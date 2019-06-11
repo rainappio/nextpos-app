@@ -1,5 +1,5 @@
 # https://medium.com/@hmajid2301/running-expo-react-native-in-docker-ff9c4f2a4388
-FROM node:latest
+FROM node:12.4.0
 
 # need git for npm install to work
 # RUN apk add --no-cache --update bash git python
@@ -13,13 +13,15 @@ RUN npm config set user 0
 RUN npm config set unsafe-perm true
 RUN npm install -g expo-cli
 
-COPY ./ /app
-WORKDIR /app
+VOLUME /source
+WORKDIR /source
 
-ENV REACT_NATIVE_PACKAGER_HOSTNAME 192.168.2.244
+#ENV REACT_NATIVE_PACKAGER_HOSTNAME 192.168.2.244
 ENV EXPO_DEBUG true
+ENV USERNAME username
+ENV PASSWORD password
 
-#ENTRYPOINT ["expo", "start", "--tunnel"]
+ENTRYPOINT ["sh", "docker-entrypoint.sh"]
 
 
 
