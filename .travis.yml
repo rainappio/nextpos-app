@@ -8,4 +8,4 @@ before_install:
 
 script:
 
-  - docker run --rm -v .:/source joelin/nextpos-appL:latest  
+  - docker run --rm -v .:/source joelin/nextpos-app:latest
