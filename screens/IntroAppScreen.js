@@ -10,7 +10,8 @@ import {
   TouchableHighlight
 } from 'react-native';
 import { WebBrowser } from 'expo';
-
+import HomeScreen from './HomeScreen';
+import CreateAccScreen from './CreateAccScreen';
 import { MonoText } from '../components/StyledText';
 
 export default class IntroAppScreen extends React.Component {
@@ -31,17 +32,26 @@ export default class IntroAppScreen extends React.Component {
             style={styles.welcomeImage}
           />
         </View>
-        <Text style={styles.welcomeText}>Quickly</Text>
-        <Text style={styles.welcomeText}>Easily</Text>
-        <Text style={styles.welcomeText}>Securely</Text>
+        <Text style={styles.welcomeText}>Simplify</Text>
+        <Text style={styles.welcomeText}>Your</Text>
+        <Text style={styles.welcomeText}>Selling</Text>
 
-        <View style={[{ width: "100%", backgroundColor: "#F39F86", position: 'absolute', bottom: 0, borderRadius: 4, }]}>
-  				<TouchableHighlight>
+        <View style={[{ width: "100%", backgroundColor: "#F39F86", position: 'absolute', bottom: 56, borderRadius: 4, }]}>
+  				<TouchableHighlight onPress={() => this.props.navigation.navigate('CreateAcc')}>
           	<Text style = {styles.gsText}>
-            	Get Started
+            	Create Account
           	</Text>
         	</TouchableHighlight>
 				</View>	   
+
+				<View style={[{ width: "100%", position: 'absolute', bottom: 0, borderRadius: 4,borderWidth: 1, borderColor: '#F39F86', }]}>
+					<TouchableHighlight onPress={() => this.props.navigation.navigate('Login')}>
+          	<Text style = {styles.signInText}>
+            	Sign In
+          	</Text>
+        	</TouchableHighlight>
+        </View>
+
       </View>    
     );
   }
@@ -53,8 +63,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
     marginTop: 60,
-    marginLeft: 40,
-    marginRight: 40,
+    marginLeft: 35,
+    marginRight: 35,
     marginBottom: 20,
   },
   welcomeImage: {
@@ -73,6 +83,12 @@ const styles = StyleSheet.create({
   	padding: 14,
   	textAlign: 'center',
   	color: '#fff',
+  	fontSize: 16,
+  },
+  signInText: {
+  	color: '#F39F86',
+  	padding: 14,
+  	textAlign: 'center',
   	fontSize: 16,
   }
 });

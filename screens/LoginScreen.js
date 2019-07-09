@@ -1,5 +1,4 @@
 import React from 'react';
-import { createStackNavigator } from 'react-navigation';
 import {
   Image,
   Platform,
@@ -11,10 +10,11 @@ import {
   TouchableHighlight
 } from 'react-native';
 import { WebBrowser } from 'expo';
-import IntroAppScreen from './IntroAppScreen';
+import HomeScreen from './HomeScreen';
 import { MonoText } from '../components/StyledText';
+import { InputText } from '../components/InputText';
 
-export default class HomeScreen extends React.Component {
+export default class LoginScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
@@ -32,17 +32,17 @@ export default class HomeScreen extends React.Component {
             style={styles.welcomeImage}
           />
         </View>
-        <Text style={styles.welcomeText}>Quickly</Text>
-        <Text style={styles.welcomeText}>Easily</Text>
-        <Text style={styles.welcomeText}>Securely</Text>
+        <Text style={styles.welcomeText}>Welcome</Text>
+        <InputText placeholder="Email Address"/>
+        <InputText placeholder="Password" secureTextEntry={true}/>
 
-        <View style={[{ width: "100%", backgroundColor: "#F39F86", position: 'absolute', bottom: 0, borderRadius: 4, }]} >
-  				<TouchableHighlight onPress={() => this.props.navigation.navigate('Intro')}>
-          	<Text style = {styles.gsText}>
-            	Get Started
+        <View style={[{ width: "100%", backgroundColor: "#F39F86", position: 'absolute', bottom: 80, borderRadius: 4, }]}>
+  				<TouchableHighlight onPress={() => this.props.navigation.navigate('Home')}>
+          	<Text style={styles.gsText}>
+            	Log In
           	</Text>
         	</TouchableHighlight>
-				</View>	   			
+				</View>	   
 
       </View>    
     );
@@ -68,13 +68,22 @@ const styles = StyleSheet.create({
   	textAlign: 'center',
   	textTransform: 'uppercase',
   	fontSize: 20,
-   	letterSpacing: 4,
+   	letterSpacing: 2,
   	lineHeight: 35,
+  	marginBottom: 16,
   },
   gsText: {
   	padding: 14,
   	textAlign: 'center',
   	color: '#fff',
   	fontSize: 16,
+  },
+  text: {
+  	fontWeight: 'bold',
+  	marginTop: 22,
+  	marginBottom: 6,
+  },
+  textSmall: {
+  	fontSize: 12,
   }
 });
