@@ -13,7 +13,7 @@ import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
-export default class HomeScreen extends React.Component {
+export default class IntroAppScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
@@ -37,7 +37,7 @@ export default class HomeScreen extends React.Component {
 
         <View style={[{ width: "100%", backgroundColor: "#F39F86", position: 'absolute', bottom: 0, borderRadius: 4, }]}>
   				<TouchableHighlight>
-          	<Text style = {styles.gsText} onPress={() => console.log("button hit")}>
+          	<Text style = {styles.gsText}>
             	Get Started
           	</Text>
         	</TouchableHighlight>
