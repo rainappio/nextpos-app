@@ -1,4 +1,5 @@
 import React from 'react';
+import { createStackNavigator } from 'react-navigation';
 import {
   Image,
   Platform,
@@ -10,7 +11,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 import { WebBrowser } from 'expo';
-
+import IntroAppScreen from './IntroAppScreen';
 import { MonoText } from '../components/StyledText';
 
 export default class HomeScreen extends React.Component {
@@ -35,13 +36,14 @@ export default class HomeScreen extends React.Component {
         <Text style={styles.welcomeText}>Easily</Text>
         <Text style={styles.welcomeText}>Securely</Text>
 
-        <View style={[{ width: "100%", backgroundColor: "#F39F86", position: 'absolute', bottom: 0, borderRadius: 4, }]}>
-  				<TouchableHighlight>
-          	<Text style = {styles.gsText} onPress={() => console.log("button hit")}>
+        <View style={[{ width: "100%", backgroundColor: "#F39F86", position: 'absolute', bottom: 0, borderRadius: 4, }]} >
+  				<TouchableHighlight onPress={() => this.props.navigation.navigate('Intro')}>
+          	<Text style = {styles.gsText}>
             	Get Started
           	</Text>
         	</TouchableHighlight>
-				</View>	   
+				</View>	   			
+
       </View>    
     );
   }
