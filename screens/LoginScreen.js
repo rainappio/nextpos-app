@@ -7,7 +7,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  TextInput
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import HomeScreen from './HomeScreen';
@@ -18,6 +19,16 @@ export default class LoginScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
+
+  state = {
+  	email: '',
+  	token: '',
+  	password: ''
+  }
+
+  getValue(text,field){
+  	alert("hii")
+  }
 
   render() {
     return (    	
@@ -32,9 +43,9 @@ export default class LoginScreen extends React.Component {
             style={styles.welcomeImage}
           />
         </View>
-        <Text style={styles.welcomeText}>Welcome</Text>
-        <InputText placeholder="Email Address"/>
-        <InputText placeholder="Password" secureTextEntry={true}/>
+        <Text style={styles.welcomeText}>Welcome l</Text>
+        <TextInput placeholder="Email Address" onChangeText={(text)=> this.getValue(text,'email')}/>
+        <TextInput placeholder="Password" secureTextEntry={true} onChangeText={(text)=> this.getValue(text,'password')}/>
 
         <View style={[{ width: "100%", backgroundColor: "#F39F86", position: 'absolute', bottom: 80, borderRadius: 4, }]}>
   				<TouchableHighlight onPress={() => this.props.navigation.navigate('Home')}>
