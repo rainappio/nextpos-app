@@ -14,6 +14,7 @@ import HomeScreen from './HomeScreen';
 import { MonoText } from '../components/StyledText';
 import { InputText } from '../components/InputText';
 
+
 export default class IntroAppScreen extends React.Component {
   static navigationOptions = {
     header: null,
@@ -32,6 +33,7 @@ export default class IntroAppScreen extends React.Component {
             style={styles.welcomeImage}
           />
         </View>
+
         <Text style={styles.welcomeText}>Let's Get Started</Text>
         <InputText placeholder="Email Address"/>
         <InputText placeholder="Confirm Email Address"/>
@@ -44,7 +46,7 @@ export default class IntroAppScreen extends React.Component {
   				<TouchableHighlight onPress={() => this.props.navigation.navigate('Home')}>
           	<Text style = {styles.gsText}>
             	Sign Upp
-          	</Text>
+            </Text>
         	</TouchableHighlight>
 				</View>	   
 
