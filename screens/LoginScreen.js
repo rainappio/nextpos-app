@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import { Field, reduxForm } from 'redux-form'
 import {
   Image,
   Platform,
@@ -9,29 +10,20 @@ import {
   View,
   TouchableHighlight,
   TextInput
-} from 'react-native';
-import { WebBrowser } from 'expo';
-import HomeScreen from './HomeScreen';
-import { MonoText } from '../components/StyledText';
-import { InputText } from '../components/InputText';
+} from 'react-native'
+import { PropTypes } from 'prop-types'
+import { isRequired, isEmail } from '../validators'
+import InputText from '../components/InputText'
+import styles from '../styles'
 
-export default class LoginScreen extends React.Component {
+class LoginScreen extends React.Component {
   static navigationOptions = {
-    header: null,
-  };
-
-  state = {
-  	email: '',
-  	token: '',
-  	password: ''
-  }
-
-  getValue(text,field){
-  	alert("hii")
+    header: null
   }
 
   render() {
-    return (    	
+    const { handleSubmit } = this.props
+    return (
       <View style={styles.container}>
         <View style={[{ position: 'absolute', top: 0 }]}>
           <Image
@@ -43,58 +35,48 @@ export default class LoginScreen extends React.Component {
             style={styles.welcomeImage}
           />
         </View>
-        <Text style={styles.welcomeText}>Welcome l</Text>
-        <TextInput placeholder="Email Address" onChangeText={(text)=> this.getValue(text,'email')}/>
-        <TextInput placeholder="Password" secureTextEntry={true} onChangeText={(text)=> this.getValue(text,'password')}/>
 
-        <View style={[{ width: "100%", backgroundColor: "#F39F86", position: 'absolute', bottom: 80, borderRadius: 4, }]}>
-  				<TouchableHighlight onPress={() => this.props.navigation.navigate('Home')}>
-          	<Text style={styles.gsText}>
-            	Log In
-          	</Text>
-        	</TouchableHighlight>
-				</View>	   
+        <Field
+          name="username"
+          component={InputText}
+          validate={[isRequired, isEmail]}
+          placeholder="Email Address"
+        />
 
-      </View>    
-    );
+        <Field
+          name="masterPassword"
+          component={InputText}
+          validate={isRequired}
+          placeholder="Password"
+          secureTextEntry={true}
+        />
+
+        <View
+          style={[
+            {
+              width: '100%',
+              backgroundColor: '#F39F86',
+              marginTop: 40,
+              borderRadius: 4
+            }
+          ]}
+        >
+          <TouchableOpacity onPress={handleSubmit}>
+            <Text style={styles.gsText}>Log In</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    )
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    marginTop: 60,
-    marginLeft: 35,
-    marginRight: 35,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 40,
-    height: 40,
-    resizeMode: 'contain',
-  },
-  welcomeText: {
-  	textAlign: 'center',
-  	textTransform: 'uppercase',
-  	fontSize: 20,
-   	letterSpacing: 2,
-  	lineHeight: 35,
-  	marginBottom: 16,
-  },
-  gsText: {
-  	padding: 14,
-  	textAlign: 'center',
-  	color: '#fff',
-  	fontSize: 16,
-  },
-  text: {
-  	fontWeight: 'bold',
-  	marginTop: 22,
-  	marginBottom: 6,
-  },
-  textSmall: {
-  	fontSize: 12,
-  }
-});
+LoginScreen.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  valid: PropTypes.bool.isRequired
+}
+
+LoginScreen = reduxForm({
+  form: 'loginForm'
+})(LoginScreen)
+
+export default LoginScreen
