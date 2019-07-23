@@ -9,10 +9,6 @@ import {
   View,
   TouchableHighlight
 } from 'react-native'
-import { WebBrowser } from 'expo'
-import HomeScreen from './HomeScreen'
-import CreateAccScreen from './CreateAccScreen'
-import { MonoText } from '../components/StyledText'
 import styles from '../styles'
 
 export default class IntroAppScreen extends React.Component {

@@ -25,7 +25,6 @@ class CreateAccScreen extends React.Component {
         console.error(error)
       })
   }
-
   render() {
     return <CreateAccFormScreen onSubmit={this.handleSubmit} />
   }

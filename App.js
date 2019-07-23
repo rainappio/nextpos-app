@@ -8,7 +8,6 @@ import AppNavigator from './navigation/AppNavigator'
 import styles from './styles'
 
 const store = createStore(rootReducer)
-
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false
