@@ -1,13 +1,38 @@
 import React from 'react'
 import { Platform, StatusBar, StyleSheet, View } from 'react-native'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
+import thunk from 'redux-thunk'
 import rootReducer from './reducers'
 import { AppLoading, Asset, Font, Icon } from 'expo'
+import { AsyncStorage } from 'react-native'
+import { doLoggedIn } from './actions'
 import AppNavigator from './navigation/AppNavigator'
 import styles from './styles'
 
-const store = createStore(rootReducer)
+const store = createStore(
+  rootReducer,
+  {},
+  composeWithDevTools(applyMiddleware(thunk))
+)
+
+function restoreAuth(dispatch) {
+  let accessToken
+  try {
+    accessToken = AsyncStorage.getItem('token')
+  } catch (e) {
+    return Promise.resolve()
+  }
+  if (!accessToken) {
+    this.props.navigation.navigate('Login')
+    return Promise.resolve()
+  }
+  if (accessToken) {
+    dispatch(doLoggedIn(accessToken))
+  }
+}
+restoreAuth(store.dispatch)
 
 export default class App extends React.Component {
   state = {

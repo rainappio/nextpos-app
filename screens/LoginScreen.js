@@ -9,11 +9,13 @@ import {
   TouchableOpacity,
   View,
   TouchableHighlight,
-  TextInput
+  TextInput,
+  Button
 } from 'react-native'
 import { PropTypes } from 'prop-types'
 import { isRequired, isEmail } from '../validators'
 import InputText from '../components/InputText'
+import LoginSuccessScreen from './LoginSuccessScreen'
 import styles from '../styles'
 
 class LoginScreen extends React.Component {
@@ -50,7 +52,6 @@ class LoginScreen extends React.Component {
           placeholder="Password"
           secureTextEntry={true}
         />
-
         <View
           style={[
             {
@@ -61,9 +62,9 @@ class LoginScreen extends React.Component {
             }
           ]}
         >
-          <TouchableOpacity onPress={handleSubmit}>
+          <TouchableHighlight onPress={handleSubmit}>
             <Text style={styles.gsText}>Log In</Text>
-          </TouchableOpacity>
+          </TouchableHighlight>
         </View>
       </View>
     )

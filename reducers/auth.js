@@ -1,7 +1,8 @@
 import { LOGGED_IN, LOGGED_OUT } from '../actions'
 
 const initialState = {
-  isLoggedIn: false
+  isLoggedIn: false,
+  token: undefined
 }
 
 export const reducer = (state = initialState, action) => {
@@ -9,7 +10,8 @@ export const reducer = (state = initialState, action) => {
     case LOGGED_IN:
       return {
         ...state,
-        isLoggedIn: true
+        isLoggedIn: true,
+        token: action.data
       }
     case LOGGED_OUT:
       return initialState

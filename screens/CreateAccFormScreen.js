@@ -55,13 +55,13 @@ class CreateAccFormScreen extends React.Component {
           secureTextEntry={false}
         />
 
-        <Field
+        {/* <Field
           name="confirmusername"
           component={InputText}
           validate={isEmail}
           placeholder="Confirm Email Address"
           secureTextEntry={false}
-        />
+        /> */}
 
         <Field
           name="masterPassword"

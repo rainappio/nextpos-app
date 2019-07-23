@@ -3,19 +3,15 @@ import CreateAccFormScreen from './CreateAccFormScreen'
 
 class CreateAccScreen extends React.Component {
   handleSubmit = values => {
-    //console.warn('handleSubmit hit');
-    console.warn(values)
-
     fetch('http://35.234.63.193/clients', {
-      method: 'POST', // or 'PUT'
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(values) // data can be `string` or {object}!
+      body: JSON.stringify(values)
     })
       .then(response => {
-        console.warn(response)
-        if (response.ok !== true) {
+        if (!response.ok) {
           alert('username already taken')
         } else {
           this.props.navigation.navigate('Login')
@@ -25,7 +21,6 @@ class CreateAccScreen extends React.Component {
         console.error(error)
       })
   }
-
   render() {
     return <CreateAccFormScreen onSubmit={this.handleSubmit} />
   }

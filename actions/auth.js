@@ -1,24 +1,30 @@
+import { AsyncStorage } from 'react-native'
 export const LOGGED_IN = 'LOGGED_IN'
 export const LOGGED_OUT = 'LOGGED_OUT'
 
-export const loggedIn = accInfo => ({
+export const loggedIn = data => ({
   type: LOGGED_IN,
-  payload: accInfo
+  data
 })
 
 export const loggedOut = () => ({
   type: LOGGED_OUT
 })
 
-export function hasLoggedIn (loginData) {
-  const accInfo = {}
-  return (dispatch, getState) => {
-    dispatch(loggedIn(accInfo))
+export function doLoggedIn () {
+  var accessToken = AsyncStorage.getItem('token')
+  return dispatch => {
+    dispatch(loggedIn(accessToken))
   }
 }
 
 export function doLogout () {
+  try {
+    AsyncStorage.removeItem('token')
+  } catch (e) {
+    // Ignore missing local storage
+  }
   return dispatch => {
-    dispatch(loggedOut)
+    dispatch(loggedOut())
   }
 }
