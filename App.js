@@ -16,7 +16,6 @@ const store = createStore(
   {},
   composeWithDevTools(applyMiddleware(thunk))
 )
-console.log(store.getState())
 
 function restoreAuth(dispatch) {
   let accessToken
