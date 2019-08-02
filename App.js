@@ -16,7 +16,6 @@ const store = createStore(
   {},
   composeWithDevTools(applyMiddleware(thunk))
 )
-console.log(store.getState())
 
 function restoreAuth(dispatch) {
   let accessToken
@@ -30,6 +29,7 @@ function restoreAuth(dispatch) {
     return Promise.resolve()
   }
   if (accessToken) {
+    //this.props.navigation.navigate('LoginSuccess')
     dispatch(doLoggedIn(accessToken))
   }
 }
@@ -41,6 +41,7 @@ export default class App extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading

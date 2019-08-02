@@ -12,12 +12,14 @@ import SettingsScreen from '../screens/SettingsScreen'
 import IntroAppScreen from '../screens/IntroAppScreen'
 import CreateAccScreen from '../screens/CreateAccScreen'
 import Login from '../screens/Login'
+import LoginSuccessScreen from '../screens/LoginSuccessScreen'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   Intro: IntroAppScreen,
   CreateAcc: CreateAccScreen,
-  Login: Login
+  Login: Login,
+  LoginSuccess: LoginSuccessScreen
 })
 
 HomeStack.navigationOptions = {

@@ -62,5 +62,33 @@ export default StyleSheet.create({
     padding: 10,
     textAlign: 'center',
     fontSize: 16
+  },
+  margin_15: {
+    margin: 10
+  },
+  grayBg: {
+    backgroundColor: '#f5f5f5'
+  },
+  paddTop_40: {
+    paddingTop: 30
+  },
+  paddBottom_40: {
+    paddingBottom: 30
+  },
+  jc_alignIem_center: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  flex_dir_row: {
+    flexDirection: 'row'
+  },
+  orange_color: {
+    color: '#f18d1a'
+  },
+  half_width: {
+    width: '45%'
+  },
+  centerText: {
+    textAlign: 'center'
   }
 })
