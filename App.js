@@ -1,12 +1,17 @@
 import React from 'react'
-import { Platform, StatusBar, StyleSheet, View } from 'react-native'
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+  AsyncStorage
+} from 'react-native'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import rootReducer from './reducers'
 import { AppLoading, Asset, Font, Icon } from 'expo'
-import { AsyncStorage } from 'react-native'
 import { doLoggedIn } from './actions'
 import AppNavigator from './navigation/AppNavigator'
 import styles from './styles'
@@ -18,19 +23,16 @@ const store = createStore(
 )
 
 function restoreAuth(dispatch) {
-  let accessToken
   try {
-    accessToken = AsyncStorage.getItem('token')
+    AsyncStorage.getItem('token').then(val => {
+      if (!val) {
+        return Promise.resolve()
+      } else {
+        dispatch(doLoggedIn(val))
+      }
+    })
   } catch (e) {
     return Promise.resolve()
-  }
-  if (!accessToken) {
-    this.props.navigation.navigate('Login')
-    return Promise.resolve()
-  }
-  if (accessToken) {
-    //this.props.navigation.navigate('LoginSuccess')
-    dispatch(doLoggedIn(accessToken))
   }
 }
 restoreAuth(store.dispatch)
@@ -41,7 +43,6 @@ export default class App extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
