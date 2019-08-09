@@ -22,8 +22,11 @@ export default StyleSheet.create({
     position: 'relative'
   },
   rootInput: {
-    height: 40,
-    padding: 10
+    height: 44,
+    padding: 10,
+    marginBottom: 10,
+    borderBottomColor: '#f1f1f1',
+    borderBottomWidth: 1
   },
   rootError: {
     color: 'red',
@@ -69,11 +72,14 @@ export default StyleSheet.create({
   grayBg: {
     backgroundColor: '#f5f5f5'
   },
-  paddTop_40: {
+  paddTop_30: {
     paddingTop: 30
   },
-  paddBottom_40: {
+  paddBottom_30: {
     paddingBottom: 30
+  },
+  paddBottom_10: {
+    paddingBottom: 10
   },
   jc_alignIem_center: {
     justifyContent: 'center',
@@ -90,5 +96,37 @@ export default StyleSheet.create({
   },
   centerText: {
     textAlign: 'center'
+  },
+  textLeftWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginBottom: 10
+  },
+  grayText: {
+    color: '#888'
+  },
+  mgr_20: {
+    marginRight: 20
+  },
+  container_nocenterCnt: {
+    flex: 1,
+    marginTop: 62,
+    marginLeft: 35,
+    marginRight: 35,
+    marginBottom: 20,
+    position: 'relative'
+  },
+  mgrbtn40: {
+    marginBottom: 40
+  },
+  pickerStyle: {
+    width: '100%',
+    justifyContent: 'center',
+    marginLeft: -8,
+    paddingRight: 0
+  },
+  leftpadd32: {
+    paddingLeft: 32
   }
 })

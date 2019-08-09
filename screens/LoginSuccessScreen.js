@@ -23,7 +23,7 @@ class LoginSuccessScreen extends React.Component {
     return (
       <ScrollView>
         <View style={styles.container}>
-          <View style={[styles.jc_alignIem_center, styles.paddBottom_40]}>
+          <View style={[styles.jc_alignIem_center, styles.paddBottom_10]}>
             <Image
               source={
                 __DEV__
@@ -41,8 +41,8 @@ class LoginSuccessScreen extends React.Component {
                 styles.grayBg,
                 styles.half_width,
                 styles.jc_alignIem_center,
-                styles.paddTop_40,
-                styles.paddBottom_40
+                styles.paddTop_30,
+                styles.paddBottom_30
               ]}
             >
               <TouchableOpacity
@@ -66,8 +66,8 @@ class LoginSuccessScreen extends React.Component {
                 styles.grayBg,
                 styles.half_width,
                 styles.jc_alignIem_center,
-                styles.paddTop_40,
-                styles.paddBottom_40
+                styles.paddTop_30,
+                styles.paddBottom_30
               ]}
             >
               <TouchableOpacity
@@ -93,8 +93,8 @@ class LoginSuccessScreen extends React.Component {
                 styles.grayBg,
                 styles.half_width,
                 styles.jc_alignIem_center,
-                styles.paddTop_40,
-                styles.paddBottom_40
+                styles.paddTop_30,
+                styles.paddBottom_30
               ]}
             >
               <TouchableOpacity
@@ -118,8 +118,8 @@ class LoginSuccessScreen extends React.Component {
                 styles.grayBg,
                 styles.half_width,
                 styles.jc_alignIem_center,
-                styles.paddTop_40,
-                styles.paddBottom_40
+                styles.paddTop_30,
+                styles.paddBottom_30
               ]}
             >
               <TouchableOpacity
@@ -145,12 +145,12 @@ class LoginSuccessScreen extends React.Component {
                 styles.grayBg,
                 styles.half_width,
                 styles.jc_alignIem_center,
-                styles.paddTop_40,
-                styles.paddBottom_40
+                styles.paddTop_30,
+                styles.paddBottom_30
               ]}
             >
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Product')}
+                onPress={() => this.props.navigation.navigate('ProductList')}
               >
                 <View>
                   <Icon
@@ -170,8 +170,8 @@ class LoginSuccessScreen extends React.Component {
                 styles.grayBg,
                 styles.half_width,
                 styles.jc_alignIem_center,
-                styles.paddTop_40,
-                styles.paddBottom_40
+                styles.paddTop_30,
+                styles.paddBottom_30
               ]}
             >
               <TouchableOpacity onPress={doLogout}>

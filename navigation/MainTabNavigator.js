@@ -13,13 +13,19 @@ import IntroAppScreen from '../screens/IntroAppScreen'
 import CreateAccScreen from '../screens/CreateAccScreen'
 import Login from '../screens/Login'
 import LoginSuccessScreen from '../screens/LoginSuccessScreen'
+import ProductListScreen from '../screens/ProductListScreen'
+import ProductFormScreen from '../screens/ProductFormScreen'
+import Product from '../screens/Product'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   Intro: IntroAppScreen,
   CreateAcc: CreateAccScreen,
   Login: Login,
-  LoginSuccess: LoginSuccessScreen
+  LoginSuccess: LoginSuccessScreen,
+  ProductList: ProductListScreen,
+  ProductForm: ProductFormScreen,
+  Product: Product
 })
 
 HomeStack.navigationOptions = {
