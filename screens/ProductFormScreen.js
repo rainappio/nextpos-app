@@ -35,8 +35,7 @@ class ProductFormScreen extends React.Component {
               styles.welcomeText,
               styles.orange_color,
               styles.textMedium,
-              styles.textBold,
-              styles.mgrbtn40
+              styles.textBold
             ]}
           >
             Add Product
@@ -60,10 +59,10 @@ class ProductFormScreen extends React.Component {
           <Field
             name="price"
             component={InputText}
-            type="number"
             validate={isRequired}
             placeholder="Price"
             secureTextEntry={false}
+            keyboardType={'numeric'}
           />
 
           <Field

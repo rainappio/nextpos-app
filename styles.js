@@ -43,8 +43,9 @@ export default StyleSheet.create({
     textTransform: 'uppercase',
     fontSize: 20,
     letterSpacing: 2,
-    lineHeight: 26,
-    marginBottom: 16
+    lineHeight: 32,
+    marginBottom: 16,
+    marginTop: -8
   },
   gsText: {
     padding: 10,
@@ -123,10 +124,19 @@ export default StyleSheet.create({
   pickerStyle: {
     width: '100%',
     justifyContent: 'center',
-    marginLeft: -8,
-    paddingRight: 0
+    paddingRight: 0,
+    paddingLeft: 0,
+    marginTop: 8
   },
   leftpadd32: {
     paddingLeft: 32
+  },
+  fullWidth: {
+    width: '100%'
+  },
+  isActive: {
+    color: '#000',
+    borderBottomWidth: 2,
+    borderBottomColor: '#F39F86'
   }
 })

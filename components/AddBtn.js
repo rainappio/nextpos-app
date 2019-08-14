@@ -13,7 +13,7 @@ class AddBtn extends React.Component {
         style={{ position: 'absolute', right: 0, top: -8 }}
       >
         <View>
-          <Icon name="ios-add" size={40} color="#f18d1a" />
+          <Icon name="ios-add" size={35} color="#f18d1a" />
         </View>
       </TouchableOpacity>
     )

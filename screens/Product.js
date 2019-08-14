@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
 import ProductFormScreen from './ProductFormScreen'
-import { getLables } from '../actions'
+import { getProducts, getLables, getLabel } from '../actions'
 
 class Product extends React.Component {
   static navigationOptions = {
@@ -11,6 +11,7 @@ class Product extends React.Component {
 
   componentDidMount() {
     this.props.getLables()
+    this.props.getProducts()
   }
 
   handleSubmit = values => {
@@ -35,7 +36,9 @@ class Product extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
-            alert('product successfully saved')
+            this.props.dispatch(getLables())
+            this.props.dispatch(getProducts())
+            this.props.navigation.navigate('ProductList')
           } else {
             //this.props.navigation.navigate('Login')
             alert('pls try again')
@@ -48,19 +51,23 @@ class Product extends React.Component {
   }
 
   render() {
-    const { labels = [] } = this.props
-
-    return <ProductFormScreen labels={labels} onSubmit={this.handleSubmit} />
+    const { labels = [], dispatch, products=[] } = this.props
+		
+    return <ProductFormScreen labels={labels} products={products} onSubmit={this.handleSubmit} />
   }
 }
 
 const mapStateToProps = state => ({
-  labels: state.labels.data.labels
+  labels: state.labels.data.labels,
+  subproducts: state.label.data.subLabels,
+  products: state.products.data.results
 })
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getLables: () => dispatch(getLables())
+  getLables: () => dispatch(getLables()),
+  getProducts: () => dispatch(getProducts()),
+  getLabel: id => dispatch(getLabel(id))
 })
 
 export default connect(

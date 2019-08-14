@@ -25,7 +25,8 @@ const HomeStack = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
   ProductList: ProductListScreen,
   ProductForm: ProductFormScreen,
-  Product: Product
+  Product: Product,
+  Settings: SettingsScreen
 })
 
 HomeStack.navigationOptions = {

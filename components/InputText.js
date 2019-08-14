@@ -12,6 +12,7 @@ const InputText = ({
     value,
     placeholder,
     secureTextEntry,
+    keyboardType,
     onPress
   },
   meta: { error, touched, valid },
@@ -34,6 +35,7 @@ const InputText = ({
       onChangeText={onChange}
       onFocus={onFocus}
       secureTextEntry={secureTextEntry}
+      keyboardType={keyboardType}
       {...rest}
       style={[
         styles.rootInput,

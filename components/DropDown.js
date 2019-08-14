@@ -1,37 +1,37 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, Picker } from 'react-native'
+import { StyleSheet, View, Text, Picker, Platform } from 'react-native'
+import RNPickerSelect from 'react-native-picker-select'
 import styles from '../styles'
 
 export default class DropDown extends Component {
-  state = {
-    choosenIndex: 0
-  }
-
   render() {
     const {
       input: { onChange, value, ...inputProps },
       children,
-      meta,
-      options,
-      ...pickerProps
+      meta: { error, touched, valid },
+      options
     } = this.props
 
     return (
-      <View style={[styles.pickerStyle, styles.rootInput]}>
-        <Picker
-          selectedValue={value}
-          onValueChange={value => onChange(value)}
-          {...inputProps}
-          {...pickerProps}
+      <View>
+        <View
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: '#f1f1f1',
+            paddingTop: Platform.OS === 'ios' ? 30 : 4,
+            paddingBottom: Platform.OS === 'ios' ? 12 : 4,
+            paddingLeft: Platform.OS === 'ios' ? 9 : 4,
+            marginBottom: 8
+          }}
         >
-          <Picker.Item label="Choose Label" value="" color="#ccc" />
-          {options.map(opts => (
-            <Picker.Item key={opts.id} label={opts.label} value={opts.id} />
-          ))}
-        </Picker>
-        {!meta.valid && meta.touched && (
-          <Text style={styles.rootError}>{meta.error}</Text>
-        )}
+          <RNPickerSelect
+            items={options}
+            onValueChange={value => onChange(value)}
+            value={value}
+            {...inputProps}
+          />
+        </View>
+        {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
       </View>
     )
   }
