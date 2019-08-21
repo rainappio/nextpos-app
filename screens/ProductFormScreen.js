@@ -52,7 +52,6 @@ class ProductFormScreen extends React.Component {
           <Field
             name="sku"
             component={InputText}
-            validate={isRequired}
             placeholder="SKU"
             secureTextEntry={false}
           />
@@ -69,7 +68,6 @@ class ProductFormScreen extends React.Component {
             component={DropDown}
             name="productLabelId"
             options={labels}
-            validate={[isRequired]}
             search
             selection
             fluid
@@ -79,7 +77,6 @@ class ProductFormScreen extends React.Component {
           <Field
             name="description"
             component={InputText}
-            validate={isRequired}
             placeholder="Description"
             secureTextEntry={false}
           />

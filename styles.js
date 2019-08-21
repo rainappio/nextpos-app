@@ -138,5 +138,59 @@ export default StyleSheet.create({
     color: '#000',
     borderBottomWidth: 2,
     borderBottomColor: '#F39F86'
+  },
+  whiteColor: {
+    color: '#fff'
+  },
+  boxShadow: {
+    borderWidth: 1,
+    borderRadius: 2,
+    borderColor: '#ddd',
+    borderBottomWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 5, height: 10 },
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
+    elevation: 1,
+    padding: 12
+  },
+  modalContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.6)'
+  },
+  popUpLayout: {
+    padding: 25,
+    margin: 20
+  },
+  whiteBg: {
+    backgroundColor: '#fff'
+  },
+  editIcon: {
+  	backgroundColor: '#f18d1a',
+  	flex: 1,
+  	alignItems: 'center',
+  	position: 'absolute',
+  	right: 38,
+  	paddingTop: 6,
+  	paddingBottom: 6,
+  	paddingLeft: 12,
+  	paddingRight: 12,
+  	opacity: .6,
+  	bottom: 4
+  },
+   delIcon: {
+  	backgroundColor: '#f18d1a',
+  	flex: 1,
+  	alignItems: 'center',
+  	position: 'absolute',
+  	right: 0,
+  	paddingTop: 6,
+  	paddingBottom: 6,
+  	paddingLeft: 12,
+  	paddingRight: 12,
+  	padding: 8,
+  	bottom: 4
   }
 })

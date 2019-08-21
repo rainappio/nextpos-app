@@ -6,7 +6,9 @@ import {
 
 const initialState = {
   data: [],
-  loading: true,
+  loading: false,
+  haveData: false,
+  haveError: false,
   error: null
 }
 
@@ -16,18 +18,24 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+        haveData: false,
+        haveError: false,
         error: null
       }
     case FETCH_PRODUCTS_SUCCESS:
       return {
         ...state,
         loading: false,
+        haveData: true,
+        haveError: false,
         data: action.data
       }
     case FETCH_PRODUCTS_FAILURE:
       return {
         ...state,
-        loading: true,
+        loading: false,
+        haveData: false,
+        haveError: true,
         error: action.error,
         data: []
       }

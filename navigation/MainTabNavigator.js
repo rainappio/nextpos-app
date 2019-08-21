@@ -16,6 +16,7 @@ import LoginSuccessScreen from '../screens/LoginSuccessScreen'
 import ProductListScreen from '../screens/ProductListScreen'
 import ProductFormScreen from '../screens/ProductFormScreen'
 import Product from '../screens/Product'
+import ProductEditScreen from '../screens/ProductEditScreen'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -26,7 +27,8 @@ const HomeStack = createStackNavigator({
   ProductList: ProductListScreen,
   ProductForm: ProductFormScreen,
   Product: Product,
-  Settings: SettingsScreen
+  Settings: SettingsScreen,
+  ProductEdit: ProductEditScreen
 })
 
 HomeStack.navigationOptions = {

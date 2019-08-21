@@ -51,9 +51,16 @@ class Product extends React.Component {
   }
 
   render() {
-    const { labels = [], dispatch, products=[] } = this.props
-		
-    return <ProductFormScreen labels={labels} products={products} onSubmit={this.handleSubmit} />
+    const { labels = [], dispatch, products = [], navigation } = this.props
+
+    return (
+      <ProductFormScreen
+        labels={labels}
+        products={products}
+        onSubmit={this.handleSubmit}
+        navigation={navigation}
+      />
+    )
   }
 }
 

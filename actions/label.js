@@ -3,7 +3,7 @@ export const FETCH_LABEL = 'FETCH_LABEL'
 export const FETCH_LABEL_SUCCESS = 'FETCH_LABEL_SUCCESS'
 export const FETCH_LABEL_FAILURE = 'FETCH_LABEL_FAILURE'
 
-export const fetchLabel = (id) => ({
+export const fetchLabel = id => ({
   type: FETCH_LABEL,
   id
 })
@@ -18,14 +18,14 @@ export const fetchLabelFailure = error => ({
   error
 })
 
-export const getLabel = (id) => {
-  return (dispatch) => {
-    dispatch(fetchLabel(id));
+export const getLabel = id => {
+  return dispatch => {
+    dispatch(fetchLabel(id))
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
       } else {
-      	JSON.parse(value)
+        JSON.parse(value)
       }
     }).then(val => {
       var tokenObj = JSON.parse(val)
