@@ -17,6 +17,8 @@ import ProductListScreen from '../screens/ProductListScreen'
 import ProductFormScreen from '../screens/ProductFormScreen'
 import Product from '../screens/Product'
 import ProductEditScreen from '../screens/ProductEditScreen'
+import Category from '../screens/Category'
+import CategoryListScreen from '../screens/CategoryListScreen'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -28,7 +30,9 @@ const HomeStack = createStackNavigator({
   ProductForm: ProductFormScreen,
   Product: Product,
   Settings: SettingsScreen,
-  ProductEdit: ProductEditScreen
+  ProductEdit: ProductEditScreen,
+  Category: Category,
+  CategoryList: CategoryListScreen
 })
 
 HomeStack.navigationOptions = {
