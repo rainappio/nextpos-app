@@ -35,11 +35,12 @@ class Login extends React.Component {
         if (res.error) {
           alert(res.error)
         } else {
-          AsyncStorage.setItem('token', res.access_token)
-          this.setState({
-            isLoggedIn: true
+          AsyncStorage.setItem('token', JSON.stringify(res)).then(values => {
+            this.setState({
+              isLoggedIn: true
+            })
+            this.props.dispatch(doLoggedIn())
           })
-          this.props.dispatch(doLoggedIn())
         }
         return res
       })

@@ -5,4 +5,5 @@ set -e
 
 npm install
 expo login -u ${USERNAME} -p ${PASSWORD}
+expo optimize
 expo publish
