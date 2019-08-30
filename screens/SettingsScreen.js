@@ -105,7 +105,9 @@ class SettingsScreen extends React.Component {
                 ]}
               >
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('ProductList')}
+                  onPress={() =>
+                    this.props.navigation.navigate('ProductsOverview')
+                  }
                 >
                   <View>
                     <Icon

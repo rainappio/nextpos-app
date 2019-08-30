@@ -36,6 +36,7 @@ const InputText = ({
       onFocus={onFocus}
       secureTextEntry={secureTextEntry}
       keyboardType={keyboardType}
+      value={value}
       {...rest}
       style={[
         styles.rootInput,

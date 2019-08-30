@@ -11,8 +11,7 @@ export const loggedOut = () => ({
   type: LOGGED_OUT
 })
 
-export function doLoggedIn () {
-  var accessToken = AsyncStorage.getItem('token')
+export function doLoggedIn (accessToken) {
   return dispatch => {
     dispatch(loggedIn(accessToken))
   }

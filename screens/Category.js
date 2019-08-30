@@ -1,11 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage, View, Text } from 'react-native'
+import { getProducts } from '../actions'
 import CategoryFormScreen from './CategoryFormScreen'
 
 class Category extends React.Component {
   static navigationOptions = {
     header: null
+  }
+
+  state = {
+    refreshing: false
   }
 
   handleSubmit = values => {
@@ -29,9 +34,17 @@ class Category extends React.Component {
         body: JSON.stringify(values)
       })
         .then(response => {
-          console.log(response)
           if (response.status === 200) {
-            this.props.navigation.navigate('CategoryList')
+            this.props.navigation.navigate('ProductsOverview')
+            this.setState({
+              refreshing: true
+            })
+            this.props.getProducts() !== undefined &&
+              this.props.getProducts().then(() => {
+                this.setState({
+                  refreshing: false
+                })
+              })
           } else {
             alert('pls try again')
           }
@@ -44,13 +57,22 @@ class Category extends React.Component {
 
   render() {
     const { navigation } = this.props
+    const { refreshing } = this.state
     return (
       <CategoryFormScreen
         onSubmit={this.handleSubmit}
         navigation={navigation}
+        refreshing={refreshing}
       />
     )
   }
 }
 
-export default Category
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+  getProducts: () => dispatch(getProducts())
+})
+export default connect(
+  null,
+  mapDispatchToProps
+)(Category)
