@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
   TouchableHighlight,
-  TextInput
+  RefreshControl
 } from 'react-native'
 import { isRequired } from '../validators'
 import InputText from '../components/InputText'
@@ -24,22 +24,44 @@ class ProductFormScreen extends React.Component {
   }
 
   render() {
-    const { handleSubmit, labels } = this.props
+    const {
+      handleSubmit,
+      labels,
+      isEditForm,
+      refreshing,
+      handleEditCancel
+    } = this.props
 
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
-          <BackBtn />
-          <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold
-            ]}
-          >
-            Add Product
-          </Text>
+          {isEditForm ? (
+            <Text
+              style={[
+                styles.welcomeText,
+                styles.orange_color,
+                styles.textMedium,
+                styles.textBold,
+                styles.mgrbtn80
+              ]}
+            >
+              Edit Product
+            </Text>
+          ) : (
+            <View>
+              <BackBtn />
+              <Text
+                style={[
+                  styles.welcomeText,
+                  styles.orange_color,
+                  styles.textMedium,
+                  styles.textBold
+                ]}
+              >
+                Add Product
+              </Text>
+            </View>
+          )}
 
           <Field
             name="name"
@@ -92,11 +114,16 @@ class ProductFormScreen extends React.Component {
               }
             ]}
           >
-            <TouchableHighlight onPress={handleSubmit}>
-              <Text style={styles.gsText}>Save</Text>
-            </TouchableHighlight>
+            {isEditForm ? (
+              <TouchableHighlight onPress={handleSubmit}>
+                <Text style={styles.gsText}>Update</Text>
+              </TouchableHighlight>
+            ) : (
+              <TouchableHighlight onPress={handleSubmit}>
+                <Text style={styles.gsText}>Save</Text>
+              </TouchableHighlight>
+            )}
           </View>
-
           <View
             style={[
               {
@@ -109,11 +136,19 @@ class ProductFormScreen extends React.Component {
               }
             ]}
           >
-            <TouchableHighlight
-              onPress={() => this.props.navigation.navigate('ProductList')}
-            >
-              <Text style={styles.signInText}>Cancel</Text>
-            </TouchableHighlight>
+            {isEditForm ? (
+              <TouchableHighlight onPress={handleEditCancel}>
+                <Text style={styles.signInText}>Cancel</Text>
+              </TouchableHighlight>
+            ) : (
+              <TouchableHighlight
+                onPress={() =>
+                  this.props.navigation.navigate('ProductsOverview')
+                }
+              >
+                <Text style={styles.signInText}>Cancel</Text>
+              </TouchableHighlight>
+            )}
           </View>
         </View>
       </DismissKeyboard>

@@ -7,17 +7,41 @@ import {
   Text,
   TouchableOpacity,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  AsyncStorage
 } from 'react-native'
 import { WebBrowser } from 'expo'
+import { connect } from 'react-redux'
 import HomeScreen from './HomeScreen'
 import CreateAccScreen from './CreateAccScreen'
 import { MonoText } from '../components/StyledText'
 import styles from '../styles'
+import { doLogout } from '../actions'
 
-export default class IntroAppScreen extends React.Component {
+class IntroAppScreen extends React.Component {
   static navigationOptions = {
     header: null
+  }
+
+  isTokenAlive = () => {
+    AsyncStorage.getItem('token', (err, value) => {
+      if (err) {
+        console.log(err)
+      } else {
+        return JSON.parse(value)
+      }
+    }).then(val => {
+      var tokenObj = JSON.parse(val)
+      if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {
+        this.props.navigation.navigate('Login')
+      } else if (tokenObj == null) {
+        this.props.dispatch(doLogout())
+        this.props.navigation.navigate('Login')
+      } else {
+        this.props.dispatch(doLogout())
+        this.props.navigation.navigate('Login')
+      }
+    })
   }
 
   render() {
@@ -67,9 +91,7 @@ export default class IntroAppScreen extends React.Component {
             }
           ]}
         >
-          <TouchableHighlight
-            onPress={() => this.props.navigation.navigate('Login')}
-          >
+          <TouchableHighlight onPress={this.isTokenAlive}>
             <Text style={styles.signInText}>Sign In</Text>
           </TouchableHighlight>
         </View>
@@ -77,3 +99,12 @@ export default class IntroAppScreen extends React.Component {
     )
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  dispatch
+})
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(IntroAppScreen)

@@ -192,5 +192,82 @@ export default StyleSheet.create({
     paddingRight: 12,
     padding: 8,
     bottom: 4
+  },
+  editIcon: {
+    backgroundColor: '#f18d1a',
+    flex: 1,
+    alignItems: 'center',
+    position: 'absolute',
+    right: 38,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+    opacity: 0.6,
+    bottom: 4
+  },
+  delIcon: {
+    backgroundColor: '#f18d1a',
+    flex: 1,
+    alignItems: 'center',
+    position: 'absolute',
+    right: 0,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+    padding: 8,
+    bottom: 4
+  },
+  standalone: {
+    marginTop: 30,
+    marginBottom: 30
+  },
+  standaloneRowFront: {
+    alignItems: 'center',
+    backgroundColor: '#CCC',
+    justifyContent: 'center',
+    height: 50
+  },
+  standaloneRowBack: {
+    alignItems: 'center',
+    backgroundColor: '#8BC645',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 15
+  },
+  backTextWhite: {
+    color: '#FFF'
+  },
+  rowFront: {
+    backgroundColor: '#fff',
+    borderBottomColor: '#f1f1f1',
+    borderBottomWidth: 1,
+    paddingLeft: 10
+  },
+  rowBack: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 0
+  },
+  backRightBtn: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    width: 75
+  },
+  backRightBtnLeft: {
+    backgroundColor: 'blue',
+    right: 75
+  },
+  backRightBtnRight: {
+    backgroundColor: 'red',
+    right: 0
   }
 })

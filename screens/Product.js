@@ -9,6 +9,10 @@ class Product extends React.Component {
     header: null
   }
 
+  state ={
+    refreshing: false
+  }
+
   componentDidMount() {
     this.props.getLables()
     this.props.getProducts()
@@ -36,9 +40,18 @@ class Product extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
-            this.props.dispatch(getLables())
-            this.props.dispatch(getProducts())
-            this.props.navigation.navigate('ProductList')
+            this.props.navigation.navigate('ProductsOverview', {
+              productId: values.productLabelId
+            })
+            this.setState({
+              refreshing: true
+            })
+            this.props.getProducts() !== undefined &&
+              this.props.getProducts().then(() => {
+                this.setState({
+                  refreshing: false
+                })
+              })
           } else {
             //this.props.navigation.navigate('Login')
             alert('pls try again')
@@ -51,14 +64,14 @@ class Product extends React.Component {
   }
 
   render() {
-    const { labels = [], dispatch, products = [], navigation } = this.props
-
+    const { labels = [], navigation } = this.props
+    const { refreshing } = this.state
     return (
       <ProductFormScreen
         labels={labels}
-        products={products}
         onSubmit={this.handleSubmit}
         navigation={navigation}
+        refreshing={refreshing}
       />
     )
   }
@@ -73,8 +86,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   dispatch,
   getLables: () => dispatch(getLables()),
-  getProducts: () => dispatch(getProducts()),
-  getLabel: id => dispatch(getLabel(id))
+  getProducts: () => dispatch(getProducts())
 })
 
 export default connect(

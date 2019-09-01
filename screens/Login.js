@@ -35,11 +35,22 @@ class Login extends React.Component {
         if (res.error) {
           alert(res.error)
         } else {
-          AsyncStorage.setItem('token', JSON.stringify(res)).then(values => {
-            this.setState({
-              isLoggedIn: true
-            })
-            this.props.dispatch(doLoggedIn())
+          var tokenexpiration = new Date().setSeconds(
+            new Date().getSeconds() + parseInt(3599)
+          )
+          res.tokenExp = tokenexpiration
+          AsyncStorage.setItem('token', JSON.stringify(res))
+
+          AsyncStorage.getItem('token', (err, value) => {
+            if (err) {
+              console.log(err)
+            } else {
+              return JSON.parse(value)
+            }
+          }).then(val => {
+            var tokenObj = JSON.parse(val)
+            var accessToken = tokenObj.access_token
+            this.props.dispatch(doLoggedIn(accessToken))
           })
         }
         return res
@@ -63,7 +74,10 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  dispatch
+  dispatch,
+  doLoggedIn: () => {
+    dispatch(doLoggedIn())
+  }
 })
 
 export default connect(

@@ -4,12 +4,14 @@ import { reducer as authReducer } from './auth'
 import { reducer as labelsReducer } from './labels'
 import { reducer as productsReducer } from './products'
 import { reducer as labelReducer } from './label'
+import { reducer as productReducer } from './product'
 
 const rootReducer = combineReducers({
   form: formReducer,
   auth: authReducer,
   labels: labelsReducer,
   products: productsReducer,
-  label: labelReducer
+  label: labelReducer,
+  product: productReducer
 })
 export default rootReducer
