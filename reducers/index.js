@@ -5,6 +5,7 @@ import { reducer as labelsReducer } from './labels'
 import { reducer as productsReducer } from './products'
 import { reducer as labelReducer } from './label'
 import { reducer as productReducer } from './product'
+import { reducer as clientuserReducer } from './clientusers'
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   labels: labelsReducer,
   products: productsReducer,
   label: labelReducer,
-  product: productReducer
+  product: productReducer,
+  clientusers: clientuserReducer
 })
 export default rootReducer

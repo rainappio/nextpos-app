@@ -9,7 +9,7 @@ class Product extends React.Component {
     header: null
   }
 
-  state ={
+  state = {
     refreshing: false
   }
 

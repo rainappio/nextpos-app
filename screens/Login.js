@@ -2,10 +2,9 @@ import React from 'react'
 import { AsyncStorage, View } from 'react-native'
 import { connect } from 'react-redux'
 import { encode as btoa } from 'base-64'
-import { doLoggedIn } from '../actions'
+import { doLoggedIn, getClientUsr } from '../actions'
 import LoginScreen from './LoginScreen'
 import LoginSuccessScreen from './LoginSuccessScreen'
-import HomeScreen from './HomeScreen'
 
 class Login extends React.Component {
   static navigationOptions = {
@@ -14,6 +13,10 @@ class Login extends React.Component {
 
   state = {
     isLoggedIn: false
+  }
+
+  componentDidMount() {
+    this.props.getClientUsr()
   }
 
   handleSubmit = values => {
@@ -39,6 +42,8 @@ class Login extends React.Component {
             new Date().getSeconds() + parseInt(3599)
           )
           res.tokenExp = tokenexpiration
+          res.cli_userName = values.username
+          res.cli_masterPwd = values.masterPassword
           AsyncStorage.setItem('token', JSON.stringify(res))
 
           AsyncStorage.getItem('token', (err, value) => {
@@ -49,8 +54,9 @@ class Login extends React.Component {
             }
           }).then(val => {
             var tokenObj = JSON.parse(val)
-            var accessToken = tokenObj.access_token
+            var accessToken = tokenObj !== null && tokenObj.access_token
             this.props.dispatch(doLoggedIn(accessToken))
+            this.props.getClientUsr()
           })
         }
         return res
@@ -59,10 +65,12 @@ class Login extends React.Component {
   }
 
   render() {
-    const { isLoggedIn, navigation } = this.props
+    const { isLoggedIn, navigation, clientusers } = this.props
 
     if (isLoggedIn) {
-      return <LoginSuccessScreen navigation={navigation} />
+      return (
+        <LoginSuccessScreen navigation={navigation} clientusers={clientusers} />
+      )
     } else {
       return <LoginScreen onSubmit={this.handleSubmit} />
     }
@@ -70,13 +78,17 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  isLoggedIn: state.auth.isLoggedIn
+  isLoggedIn: state.auth.isLoggedIn,
+  clientusers: state.clientusers.data.users
 })
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
   doLoggedIn: () => {
     dispatch(doLoggedIn())
+  },
+  getClientUsr: () => {
+    dispatch(getClientUsr())
   }
 })
 

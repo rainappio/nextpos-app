@@ -269,5 +269,29 @@ export default StyleSheet.create({
   backRightBtnRight: {
     backgroundColor: 'red',
     right: 0
+  },
+  borderRadius4: {
+    borderRadius: 4
+  },
+  textBig: {
+    fontSize: 22
+  },
+  textBold: {
+    fontWeight: 'bold'
+  },
+  uerIcon: {
+    color: '#fff',
+    fontSize: 18,
+    flex: 1,
+    textAlign: 'center',
+    position: 'absolute',
+    right: 0,
+    width: 40,
+    height: 40,
+    borderRadius: 40,
+    paddingTop: 8
+  },
+  orange_bg: {
+    backgroundColor: '#f18d1a'
   }
 })
