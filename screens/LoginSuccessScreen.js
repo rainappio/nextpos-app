@@ -5,7 +5,8 @@ import {
   TouchableHighlight,
   Image,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage
 } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -29,6 +30,15 @@ class LoginSuccessScreen extends React.Component {
       isLogoutBtnClick: true,
       refreshing: true
     })
+  }
+
+  async handleClientUserLogout(navigation) {
+    try {
+      await AsyncStorage.removeItem('clientusrToken')
+      navigation.navigate('Login')
+    } catch (err) {
+      console.log(`The error is: ${err}`)
+    }
   }
 
   render() {
@@ -68,6 +78,31 @@ class LoginSuccessScreen extends React.Component {
                 </Text>
               ) : null}
             </View>
+
+            {isAuthClientUser ? (
+              <View
+                style={[
+                  {
+                    width: '100%',
+                    position: 'absolute',
+                    top: 0
+                  }
+                ]}
+              >
+                <TouchableHighlight>
+                  <Text
+                    style={{
+                      textAlign: 'right',
+                      color: '#f18d1a',
+                      marginTop: 12
+                    }}
+                    onPress={() => this.handleClientUserLogout(navigation)}
+                  >
+                    Logout
+                  </Text>
+                </TouchableHighlight>
+              </View>
+            ) : null}
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View
@@ -242,9 +277,7 @@ class LoginSuccessScreen extends React.Component {
                     styles.paddBottom_30
                   ]}
                 >
-                  <TouchableOpacity
-                    onPress={this.goToClentUsersList}
-                  >
+                  <TouchableOpacity onPress={this.goToClentUsersList}>
                     <View>
                       <Icon
                         name="ios-log-out"
@@ -252,7 +285,7 @@ class LoginSuccessScreen extends React.Component {
                         color="#f18d1a"
                         style={[styles.centerText, styles.margin_15]}
                       />
-                      <Text style={styles.centerText}>Logout</Text>
+                      <Text style={styles.centerText}>Client Users</Text>
                     </View>
                   </TouchableOpacity>
                 </View>

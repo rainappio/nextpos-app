@@ -7,11 +7,11 @@ import {
   ActivityIndicator
 } from 'react-native'
 import { connect } from 'react-redux'
-import ProductFormScreen from './ProductFormScreen'
-import { getLables, getProduct, clearProduct, getProducts } from '../actions'
+import StaffFormScreen from './StaffFormScreen'
+import { clearClient, getClientUsr, getClientUsrs } from '../actions'
 import styles from '../styles'
 
-class ProductEdit extends Component {
+class StaffEditScreen extends Component {
   static navigationOptions = {
     header: null
   }
@@ -24,17 +24,18 @@ class ProductEdit extends Component {
   }
 
   componentDidMount() {
-    this.props.getLables()
-    this.props.load()
+    this.props.getClientUsr()
   }
 
   handleEditCancel = () => {
-    this.props.clearProduct()
-    this.props.navigation.navigate('ProductsOverview')
+    this.props.clearClient()
+    this.props.navigation.navigate('StaffsOverview')
   }
 
   handleUpdate = values => {
-    var prdId = this.props.navigation.state.params.productId
+    // console.log(values)
+    // console.log("+++")
+    var staffname = this.props.navigation.state.params.staffname
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -43,22 +44,26 @@ class ProductEdit extends Component {
       }
     }).then(val => {
       var tokenObj = JSON.parse(val)
-      fetch(`http://35.234.63.193/products/${prdId}`, {
+      // console.log(tokenObj)
+      // console.log(",,,,,,,,,,,,,")
+      fetch(`http://35.234.63.193/clients/me/users/${staffname}`, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-client-id': tokenObj.clientId,
+          // 'x-client-id': tokenObj.clientId,
           Authorization: 'Bearer ' + tokenObj.access_token
         },
         body: JSON.stringify(values)
       })
         .then(response => {
+          // console.log(response)
+          // console.log("&&&&&&")
           if (response.status === 200) {
-            this.props.clearProduct(prdId)
-            this.props.navigation.navigate('ProductsOverview', {
-              productId: prdId
+            this.props.clearClient()
+            this.props.navigation.navigate('StaffsOverview', {
+              staffname: staffname
             })
 
             this.setState({
@@ -66,14 +71,14 @@ class ProductEdit extends Component {
               saveError: false,
               refreshing: true
             })
-            this.props.getProducts() !== undefined &&
-              this.props.getProducts().then(() => {
+            this.props.getClientUsrs() !== undefined &&
+              this.props.getClientUsrs().then(() => {
                 this.setState({
                   refreshing: false
                 })
               })
           } else {
-            alert('pls try again')
+            alert('oops, pls try again')
           }
         })
         .catch(error => {
@@ -88,16 +93,14 @@ class ProductEdit extends Component {
 
   render() {
     const {
-      labels,
       navigation,
-      product,
+      clientuser,
       clearProduct,
       haveData,
       haveError,
       isLoading
     } = this.props
     const { isEditForm, refreshing } = this.state
-    product.price != undefined ? (product.price += '') : null
 
     if (isLoading) {
       return (
@@ -107,11 +110,10 @@ class ProductEdit extends Component {
       )
     } else if (haveData) {
       return (
-        <ProductFormScreen
-          labels={labels}
+        <StaffFormScreen
           isEditForm={isEditForm}
           navigation={navigation}
-          initialValues={product}
+          initialValues={clientuser}
           handleEditCancel={this.handleEditCancel}
           onSubmit={this.handleUpdate}
           refreshing={refreshing}
@@ -124,26 +126,21 @@ class ProductEdit extends Component {
 }
 
 const mapStateToProps = state => ({
-  gblahs: state,
-  labels: state.labels.data.labels,
-  product: state.product.data,
-  haveData: state.product.haveData,
-  haveError: state.product.haveError,
-  isLoading: state.product.loading
+  clientuser: state.clientuser.data,
+  haveData: state.clientuser.haveData,
+  haveError: state.clientuser.haveError,
+  isLoading: state.clientuser.loading
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getLables: () => dispatch(getLables()),
-  load: () => {
-    dispatch(getProduct(props.navigation.state.params.productId))
-  },
-  clearProduct: () =>
-    dispatch(clearProduct(props.navigation.state.params.productId)),
-  getProducts: () => dispatch(getProducts())
+  getClientUsr: () =>
+    dispatch(getClientUsr(props.navigation.state.params.staffname)),
+  clearClient: () => dispatch(clearClient()),
+  getClientUsrs: () => dispatch(getClientUsrs())
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProductEdit)
+)(StaffEditScreen)

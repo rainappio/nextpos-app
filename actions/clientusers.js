@@ -17,7 +17,7 @@ export const fetchClientsUsersFailure = error => ({
   error
 })
 
-export const getClientUsr = () => {
+export const getClientUsrs = () => {
   return dispatch => {
     dispatch(fetchClientsUsers())
     AsyncStorage.getItem('token', (err, value) => {
@@ -27,7 +27,7 @@ export const getClientUsr = () => {
         return JSON.parse(value)
       }
     }).then(val => {
-      var tokenObj = JSON.parse(val)
+      var tokenObj = val !== null && JSON.parse(val)
       var auth = 'Bearer ' + tokenObj.access_token
       return fetch('http://35.234.63.193/clients/me/users', {
         method: 'GET',

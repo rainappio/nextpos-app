@@ -131,15 +131,19 @@ class SettingsScreen extends React.Component {
                   styles.paddBottom_30
                 ]}
               >
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('StaffsOverview')
+                  }
+                >
                   <View>
                     <Icon
-                      name="md-star"
+                      name="ios-people"
                       size={40}
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>Categories</Text>
+                    <Text style={styles.centerText}>Staff</Text>
                   </View>
                 </TouchableOpacity>
               </View>

@@ -13,6 +13,7 @@ import {
   AsyncStorage
 } from 'react-native'
 import { encode as btoa } from 'base-64'
+import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
@@ -105,6 +106,17 @@ class ClientUserLoginForm extends React.Component {
               style={styles.welcomeImage}
             />
           </View>
+
+          <Text
+            style={[
+              styles.welcomeText,
+              styles.orange_color,
+              styles.marginTop40
+            ]}
+            onPress={() => this.props.navigation.goBack()}
+          >
+            <Icon name="ios-arrow-back" size={26} color="#f18d1a" />
+          </Text>
 
           <Text
             style={[
