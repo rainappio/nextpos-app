@@ -22,7 +22,21 @@ class ClockIn extends React.Component {
   }
 
   state = {
-    isClockIn: false
+    timecardStatus: ''
+  }
+
+  componentDidMount() {
+    AsyncStorage.getItem('timecardStatus', (err, value) => {
+      if (err) {
+        console.log(err)
+      } else {
+        return value
+      }
+    }).then(val => {
+      this.setState({
+        timecardStatus: val
+      })
+    })
   }
 
   handleClockIn = currentTime => {
@@ -44,11 +58,11 @@ class ClockIn extends React.Component {
         },
         body: JSON.stringify(currentTime)
       })
-        .then(response => {
-          if (response.status === 200) {
-            this.setState({
-              isClockIn: true
-            })
+        .then(response => response.json())
+        .then(res => {
+          if (Object.keys(res).length > 0) {
+            AsyncStorage.setItem('timecardStatus', res.timeCardStatus)
+            this.props.navigation.navigate('LoginSuccess')
           } else {
             alert('pls try again')
           }
@@ -78,13 +92,13 @@ class ClockIn extends React.Component {
         },
         body: JSON.stringify(currentTime)
       })
-        .then(response => {
-          if (response.status === 200) {
-            this.setState({
-              isClockIn: false
-            })
+        .then(response => response.json())
+        .then(res => {
+          if (Object.keys(res).length > 0) {
+            AsyncStorage.setItem('timecardStatus', res.timeCardStatus)
+            this.props.navigation.navigate('LoginSuccess')
           } else {
-            alert('pls try again')
+            alert(res.error)
           }
         })
         .catch(error => {
@@ -93,19 +107,9 @@ class ClockIn extends React.Component {
     })
   }
 
-  async handleoverAllLogout(navigation) {
-    try {
-      await AsyncStorage.removeItem('token')
-      await AsyncStorage.removeItem('clientusrToken')
-      navigation.navigate('Intro')
-    } catch (err) {
-      console.log(`The error is: ${err}`)
-    }
-  }
-
   render() {
     const { navigation } = this.props
-    const { isClockIn } = this.state
+    const { timecardStatus } = this.state
     var authClientUserName =
       this.props.navigation.state.params !== undefined &&
       this.props.navigation.state.params.authClientUserName
@@ -162,11 +166,9 @@ class ClockIn extends React.Component {
             >
               <TouchableOpacity
                 onPress={
-                  isClockIn
-                    ? currentTime =>
-                        this.handleClockOut(new Date().toISOString())
-                    : currentTime =>
-                        this.handleClockIn(new Date().toISOString())
+                  timecardStatus === 'ACTIVE'
+                    ? () => this.handleClockOut(new Date().toISOString())
+                    : () => this.handleClockIn(new Date().toISOString())
                 }
               >
                 <View>
@@ -177,30 +179,11 @@ class ClockIn extends React.Component {
                     style={[styles.centerText, styles.margin_15]}
                   />
                   <Text style={(styles.centerText, styles.whiteColor)}>
-                    {isClockIn ? 'Clock Out' : 'Clock In'}
+                    {timecardStatus === 'ACTIVE' ? 'Clock Out' : 'Clock In'}
                   </Text>
                 </View>
               </TouchableOpacity>
             </View>
-          </View>
-
-          <View
-            style={[
-              {
-                width: '100%',
-                position: 'absolute',
-                bottom: 80
-              }
-            ]}
-          >
-            <TouchableHighlight>
-              <Text
-                style={styles.signInText}
-                onPress={() => this.handleoverAllLogout(navigation)}
-              >
-                Logout
-              </Text>
-            </TouchableHighlight>
           </View>
 
           <View

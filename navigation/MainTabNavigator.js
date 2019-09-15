@@ -23,6 +23,9 @@ import ProductsOverview from '../screens/ProductsOverview'
 import ClientUsers from '../screens/ClientUsers'
 import ClientUserLogin from '../screens/ClientUserLogin'
 import ClockIn from '../screens/ClockIn'
+import StaffsOverview from '../screens/StaffsOverview'
+import StaffEditScreen from '../screens/StaffEditScreen'
+import Staff from '../screens/Staff'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -40,19 +43,19 @@ const HomeStack = createStackNavigator({
   ProductsOverview: ProductsOverview,
   ClientUsers: ClientUsers,
   ClientUserLogin: ClientUserLogin,
-  ClockIn: ClockIn
+  ClockIn: ClockIn,
+  StaffsOverview: StaffsOverview,
+  StaffEdit: StaffEditScreen,
+  Staff: Staff
 })
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'Home'
+  ,
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      name={'ios-book'}
     />
   )
 }
@@ -66,7 +69,7 @@ LinksStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={'ios-book'}
     />
   )
 }
@@ -80,7 +83,7 @@ SettingsStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={'ios-book'}
     />
   )
 }

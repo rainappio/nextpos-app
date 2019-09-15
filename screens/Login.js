@@ -2,7 +2,7 @@ import React from 'react'
 import { AsyncStorage, View } from 'react-native'
 import { connect } from 'react-redux'
 import { encode as btoa } from 'base-64'
-import { doLoggedIn, getClientUsr } from '../actions'
+import { doLoggedIn, getClientUsrs } from '../actions'
 import LoginScreen from './LoginScreen'
 import LoginSuccessScreen from './LoginSuccessScreen'
 
@@ -16,7 +16,7 @@ class Login extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getClientUsr()
+    this.props.getClientUsrs()
   }
 
   handleSubmit = values => {
@@ -56,7 +56,7 @@ class Login extends React.Component {
             var tokenObj = JSON.parse(val)
             var accessToken = tokenObj !== null && tokenObj.access_token
             this.props.dispatch(doLoggedIn(accessToken))
-            this.props.getClientUsr()
+            this.props.getClientUsrs()
           })
         }
         return res
@@ -87,8 +87,8 @@ const mapDispatchToProps = dispatch => ({
   doLoggedIn: () => {
     dispatch(doLoggedIn())
   },
-  getClientUsr: () => {
-    dispatch(getClientUsr())
+  getClientUsrs: () => {
+    dispatch(getClientUsrs())
   }
 })
 

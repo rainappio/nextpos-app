@@ -7,7 +7,8 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-  RefreshControl
+  RefreshControl,
+  TouchableHighlight
 } from 'react-native'
 import styles from '../styles'
 
@@ -16,15 +17,24 @@ class ClientUsers extends React.Component {
     header: null
   }
 
+  async handleDefaultUserLogout(navigation) {
+    try {
+      await AsyncStorage.removeItem('token')
+      navigation.goBack()
+    } catch (err) {
+      console.log(`The error is: ${err}`)
+    }
+  }
+
   render() {
-    const { clientusers, refreshing } = this.props
+    const { clientusers, refreshing, navigation } = this.props
 
     return (
       <View
         style={[styles.container]}
         refreshControl={<RefreshControl refreshing={refreshing} />}
       >
-        <View style={[{ position: 'absolute', top: 10 }]}>
+        <View style={[{ position: 'absolute', top: 0 }]}>
           <Image
             source={
               __DEV__
@@ -33,6 +43,25 @@ class ClientUsers extends React.Component {
             }
             style={styles.welcomeImage}
           />
+        </View>
+
+        <View
+          style={[
+            {
+              width: '100%',
+              position: 'absolute',
+              top: 0
+            }
+          ]}
+        >
+          <TouchableHighlight>
+            <Text
+              style={{ textAlign: 'right', color: '#f18d1a', marginTop: 12 }}
+              onPress={() => this.handleDefaultUserLogout(navigation)}
+            >
+              Logout
+            </Text>
+          </TouchableHighlight>
         </View>
 
         <View>

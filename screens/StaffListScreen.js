@@ -1,5 +1,4 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
 import {
   Image,
   Platform,
@@ -15,13 +14,13 @@ import {
   ActivityIndicator
 } from 'react-native'
 import { connect } from 'react-redux'
-import ProductRow from './ProductRow'
+import StaffRow from './StaffRow'
 import styles from '../styles'
 
-export const ProductListScreen = ({
+export const StaffListScreen = ({
   isLoading,
   haveError,
-  products,
+  clientusers,
   navigation,
   getProduct,
   dispatch
@@ -38,20 +37,14 @@ export const ProductListScreen = ({
         <Text>Err during loading, check internet conn...</Text>
       </View>
     )
-  } else if (products !== undefined && products.length === 0) {
+  } else if (clientusers.length === 0) {
     return (
       <View style={[styles.container]}>
-        <Text>no products ...</Text>
+        <Text>no clientusers ...</Text>
       </View>
     )
   }
-  return (
-    <ProductRow
-      products={products}
-      navigation={navigation}
-      getProduct={getProduct}
-    />
-  )
+  return <StaffRow clientusers={clientusers} navigation={navigation} />
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -64,4 +57,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   null,
   mapDispatchToProps
-)(ProductListScreen)
+)(StaffListScreen)

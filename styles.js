@@ -285,13 +285,32 @@ export default StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     position: 'absolute',
-    right: 0,
-    width: 40,
-    height: 40,
-    borderRadius: 40,
-    paddingTop: 8
+    left: 0,
+    width: 30,
+    height: 30,
+    borderRadius: 30,
+    paddingTop: 2
   },
   orange_bg: {
     backgroundColor: '#f18d1a'
+  },
+  editIconII: {
+    backgroundColor: '#f18d1a',
+    flex: 1,
+    alignItems: 'center',
+    position: 'absolute',
+    right: 0,
+    paddingTop: 6,
+    paddingBottom: 6,
+    paddingLeft: 12,
+    paddingRight: 12,
+    opacity: 0.6,
+    bottom: 4
+  },
+  colordelIcon: {
+    flex: 1,
+    alignItems: 'center',
+    position: 'absolute',
+    right: 0
   }
 })
