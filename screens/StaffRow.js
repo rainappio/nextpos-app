@@ -43,6 +43,10 @@ class StaffRow extends React.Component {
       isLoading
     } = this.props
 
+    var clientusersOnly = clientusers.filter(function(el) {
+      return el.defaultUser === false
+    })
+
     return (
       <ScrollView
         refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
@@ -64,7 +68,7 @@ class StaffRow extends React.Component {
 
             <View style={styles.standalone}>
               <SwipeListView
-                data={clientusers}
+                data={clientusersOnly}
                 renderItem={(data, rowMap) => (
                   <View style={styles.rowFront}>
                     <Text

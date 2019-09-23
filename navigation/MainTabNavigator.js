@@ -1,5 +1,5 @@
 import React from 'react'
-import { Platform } from 'react-native'
+import { Platform, Text } from 'react-native'
 import {
   createStackNavigator,
   createBottomTabNavigator
@@ -26,6 +26,10 @@ import ClockIn from '../screens/ClockIn'
 import StaffsOverview from '../screens/StaffsOverview'
 import StaffEditScreen from '../screens/StaffEditScreen'
 import Staff from '../screens/Staff'
+import TablesScreen from '../screens/TablesScreen'
+import OrdersScreen from '../screens/OrdersScreen'
+import ReservationScreen from '../screens/ReservationScreen'
+import ReportsScreen from '../screens/ReportsScreen'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -50,28 +54,8 @@ const HomeStack = createStackNavigator({
 })
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home'
-  ,
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={'ios-book'}
-    />
-  )
-}
-
-const LinksStack = createStackNavigator({
-  Links: LinksScreen
-})
-
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={'ios-book'}
-    />
-  )
+  tabBarLabel: 'Home',
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={'md-home'} />
 }
 
 const SettingsStack = createStackNavigator({
@@ -83,13 +67,107 @@ SettingsStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={'ios-book'}
+      name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'}
     />
   )
 }
 
+const TablesStack = createStackNavigator({
+  Tables: TablesScreen
+})
+
+TablesStack.navigationOptions = {
+  tabBarLabel: 'Tables',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-grid' : 'md-grid'}
+    />
+  )
+}
+
+const OrdersStack = createStackNavigator({
+  Orders: OrdersScreen
+})
+
+OrdersStack.navigationOptions = {
+  tabBarLabel: 'Orders',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name="md-bookmark" size={32} />
+  )
+}
+
+const ReservationStack = createStackNavigator({
+  Reservation: ReservationScreen
+})
+
+ReservationStack.navigationOptions = {
+  tabBarLabel: 'Reservation',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name="ios-paper" size={32} />
+  )
+}
+
+const ReportsStack = createStackNavigator({
+  Reports: ReportsScreen
+})
+
+ReportsStack.navigationOptions = {
+  tabBarLabel: 'Reports',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name="md-paper" size={32} />
+  )
+}
+
 export default createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack
+  HomeStack: {
+    screen: HomeStack,
+    navigationOptions: ({ navigation }) => {
+      if (navigation.state.routes.length > 0) {
+        navigation.state.routes.map(route => {
+          if (
+            route.routeName === 'Home' ||
+            route.routeName === 'Intro' ||
+            route.routeName === 'Login'
+          ) {
+            tabBarVisible = false
+          } else {
+            tabBarVisible = true
+          }
+          //return tabBarVisible
+        })
+        return { tabBarVisible }
+      }
+    }
+  },
+  TablesStack: {
+    screen: TablesStack,
+    navigationOptions: {
+      headerTitle: 'Tables'
+    }
+  },
+  OrdersStack: {
+    screen: OrdersStack,
+    navigationOptions: {
+      headerTitle: 'Orders'
+    }
+  },
+  ReservationStack: {
+    screen: ReservationStack,
+    navigationOptions: {
+      headerTitle: 'Reservation'
+    }
+  },
+  ReportsStack: {
+    screen: ReportsStack,
+    navigationOptions: {
+      headerTitle: 'Reports'
+    }
+  },
+  SettingsStack: {
+    screen: SettingsStack,
+    navigationOptions: {
+      headerTitle: 'Settings'
+    }
+  }
 })

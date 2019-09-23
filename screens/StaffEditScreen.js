@@ -33,8 +33,6 @@ class StaffEditScreen extends Component {
   }
 
   handleUpdate = values => {
-    // console.log(values)
-    // console.log("+++")
     var staffname = this.props.navigation.state.params.staffname
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
@@ -44,8 +42,6 @@ class StaffEditScreen extends Component {
       }
     }).then(val => {
       var tokenObj = JSON.parse(val)
-      // console.log(tokenObj)
-      // console.log(",,,,,,,,,,,,,")
       fetch(`http://35.234.63.193/clients/me/users/${staffname}`, {
         method: 'POST',
         withCredentials: true,
@@ -58,8 +54,6 @@ class StaffEditScreen extends Component {
         body: JSON.stringify(values)
       })
         .then(response => {
-          // console.log(response)
-          // console.log("&&&&&&")
           if (response.status === 200) {
             this.props.clearClient()
             this.props.navigation.navigate('StaffsOverview', {

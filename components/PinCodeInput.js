@@ -10,6 +10,7 @@ export default class PinCodeInput extends Component {
       children,
       meta: { error, touched, valid },
       options,
+      customHeight,
       ...rest
     } = this.props
 
@@ -45,7 +46,7 @@ export default class PinCodeInput extends Component {
               borderRadius: 2,
               borderColor: 'orange',
               // backgroundColor: 'transparent',
-              height: 71,
+              height: customHeight,
               marginRight: 8
             }}
             cellStyleFocused={null}

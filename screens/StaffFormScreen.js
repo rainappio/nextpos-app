@@ -16,11 +16,14 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux'
 import { isRequired } from '../validators'
 import InputText from '../components/InputText'
+import PinCodeInput from '../components/PinCodeInput'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import DropDown from '../components/DropDown'
 import MultiDropDown from '../components/MultiDropDown'
 import { getClientUsrs } from '../actions'
+import EditPasswordPopUp from '../components/EditPasswordPopUp'
+import RNSwitch from '../components/RNSwitch'
 import styles from '../styles'
 
 class StaffFormScreen extends React.Component {
@@ -28,17 +31,10 @@ class StaffFormScreen extends React.Component {
     header: null
   }
 
-  state = {
-    roles: [
-      {
-        id: 'ADMIN',
-        name: 'ADMIN'
-      },
-      {
-        id: 'USER',
-        name: 'USER'
-      }
-    ]
+  hangleToggle = value => {
+    this.setState({
+      switchedVal: value
+    })
   }
 
   handleDelete = name => {
@@ -61,7 +57,6 @@ class StaffFormScreen extends React.Component {
         }
       })
         .then(response => {
-          console.log(response)
           if (response.status === 204) {
             this.props.navigation.navigate('StaffsOverview')
             this.setState({ refreshing: true })
@@ -86,14 +81,15 @@ class StaffFormScreen extends React.Component {
       handleSubmit,
       isEditForm,
       refreshing,
-      handleEditCancel
+      handleEditCancel,
+      initialValues
     } = this.props
 
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
-          {isEditForm ? (
-            <View>
+          <View>
+            {isEditForm ? (
               <Text
                 style={[
                   styles.welcomeText,
@@ -103,73 +99,117 @@ class StaffFormScreen extends React.Component {
                   styles.mgrbtn80
                 ]}
               >
-                Edit Staff
+                Staff - {this.props.navigation.state.params.staffname}
               </Text>
-
-              <View style={styles.colordelIcon}>
-                <Icon
-                  name="md-trash"
-                  size={25}
-                  color="#f18d1a"
-                  onPress={() =>
-                    this.handleDelete(
-                      this.props.navigation.state.params.staffname
-                    )
-                  }
-                />
-              </View>
-            </View>
-          ) : (
-            <View>
-              <BackBtn />
+            ) : (
               <Text
                 style={[
                   styles.welcomeText,
                   styles.orange_color,
                   styles.textMedium,
-                  styles.textBold
+                  styles.textBold,
+                  styles.mgrbtn80
                 ]}
               >
-                Create Staff
+                Add Staff
               </Text>
+            )}
+
+            <View style={styles.colordelIcon}>
+              <Icon
+                name="md-trash"
+                size={25}
+                color="#f18d1a"
+                onPress={() =>
+                  this.handleDelete(
+                    this.props.navigation.state.params.staffname
+                  )
+                }
+              />
             </View>
-          )}
 
-          <Field
-            name="nickname"
-            component={InputText}
-            placeholder="Nick Name"
-            secureTextEntry={false}
-          />
+            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+              <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
+                <Text>Nick Name</Text>
+              </View>
+              <View style={[styles.onesixthWidth]}>
+                <Field
+                  name="nickname"
+                  component={InputText}
+                  placeholder="Nick Name"
+                  secureTextEntry={false}
+                />
+              </View>
+            </View>
 
-          <Field
-            name="username"
-            component={InputText}
-            validate={isRequired}
-            placeholder="User Name"
-            secureTextEntry={false}
-          />
+            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+              <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
+                <Text>User Name</Text>
+              </View>
+              <View style={[styles.onesixthWidth]}>
+                <Field
+                  name="username"
+                  component={InputText}
+                  validate={isRequired}
+                  placeholder="User Name"
+                  secureTextEntry={false}
+                />
+              </View>
+            </View>
 
-          <Field
-            name="password"
-            component={InputText}
-            validate={isRequired}
-            placeholder="Password"
-            secureTextEntry={true}
-            keyboardType={'numeric'}
-          />
+            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+              <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
+                <Text>Password</Text>
+              </View>
+              <View style={[styles.onesixthWidth, styles.mgrtotop8]}>
+                <Field
+                  name="password"
+                  component={PinCodeInput}
+                  onChange={val => this.val}
+                  customHeight={40}
+                />
+              </View>
+            </View>
 
-          <Field
-            component={MultiDropDown}
-            name="roles"
-            items={this.state.roles}
-            search
-            selection
-            fluid
-            placeholder="Staff Roles"
-          />
+            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+              {isEditForm && (
+                <EditPasswordPopUp
+                  navigation={this.props.navigation}
+                  name={initialValues.username}
+                />
+              )}
+            </View>
 
-          {/*  <MultiDropDown/>*/}
+            {isEditForm ? (
+              <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+                <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
+                  <Text>Manager</Text>
+                </View>
+                <View style={[styles.onesixthWidth, styles.mgrtotop8]}>
+                  <Field
+                    name="roleStatus"
+                    component={RNSwitch}
+                    //onChange={(value) => this.hangleToggle(true)}
+                    // value={initialValues.roles !== undefined && initialValues.roles.includes('MANAGER')}
+                  />
+                </View>
+              </View>
+            ) : (
+              <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+                <View style={[styles.onethirdWidth, styles.mgrtotop20]}>
+                  <Text>Manager</Text>
+                </View>
+                <View style={[styles.onesixthWidth, styles.mgrtotop20]}>
+                  <Field
+                    name="roleStatus"
+                    component={RNSwitch}
+                    //onChange={(value) => this.hangleToggle(true)}
+                    // value={initialValues.roles !== undefined && initialValues.roles.includes('MANAGER')}
+                  />
+                </View>
+              </View>
+            )}
+          </View>
 
           <View
             style={[

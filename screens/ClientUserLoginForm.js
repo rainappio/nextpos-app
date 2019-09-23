@@ -134,6 +134,7 @@ class ClientUserLoginForm extends React.Component {
             name="encryptedPassword"
             component={PinCodeInput}
             onChange={val => this.clientLogin(val)}
+            customHeight={71}
           />
         </View>
       </DismissKeyboard>

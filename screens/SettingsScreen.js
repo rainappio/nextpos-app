@@ -87,7 +87,7 @@ class SettingsScreen extends React.Component {
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>Storres</Text>
+                    <Text style={styles.centerText}>Stores</Text>
                   </View>
                 </TouchableOpacity>
               </View>

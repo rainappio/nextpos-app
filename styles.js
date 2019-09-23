@@ -9,7 +9,7 @@ export default StyleSheet.create({
     marginTop: 62,
     marginLeft: 35,
     marginRight: 35,
-    marginBottom: 20,
+    marginBottom: 62,
     position: 'relative'
   },
   childContainer: {
@@ -312,5 +312,26 @@ export default StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     right: 0
+  },
+  onethirdWidth: {
+    width: '35%'
+  },
+  onesixthWidth: {
+    width: '65%'
+  },
+  mgrtotop8: {
+    marginTop: 8
+  },
+  mgrtotop12: {
+    marginTop: 12
+  },
+  paddLeft20: {
+    paddingLeft: 20
+  },
+  paddRight20: {
+    paddingRight: 20
+  },
+  mgrtotop20: {
+    marginTop: 20
   }
 })

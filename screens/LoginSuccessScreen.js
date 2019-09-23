@@ -220,7 +220,11 @@ class LoginSuccessScreen extends React.Component {
                 ]}
               >
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Settings')}
+                  onPress={() =>
+                    this.props.navigation.navigate('Settings', {
+                      currRoute: navigation.state.routeName
+                    })
+                  }
                 >
                   <View>
                     <Icon
