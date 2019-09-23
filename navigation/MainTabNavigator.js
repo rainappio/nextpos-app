@@ -31,6 +31,7 @@ import OrdersScreen from '../screens/OrdersScreen'
 import ReservationScreen from '../screens/ReservationScreen'
 import ReportsScreen from '../screens/ReportsScreen'
 
+
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   Intro: IntroAppScreen,
