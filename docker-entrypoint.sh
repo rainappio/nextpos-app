@@ -4,6 +4,7 @@ set -e
 # https://www.freecodecamp.org/news/docker-entrypoint-cmd-dockerfile-best-practices-abc591c30e21/
 
 npm install
+npm audit fix
 expo login -u ${USERNAME} -p ${PASSWORD}
 expo optimize
 expo publish
