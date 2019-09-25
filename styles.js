@@ -9,7 +9,7 @@ export default StyleSheet.create({
     marginTop: 62,
     marginLeft: 35,
     marginRight: 35,
-    marginBottom: 20,
+    marginBottom: 62,
     position: 'relative'
   },
   childContainer: {
@@ -269,5 +269,69 @@ export default StyleSheet.create({
   backRightBtnRight: {
     backgroundColor: 'red',
     right: 0
+  },
+  borderRadius4: {
+    borderRadius: 4
+  },
+  textBig: {
+    fontSize: 22
+  },
+  textBold: {
+    fontWeight: 'bold'
+  },
+  uerIcon: {
+    color: '#fff',
+    fontSize: 18,
+    flex: 1,
+    textAlign: 'center',
+    position: 'absolute',
+    left: 0,
+    width: 30,
+    height: 30,
+    borderRadius: 30,
+    paddingTop: 2
+  },
+  orange_bg: {
+    backgroundColor: '#f18d1a'
+  },
+  editIconII: {
+    backgroundColor: '#f18d1a',
+    flex: 1,
+    alignItems: 'center',
+    position: 'absolute',
+    right: 0,
+    paddingTop: 6,
+    paddingBottom: 6,
+    paddingLeft: 12,
+    paddingRight: 12,
+    opacity: 0.6,
+    bottom: 4
+  },
+  colordelIcon: {
+    flex: 1,
+    alignItems: 'center',
+    position: 'absolute',
+    right: 0
+  },
+  onethirdWidth: {
+    width: '35%'
+  },
+  onesixthWidth: {
+    width: '65%'
+  },
+  mgrtotop8: {
+    marginTop: 8
+  },
+  mgrtotop12: {
+    marginTop: 12
+  },
+  paddLeft20: {
+    paddingLeft: 20
+  },
+  paddRight20: {
+    paddingRight: 20
+  },
+  mgrtotop20: {
+    marginTop: 20
   }
 })

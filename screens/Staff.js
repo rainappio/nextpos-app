@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
-import ProductFormScreen from './ProductFormScreen'
-import { getProducts, getLables, getLabel } from '../actions'
+import StaffFormScreen from './StaffFormScreen'
+import { getClientUsr, getClientUsrs } from '../actions'
 
-class Product extends React.Component {
+class Staff extends React.Component {
   static navigationOptions = {
     header: null
   }
@@ -14,11 +14,24 @@ class Product extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getLables()
-    this.props.getProducts()
+    this.props.getClientUsr()
   }
 
   handleSubmit = values => {
+    var staffVal = {}
+    console.log(values.roleStatus) //true
+    if (values.roleStatus == true) {
+      staffVal['roles'] = ['MANAGER']
+    } else if (values.roleStatus == false) {
+      staffVal['roles'] = ['ADMIN', 'USER']
+    }
+    staffVal['nickname'] = values.nickname
+    staffVal['username'] = values.username
+    staffVal['password'] = values.password
+
+    console.log(staffVal)
+    console.log('pp')
+    // return;
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -27,7 +40,7 @@ class Product extends React.Component {
       }
     }).then(val => {
       var tokenObj = JSON.parse(val)
-      fetch('http://35.234.63.193/products', {
+      fetch('http://35.234.63.193/clients/me/users', {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
@@ -36,18 +49,20 @@ class Product extends React.Component {
           'x-client-id': tokenObj.clientId,
           Authorization: 'Bearer ' + tokenObj.access_token
         },
-        body: JSON.stringify(values)
+        body: JSON.stringify(staffVal)
       })
         .then(response => {
+          console.log(response) //400 bad request
           if (response.status === 200) {
-            this.props.navigation.navigate('ProductsOverview', {
-              productId: values.productLabelId
-            })
+            this.props.navigation.navigate(
+              'StaffsOverview'
+              // ,{productId: values.productLabelId}
+            )
             this.setState({
               refreshing: true
             })
-            this.props.getProducts() !== undefined &&
-              this.props.getProducts().then(() => {
+            this.props.getClientUsrs() !== undefined &&
+              this.props.getClientUsrs().then(() => {
                 this.setState({
                   refreshing: false
                 })
@@ -64,11 +79,10 @@ class Product extends React.Component {
   }
 
   render() {
-    const { labels = [], navigation } = this.props
+    const { navigation, clientuser } = this.props
     const { refreshing } = this.state
     return (
-      <ProductFormScreen
-        labels={labels}
+      <StaffFormScreen
         onSubmit={this.handleSubmit}
         navigation={navigation}
         refreshing={refreshing}
@@ -78,18 +92,16 @@ class Product extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  labels: state.labels.data.labels,
-  subproducts: state.label.data.subLabels,
-  products: state.products.data.results
+  clientuser: state.clientuser.data
 })
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getLables: () => dispatch(getLables()),
-  getProducts: () => dispatch(getProducts())
+  getClientUsr: () => dispatch(getClientUsr()),
+  getClientUsrs: () => dispatch(getClientUsrs())
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Product)
+)(Staff)

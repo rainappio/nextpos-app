@@ -5,11 +5,10 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 class AddBtn extends React.Component {
   render() {
+    const { onPress } = this.props
     return (
       <TouchableOpacity
-        onPress={() => {
-          this.props.navigation.navigate('Product')
-        }}
+        onPress={onPress}
         style={{ position: 'absolute', right: 0, top: -8 }}
       >
         <View>

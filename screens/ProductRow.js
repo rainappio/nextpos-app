@@ -180,6 +180,7 @@ class ProductRow extends React.Component {
                 )}
                 leftOpenValue={0}
                 rightOpenValue={-80}
+                keyExtractor={(data, rowMap) => rowMap.toString()}
               />
             </View>
           </View>

@@ -77,7 +77,7 @@ class CategoryFormScreen extends React.Component {
             ]}
           >
             <TouchableHighlight
-              onPress={() => this.props.navigation.navigate('ProductList')}
+              onPress={() => this.props.navigation.navigate('ProductsOverview')}
             >
               <Text style={styles.signInText}>Cancel</Text>
             </TouchableHighlight>
