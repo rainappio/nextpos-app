@@ -30,6 +30,7 @@ import TablesScreen from '../screens/TablesScreen'
 import OrdersScreen from '../screens/OrdersScreen'
 import ReservationScreen from '../screens/ReservationScreen'
 import ReportsScreen from '../screens/ReportsScreen'
+import CategoryCustomize from '../screens/CategoryCustomize'
 
 
 const HomeStack = createStackNavigator({
@@ -51,7 +52,8 @@ const HomeStack = createStackNavigator({
   ClockIn: ClockIn,
   StaffsOverview: StaffsOverview,
   StaffEdit: StaffEditScreen,
-  Staff: Staff
+  Staff: Staff,
+  CategoryCustomize: CategoryCustomize
 })
 
 HomeStack.navigationOptions = {

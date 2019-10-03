@@ -187,10 +187,8 @@ class StaffFormScreen extends React.Component {
                 </View>
                 <View style={[styles.onesixthWidth, styles.mgrtotop8]}>
                   <Field
-                    name="roleStatus"
+                    name="roles"
                     component={RNSwitch}
-                    //onChange={(value) => this.hangleToggle(true)}
-                    // value={initialValues.roles !== undefined && initialValues.roles.includes('MANAGER')}
                   />
                 </View>
               </View>
@@ -201,10 +199,8 @@ class StaffFormScreen extends React.Component {
                 </View>
                 <View style={[styles.onesixthWidth, styles.mgrtotop20]}>
                   <Field
-                    name="roleStatus"
+                    name="roles"
                     component={RNSwitch}
-                    //onChange={(value) => this.hangleToggle(true)}
-                    // value={initialValues.roles !== undefined && initialValues.roles.includes('MANAGER')}
                   />
                 </View>
               </View>

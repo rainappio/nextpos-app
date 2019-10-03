@@ -18,20 +18,7 @@ class Staff extends React.Component {
   }
 
   handleSubmit = values => {
-    var staffVal = {}
-    console.log(values.roleStatus) //true
-    if (values.roleStatus == true) {
-      staffVal['roles'] = ['MANAGER']
-    } else if (values.roleStatus == false) {
-      staffVal['roles'] = ['ADMIN', 'USER']
-    }
-    staffVal['nickname'] = values.nickname
-    staffVal['username'] = values.username
-    staffVal['password'] = values.password
-
-    console.log(staffVal)
-    console.log('pp')
-    // return;
+    values.roles === true ? values.roles=['MANAGER','USER'] : values.roles=['USER']
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -49,7 +36,7 @@ class Staff extends React.Component {
           'x-client-id': tokenObj.clientId,
           Authorization: 'Bearer ' + tokenObj.access_token
         },
-        body: JSON.stringify(staffVal)
+        body: JSON.stringify(values)
       })
         .then(response => {
           console.log(response) //400 bad request

@@ -24,7 +24,8 @@ export const ProductListScreen = ({
   products,
   navigation,
   getProduct,
-  dispatch
+  dispatch,
+  labels
 }) => {
   if (isLoading) {
     return (
@@ -50,6 +51,7 @@ export const ProductListScreen = ({
       products={products}
       navigation={navigation}
       getProduct={getProduct}
+      labels={labels}
     />
   )
 }

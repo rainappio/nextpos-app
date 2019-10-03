@@ -12,7 +12,7 @@ import {
   AsyncStorage
 } from 'react-native'
 import { connect } from 'react-redux'
-import { getProducts } from '../actions'
+import { getProducts, getLables } from '../actions'
 import ProductListScreen from './ProductListScreen'
 
 class ProductsOverview extends React.Component {
@@ -22,6 +22,7 @@ class ProductsOverview extends React.Component {
 
   componentDidMount() {
     this.props.getProducts()
+  	this.props.getLables()
   }
 
   render() {
@@ -30,7 +31,8 @@ class ProductsOverview extends React.Component {
       navigation,
       haveData,
       haveError,
-      isLoading
+      isLoading,
+      labels
     } = this.props
 
     return (
@@ -40,21 +42,23 @@ class ProductsOverview extends React.Component {
         haveData={haveData}
         haveError={haveError}
         isLoading={isLoading}
+        labels={labels}
       />
     )
   }
 }
 
 const mapStateToProps = state => ({
-  gs: state,
   products: state.products.data.results,
   haveData: state.products.haveData,
   haveError: state.products.haveError,
-  isLoading: state.products.loading
+  isLoading: state.products.loading,
+  labels: state.labels.data.labels
 })
 
 const mapDispatchToProps = dispatch => ({
-  getProducts: () => dispatch(getProducts())
+  getProducts: () => dispatch(getProducts()),
+  getLables: () => dispatch(getLables())
 })
 
 export default connect(
