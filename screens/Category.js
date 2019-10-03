@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage, View, Text } from 'react-native'
-import { getProducts } from '../actions'
+import { getProducts, getLables } from '../actions'
 import CategoryFormScreen from './CategoryFormScreen'
 
 class Category extends React.Component {
@@ -39,8 +39,9 @@ class Category extends React.Component {
             this.setState({
               refreshing: true
             })
-            this.props.getProducts() !== undefined &&
-              this.props.getProducts().then(() => {
+            this.props.getProducts()
+            this.props.getLables() !== undefined &&
+              this.props.getLables().then(() => {
                 this.setState({
                   refreshing: false
                 })
@@ -70,7 +71,8 @@ class Category extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getProducts: () => dispatch(getProducts())
+  getProducts: () => dispatch(getProducts()),
+  getLables: () => dispatch(getLables())
 })
 export default connect(
   null,

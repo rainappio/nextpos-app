@@ -21,7 +21,6 @@ import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import DropDown from '../components/DropDown'
 import PopUp from '../components/PopUp'
-// import { clearClient, getClientUsr, getClientUsrs } from '../actions'
 import styles from '../styles'
 
 class StaffRow extends React.Component {
@@ -107,13 +106,4 @@ class StaffRow extends React.Component {
   }
 }
 
-// const mapDispatchToProps = dispatch => ({
-//   dispatch,
-//   getProducts: () => dispatch(getProducts())
-// })
-
-// export default connect(
-//   null,
-//   mapDispatchToProps
-// )(StaffRow)
 export default StaffRow

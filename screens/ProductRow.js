@@ -14,15 +14,22 @@ import {
   AsyncStorage
 } from 'react-native'
 import { connect } from 'react-redux'
-import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
 import Icon from 'react-native-vector-icons/Ionicons'
+import AntDesignIcon from 'react-native-vector-icons/AntDesign'
+import {
+  Accordion,
+  List,
+  SwipeListView,
+  SwipeRow,
+  SwipeAction
+} from '@ant-design/react-native'
 import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import DropDown from '../components/DropDown'
 import PopUp from '../components/PopUp'
-import { getProducts, getLables, getLabel } from '../actions'
+import { getProducts } from '../actions'
 import styles from '../styles'
 
 class ProductRow extends React.Component {
@@ -30,19 +37,17 @@ class ProductRow extends React.Component {
     header: null
   }
 
-  state = {
-    selectedProducts: [],
-    refreshing: false
-  }
-
-  handleFilter = key => {
-    switch (key) {
-      case key:
-        this.setState({
-          selectedProducts: this.props.products[key]
-        })
-        break
-      default:
+  constructor() {
+    super(...arguments)
+    this.state = {
+      activeSections: [2, 0],
+      selectedProducts: [],
+      refreshing: false,
+      status: '',
+      labelId: null
+    }
+    this.onChange = activeSections => {
+      this.setState({ activeSections })
     }
   }
 
@@ -85,31 +90,69 @@ class ProductRow extends React.Component {
     })
   }
 
+  PanelHeader = (labelName, labelId) => {
+    return (
+      <View
+        style={{
+          width: '100%',
+          marginRight: 8,
+          paddingTop: 15,
+          paddingBottom: 15
+        }}
+      >
+        <Text style={{ fontSize: 16 }}>{labelName}</Text>
+        <AntDesignIcon
+          name="ellipsis1"
+          size={25}
+          color="black"
+          style={{ position: 'absolute', right: 0, top: 15 }}
+          onPress={() =>
+            this.props.navigation.navigate('CategoryCustomize', {
+              labelName: labelName,
+              labelId: labelId
+            })
+          }
+        />
+      </View>
+    )
+  }
+
+  onOpenNP = id => {
+    this.setState({
+      labelId: id
+    })
+  }
+
   render() {
     const {
       products = [],
-      labels,
+      labels = [],
       navigation,
       haveData,
       haveError,
       isLoading
     } = this.props
     const { selectedProducts } = this.state
-    const modifyLabels = []
+    var map = new Map(Object.entries(products))
 
-    var LabelsArr =
-      products !== undefined &&
-      Object.keys(products).filter(key => {
-        return typeof key === 'string'
-      })
-
-    LabelsArr.map((lbl, ix) => {
-      const customObj = {}
-      customObj.label = lbl
-      customObj.value = lbl
-      modifyLabels.push(customObj)
-      return modifyLabels
-    })
+    const right = [
+      {
+        text: (
+          <Icon
+            name="md-create"
+            size={25}
+            color="#fff"
+            onPress={() =>
+              this.props.navigation.navigate('ProductEdit', {
+                productId: this.state.labelId
+              })
+            }
+          />
+        ),
+        onPress: () => console.log('read'),
+        style: { backgroundColor: '#f18d1a90' }
+      }
+    ]
 
     return (
       <ScrollView
@@ -130,59 +173,31 @@ class ProductRow extends React.Component {
             </Text>
             <PopUp navigation={navigation} />
 
-            <Field
-              component={DropDown}
-              name="productLabelId"
-              options={modifyLabels}
-              onChange={this.handleFilter}
-              search
-              selection
-              fluid
-              placeholder="Product Label"
-            />
-
-            <View style={styles.standalone}>
-              <SwipeListView
-                data={selectedProducts}
-                renderItem={(data, rowMap) => (
-                  <View style={styles.rowFront}>
-                    <Text
-                      key={data.item.id}
-                      style={{ paddingTop: 20, paddingBottom: 20 }}
-                    >
-                      {data.item.name}
-                    </Text>
-                  </View>
-                )}
-                renderHiddenItem={(data, rowMap) => (
-                  <View style={styles.rowBack} key={data.item.id}>
-                    <View style={styles.editIcon}>
-                      <Icon
-                        name="md-create"
-                        size={25}
-                        color="black"
-                        onPress={() =>
-                          this.props.navigation.navigate('ProductEdit', {
-                            productId: data.item.id
-                          })
-                        }
-                      />
-                    </View>
-                    <View style={styles.delIcon}>
-                      <Icon
-                        name="md-trash"
-                        size={25}
-                        color="#fff"
-                        onPress={() => this.handleDelete(data.item.id)}
-                      />
-                    </View>
-                  </View>
-                )}
-                leftOpenValue={0}
-                rightOpenValue={-80}
-                keyExtractor={(data, rowMap) => rowMap.toString()}
-              />
-            </View>
+            <Accordion
+              onChange={this.onChange}
+              activeSections={this.state.activeSections}
+            >
+              {labels.map(lbl => (
+                <Accordion.Panel
+                  header={this.PanelHeader(lbl.label, lbl.id)}
+                  key={lbl.id}
+                >
+                  <List>
+                    {map.get(lbl.label).map(prd => (
+                      <SwipeAction
+                        autoClose
+                        right={right}
+                        onOpen={() => this.onOpenNP(prd.id)}
+                        onClose={() => console.log('close')}
+                        key={prd.id}
+                      >
+                        <List.Item>{prd.name}</List.Item>
+                      </SwipeAction>
+                    ))}
+                  </List>
+                </Accordion.Panel>
+              ))}
+            </Accordion>
           </View>
         </DismissKeyboard>
       </ScrollView>

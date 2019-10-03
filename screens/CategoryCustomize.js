@@ -1,26 +1,21 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AsyncStorage } from 'react-native'
-import StaffFormScreen from './StaffFormScreen'
-import { getClientUsr, getClientUsrs } from '../actions'
+import { AsyncStorage, View, Text } from 'react-native'
+import CategoryCustomizeScreen from './CategoryCustomizeScreen'
+import { getProducts } from '../actions'
 
-class Staff extends React.Component {
+class CategoryCustomize extends React.Component {
   static navigationOptions = {
     header: null
   }
 
   state = {
-    refreshing: false
-  }
-
-  componentDidMount() {
-    this.props.getClientUsr()
+    refreshing: false,
   }
 
   handleSubmit = values => {
-    values.roles === true
-      ? (values.roles = ['MANAGER', 'USER'])
-      : (values.roles = ['USER'])
+    var prdlabelId = this.props.navigation.state.params.labelId
+
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -29,7 +24,7 @@ class Staff extends React.Component {
       }
     }).then(val => {
       var tokenObj = JSON.parse(val)
-      fetch('http://35.234.63.193/clients/me/users', {
+      fetch(`http://35.234.63.193/labels/${prdlabelId}`, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
@@ -41,23 +36,18 @@ class Staff extends React.Component {
         body: JSON.stringify(values)
       })
         .then(response => {
-          console.log(response) //400 bad request
           if (response.status === 200) {
-            this.props.navigation.navigate(
-              'StaffsOverview'
-              // ,{productId: values.productLabelId}
-            )
+            this.props.navigation.navigate('ProductsOverview')
             this.setState({
               refreshing: true
             })
-            this.props.getClientUsrs() !== undefined &&
-              this.props.getClientUsrs().then(() => {
+            this.props.getProducts() !== undefined &&
+              this.props.getProducts().then(() => {
                 this.setState({
                   refreshing: false
                 })
               })
           } else {
-            //this.props.navigation.navigate('Login')
             alert('pls try again')
           }
         })
@@ -68,29 +58,29 @@ class Staff extends React.Component {
   }
 
   render() {
-    const { navigation, clientuser } = this.props
+    const { navigation } = this.props
     const { refreshing } = this.state
+
     return (
-      <StaffFormScreen
+      <CategoryCustomizeScreen
         onSubmit={this.handleSubmit}
         navigation={navigation}
         refreshing={refreshing}
+        labelName={navigation.state.params.labelName}
       />
     )
   }
 }
 
 const mapStateToProps = state => ({
-  clientuser: state.clientuser.data
+  label: state.label.data
 })
 
 const mapDispatchToProps = dispatch => ({
-  dispatch,
-  getClientUsr: () => dispatch(getClientUsr()),
-  getClientUsrs: () => dispatch(getClientUsrs())
+  getProducts: () => dispatch(getProducts())
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Staff)
+)(CategoryCustomize)

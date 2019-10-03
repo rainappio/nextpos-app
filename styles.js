@@ -333,5 +333,30 @@ export default StyleSheet.create({
   },
   mgrtotop20: {
     marginTop: 20
+  },
+  BlackColorTitle: {
+    textAlign: 'center',
+    fontSize: 20,
+    letterSpacing: 2,
+    lineHeight: 32,
+    marginBottom: 16,
+    marginTop: -8
+  },
+  paddingTopBtn20: {
+    paddingTop: 20,
+    paddingBottom: 20
+  },
+  borderBottomLine: {
+    borderBottomColor: '#f1f1f1',
+    borderBottomWidth: 1
+  },
+  mgrbtn20: {
+    marginBottom: 20
+  },
+  paddBottom_20: {
+    paddingBottom: 20
+  },
+  paddTop_20: {
+    paddingTop: 20
   }
 })
