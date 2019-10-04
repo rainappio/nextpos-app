@@ -79,30 +79,6 @@ class CategoryCustomizeScreen extends React.Component {
             />
           </View>
 
-          <View
-            style={[
-              styles.jc_alignIem_center,
-              styles.flex_dir_row,
-              styles.paddingTopBtn20,
-              styles.borderBottomLine
-            ]}
-          >
-          <Text style={[styles.textBig,styles.centerText]}>{labelName}</Text>
-
-          <View style={[styles.borderBottomLine, styles.paddBottom_20]}>
-            <Text>Option</Text>            
-            <AddBtn customTop={-6} onPress={() => this.props.navigation.navigate('Option')}/>
-          </View> 
-  
-          <View style={[ styles.borderBottomLine, styles.paddingTopBtn20 ]}>
-            <Field
-							name="productOptionIds"
-							component={RenderRadioBtns}
-							customValue={prodctsoptions.id}
-							optionName={prodctsoptions.optionName}
-            />
-          </View>
-
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row, styles.paddingTopBtn20, styles.borderBottomLine]}>
             <View>
               <Text>Apply To Product</Text>
@@ -117,7 +93,6 @@ class CategoryCustomizeScreen extends React.Component {
           </View>
 
           <View>
-
             <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
               <Text>Working Area</Text>
             </View>
@@ -169,7 +144,6 @@ class CategoryCustomizeScreen extends React.Component {
               <Text style={styles.signInText}>Cancel</Text>
             </TouchableHighlight>
           </View>
-        </View>
         </View>
       </ScrollView>
     )
