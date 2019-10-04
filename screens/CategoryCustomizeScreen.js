@@ -33,7 +33,6 @@ class CategoryCustomizeScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
-
   componentDidMount() {
     this.props.getProductOption()
     this.props.getWorkingAreas()
@@ -61,7 +60,6 @@ class CategoryCustomizeScreen extends React.Component {
           >
             Customize Category
           </Text>
-
           <Text style={[styles.textBig, styles.centerText]}>{labelName}</Text>
 
           <View style={[styles.borderBottomLine, styles.paddBottom_20]}>
@@ -89,6 +87,23 @@ class CategoryCustomizeScreen extends React.Component {
               styles.borderBottomLine
             ]}
           >
+          <Text style={[styles.textBig,styles.centerText]}>{labelName}</Text>
+
+          <View style={[styles.borderBottomLine, styles.paddBottom_20]}>
+            <Text>Option</Text>            
+            <AddBtn customTop={-6} onPress={() => this.props.navigation.navigate('Option')}/>
+          </View> 
+  
+          <View style={[ styles.borderBottomLine, styles.paddingTopBtn20 ]}>
+            <Field
+							name="productOptionIds"
+							component={RenderRadioBtns}
+							customValue={prodctsoptions.id}
+							optionName={prodctsoptions.optionName}
+            />
+          </View>
+
+          <View style={[styles.jc_alignIem_center, styles.flex_dir_row, styles.paddingTopBtn20, styles.borderBottomLine]}>
             <View>
               <Text>Apply To Product</Text>
             </View>
@@ -102,6 +117,7 @@ class CategoryCustomizeScreen extends React.Component {
           </View>
 
           <View>
+
             <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
               <Text>Working Area</Text>
             </View>
@@ -154,13 +170,13 @@ class CategoryCustomizeScreen extends React.Component {
             </TouchableHighlight>
           </View>
         </View>
+        </View>
       </ScrollView>
     )
   }
 }
 
 const mapStateToProps = (state, props) => ({
-  gggs: props,
   labels: state.labels.data.labels,
   prodctsoptions: state.productoption.data,
   workingareas: state.workingareas.data.workingAreas,

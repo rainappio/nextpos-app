@@ -10,7 +10,7 @@ class CategoryCustomize extends React.Component {
   }
 
   state = {
-    refreshing: false
+    refreshing: false,
   }
 
   handleSubmit = values => {
