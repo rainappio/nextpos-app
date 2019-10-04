@@ -17,7 +17,6 @@ export default class RenderCheckbox extends React.Component {
         key={customValue}
         clear
         error
-        //onChange={() => onChange(customValue)}
         onChange={e => onChange(console.log(e))}
         checked={value === customValue}
         style={{ position: 'absolute', right: 0 }}

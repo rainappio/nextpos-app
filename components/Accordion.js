@@ -1,23 +1,24 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import Accordion from 'react-native-collapsible/Accordion'
-
+ 
 const SECTIONS = [
   {
     title: 'First',
-    content: 'Lorem ipsum...'
+    content: 'Lorem ipsum...',
   },
   {
     title: 'Second',
-    content: 'Lorem ipsum...'
-  }
-]
-
+    content: 'Lorem ipsum...',
+  },
+];
+ 
 class AccordionView extends Component {
+	
   state = {
-    activeSections: []
-  }
-
+    activeSections: [],
+  };
+ 
   _renderSectionTitle = section => {
     return (
       <View style={styles.content}>
@@ -71,18 +72,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 22,
     fontWeight: '300',
-    marginBottom: 20
   },
   header: {
     backgroundColor: '#F5FCFF',
     padding: 10
   },
-  headerText: {
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '500'
-  },
-  content: {
     padding: 20,
     backgroundColor: '#fff'
   },
