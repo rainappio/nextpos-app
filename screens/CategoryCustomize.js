@@ -2,7 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage, View, Text } from 'react-native'
 import CategoryCustomizeScreen from './CategoryCustomizeScreen'
-import { getProducts } from '../actions'
+import {
+	getProducts,
+  getLables,
+  getProductOptions,
+  getWorkingAreas,
+  getLabel
+} from '../actions'
 
 class CategoryCustomize extends React.Component {
   static navigationOptions = {
@@ -11,6 +17,13 @@ class CategoryCustomize extends React.Component {
 
   state = {
     refreshing: false,
+  }
+
+  componentDidMount() {
+    this.props.getProductOptions()
+    this.props.getWorkingAreas()
+    // this.props.getProducts()
+    this.props.getLabel()
   }
 
   handleSubmit = values => {
@@ -37,16 +50,17 @@ class CategoryCustomize extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
-            this.props.navigation.navigate('ProductsOverview')
+          	alert("Success")
+            // this.props.navigation.navigate('CategoryCustomize')
             this.setState({
               refreshing: true
             })
-            this.props.getProducts() !== undefined &&
-              this.props.getProducts().then(() => {
-                this.setState({
-                  refreshing: false
-                })
-              })
+            // this.props.getProducts() !== undefined &&
+            //   this.props.getProducts().then(() => {
+            //     this.setState({
+            //       refreshing: false
+            //     })
+            //   })
           } else {
             alert('pls try again')
           }
@@ -58,7 +72,7 @@ class CategoryCustomize extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
+    const { navigation, prodctoptions, workingareas, label } = this.props
     const { refreshing } = this.state
 
     return (
@@ -67,17 +81,32 @@ class CategoryCustomize extends React.Component {
         navigation={navigation}
         refreshing={refreshing}
         labelName={navigation.state.params.labelName}
+        // initialValues={label}
+        prodctoptions={prodctoptions}
+        workingareas={workingareas}
       />
     )
   }
 }
 
-const mapStateToProps = state => ({
-  label: state.label.data
+const mapStateToProps = (state, props) => ({
+	label: state.label.data,
+  labels: state.labels.data.labels,
+  prodctoptions: state.prodctsoptions.data.results,
+  workingareas: state.workingareas.data.workingAreas,
+  // products: state.products.data.results 
+  // initialValues: {
+  //   // label: props.labelName,
+  //   appliesToProducts: true
+  // }
 })
 
-const mapDispatchToProps = dispatch => ({
-  getProducts: () => dispatch(getProducts())
+const mapDispatchToProps = (dispatch,props) => ({
+	dispatch,
+  getWorkingAreas: () => dispatch(getWorkingAreas()),
+  getProductOptions: () => dispatch(getProductOptions()),
+  // getProducts: () => dispatch(getProducts()),
+  getLabel: () => dispatch(getLabel(props.navigation.state.params.labelId))
 })
 
 export default connect(

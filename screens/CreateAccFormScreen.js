@@ -27,6 +27,7 @@ class CreateAccFormScreen extends React.Component {
   render() {
     const { handleSubmit, submitting } = this.props
     return (
+    <View style={styles.container}>
       <DismissKeyboard>
         <View style={styles.childContainer}>
           <View style={[{ position: 'absolute', top: 0 }]}>
@@ -97,6 +98,7 @@ class CreateAccFormScreen extends React.Component {
           </View>
         </View>
       </DismissKeyboard>
+    </View>
     )
   }
 }

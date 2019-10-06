@@ -11,10 +11,6 @@ class Login extends React.Component {
     header: null
   }
 
-  state = {
-    isLoggedIn: false
-  }
-
   componentDidMount() {
     this.props.getClientUsrs()
   }
@@ -45,18 +41,16 @@ class Login extends React.Component {
           res.cli_userName = values.username
           res.cli_masterPwd = values.masterPassword
           AsyncStorage.setItem('token', JSON.stringify(res))
-
-          AsyncStorage.getItem('token', (err, value) => {
-            if (err) {
-              console.log(err)
-            } else {
-              return JSON.parse(value)
-            }
-          }).then(val => {
+          .then(x => AsyncStorage.getItem('token'))
+					.then(val => {
+						//https://stackoverflow.com/questions/46610813/asyncstorage-setitem-callback-always-null/46611039
             var tokenObj = JSON.parse(val)
             var accessToken = tokenObj !== null && tokenObj.access_token
             this.props.dispatch(doLoggedIn(accessToken))
             this.props.getClientUsrs()
+            // this.props.clientusers !== undefined && this.props.navigation.navigate('LoginSuccess',{
+            // 	clientusers: this.props.clientusers
+            // })
           })
         }
         return res
@@ -66,7 +60,6 @@ class Login extends React.Component {
 
   render() {
     const { isLoggedIn, navigation, clientusers } = this.props
-
     if (isLoggedIn) {
       return (
         <LoginSuccessScreen navigation={navigation} clientusers={clientusers} />

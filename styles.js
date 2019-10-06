@@ -358,5 +358,8 @@ export default StyleSheet.create({
   },
   paddTop_20: {
     paddingTop: 20
+  },
+  minustopMargin10: {
+  	marginTop: -10
   }
 })

@@ -17,31 +17,21 @@ import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
-import {
-  getLables,
-  getProductOption,
-  getWorkingAreas,
-  getLabel
-} from '../actions'
 import RNSwitch from '../components/RNSwitch'
-import { Grid } from '@ant-design/react-native'
 import RenderRadioBtn from '../components/RadioItem'
-import RenderRadioBtns from '../components/RadioItems'
+import RenderCheckboxGroup from '../components/CheckBoxGroup'
+import RenderRadioGroup from '../components/RadioGroup'
 import styles from '../styles'
 
 class CategoryCustomizeScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
-  componentDidMount() {
-    this.props.getProductOption()
-    this.props.getWorkingAreas()
-  }
 
   render() {
     const {
       labels,
-      prodctsoptions,
+      prodctoptions,
       workingareas,
       handleSubmit,
       labelName
@@ -60,41 +50,66 @@ class CategoryCustomizeScreen extends React.Component {
           >
             Customize Category
           </Text>
-          <Text style={[styles.textBig, styles.centerText]}>{labelName}</Text>
+          {/*<Text style={[styles.textBig, styles.centerText]}>{labelName}</Text>*/}
+          
+          <View style={styles.paddBottom_20}>
+          	<Field
+            	name="label"
+            	component={InputText}
+            	placeholder={labelName}
+            	iscustomizeCate={true}
+          	/>
+          </View>
 
-          <View style={[styles.borderBottomLine, styles.paddBottom_20]}>
-            <Text>Option</Text>
+          <View style={[styles.borderBottomLine, styles.paddBottom_20, styles.minustopMargin10]}>
+            <Text style={styles.textBold}>Option</Text>
             <AddBtn
-              customTop={-6}
               onPress={() => this.props.navigation.navigate('Option')}
             />
           </View>
-
-          <View style={[styles.borderBottomLine, styles.paddingTopBtn20]}>
-            <Field
-              name="productOptionIds"
-              component={RenderRadioBtns}
-              customValue={prodctsoptions.id}
-              optionName={prodctsoptions.optionName}
-            />
-          </View>
+          
+          <Field
+            name="productOptionIds"
+            component={RenderCheckboxGroup}
+            //component={RenderRadioGroup}
+            //customValue={prodctsoptions.id}
+            // optionName={prodctsoptions.optionName}
+            //customarr={workingareas}
+            customarr={prodctoptions}
+          />
+{/*
+            {workingareas !== undefined &&
+              workingareas.map(workarea => (
+                <View
+                  style={[styles.borderBottomLine, styles.paddingTopBtn20]}
+                  key={workarea.id}
+                >
+                  <Field
+                    name="productOptionIds"
+                    component={RenderCheckboxGroup}
+                    customValue={workarea.id}
+                    optionName={workarea.name}
+                  />
+                </View>
+              ))}  */}             
+    
 
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row, styles.paddingTopBtn20, styles.borderBottomLine]}>
             <View>
-              <Text>Apply To Product</Text>
+              <Text style={styles.textBold}>Apply To Product</Text>
             </View>
             <View style={[styles.onesixthWidth]}>
               <Field
                 name="appliesToProducts"
                 component={RNSwitch}
-                isChecked={true}
+                checked={true}
               />
             </View>
           </View>
 
           <View>
             <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
-              <Text>Working Area</Text>
+              <Text style={styles.textBold}>Working Area</Text>
             </View>
             {workingareas !== undefined &&
               workingareas.map(workarea => (
@@ -108,8 +123,8 @@ class CategoryCustomizeScreen extends React.Component {
                     customValue={workarea.id}
                     optionName={workarea.name}
                   />
-                </View>
-              ))}
+                 </View>
+              ))}              
           </View>
 
           <View
@@ -139,7 +154,7 @@ class CategoryCustomizeScreen extends React.Component {
             ]}
           >
             <TouchableHighlight
-              onPress={() => this.props.navigation.navigate('StaffsOverview')}
+              onPress={() => this.props.navigation.navigate('ProductsOverview')}
             >
               <Text style={styles.signInText}>Cancel</Text>
             </TouchableHighlight>
@@ -150,26 +165,26 @@ class CategoryCustomizeScreen extends React.Component {
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  labels: state.labels.data.labels,
-  prodctsoptions: state.productoption.data,
-  workingareas: state.workingareas.data.workingAreas,
-  initialValues: {
-    label: props.labelName,
-    appliesToProducts: false
-  }
-})
+// const mapStateToProps = (state, props) => ({
+//   labels: state.labels.data.labels,
+//   prodctsoptions: state.productoption.data,
+//   workingareas: state.workingareas.data.workingAreas,
+//   initialValues: {
+//     // label: props.labelName,
+//     appliesToProducts: false
+//   }
+// })
 
-const mapDispatchToProps = dispatch => ({
-  getWorkingAreas: () => dispatch(getWorkingAreas()),
-  getProductOption: () => dispatch(getProductOption())
-})
+// const mapDispatchToProps = dispatch => ({
+//   getWorkingAreas: () => dispatch(getWorkingAreas()),
+//   getProductOption: () => dispatch(getProductOption())
+// })
 
 CategoryCustomizeScreen = reduxForm({
   form: 'categorylist_searchform'
 })(CategoryCustomizeScreen)
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CategoryCustomizeScreen)
+export default CategoryCustomizeScreen
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(CategoryCustomizeScreen)

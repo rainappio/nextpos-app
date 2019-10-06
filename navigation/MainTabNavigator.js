@@ -31,6 +31,7 @@ import OrdersScreen from '../screens/OrdersScreen'
 import ReservationScreen from '../screens/ReservationScreen'
 import ReportsScreen from '../screens/ReportsScreen'
 import CategoryCustomize from '../screens/CategoryCustomize'
+import LoginScreen from '../screens/LoginScreen'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -52,8 +53,13 @@ const HomeStack = createStackNavigator({
   StaffsOverview: StaffsOverview,
   StaffEdit: StaffEditScreen,
   Staff: Staff,
-  CategoryCustomize: CategoryCustomize
+  CategoryCustomize: CategoryCustomize,
+  LoginScreen: LoginScreen
 })
+
+// const HomeStack = createStackNavigator({
+//   Home: HomeScreen
+// })
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
@@ -68,7 +74,7 @@ SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
-      focused={focused}
+      focused={focused=false}
       name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'}
     />
   )

@@ -17,6 +17,7 @@ const InputText = ({
   },
   meta: { error, touched, valid },
   isgrayBg,
+  iscustomizeCate,
   ...rest
 }) => (
   <View>
@@ -42,7 +43,9 @@ const InputText = ({
         styles.rootInput,
         { borderColor: !valid && touched ? 'red' : 'gray' },
         isgrayBg ? styles.grayBg : '',
-        isgrayBg && styles.leftpadd32
+        isgrayBg && styles.leftpadd32,     
+        iscustomizeCate ? styles.centerText : '',
+        iscustomizeCate ? styles.textBig : ''
       ]}
     />
     {!valid && touched && <Text style={styles.rootError}>{error}</Text>}

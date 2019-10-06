@@ -2,6 +2,10 @@ import React from 'react'
 import CreateAccFormScreen from './CreateAccFormScreen'
 
 class CreateAccScreen extends React.Component {
+	static navigationOptions = {
+    header: null
+  }
+  
   handleSubmit = values => {
     fetch('http://35.234.63.193/clients', {
       method: 'POST', // or 'PUT'

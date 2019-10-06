@@ -24,7 +24,7 @@ class SettingsScreen extends React.Component {
     header: null
   }
 
-  render() {
+  render() {console.log(this.props.navigation.state.routeName)
     return (
       <ScrollView>
         <DismissKeyboard>

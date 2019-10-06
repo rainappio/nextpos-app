@@ -101,7 +101,7 @@ class IntroAppScreen extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  dispatch
+	dispatch,
 })
 
 export default connect(
