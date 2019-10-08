@@ -240,9 +240,7 @@ class StaffFormScreen extends React.Component {
                 <Text style={styles.signInText}>Cancel</Text>
               </TouchableHighlight>
             ) : (
-              <TouchableHighlight
-                onPress={onCancel}
-              >
+              <TouchableHighlight onPress={onCancel}>
                 <Text style={styles.signInText}>Cancel</Text>
               </TouchableHighlight>
             )}

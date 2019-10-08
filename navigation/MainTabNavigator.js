@@ -78,7 +78,7 @@ SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
-      focused={focused=false}
+      focused={(focused = false)}
       name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'}
     />
   )

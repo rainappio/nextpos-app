@@ -360,6 +360,6 @@ export default StyleSheet.create({
     paddingTop: 20
   },
   minustopMargin10: {
-  	marginTop: -10
+    marginTop: -10
   }
 })

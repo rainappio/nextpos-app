@@ -42,10 +42,8 @@ class Option extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
-          	alert('success')
-            this.props.navigation.navigate(
-              'CategoryCustomize'
-            )
+            alert('success')
+            this.props.navigation.navigate('CategoryCustomize')
             this.setState({
               refreshing: true
             })

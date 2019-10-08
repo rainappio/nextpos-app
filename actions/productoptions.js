@@ -5,7 +5,7 @@ export const FETCH_PRODUCT_OPTIONS_FAILURE = 'FETCH_PRODUCT_OPTIONS_FAILURE'
 export const CLEAR_PRODUCT_OPTIONS = 'CLEAR_PRODUCT_OPTIONS'
 
 export const fetchProductOptions = () => ({
-  type: FETCH_PRODUCT_OPTIONS,
+  type: FETCH_PRODUCT_OPTIONS
 })
 
 export const fetchProductOptionsSuccess = data => ({
@@ -30,18 +30,15 @@ export const getProductOptions = () => {
     }).then(val => {
       var tokenObj = JSON.parse(val)
       var auth = 'Bearer ' + tokenObj.access_token
-      return fetch(
-        `http://35.234.63.193/productoptions`,
-        {
-          method: 'GET',
-          withCredentials: true,
-          credentials: 'include',
-          headers: {
-            'x-client-id': tokenObj.clientId,
-            Authorization: auth
-          }
+      return fetch(`http://35.234.63.193/productoptions`, {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'x-client-id': tokenObj.clientId,
+          Authorization: auth
         }
-      )
+      })
         .then(res => res.json())
         .then(data => {
           dispatch(fetchProductOptionsSuccess(data))

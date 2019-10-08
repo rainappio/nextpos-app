@@ -64,7 +64,7 @@ class ClientUsers extends React.Component {
           </TouchableHighlight>
         </View>
 
-        <View style={{marginTop: 80}}>
+        <View style={{ marginTop: 80 }}>
           <FlatList
             data={clientusers}
             renderItem={({ item }) => (

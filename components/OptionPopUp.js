@@ -70,22 +70,26 @@ export default class OptionPopUp extends Component {
                     Add
                   </Text>
 
-                   <Field
-            				name="masterPassword"
-            				component={InputText}
-            				validate={isRequired}
-            				placeholder="Option Value"
-          				/>
+                  <Field
+                    name="masterPassword"
+                    component={InputText}
+                    validate={isRequired}
+                    placeholder="Option Value"
+                  />
 
-          				<Field
-            				name="masterPassword"
-            				component={InputText}
-            				validate={isRequired}
-            				placeholder="Option Price"
-          				/>
+                  <Field
+                    name="masterPassword"
+                    component={InputText}
+                    validate={isRequired}
+                    placeholder="Option Price"
+                  />
 
                   <View
-                    style={[styles.jc_alignIem_center, styles.flex_dir_row, styles.paddTop_20]}
+                    style={[
+                      styles.jc_alignIem_center,
+                      styles.flex_dir_row,
+                      styles.paddTop_20
+                    ]}
                   >
                     <View
                       style={{

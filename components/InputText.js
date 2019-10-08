@@ -43,7 +43,7 @@ const InputText = ({
         styles.rootInput,
         { borderColor: !valid && touched ? 'red' : 'gray' },
         isgrayBg ? styles.grayBg : '',
-        isgrayBg && styles.leftpadd32,     
+        isgrayBg && styles.leftpadd32,
         iscustomizeCate ? styles.centerText : '',
         iscustomizeCate ? styles.textBig : ''
       ]}

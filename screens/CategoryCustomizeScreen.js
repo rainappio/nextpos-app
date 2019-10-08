@@ -50,30 +50,41 @@ class CategoryCustomizeScreen extends React.Component {
           >
             Customize Category
           </Text>
-         
-          <View style={styles.paddBottom_20}>
-          	<Field
-            	name="label"
-            	component={InputText}
-            	placeholder={labelName}
-            	iscustomizeCate={true}
-          	/>
-          </View>
 
-          <View style={[styles.borderBottomLine, styles.paddBottom_20, styles.minustopMargin10]}>
-            <Text style={styles.textBold}>Option</Text>
-            <AddBtn
-              onPress={() => this.props.navigation.navigate('Option')}
+          <View style={styles.paddBottom_20}>
+            <Field
+              name="label"
+              component={InputText}
+              placeholder={labelName}
+              iscustomizeCate={true}
             />
           </View>
-          
+
+          <View
+            style={[
+              styles.borderBottomLine,
+              styles.paddBottom_20,
+              styles.minustopMargin10
+            ]}
+          >
+            <Text style={styles.textBold}>Option</Text>
+            <AddBtn onPress={() => this.props.navigation.navigate('Option')} />
+          </View>
+
           <Field
             name="productOptionIds"
-            component={RenderCheckboxGroup}           
+            component={RenderCheckboxGroup}
             customarr={prodctoptions}
           />
 
-          <View style={[styles.jc_alignIem_center, styles.flex_dir_row, styles.paddingTopBtn20, styles.borderBottomLine]}>
+          <View
+            style={[
+              styles.jc_alignIem_center,
+              styles.flex_dir_row,
+              styles.paddingTopBtn20,
+              styles.borderBottomLine
+            ]}
+          >
             <View>
               <Text style={styles.textBold}>Apply To Product</Text>
             </View>
@@ -102,8 +113,8 @@ class CategoryCustomizeScreen extends React.Component {
                     customValue={workarea.id}
                     optionName={workarea.name}
                   />
-                 </View>
-              ))}              
+                </View>
+              ))}
           </View>
 
           <View

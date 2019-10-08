@@ -74,19 +74,19 @@ class CategoryCustomize extends React.Component {
     const { navigation, prodctoptions, workingareas, label } = this.props
     const { refreshing } = this.state
 
-		//your get label API need to return value like this to show checked status on category customize screen
-    var labelInitial ={
-    "id": "2ca9bb47-0e03-41b9-a0cc-a63b0ca959a9",
-    "appliesToProducts": true,
-    "productOptionIds": ['c3752b32-6e08-44d9-b7a7-fb19bfb7bb6b'],
-    "value": "2ca9bb47-0e03-41b9-a0cc-a63b0ca959a9",
-    "label": "Cate edited",
-    "workingAreaId": 'fe2153f2-7a91-4402-b0da-f1447c018164',//  change this to workingAreaId
-    //"workingAreaId": 'c27aa52d-6a05-4ddb-abe9-0ea5e873cb17',
-    "productOptions": [], // change this to productOptionIds
-    "subLabels": [],
-    "appliedProducts": [], // change this to appliesToProducts: true , not []
-}
+    //your get label API need to return value like this to show checked status on category customize screen
+    var labelInitial = {
+      id: '2ca9bb47-0e03-41b9-a0cc-a63b0ca959a9',
+      appliesToProducts: true,
+      productOptionIds: ['c3752b32-6e08-44d9-b7a7-fb19bfb7bb6b'],
+      value: '2ca9bb47-0e03-41b9-a0cc-a63b0ca959a9',
+      label: 'Cate edited',
+      workingAreaId: 'fe2153f2-7a91-4402-b0da-f1447c018164', //  change this to workingAreaId
+      //"workingAreaId": 'c27aa52d-6a05-4ddb-abe9-0ea5e873cb17',
+      productOptions: [], // change this to productOptionIds
+      subLabels: [],
+      appliedProducts: [] // change this to appliesToProducts: true , not []
+    }
 
     return (
       <CategoryCustomizeScreen

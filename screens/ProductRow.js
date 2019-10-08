@@ -193,7 +193,7 @@ class ProductRow extends React.Component {
                       >
                         <List.Item>{prd.name}</List.Item>
                       </SwipeAction>
-                    ))}                    
+                    ))}
                   </List>
                 </Accordion.Panel>
               ))}

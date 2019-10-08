@@ -41,13 +41,13 @@ class Login extends React.Component {
           res.cli_userName = values.username
           res.cli_masterPwd = values.masterPassword
           AsyncStorage.setItem('token', JSON.stringify(res))
-          .then(x => AsyncStorage.getItem('token'))
-					.then(val => {
-						var tokenObj = JSON.parse(val)
-            var accessToken = tokenObj !== null && tokenObj.access_token
-            this.props.dispatch(doLoggedIn(accessToken))
-            this.props.getClientUsrs()
-          })
+            .then(x => AsyncStorage.getItem('token'))
+            .then(val => {
+              var tokenObj = JSON.parse(val)
+              var accessToken = tokenObj !== null && tokenObj.access_token
+              this.props.dispatch(doLoggedIn(accessToken))
+              this.props.getClientUsrs()
+            })
         }
         return res
       })

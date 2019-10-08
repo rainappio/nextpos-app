@@ -50,14 +50,15 @@ class LoginSuccessScreen extends React.Component {
     var authClientUserName =
       this.props.navigation.state.params !== undefined &&
       this.props.navigation.state.params.clientusersName
-    	//var clientusersFromNav = this.props.navigation.state.params.clientusers
+    //var clientusersFromNav = this.props.navigation.state.params.clientusers
 
     if (isLogoutBtnClick) {
       return (
         <ClientUsers
           navigation={navigation}
           refreshing={refreshing}
-          clientusers={clientusers}/>
+          clientusers={clientusers}
+        />
       )
     } else {
       return (
