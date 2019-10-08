@@ -32,6 +32,8 @@ import ReservationScreen from '../screens/ReservationScreen'
 import ReportsScreen from '../screens/ReportsScreen'
 import CategoryCustomize from '../screens/CategoryCustomize'
 import LoginScreen from '../screens/LoginScreen'
+import OptionFormScreen from '../screens/OptionFormScreen'
+import Option from '../screens/Option'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -54,7 +56,9 @@ const HomeStack = createStackNavigator({
   StaffEdit: StaffEditScreen,
   Staff: Staff,
   CategoryCustomize: CategoryCustomize,
-  LoginScreen: LoginScreen
+  LoginScreen: LoginScreen,
+  OptionScreen: OptionFormScreen,
+  Option: Option
 })
 
 // const HomeStack = createStackNavigator({

@@ -17,7 +17,6 @@ export default class RenderCheckboxGroup extends React.Component {
     customarr,
     meta: {error, toched, valid},
     ...rest} = this.props
-		// console.log(this.props)
 		const arr = [...this.props.input.value]
 
 		const checkBoxes = customarr !== undefined && customarr.map( ca => {
@@ -28,8 +27,7 @@ export default class RenderCheckboxGroup extends React.Component {
 					arr.push(ca.id)
 				}else{
 					arr.splice(arr.indexOf(ca.id), 1)
-				}
-				//console.log(arr)
+				}	
 				return this.props.input.onChange(arr)
 			}
 
@@ -38,7 +36,6 @@ export default class RenderCheckboxGroup extends React.Component {
 					<Checkbox
         		clear
         		error      
-        		//onChange={(e) => onChange(e.target.checked ? arr.push(customValue) : arr.splice(arr.indexOf(customValue),1))}
         		onChange={(e) => onChange(e.target.checked)}
         		checked={value}
         		style={{position: 'absolute',right: 0}}

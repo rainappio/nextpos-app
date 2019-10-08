@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { AsyncStorage, View, Text } from 'react-native'
 import CategoryCustomizeScreen from './CategoryCustomizeScreen'
 import {
-	getProducts,
+  getProducts,
   getLables,
   getProductOptions,
   getWorkingAreas,
@@ -16,7 +16,7 @@ class CategoryCustomize extends React.Component {
   }
 
   state = {
-    refreshing: false,
+    refreshing: false
   }
 
   componentDidMount() {
@@ -28,7 +28,6 @@ class CategoryCustomize extends React.Component {
 
   handleSubmit = values => {
     var prdlabelId = this.props.navigation.state.params.labelId
-
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -50,7 +49,7 @@ class CategoryCustomize extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
-          	alert("Success")
+            alert('Success')
             // this.props.navigation.navigate('CategoryCustomize')
             this.setState({
               refreshing: true
@@ -75,13 +74,27 @@ class CategoryCustomize extends React.Component {
     const { navigation, prodctoptions, workingareas, label } = this.props
     const { refreshing } = this.state
 
+		//your get label API need to return value like this to show checked status on category customize screen
+    var labelInitial ={
+    "id": "2ca9bb47-0e03-41b9-a0cc-a63b0ca959a9",
+    "appliesToProducts": true,
+    "productOptionIds": ['c3752b32-6e08-44d9-b7a7-fb19bfb7bb6b'],
+    "value": "2ca9bb47-0e03-41b9-a0cc-a63b0ca959a9",
+    "label": "Cate edited",
+    "workingAreaId": 'fe2153f2-7a91-4402-b0da-f1447c018164',//  change this to workingAreaId
+    //"workingAreaId": 'c27aa52d-6a05-4ddb-abe9-0ea5e873cb17',
+    "productOptions": [], // change this to productOptionIds
+    "subLabels": [],
+    "appliedProducts": [], // change this to appliesToProducts: true , not []
+}
+
     return (
       <CategoryCustomizeScreen
         onSubmit={this.handleSubmit}
         navigation={navigation}
         refreshing={refreshing}
         labelName={navigation.state.params.labelName}
-        // initialValues={label}
+        initialValues={labelInitial}
         prodctoptions={prodctoptions}
         workingareas={workingareas}
       />
@@ -90,19 +103,14 @@ class CategoryCustomize extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
-	label: state.label.data,
+  label: state.label.data,
   labels: state.labels.data.labels,
   prodctoptions: state.prodctsoptions.data.results,
-  workingareas: state.workingareas.data.workingAreas,
-  // products: state.products.data.results 
-  // initialValues: {
-  //   // label: props.labelName,
-  //   appliesToProducts: true
-  // }
+  workingareas: state.workingareas.data.workingAreas
 })
 
-const mapDispatchToProps = (dispatch,props) => ({
-	dispatch,
+const mapDispatchToProps = (dispatch, props) => ({
+  dispatch,
   getWorkingAreas: () => dispatch(getWorkingAreas()),
   getProductOptions: () => dispatch(getProductOptions()),
   // getProducts: () => dispatch(getProducts()),

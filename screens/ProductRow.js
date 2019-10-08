@@ -134,11 +134,7 @@ class ProductRow extends React.Component {
     } = this.props
     const { selectedProducts } = this.state
     var map = new Map(Object.entries(products))
-		console.log(products)
-		//{AlcoDrink: Array(0), Branch: Array(0), Breakfast: Array(0), Cate edited: Array(0), Cate88 Edited: Array(0), …}
-		console.log(map)
-		//Map(12) {"AlcoDrink" => Array(0), "Branch" => Array(0), "Breakfast" => Array(0), "Cate edited" => Array(0), "Cate88 Edited" => Array(0), …}
-		
+
     const right = [
       {
         text: (

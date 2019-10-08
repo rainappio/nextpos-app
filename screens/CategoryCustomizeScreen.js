@@ -50,8 +50,7 @@ class CategoryCustomizeScreen extends React.Component {
           >
             Customize Category
           </Text>
-          {/*<Text style={[styles.textBig, styles.centerText]}>{labelName}</Text>*/}
-          
+         
           <View style={styles.paddBottom_20}>
           	<Field
             	name="label"
@@ -70,29 +69,9 @@ class CategoryCustomizeScreen extends React.Component {
           
           <Field
             name="productOptionIds"
-            component={RenderCheckboxGroup}
-            //component={RenderRadioGroup}
-            //customValue={prodctsoptions.id}
-            // optionName={prodctsoptions.optionName}
-            //customarr={workingareas}
+            component={RenderCheckboxGroup}           
             customarr={prodctoptions}
           />
-{/*
-            {workingareas !== undefined &&
-              workingareas.map(workarea => (
-                <View
-                  style={[styles.borderBottomLine, styles.paddingTopBtn20]}
-                  key={workarea.id}
-                >
-                  <Field
-                    name="productOptionIds"
-                    component={RenderCheckboxGroup}
-                    customValue={workarea.id}
-                    optionName={workarea.name}
-                  />
-                </View>
-              ))}  */}             
-    
 
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row, styles.paddingTopBtn20, styles.borderBottomLine]}>
             <View>
@@ -165,26 +144,7 @@ class CategoryCustomizeScreen extends React.Component {
   }
 }
 
-// const mapStateToProps = (state, props) => ({
-//   labels: state.labels.data.labels,
-//   prodctsoptions: state.productoption.data,
-//   workingareas: state.workingareas.data.workingAreas,
-//   initialValues: {
-//     // label: props.labelName,
-//     appliesToProducts: false
-//   }
-// })
-
-// const mapDispatchToProps = dispatch => ({
-//   getWorkingAreas: () => dispatch(getWorkingAreas()),
-//   getProductOption: () => dispatch(getProductOption())
-// })
-
 CategoryCustomizeScreen = reduxForm({
   form: 'categorylist_searchform'
 })(CategoryCustomizeScreen)
 export default CategoryCustomizeScreen
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(CategoryCustomizeScreen)

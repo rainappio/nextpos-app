@@ -82,7 +82,8 @@ class StaffFormScreen extends React.Component {
       isEditForm,
       refreshing,
       handleEditCancel,
-      initialValues
+      initialValues,
+      onCancel
     } = this.props
 
     return (
@@ -240,7 +241,7 @@ class StaffFormScreen extends React.Component {
               </TouchableHighlight>
             ) : (
               <TouchableHighlight
-                onPress={() => this.props.navigation.navigate('StaffsOverview')}
+                onPress={onCancel}
               >
                 <Text style={styles.signInText}>Cancel</Text>
               </TouchableHighlight>

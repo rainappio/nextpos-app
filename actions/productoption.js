@@ -36,7 +36,7 @@ export const getProductOption = id => {
       var tokenObj = JSON.parse(val)
       var auth = 'Bearer ' + tokenObj.access_token
       return fetch(
-        `http://35.234.63.193/productoptions/c3752b32-6e08-44d9-b7a7-fb19bfb7bb6b?version=DESIGN`,
+        `http://35.234.63.193/productoptions/${id}?version=DESIGN`,
         {
           method: 'GET',
           withCredentials: true,

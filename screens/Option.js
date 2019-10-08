@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
-import StaffFormScreen from './StaffFormScreen'
-import { getClientUsr, getClientUsrs } from '../actions'
+import OptionFormScreen from './OptionFormScreen'
+import { getClientUsr, getClientUsrs, getProductOptions } from '../actions'
 
-class Staff extends React.Component {
+class Option extends React.Component {
   static navigationOptions = {
     header: null
   }
@@ -14,18 +14,13 @@ class Staff extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getClientUsr()
-  }
-
-  handleCancel = () => {
-    this.props.getClientUsrs()
-    this.props.navigation.navigate('StaffsOverview')
+    this.props.getProductOptions()
   }
 
   handleSubmit = values => {
-    values.roles === true
-      ? (values.roles = ['MANAGER', 'USER'])
-      : (values.roles = ['USER'])
+    values.optionType === true
+      ? (values.optionType = 'MULTIPLE_CHOICE')
+      : (values.optionType = 'ONE_CHOICE')
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -34,7 +29,7 @@ class Staff extends React.Component {
       }
     }).then(val => {
       var tokenObj = JSON.parse(val)
-      fetch('http://35.234.63.193/clients/me/users', {
+      fetch('http://35.234.63.193/productoptions', {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
@@ -46,17 +41,16 @@ class Staff extends React.Component {
         body: JSON.stringify(values)
       })
         .then(response => {
-          console.log(response) //400 bad request
           if (response.status === 200) {
+          	alert('success')
             this.props.navigation.navigate(
-              'StaffsOverview'
-              // ,{productId: values.productLabelId}
+              'CategoryCustomize'
             )
             this.setState({
               refreshing: true
             })
-            this.props.getClientUsrs() !== undefined &&
-              this.props.getClientUsrs().then(() => {
+            this.props.getProductOptions() !== undefined &&
+              this.props.getProductOptions().then(() => {
                 this.setState({
                   refreshing: false
                 })
@@ -76,11 +70,10 @@ class Staff extends React.Component {
     const { navigation, clientuser } = this.props
     const { refreshing } = this.state
     return (
-      <StaffFormScreen
+      <OptionFormScreen
         onSubmit={this.handleSubmit}
         navigation={navigation}
         refreshing={refreshing}
-        onCancel={this.handleCancel}
       />
     )
   }
@@ -93,10 +86,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   dispatch,
   getClientUsr: () => dispatch(getClientUsr()),
-  getClientUsrs: () => dispatch(getClientUsrs())
+  getProductOptions: () => dispatch(getProductOptions())
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Staff)
+)(Option)
