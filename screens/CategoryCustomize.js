@@ -1,14 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AsyncStorage, View, Text } from 'react-native'
+import { AsyncStorage, View, Text, ActivityIndicator } from 'react-native'
 import CategoryCustomizeScreen from './CategoryCustomizeScreen'
 import {
   getProducts,
   getLables,
   getProductOptions,
   getWorkingAreas,
-  getLabel
+  getLabel,
+  clearLabel
 } from '../actions'
+import styles from '../styles'
 
 class CategoryCustomize extends React.Component {
   static navigationOptions = {
@@ -22,7 +24,6 @@ class CategoryCustomize extends React.Component {
   componentDidMount() {
     this.props.getProductOptions()
     this.props.getWorkingAreas()
-    // this.props.getProducts()
     this.props.getLabel()
   }
 
@@ -49,17 +50,17 @@ class CategoryCustomize extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
-            alert('Success')
-            // this.props.navigation.navigate('CategoryCustomize')
+           this.props.clearLabel();
+            this.props.navigation.navigate('ProductsOverview')
             this.setState({
               refreshing: true
             })
-            // this.props.getProducts() !== undefined &&
-            //   this.props.getProducts().then(() => {
-            //     this.setState({
-            //       refreshing: false
-            //     })
-            //   })
+            this.props.getProducts() !== undefined &&
+              this.props.getProducts().then(() => {
+                this.setState({
+                  refreshing: false
+                })
+              })
           } else {
             alert('pls try again')
           }
@@ -70,33 +71,47 @@ class CategoryCustomize extends React.Component {
     })
   }
 
+  handleEditCancel = () => {
+    this.props.clearLabel()
+    this.props.navigation.navigate('ProductsOverview')
+  }
+
   render() {
-    const { navigation, prodctoptions, workingareas, label } = this.props
+    const { navigation, prodctoptions, workingareas, label, isLoading, haveData, haveError } = this.props
     const { refreshing } = this.state
 
-    //your get label API need to return value like this to show checked status on category customize screen
-    var labelInitial = {
-      id: '2ca9bb47-0e03-41b9-a0cc-a63b0ca959a9',
-      appliesToProducts: true,
-      productOptionIds: ['c3752b32-6e08-44d9-b7a7-fb19bfb7bb6b'],
-      value: '2ca9bb47-0e03-41b9-a0cc-a63b0ca959a9',
-      label: 'Cate edited',
-      workingAreaId: 'fe2153f2-7a91-4402-b0da-f1447c018164', //  change this to workingAreaId
-      //"workingAreaId": 'c27aa52d-6a05-4ddb-abe9-0ea5e873cb17',
-      productOptions: [], // change this to productOptionIds
-      subLabels: [],
-      appliedProducts: [] // change this to appliesToProducts: true , not []
-    }
-
+  if (isLoading) {
+    return (
+      <View style={[styles.container]}>
+        <ActivityIndicator size="large" color="#ccc" />
+      </View>
+    )
+  } else if (haveError) {m
+    return (
+      <View style={[styles.container]}>
+        <Text>Err during loading, check internet conn...</Text>
+      </View>
+    )
+  } else if (label !== undefined && Object.entries(label).length === 0) {
+    return (
+      <View style={[styles.container]}>
+        <Text>no label ...</Text>
+      </View>
+    )
+  }
     return (
       <CategoryCustomizeScreen
         onSubmit={this.handleSubmit}
         navigation={navigation}
         refreshing={refreshing}
         labelName={navigation.state.params.labelName}
-        initialValues={labelInitial}
+        initialValues={label}
         prodctoptions={prodctoptions}
         workingareas={workingareas}
+        onCancel={this.handleEditCancel}
+        haveData={haveData}
+        isLoading={isLoading}
+        haveError={haveError}
       />
     )
   }
@@ -106,15 +121,20 @@ const mapStateToProps = (state, props) => ({
   label: state.label.data,
   labels: state.labels.data.labels,
   prodctoptions: state.prodctsoptions.data.results,
-  workingareas: state.workingareas.data.workingAreas
+  workingareas: state.workingareas.data.workingAreas,
+  isLoading: state.label.loading,
+  haveData: state.label.haveData,
+  haveError: state.label.haveError
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getWorkingAreas: () => dispatch(getWorkingAreas()),
   getProductOptions: () => dispatch(getProductOptions()),
-  // getProducts: () => dispatch(getProducts()),
-  getLabel: () => dispatch(getLabel(props.navigation.state.params.labelId))
+  clearLabel: () => dispatch(clearLabel()),
+  getLabel: () => dispatch(getLabel(props.navigation.state.params.labelId)),
+  getLables: () => dispatch(getLables()),
+  getProducts: () => dispatch(getProducts())
 })
 
 export default connect(

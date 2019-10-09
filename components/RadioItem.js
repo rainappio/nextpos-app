@@ -11,14 +11,13 @@ export default class RenderRadioBtn extends React.Component {
       meta: { error, toched, valid },
       ...rest
     } = this.props
-    // console.log(this.props)
+
     return (
       <Radio
         key={customValue}
         clear
         error
         onChange={() => onChange(customValue)}
-        //onChange={onChange(customValue)}
         checked={value === customValue}
         style={{ position: 'absolute', right: 0 }}
       >

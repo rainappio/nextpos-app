@@ -29,7 +29,7 @@ export default class RenderCheckboxGroup extends React.Component {
           }
           return this.props.input.onChange(arr)
         }
-
+	
         return (
           <View
             style={[styles.borderBottomLine, styles.paddingTopBtn20]}
@@ -37,9 +37,9 @@ export default class RenderCheckboxGroup extends React.Component {
           >
             <Checkbox
               clear
-              error
+              arr
               onChange={e => onChange(e.target.checked)}
-              checked={value}
+              checked={value.length !== 0 && value.includes(ca.id) }
               style={{ position: 'absolute', right: 0 }}
             >
               <Text>{ca.name}</Text>

@@ -29,7 +29,7 @@ import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import DropDown from '../components/DropDown'
 import PopUp from '../components/PopUp'
-import { getProducts } from '../actions'
+import { getProducts, clearLabel } from '../actions'
 import styles from '../styles'
 
 class ProductRow extends React.Component {
@@ -105,14 +105,10 @@ class ProductRow extends React.Component {
           name="ellipsis1"
           size={25}
           color="black"
-          style={{ position: 'absolute', right: 0, top: 15 }}
-          onPress={() =>
-            this.props.navigation.navigate('CategoryCustomize', {
-              labelName: labelName,
-              labelId: labelId
-            })
-          }
-        />
+          style={{ position: 'absolute', right: 0, top: 15 }}       
+          onPress={() => {this.props.navigation.navigate('CategoryCustomize',{
+                    	labelId: labelId
+                    })}}/>
       </View>
     )
   }
@@ -130,7 +126,8 @@ class ProductRow extends React.Component {
       navigation,
       haveData,
       haveError,
-      isLoading
+      isLoading,
+      label
     } = this.props
     const { selectedProducts } = this.state
     var map = new Map(Object.entries(products))
@@ -205,9 +202,10 @@ class ProductRow extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch,props) => ({
   dispatch,
-  getProducts: () => dispatch(getProducts())
+  getProducts: () => dispatch(getProducts()),
+  clearLabel: () => dispatch(clearLabel()),
 })
 
 ProductRow = reduxForm({

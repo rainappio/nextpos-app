@@ -34,8 +34,9 @@ class CategoryCustomizeScreen extends React.Component {
       prodctoptions,
       workingareas,
       handleSubmit,
-      labelName
+      onCancel
     } = this.props
+
     return (
       <ScrollView>
         <View style={[styles.container_nocenterCnt]}>
@@ -51,11 +52,11 @@ class CategoryCustomizeScreen extends React.Component {
             Customize Category
           </Text>
 
+					<View>
           <View style={styles.paddBottom_20}>
             <Field
               name="label"
               component={InputText}
-              placeholder={labelName}
               iscustomizeCate={true}
             />
           </View>
@@ -144,11 +145,13 @@ class CategoryCustomizeScreen extends React.Component {
             ]}
           >
             <TouchableHighlight
-              onPress={() => this.props.navigation.navigate('ProductsOverview')}
+              onPress={() => onCancel()}
             >
               <Text style={styles.signInText}>Cancel</Text>
             </TouchableHighlight>
           </View>
+					</View>
+
         </View>
       </ScrollView>
     )
