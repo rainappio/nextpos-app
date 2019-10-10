@@ -30,6 +30,7 @@ class ProductEdit extends Component {
 
   handleEditCancel = () => {
     this.props.clearProduct()
+    this.props.getProducts();
     this.props.navigation.navigate('ProductsOverview')
   }
 

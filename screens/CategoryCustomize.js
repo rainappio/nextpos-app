@@ -51,6 +51,7 @@ class CategoryCustomize extends React.Component {
         .then(response => {
           if (response.status === 200) {
            this.props.clearLabel();
+           this.props.getLables();
             this.props.navigation.navigate('ProductsOverview')
             this.setState({
               refreshing: true
@@ -73,6 +74,7 @@ class CategoryCustomize extends React.Component {
 
   handleEditCancel = () => {
     this.props.clearLabel()
+    this.props.getProducts()
     this.props.navigation.navigate('ProductsOverview')
   }
 
@@ -95,7 +97,7 @@ class CategoryCustomize extends React.Component {
   } else if (label !== undefined && Object.entries(label).length === 0) {
     return (
       <View style={[styles.container]}>
-        <Text>no label ...</Text>
+        <Text>fetching label ...</Text>
       </View>
     )
   }
@@ -109,9 +111,6 @@ class CategoryCustomize extends React.Component {
         prodctoptions={prodctoptions}
         workingareas={workingareas}
         onCancel={this.handleEditCancel}
-        haveData={haveData}
-        isLoading={isLoading}
-        haveError={haveError}
       />
     )
   }
