@@ -42,7 +42,7 @@ class LoginSuccessScreen extends React.Component {
   }
 
   render() {
-    const { doLogout, clientusers, navigation } = this.props
+    const { doLogout, navigation, clientusers } = this.props
     const { isLogoutBtnClick, refreshing } = this.state
     var isAuthClientUser =
       this.props.navigation.state.params !== undefined &&
@@ -50,6 +50,7 @@ class LoginSuccessScreen extends React.Component {
     var authClientUserName =
       this.props.navigation.state.params !== undefined &&
       this.props.navigation.state.params.clientusersName
+    //var clientusersFromNav = this.props.navigation.state.params.clientusers
 
     if (isLogoutBtnClick) {
       return (

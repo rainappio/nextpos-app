@@ -1,12 +1,11 @@
 import {
-  FETCH_LABEL,
-  FETCH_LABEL_SUCCESS,
-  FETCH_LABEL_FAILURE,
-  CLEAR_LABEL
+  FETCH_WORKING_AREAS,
+  FETCH_WORKING_AREAS_SUCCESS,
+  FETCH_WORKING_AREAS_FAILURE
 } from '../actions'
 
 const initialState = {
-  data: {},
+  data: [],
   loading: false,
   haveData: false,
   haveError: false,
@@ -15,7 +14,7 @@ const initialState = {
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_LABEL:
+    case FETCH_WORKING_AREAS:
       return {
         ...state,
         loading: true,
@@ -23,7 +22,7 @@ export const reducer = (state = initialState, action) => {
         haveError: false,
         error: null
       }
-    case FETCH_LABEL_SUCCESS:
+    case FETCH_WORKING_AREAS_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -31,17 +30,15 @@ export const reducer = (state = initialState, action) => {
         haveError: false,
         data: action.data
       }
-    case FETCH_LABEL_FAILURE:
+    case FETCH_WORKING_AREAS_FAILURE:
       return {
         ...state,
         loading: false,
         haveData: false,
         haveError: true,
         error: action.error,
-        data: {}
+        data: []
       }
-    case CLEAR_LABEL:
-      return initialState
     default:
       return state
   }

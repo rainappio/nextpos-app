@@ -82,7 +82,8 @@ class StaffFormScreen extends React.Component {
       isEditForm,
       refreshing,
       handleEditCancel,
-      initialValues
+      initialValues,
+      onCancel
     } = this.props
 
     return (
@@ -186,12 +187,7 @@ class StaffFormScreen extends React.Component {
                   <Text>Manager</Text>
                 </View>
                 <View style={[styles.onesixthWidth, styles.mgrtotop8]}>
-                  <Field
-                    name="roleStatus"
-                    component={RNSwitch}
-                    //onChange={(value) => this.hangleToggle(true)}
-                    // value={initialValues.roles !== undefined && initialValues.roles.includes('MANAGER')}
-                  />
+                  <Field name="roles" component={RNSwitch} />
                 </View>
               </View>
             ) : (
@@ -200,12 +196,7 @@ class StaffFormScreen extends React.Component {
                   <Text>Manager</Text>
                 </View>
                 <View style={[styles.onesixthWidth, styles.mgrtotop20]}>
-                  <Field
-                    name="roleStatus"
-                    component={RNSwitch}
-                    //onChange={(value) => this.hangleToggle(true)}
-                    // value={initialValues.roles !== undefined && initialValues.roles.includes('MANAGER')}
-                  />
+                  <Field name="roles" component={RNSwitch} />
                 </View>
               </View>
             )}
@@ -249,9 +240,7 @@ class StaffFormScreen extends React.Component {
                 <Text style={styles.signInText}>Cancel</Text>
               </TouchableHighlight>
             ) : (
-              <TouchableHighlight
-                onPress={() => this.props.navigation.navigate('StaffsOverview')}
-              >
+              <TouchableHighlight onPress={onCancel}>
                 <Text style={styles.signInText}>Cancel</Text>
               </TouchableHighlight>
             )}

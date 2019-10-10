@@ -29,10 +29,14 @@ class StaffEditScreen extends Component {
 
   handleEditCancel = () => {
     this.props.clearClient()
+    this.props.getClientUsrs()
     this.props.navigation.navigate('StaffsOverview')
   }
 
   handleUpdate = values => {
+    values.roles === true
+      ? (values.roles = ['MANAGER', 'USER'])
+      : (values.roles = ['USER'])
     var staffname = this.props.navigation.state.params.staffname
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
@@ -72,7 +76,7 @@ class StaffEditScreen extends Component {
                 })
               })
           } else {
-            alert('oops, pls try again')
+            alert('pls try again')
           }
         })
         .catch(error => {
@@ -95,6 +99,10 @@ class StaffEditScreen extends Component {
       isLoading
     } = this.props
     const { isEditForm, refreshing } = this.state
+
+    Array.isArray(clientuser.roles) && clientuser.roles.includes('MANAGER')
+      ? (clientuser.roles = true)
+      : (clientuser.roles = false)
 
     if (isLoading) {
       return (
