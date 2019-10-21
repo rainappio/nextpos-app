@@ -22,7 +22,8 @@ class LoginSuccessScreen extends React.Component {
 
   state = {
     isLogoutBtnClick: false,
-    refreshing: false
+    refreshing: false,
+    showHiddenMenu: false
   }
 
   goToClentUsersList = () => {
@@ -39,6 +40,10 @@ class LoginSuccessScreen extends React.Component {
     } catch (err) {
       console.log(`The error is: ${err}`)
     }
+  }
+
+  _toggleShow = () => {
+    this.setState({showHiddenMenu: !this.state.showHiddenMenu})
   }
 
   render() {
@@ -64,7 +69,7 @@ class LoginSuccessScreen extends React.Component {
       return (
         <ScrollView>
           <View style={styles.container}>
-            <View style={[styles.jc_alignIem_center, styles.paddBottom_10]}>
+            <View style={[styles.paddBottom_10]}>
               <Image
                 source={
                   __DEV__
@@ -72,38 +77,17 @@ class LoginSuccessScreen extends React.Component {
                     : require('../assets/images/logo.png')
                 }
                 style={styles.welcomeImage}
-              />
-              {isAuthClientUser ? (
-                <Text style={[styles.orange_bg, styles.uerIcon]}>
-                  {authClientUserName[0]}
-                </Text>
-              ) : null}
-            </View>
+              />            
 
-            {isAuthClientUser ? (
-              <View
-                style={[
-                  {
-                    width: '100%',
-                    position: 'absolute',
-                    top: 0
-                  }
-                ]}
-              >
-                <TouchableHighlight>
-                  <Text
-                    style={{
-                      textAlign: 'right',
-                      color: '#f18d1a',
-                      marginTop: 12
-                    }}
-                    onPress={() => this.handleClientUserLogout(navigation)}
-                  >
-                    Logout
-                  </Text>
-                </TouchableHighlight>
-              </View>
-            ) : null}
+              {isAuthClientUser ? (
+              	<View style={{alignItems: 'flex-end', marginTop: -30}}>
+                	<Text style={[styles.orange_bg, styles.userIcon]} onPress={this._toggleShow}>
+                  	{authClientUserName[0]}
+                	</Text>
+                	{this.state.showHiddenMenu && <HiddenMenu navigation={navigation} handleClientUserLogout={this.handleClientUserLogout}/>}
+              	</View>
+              	) : null}  
+            </View>                           
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View
@@ -117,7 +101,7 @@ class LoginSuccessScreen extends React.Component {
                 ]}
               >
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Product')}
+                  onPress={() => this.props.navigation.navigate('Tables')}
                 >
                   <View>
                     <Icon
@@ -142,7 +126,7 @@ class LoginSuccessScreen extends React.Component {
                 ]}
               >
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Product')}
+                  onPress={() => this.props.navigation.navigate('Orders')}
                 >
                   <View>
                     <Icon
@@ -169,7 +153,7 @@ class LoginSuccessScreen extends React.Component {
                 ]}
               >
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Product')}
+                  onPress={() => this.props.navigation.navigate('Reservation')}
                 >
                   <View>
                     <Icon
@@ -194,7 +178,7 @@ class LoginSuccessScreen extends React.Component {
                 ]}
               >
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Product')}
+                  onPress={() => this.props.navigation.navigate('Reports')}
                 >
                   <View>
                     <FontAwesomeIcon
@@ -314,3 +298,43 @@ export default connect(
   null,
   mapDispatchToProps
 )(LoginSuccessScreen)
+
+export class HiddenMenu extends React.Component {
+  render() {
+    return (
+    	<View style={[styles.jc_alignIem_center, styles.flex_dir_row, styles.mgrtotop12]}>
+              <View
+                style={[             
+                  styles.half_width,
+                  styles.jc_alignIem_center,
+                  styles.paddingTopBtn20
+                ]}
+              >
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Account')}
+                >
+                  <View>
+                    <Text style={[styles.orange_color]}>Account</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+
+              <View
+                style={[
+                  styles.half_width,
+                  styles.jc_alignIem_center,
+                  styles.paddingTopBtn20
+                ]}
+              >
+                <Text              				
+              		onPress={() => this.props.handleClientUserLogout(this.props.navigation)}
+              		style={[styles.orange_color]}
+            		>
+              		Logout
+            		</Text>
+
+              </View>
+            </View>
+    );
+  }
+}

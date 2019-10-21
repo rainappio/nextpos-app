@@ -361,5 +361,19 @@ export default StyleSheet.create({
   },
   minustopMargin10: {
     marginTop: -10
+  },
+    nopaddingLeft: {
+  	paddingLeft: 0
+  },
+  userIcon: {
+    color: '#fff',
+    fontSize: 22,
+    flex: 1,
+    textAlign: 'center',
+    width: 30,
+    height: 30,
+    borderRadius: 30,
+    top: 0
   }
+  
 })

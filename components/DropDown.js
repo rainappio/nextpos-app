@@ -20,7 +20,7 @@ export default class DropDown extends Component {
             borderBottomColor: '#f1f1f1',
             paddingTop: Platform.OS === 'ios' ? 30 : 4,
             paddingBottom: Platform.OS === 'ios' ? 12 : 4,
-            paddingLeft: Platform.OS === 'ios' ? 9 : 4,
+            paddingLeft: 0,
             marginBottom: 8
           }}
         >

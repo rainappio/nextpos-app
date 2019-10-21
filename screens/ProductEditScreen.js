@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import ProductFormScreen from './ProductFormScreen'
-import { getLables, getProduct, clearProduct, getProducts } from '../actions'
+import { getLables, getProduct, clearProduct, getProducts, getProductOptions, getWorkingAreas } from '../actions'
 import styles from '../styles'
 
 class ProductEdit extends Component {
@@ -26,6 +26,9 @@ class ProductEdit extends Component {
   componentDidMount() {
     this.props.getLables()
     this.props.load()
+    this.props.getProductOptions()
+    this.props.getWorkingAreas()
+    this.props.getProduct()
   }
 
   handleEditCancel = () => {
@@ -36,6 +39,7 @@ class ProductEdit extends Component {
 
   handleUpdate = values => {
     var prdId = this.props.navigation.state.params.productId
+    
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -95,7 +99,9 @@ class ProductEdit extends Component {
       clearProduct,
       haveData,
       haveError,
-      isLoading
+      isLoading,
+      prodctoptions, 
+      workingareas
     } = this.props
     const { isEditForm, refreshing } = this.state
     product.price != undefined ? (product.price += '') : null
@@ -116,6 +122,8 @@ class ProductEdit extends Component {
           handleEditCancel={this.handleEditCancel}
           onSubmit={this.handleUpdate}
           refreshing={refreshing}
+          workingareas={workingareas}
+          prodctoptions={prodctoptions}
         />
       )
     } else {
@@ -125,12 +133,13 @@ class ProductEdit extends Component {
 }
 
 const mapStateToProps = state => ({
-  gblahs: state,
   labels: state.labels.data.labels,
   product: state.product.data,
   haveData: state.product.haveData,
   haveError: state.product.haveError,
-  isLoading: state.product.loading
+  isLoading: state.product.loading,
+  prodctoptions: state.prodctsoptions.data.results,
+  workingareas: state.workingareas.data.workingAreas,
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -141,7 +150,10 @@ const mapDispatchToProps = (dispatch, props) => ({
   },
   clearProduct: () =>
     dispatch(clearProduct(props.navigation.state.params.productId)),
-  getProducts: () => dispatch(getProducts())
+  getProducts: () => dispatch(getProducts()),
+  getWorkingAreas: () => dispatch(getWorkingAreas()),
+  getProductOptions: () => dispatch(getProductOptions()),
+  getProduct: () => dispatch(getProduct(props.navigation.state.params.productId))
 })
 
 export default connect(

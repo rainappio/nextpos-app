@@ -36,7 +36,7 @@ class CategoryCustomizeScreen extends React.Component {
       handleSubmit,
       onCancel
     } = this.props
-
+		
     return (
       <ScrollView>
         <View style={[styles.container_nocenterCnt]}>
@@ -69,7 +69,7 @@ class CategoryCustomizeScreen extends React.Component {
             ]}
           >
             <Text style={styles.textBold}>Option</Text>
-            <AddBtn onPress={() => this.props.navigation.navigate('Option')} />
+            <AddBtn onPress={() => this.props.navigation.navigate('Option',{customRoute: this.props.navigation.state.routeName})} />
           </View>
 
           <Field

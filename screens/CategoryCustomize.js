@@ -50,8 +50,8 @@ class CategoryCustomize extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
-           this.props.clearLabel();
-           this.props.getLables();
+            this.props.clearLabel()
+            this.props.getLables()
             this.props.navigation.navigate('ProductsOverview')
             this.setState({
               refreshing: true
@@ -79,28 +79,36 @@ class CategoryCustomize extends React.Component {
   }
 
   render() {
-    const { navigation, prodctoptions, workingareas, label, isLoading, haveData, haveError } = this.props
+    const {
+      navigation,
+      prodctoptions,
+      workingareas,
+      label,
+      isLoading,
+      haveData,
+      haveError
+    } = this.props
     const { refreshing } = this.state
 
-  if (isLoading) {
-    return (
-      <View style={[styles.container]}>
-        <ActivityIndicator size="large" color="#ccc" />
-      </View>
-    )
-  } else if (haveError) {m
-    return (
-      <View style={[styles.container]}>
-        <Text>Err during loading, check internet conn...</Text>
-      </View>
-    )
-  } else if (label !== undefined && Object.entries(label).length === 0) {
-    return (
-      <View style={[styles.container]}>
-        <Text>fetching label ...</Text>
-      </View>
-    )
-  }
+    if (isLoading) {
+      return (
+        <View style={[styles.container]}>
+          <ActivityIndicator size="large" color="#ccc" />
+        </View>
+      )
+    } else if (haveError) {
+      return (
+        <View style={[styles.container]}>
+          <Text>Err during loading, check internet conn...</Text>
+        </View>
+      )
+    } else if (label !== undefined && Object.entries(label).length === 0) {
+      return (
+        <View style={[styles.container]}>
+          <Text>fetching label ...</Text>
+        </View>
+      )
+    }
     return (
       <CategoryCustomizeScreen
         onSubmit={this.handleSubmit}

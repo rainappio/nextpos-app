@@ -1,10 +1,7 @@
 import React from 'react'
 import { Platform, Text } from 'react-native'
-import {
-  createStackNavigator,
-  createBottomTabNavigator
-} from 'react-navigation'
-
+import { createStackNavigator } from 'react-navigation-stack'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
 import TabBarIcon from '../components/TabBarIcon'
 import HomeScreen from '../screens/HomeScreen'
 import LinksScreen from '../screens/LinksScreen'
@@ -34,106 +31,115 @@ import CategoryCustomize from '../screens/CategoryCustomize'
 import LoginScreen from '../screens/LoginScreen'
 import OptionFormScreen from '../screens/OptionFormScreen'
 import Option from '../screens/Option'
+import AccountScreen from '../screens/AccountScreen'
 
-const HomeStack = createStackNavigator({
+const Home = createStackNavigator({
   Home: HomeScreen,
   Intro: IntroAppScreen,
   CreateAcc: CreateAccScreen,
   Login: Login,
   LoginSuccess: LoginSuccessScreen,
-  ProductList: ProductListScreen,
-  ProductForm: ProductFormScreen,
-  Product: Product,
-  Settings: SettingsScreen,
-  ProductEdit: ProductEditScreen,
-  Category: Category,
-  CategoryList: CategoryListScreen,
-  ProductsOverview: ProductsOverview,
+  Tables: TablesScreen,
+  Orders: OrdersScreen,
+  Reservation: ReservationScreen,
+  Reports: ReportsScreen,
   ClientUsers: ClientUsers,
   ClientUserLogin: ClientUserLogin,
   ClockIn: ClockIn,
+})
+Home.navigationOptions = {
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={'md-home'} />
+  ),
+  tabBarOptions: {
+    activeTintColor: '#f18d1a'
+  }
+}
+
+const Settings = createStackNavigator({
+  Settings: SettingsScreen,
+  Account: AccountScreen,
+  Staff: Staff,
+  ProductList: ProductListScreen,
+  ProductForm: ProductFormScreen,
+  Product: Product,
+  ProductEdit: ProductEditScreen,
+  ProductsOverview: ProductsOverview,
   StaffsOverview: StaffsOverview,
   StaffEdit: StaffEditScreen,
   Staff: Staff,
-  CategoryCustomize: CategoryCustomize,
-  LoginScreen: LoginScreen,
   OptionScreen: OptionFormScreen,
-  Option: Option
+  Option: Option,
+  Category: Category,
+  CategoryList: CategoryListScreen,
+  CategoryCustomize: CategoryCustomize
 })
-
-// const HomeStack = createStackNavigator({
-//   Home: HomeScreen
-// })
-
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
-  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={'md-home'} />
-}
-
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen
-})
-
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+Settings.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
-      focused={(focused = false)}
+      focused={focused}
       name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'}
     />
-  )
+  ),
+  tabBarOptions: {
+    activeTintColor: '#f18d1a'
+  }
 }
 
-const TablesStack = createStackNavigator({
+const Tables = createStackNavigator({
   Tables: TablesScreen
 })
-
-TablesStack.navigationOptions = {
-  tabBarLabel: 'Tables',
+Tables.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-grid' : 'md-grid'}
     />
-  )
+  ),
+  tabBarOptions: {
+    activeTintColor: '#f18d1a'
+  }
 }
 
-const OrdersStack = createStackNavigator({
+const Orders = createStackNavigator({
   Orders: OrdersScreen
 })
-
-OrdersStack.navigationOptions = {
-  tabBarLabel: 'Orders',
+Orders.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name="md-bookmark" size={32} />
-  )
+  ),
+  tabBarOptions: {
+    activeTintColor: '#f18d1a'
+  }
 }
 
-const ReservationStack = createStackNavigator({
+const Reservation = createStackNavigator({
   Reservation: ReservationScreen
 })
-
-ReservationStack.navigationOptions = {
-  tabBarLabel: 'Reservation',
+Reservation.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name="ios-paper" size={32} />
-  )
+  ),
+  tabBarOptions: {
+    activeTintColor: '#f18d1a'
+  }
 }
 
-const ReportsStack = createStackNavigator({
+const Reports = createStackNavigator({
   Reports: ReportsScreen
 })
-
-ReportsStack.navigationOptions = {
-  tabBarLabel: 'Reports',
+Reports.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name="md-paper" size={32} />
-  )
+  ),
+  tabBarOptions: {
+    activeTintColor: '#f18d1a'
+  }
 }
 
 export default createBottomTabNavigator({
-  HomeStack: {
-    screen: HomeStack,
+  Home: {
+    screen: Home,
     navigationOptions: ({ navigation }) => {
       if (navigation.state.routes.length > 0) {
         navigation.state.routes.map(route => {
@@ -146,40 +152,24 @@ export default createBottomTabNavigator({
           } else {
             tabBarVisible = true
           }
-          //return tabBarVisible
         })
         return { tabBarVisible }
       }
     }
   },
-  TablesStack: {
-    screen: TablesStack,
-    navigationOptions: {
-      headerTitle: 'Tables'
-    }
+  Tables: {
+    screen: Tables
   },
-  OrdersStack: {
-    screen: OrdersStack,
-    navigationOptions: {
-      headerTitle: 'Orders'
-    }
+  Orders: {
+    screen: Orders
   },
-  ReservationStack: {
-    screen: ReservationStack,
-    navigationOptions: {
-      headerTitle: 'Reservation'
-    }
+  Reservation: {
+    screen: Reservation
   },
-  ReportsStack: {
-    screen: ReportsStack,
-    navigationOptions: {
-      headerTitle: 'Reports'
-    }
+  Reports: {
+    screen: Reports
   },
-  SettingsStack: {
-    screen: SettingsStack,
-    navigationOptions: {
-      headerTitle: 'Settings'
-    }
+  Settings: {
+    screen: Settings
   }
 })
