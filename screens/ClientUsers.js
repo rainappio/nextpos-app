@@ -94,14 +94,15 @@ class ClientUsers extends React.Component {
                   }}
                   onPress={() =>
                     this.props.navigation.navigate('ClientUserLogin', {
-                      clientusersName: item.username
+                      clientusersName: item.username,
+                      defaultUser: item.defaultUser
                     })
                   }
                 >
                   {item.username[0].toUpperCase()}
                 </Text>
                 <Text style={{ marginLeft: 60, marginTop: -30 }}>
-                  {item.username}
+                  {item.nickname != null ? item.nickname : item.username}
                 </Text>
               </View>
             )}

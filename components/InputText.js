@@ -8,11 +8,13 @@ const InputText = ({
   input: {
     onBlur,
     onChange,
+    onSubmitEditing,
     onFocus,
     value,
     placeholder,
     secureTextEntry,
     keyboardType,
+    editable,
     onPress
   },
   meta: { error, touched, valid },
@@ -34,10 +36,12 @@ const InputText = ({
     <TextInput
       onBlur={onBlur}
       onChangeText={onChange}
+      onSubmitEditing={onSubmitEditing}
       onFocus={onFocus}
       secureTextEntry={secureTextEntry}
       keyboardType={keyboardType}
       value={value}
+      editable={editable}
       {...rest}
       style={[
         styles.rootInput,

@@ -8,7 +8,8 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   TouchableHighlight,
-  AsyncStorage
+  AsyncStorage,
+  Keyboard
 } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -17,9 +18,15 @@ import { getClientUsr } from '../actions'
 import styles from '../styles'
 
 class EditPasswordPopUp extends Component {
+  constructor(props) {
+    super(props);
+
+    // https://reactjs.org/docs/handling-events.html
+    this.handleChangePwd = this.handleChangePwd.bind(this);
+  }
+
   state = {
-    isVisible: false,
-    refreshing: false
+    isVisible: false
   }
 
   toggleModal = visible => {
@@ -28,14 +35,13 @@ class EditPasswordPopUp extends Component {
     })
   }
 
-  ismodalClose = msg => {
-    console.log(msg)
-  }
-
   handleChangePwd = updatedPassword => {
     var name = this.props.name
     var newPwd = {}
     newPwd['password'] = updatedPassword
+
+    // dismiss keyboard after pin code is fulfilled.
+    Keyboard.dismiss();
 
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
@@ -59,11 +65,11 @@ class EditPasswordPopUp extends Component {
         .then(response => response.json())
         .then(res => {
           if (res.username) {
-            alert('Successfully updated password')
-            this.setState({
-              refreshing: false
-            })
+            //alert('Successfully updated password')
           }
+        })
+        .then(() => {
+          setTimeout(() => {this.toggleModal(false)}, 1000);
         })
         .catch(error => {
           console.error(error)
@@ -71,8 +77,14 @@ class EditPasswordPopUp extends Component {
     })
   }
 
+  /**
+   * https://stackoverflow.com/questions/40483034/close-react-native-modal-by-clicking-on-overlay
+   *
+   * Direct manipulation:
+   * https://facebook.github.io/react-native/docs/direct-manipulation
+   * https://medium.com/@payalmaniyar/deep-understanding-of-ref-direct-manipulation-in-react-native-e89726ddb78e
+   */
   render() {
-    const { onSubmit } = this.props
     return (
       <View>
         <TouchableOpacity
@@ -89,9 +101,9 @@ class EditPasswordPopUp extends Component {
           animationType="fade"
           transparent={true}
           visible={this.state.isVisible}
-          onRequestClose={() => this.toggleModal(false)}
         >
           <TouchableOpacity
+            ref={component => this._touchable = component}
             activeOpacity={1}
             style={styles.modalContainer}
             onPressOut={() => {
