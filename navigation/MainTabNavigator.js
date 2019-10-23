@@ -1,7 +1,8 @@
 import React from 'react'
-import { Platform, Text } from 'react-native'
+import { Platform, Text, AsyncStorage } from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
+import { NavigationActions, StackActions } from 'react-navigation'
 import TabBarIcon from '../components/TabBarIcon'
 import HomeScreen from '../screens/HomeScreen'
 import LinksScreen from '../screens/LinksScreen'
@@ -44,20 +45,31 @@ const Home = createStackNavigator({
   Reservation: ReservationScreen,
   Reports: ReportsScreen,
   ClientUsers: ClientUsers,
-  ClientUserLogin: ClientUserLogin,
+  ClientUserLoginS: ClientUserLogin,
   ClockIn: ClockIn,
 })
 Home.navigationOptions = {
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={'md-home'} />
+    <TabBarIcon focused={focused} name={'md-home'}/>
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
-  }
+  },
+  tabBarOnPress: ({ navigation, defaultHandler }) => {
+  	console.log(navigation.state.routes)
+  	navigation.dispatch(StackActions.reset({
+				index: 0, 
+				key: navigation.state.routes[0].key,    
+  			actions: [ NavigationActions.navigate({ 
+  				routeName: navigation.state.routes[0].routeName })]
+  		}))
+  		navigation.navigate('LoginSuccess')
+  		defaultHandler()
+  	}
 }
 
 const Settings = createStackNavigator({
-  Settings: SettingsScreen,
+  SettingScr: SettingsScreen,
   Account: AccountScreen,
   Staff: Staff,
   ProductList: ProductListScreen,
@@ -67,7 +79,6 @@ const Settings = createStackNavigator({
   ProductsOverview: ProductsOverview,
   StaffsOverview: StaffsOverview,
   StaffEdit: StaffEditScreen,
-  Staff: Staff,
   OptionScreen: OptionFormScreen,
   Option: Option,
   Category: Category,
@@ -83,6 +94,17 @@ Settings.navigationOptions = {
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
+  },
+  tabBarOnPress: ({ navigation, defaultHandler }) => {
+  	navigation.dispatch(StackActions.reset({
+			index: 0, 
+			key: navigation.state.routes[0].key,    
+  		actions: [ NavigationActions.navigate({ 
+  			routeName: navigation.state.routes[0].routeName })]
+  	}))
+  	navigation.navigate('SettingScr')
+  	//navigation.dispatch(StackActions.popToTop())
+  	defaultHandler()
   }
 }
 
@@ -140,18 +162,18 @@ Reports.navigationOptions = {
 export default createBottomTabNavigator({
   Home: {
     screen: Home,
-    navigationOptions: ({ navigation }) => {
+    navigationOptions: ({ navigation }) => {    	
       if (navigation.state.routes.length > 0) {
         navigation.state.routes.map(route => {
-          if (
-            route.routeName === 'Home' ||
-            route.routeName === 'Intro' ||
-            route.routeName === 'Login'
-          ) {
-            tabBarVisible = false
-          } else {
-            tabBarVisible = true
-          }
+					if (
+            	route.routeName === 'Home' ||
+            	route.routeName === 'Intro' ||
+            	route.routeName === 'Login'
+          	) {
+            	tabBarVisible = false
+          	}else{
+            	tabBarVisible = true
+          	}   
         })
         return { tabBarVisible }
       }
