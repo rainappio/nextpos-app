@@ -36,7 +36,7 @@ class CategoryCustomizeScreen extends React.Component {
       handleSubmit,
       onCancel
     } = this.props
-		
+
     return (
       <ScrollView>
         <View style={[styles.container_nocenterCnt]}>
@@ -52,106 +52,109 @@ class CategoryCustomizeScreen extends React.Component {
             Customize Category
           </Text>
 
-					<View>
-          <View style={styles.paddBottom_20}>
-            <Field
-              name="label"
-              component={InputText}
-              iscustomizeCate={true}
-            />
-          </View>
-
-          <View
-            style={[
-              styles.borderBottomLine,
-              styles.paddBottom_20,
-              styles.minustopMargin10
-            ]}
-          >
-            <Text style={styles.textBold}>Option</Text>
-            <AddBtn onPress={() => this.props.navigation.navigate('Option',{customRoute: this.props.navigation.state.routeName})} />
-          </View>
-
-          <Field
-            name="productOptionIds"
-            component={RenderCheckboxGroup}
-            customarr={prodctoptions}
-          />
-
-          <View
-            style={[
-              styles.jc_alignIem_center,
-              styles.flex_dir_row,
-              styles.paddingTopBtn20,
-              styles.borderBottomLine
-            ]}
-          >
-            <View>
-              <Text style={styles.textBold}>Apply To Product</Text>
-            </View>
-            <View style={[styles.onesixthWidth]}>
+          <View>
+            <View style={styles.paddBottom_20}>
               <Field
-                name="appliesToProducts"
-                component={RNSwitch}
-                checked={true}
+                name="label"
+                component={InputText}
+                iscustomizeCate={true}
               />
             </View>
-          </View>
 
-          <View>
-            <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
-              <Text style={styles.textBold}>Working Area</Text>
-            </View>
-            {workingareas !== undefined &&
-              workingareas.map(workarea => (
-                <View
-                  style={[styles.borderBottomLine, styles.paddingTopBtn20]}
-                  key={workarea.id}
-                >
-                  <Field
-                    name="workingAreaId"
-                    component={RenderRadioBtn}
-                    customValue={workarea.id}
-                    optionName={workarea.name}
-                  />
-                </View>
-              ))}
-          </View>
-
-          <View
-            style={[
-              {
-                width: '100%',
-                backgroundColor: '#F39F86',
-                borderRadius: 4,
-                marginBottom: 8
-              }
-            ]}
-          >
-            <TouchableHighlight onPress={handleSubmit}>
-              <Text style={styles.gsText}>Save</Text>
-            </TouchableHighlight>
-          </View>
-
-          <View
-            style={[
-              {
-                width: '100%',
-                bottom: 0,
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86'
-              }
-            ]}
-          >
-            <TouchableHighlight
-              onPress={() => onCancel()}
+            <View
+              style={[
+                styles.borderBottomLine,
+                styles.paddBottom_20,
+                styles.minustopMargin10
+              ]}
             >
-              <Text style={styles.signInText}>Cancel</Text>
-            </TouchableHighlight>
-          </View>
-					</View>
+              <Text style={styles.textBold}>Option</Text>
+              <AddBtn
+                onPress={() =>
+                  this.props.navigation.navigate('Option', {
+                    customRoute: this.props.navigation.state.routeName
+                  })
+                }
+              />
+            </View>
 
+            <Field
+              name="productOptionIds"
+              component={RenderCheckboxGroup}
+              customarr={prodctoptions}
+            />
+
+            <View
+              style={[
+                styles.jc_alignIem_center,
+                styles.flex_dir_row,
+                styles.paddingTopBtn20,
+                styles.borderBottomLine
+              ]}
+            >
+              <View>
+                <Text style={styles.textBold}>Apply To Product</Text>
+              </View>
+              <View style={[styles.onesixthWidth]}>
+                <Field
+                  name="appliesToProducts"
+                  component={RNSwitch}
+                  checked={true}
+                />
+              </View>
+            </View>
+
+            <View>
+              <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
+                <Text style={styles.textBold}>Working Area</Text>
+              </View>
+              {workingareas !== undefined &&
+                workingareas.map(workarea => (
+                  <View
+                    style={[styles.borderBottomLine, styles.paddingTopBtn20]}
+                    key={workarea.id}
+                  >
+                    <Field
+                      name="workingAreaId"
+                      component={RenderRadioBtn}
+                      customValue={workarea.id}
+                      optionName={workarea.name}
+                    />
+                  </View>
+                ))}
+            </View>
+
+            <View
+              style={[
+                {
+                  width: '100%',
+                  backgroundColor: '#F39F86',
+                  borderRadius: 4,
+                  marginBottom: 8
+                }
+              ]}
+            >
+              <TouchableHighlight onPress={handleSubmit}>
+                <Text style={styles.gsText}>Save</Text>
+              </TouchableHighlight>
+            </View>
+
+            <View
+              style={[
+                {
+                  width: '100%',
+                  bottom: 0,
+                  borderRadius: 4,
+                  borderWidth: 1,
+                  borderColor: '#F39F86'
+                }
+              ]}
+            >
+              <TouchableHighlight onPress={() => onCancel()}>
+                <Text style={styles.signInText}>Cancel</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
         </View>
       </ScrollView>
     )

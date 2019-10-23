@@ -8,7 +8,14 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import ProductFormScreen from './ProductFormScreen'
-import { getLables, getProduct, clearProduct, getProducts, getProductOptions, getWorkingAreas } from '../actions'
+import {
+  getLables,
+  getProduct,
+  clearProduct,
+  getProducts,
+  getProductOptions,
+  getWorkingAreas
+} from '../actions'
 import styles from '../styles'
 
 class ProductEdit extends Component {
@@ -33,13 +40,13 @@ class ProductEdit extends Component {
 
   handleEditCancel = () => {
     this.props.clearProduct()
-    this.props.getProducts();
+    this.props.getProducts()
     this.props.navigation.navigate('ProductsOverview')
   }
 
   handleUpdate = values => {
     var prdId = this.props.navigation.state.params.productId
-    
+
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -100,7 +107,7 @@ class ProductEdit extends Component {
       haveData,
       haveError,
       isLoading,
-      prodctoptions, 
+      prodctoptions,
       workingareas
     } = this.props
     const { isEditForm, refreshing } = this.state
@@ -139,7 +146,7 @@ const mapStateToProps = state => ({
   haveError: state.product.haveError,
   isLoading: state.product.loading,
   prodctoptions: state.prodctsoptions.data.results,
-  workingareas: state.workingareas.data.workingAreas,
+  workingareas: state.workingareas.data.workingAreas
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -153,7 +160,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   getProducts: () => dispatch(getProducts()),
   getWorkingAreas: () => dispatch(getWorkingAreas()),
   getProductOptions: () => dispatch(getProductOptions()),
-  getProduct: () => dispatch(getProduct(props.navigation.state.params.productId))
+  getProduct: () =>
+    dispatch(getProduct(props.navigation.state.params.productId))
 })
 
 export default connect(

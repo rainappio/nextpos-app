@@ -105,10 +105,13 @@ class ProductRow extends React.Component {
           name="ellipsis1"
           size={25}
           color="black"
-          style={{ position: 'absolute', right: 0, top: 15 }}       
-          onPress={() => {this.props.navigation.navigate('CategoryCustomize',{
-                    	labelId: labelId
-                    })}}/>
+          style={{ position: 'absolute', right: 0, top: 15 }}
+          onPress={() => {
+            this.props.navigation.navigate('CategoryCustomize', {
+              labelId: labelId
+            })
+          }}
+        />
       </View>
     )
   }
@@ -202,10 +205,10 @@ class ProductRow extends React.Component {
   }
 }
 
-const mapDispatchToProps = (dispatch,props) => ({
+const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getProducts: () => dispatch(getProducts()),
-  clearLabel: () => dispatch(clearLabel()),
+  clearLabel: () => dispatch(clearLabel())
 })
 
 ProductRow = reduxForm({

@@ -23,7 +23,6 @@ export const clearLabel = () => ({
   type: CLEAR_LABEL
 })
 
-
 export const getLabel = id => {
   return dispatch => {
     dispatch(fetchLabel(id))

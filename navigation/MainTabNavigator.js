@@ -1,7 +1,8 @@
 import React from 'react'
-import { Platform, Text } from 'react-native'
+import { Platform, Text, AsyncStorage } from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
+import { NavigationActions, StackActions } from 'react-navigation'
 import TabBarIcon from '../components/TabBarIcon'
 import HomeScreen from '../screens/HomeScreen'
 import LinksScreen from '../screens/LinksScreen'
@@ -44,8 +45,8 @@ const Home = createStackNavigator({
   Reservation: ReservationScreen,
   Reports: ReportsScreen,
   ClientUsers: ClientUsers,
-  ClientUserLogin: ClientUserLogin,
-  ClockIn: ClockIn,
+  ClientUserLoginS: ClientUserLogin,
+  ClockIn: ClockIn
 })
 Home.navigationOptions = {
   tabBarIcon: ({ focused }) => (
@@ -53,11 +54,27 @@ Home.navigationOptions = {
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
+  },
+  tabBarOnPress: ({ navigation, defaultHandler }) => {
+    console.log(navigation.state.routes)
+    navigation.dispatch(
+      StackActions.reset({
+        index: 0,
+        key: navigation.state.routes[0].key,
+        actions: [
+          NavigationActions.navigate({
+            routeName: navigation.state.routes[0].routeName
+          })
+        ]
+      })
+    )
+    navigation.navigate('LoginSuccess')
+    defaultHandler()
   }
 }
 
 const Settings = createStackNavigator({
-  Settings: SettingsScreen,
+  SettingScr: SettingsScreen,
   Account: AccountScreen,
   Staff: Staff,
   ProductList: ProductListScreen,
@@ -67,12 +84,13 @@ const Settings = createStackNavigator({
   ProductsOverview: ProductsOverview,
   StaffsOverview: StaffsOverview,
   StaffEdit: StaffEditScreen,
-  Staff: Staff,
   OptionScreen: OptionFormScreen,
   Option: Option,
   Category: Category,
   CategoryList: CategoryListScreen,
-  CategoryCustomize: CategoryCustomize
+  CategoryCustomize: CategoryCustomize,
+  ClientUsers: ClientUsers,
+  ClientUserLoginS: ClientUserLogin
 })
 Settings.navigationOptions = {
   tabBarIcon: ({ focused }) => (
@@ -83,6 +101,22 @@ Settings.navigationOptions = {
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
+  },
+  tabBarOnPress: ({ navigation, defaultHandler }) => {
+    navigation.dispatch(
+      StackActions.reset({
+        index: 0,
+        key: navigation.state.routes[0].key,
+        actions: [
+          NavigationActions.navigate({
+            routeName: navigation.state.routes[0].routeName
+          })
+        ]
+      })
+    )
+    navigation.navigate('SettingScr')
+    //navigation.dispatch(StackActions.popToTop())
+    defaultHandler()
   }
 }
 

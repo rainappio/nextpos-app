@@ -169,7 +169,11 @@ class OptionFormScreen extends React.Component {
             ]}
           >
             <TouchableHighlight
-              onPress={() => this.props.navigation.navigate(this.props.navigation.state.params.customRoute)}
+              onPress={() =>
+                this.props.navigation.navigate(
+                  this.props.navigation.state.params.customRoute
+                )
+              }
             >
               <Text style={styles.signInText}>Cancel</Text>
             </TouchableHighlight>

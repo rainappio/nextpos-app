@@ -13,6 +13,7 @@ export default class TabBarIcon extends React.Component {
         color={
           this.props.focused ? Colors.tabIconSelected : Colors.tabIconDefault
         }
+        onPress={this.props.onPress}
       />
     )
   }
