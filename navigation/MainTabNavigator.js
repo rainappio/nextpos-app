@@ -51,7 +51,7 @@ const Home = createStackNavigator({
 })
 Home.navigationOptions = {
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={'md-home'} />
+    <TabBarIcon focused={focused} name={'md-home'}/>
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
@@ -174,18 +174,18 @@ Reports.navigationOptions = {
 export default createBottomTabNavigator({
   Home: {
     screen: Home,
-    navigationOptions: ({ navigation }) => {
+    navigationOptions: ({ navigation }) => {    	
       if (navigation.state.routes.length > 0) {
         navigation.state.routes.map(route => {
-          if (
-            route.routeName === 'Home' ||
-            route.routeName === 'Intro' ||
-            route.routeName === 'Login'
-          ) {
-            tabBarVisible = false
-          } else {
-            tabBarVisible = true
-          }
+					if (
+            	route.routeName === 'Home' ||
+            	route.routeName === 'Intro' ||
+            	route.routeName === 'Login'
+          	) {
+            	tabBarVisible = false
+          	}else{
+            	tabBarVisible = true
+          	}   
         })
         return { tabBarVisible }
       }
