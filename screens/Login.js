@@ -15,6 +15,14 @@ class Login extends React.Component {
     this.props.getClientUsrs()
   }
 
+  componentWillReceiveProps(props){
+  	if (props.isLoggedIn) {
+      props.navigation.navigate('LoginSuccess',{
+      	clientusers: props.clientusers
+      })
+    } 
+	}
+
   handleSubmit = values => {
     const formData = new FormData()
     formData.append('grant_type', 'client_credentials')
