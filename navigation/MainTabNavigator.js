@@ -39,13 +39,14 @@ const Home = createStackNavigator({
   Intro: IntroAppScreen,
   CreateAcc: CreateAccScreen,
   Login: Login,
+  LoginScreen: LoginScreen,
   LoginSuccess: LoginSuccessScreen,
   Tables: TablesScreen,
   Orders: OrdersScreen,
   Reservation: ReservationScreen,
   Reports: ReportsScreen,
   ClientUsers: ClientUsers,
-  ClientUserLoginS: ClientUserLogin,
+  ClientUserLogin: ClientUserLogin,
   ClockIn: ClockIn
 })
 Home.navigationOptions = {
@@ -56,7 +57,6 @@ Home.navigationOptions = {
     activeTintColor: '#f18d1a'
   },
   tabBarOnPress: ({ navigation, defaultHandler }) => {
-    console.log(navigation.state.routes)
     navigation.dispatch(
       StackActions.reset({
         index: 0,
@@ -76,14 +76,14 @@ Home.navigationOptions = {
 const Settings = createStackNavigator({
   SettingScr: SettingsScreen,
   Account: AccountScreen,
-  Staff: Staff,
   ProductList: ProductListScreen,
   ProductForm: ProductFormScreen,
   Product: Product,
   ProductEdit: ProductEditScreen,
   ProductsOverview: ProductsOverview,
-  StaffsOverview: StaffsOverview,
+  Staff: Staff,
   StaffEdit: StaffEditScreen,
+  StaffsOverview: StaffsOverview,
   OptionScreen: OptionFormScreen,
   Option: Option,
   Category: Category,

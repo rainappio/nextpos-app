@@ -73,11 +73,6 @@ class LoginScreen extends React.Component {
   }
 }
 
-LoginScreen.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  valid: PropTypes.bool.isRequired
-}
-
 LoginScreen = reduxForm({
   form: 'loginForm'
 })(LoginScreen)

@@ -133,7 +133,7 @@ class SettingsScreen extends React.Component {
               >
                 <TouchableOpacity
                   onPress={() =>
-                    this.props.navigation.navigate('Staff')
+                    this.props.navigation.navigate('StaffsOverview')
                   }
                 >
                   <View>

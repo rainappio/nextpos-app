@@ -15,14 +15,6 @@ class Login extends React.Component {
     this.props.getClientUsrs()
   }
 
-  componentWillReceiveProps(props) {
-    if (props.isLoggedIn) {
-      props.navigation.navigate('LoginSuccess', {
-        clientusers: props.clientusers
-      })
-    }
-  }
-
   handleSubmit = values => {
     const formData = new FormData()
     formData.append('grant_type', 'client_credentials')
@@ -55,6 +47,7 @@ class Login extends React.Component {
               var accessToken = tokenObj !== null && tokenObj.access_token
               this.props.dispatch(doLoggedIn(accessToken))
               this.props.getClientUsrs()
+              this.props.navigation.navigate('LoginSuccess')
             })
         }
         return res
@@ -69,6 +62,7 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  sssss: state,
   isLoggedIn: state.auth.isLoggedIn,
   clientusers: state.clientusers.data.users
 })
