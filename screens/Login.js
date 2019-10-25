@@ -62,7 +62,6 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  sssss: state,
   isLoggedIn: state.auth.isLoggedIn,
   clientusers: state.clientusers.data.users
 })
