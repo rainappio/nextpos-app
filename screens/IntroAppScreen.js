@@ -33,7 +33,7 @@ class IntroAppScreen extends React.Component {
     }).then(val => {
       var tokenObj = JSON.parse(val)
       if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {
-        this.props.navigation.navigate('Login')
+        this.props.navigation.navigate('LoginSuccess')
       } else if (tokenObj == null) {
         this.props.dispatch(doLogout())
         this.props.navigation.navigate('Login')
@@ -99,7 +99,6 @@ class IntroAppScreen extends React.Component {
     )
   }
 }
-
 const mapDispatchToProps = dispatch => ({
   dispatch
 })

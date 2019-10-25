@@ -2,7 +2,7 @@ import React from 'react'
 import { Platform, Text, AsyncStorage } from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
-import { NavigationActions, StackActions } from 'react-navigation'
+import { NavigationActions, StackActions, createSwitchNavigator } from 'react-navigation'
 import TabBarIcon from '../components/TabBarIcon'
 import HomeScreen from '../screens/HomeScreen'
 import LinksScreen from '../screens/LinksScreen'
@@ -35,16 +35,9 @@ import Option from '../screens/Option'
 import AccountScreen from '../screens/AccountScreen'
 
 const Home = createStackNavigator({
-  Home: HomeScreen,
-  Intro: IntroAppScreen,
-  CreateAcc: CreateAccScreen,
-  Login: Login,
-  LoginScreen: LoginScreen,
   LoginSuccess: LoginSuccessScreen,
-  Tables: TablesScreen,
-  Orders: OrdersScreen,
-  Reservation: ReservationScreen,
-  Reports: ReportsScreen,
+  Login: Login,
+  LoginScreen: LoginScreen,  
   ClientUsers: ClientUsers,
   ClientUserLogin: ClientUserLogin,
   ClockIn: ClockIn
@@ -171,7 +164,7 @@ Reports.navigationOptions = {
   }
 }
 
-export default createBottomTabNavigator({
+var tabBar = createBottomTabNavigator({
   Home: {
     screen: Home,
     navigationOptions: ({ navigation }) => {    	
@@ -205,5 +198,14 @@ export default createBottomTabNavigator({
   },
   Settings: {
     screen: Settings
+  }
+})
+
+export default createSwitchNavigator({
+  Home: HomeScreen,
+  Intro: IntroAppScreen,
+  CreateAcc: CreateAccScreen,
+  tabBar: {
+    screen: tabBar // Calling the tabNavigator, wich contains the other stackNavigators
   }
 })
