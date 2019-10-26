@@ -10,6 +10,8 @@ import {
   RefreshControl,
   TouchableHighlight
 } from 'react-native'
+import { connect } from 'react-redux'
+import { getClientUsrs, doLogout } from '../actions'
 import styles from '../styles'
 
 class ClientUsers extends React.Component {
@@ -17,10 +19,15 @@ class ClientUsers extends React.Component {
     header: null
   }
 
+  componentDidMount() {
+    this.props.getClientUsrs()
+  }
+
   async handleDefaultUserLogout(navigation) {
     try {
       await AsyncStorage.removeItem('token')
-      navigation.goBack()
+      navigation.navigate('Login')
+      this.props.dispatch(this.props.dispatch(doLogout()))
     } catch (err) {
       console.log(`The error is: ${err}`)
     }
@@ -107,4 +114,21 @@ class ClientUsers extends React.Component {
   }
 }
 
-export default ClientUsers
+const mapStateToProps = state => ({
+  clientusers: state.clientusers.data.users
+})
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+  getClientUsrs: () => {
+    dispatch(getClientUsrs())
+  },
+  doLoggedOut: () => {
+    dispatch(doLogout())
+  }
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ClientUsers)

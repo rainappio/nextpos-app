@@ -47,6 +47,7 @@ class Login extends React.Component {
               var accessToken = tokenObj !== null && tokenObj.access_token
               this.props.dispatch(doLoggedIn(accessToken))
               this.props.getClientUsrs()
+              this.props.navigation.navigate('LoginSuccess')
             })
         }
         return res
@@ -56,13 +57,7 @@ class Login extends React.Component {
 
   render() {
     const { isLoggedIn, navigation, clientusers } = this.props
-    if (isLoggedIn) {
-      return (
-        <LoginSuccessScreen navigation={navigation} clientusers={clientusers} />
-      )
-    } else {
-      return <LoginScreen onSubmit={this.handleSubmit} />
-    }
+    return <LoginScreen onSubmit={this.handleSubmit} />  
   }
 }
 

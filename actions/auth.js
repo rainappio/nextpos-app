@@ -18,11 +18,11 @@ export function doLoggedIn (accessToken) {
 }
 
 export function doLogout () {
-  try {
-    AsyncStorage.removeItem('token')
-  } catch (e) {
-    // Ignore missing local storage
-  }
+  // try {
+  //   AsyncStorage.removeItem('token')
+  // } catch (e) {
+  //   // Ignore missing local storage
+  // }
   return dispatch => {
     dispatch(loggedOut())
   }

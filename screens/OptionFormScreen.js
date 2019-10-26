@@ -19,6 +19,7 @@ import InputText from '../components/InputText'
 import RNSwitch from '../components/RNSwitch'
 import styles from '../styles'
 import IonIcon from 'react-native-vector-icons/Ionicons'
+import { isRequired } from '../validators'
 
 class OptionFormScreen extends React.Component {
   static navigationOptions = {
@@ -102,6 +103,7 @@ class OptionFormScreen extends React.Component {
             name="optionName"
             component={InputText}
             placeholder="Option Name"
+            validate={isRequired}
           />
 
           <View
@@ -167,7 +169,11 @@ class OptionFormScreen extends React.Component {
             ]}
           >
             <TouchableHighlight
-              onPress={() => this.props.navigation.navigate('Option')}
+              onPress={() =>
+                this.props.navigation.navigate(
+                  this.props.navigation.state.params.customRoute
+                )
+              }
             >
               <Text style={styles.signInText}>Cancel</Text>
             </TouchableHighlight>

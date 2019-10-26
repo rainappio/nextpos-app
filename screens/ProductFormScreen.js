@@ -16,6 +16,9 @@ import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import DropDown from '../components/DropDown'
+import AddBtn from '../components/AddBtn'
+import RenderRadioBtn from '../components/RadioItem'
+import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
 
 class ProductFormScreen extends React.Component {
@@ -29,129 +32,187 @@ class ProductFormScreen extends React.Component {
       labels,
       isEditForm,
       refreshing,
-      handleEditCancel
+      handleEditCancel,
+      workingareas,
+      prodctoptions
     } = this.props
 
     return (
-      <DismissKeyboard>
-        <View style={styles.container_nocenterCnt}>
-          {isEditForm ? (
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold,
-                styles.mgrbtn80
-              ]}
-            >
-              Edit Product
-            </Text>
-          ) : (
-            <View>
-              <BackBtn />
+      <ScrollView>
+        <DismissKeyboard>
+          <View style={styles.container_nocenterCnt}>
+            {isEditForm ? (
               <Text
                 style={[
                   styles.welcomeText,
                   styles.orange_color,
                   styles.textMedium,
-                  styles.textBold
+                  styles.textBold,
+                  styles.mgrbtn80
                 ]}
               >
-                Add Product
+                Edit Product
               </Text>
+            ) : (
+              <View>
+                <BackBtn />
+                <Text
+                  style={[
+                    styles.welcomeText,
+                    styles.orange_color,
+                    styles.textMedium,
+                    styles.textBold
+                  ]}
+                >
+                  Add Product
+                </Text>
+              </View>
+            )}
+
+            <Field
+              name="name"
+              component={InputText}
+              validate={isRequired}
+              placeholder="Product Name"
+              secureTextEntry={false}
+            />
+
+            <Field
+              name="sku"
+              component={InputText}
+              placeholder="SKU"
+              secureTextEntry={false}
+            />
+
+            <Field
+              name="price"
+              component={InputText}
+              validate={isRequired}
+              placeholder="Price"
+              secureTextEntry={false}
+              keyboardType={'numeric'}
+            />
+
+            <Field
+              component={DropDown}
+              name="productLabelId"
+              options={labels}
+              search
+              selection
+              fluid
+              placeholder="Product Label"
+            />
+
+            <View style={{ marginBottom: 20 }}>
+              <Field
+                name="description"
+                component={InputText}
+                placeholder="Description"
+                secureTextEntry={false}
+              />
             </View>
-          )}
 
-          <Field
-            name="name"
-            component={InputText}
-            validate={isRequired}
-            placeholder="Product Name"
-            secureTextEntry={false}
-          />
+            {isEditForm && (
+              <View>
+                <View
+                  style={[
+                    styles.borderBottomLine,
+                    styles.paddBottom_20,
+                    styles.minustopMargin10
+                  ]}
+                >
+                  <Text style={styles.textBold}>Option</Text>
+                  <AddBtn
+                    onPress={() =>
+                      this.props.navigation.navigate('Option', {
+                        customRoute: this.props.navigation.state.routeName
+                      })
+                    }
+                  />
+                </View>
 
-          <Field
-            name="sku"
-            component={InputText}
-            placeholder="SKU"
-            secureTextEntry={false}
-          />
-          <Field
-            name="price"
-            component={InputText}
-            validate={isRequired}
-            placeholder="Price"
-            secureTextEntry={false}
-            keyboardType={'numeric'}
-          />
+                <Field
+                  name="productOptionIds"
+                  component={RenderCheckboxGroup}
+                  customarr={prodctoptions}
+                />
 
-          <Field
-            component={DropDown}
-            name="productLabelId"
-            options={labels}
-            search
-            selection
-            fluid
-            placeholder="Product Label"
-          />
-
-          <Field
-            name="description"
-            component={InputText}
-            placeholder="Description"
-            secureTextEntry={false}
-          />
-
-          <View
-            style={[
-              {
-                width: '100%',
-                backgroundColor: '#F39F86',
-                position: 'absolute',
-                bottom: 48,
-                borderRadius: 4
-              }
-            ]}
-          >
-            {isEditForm ? (
-              <TouchableHighlight onPress={handleSubmit}>
-                <Text style={styles.gsText}>Update</Text>
-              </TouchableHighlight>
-            ) : (
-              <TouchableHighlight onPress={handleSubmit}>
-                <Text style={styles.gsText}>Save</Text>
-              </TouchableHighlight>
+                <View>
+                  <View
+                    style={[styles.paddingTopBtn20, styles.borderBottomLine]}
+                  >
+                    <Text style={styles.textBold}>Working Area</Text>
+                  </View>
+                  {workingareas !== undefined &&
+                    workingareas.map(workarea => (
+                      <View
+                        style={[
+                          styles.borderBottomLine,
+                          styles.paddingTopBtn20
+                        ]}
+                        key={workarea.id}
+                      >
+                        <Field
+                          name="workingAreaId"
+                          component={RenderRadioBtn}
+                          customValue={workarea.id}
+                          optionName={workarea.name}
+                        />
+                      </View>
+                    ))}
+                </View>
+              </View>
             )}
-          </View>
-          <View
-            style={[
-              {
-                width: '100%',
-                position: 'absolute',
-                bottom: 0,
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86'
-              }
-            ]}
-          >
-            {isEditForm ? (
-              <TouchableHighlight onPress={handleEditCancel}>
-                <Text style={styles.signInText}>Cancel</Text>
-              </TouchableHighlight>
-            ) : (
-              <TouchableHighlight
-                onPress={() =>
-                  this.props.navigation.navigate('ProductsOverview')
+
+            <View
+              style={[
+                {
+                  width: '100%',
+                  backgroundColor: '#F39F86',
+                  marginBottom: 8,
+                  borderRadius: 4
                 }
-              >
-                <Text style={styles.signInText}>Cancel</Text>
-              </TouchableHighlight>
-            )}
+              ]}
+            >
+              {isEditForm ? (
+                <TouchableHighlight onPress={handleSubmit}>
+                  <Text style={styles.gsText}>Update</Text>
+                </TouchableHighlight>
+              ) : (
+                <TouchableHighlight onPress={handleSubmit}>
+                  <Text style={styles.gsText}>Save</Text>
+                </TouchableHighlight>
+              )}
+            </View>
+            <View
+              style={[
+                {
+                  width: '100%',
+                  // position: 'absolute',
+                  // bottom: 0,
+                  borderRadius: 4,
+                  borderWidth: 1,
+                  borderColor: '#F39F86'
+                }
+              ]}
+            >
+              {isEditForm ? (
+                <TouchableHighlight onPress={handleEditCancel}>
+                  <Text style={styles.signInText}>Cancel</Text>
+                </TouchableHighlight>
+              ) : (
+                <TouchableHighlight
+                  onPress={() =>
+                    this.props.navigation.navigate('ProductsOverview')
+                  }
+                >
+                  <Text style={styles.signInText}>Cancel</Text>
+                </TouchableHighlight>
+              )}
+            </View>
           </View>
-        </View>
-      </DismissKeyboard>
+        </DismissKeyboard>
+      </ScrollView>
     )
   }
 }

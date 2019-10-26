@@ -42,8 +42,9 @@ class Option extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
-            alert('success')
-            this.props.navigation.navigate('CategoryCustomize')
+            this.props.navigation.navigate(
+              this.props.navigation.state.params.customRoute
+            )
             this.setState({
               refreshing: true
             })
@@ -55,7 +56,7 @@ class Option extends React.Component {
               })
           } else {
             //this.props.navigation.navigate('Login')
-            alert('pls try again')
+            alert('pls add at least one value')
           }
         })
         .catch(error => {
