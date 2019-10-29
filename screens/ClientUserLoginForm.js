@@ -17,6 +17,9 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
+import InputText from "../components/InputText";
+import {isRequired} from "../validators";
+import Backend from '../constants/Backend'
 
 class ClientUserLoginForm extends React.Component {
   static navigationOptions = {
@@ -46,7 +49,7 @@ class ClientUserLoginForm extends React.Component {
         formData.append('password', passWord)
 
         var auth = 'Basic ' + btoa(username + ':' + masterPassword)
-        fetch('http://35.234.63.193/oauth/token', {
+        fetch(Backend.api.getAuthToken, {
           method: 'POST',
           withCredentials: true,
           credentials: 'include',
@@ -57,10 +60,10 @@ class ClientUserLoginForm extends React.Component {
         })
           .then(response => response.json())
           .then(res => {
-            if (passWord.length === 4 && res.error) {
+            if (res.error) {
               alert(res.error)
             } else {
-              var clientusrTokenexpiration = new Date().setSeconds(
+              let clientusrTokenexpiration = new Date().setSeconds(
                 new Date().getSeconds() + parseInt(res.expires_in)
               )
               res.clientusrTokenExp = clientusrTokenexpiration
@@ -73,9 +76,9 @@ class ClientUserLoginForm extends React.Component {
                   return JSON.parse(value)
                 }
               }).then(val => {
-                var tokenObj = JSON.parse(val)
-                var accessToken = tokenObj.refresh_token
-                if (accessToken !== null && passWord.length === 4) {
+                let tokenObj = JSON.parse(val)
+                let accessToken = tokenObj.refresh_token
+                if (accessToken !== null) {
                   this.props.navigation.navigate('LoginSuccess', {
                     isAuthClientUser: true,
                     clientusersName: this.props.clientusersName
@@ -115,7 +118,7 @@ class ClientUserLoginForm extends React.Component {
             ]}
             onPress={() => this.props.navigation.goBack()}
           >
-            <Icon name="ios-arrow-back" size={26} color="#f18d1a" />
+            <Icon name="ios-arrow-back" size={26} color="#f18d1a">Back</Icon>
           </Text>
 
           <Text
@@ -126,16 +129,26 @@ class ClientUserLoginForm extends React.Component {
               styles.mgrBtm50
             ]}
           >
-            Hello{' '}
-            {`${clientusersName[0].toUpperCase()}${clientusersName.slice(1)}`}
+            {clientusersName}
           </Text>
 
-          <Field
-            name="encryptedPassword"
-            component={PinCodeInput}
-            onChange={val => this.clientLogin(val)}
-            customHeight={71}
-          />
+          {this.props.defaultUser ?
+            <Field
+              name="encryptedPassword"
+              component={InputText}
+              validate={isRequired}
+              placeholder="Password"
+              secureTextEntry={true}
+              onSubmitEditing={val => this.clientLogin(val.nativeEvent.text)}
+            />
+            :
+            <Field
+              name="encryptedPassword"
+              component={PinCodeInput}
+              onChange={val => this.clientLogin(val)}
+              customHeight={71}
+            />
+          }
         </View>
       </DismissKeyboard>
     )

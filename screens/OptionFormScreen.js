@@ -114,7 +114,7 @@ class OptionFormScreen extends React.Component {
             ]}
           >
             <View style={[styles.onethirdWidth]}>
-              <Text>required</Text>
+              <Text>Required</Text>
             </View>
             <View style={[styles.onesixthWidth]}>
               <Field name="required" component={RNSwitch} />

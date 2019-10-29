@@ -1,16 +1,28 @@
-import React, { Component } from 'react'
-import { StyleSheet, View, Text, Picker, Platform } from 'react-native'
+import React, {Component} from 'react'
+import {StyleSheet, View, Text, Picker, Platform} from 'react-native'
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input'
 import styles from '../styles'
 
+/**
+ * Reference: https://www.npmjs.com/package/react-native-smooth-pincode-input
+ */
 export default class PinCodeInput extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      passwordValue: ''
+    }
+  }
+
   render() {
     const {
-      input: { onChange, onBlur, value, ...inputProps },
+      input: {onChange, onBlur, value, ...inputProps},
       children,
-      meta: { error, touched, valid },
+      meta: {error, touched, valid},
       options,
       customHeight,
+      editable,
       ...rest
     } = this.props
 
@@ -18,17 +30,7 @@ export default class PinCodeInput extends Component {
       <View>
         <View style={[styles.jc_alignIem_center]}>
           <SmoothPinCodeInput
-            placeholder={
-              <View
-                style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: 25,
-                  // opacity: 0.3,
-                  backgroundColor: '#000'
-                }}
-              ></View>
-            }
+            placeholder=""
             mask={
               <View
                 style={{
@@ -41,6 +43,7 @@ export default class PinCodeInput extends Component {
             }
             maskDelay={1000}
             password={true}
+            autoFocus={true}
             cellStyle={{
               borderWidth: 1,
               borderRadius: 2,
@@ -50,8 +53,10 @@ export default class PinCodeInput extends Component {
               marginRight: 8
             }}
             cellStyleFocused={null}
-            value={value}
-            onTextChange={value => onChange(value)}
+            editable={editable}
+            value={this.state.passwordValue}
+            onTextChange={value => this.setState({passwordValue: value})}
+            onFulfill={value => onChange(value)}
             {...inputProps}
           />
         </View>

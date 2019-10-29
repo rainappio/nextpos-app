@@ -11,6 +11,7 @@ class ClientUserLogin extends React.Component {
     return (
       <ClientUserLoginForm
         clientusersName={this.props.navigation.state.params.clientusersName}
+        defaultUser={this.props.navigation.state.params.defaultUser}
         navigation={navigation}
       />
     )

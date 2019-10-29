@@ -154,6 +154,7 @@ class StaffFormScreen extends React.Component {
                   validate={isRequired}
                   placeholder="User Name"
                   secureTextEntry={false}
+                  editable={!isEditForm}
                 />
               </View>
             </View>
@@ -168,6 +169,7 @@ class StaffFormScreen extends React.Component {
                   component={PinCodeInput}
                   onChange={val => this.val}
                   customHeight={40}
+                  editable={!isEditForm}
                 />
               </View>
             </View>

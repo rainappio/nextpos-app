@@ -1,67 +1,66 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput,
-  AsyncStorage
-} from 'react-native'
+import {Text, TouchableHighlight, TouchableOpacity, View} from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import styles from '../styles'
+import Backend, {fetchAuthenticatedRequest} from '../constants/Backend'
+
 
 class ClockIn extends React.Component {
   static navigationOptions = {
     header: null
   }
 
-  state = {
-    timecardStatus: ''
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      timecard: null
+    };
   }
 
   componentDidMount() {
-    AsyncStorage.getItem('timecardStatus', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        return value
-      }
-    }).then(val => {
-      this.setState({
-        timecardStatus: val
+    this.getUserTimeCard();
+  }
+
+  getUserTimeCard = () => {
+    fetchAuthenticatedRequest((token) => {
+      fetch(Backend.api.timecard.getActive, {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token.access_token
+        }
       })
+        .then(response => response.json())
+        .then(res => {
+          this.setState({
+            timecard: res
+          })
+
+        })
+        .catch(error => {
+          console.error(error)
+        })
     })
   }
 
-  handleClockIn = currentTime => {
-    AsyncStorage.getItem('clientusrToken', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      fetch('http://35.234.63.193/timecards/clockin', {
+  handleClockIn = () => {
+    fetchAuthenticatedRequest((token) => {
+      fetch(Backend.api.timecard.clockin, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + tokenObj.access_token
-        },
-        body: JSON.stringify(currentTime)
+          Authorization: 'Bearer ' + token.access_token
+        }
       })
         .then(response => response.json())
         .then(res => {
           if (Object.keys(res).length > 0) {
-            AsyncStorage.setItem('timecardStatus', res.timeCardStatus)
             this.props.navigation.navigate('LoginSuccess')
           } else {
             alert('pls try again')
@@ -73,29 +72,20 @@ class ClockIn extends React.Component {
     })
   }
 
-  handleClockOut = currentTime => {
-    AsyncStorage.getItem('clientusrToken', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      fetch('http://35.234.63.193/timecards/clockout', {
+  handleClockOut = () => {
+    fetchAuthenticatedRequest((token) => {
+      fetch(Backend.api.timecard.clockout, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + tokenObj.access_token
-        },
-        body: JSON.stringify(currentTime)
+          Authorization: 'Bearer ' + token.access_token
+        }
       })
         .then(response => response.json())
         .then(res => {
           if (Object.keys(res).length > 0) {
-            AsyncStorage.setItem('timecardStatus', res.timeCardStatus)
             this.props.navigation.navigate('LoginSuccess')
           } else {
             alert(res.error)
@@ -108,11 +98,26 @@ class ClockIn extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
-    const { timecardStatus } = this.state
-    var authClientUserName =
+    /**
+     * This check exists to circumvent the issue that the first render() call hasn't set the this.state.timecard object yet.
+     * https://stackoverflow.com/questions/50082423/why-is-render-being-called-twice-in-reactnative
+     */
+    if (!this.state.timecard) {
+      return <Text>Loading...</Text>;
+    }
+
+    let timeCardStatus = this.state.timecard.timeCardStatus;
+    let authClientUserName =
       this.props.navigation.state.params !== undefined &&
       this.props.navigation.state.params.authClientUserName
+
+    let clockedIn = null;
+
+    if (timeCardStatus === 'ACTIVE') {
+      let clockIn = this.state.timecard.clockIn;
+      let index = clockIn.indexOf("+");
+      clockedIn = new Date(clockIn.slice(0, index)).toLocaleTimeString();
+    }
 
     return (
       <DismissKeyboard>
@@ -140,16 +145,15 @@ class ClockIn extends React.Component {
           </View>
 
           <Text style={[styles.welcomeText, styles.textBig, styles.textBold]}>
-            Hello{' '}
-            {`${authClientUserName[0].toUpperCase()}${authClientUserName.slice(
-              1
-            )}`}
+            {authClientUserName}
           </Text>
 
-          <Text
-            style={{ marginTop: 25, marginBottom: 35, textAlign: 'center' }}
-          >
-            {new Date().toISOString()}
+          <Text style={{marginTop: 25, marginBottom: 35, textAlign: 'center'}}>
+            Current time: {`${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`}
+          </Text>
+
+          <Text style={{marginTop: 25, marginBottom: 35, textAlign: 'center'}}>
+            Status: {timeCardStatus} {clockedIn != null  ? `at ${clockedIn}` : ''}
           </Text>
 
           <View style={[styles.jc_alignIem_center]}>
@@ -166,9 +170,9 @@ class ClockIn extends React.Component {
             >
               <TouchableOpacity
                 onPress={
-                  timecardStatus === 'ACTIVE'
-                    ? () => this.handleClockOut(new Date().toISOString())
-                    : () => this.handleClockIn(new Date().toISOString())
+                  timeCardStatus === 'ACTIVE'
+                    ? () => this.handleClockOut()
+                    : () => this.handleClockIn()
                 }
               >
                 <View>
@@ -179,7 +183,7 @@ class ClockIn extends React.Component {
                     style={[styles.centerText, styles.margin_15]}
                   />
                   <Text style={(styles.centerText, styles.whiteColor)}>
-                    {timecardStatus === 'ACTIVE' ? 'Clock Out' : 'Clock In'}
+                    {timeCardStatus === 'ACTIVE' ? 'Clock Out' : 'Clock In'}
                   </Text>
                 </View>
               </TouchableOpacity>
