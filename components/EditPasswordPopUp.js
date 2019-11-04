@@ -19,10 +19,10 @@ import styles from '../styles'
 
 class EditPasswordPopUp extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     // https://reactjs.org/docs/handling-events.html
-    this.handleChangePwd = this.handleChangePwd.bind(this);
+    this.handleChangePwd = this.handleChangePwd.bind(this)
   }
 
   state = {
@@ -41,7 +41,7 @@ class EditPasswordPopUp extends Component {
     newPwd['password'] = updatedPassword
 
     // dismiss keyboard after pin code is fulfilled.
-    Keyboard.dismiss();
+    Keyboard.dismiss()
 
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
@@ -69,7 +69,9 @@ class EditPasswordPopUp extends Component {
           }
         })
         .then(() => {
-          setTimeout(() => {this.toggleModal(false)}, 1000);
+          setTimeout(() => {
+            this.toggleModal(false)
+          }, 1000)
         })
         .catch(error => {
           console.error(error)
@@ -103,7 +105,7 @@ class EditPasswordPopUp extends Component {
           visible={this.state.isVisible}
         >
           <TouchableOpacity
-            ref={component => this._touchable = component}
+            ref={component => (this._touchable = component)}
             activeOpacity={1}
             style={styles.modalContainer}
             onPressOut={() => {

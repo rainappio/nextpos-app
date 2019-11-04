@@ -17,7 +17,9 @@ class Login extends React.Component {
 
   handleSubmit = values => {
     const formData = new FormData()
-    formData.append('grant_type', 'client_credentials')
+    formData.append('grant_type', 'password')//client_credentials
+    formData.append('password', 'Secret1')
+    formData.append('username', 'may@gmail.com')
     var auth = 'Basic ' + btoa(values.username + ':' + values.masterPassword)
 
     fetch('http://35.234.63.193/oauth/token', {
@@ -57,7 +59,7 @@ class Login extends React.Component {
 
   render() {
     const { isLoggedIn, navigation, clientusers } = this.props
-    return <LoginScreen onSubmit={this.handleSubmit} />  
+    return <LoginScreen onSubmit={this.handleSubmit} />
   }
 }
 

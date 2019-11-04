@@ -10,6 +10,11 @@ import { reducer as clientuserReducer } from './clientuser'
 import { reducer as productoptionReducer } from './productoption'
 import { reducer as workingareasReducer } from './workingareas'
 import { reducer as productoptionsReducer } from './productoptions'
+import { reducer as tablelayoutsReducer } from './tablelayouts'
+import { reducer as tablelayoutReducer } from './tablelayout'
+import { reducer as shiftReducer } from './shift'
+import { reducer as ordersinflightReducer } from './ordersinflight'
+import { reducer as orderReducer } from './order'
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -22,6 +27,11 @@ const rootReducer = combineReducers({
   clientuser: clientuserReducer,
   productoption: productoptionReducer,
   workingareas: workingareasReducer,
-  prodctsoptions: productoptionsReducer
+  prodctsoptions: productoptionsReducer,
+  tablelayouts: tablelayoutsReducer,
+  tablelayout: tablelayoutReducer,
+  shift: shiftReducer,
+  ordersinflight: ordersinflightReducer,
+  order: orderReducer
 })
 export default rootReducer

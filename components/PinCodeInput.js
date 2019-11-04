@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {StyleSheet, View, Text, Picker, Platform} from 'react-native'
+import React, { Component } from 'react'
+import { StyleSheet, View, Text, Picker, Platform } from 'react-native'
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input'
 import styles from '../styles'
 
@@ -8,7 +8,7 @@ import styles from '../styles'
  */
 export default class PinCodeInput extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       passwordValue: ''
@@ -17,9 +17,9 @@ export default class PinCodeInput extends Component {
 
   render() {
     const {
-      input: {onChange, onBlur, value, ...inputProps},
+      input: { onChange, onBlur, value, ...inputProps },
       children,
-      meta: {error, touched, valid},
+      meta: { error, touched, valid },
       options,
       customHeight,
       editable,
@@ -55,7 +55,7 @@ export default class PinCodeInput extends Component {
             cellStyleFocused={null}
             editable={editable}
             value={this.state.passwordValue}
-            onTextChange={value => this.setState({passwordValue: value})}
+            onTextChange={value => this.setState({ passwordValue: value })}
             onFulfill={value => onChange(value)}
             {...inputProps}
           />

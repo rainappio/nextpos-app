@@ -7,6 +7,7 @@ class BackBtn extends React.Component {
   render() {
     return (
       <TouchableOpacity
+        hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
         onPress={() => {
           this.props.navigation.goBack()
         }}

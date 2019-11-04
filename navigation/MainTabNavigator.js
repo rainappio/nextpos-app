@@ -2,7 +2,11 @@ import React from 'react'
 import { Platform, Text, AsyncStorage } from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
-import { NavigationActions, StackActions, createSwitchNavigator } from 'react-navigation'
+import {
+  NavigationActions,
+  StackActions,
+  createSwitchNavigator
+} from 'react-navigation'
 import TabBarIcon from '../components/TabBarIcon'
 import HomeScreen from '../screens/HomeScreen'
 import LinksScreen from '../screens/LinksScreen'
@@ -33,18 +37,26 @@ import LoginScreen from '../screens/LoginScreen'
 import OptionFormScreen from '../screens/OptionFormScreen'
 import Option from '../screens/Option'
 import AccountScreen from '../screens/AccountScreen'
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import Colors from '../constants/Colors'
+import OrderStart from '../screens/OrderStart'
+import OrderForm from '../screens/OrderForm'
+import OrderFormII from '../screens/OrderFormII'
+import OrderFormIII from '../screens/OrderFormIII'
+import OrderFormIV from '../screens/OrderFormIV'
+import OrdersSummary from '../screens/OrdersSummary'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
   Login: Login,
-  LoginScreen: LoginScreen,  
+  LoginScreen: LoginScreen,
   ClientUsers: ClientUsers,
   ClientUserLogin: ClientUserLogin,
   ClockIn: ClockIn
 })
 Home.navigationOptions = {
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={'md-home'}/>
+    <TabBarIcon focused={focused} name={'md-home'} />
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
@@ -114,14 +126,17 @@ Settings.navigationOptions = {
 }
 
 const Tables = createStackNavigator({
-  Tables: TablesScreen
+  Tables: TablesScreen,
+  OrderStart: OrderStart,
+  NewOrderForm: OrderForm,
+  OrderFormII: OrderFormII,
+  OrderFormIII: OrderFormIII,
+  OrderFormIV: OrderFormIV,
+  OrdersSummary: OrdersSummary
 })
 Tables.navigationOptions = {
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-grid' : 'md-grid'}
-    />
+    <TabBarIcon focused={focused} name="md-people" />
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
@@ -133,7 +148,7 @@ const Orders = createStackNavigator({
 })
 Orders.navigationOptions = {
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name="md-bookmark" size={32} />
+    <TabBarIcon focused={focused} name="md-document" size={32} />
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
@@ -145,7 +160,7 @@ const Reservation = createStackNavigator({
 })
 Reservation.navigationOptions = {
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name="ios-paper" size={32} />
+    <TabBarIcon focused={focused} name="ios-calendar" size={32} />
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
@@ -157,7 +172,12 @@ const Reports = createStackNavigator({
 })
 Reports.navigationOptions = {
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name="md-paper" size={32} />
+    <FontAwesomeIcon
+      focused={focused}
+      name="bar-chart"
+      size={22}
+      color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+    />
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
@@ -167,18 +187,18 @@ Reports.navigationOptions = {
 var tabBar = createBottomTabNavigator({
   Home: {
     screen: Home,
-    navigationOptions: ({ navigation }) => {    	
+    navigationOptions: ({ navigation }) => {
       if (navigation.state.routes.length > 0) {
         navigation.state.routes.map(route => {
-					if (
-            	route.routeName === 'Home' ||
-            	route.routeName === 'Intro' ||
-            	route.routeName === 'Login'
-          	) {
-            	tabBarVisible = false
-          	}else{
-            	tabBarVisible = true
-          	}   
+          if (
+            route.routeName === 'Home' ||
+            route.routeName === 'Intro' ||
+            route.routeName === 'Login'
+          ) {
+            tabBarVisible = false
+          } else {
+            tabBarVisible = true
+          }
         })
         return { tabBarVisible }
       }

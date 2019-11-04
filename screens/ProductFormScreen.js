@@ -20,6 +20,7 @@ import AddBtn from '../components/AddBtn'
 import RenderRadioBtn from '../components/RadioItem'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
+import DeleteBtn from '../components/DeleteBtn'
 
 class ProductFormScreen extends React.Component {
   static navigationOptions = {
@@ -33,6 +34,7 @@ class ProductFormScreen extends React.Component {
       isEditForm,
       refreshing,
       handleEditCancel,
+      handleDeleteProduct,
       workingareas,
       prodctoptions
     } = this.props
@@ -41,6 +43,7 @@ class ProductFormScreen extends React.Component {
       <ScrollView>
         <DismissKeyboard>
           <View style={styles.container_nocenterCnt}>
+            <BackBtn />
             {isEditForm ? (
               <Text
                 style={[
@@ -55,7 +58,6 @@ class ProductFormScreen extends React.Component {
               </Text>
             ) : (
               <View>
-                <BackBtn />
                 <Text
                   style={[
                     styles.welcomeText,
@@ -210,6 +212,11 @@ class ProductFormScreen extends React.Component {
                 </TouchableHighlight>
               )}
             </View>
+            {isEditForm ? (
+              <DeleteBtn handleDeleteAction={handleDeleteProduct} />
+            ) : (
+              <View />
+            )}
           </View>
         </DismissKeyboard>
       </ScrollView>
