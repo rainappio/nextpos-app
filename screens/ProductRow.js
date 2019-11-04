@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   View,
   TouchableHighlight,
+  TouchableOpacity,
   TextInput,
   RefreshControl,
   AsyncStorage
@@ -40,7 +41,7 @@ class ProductRow extends React.Component {
   constructor() {
     super(...arguments)
     this.state = {
-      activeSections: [2, 0],
+      activeSections: [],
       selectedProducts: [],
       refreshing: false,
       status: '',
@@ -49,45 +50,6 @@ class ProductRow extends React.Component {
     this.onChange = activeSections => {
       this.setState({ activeSections })
     }
-  }
-
-  handleDelete = id => {
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      fetch(`http://35.234.63.193/products/${id}`, {
-        method: 'DELETE',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-client-id': tokenObj.clientId,
-          Authorization: 'Bearer ' + tokenObj.access_token
-        }
-      })
-        .then(response => {
-          if (response.status === 204) {
-            this.props.navigation.navigate('ProductsOverview')
-            this.setState({ refreshing: true })
-            this.props.getProducts() !== undefined &&
-              this.props.getProducts().then(() => {
-                this.setState({
-                  refreshing: false
-                })
-              })
-          } else {
-            alert('pls try again')
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
   }
 
   PanelHeader = (labelName, labelId) => {
@@ -142,14 +104,11 @@ class ProductRow extends React.Component {
             name="md-create"
             size={25}
             color="#fff"
-            onPress={() =>
-              this.props.navigation.navigate('ProductEdit', {
-                productId: this.state.labelId
-              })
-            }
           />
         ),
-        onPress: () => console.log('read'),
+        onPress: () => this.props.navigation.navigate('ProductEdit', {
+          productId: this.state.labelId
+        }),
         style: { backgroundColor: '#f18d1a90' }
       }
     ]
@@ -176,6 +135,7 @@ class ProductRow extends React.Component {
             <Accordion
               onChange={this.onChange}
               activeSections={this.state.activeSections}
+              duration={300}
             >
               {labels.map(lbl => (
                 <Accordion.Panel
@@ -185,13 +145,17 @@ class ProductRow extends React.Component {
                   <List>
                     {map.get(lbl.label).map(prd => (
                       <SwipeAction
-                        autoClose
+                        autoClose={true}
                         right={right}
                         onOpen={() => this.onOpenNP(prd.id)}
-                        onClose={() => console.log('close')}
+                        onClose={() => {}}
                         key={prd.id}
                       >
-                        <List.Item>{prd.name}</List.Item>
+                        <List.Item
+                          style={{
+                            backgroundColor: styles.grayBg
+                          }}
+                        >{prd.name}</List.Item>
                       </SwipeAction>
                     ))}
                   </List>

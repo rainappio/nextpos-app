@@ -16,6 +16,7 @@ import { isRequired, isEmail } from '../validators'
 import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
+import {withNavigation} from 'react-navigation'
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -66,6 +67,9 @@ class LoginScreen extends React.Component {
             <TouchableOpacity onPress={handleSubmit}>
               <Text style={styles.gsText}>Log In</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Intro')}>
+              <Text style={styles.gsText}>Cancel</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </DismissKeyboard>
@@ -77,4 +81,4 @@ LoginScreen = reduxForm({
   form: 'loginForm'
 })(LoginScreen)
 
-export default LoginScreen
+export default withNavigation(LoginScreen)
