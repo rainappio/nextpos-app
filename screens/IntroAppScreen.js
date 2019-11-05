@@ -23,6 +23,21 @@ class IntroAppScreen extends React.Component {
     header: null
   }
 
+  constructor(props) {
+    super(props);
+
+    this.props.screenProps.localize({
+      en: {
+        createAccount: 'Create Account',
+        signIn: 'Sign In'
+      },
+      zh: {
+        createAccount: '註冊新帳號',
+        signIn: '登入'
+      }
+    })
+  }
+
   isTokenAlive = () => {
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
@@ -45,6 +60,8 @@ class IntroAppScreen extends React.Component {
   }
 
   render() {
+    let {t} = this.props.screenProps;
+
     return (
       <View style={styles.container}>
         <View style={[{ position: 'absolute', top: 10 }]}>
@@ -75,7 +92,7 @@ class IntroAppScreen extends React.Component {
           <TouchableHighlight
             onPress={() => this.props.navigation.navigate('CreateAcc')}
           >
-            <Text style={styles.gsText}>Create Account</Text>
+            <Text style={styles.gsText}>{t('createAccount')}</Text>
           </TouchableHighlight>
         </View>
 
@@ -92,7 +109,7 @@ class IntroAppScreen extends React.Component {
           ]}
         >
           <TouchableHighlight onPress={this.isTokenAlive}>
-            <Text style={styles.signInText}>Sign In</Text>
+            <Text style={styles.signInText}>{t('signIn')}</Text>
           </TouchableHighlight>
         </View>
       </View>

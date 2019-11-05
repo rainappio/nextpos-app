@@ -155,6 +155,7 @@ class StaffFormScreen extends React.Component {
                   placeholder="User Name"
                   secureTextEntry={false}
                   editable={!isEditForm}
+                  autoCapitalize="none"
                 />
               </View>
             </View>

@@ -18,6 +18,11 @@ import { Icon, Ionicons } from '@expo/vector-icons'
 import { doLoggedIn } from './actions'
 import AppNavigator from './navigation/AppNavigator'
 import styles from './styles'
+import * as Localization from "expo-localization";
+import i18n from 'i18n-js';
+import globalEn from "./locales/en"
+import globalZh from "./locales/zh"
+
 
 const store = createStore(
   rootReducer,
@@ -41,9 +46,47 @@ function restoreAuth(dispatch) {
 restoreAuth(store.dispatch)
 
 export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isLoadingComplete: false,
+      locale: Localization.locale
+    }
+
+    i18n.fallbacks = true;
+    i18n.locale = Localization.locale;
+    i18n.translations = { en: {...globalEn}, zh: {...globalZh} };
   }
+
+  /**
+   * Function to merge global localization with screen specific localization.
+   *
+   * Reference (expo-localization, i18n-js):
+   * https://docs.expo.io/versions/v35.0.0/sdk/localization/
+   * https://reactnavigation.org/docs/en/localization.html
+   * https://medium.com/@nicolas.kovacs/react-native-localize-and-i18n-js-117f09428017
+   *
+   * react-i18next (another implementation)
+   * @param locale
+   */
+  localize = (locale) => {
+    const en = { ...globalEn, ...locale.en }
+    const zh = { ...globalZh, ...locale.zh }
+
+    i18n.translations = { en, zh };
+  }
+
+  changeLanguage = () => {
+    let locale = this.state.locale === 'zh-TW' ? 'en-TW' : 'zh-TW';
+    console.log(`Change to ${locale}`);
+
+    this.setState({ locale });
+  };
+
+  t = (scope, options) => {
+    return i18n.t(scope, { locale: this.state.locale, ...options });
+  };
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -59,7 +102,12 @@ export default class App extends React.Component {
         <Provider store={store}>
           <View style={styles.mainContainer}>
             {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-            <AppNavigator />
+            <AppNavigator screenProps={{
+              t: this.t,
+              locale: this.state.locale,
+              localize: this.localize,
+              changeLanguage: this.changeLanguage,
+            }}/>
           </View>
         </Provider>
       )

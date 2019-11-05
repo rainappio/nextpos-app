@@ -1,20 +1,9 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput
-} from 'react-native'
-import { PropTypes } from 'prop-types'
-import { isRequired, isEmail } from '../validators'
+import {Field, reduxForm} from 'redux-form'
+import {Image, KeyboardAvoidingView, Text, TouchableOpacity, View} from 'react-native'
+import {isEmail, isRequired} from '../validators'
 import InputText from '../components/InputText'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import styles from '../styles'
 import { withNavigation } from 'react-navigation'
 
@@ -23,11 +12,25 @@ class LoginScreen extends React.Component {
     header: null
   }
 
+  constructor(props) {
+    super(props);
+
+    this.props.screenProps.localize({
+      en: {
+        login: 'Login'
+      },
+      zh: {
+        login: '登入'
+      }
+    })
+  }
   render() {
     const { handleSubmit } = this.props
+    const {t} = this.props.screenProps
+
     return (
       <DismissKeyboard>
-        <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
           <View style={[{ position: 'absolute', top: 0 }]}>
             <Image
               source={
@@ -43,14 +46,15 @@ class LoginScreen extends React.Component {
             name="username"
             component={InputText}
             validate={[isRequired, isEmail]}
-            placeholder="Email Address"
+            placeholder={t('email')}
+            autoFocus={true}
           />
 
           <Field
             name="masterPassword"
             component={InputText}
             validate={isRequired}
-            placeholder="Password"
+            placeholder={t('password')}
             secureTextEntry={true}
           />
 
@@ -65,7 +69,7 @@ class LoginScreen extends React.Component {
             ]}
           >
             <TouchableOpacity onPress={handleSubmit}>
-              <Text style={styles.gsText}>Log In</Text>
+              <Text style={styles.gsText}>{t('login')}</Text>
             </TouchableOpacity>
           </View>
 
@@ -79,13 +83,11 @@ class LoginScreen extends React.Component {
               }
             ]}
           >
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Intro')}
-            >
-              <Text style={styles.gsText}>Cancel</Text>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Intro')}>
+              <Text style={styles.gsText}>{t('cancel')}</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </DismissKeyboard>
     )
   }

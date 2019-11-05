@@ -59,7 +59,7 @@ class Login extends React.Component {
 
   render() {
     const { isLoggedIn, navigation, clientusers } = this.props
-    return <LoginScreen onSubmit={this.handleSubmit} />
+    return <LoginScreen onSubmit={this.handleSubmit} screenProps={this.props.screenProps} />
   }
 }
 

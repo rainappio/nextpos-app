@@ -17,7 +17,23 @@ export default class HomeScreen extends React.Component {
     header: null
   }
 
+  constructor(props) {
+    super(props);
+
+    this.props.screenProps.localize({
+      en: {
+        getStarted: 'Get Started'
+      },
+      zh: {
+          getStarted: '開始'
+        }
+      }
+    );
+  }
+
   render() {
+    let {t} = this.props.screenProps;
+
     return (
       <View style={styles.container}>
         <View style={[{ position: 'absolute', top: 0 }]}>
@@ -48,7 +64,7 @@ export default class HomeScreen extends React.Component {
           <TouchableHighlight
             onPress={() => this.props.navigation.navigate('Intro')}
           >
-            <Text style={styles.gsText}>Get Started</Text>
+            <Text style={styles.gsText}>{t('getStarted')}</Text>
           </TouchableHighlight>
         </View>
       </View>

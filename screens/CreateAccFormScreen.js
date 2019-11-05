@@ -25,8 +25,22 @@ class CreateAccFormScreen extends React.Component {
     header: null
   }
 
+  constructor(props) {
+    super(props);
+
+    this.props.screenProps.localize({
+      en: {
+        signUp: 'Sign Up'
+      },
+      zh: {
+        signUp: '註冊'
+      }
+    })
+  }
+
   render() {
     const { handleSubmit, submitting } = this.props
+    const {t} = this.props.screenProps
     return (
       <View style={styles.container}>
         <DismissKeyboard>
@@ -47,7 +61,7 @@ class CreateAccFormScreen extends React.Component {
             <Field
               name="clientName"
               component={InputText}
-              placeholder="Client Name"
+              placeholder={t('clientName')}
               secureTextEntry={false}
             />
 
@@ -55,14 +69,14 @@ class CreateAccFormScreen extends React.Component {
               name="username"
               component={InputText}
               validate={isEmail}
-              placeholder="Email Address"
+              placeholder={t('email')}
               secureTextEntry={false}
             />
             <Field
               name="masterPassword"
               component={InputText}
               validate={isvalidPassword}
-              placeholder="Password"
+              placeholder={t('password')}
               secureTextEntry={true}
             />
 
@@ -85,12 +99,10 @@ class CreateAccFormScreen extends React.Component {
               ]}
             >
               <TouchableOpacity onPress={handleSubmit}>
-                <Text style={styles.gsText}>Sign Up</Text>
+                <Text style={styles.gsText}>{t('signUp')}</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Intro')}
-              >
-                <Text style={styles.gsText}>Cancel</Text>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Intro')}>
+                <Text style={styles.gsText}>{t('cancel')}</Text>
               </TouchableOpacity>
             </View>
           </View>
