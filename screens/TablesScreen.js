@@ -267,7 +267,11 @@ class TablesScreen extends React.Component {
         <DismissKeyboard>
           <View>
             <View style={styles.container}>
+<<<<<<< HEAD
               <BackBtn onPress={() => this.props.navigation.goBack()} />
+=======
+              <BackBtn onPress={() => this.props.navigation.goBack()}/>
+>>>>>>> 655407562acefb3ff56aefec6991ec1e0aebe858
               <Text
                 style={[
                   styles.welcomeText,
