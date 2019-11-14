@@ -109,7 +109,8 @@ class OrderFormII extends React.Component {
         orderInfo.demographicData.female +
         orderInfo.demographicData.kid
 
-    let CC = null;let orderId =null;
+    let CC = null
+    let orderId = null
     var keysArr = ordersInflight !== undefined && Object.keys(ordersInflight)
     keysArr !== false &&
       keysArr.map(
@@ -124,10 +125,9 @@ class OrderFormII extends React.Component {
         key =>
           (orderId = ordersInflight[key].map(order => {
             return order.tableLayoutId === key && order.orderId
-          }
-        ))
+          }))
       )
-	
+
     let tableLayout =
       tables !== null &&
       tables
@@ -272,7 +272,11 @@ class OrderFormII extends React.Component {
 
           <View style={[styles.half_width, styles.verticalMiddle]}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('OrdersSummary',{orderId: orderId[0]})}
+              onPress={() =>
+                this.props.navigation.navigate('OrdersSummary', {
+                  orderId: orderId[0]
+                })
+              }
             >
               <View>
                 <FontAwesomeIcon

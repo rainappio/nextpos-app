@@ -30,12 +30,16 @@ import {
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
-import { getProducts, getLables, getOrder, readableDateFormat } from '../actions'
+import {
+  getProducts,
+  getLables,
+  getOrder,
+  readableDateFormat
+} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 
 class OrdersSummary extends React.Component {
-
   componentDidMount() {
     this.props.getLables()
     this.props.getProducts()
@@ -71,7 +75,7 @@ class OrdersSummary extends React.Component {
       label,
       order
     } = this.props
-console.log(this.props)
+
     if (isLoading) {
       return (
         <View style={[styles.container]}>
@@ -127,8 +131,9 @@ console.log(this.props)
                       styles.orange_color
                     ]}
                   >
-                    {order.tableInfo.tableName !== undefined ? order.tableInfo.tableName : null }
-
+                    {order.tableInfo.tableName !== undefined
+                      ? order.tableInfo.tableName
+                      : null}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -146,7 +151,10 @@ console.log(this.props)
                     style={[styles.centerText]}
                   >
                     <Text style={[styles.textBig, styles.orange_color]}>
-                      &nbsp;{order.demographicData.male + order.demographicData.female + order.demographicData.kid}
+                      &nbsp;
+                      {order.demographicData.male +
+                        order.demographicData.female +
+                        order.demographicData.kid}
                     </Text>
                   </FontAwesomeIcon>
                 </View>
@@ -154,11 +162,12 @@ console.log(this.props)
             </View>
 
             <View style={[styles.fullhalf_width]}>
-              <TouchableOpacity
-              >
+              <TouchableOpacity>
                 <View>
                   <Text style={styles.toRight}>Staff - {order.servedBy}</Text>
-                  <Text style={styles.toRight}>{readableDateFormat(order.createdDate)}</Text>
+                  <Text style={styles.toRight}>
+                    {readableDateFormat(order.createdDate)}
+                  </Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -274,11 +283,10 @@ console.log(this.props)
             </View>
           </View>
 
-
-          {
-						(order.state === 'OPEN' || order.state === 'IN_PROCESS' || order.state === 'DELIVERED')
-						? 
-							<View
+          {order.state === 'OPEN' ||
+          order.state === 'IN_PROCESS' ||
+          order.state === 'DELIVERED' ? (
+            <View
               style={{
                 width: '100%',
                 borderRadius: 4,
@@ -291,7 +299,7 @@ console.log(this.props)
               }}
             >
               <TouchableOpacity
-                onPress={(order) => {
+                onPress={order => {
                   this.props.navigation.navigate('Tables')
                   //this.props.navigation.state.params.onSubmit()
                 }}
@@ -301,29 +309,25 @@ console.log(this.props)
                 </Text>
               </TouchableOpacity>
             </View>
-						:
-						null
-					}           
+          ) : null}
 
-					
-            <View
-              style={{
-                width: '100%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86'
+          <View
+            style={{
+              width: '100%',
+              borderRadius: 4,
+              borderWidth: 1,
+              borderColor: '#F39F86'
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.goBack()
               }}
             >
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.goBack()
-                }}
-              >
-                <Text style={styles.signInText}>Cancel</Text>
-              </TouchableOpacity>
-            </View>
+              <Text style={styles.signInText}>Cancel</Text>
+            </TouchableOpacity>
           </View>
-       
+        </View>
       </ScrollView>
     )
   }
@@ -340,7 +344,7 @@ const mapStateToProps = state => ({
   initialValues: state.order.data
 })
 
-const mapDispatchToProps = (dispatch,props) => ({
+const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getLables: () => dispatch(getLables()),
   getProducts: () => dispatch(getProducts()),

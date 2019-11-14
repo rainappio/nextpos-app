@@ -71,7 +71,7 @@ class OrderForm extends Component {
         value: 'kid'
       }
     ]
-		
+
     return (
       <ScrollView>
         <DismissKeyboard>

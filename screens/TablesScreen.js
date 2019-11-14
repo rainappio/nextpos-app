@@ -48,8 +48,8 @@ class TablesScreen extends React.Component {
   }
 
   handleOpenShift = () => {
-  	// console.log("handleOpenShift hit")
-  	//formData.append('grant_type', 'password')
+    // console.log("handleOpenShift hit")
+    //formData.append('grant_type', 'password')
 
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
@@ -59,55 +59,53 @@ class TablesScreen extends React.Component {
       }
     }).then(val => {
       var tokenObj = JSON.parse(val)
-			//console.log(tokenObj)
-			const formData = new FormData()
-			formData.append('grant_type', 'password')
-			formData.append('username', tokenObj.cli_userName)
-			formData.append('password', tokenObj.cli_masterPwd)
+      //console.log(tokenObj)
+      const formData = new FormData()
+      formData.append('grant_type', 'password')
+      formData.append('username', tokenObj.cli_userName)
+      formData.append('password', tokenObj.cli_masterPwd)
 
-			var auth = 'Basic ' + btoa(tokenObj.cli_userName + ':' + tokenObj.cli_masterPwd)
+      var auth =
+        'Basic ' + btoa(tokenObj.cli_userName + ':' + tokenObj.cli_masterPwd)
 
-    	fetch('http://35.234.63.193/oauth/token', {
-      	method: 'POST',
-      	withCredentials: true,
-      	credentials: 'include',
-      	headers: {
-        	Authorization: auth
-      	},
-      	body: formData
-    	})
-      	.then(response => response.json())
-      	.then(res => {
-      		// console.log(res)
-      		// console.log("passwordtoken")
-      		AsyncStorage.setItem('orderToken', JSON.stringify(res))
-      		fetch('http://35.234.63.193/shifts/open',{
-  					method: 'POST',
-  					withCredentials: true,
-  					credentials: 'include',
-  					headers: {
-  						'Content-Type': 'application/json',
-  						// 'x-client-id': tokenObj.clientId,
-  						Authorization: 'Bearer' + res.access_token
-  					},
-  					body: JSON.stringify({
-							"balance": "1000"
-						})
-  				}).then(response => {
-  					//console.log(response)
-  					if(response.status === 200){
-  						this.props.dispatch(getShiftStatus())
-  					}
-  				})
+      fetch('http://35.234.63.193/oauth/token', {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          Authorization: auth
+        },
+        body: formData
       })
-    })  	
+        .then(response => response.json())
+        .then(res => {
+          AsyncStorage.setItem('orderToken', JSON.stringify(res))
+          fetch('http://35.234.63.193/shifts/open', {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              // 'x-client-id': tokenObj.clientId,
+              Authorization: 'Bearer' + res.access_token
+            },
+            body: JSON.stringify({
+              balance: '1000'
+            })
+          }).then(response => {
+            if (response.status === 200) {
+              this.props.dispatch(getShiftStatus())
+            }
+          })
+        })
+    })
   }
 
   handleOrderSubmit = values => {
-  	//orderId = this.props.navigation.state.params.orderId;
-  	console.log(values)
-  	console.log("submit order hit")
-  	return;
+    //orderId = this.props.navigation.state.params.orderId;
+    console.log(values)
+    console.log('submit order hit')
+    return
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -131,8 +129,7 @@ class TablesScreen extends React.Component {
           if (response.status === 200) {
             // AsyncStorage.setItem('orderInfo', JSON.stringify(createOrder))
             this.props.navigation.navigate('Tables')
-          } 
-          else {
+          } else {
             alert('pls try again')
           }
         })
@@ -182,99 +179,95 @@ class TablesScreen extends React.Component {
     var tblLayouts = removeDuplicates(tblsArr, 'tableLayoutId')
 
     if (isLoading) {
-    return (
-      <View style={[styles.container]}>
-        <ActivityIndicator size="large" color="#ccc" />
-      </View>
-    )
-  } else if (haveError) {
-    return (
-      <View style={[styles.container]}>
-        <Text>Err during loading, check internet conn...</Text>
-      </View>
-    )
-  } else if(shiftStatus === 'INACTIVE'){
-  		return(
-				<View style={styles.container}>
-        	{/*<ActivityIndicator size="large" color="#ccc" />*/}
-        	 {/*<PopUp 
+      return (
+        <View style={[styles.container]}>
+          <ActivityIndicator size="large" color="#ccc" />
+        </View>
+      )
+    } else if (haveError) {
+      return (
+        <View style={[styles.container]}>
+          <Text>Err during loading, check internet conn...</Text>
+        </View>
+      )
+    } else if (shiftStatus === 'INACTIVE') {
+      return (
+        <View style={styles.container}>
+          {/*<ActivityIndicator size="large" color="#ccc" />*/}
+          {/*<PopUp 
             	navigation={navigation} 
             	title="" 
             	btn1Txt={'Yes'} 
             	btn2Txt={'No'} 
             	firstRoute={'Category'}
             	secondRoute={'Tables'}/>*/}
-            <ScrollView
-              directionalLockEnabled={true}
-              contentContainerStyle={styles.modalContainer}
-            >
-              <TouchableWithoutFeedback>
-                <View
-                  style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}
+          <ScrollView
+            directionalLockEnabled={true}
+            contentContainerStyle={styles.modalContainer}
+          >
+            <TouchableWithoutFeedback>
+              <View
+                style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}
+              >
+                <Text
+                  style={[
+                    styles.textMedium,
+                    styles.orange_color,
+                    styles.mgrbtn40,
+                    styles.centerText
+                  ]}
                 >
-                  <Text
-                    style={[
-                      styles.textMedium,
-                      styles.orange_color,
-                      styles.mgrbtn40,
-                      styles.centerText
-                    ]}
-                  >
-                    Open Shift
-                  </Text>
+                  Open Shift
+                </Text>
+                <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
                   <View
-                    style={[styles.jc_alignIem_center, styles.flex_dir_row]}
+                    style={{
+                      width: '46%',
+                      borderRadius: 4,
+                      borderWidth: 1,
+                      borderColor: '#F39F86',
+                      backgroundColor: '#F39F86',
+                      marginRight: '2%'
+                    }}
                   >
-                    <View
-                      style={{
-                        width: '46%',
-                        borderRadius: 4,
-                        borderWidth: 1,
-                        borderColor: '#F39F86',
-                        backgroundColor: '#F39F86',
-                        marginRight: '2%'
-                      }}
-                    >
-                      <TouchableOpacity
-                        onPress={() => this.handleOpenShift()}
-                      >
-                        <Text style={[styles.signInText, styles.whiteColor]}>
-                          Open
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity onPress={() => this.handleOpenShift()}>
+                      <Text style={[styles.signInText, styles.whiteColor]}>
+                        Open
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
 
-                    <View
-                      style={{
-                        width: '46%',
-                        borderRadius: 4,
-                        borderWidth: 1,
-                        borderColor: '#F39F86',
-                        marginLeft: '2%'
+                  <View
+                    style={{
+                      width: '46%',
+                      borderRadius: 4,
+                      borderWidth: 1,
+                      borderColor: '#F39F86',
+                      marginLeft: '2%'
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate('Tables')
                       }}
                     >
-                      <TouchableOpacity
-                        onPress={() => {
-                          this.props.navigation.navigate('Tables')
-                        }}
-                      >
-                        <Text style={styles.signInText}>Cancel</Text>
-                      </TouchableOpacity>
-                    </View>
+                      <Text style={styles.signInText}>Cancel</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
-              </TouchableWithoutFeedback>
-            </ScrollView>
-      	</View>
-			)
-  	}
+              </View>
+            </TouchableWithoutFeedback>
+          </ScrollView>
+        </View>
+      )
+    }
 
     return (
       <ScrollView>
         <DismissKeyboard>
           <View>
             <View style={styles.container}>
-              <BackBtn />
+              <BackBtn onPress={() => this.props.navigation.goBack()} />
               <Text
                 style={[
                   styles.welcomeText,
@@ -339,12 +332,14 @@ class TablesScreen extends React.Component {
                           styles.grayBg,
                           styles.mgrb
                         ]}
-                        key={order.orderId}       
-                        onPress={() => this.props.navigation.navigate('OrdersSummary',{ 
-                        	orderId: order.orderId,
-                        	onSubmit: this.handleOrderSubmit
-                        })}              
-                      >                  
+                        key={order.orderId}
+                        onPress={() =>
+                          this.props.navigation.navigate('OrdersSummary', {
+                            orderId: order.orderId,
+                            onSubmit: this.handleOrderSubmit
+                          })
+                        }
+                      >
                         <View style={[styles.quarter_width]}>
                           <TouchableOpacity>
                             <View>
@@ -422,7 +417,6 @@ class TablesScreen extends React.Component {
                         >
                           &nbsp;&nbsp;{tblLayout.state}
                         </Text>
-                       
                       </TouchableOpacity>
                     )
                   })}
