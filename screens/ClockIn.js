@@ -3,7 +3,7 @@ import { Text, TouchableHighlight, TouchableOpacity, View } from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import Backend, { fetchAuthenticatedRequest } from '../constants/Backend'
+import {api, fetchAuthenticatedRequest} from '../constants/Backend'
 
 class ClockIn extends React.Component {
   static navigationOptions = {
@@ -23,8 +23,8 @@ class ClockIn extends React.Component {
   }
 
   getUserTimeCard = () => {
-    fetchAuthenticatedRequest(token => {
-      fetch(Backend.api.timecard.getActive, {
+    fetchAuthenticatedRequest((token) => {
+      fetch(api.timecard.getActive, {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -46,8 +46,8 @@ class ClockIn extends React.Component {
   }
 
   handleClockIn = () => {
-    fetchAuthenticatedRequest(token => {
-      fetch(Backend.api.timecard.clockin, {
+    fetchAuthenticatedRequest((token) => {
+      fetch(api.timecard.clockin, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
@@ -71,8 +71,8 @@ class ClockIn extends React.Component {
   }
 
   handleClockOut = () => {
-    fetchAuthenticatedRequest(token => {
-      fetch(Backend.api.timecard.clockout, {
+    fetchAuthenticatedRequest((token) => {
+      fetch(api.timecard.clockout, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',

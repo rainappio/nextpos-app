@@ -40,7 +40,7 @@ class ProductFormScreen extends React.Component {
     } = this.props
 
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View style={styles.container_nocenterCnt}>
             <BackBtn />

@@ -18,7 +18,7 @@ export const fetchProductOptionsFailure = error => ({
   error
 })
 
-export const getProductOptions = () => {
+export const getProductOptions = (labelId) => {
   return dispatch => {
     dispatch(fetchProductOptions())
     AsyncStorage.getItem('token', (err, value) => {
@@ -30,12 +30,11 @@ export const getProductOptions = () => {
     }).then(val => {
       var tokenObj = JSON.parse(val)
       var auth = 'Bearer ' + tokenObj.access_token
-      return fetch(`http://35.234.63.193/productoptions`, {
+      return fetch(`http://35.234.63.193/productoptions${labelId === undefined ? '' : `?productLabelId=${labelId}`}`, {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
         headers: {
-          'x-client-id': tokenObj.clientId,
           Authorization: auth
         }
       })
