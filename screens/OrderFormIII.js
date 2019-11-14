@@ -94,11 +94,8 @@ class OrderFormIII extends React.Component {
     }
 
     createOrderObj['productOptions'] = prdOptionsCollections
-		console.log(createOrderObj)
-		console.log("++")
 
 		var orderId = this.props.navigation.state.params.orderId;
-		console.log(orderId)
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -118,7 +115,6 @@ class OrderFormIII extends React.Component {
         body: JSON.stringify(createOrderObj)
       })
         .then(response => {
-        	console.log(response)
           if (response.status === 200) {
             this.props.navigation.navigate('OrderFormII')
           }

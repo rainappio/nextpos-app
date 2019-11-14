@@ -78,8 +78,6 @@ class TablesScreen extends React.Component {
     	})
       	.then(response => response.json())
       	.then(res => {
-      		// console.log(res)
-      		// console.log("passwordtoken")
       		AsyncStorage.setItem('orderToken', JSON.stringify(res))
       		fetch('http://35.234.63.193/shifts/open',{
   					method: 'POST',
@@ -94,7 +92,6 @@ class TablesScreen extends React.Component {
 							"balance": "1000"
 						})
   				}).then(response => {
-  					//console.log(response)
   					if(response.status === 200){
   						this.props.dispatch(getShiftStatus())
   					}
@@ -274,7 +271,7 @@ class TablesScreen extends React.Component {
         <DismissKeyboard>
           <View>
             <View style={styles.container}>
-              <BackBtn />
+              <BackBtn onPress={() => this.props.navigation.goBack()}/>
               <Text
                 style={[
                   styles.welcomeText,

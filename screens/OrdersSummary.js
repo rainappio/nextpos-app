@@ -71,7 +71,7 @@ class OrdersSummary extends React.Component {
       label,
       order
     } = this.props
-console.log(this.props)
+
     if (isLoading) {
       return (
         <View style={[styles.container]}>

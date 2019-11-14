@@ -15,8 +15,6 @@ class OrderStart extends React.Component {
   }
 
   handleSubmit = values => {
-  	console.log(values);
-  	console.log("first order")
     var createOrder = {}
     createOrder.tableId = values.tableId
     createOrder.demographicData = {
@@ -26,8 +24,6 @@ class OrderStart extends React.Component {
       ageGroup: values.ageGroup,
       visitFrequency: values.visitFrequency
     }
-		console.log(createOrder)
-    //AsyncStorage.getItem('orderToken', (err, value) => {
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -36,7 +32,6 @@ class OrderStart extends React.Component {
       }
     }).then(val => {
       var tokenObj = JSON.parse(val)
-      console.log(tokenObj)
       fetch('http://35.234.63.193/orders', {
         method: 'POST',
         withCredentials: true,
