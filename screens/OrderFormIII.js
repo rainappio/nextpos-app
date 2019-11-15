@@ -32,7 +32,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import DropDown from '../components/DropDown'
-import { getProduct } from '../actions'
+import { getProduct, getOrder } from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 import OrderFormIV from './OrderFormIV'
@@ -40,6 +40,7 @@ import OrderFormIV from './OrderFormIV'
 class OrderFormIII extends React.Component {
   componentDidMount() {
     this.props.getProduct()
+    this.props.getOrder()
   }
 
   static navigationOptions = {
@@ -93,7 +94,7 @@ class OrderFormIII extends React.Component {
     }
 
     createOrderObj['productOptions'] = prdOptionsCollections
-
+	
     var orderId = this.props.navigation.state.params.orderId
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
@@ -123,7 +124,12 @@ class OrderFormIII extends React.Component {
   }
 
   render() {
-    const { navigation, haveData, haveError, isLoading } = this.props
+    const { navigation, haveData, haveError, isLoading, order } = this.props
+    var customerCount = null;
+		customerCount = Object.keys(order).length !== 0 && 											
+                    	order.demographicData.male +
+											order.demographicData.female +
+											order.demographicData.kid
 
     function Item({ title, price }) {
       return (
@@ -169,7 +175,7 @@ class OrderFormIII extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <ScrollView
-          refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
+          refreshControl={<RefreshControl refreshing={this.state.refreshing}/>}
         >
           <DismissKeyboard>
             <View style={[styles.container]}>
@@ -230,7 +236,7 @@ class OrderFormIII extends React.Component {
                 >
                   <Text style={[styles.textBig, styles.whiteColor]}>
                     &nbsp;&nbsp;
-                    {this.props.navigation.state.params.customerCount}
+                    {customerCount}
                   </Text>
                 </FontAwesomeIcon>
               </View>
@@ -248,7 +254,7 @@ class OrderFormIII extends React.Component {
                   color="#fff"
                   style={[styles.toRight, styles.mgrtotop8, styles.mgr_20]}
                 />
-                <Text style={styles.itemCount}>{this.state.lineItems}</Text>
+                <Text style={styles.itemCount}>{Object.keys(order).length !== 0 && order.lineItems.length}</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -262,12 +268,14 @@ const mapStateToProps = state => ({
   product: state.product.data,
   haveData: state.products.haveData,
   haveError: state.products.haveError,
-  isLoading: state.products.loading
+  isLoading: state.products.loading,
+  order: state.order.data,
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getProduct: () => dispatch(getProduct(props.navigation.state.params.prdId))
+  getProduct: () => dispatch(getProduct(props.navigation.state.params.prdId)),
+  getOrder:() => dispatch(getOrder(props.navigation.state.params.orderId))
 })
 
 OrderFormIII = reduxForm({

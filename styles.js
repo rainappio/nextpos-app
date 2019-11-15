@@ -420,5 +420,8 @@ export default StyleSheet.create({
   },
   fullhalf_width: {
     width: '60%'
+  },
+  no_mgrTop: {
+  	marginTop: 0
   }
 })
