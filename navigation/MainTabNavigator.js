@@ -95,7 +95,8 @@ const Settings = createStackNavigator({
   CategoryList: CategoryListScreen,
   CategoryCustomize: CategoryCustomize,
   ClientUsers: ClientUsers,
-  ClientUserLoginS: ClientUserLogin
+  ClientUserLoginS: ClientUserLogin,
+  LoginSuccess: LoginSuccessScreen,
 })
 Settings.navigationOptions = {
   tabBarIcon: ({ focused }) => (

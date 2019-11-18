@@ -70,7 +70,8 @@ class OrdersSummary extends React.Component {
       haveError,
       isLoading,
       label,
-      order
+      order,
+      initialValues
     } = this.props
 
 		
@@ -84,6 +85,9 @@ class OrdersSummary extends React.Component {
 				isLoading={isLoading}
 				haveError={haveError}
 				haveData={haveData}
+				onSubmit={this.props.navigation.state.params.handleOrderSubmit}
+				handleDelete={this.props.navigation.state.params.handleDelete}
+				initialValues={initialValues}
 				/>
     }
     </View>
@@ -96,7 +100,8 @@ const mapStateToProps = state => ({
 	order: state.order.data,
   haveData: state.order.haveData,
   haveError: state.order.haveError,
-  isLoading: state.order.loading
+  isLoading: state.order.loading,
+  initialValues: state.order.data
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -104,11 +109,9 @@ const mapDispatchToProps = (dispatch, props) => ({
   getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
 })
 
-OrdersSummary = reduxForm({
-  form: 'ordersummaryForm'
-})(OrdersSummary)
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(OrdersSummary)
+	mapStateToProps,
+  mapDispatchToProps)(reduxForm({
+  	form: 'ordersummaryForm',
+  	//initialValues: {"name" : "shin"}
+	})(OrdersSummary))

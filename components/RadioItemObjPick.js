@@ -12,10 +12,9 @@ export default class RadioItemObjPick extends React.Component {
       meta: { error, touched, valid },
       ...rest
     } = this.props
-
     return (
       <View>
-        <Radio.RadioItem
+        <Radio
           key={customValueOrder}
           clear
           error
@@ -24,20 +23,12 @@ export default class RadioItemObjPick extends React.Component {
             customValueOrder !== undefined &&
             value.optionValue === customValueOrder.optionValue
           }
-          style={[
-            styles.myradio,
-            {
-              backgroundColor:
-                customValueOrder !== undefined &&
-                value.optionValue === customValueOrder.optionValue
-                  ? '#f18d1a'
-                  : '#fff'
-            } //for order
-          ]}
-        />
-        <Text style={{ position: 'absolute', left: 40, top: 6 }}>
+          style={{position: 'absolute', right: 0}}
+        >
+        <Text>
           {optionName}
         </Text>
+      </Radio>
         {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
       </View>
     )

@@ -17,7 +17,7 @@ import {
 import { connect } from 'react-redux'
 import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
+import BackBtnCustom from '../components/BackBtnCustom'
 import AddBtn from '../components/AddBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -27,7 +27,9 @@ import {
   getTableLayout,
   getShiftStatus,
   getfetchOrderInflights,
-  timeConverter
+  get_time_diff,
+  clearOrder,
+  clearProduct
 } from '../actions'
 import images from '../assets/images'
 import styles from '../styles'
@@ -38,6 +40,10 @@ let uniqueFloorNames = []
 class TablesScreen extends React.Component {
   static navigationOptions = {
     header: null
+  }
+
+  state = {
+  	refreshing: false
   }
 
   componentDidMount() {
@@ -102,10 +108,43 @@ class TablesScreen extends React.Component {
   }
 
   handleOrderSubmit = values => {
-    //orderId = this.props.navigation.state.params.orderId;
-    console.log(values)
-    console.log('submit order hit')
-    return
+  	var orderId = values.orderId;
+	  const formData = new FormData()
+    //formData.append('grant_type', 'action=SUBMIT') //client_credentials, Network Request Fail Err
+    formData.append('action', 'SUBMIT')  
+    AsyncStorage.getItem('token', (err, value) => {
+      if (err) {
+        console.log(err)
+      } else {
+        JSON.parse(value)
+      }
+    }).then(val => {
+      var tokenObj = JSON.parse(val);
+      fetch(`http://35.234.63.193/orders/${orderId}/process`, {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + tokenObj.access_token
+        },
+        body: formData// this get Network Err
+      })
+      .then(response => response.json())
+      .then(res => {
+          if (res.fromState === 'OPEN' || res.fromState === 'IN_PROCESS') {
+            this.props.navigation.navigate('Tables',{ orderId : orderId})
+            this.props.clearOrder(orderId)
+          } else {
+            alert(res.message)
+          }
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    })
+  }
+
+	handleDelete = id => {
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -114,21 +153,25 @@ class TablesScreen extends React.Component {
       }
     }).then(val => {
       var tokenObj = JSON.parse(val)
-      fetch(`http://35.234.63.193/orders/${orderId}`, {
-        method: 'POST',
+      fetch(`http://35.234.63.193/orders/${id}`, {
+        method: 'DELETE',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-client-id': tokenObj.application_client_id,
           Authorization: 'Bearer ' + tokenObj.access_token
-        },
-        body: JSON.stringify(values)
+        }
       })
         .then(response => {
           if (response.status === 200) {
-            // AsyncStorage.setItem('orderInfo', JSON.stringify(createOrder))
             this.props.navigation.navigate('Tables')
+            this.setState({ refreshing: true })
+            this.props.getfetchOrderInflights() !== undefined &&
+              this.props.getfetchOrderInflights().then(() => {
+                this.setState({
+                  refreshing: false
+                })
+              })
           } else {
             alert('pls try again')
           }
@@ -138,6 +181,7 @@ class TablesScreen extends React.Component {
         })
     })
   }
+
 
   render() {
     const {
@@ -149,6 +193,7 @@ class TablesScreen extends React.Component {
       shiftStatus,
       ordersInflight
     } = this.props
+
     let tables = []
     let tblLength =
       tablelayouts.tableLayouts !== undefined &&
@@ -177,6 +222,12 @@ class TablesScreen extends React.Component {
       return array.filter(obj => !lookup.has(obj[key]) && lookup.add(obj[key]))
     }
     var tblLayouts = removeDuplicates(tblsArr, 'tableLayoutId')
+
+    function convertDateForRealDevices(date) {
+    	var arr = date.split(/[- :]/);
+    		date = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
+    		return date;
+		}
 
     if (isLoading) {
       return (
@@ -267,7 +318,7 @@ class TablesScreen extends React.Component {
         <DismissKeyboard>
           <View>
             <View style={styles.container}>
-              <BackBtn onPress={() => this.props.navigation.goBack()} />
+              <BackBtnCustom onPress={() => this.props.navigation.navigate('LoginSuccess')} />
               <Text
                 style={[
                   styles.welcomeText,
@@ -282,7 +333,8 @@ class TablesScreen extends React.Component {
               <AddBtn
                 onPress={() =>
                   this.props.navigation.navigate('OrderStart', {
-                    tables: tables
+                    tables: tables,
+                    handleOrderSubmit: this.handleOrderSubmit
                   })
                 }
               />
@@ -303,25 +355,9 @@ class TablesScreen extends React.Component {
                   >
                     {tblLayout.tableLayout}
                   </Text>
-                  {ordersInflight[tblLayout.tableLayoutId].map(order => {
-                    var orderStart = new Date(order.createdTime).getTime()
-                    var now = new Date().getTime()
-                    var milliSecDiff = Math.abs(orderStart - now)
-                    var MinutesDiff = Math.round(milliSecDiff / 60000)
-                    var orderTime = timeConverter(MinutesDiff)
-
-                    //order deadline
-                    var timespan = 30 * 60 * 1000 // 30 minutes in milliseconds
-                    var orderDeadLineMilliSec =
-                      new Date(order.createdTime).getTime() + timespan
-                    var orderDeadLineMilliSecDiff = Math.abs(
-                      orderDeadLineMilliSec - now
-                    )
-                    var orderDeadLineMinutes = Math.round(
-                      orderDeadLineMilliSecDiff / 60000
-                    )
-                    var orderDeadLineTime = timeConverter(orderDeadLineMinutes)
-
+                  {
+                  	ordersInflight[tblLayout.tableLayoutId] !== undefined && ordersInflight[tblLayout.tableLayoutId].map(order => {
+                  	var timeDifference = get_time_diff(order.createdTime);
                     return (
                       <TouchableOpacity
                         style={[
@@ -329,14 +365,14 @@ class TablesScreen extends React.Component {
                           styles.flex_dir_row,
                           styles.marginLeftRight35,
                           styles.paddingTopBtn8,
-                          styles.grayBg,
-                          styles.mgrb
+                          styles.borderBottomLine
                         ]}
                         key={order.orderId}
                         onPress={() =>
                           this.props.navigation.navigate('OrdersSummary', {
                             orderId: order.orderId,
-                            onSubmit: this.handleOrderSubmit
+                            handleOrderSubmit: this.handleOrderSubmit,
+                            handleDelete: this.handleDelete
                           })
                         }
                       >
@@ -372,28 +408,43 @@ class TablesScreen extends React.Component {
                           <TouchableOpacity
                           //onPress={() => this.props.navigation.navigate('Orders')}
                           >
-                            <View>
-                              {orderTime < orderDeadLineTime ? (
-                                <FontAwesomeIcon
-                                  name={'clock-o'}
-                                  color="#ccc"
-                                  size={25}
-                                >
-                                  <Text style={{ color: '#000', fontSize: 12 }}>
-                                    &nbsp;&nbsp;{orderTime}
-                                  </Text>
-                                </FontAwesomeIcon>
-                              ) : (
-                                <FontAwesomeIcon
-                                  name={'clock-o'}
-                                  color="red"
-                                  size={25}
-                                >
-                                  <Text style={{ color: 'red', fontSize: 12 }}>
-                                    &nbsp;&nbsp;{orderTime}
-                                  </Text>
-                                </FontAwesomeIcon>
-                              )}
+                            <View>                                                   
+                              {
+																timeDifference < 29
+																?
+																	<FontAwesomeIcon
+                                  	name={'clock-o'}
+                                  	color="#f18d1a"
+                                  	size={25}
+                                	>
+                                  	<Text style={{ fontSize: 12 }}>
+                                    	&nbsp;&nbsp;{timeDifference + " min"}
+                                  	</Text>
+                                	</FontAwesomeIcon>
+                                	:
+                                		timeDifference >= 30
+                                		?
+                                			<FontAwesomeIcon
+                                  			name={'clock-o'}
+                                  			color="red"
+                                  			size={25}
+                                			>
+                                  		<Text style={{ fontSize: 12 }}>
+                                    		&nbsp;&nbsp;{timeDifference + " min"}
+                                  		</Text>
+                                		</FontAwesomeIcon>
+                                			:
+                                				timeDifference > 1440 && 
+                                				<FontAwesomeIcon
+                                  				name={'clock-o'}
+                                  				color="#f1f1f1"
+                                  				size={25}
+                                				>
+                                  			<Text style={{ fontSize: 12 }}>
+                                    			&nbsp;&nbsp;{timeDifference + " min"}
+                                  			</Text>
+                                			</FontAwesomeIcon>
+                              }                        
                             </View>
                           </TouchableOpacity>
                         </View>
@@ -402,12 +453,32 @@ class TablesScreen extends React.Component {
                           <TouchableOpacity
                           //onPress={() => this.props.navigation.navigate('Orders')}
                           >
-                            <Image
-                              source={images.process}
-                              style={{ width: 30, height: 20 }}
-                            />
+                            {
+                            	tblLayout.state === 'OPEN'
+                            		?
+                            		<Image
+                              		source={images.order}                              	  
+                              	  //style={{ width: 25}}
+                            		/>
+                              	:
+																 tblLayout.state === 'IN_PROCESS'
+																 ?
+																	<Image
+                              			source={images.process}                              	  
+                              	  	style={{ width: 30, height: 20 }}
+                            			/>
+																	:
+																		tblLayout.state === 'COMPLETED'
+																		&&
+																		<Image
+                              			source={images.completed}                              	  
+                              	  	style={{ width: 30, height: 20 }}
+                            			/>
+                              }
+                              
                           </TouchableOpacity>
                         </View>
+
                         <Text
                           style={{
                             color: '#000',
@@ -417,6 +488,7 @@ class TablesScreen extends React.Component {
                         >
                           &nbsp;&nbsp;{tblLayout.state}
                         </Text>
+
                       </TouchableOpacity>
                     )
                   })}
@@ -440,12 +512,14 @@ const mapStateToProps = state => ({
   ordersInflight: state.ordersinflight.data.orders
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch,props) => ({
   dispatch,
   getTableLayouts: () => dispatch(getTableLayouts()),
   getTableLayout: () => dispatch(getTableLayout()),
   getShiftStatus: () => dispatch(getShiftStatus()),
-  getfetchOrderInflights: () => dispatch(getfetchOrderInflights())
+  getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
+  clearOrder: () => dispatch(clearOrder(props.navigation.state.params.orderId)),
+  clearProduct: () => dispatch(clearProduct())
 })
 export default connect(
   mapStateToProps,

@@ -45,7 +45,9 @@ class OrdersSummaryRow extends React.Component {
       haveError,
       isLoading,
       label,
-      order
+      order,
+      handleDelete,
+      initialValues
     } = this.props
 
     return (
@@ -173,9 +175,10 @@ class OrdersSummaryRow extends React.Component {
     marginRight: 35,position: 'relative'}}>*/}
 				
 				<View style={[styles.container]}>
+					<Text style={styles.textBold}>{order.orderId}</Text>
 				{
 						order.lineItems.map(lineItem => 
-          		<View style={[styles.flex_dir_row, styles.paddingTopBtn8]} key={lineItem.lineItemId}>
+          		<View style={[styles.flex_dir_row, styles.paddingTopBtn8]} key={lineItem.lineItemId}>          			
             		<View style={[styles.quarter_width, styles.jc_alignIem_center]}>
               		<TouchableOpacity
               		//onPress={() => this.props.navigation.navigate('Orders')}
@@ -237,9 +240,9 @@ class OrdersSummaryRow extends React.Component {
           </View>
 
           {
-          	order.state === 'OPEN' || 'IN_PROCESS' || 'DELIVERED' ? 
-            null
-           : <View
+          	order.state === 'OPEN' 
+          	? 
+							<View
               style={{
                 width: '100%',
                 borderRadius: 4,
@@ -251,16 +254,63 @@ class OrdersSummaryRow extends React.Component {
               }}
             >
               <TouchableOpacity
-                onPress={order => {
-                  this.props.navigation.navigate('Tables')
-                  //this.props.navigation.state.params.onSubmit()
-                }}
+                onPress={() => this.props.onSubmit(initialValues)}
+                //onPress={this.props.handleSubmit}
               >
                 <Text style={[styles.signInText, styles.whiteColor]}>
                   Submit
                 </Text>
               </TouchableOpacity>
-            </View>}
+            </View>
+						:
+						order.state === 'IN_PROCESS'
+						? 
+						<View
+              style={{
+                width: '100%',
+                borderRadius: 4,
+                borderWidth: 1,
+                borderColor: '#F39F86',
+                backgroundColor: '#F39F86',
+                marginRight: '2%',
+                marginTop: 22
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => this.props.onSubmit(initialValues)}
+                //onPress={this.props.handleSubmit}
+              >
+                <Text style={[styles.signInText, styles.whiteColor]}>
+                  Submit
+                </Text>
+              </TouchableOpacity>
+            </View>
+            :
+            order.state === 'DELIVERED'
+						? 
+						<View
+              style={{
+                width: '100%',
+                borderRadius: 4,
+                borderWidth: 1,
+                borderColor: '#F39F86',
+                backgroundColor: '#F39F86',
+                marginRight: '2%',
+                marginTop: 22
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => this.props.onSubmit(initialValues)}
+                //onPress={this.props.handleSubmit}
+              >
+                <Text style={[styles.signInText, styles.whiteColor]}>
+                  Submit
+                </Text>
+              </TouchableOpacity>
+            </View>
+            :
+            null
+          }
 
           <View
             style={{
@@ -277,6 +327,25 @@ class OrdersSummaryRow extends React.Component {
               }}
             >
               <Text style={styles.signInText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{
+              width: '100%',
+              borderRadius: 4,
+              borderWidth: 1,
+              borderColor: '#F39F86',
+              marginTop: 16
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                //this.props.navigation.goBack()
+                this.props.handleDelete(order.orderId)
+              }}
+            >
+              <Text style={styles.signInText}>Delete</Text>
             </TouchableOpacity>
           </View>
         </View>

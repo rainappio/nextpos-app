@@ -45,7 +45,10 @@ export const OrdersSummaryRowOverView =({
 	haveError,
 	haveData,
 	order,
-	navigation
+	navigation,
+	onSubmit,
+	initialValues,
+	handleDelete
 }) => {
 	if (isLoading) {
       return (
@@ -70,6 +73,9 @@ export const OrdersSummaryRowOverView =({
     <OrdersSummaryRow 
     	order={order}
     	navigation={navigation}
+    	onSubmit={onSubmit}
+    	handleDelete={handleDelete}
+    	initialValues={initialValues}
     />
   )
 }

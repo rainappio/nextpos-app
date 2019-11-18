@@ -68,11 +68,11 @@ class OrderFormII extends React.Component {
       })
       .done()
 
-    AsyncStorage.getItem('orderInfo')
-      .then(value => {
-        this.setState({ orderInfo: JSON.parse(value) })
-      })
-      .done()
+    // AsyncStorage.getItem('orderInfo')
+    //   .then(value => {
+    //     this.setState({ orderInfo: JSON.parse(value) })
+    //   })
+    //   .done()
   }
 
   PanelHeader = (labelName, labelId) => {
@@ -110,8 +110,10 @@ class OrderFormII extends React.Component {
         orderInfo.demographicData.kid
 
     let CC = null
-    let orderId = null
+    let orderIdArr = null
     var keysArr = ordersInflight !== undefined && Object.keys(ordersInflight)
+    var valsArr = ordersInflight !== undefined && Object.keys(ordersInflight)
+
     keysArr !== false &&
       keysArr.map(
         key =>
@@ -120,11 +122,12 @@ class OrderFormII extends React.Component {
           }))
       )
 
-    keysArr !== false &&
-      keysArr.map(
+    valsArr !== false &&
+      valsArr.map(
         key =>
-          (orderId = ordersInflight[key].map(order => {
-            return order.tableLayoutId === key && order.orderId
+          (orderIdArr = ordersInflight[key].map(order => {
+            //return order.tableLayoutId === key && order.orderId
+            return order.orderId
           }))
       )
 
@@ -137,7 +140,7 @@ class OrderFormII extends React.Component {
         .map(tbl => {
           return tbl.label
         })
-
+		
     const right = [
       {
         text: (
@@ -206,17 +209,19 @@ class OrderFormII extends React.Component {
                 >
                   <List>
                     {map.get(lbl.label).map(prd => (
+
                       <List.Item
                         key={prd.id}
                         onPress={() =>
                           this.props.navigation.navigate('OrderFormIII', {
                             prdName: prd.name,
-                            customerCount: customerCount,
+                            // customerCount: customerCount,
                             tableLayout: tableLayout,
                             prdId: prd.id,
-                            orderInfo: orderInfo,
-                            CC: CC[0],
-                            orderId: orderId[0]
+                            orderId: orderIdArr.length === 1 ?
+                            				 orderIdArr[0]
+                            				 :orderIdArr[orderIdArr.length -1],
+                            onSubmit: this.props.navigation.state.params.onSubmit
                           })
                         }
                       >
@@ -245,7 +250,7 @@ class OrderFormII extends React.Component {
                     styles.whiteColor
                   ]}
                 >
-                  {tableLayout[0]}
+                 
                 </Text>
               </View>
             </TouchableOpacity>
@@ -263,7 +268,7 @@ class OrderFormII extends React.Component {
                   style={[styles.centerText]}
                 >
                   <Text style={[styles.textBig, styles.whiteColor]}>
-                    &nbsp;&nbsp;{customerCount}
+                    &nbsp;&nbsp;
                   </Text>
                 </FontAwesomeIcon>
               </View>
@@ -274,7 +279,8 @@ class OrderFormII extends React.Component {
             <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate('OrdersSummary', {
-                  orderId: orderId[0]
+                  orderId: orderIdArr[orderIdArr.length -1],
+                  handleOrderSubmit: this.props.navigation.state.params.onSubmit
                 })
               }
             >

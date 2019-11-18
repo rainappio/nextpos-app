@@ -91,10 +91,7 @@ class OrderFormIV extends React.Component {
 
                           return (
                             <View
-                              style={[
-                                styles.borderBottomLine,
-                                styles.paddingTopBtn20
-                              ]}
+                            	style={styles.paddingTopBtn20}
                               key={prdOption.id + ix}
                             >
                               <Field

@@ -40,7 +40,7 @@ import OrderFormIV from './OrderFormIV'
 class OrderFormIII extends React.Component {
   componentDidMount() {
     this.props.getProduct()
-    this.props.getOrder()
+    this.props.getOrder(this.props.navigation.state.params.orderId)
   }
 
   static navigationOptions = {
@@ -93,9 +93,9 @@ class OrderFormIII extends React.Component {
       )
     }
 
-    createOrderObj['productOptions'] = prdOptionsCollections
-	
+    createOrderObj['productOptions'] = prdOptionsCollections	
     var orderId = this.props.navigation.state.params.orderId
+
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -126,10 +126,6 @@ class OrderFormIII extends React.Component {
   render() {
     const { navigation, haveData, haveError, isLoading, order } = this.props
     var customerCount = null;
-		customerCount = Object.keys(order).length !== 0 && 											
-                    	order.demographicData.male +
-											order.demographicData.female +
-											order.demographicData.kid
 
     function Item({ title, price }) {
       return (
@@ -236,7 +232,10 @@ class OrderFormIII extends React.Component {
                 >
                   <Text style={[styles.textBig, styles.whiteColor]}>
                     &nbsp;&nbsp;
-                    {customerCount}
+                    { Object.keys(order).length !== 0 && 											
+                    	order.demographicData.male +
+											order.demographicData.female +
+											order.demographicData.kid }
                   </Text>
                 </FontAwesomeIcon>
               </View>
@@ -245,7 +244,11 @@ class OrderFormIII extends React.Component {
 
           <View style={[styles.half_width, styles.verticalMiddle]}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('OrdersSummary')}
+              onPress={() => this.props.navigation.navigate(
+              	'OrdersSummary', {
+              		handleOrderSubmit: this.props.navigation.state.params.onSubmit,
+              		orderId: this.props.navigation.state.params.orderId
+              	})}
             >
               <View>
                 <FontAwesomeIcon

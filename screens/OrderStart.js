@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage, View, Text } from 'react-native'
 import ProductFormScreen from './ProductFormScreen'
-import { getProducts, getLables, getLabel } from '../actions'
+import { getProducts, getLables, getLabel, clearProduct } from '../actions'
 import OrderForm from './OrderForm'
 
 class OrderStart extends React.Component {
@@ -43,10 +43,12 @@ class OrderStart extends React.Component {
         },
         body: JSON.stringify(createOrder)
       })
-        .then(response => {
+        .then(response => {        	
           if (response.status === 200) {
+          	AsyncStorage.setItem('orderInfo',JSON.stringify(response))
             this.props.navigation.navigate('OrderFormII', {
-              tableId: createOrder.tableId
+              tableId: createOrder.tableId,
+              onSubmit: this.props.navigation.state.params.handleOrderSubmit
             })
           } else {
             alert('pls try again')
@@ -73,4 +75,11 @@ class OrderStart extends React.Component {
   }
 }
 
-export default OrderStart
+const mapDispatchToProps = dispatch => ({
+  clearProduct: () => dispatch(clearProduct())
+})
+export default connect(
+  null,
+  mapDispatchToProps
+)(OrderStart)
+
