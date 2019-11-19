@@ -27,15 +27,12 @@ import {
   SwipeRow,
   SwipeAction
 } from '@ant-design/react-native'
-import {
-  readableDateFormat
-} from '../actions'
+import { readableDateFormat } from '../actions'
 import BackBtn from '../components/BackBtn'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 
 class OrdersSummaryRow extends React.Component {
-   
   render() {
     const {
       products = [],
@@ -85,7 +82,7 @@ class OrdersSummaryRow extends React.Component {
                       styles.orange_color
                     ]}
                   >
-                    { order.tableInfo.tableName }
+                    {order.tableInfo.tableName}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -113,10 +110,12 @@ class OrdersSummaryRow extends React.Component {
               </TouchableOpacity>
             </View>
 
-           <View style={[styles.fullhalf_width, styles.mgr_20]}>
+            <View style={[styles.fullhalf_width, styles.mgr_20]}>
               <TouchableOpacity>
                 <View>
-                  <Text style={[styles.toRight, styles.mgr_20]}>Staff - {order.servedBy}</Text>
+                  <Text style={[styles.toRight, styles.mgr_20]}>
+                    Staff - {order.servedBy}
+                  </Text>
                   <Text style={[styles.toRight, styles.mgr_20]}>
                     {readableDateFormat(order.createdDate)}
                   </Text>
@@ -171,50 +170,58 @@ class OrdersSummaryRow extends React.Component {
           </View>
         </View>
 
-        {/*<View style={{marginLeft: 35,
-    marginRight: 35,position: 'relative'}}>*/}
-				
-				<View style={[styles.container]}>
-					<Text style={styles.textBold}>{order.orderId}</Text>
-				{
-						order.lineItems.map(lineItem => 
-          		<View style={[styles.flex_dir_row, styles.paddingTopBtn8]} key={lineItem.lineItemId}>          			
-            		<View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-              		<TouchableOpacity
-              		//onPress={() => this.props.navigation.navigate('Orders')}
-              		>
-                		<Text style={{ textAlign: 'left', marginLeft: -28 }}>
-                  		{lineItem.productName}
-                		</Text>
-              		</TouchableOpacity>
-            		</View>
+        <View style={[styles.container]}>
+          <Text style={styles.textBold}>{order.orderId}</Text>
+          {order.lineItems.map(lineItem => (
+            <View key={lineItem.lineItemId}>
+              <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
+                <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
+                  <TouchableOpacity
+                  //onPress={() => this.props.navigation.navigate('Orders')}
+                  >
+                    <Text style={{ textAlign: 'left', marginLeft: -28 }}>
+                      {lineItem.productName}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
 
-            		<View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-              		<TouchableOpacity
-              		//onPress={() => this.props.navigation.navigate('Orders')}
-              		>
-                		<Text>&nbsp;&nbsp;{lineItem.quantity}</Text>
-              		</TouchableOpacity>
-            		</View>
+                <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
+                  <TouchableOpacity
+                  //onPress={() => this.props.navigation.navigate('Orders')}
+                  >
+                    <Text>&nbsp;&nbsp;{lineItem.quantity}</Text>
+                  </TouchableOpacity>
+                </View>
 
-            		<View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-              		<TouchableOpacity
-                		onPress={() => this.props.navigation.navigate('OrdersSummary')}
-              		>
-                		<Text>${lineItem.price}</Text>
-              		</TouchableOpacity>
-            		</View>
+                <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate('OrdersSummary')
+                    }
+                  >
+                    <Text>${lineItem.price}</Text>
+                  </TouchableOpacity>
+                </View>
 
-            		<View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-              		<TouchableOpacity
-                		onPress={() => this.props.navigation.navigate('OrdersSummary')}
-              		>
-                		<Text style={{ marginRight: -24 }}>{lineItem.subTotal.amountWithoutTax} TX</Text>
-              		</TouchableOpacity>
-            		</View>
-          	</View>						
-					)}
-
+                <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate('OrdersSummary')
+                    }
+                  >
+                    <Text style={{ marginRight: -24 }}>
+                      {lineItem.subTotal.amountWithoutTax} TX
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={[styles.mgrbtn20]}>
+                <Text style={{ textAlign: 'left', marginLeft: 4 }}>
+                  {lineItem.options}
+                </Text>
+              </View>
+            </View>
+          ))}
 
           <View
             style={[
@@ -233,16 +240,14 @@ class OrdersSummaryRow extends React.Component {
                 onPress={() => this.props.navigation.navigate('OrdersSummary')}
               >
                 <Text style={{ textAlign: 'right', marginRight: -26 }}>
-                 {order.orderTotal} TX
+                  {order.orderTotal} TX
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
 
-          {
-          	order.state === 'OPEN' 
-          	? 
-							<View
+          {order.state === 'OPEN' ? (
+            <View
               style={{
                 width: '100%',
                 borderRadius: 4,
@@ -254,7 +259,7 @@ class OrdersSummaryRow extends React.Component {
               }}
             >
               <TouchableOpacity
-                onPress={() => this.props.onSubmit(initialValues)}
+                onPress={() => this.props.onSubmit(order.orderId)}
                 //onPress={this.props.handleSubmit}
               >
                 <Text style={[styles.signInText, styles.whiteColor]}>
@@ -262,10 +267,8 @@ class OrdersSummaryRow extends React.Component {
                 </Text>
               </TouchableOpacity>
             </View>
-						:
-						order.state === 'IN_PROCESS'
-						? 
-						<View
+          ) : order.state === 'IN_PROCESS' ? (
+            <View
               style={{
                 width: '100%',
                 borderRadius: 4,
@@ -277,7 +280,7 @@ class OrdersSummaryRow extends React.Component {
               }}
             >
               <TouchableOpacity
-                onPress={() => this.props.onSubmit(initialValues)}
+                onPress={() => this.props.onSubmit(order.orderId)}
                 //onPress={this.props.handleSubmit}
               >
                 <Text style={[styles.signInText, styles.whiteColor]}>
@@ -285,10 +288,8 @@ class OrdersSummaryRow extends React.Component {
                 </Text>
               </TouchableOpacity>
             </View>
-            :
-            order.state === 'DELIVERED'
-						? 
-						<View
+          ) : order.state === 'DELIVERED' ? (
+            <View
               style={{
                 width: '100%',
                 borderRadius: 4,
@@ -300,7 +301,7 @@ class OrdersSummaryRow extends React.Component {
               }}
             >
               <TouchableOpacity
-                onPress={() => this.props.onSubmit(initialValues)}
+                onPress={() => this.props.onSubmit(order.orderId)}
                 //onPress={this.props.handleSubmit}
               >
                 <Text style={[styles.signInText, styles.whiteColor]}>
@@ -308,9 +309,7 @@ class OrdersSummaryRow extends React.Component {
                 </Text>
               </TouchableOpacity>
             </View>
-            :
-            null
-          }
+          ) : null}
 
           <View
             style={{
@@ -318,7 +317,7 @@ class OrdersSummaryRow extends React.Component {
               borderRadius: 4,
               borderWidth: 1,
               borderColor: '#F39F86',
-              marginTop: 16
+              marginTop: 8
             }}
           >
             <TouchableOpacity
@@ -336,7 +335,7 @@ class OrdersSummaryRow extends React.Component {
               borderRadius: 4,
               borderWidth: 1,
               borderColor: '#F39F86',
-              marginTop: 16
+              marginTop: 8
             }}
           >
             <TouchableOpacity

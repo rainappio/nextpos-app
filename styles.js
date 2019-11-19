@@ -422,6 +422,6 @@ export default StyleSheet.create({
     width: '60%'
   },
   no_mgrTop: {
-  	marginTop: 0
+    marginTop: 0
   }
 })

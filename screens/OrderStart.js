@@ -24,6 +24,11 @@ class OrderStart extends React.Component {
       ageGroup: values.ageGroup,
       visitFrequency: values.visitFrequency
     }
+    var Person = createOrder.demographicData
+    var male = Person.male !== undefined ? Person.male : 0
+    var female = Person.female !== undefined ? Person.male : 0
+    var kid = Person.kid !== undefined ? Person.kid : 0
+    var customerCount = male + female + kid
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -43,12 +48,13 @@ class OrderStart extends React.Component {
         },
         body: JSON.stringify(createOrder)
       })
-        .then(response => {        	
+        .then(response => {
           if (response.status === 200) {
-          	AsyncStorage.setItem('orderInfo',JSON.stringify(response))
             this.props.navigation.navigate('OrderFormII', {
               tableId: createOrder.tableId,
-              onSubmit: this.props.navigation.state.params.handleOrderSubmit
+              onSubmit: this.props.navigation.state.params.handleOrderSubmit,
+              handleDelete: this.props.navigation.state.params.handleDelete,
+              customerCount: customerCount
             })
           } else {
             alert('pls try again')
@@ -82,4 +88,3 @@ export default connect(
   null,
   mapDispatchToProps
 )(OrderStart)
-

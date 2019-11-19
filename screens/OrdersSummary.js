@@ -30,11 +30,7 @@ import {
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
-import {
-  getProducts,
-  getLables,
-  getOrder
-} from '../actions'
+import { getProducts, getLables, getOrder } from '../actions'
 import OrdersSummaryRowOverView from './OrdersSummaryRowOverView'
 import styles from '../styles'
 
@@ -74,30 +70,28 @@ class OrdersSummary extends React.Component {
       initialValues
     } = this.props
 
-		
-    return (		
-    	<View>
-    {
-    	Object.keys(order).length !== 0 &&
-			<OrdersSummaryRowOverView
-				order={order}
-				navigation={navigation}
-				isLoading={isLoading}
-				haveError={haveError}
-				haveData={haveData}
-				onSubmit={this.props.navigation.state.params.handleOrderSubmit}
-				handleDelete={this.props.navigation.state.params.handleDelete}
-				initialValues={initialValues}
-				/>
-    }
-    </View>
+    return (
+      <View>
+        {Object.keys(order).length !== 0 && (
+          <OrdersSummaryRowOverView
+            order={order}
+            navigation={navigation}
+            isLoading={isLoading}
+            haveError={haveError}
+            haveData={haveData}
+            onSubmit={this.props.navigation.state.params.handleOrderSubmit}
+            handleDelete={this.props.navigation.state.params.handleDelete}
+            initialValues={initialValues}
+          />
+        )}
+      </View>
     )
   }
 }
 
 const mapStateToProps = state => ({
-	mee: state,
-	order: state.order.data,
+  mee: state,
+  order: state.order.data,
   haveData: state.order.haveData,
   haveError: state.order.haveError,
   isLoading: state.order.loading,
@@ -110,8 +104,11 @@ const mapDispatchToProps = (dispatch, props) => ({
 })
 
 export default connect(
-	mapStateToProps,
-  mapDispatchToProps)(reduxForm({
-  	form: 'ordersummaryForm',
-  	//initialValues: {"name" : "shin"}
-	})(OrdersSummary))
+  mapStateToProps,
+  mapDispatchToProps
+)(
+  reduxForm({
+    form: 'ordersummaryForm'
+    //initialValues: {"name" : "shin"}
+  })(OrdersSummary)
+)

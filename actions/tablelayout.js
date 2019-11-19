@@ -35,18 +35,15 @@ export const getTableLayout = id => {
     }).then(val => {
       var tokenObj = JSON.parse(val)
       var auth = 'Bearer ' + tokenObj.access_token
-      return fetch(
-        'http://35.234.63.193/tablelayouts/381cb9d2-07dc-431c-8189-43952f3b086c',
-        {
-          method: 'GET',
-          withCredentials: true,
-          credentials: 'include',
-          headers: {
-            'x-client-id': tokenObj.clientId,
-            Authorization: auth
-          }
+      return fetch(`http://35.234.63.193/tablelayouts/${id}`, {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'x-client-id': tokenObj.clientId,
+          Authorization: auth
         }
-      )
+      })
         .then(res => res.json())
         .then(data => {
           dispatch(fetchTableLayoutSuccess(data))

@@ -1,26 +1,31 @@
-export function get_time_diff( datetime )
-{
-    var t = datetime.split(/[- :T]/);
-    var date = new Date(parseInt(t[0]), parseInt(t[1]-1), parseInt(t[2]), parseInt(t[3]), parseInt(t[4]), parseInt(t[5]));
-    var orderStart = new Date( date ).getTime();
-    var now = new Date().getTime();
+export function get_time_diff (datetime) {
+  var t = datetime.split(/[- :T]/)
+  var date = new Date(
+    parseInt(t[0]),
+    parseInt(t[1] - 1),
+    parseInt(t[2]),
+    parseInt(t[3]),
+    parseInt(t[4]),
+    parseInt(t[5])
+  )
+  var orderStart = new Date(date).getTime()
+  var now = new Date().getTime()
 
-    if( isNaN(orderStart) )
-    {
-        return "";
-    }
-    if (orderStart < now) {
-        var milisec_diff = now - orderStart;
-    }else{
-        var milisec_diff = orderStart - now;
-    }
+  if (isNaN(orderStart)) {
+    return ''
+  }
+  if (orderStart < now) {
+    var milisec_diff = now - orderStart
+  } else {
+    var milisec_diff = orderStart - now
+  }
 
-    var days = Math.floor(milisec_diff / 1000 / 60 / (60 * 24));
-    var minutes = Math.floor(milisec_diff / 1000 / 60)
+  var days = Math.floor(milisec_diff / 1000 / 60 / (60 * 24))
+  var minutes = Math.floor(milisec_diff / 1000 / 60)
 
-    var date_diff = new Date( milisec_diff );
-		return minutes
-    //return days + " Days "+ date_diff.getHours() + " Hours " + date_diff.getMinutes() + " Minutes " + date_diff.getSeconds() + " Seconds";
+  var date_diff = new Date(milisec_diff)
+  return minutes - 390
+  // return days + " Days "+ date_diff.getHours() + " Hours " + date_diff.getMinutes() + " Minutes " + date_diff.getSeconds() + " Seconds";
 }
 
 export function checkNaN (value) {

@@ -30,7 +30,12 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import DropDown from '../components/DropDown'
-import { getProducts, getLables, getfetchOrderInflights } from '../actions'
+import {
+  getProducts,
+  getLables,
+  getfetchOrderInflights,
+  getOrder
+} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 
@@ -48,7 +53,6 @@ class OrderFormII extends React.Component {
       status: '',
       labelId: null,
       tables: null,
-      orderInfo: null,
       cc: null
     }
     this.onChange = activeSections => {
@@ -60,6 +64,7 @@ class OrderFormII extends React.Component {
     this.props.getLables()
     this.props.getProducts()
     this.props.getfetchOrderInflights()
+    // this.props.getOrder()//get err, just try by Async way
 
     //By Async Way
     AsyncStorage.getItem('tables')
@@ -67,12 +72,6 @@ class OrderFormII extends React.Component {
         this.setState({ tables: JSON.parse(value) })
       })
       .done()
-
-    // AsyncStorage.getItem('orderInfo')
-    //   .then(value => {
-    //     this.setState({ orderInfo: JSON.parse(value) })
-    //   })
-    //   .done()
   }
 
   PanelHeader = (labelName, labelId) => {
@@ -99,26 +98,23 @@ class OrderFormII extends React.Component {
       haveError,
       isLoading,
       label,
-      ordersInflight
+      ordersInflight,
+      order
     } = this.props
     const { selectedProducts, tables, orderInfo } = this.state
     var map = new Map(Object.entries(products))
-    let customerCount =
-      orderInfo !== null &&
-      orderInfo.demographicData.male +
-        orderInfo.demographicData.female +
-        orderInfo.demographicData.kid
 
     let CC = null
-    let orderIdArr = null
+    let orderIdArr = []
     var keysArr = ordersInflight !== undefined && Object.keys(ordersInflight)
     var valsArr = ordersInflight !== undefined && Object.keys(ordersInflight)
 
     keysArr !== false &&
       keysArr.map(
         key =>
-          (CC = ordersInflight[key].map(order => {
-            return order.tableLayoutId === key && order.customerCount
+          (orderIdArr = ordersInflight[key].map(order => {
+            //return orderIdArr.push(order)
+            return order.tableLayoutId === key && order.orderId
           }))
       )
 
@@ -131,6 +127,9 @@ class OrderFormII extends React.Component {
           }))
       )
 
+    //   console.log(ordersInflight)
+    //console.log(orderIdArr[orderIdArr.length - 1].orderId)
+    console.log(orderIdArr)
     let tableLayout =
       tables !== null &&
       tables
@@ -140,7 +139,7 @@ class OrderFormII extends React.Component {
         .map(tbl => {
           return tbl.label
         })
-		
+
     const right = [
       {
         text: (
@@ -209,7 +208,6 @@ class OrderFormII extends React.Component {
                 >
                   <List>
                     {map.get(lbl.label).map(prd => (
-
                       <List.Item
                         key={prd.id}
                         onPress={() =>
@@ -218,10 +216,11 @@ class OrderFormII extends React.Component {
                             // customerCount: customerCount,
                             tableLayout: tableLayout,
                             prdId: prd.id,
-                            orderId: orderIdArr.length === 1 ?
-                            				 orderIdArr[0]
-                            				 :orderIdArr[orderIdArr.length -1],
-                            onSubmit: this.props.navigation.state.params.onSubmit
+                            orderId: orderIdArr[orderIdArr.length - 1],
+                            onSubmit: this.props.navigation.state.params
+                              .onSubmit,
+                            handleDelete: this.props.navigation.state.params
+                              .handleDelete
                           })
                         }
                       >
@@ -250,7 +249,7 @@ class OrderFormII extends React.Component {
                     styles.whiteColor
                   ]}
                 >
-                 
+                  {tableLayout}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -269,6 +268,7 @@ class OrderFormII extends React.Component {
                 >
                   <Text style={[styles.textBig, styles.whiteColor]}>
                     &nbsp;&nbsp;
+                    {this.props.navigation.state.params.customerCount}
                   </Text>
                 </FontAwesomeIcon>
               </View>
@@ -279,8 +279,10 @@ class OrderFormII extends React.Component {
             <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate('OrdersSummary', {
-                  orderId: orderIdArr[orderIdArr.length -1],
-                  handleOrderSubmit: this.props.navigation.state.params.onSubmit
+                  orderId: orderIdArr[orderIdArr.length - 1],
+                  handleOrderSubmit: this.props.navigation.state.params
+                    .onSubmit,
+                  handleDelete: this.props.navigation.state.params.handleDelete
                 })
               }
             >
@@ -309,13 +311,15 @@ const mapStateToProps = state => ({
   haveError: state.products.haveError,
   isLoading: state.products.loading,
   ordersInflight: state.ordersinflight.data.orders
+  // order: state.order.data
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getLables: () => dispatch(getLables()),
   getProducts: () => dispatch(getProducts()),
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights())
+  // getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
 })
 
 OrderFormII = reduxForm({

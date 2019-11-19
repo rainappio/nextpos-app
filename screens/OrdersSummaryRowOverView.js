@@ -40,42 +40,42 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import OrdersSummaryRow from './OrdersSummaryRow'
 import styles from '../styles'
 
-export const OrdersSummaryRowOverView =({
-	isLoading,
-	haveError,
-	haveData,
-	order,
-	navigation,
-	onSubmit,
-	initialValues,
-	handleDelete
+export const OrdersSummaryRowOverView = ({
+  isLoading,
+  haveError,
+  haveData,
+  order,
+  navigation,
+  onSubmit,
+  initialValues,
+  handleDelete
 }) => {
-	if (isLoading) {
-      return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
-      )
-    } else if (haveError) {
-      return (
-        <View style={[styles.container]}>
-          <Text>Err during loading, check internet conn...</Text>
-        </View>
-      )
-    } else if (order !== undefined && order.length === 0) {
-      return (
-        <View style={[styles.container]}>
-          <Text>no order ...</Text>
-        </View>
-      )
-    }   
+  if (isLoading) {
+    return (
+      <View style={[styles.container]}>
+        <ActivityIndicator size="large" color="#ccc" />
+      </View>
+    )
+  } else if (haveError) {
+    return (
+      <View style={[styles.container]}>
+        <Text>Err during loading, check internet conn...</Text>
+      </View>
+    )
+  } else if (order !== undefined && order.length === 0) {
+    return (
+      <View style={[styles.container]}>
+        <Text>no order ...</Text>
+      </View>
+    )
+  }
   return (
-    <OrdersSummaryRow 
-    	order={order}
-    	navigation={navigation}
-    	onSubmit={onSubmit}
-    	handleDelete={handleDelete}
-    	initialValues={initialValues}
+    <OrdersSummaryRow
+      order={order}
+      navigation={navigation}
+      onSubmit={onSubmit}
+      handleDelete={handleDelete}
+      initialValues={initialValues}
     />
   )
 }

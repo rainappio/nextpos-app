@@ -51,9 +51,7 @@ class OrderFormIV extends React.Component {
     return (
       <View style={styles.modalContainer}>
         <DismissKeyboard>
-          <View
-            style={[styles.boxShadow, styles.popUpLayout, styles.fullWidth]}
-          >
+          <View style={[styles.popUpLayout, styles.fullWidth]}>
             <Text
               style={[
                 styles.welcomeText,
@@ -91,7 +89,7 @@ class OrderFormIV extends React.Component {
 
                           return (
                             <View
-                            	style={styles.paddingTopBtn20}
+                              style={styles.paddingTopBtn20}
                               key={prdOption.id + ix}
                             >
                               <Field

@@ -12,7 +12,9 @@ import {
   TextInput,
   ActivityIndicator,
   TouchableWithoutFeedback,
-  AsyncStorage
+  AsyncStorage,
+  RefreshControl,
+  FlatList
 } from 'react-native'
 import { connect } from 'react-redux'
 import InputText from '../components/InputText'
@@ -22,16 +24,15 @@ import AddBtn from '../components/AddBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import OrderStart from './OrderStart'
+import OrderItem from './OrderItem'
 import {
   getTableLayouts,
-  getTableLayout,
   getShiftStatus,
   getfetchOrderInflights,
   get_time_diff,
   clearOrder,
   clearProduct
 } from '../actions'
-import images from '../assets/images'
 import styles from '../styles'
 
 let tblsArr = []
@@ -43,20 +44,18 @@ class TablesScreen extends React.Component {
   }
 
   state = {
-  	refreshing: false
+    refreshing: false,
+    tables: []
   }
 
-  componentDidMount() {
+  constructor(props) {
+    super(props)
     this.props.getTableLayouts()
-    this.props.getTableLayout()
-    this.props.getShiftStatus()
     this.props.getfetchOrderInflights()
+    this.props.getShiftStatus()
   }
 
   handleOpenShift = () => {
-    // console.log("handleOpenShift hit")
-    //formData.append('grant_type', 'password')
-
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -65,7 +64,6 @@ class TablesScreen extends React.Component {
       }
     }).then(val => {
       var tokenObj = JSON.parse(val)
-      //console.log(tokenObj)
       const formData = new FormData()
       formData.append('grant_type', 'password')
       formData.append('username', tokenObj.cli_userName)
@@ -107,11 +105,9 @@ class TablesScreen extends React.Component {
     })
   }
 
-  handleOrderSubmit = values => {
-  	var orderId = values.orderId;
-	  const formData = new FormData()
-    //formData.append('grant_type', 'action=SUBMIT') //client_credentials, Network Request Fail Err
-    formData.append('action', 'SUBMIT')  
+  handleOrderSubmit = id => {
+    const formData = new FormData()
+    formData.append('action', 'SUBMIT')
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -119,23 +115,25 @@ class TablesScreen extends React.Component {
         JSON.parse(value)
       }
     }).then(val => {
-      var tokenObj = JSON.parse(val);
-      fetch(`http://35.234.63.193/orders/${orderId}/process`, {
+      var tokenObj = JSON.parse(val)
+      fetch(`http://35.234.63.193/orders/${id}/process`, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           Authorization: 'Bearer ' + tokenObj.access_token
         },
-        body: formData// this get Network Err
+        body: formData // this get Network Err
       })
-      .then(response => response.json())
-      .then(res => {
-          if (res.fromState === 'OPEN' || res.fromState === 'IN_PROCESS') {
-            this.props.navigation.navigate('Tables',{ orderId : orderId})
-            this.props.clearOrder(orderId)
+        .then(response => response.json())
+        .then(res => {
+          if (res.hasOwnProperty('orderId')) {
+            this.props.navigation.navigate('Tables')
+            this.props.getfetchOrderInflights()
+            //this.props.clearOrder(orderId)
+            this.setState({ refreshing: true })
           } else {
-            alert(res.message)
+            alert(res.message === undefined ? 'pls try again' : res.message)
           }
         })
         .catch(error => {
@@ -144,7 +142,7 @@ class TablesScreen extends React.Component {
     })
   }
 
-	handleDelete = id => {
+  handleDelete = id => {
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -165,13 +163,8 @@ class TablesScreen extends React.Component {
         .then(response => {
           if (response.status === 200) {
             this.props.navigation.navigate('Tables')
-            this.setState({ refreshing: true })
-            this.props.getfetchOrderInflights() !== undefined &&
-              this.props.getfetchOrderInflights().then(() => {
-                this.setState({
-                  refreshing: false
-                })
-              })
+            this.props.getfetchOrderInflights()
+            this.props.getTableLayouts()
           } else {
             alert('pls try again')
           }
@@ -181,7 +174,6 @@ class TablesScreen extends React.Component {
         })
     })
   }
-
 
   render() {
     const {
@@ -224,10 +216,10 @@ class TablesScreen extends React.Component {
     var tblLayouts = removeDuplicates(tblsArr, 'tableLayoutId')
 
     function convertDateForRealDevices(date) {
-    	var arr = date.split(/[- :]/);
-    		date = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
-    		return date;
-		}
+      var arr = date.split(/[- :]/)
+      date = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5])
+      return date
+    }
 
     if (isLoading) {
       return (
@@ -244,14 +236,6 @@ class TablesScreen extends React.Component {
     } else if (shiftStatus === 'INACTIVE') {
       return (
         <View style={styles.container}>
-          {/*<ActivityIndicator size="large" color="#ccc" />*/}
-          {/*<PopUp 
-            	navigation={navigation} 
-            	title="" 
-            	btn1Txt={'Yes'} 
-            	btn2Txt={'No'} 
-            	firstRoute={'Category'}
-            	secondRoute={'Tables'}/>*/}
           <ScrollView
             directionalLockEnabled={true}
             contentContainerStyle={styles.modalContainer}
@@ -314,11 +298,15 @@ class TablesScreen extends React.Component {
     }
 
     return (
-      <ScrollView>
+      <ScrollView
+      //refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
+      >
         <DismissKeyboard>
           <View>
             <View style={styles.container}>
-              <BackBtnCustom onPress={() => this.props.navigation.navigate('LoginSuccess')} />
+              <BackBtnCustom
+                onPress={() => this.props.navigation.navigate('LoginSuccess')}
+              />
               <Text
                 style={[
                   styles.welcomeText,
@@ -334,14 +322,19 @@ class TablesScreen extends React.Component {
                 onPress={() =>
                   this.props.navigation.navigate('OrderStart', {
                     tables: tables,
-                    handleOrderSubmit: this.handleOrderSubmit
+                    handleOrderSubmit: this.handleOrderSubmit,
+                    handleDelete: this.handleDelete
                   })
                 }
               />
             </View>
-            {tblLayouts.map(tblLayout => {
+
+            {tblLayouts.map((tblLayout, ix) => {
               return (
-                <View style={styles.mgrbtn40} key={tblLayout.tableLayoutId}>
+                <View
+                  style={styles.mgrbtn40}
+                  key={tblLayout.tableLayoutId + ix}
+                >
                   <Text
                     style={[
                       styles.orange_bg,
@@ -355,143 +348,26 @@ class TablesScreen extends React.Component {
                   >
                     {tblLayout.tableLayout}
                   </Text>
-                  {
-                  	ordersInflight[tblLayout.tableLayoutId] !== undefined && ordersInflight[tblLayout.tableLayoutId].map(order => {
-                  	var timeDifference = get_time_diff(order.createdTime);
-                    return (
-                      <TouchableOpacity
-                        style={[
-                          styles.jc_alignIem_center,
-                          styles.flex_dir_row,
-                          styles.marginLeftRight35,
-                          styles.paddingTopBtn8,
-                          styles.borderBottomLine
-                        ]}
-                        key={order.orderId}
-                        onPress={() =>
-                          this.props.navigation.navigate('OrdersSummary', {
-                            orderId: order.orderId,
-                            handleOrderSubmit: this.handleOrderSubmit,
-                            handleDelete: this.handleDelete
-                          })
-                        }
-                      >
-                        <View style={[styles.quarter_width]}>
-                          <TouchableOpacity>
-                            <View>
-                              <Text style={styles.centerText}>
-                                {order.tableName}
-                              </Text>
-                            </View>
-                          </TouchableOpacity>
-                        </View>
 
-                        <View style={[styles.quarter_width]}>
-                          <TouchableOpacity
-                          //onPress={() => this.props.navigation.navigate('Orders')}
-                          >
-                            <View>
-                              <FontAwesomeIcon
-                                name={'user'}
-                                color="#ccc"
-                                size={25}
-                              >
-                                <Text style={{ color: '#000', fontSize: 12 }}>
-                                  &nbsp;&nbsp;{order.customerCount}
-                                </Text>
-                              </FontAwesomeIcon>
-                            </View>
-                          </TouchableOpacity>
-                        </View>
-
-                        <View style={[styles.quarter_width]}>
-                          <TouchableOpacity
-                          //onPress={() => this.props.navigation.navigate('Orders')}
-                          >
-                            <View>                                                   
-                              {
-																timeDifference < 29
-																?
-																	<FontAwesomeIcon
-                                  	name={'clock-o'}
-                                  	color="#f18d1a"
-                                  	size={25}
-                                	>
-                                  	<Text style={{ fontSize: 12 }}>
-                                    	&nbsp;&nbsp;{timeDifference + " min"}
-                                  	</Text>
-                                	</FontAwesomeIcon>
-                                	:
-                                		timeDifference >= 30
-                                		?
-                                			<FontAwesomeIcon
-                                  			name={'clock-o'}
-                                  			color="red"
-                                  			size={25}
-                                			>
-                                  		<Text style={{ fontSize: 12 }}>
-                                    		&nbsp;&nbsp;{timeDifference + " min"}
-                                  		</Text>
-                                		</FontAwesomeIcon>
-                                			:
-                                				timeDifference > 1440 && 
-                                				<FontAwesomeIcon
-                                  				name={'clock-o'}
-                                  				color="#f1f1f1"
-                                  				size={25}
-                                				>
-                                  			<Text style={{ fontSize: 12 }}>
-                                    			&nbsp;&nbsp;{timeDifference + " min"}
-                                  			</Text>
-                                			</FontAwesomeIcon>
-                              }                        
-                            </View>
-                          </TouchableOpacity>
-                        </View>
-
-                        <View style={[styles.quarter_width, styles.leftpadd20]}>
-                          <TouchableOpacity
-                          //onPress={() => this.props.navigation.navigate('Orders')}
-                          >
-                            {
-                            	tblLayout.state === 'OPEN'
-                            		?
-                            		<Image
-                              		source={images.order}                              	  
-                              	  //style={{ width: 25}}
-                            		/>
-                              	:
-																 tblLayout.state === 'IN_PROCESS'
-																 ?
-																	<Image
-                              			source={images.process}                              	  
-                              	  	style={{ width: 30, height: 20 }}
-                            			/>
-																	:
-																		tblLayout.state === 'COMPLETED'
-																		&&
-																		<Image
-                              			source={images.completed}                              	  
-                              	  	style={{ width: 30, height: 20 }}
-                            			/>
-                              }
-                              
-                          </TouchableOpacity>
-                        </View>
-
-                        <Text
-                          style={{
-                            color: '#000',
-                            fontSize: 12,
-                            marginLeft: -40
+                  {ordersInflight[tblLayout.tableLayoutId] !== undefined &&
+                    ordersInflight[tblLayout.tableLayoutId].map(order => {
+                      return (
+                        <FlatList
+                          data={ordersInflight[tblLayout.tableLayoutId]}
+                          renderItem={({ item }) => {
+                            return (
+                              <OrderItem
+                                order={item}
+                                navigation={navigation}
+                                handleOrderSubmit={this.handleOrderSubmit}
+                                handleDelete={this.handleDelete}
+                              />
+                            )
                           }}
-                        >
-                          &nbsp;&nbsp;{tblLayout.state}
-                        </Text>
-
-                      </TouchableOpacity>
-                    )
-                  })}
+                          keyExtractor={(item, ix) => item.orderId}
+                        />
+                      )
+                    })}
                 </View>
               )
             })}
@@ -505,20 +381,19 @@ class TablesScreen extends React.Component {
 const mapStateToProps = state => ({
   checkS: state,
   tablelayouts: state.tablelayouts.data,
-  haveData: state.tablelayouts.haveData,
-  haveError: state.tablelayouts.haveError,
-  isLoading: state.tablelayouts.loading,
-  shiftStatus: state.shift.data.shiftStatus,
-  ordersInflight: state.ordersinflight.data.orders
+  ordersInflight: state.ordersinflight.data.orders,
+  haveData: state.ordersinflight.haveData,
+  haveError: state.ordersinflight.haveError,
+  isLoading: state.ordersinflight.loading,
+  shiftStatus: state.shift.data.shiftStatus
 })
 
-const mapDispatchToProps = (dispatch,props) => ({
+const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getTableLayouts: () => dispatch(getTableLayouts()),
-  getTableLayout: () => dispatch(getTableLayout()),
-  getShiftStatus: () => dispatch(getShiftStatus()),
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
-  clearOrder: () => dispatch(clearOrder(props.navigation.state.params.orderId)),
+  getTableLayouts: () => dispatch(getTableLayouts()),
+  getShiftStatus: () => dispatch(getShiftStatus()),
+  //clearOrder: () => dispatch(clearOrder(props.navigation.state.params.orderId)),
   clearProduct: () => dispatch(clearProduct())
 })
 export default connect(

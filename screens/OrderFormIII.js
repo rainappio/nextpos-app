@@ -93,7 +93,7 @@ class OrderFormIII extends React.Component {
       )
     }
 
-    createOrderObj['productOptions'] = prdOptionsCollections	
+    createOrderObj['productOptions'] = prdOptionsCollections
     var orderId = this.props.navigation.state.params.orderId
 
     AsyncStorage.getItem('token', (err, value) => {
@@ -125,7 +125,7 @@ class OrderFormIII extends React.Component {
 
   render() {
     const { navigation, haveData, haveError, isLoading, order } = this.props
-    var customerCount = null;
+    var customerCount = null
 
     function Item({ title, price }) {
       return (
@@ -171,7 +171,7 @@ class OrderFormIII extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <ScrollView
-          refreshControl={<RefreshControl refreshing={this.state.refreshing}/>}
+          refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
         >
           <DismissKeyboard>
             <View style={[styles.container]}>
@@ -232,10 +232,10 @@ class OrderFormIII extends React.Component {
                 >
                   <Text style={[styles.textBig, styles.whiteColor]}>
                     &nbsp;&nbsp;
-                    { Object.keys(order).length !== 0 && 											
-                    	order.demographicData.male +
-											order.demographicData.female +
-											order.demographicData.kid }
+                    {Object.keys(order).length !== 0 &&
+                      order.demographicData.male +
+                        order.demographicData.female +
+                        order.demographicData.kid}
                   </Text>
                 </FontAwesomeIcon>
               </View>
@@ -244,11 +244,14 @@ class OrderFormIII extends React.Component {
 
           <View style={[styles.half_width, styles.verticalMiddle]}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate(
-              	'OrdersSummary', {
-              		handleOrderSubmit: this.props.navigation.state.params.onSubmit,
-              		orderId: this.props.navigation.state.params.orderId
-              	})}
+              onPress={() =>
+                this.props.navigation.navigate('OrdersSummary', {
+                  handleOrderSubmit: this.props.navigation.state.params
+                    .onSubmit,
+                  orderId: this.props.navigation.state.params.orderId,
+                  handleDelete: this.props.navigation.state.params.handleDelete
+                })
+              }
             >
               <View>
                 <FontAwesomeIcon
@@ -257,7 +260,9 @@ class OrderFormIII extends React.Component {
                   color="#fff"
                   style={[styles.toRight, styles.mgrtotop8, styles.mgr_20]}
                 />
-                <Text style={styles.itemCount}>{Object.keys(order).length !== 0 && order.lineItems.length}</Text>
+                <Text style={styles.itemCount}>
+                  {Object.keys(order).length !== 0 && order.lineItems.length}
+                </Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -272,13 +277,13 @@ const mapStateToProps = state => ({
   haveData: state.products.haveData,
   haveError: state.products.haveError,
   isLoading: state.products.loading,
-  order: state.order.data,
+  order: state.order.data
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getProduct: () => dispatch(getProduct(props.navigation.state.params.prdId)),
-  getOrder:() => dispatch(getOrder(props.navigation.state.params.orderId))
+  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
 })
 
 OrderFormIII = reduxForm({
