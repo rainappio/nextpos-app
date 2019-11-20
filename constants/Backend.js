@@ -1,22 +1,30 @@
 import { AsyncStorage } from 'react-native'
 
 const storage = {
-  accessToken: 'clientusrToken'
-}
+  clientAccessToken: 'token',
+  clientUserAccessToken: 'clientusrToken'
+};
 
 const apiRoot = 'http://35.234.63.193'
 
-const api = {
+export const api = {
   getAuthToken: `${apiRoot}/oauth/token`,
   timecard: {
     getActive: `${apiRoot}/timecards/active`,
     clockin: `${apiRoot}/timecards/clockin`,
     clockout: `${apiRoot}/timecards/clockout`
+  },
+  product: {
+    update: (id) => { return `${apiRoot}/products/${id}`},
+    delete: (id) => { return `${apiRoot}/products/${id}`}
+  },
+  productLabel: {
+    getById: (id) => { return `${apiRoot}/labels/${id}`}
   }
-}
+};
 
-export function fetchAuthenticatedRequest (fetchRequest) {
-  AsyncStorage.getItem(storage.accessToken, (err, value) => {
+export const makeFetchRequest = (fetchRequest) => {
+  AsyncStorage.getItem(storage.clientAccessToken, (err, value) => {
     if (err) {
       console.error(err)
     } else {
@@ -28,6 +36,17 @@ export function fetchAuthenticatedRequest (fetchRequest) {
   })
 }
 
-export default {
-  api
+export function fetchAuthenticatedRequest(fetchRequest) {
+
+  AsyncStorage.getItem(storage.clientUserAccessToken, (err, value) => {
+    if (err) {
+      console.error(err)
+    } else {
+      JSON.parse(value)
+    }
+  }).then(accessToken => {
+    let tokenObj = JSON.parse(accessToken)
+    fetchRequest(tokenObj)
+  });
 }
+

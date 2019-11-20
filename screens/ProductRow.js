@@ -45,7 +45,8 @@ class ProductRow extends React.Component {
       selectedProducts: [],
       refreshing: false,
       status: '',
-      labelId: null
+      labelId: null,
+      productId: null
     }
     this.onChange = activeSections => {
       this.setState({ activeSections })
@@ -78,9 +79,10 @@ class ProductRow extends React.Component {
     )
   }
 
-  onOpenNP = id => {
+  onOpenNP = (prodId, lblId) => {
     this.setState({
-      labelId: id
+      productId: prodId,
+      labelId: lblId
     })
   }
 
@@ -99,11 +101,17 @@ class ProductRow extends React.Component {
 
     const right = [
       {
-        text: <Icon name="md-create" size={25} color="#fff" />,
-        onPress: () =>
-          this.props.navigation.navigate('ProductEdit', {
-            productId: this.state.labelId
-          }),
+        text: (
+          <Icon
+            name="md-create"
+            size={25}
+            color="#fff"
+          />
+        ),
+        onPress: () => this.props.navigation.navigate('ProductEdit', {
+          productId: this.state.productId,
+          labelId: this.state.labelId
+        }),
         style: { backgroundColor: '#f18d1a90' }
       }
     ]
@@ -142,7 +150,7 @@ class ProductRow extends React.Component {
                       <SwipeAction
                         autoClose={true}
                         right={right}
-                        onOpen={() => this.onOpenNP(prd.id)}
+                        onOpen={() => this.onOpenNP(prd.id, lbl.id)}
                         onClose={() => {}}
                         key={prd.id}
                       >

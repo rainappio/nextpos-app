@@ -38,7 +38,8 @@ class CategoryCustomizeScreen extends React.Component {
     } = this.props
 
     return (
-      <ScrollView>
+      // scroll bar in the center issue: https://github.com/facebook/react-native/issues/26610
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View style={[styles.container_nocenterCnt]}>
           <BackBtn />
           <Text

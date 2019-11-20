@@ -17,9 +17,9 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import InputText from '../components/InputText'
-import { isRequired } from '../validators'
-import Backend from '../constants/Backend'
+import InputText from "../components/InputText";
+import {isRequired} from "../validators";
+import {api} from '../constants/Backend'
 
 class ClientUserLoginForm extends React.Component {
   static navigationOptions = {
@@ -49,7 +49,7 @@ class ClientUserLoginForm extends React.Component {
         formData.append('password', passWord)
 
         var auth = 'Basic ' + btoa(username + ':' + masterPassword)
-        fetch(Backend.api.getAuthToken, {
+        fetch(api.getAuthToken, {
           method: 'POST',
           withCredentials: true,
           credentials: 'include',

@@ -1,22 +1,10 @@
-import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  ScrollView,
-  AsyncStorage,
-  ActivityIndicator
-} from 'react-native'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {ActivityIndicator, View} from 'react-native'
+import {connect} from 'react-redux'
 import ProductFormScreen from './ProductFormScreen'
-import {
-  getLables,
-  getProduct,
-  clearProduct,
-  getProducts,
-  getProductOptions,
-  getWorkingAreas
-} from '../actions'
+import {clearProduct, getLables, getProduct, getProductOptions, getProducts, getWorkingAreas} from '../actions'
 import styles from '../styles'
+import {api, makeFetchRequest} from "../constants/Backend";
 
 class ProductEdit extends Component {
   static navigationOptions = {
@@ -47,22 +35,14 @@ class ProductEdit extends Component {
   handleUpdate = values => {
     let prdId = this.props.navigation.state.params.productId
 
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      fetch(`http://35.234.63.193/products/${prdId}`, {
+    makeFetchRequest((token) => {
+      fetch(api.product.update(prdId), {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-client-id': tokenObj.clientId,
-          Authorization: 'Bearer ' + tokenObj.access_token
+          Authorization: 'Bearer ' + token.access_token
         },
         body: JSON.stringify(values)
       })
@@ -79,11 +59,11 @@ class ProductEdit extends Component {
               refreshing: true
             })
             this.props.getProducts() !== undefined &&
-              this.props.getProducts().then(() => {
-                this.setState({
-                  refreshing: false
-                })
+            this.props.getProducts().then(() => {
+              this.setState({
+                refreshing: false
               })
+            })
           } else {
             alert('pls try again')
           }
@@ -98,29 +78,20 @@ class ProductEdit extends Component {
     })
   }
 
-  handleDelete = id => {
+  handleDelete = () => {
     let productId = this.props.navigation.state.params.productId
 
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      console.log(tokenObj)
-      fetch(`http://35.234.63.193/products/${productId}`, {
+    makeFetchRequest((token) => {
+      fetch(api.product.delete(productId), {
         method: 'DELETE',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + tokenObj.access_token
+          Authorization: 'Bearer ' + token.access_token
         }
       })
         .then(response => {
-          console.log(response)
           if (response.status === 204) {
             this.props.navigation.navigate('ProductsOverview')
             this.setState({ refreshing: true })
@@ -202,7 +173,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(clearProduct(props.navigation.state.params.productId)),
   getProducts: () => dispatch(getProducts()),
   getWorkingAreas: () => dispatch(getWorkingAreas()),
-  getProductOptions: () => dispatch(getProductOptions()),
+  getProductOptions: () => dispatch(getProductOptions(props.navigation.state.params.labelId)),
   getProduct: () =>
     dispatch(getProduct(props.navigation.state.params.productId))
 })
