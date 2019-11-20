@@ -1,25 +1,31 @@
-import {Modal, ScrollView, Text, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
-import styles from "../styles";
-import React from "react";
-
+import {
+  Modal,
+  ScrollView,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View
+} from 'react-native'
+import styles from '../styles'
+import React from 'react'
 
 /**
  * https://stackoverflow.com/questions/42329240/react-native-onpress-being-called-automatically
  */
 class GenericPopUp extends React.Component {
-
   state = {
     isVisible: false
-  };
+  }
 
   toggleModal(visible) {
     this.setState({
       isVisible: visible
     })
-  };
+  }
 
   render() {
-    const {handleConfirmAction} = this.props;
+    const { handleConfirmAction } = this.props
 
     return (
       <View>
@@ -40,7 +46,9 @@ class GenericPopUp extends React.Component {
               contentContainerStyle={styles.modalContainer}
             >
               <TouchableWithoutFeedback>
-                <View style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}>
+                <View
+                  style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}
+                >
                   <Text
                     style={[
                       styles.welcomeText,

@@ -3,14 +3,13 @@ import { TouchableOpacity, View } from 'react-native'
 import { withNavigation } from 'react-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-class BackBtn extends React.Component {
+class BackBtnCustom extends React.Component {
   render() {
+    const { onPress } = this.props
     return (
       <TouchableOpacity
         hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
-        onPress={() => {
-          this.props.navigation.goBack()
-        }}
+        onPress={onPress}
         style={{ position: 'absolute', top: -4, zIndex: 2 }}
       >
         <View>
@@ -21,4 +20,4 @@ class BackBtn extends React.Component {
   }
 }
 
-export default withNavigation(BackBtn)
+export default withNavigation(BackBtnCustom)

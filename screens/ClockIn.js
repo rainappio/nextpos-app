@@ -1,10 +1,9 @@
 import React from 'react'
-import {Text, TouchableHighlight, TouchableOpacity, View} from 'react-native'
+import { Text, TouchableHighlight, TouchableOpacity, View } from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import Backend, {fetchAuthenticatedRequest} from '../constants/Backend'
-
+import Backend, { fetchAuthenticatedRequest } from '../constants/Backend'
 
 class ClockIn extends React.Component {
   static navigationOptions = {
@@ -12,19 +11,19 @@ class ClockIn extends React.Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       timecard: null
-    };
+    }
   }
 
   componentDidMount() {
-    this.getUserTimeCard();
+    this.getUserTimeCard()
   }
 
   getUserTimeCard = () => {
-    fetchAuthenticatedRequest((token) => {
+    fetchAuthenticatedRequest(token => {
       fetch(Backend.api.timecard.getActive, {
         method: 'GET',
         withCredentials: true,
@@ -39,7 +38,6 @@ class ClockIn extends React.Component {
           this.setState({
             timecard: res
           })
-
         })
         .catch(error => {
           console.error(error)
@@ -48,7 +46,7 @@ class ClockIn extends React.Component {
   }
 
   handleClockIn = () => {
-    fetchAuthenticatedRequest((token) => {
+    fetchAuthenticatedRequest(token => {
       fetch(Backend.api.timecard.clockin, {
         method: 'POST',
         withCredentials: true,
@@ -73,7 +71,7 @@ class ClockIn extends React.Component {
   }
 
   handleClockOut = () => {
-    fetchAuthenticatedRequest((token) => {
+    fetchAuthenticatedRequest(token => {
       fetch(Backend.api.timecard.clockout, {
         method: 'POST',
         withCredentials: true,
@@ -103,20 +101,20 @@ class ClockIn extends React.Component {
      * https://stackoverflow.com/questions/50082423/why-is-render-being-called-twice-in-reactnative
      */
     if (!this.state.timecard) {
-      return <Text>Loading...</Text>;
+      return <Text>Loading...</Text>
     }
 
-    let timeCardStatus = this.state.timecard.timeCardStatus;
+    let timeCardStatus = this.state.timecard.timeCardStatus
     let authClientUserName =
       this.props.navigation.state.params !== undefined &&
       this.props.navigation.state.params.authClientUserName
 
-    let clockedIn = null;
+    let clockedIn = null
 
     if (timeCardStatus === 'ACTIVE') {
-      let clockIn = this.state.timecard.clockIn;
-      let index = clockIn.indexOf("+");
-      clockedIn = new Date(clockIn.slice(0, index)).toLocaleTimeString();
+      let clockIn = this.state.timecard.clockIn
+      let index = clockIn.indexOf('+')
+      clockedIn = new Date(clockIn.slice(0, index)).toLocaleTimeString()
     }
 
     return (
@@ -148,12 +146,18 @@ class ClockIn extends React.Component {
             {authClientUserName}
           </Text>
 
-          <Text style={{marginTop: 25, marginBottom: 35, textAlign: 'center'}}>
-            Current time: {`${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`}
+          <Text
+            style={{ marginTop: 25, marginBottom: 35, textAlign: 'center' }}
+          >
+            Current time:{' '}
+            {`${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`}
           </Text>
 
-          <Text style={{marginTop: 25, marginBottom: 35, textAlign: 'center'}}>
-            Status: {timeCardStatus} {clockedIn != null  ? `at ${clockedIn}` : ''}
+          <Text
+            style={{ marginTop: 25, marginBottom: 35, textAlign: 'center' }}
+          >
+            Status: {timeCardStatus}{' '}
+            {clockedIn != null ? `at ${clockedIn}` : ''}
           </Text>
 
           <View style={[styles.jc_alignIem_center]}>

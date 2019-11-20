@@ -109,7 +109,7 @@ class ProductEdit extends Component {
       }
     }).then(val => {
       var tokenObj = JSON.parse(val)
-      console.log(tokenObj);
+      console.log(tokenObj)
       fetch(`http://35.234.63.193/products/${productId}`, {
         method: 'DELETE',
         withCredentials: true,
@@ -120,16 +120,16 @@ class ProductEdit extends Component {
         }
       })
         .then(response => {
-          console.log(response);
+          console.log(response)
           if (response.status === 204) {
             this.props.navigation.navigate('ProductsOverview')
             this.setState({ refreshing: true })
             this.props.getProducts() !== undefined &&
-            this.props.getProducts().then(() => {
-              this.setState({
-                refreshing: false
+              this.props.getProducts().then(() => {
+                this.setState({
+                  refreshing: false
+                })
               })
-            })
           } else {
             alert('pls try again')
           }

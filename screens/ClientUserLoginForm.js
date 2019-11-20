@@ -17,8 +17,8 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import InputText from "../components/InputText";
-import {isRequired} from "../validators";
+import InputText from '../components/InputText'
+import { isRequired } from '../validators'
 import Backend from '../constants/Backend'
 
 class ClientUserLoginForm extends React.Component {
@@ -118,7 +118,9 @@ class ClientUserLoginForm extends React.Component {
             ]}
             onPress={() => this.props.navigation.goBack()}
           >
-            <Icon name="ios-arrow-back" size={26} color="#f18d1a">Back</Icon>
+            <Icon name="ios-arrow-back" size={26} color="#f18d1a">
+              Back
+            </Icon>
           </Text>
 
           <Text
@@ -132,7 +134,7 @@ class ClientUserLoginForm extends React.Component {
             {clientusersName}
           </Text>
 
-          {this.props.defaultUser ?
+          {this.props.defaultUser ? (
             <Field
               name="encryptedPassword"
               component={InputText}
@@ -141,14 +143,14 @@ class ClientUserLoginForm extends React.Component {
               secureTextEntry={true}
               onSubmitEditing={val => this.clientLogin(val.nativeEvent.text)}
             />
-            :
+          ) : (
             <Field
               name="encryptedPassword"
               component={PinCodeInput}
               onChange={val => this.clientLogin(val)}
               customHeight={71}
             />
-          }
+          )}
         </View>
       </DismissKeyboard>
     )

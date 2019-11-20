@@ -348,5 +348,80 @@ export default StyleSheet.create({
     height: 30,
     borderRadius: 30,
     top: 0
+  },
+  quarter_width: {
+    width: '25%'
+  },
+  myradio: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    width: 30,
+    height: 30,
+    borderRadius: 40
+  },
+  paddingTopBtn8: {
+    paddingTop: 8,
+    paddingBottom: 8
+  },
+  height90: {
+    height: 730,
+    overflow: 'scroll'
+  },
+  toRight: {
+    textAlign: 'right'
+  },
+  itemCount: {
+    backgroundColor: 'white',
+    color: '#000',
+    width: 25,
+    height: 25,
+    borderRadius: 25,
+    fontSize: 14,
+    position: 'absolute',
+    right: -12,
+    top: 8,
+    textAlign: 'center'
+  },
+  shoppingBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    height: 50
+  },
+  item: {
+    borderTopWidth: 1,
+    borderColor: '#ddd'
+  },
+  verticalMiddle: {
+    justifyContent: 'center'
+  },
+  marginLeftRight35: {
+    marginLeft: 25,
+    marginRight: 25
+  },
+  leftpadd20: {
+    paddingLeft: 10
+  },
+  nomgrBottom: {
+    marginBottom: 0
+  },
+  rightAlign: {
+    right: 0,
+    position: 'absolute',
+    top: 20
+  },
+  mgrbtn60: {
+    marginBottom: 60
+  },
+  top40: {
+    position: 'absolute',
+    top: 160
+  },
+  fullhalf_width: {
+    width: '60%'
+  },
+  no_mgrTop: {
+    marginTop: 0
   }
 })

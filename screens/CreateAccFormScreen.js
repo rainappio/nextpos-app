@@ -18,8 +18,7 @@ import validate from '../validate'
 import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import {withNavigation} from 'react-navigation'
-
+import { withNavigation } from 'react-navigation'
 
 class CreateAccFormScreen extends React.Component {
   static navigationOptions = {
@@ -88,7 +87,9 @@ class CreateAccFormScreen extends React.Component {
               <TouchableOpacity onPress={handleSubmit}>
                 <Text style={styles.gsText}>Sign Up</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Intro')}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Intro')}
+              >
                 <Text style={styles.gsText}>Cancel</Text>
               </TouchableOpacity>
             </View>

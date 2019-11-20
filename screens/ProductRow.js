@@ -99,16 +99,11 @@ class ProductRow extends React.Component {
 
     const right = [
       {
-        text: (
-          <Icon
-            name="md-create"
-            size={25}
-            color="#fff"
-          />
-        ),
-        onPress: () => this.props.navigation.navigate('ProductEdit', {
-          productId: this.state.labelId
-        }),
+        text: <Icon name="md-create" size={25} color="#fff" />,
+        onPress: () =>
+          this.props.navigation.navigate('ProductEdit', {
+            productId: this.state.labelId
+          }),
         style: { backgroundColor: '#f18d1a90' }
       }
     ]
@@ -153,9 +148,11 @@ class ProductRow extends React.Component {
                       >
                         <List.Item
                           style={{
-                            backgroundColor: styles.grayBg
+                            backgroundColor: '#f1f1f1'
                           }}
-                        >{prd.name}</List.Item>
+                        >
+                          {prd.name}
+                        </List.Item>
                       </SwipeAction>
                     ))}
                   </List>

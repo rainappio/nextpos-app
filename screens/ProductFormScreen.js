@@ -20,7 +20,7 @@ import AddBtn from '../components/AddBtn'
 import RenderRadioBtn from '../components/RadioItem'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
-import DeleteBtn from "../components/DeleteBtn";
+import DeleteBtn from '../components/DeleteBtn'
 
 class ProductFormScreen extends React.Component {
   static navigationOptions = {
@@ -213,9 +213,9 @@ class ProductFormScreen extends React.Component {
               )}
             </View>
             {isEditForm ? (
-              <DeleteBtn handleDeleteAction={handleDeleteProduct}/>
+              <DeleteBtn handleDeleteAction={handleDeleteProduct} />
             ) : (
-              <View/>
+              <View />
             )}
           </View>
         </DismissKeyboard>
