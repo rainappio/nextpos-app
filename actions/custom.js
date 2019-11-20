@@ -10,7 +10,8 @@ export function get_time_diff (datetime) {
   )
   var orderStart = new Date(date).getTime()
   var now = new Date().getTime()
-
+	var timeZoneOffset = new Date(date).getTimezoneOffset();
+	
   if (isNaN(orderStart)) {
     return ''
   }
@@ -21,11 +22,8 @@ export function get_time_diff (datetime) {
   }
 
   var days = Math.floor(milisec_diff / 1000 / 60 / (60 * 24))
-  var minutes = Math.floor(milisec_diff / 1000 / 60)
-
-  var date_diff = new Date(milisec_diff)
-  return minutes - 390
-  // return days + " Days "+ date_diff.getHours() + " Hours " + date_diff.getMinutes() + " Minutes " + date_diff.getSeconds() + " Seconds";
+  var minutes = Math.floor(milisec_diff / 1000 / 60) + timeZoneOffset
+  return minutes
 }
 
 export function checkNaN (value) {

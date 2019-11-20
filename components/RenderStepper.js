@@ -9,6 +9,7 @@ export default class RenderStepper extends React.Component {
       input: { onBlur, onChange, onFocus, value },
       customValue,
       optionName,
+      startPt,
       meta: { error, toched, valid },
       ...rest
     } = this.props
@@ -26,9 +27,9 @@ export default class RenderStepper extends React.Component {
             error
             onChange={onChange}
             max={10}
-            min={0}
+            min={!startPt ? 0 : startPt}
             readOnly={false}
-            defaultValue={0}
+            defaultValue={!startPt ? 0 : startPt}
             styles={{ backgroundColor: 'pink' }}
           />
         </View>

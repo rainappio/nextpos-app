@@ -116,6 +116,7 @@ class OrderFormIII extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
+          	AsyncStorage.setItem('orderInfo',JSON.stringify(createOrderObj))
             this.props.navigation.navigate('OrderFormII')
           }
         })
@@ -125,7 +126,6 @@ class OrderFormIII extends React.Component {
 
   render() {
     const { navigation, haveData, haveError, isLoading, order } = this.props
-    var customerCount = null
 
     function Item({ title, price }) {
       return (
@@ -232,10 +232,11 @@ class OrderFormIII extends React.Component {
                 >
                   <Text style={[styles.textBig, styles.whiteColor]}>
                     &nbsp;&nbsp;
-                    {Object.keys(order).length !== 0 &&
+                    {Object.keys(order).length !== 0 &&                    	
                       order.demographicData.male +
-                        order.demographicData.female +
-                        order.demographicData.kid}
+                      order.demographicData.female +
+                      order.demographicData.kid
+                      }
                   </Text>
                 </FontAwesomeIcon>
               </View>

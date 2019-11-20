@@ -130,7 +130,7 @@ class OrderFormIV extends React.Component {
 
             <View style={styles.paddingTopBtn20}>
               <Text style={styles.textBold}>Quantity</Text>
-              <Field name="quantity" component={RenderStepper} />
+              <Field name="quantity" component={RenderStepper} startPt={1}/>
             </View>
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>

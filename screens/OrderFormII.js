@@ -53,7 +53,8 @@ class OrderFormII extends React.Component {
       status: '',
       labelId: null,
       tables: null,
-      cc: null
+      cc: null,
+      orderInfo: null
     }
     this.onChange = activeSections => {
       this.setState({ activeSections })
@@ -72,7 +73,20 @@ class OrderFormII extends React.Component {
         this.setState({ tables: JSON.parse(value) })
       })
       .done()
-  }
+
+		AsyncStorage.getItem('orderInfo')
+			.then(value => {
+				value != null 
+				? 
+          this.setState({
+          	orderInfo: JSON.parse(value)
+          })
+        :
+          console.log("no token exist")
+			})
+			.done()		
+
+	}
 
   PanelHeader = (labelName, labelId) => {
     return (
@@ -102,9 +116,8 @@ class OrderFormII extends React.Component {
       order
     } = this.props
     const { selectedProducts, tables, orderInfo } = this.state
-    var map = new Map(Object.entries(products))
-
-    let CC = null
+    var map = new Map(Object.entries(products))		                      
+	
     let orderIdArr = []
     var keysArr = ordersInflight !== undefined && Object.keys(ordersInflight)
     var valsArr = ordersInflight !== undefined && Object.keys(ordersInflight)
@@ -127,9 +140,6 @@ class OrderFormII extends React.Component {
           }))
       )
 
-    //   console.log(ordersInflight)
-    //console.log(orderIdArr[orderIdArr.length - 1].orderId)
-    console.log(orderIdArr)
     let tableLayout =
       tables !== null &&
       tables

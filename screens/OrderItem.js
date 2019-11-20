@@ -32,7 +32,7 @@ class OrderItem extends React.PureComponent {
           styles.paddingTopBtn8,
           styles.borderBottomLine
         ]}
-        key={order.tableLayoutId}
+        key={order.orderId}
         onPress={() =>
           navigation.navigate('OrdersSummary', {
             orderId: order.orderId,
@@ -45,8 +45,7 @@ class OrderItem extends React.PureComponent {
           <TouchableOpacity>
             <View>
               <Text>
-                {/*order.tableName*/}
-                {order.orderId}
+                {order.tableName}
               </Text>
             </View>
           </TouchableOpacity>
@@ -71,7 +70,8 @@ class OrderItem extends React.PureComponent {
           //onPress={() => this.props.navigation.navigate('Orders')}
           >
             <View>
-              {timeDifference < 29 ? (
+              {
+              	timeDifference < 29 ? (
                 <FontAwesomeIcon name={'clock-o'} color="#f18d1a" size={25}>
                   <Text style={{ fontSize: 12 }}>
                     &nbsp;&nbsp;{timeDifference + ' min'}
@@ -80,14 +80,20 @@ class OrderItem extends React.PureComponent {
               ) : timeDifference >= 30 ? (
                 <FontAwesomeIcon name={'clock-o'} color="red" size={25}>
                   <Text style={{ fontSize: 12 }}>
-                    &nbsp;&nbsp;{timeDifference + ' min'}
+                   &nbsp;&nbsp;{ Math.floor(timeDifference%60) + ' min'}
+                  </Text>
+                </FontAwesomeIcon>
+              ) : timeDifference >= 60 || timeDifference < 1439 ? (
+                <FontAwesomeIcon name={'clock-o'} color="red" size={25}>
+                  <Text style={{ fontSize: 12 }}>
+                   &nbsp;&nbsp;{Math.floor(timeDifference/60) + ' hr' + Math.floor(timeDifference%60) + ' min'}
                   </Text>
                 </FontAwesomeIcon>
               ) : (
                 timeDifference > 1440 && (
                   <FontAwesomeIcon name={'clock-o'} color="#f1f1f1" size={25}>
                     <Text style={{ fontSize: 12 }}>
-                      &nbsp;&nbsp;{timeDifference + ' min'}
+                      &nbsp;&nbsp;{Math.floor(timeDifference/(60*24)) + ' day' + Math.floor(timeDifference/60) + ' hr' + Math.floor(timeDifference%60) + ' min'}
                     </Text>
                   </FontAwesomeIcon>
                 )

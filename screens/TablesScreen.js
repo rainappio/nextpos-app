@@ -44,8 +44,7 @@ class TablesScreen extends React.Component {
   }
 
   state = {
-    refreshing: false,
-    tables: []
+    refreshing: false,    
   }
 
   constructor(props) {
@@ -130,6 +129,7 @@ class TablesScreen extends React.Component {
           if (res.hasOwnProperty('orderId')) {
             this.props.navigation.navigate('Tables')
             this.props.getfetchOrderInflights()
+            AsyncStorage.removeItem('orderInfo');
             //this.props.clearOrder(orderId)
             this.setState({ refreshing: true })
           } else {
@@ -165,6 +165,7 @@ class TablesScreen extends React.Component {
             this.props.navigation.navigate('Tables')
             this.props.getfetchOrderInflights()
             this.props.getTableLayouts()
+            AsyncStorage.removeItem('orderInfo')
           } else {
             alert('pls try again')
           }
@@ -329,12 +330,13 @@ class TablesScreen extends React.Component {
               />
             </View>
 
-            {tblLayouts.map((tblLayout, ix) => {
-              return (
+            {
+            	tblLayouts.map((tblLayout, ix) => 
+      
                 <View
                   style={styles.mgrbtn40}
                   key={tblLayout.tableLayoutId + ix}
-                >
+                  >
                   <Text
                     style={[
                       styles.orange_bg,
@@ -349,10 +351,9 @@ class TablesScreen extends React.Component {
                     {tblLayout.tableLayout}
                   </Text>
 
-                  {ordersInflight[tblLayout.tableLayoutId] !== undefined &&
-                    ordersInflight[tblLayout.tableLayoutId].map(order => {
-                      return (
-                        <FlatList
+                  {                  	
+                  	ordersInflight[tblLayout.tableLayoutId] !== undefined &&
+                       <FlatList
                           data={ordersInflight[tblLayout.tableLayoutId]}
                           renderItem={({ item }) => {
                             return (
@@ -361,16 +362,16 @@ class TablesScreen extends React.Component {
                                 navigation={navigation}
                                 handleOrderSubmit={this.handleOrderSubmit}
                                 handleDelete={this.handleDelete}
+                                key={item.orderId}
                               />
                             )
                           }}
                           keyExtractor={(item, ix) => item.orderId}
                         />
-                      )
-                    })}
+                  }
                 </View>
-              )
-            })}
+            	)
+          	}
           </View>
         </DismissKeyboard>
       </ScrollView>
