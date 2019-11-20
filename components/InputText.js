@@ -15,7 +15,8 @@ const InputText = ({
     secureTextEntry,
     keyboardType,
     editable,
-    onPress
+    onPress,
+    autoCapitalize
   },
   meta: { error, touched, valid },
   isgrayBg,
@@ -42,6 +43,7 @@ const InputText = ({
       keyboardType={keyboardType}
       value={value}
       editable={editable}
+      autoCapitalize={autoCapitalize}
       {...rest}
       style={[
         styles.rootInput,

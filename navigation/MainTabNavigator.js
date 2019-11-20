@@ -98,7 +98,8 @@ const Settings = createStackNavigator({
   ClientUserLoginS: ClientUserLogin,
   LoginSuccess: LoginSuccessScreen
 })
-Settings.navigationOptions = {
+Settings.navigationOptions = ({ screenProps: { t } }) => ({
+  title: t('menu.settings'),
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -124,7 +125,7 @@ Settings.navigationOptions = {
     //navigation.dispatch(StackActions.popToTop())
     defaultHandler()
   }
-}
+})
 
 const Tables = createStackNavigator({
   Tables: TablesScreen,
@@ -135,43 +136,47 @@ const Tables = createStackNavigator({
   OrderFormIV: OrderFormIV,
   OrdersSummary: OrdersSummary
 })
-Tables.navigationOptions = {
+Tables.navigationOptions = ({ screenProps: { t } }) => ({
+  title: t('menu.tables'),
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name="md-people" />
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
   }
-}
+})
 
 const Orders = createStackNavigator({
   Orders: OrdersScreen
 })
-Orders.navigationOptions = {
+Orders.navigationOptions = ({ screenProps: { t } }) => ({
+  title: t('menu.orders'),
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name="md-document" size={32} />
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
   }
-}
+})
 
 const Reservation = createStackNavigator({
   Reservation: ReservationScreen
 })
-Reservation.navigationOptions = {
+Reservation.navigationOptions = ({ screenProps: { t } }) => ({
+  title: t('menu.reservations'),
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name="ios-calendar" size={32} />
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
   }
-}
+})
 
 const Reports = createStackNavigator({
   Reports: ReportsScreen
 })
-Reports.navigationOptions = {
+Reports.navigationOptions = ({ screenProps: { t } }) => ({
+  title: t('menu.reporting'),
   tabBarIcon: ({ focused }) => (
     <FontAwesomeIcon
       focused={focused}
@@ -183,25 +188,25 @@ Reports.navigationOptions = {
   tabBarOptions: {
     activeTintColor: '#f18d1a'
   }
-}
+})
 
 var tabBar = createBottomTabNavigator({
   Home: {
     screen: Home,
-    navigationOptions: ({ navigation }) => {
+    navigationOptions: ({ navigation, screenProps: {t} }) => {
       if (navigation.state.routes.length > 0) {
         navigation.state.routes.map(route => {
-          if (
-            route.routeName === 'Home' ||
-            route.routeName === 'Intro' ||
-            route.routeName === 'Login'
-          ) {
-            tabBarVisible = false
-          } else {
-            tabBarVisible = true
-          }
+					if (
+            	route.routeName === 'Home' ||
+            	route.routeName === 'Intro' ||
+            	route.routeName === 'Login'
+          	) {
+            	tabBarVisible = false
+          	}else{
+            	tabBarVisible = true
+          	}
         })
-        return { tabBarVisible }
+        return { title: t('menu.home') , tabBarVisible }
       }
     }
   },

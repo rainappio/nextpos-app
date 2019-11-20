@@ -39,6 +39,8 @@ class LoginSuccessScreen extends React.Component {
 
   render() {
     const { doLogout, navigation, clientusers } = this.props
+    const {t} = this.props.screenProps
+
     var isAuthClientUser =
       this.props.navigation.state.params !== undefined &&
       this.props.navigation.state.params.isAuthClientUser
@@ -71,6 +73,7 @@ class LoginSuccessScreen extends React.Component {
                   <HiddenMenu
                     navigation={navigation}
                     handleClientUserLogout={this.handleClientUserLogout}
+                    screenProps={this.props.screenProps}
                   />
                 )}
               </View>
@@ -98,7 +101,7 @@ class LoginSuccessScreen extends React.Component {
                     color="#f18d1a"
                     style={[styles.centerText, styles.margin_15]}
                   />
-                  <Text style={styles.centerText}>Tables</Text>
+                  <Text style={styles.centerText}>{t('menu.tables')}</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -123,7 +126,7 @@ class LoginSuccessScreen extends React.Component {
                     color="#f18d1a"
                     style={[styles.centerText, styles.margin_15]}
                   />
-                  <Text style={styles.centerText}>Orders</Text>
+                  <Text style={styles.centerText}>{t('menu.orders')}</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -150,7 +153,7 @@ class LoginSuccessScreen extends React.Component {
                     color="#f18d1a"
                     style={[styles.centerText, styles.margin_15]}
                   />
-                  <Text style={styles.centerText}>Reservations</Text>
+                  <Text style={styles.centerText}>{t('menu.reservations')}</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -175,7 +178,7 @@ class LoginSuccessScreen extends React.Component {
                     color="#f18d1a"
                     style={[styles.centerText, styles.margin_15]}
                   />
-                  <Text style={styles.centerText}>Reporting</Text>
+                  <Text style={styles.centerText}>{t('menu.reporting')}</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -202,7 +205,7 @@ class LoginSuccessScreen extends React.Component {
                     color="#f18d1a"
                     style={[styles.centerText, styles.margin_15]}
                   />
-                  <Text style={styles.centerText}>Setting</Text>
+                  <Text style={styles.centerText}>{t('menu.settings')}</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -233,8 +236,8 @@ class LoginSuccessScreen extends React.Component {
                       color="#fff"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={(styles.centerText, styles.whiteColor)}>
-                      Time Card
+                    <Text style={[styles.centerText, styles.whiteColor]}>
+                      {t('menu.timecard')}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -261,7 +264,7 @@ class LoginSuccessScreen extends React.Component {
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>Client Users</Text>
+                    <Text style={styles.centerText}>{t('menu.clientUsers')}</Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -287,6 +290,8 @@ export default connect(
 
 export class HiddenMenu extends React.Component {
   render() {
+    let {t} = this.props.screenProps
+
     return (
       <View
         style={[
@@ -303,10 +308,10 @@ export class HiddenMenu extends React.Component {
           ]}
         >
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Account')}
+            onPress={() => {changeLanguage('en-TW') ; this.props.navigation.navigate('Account')}}
           >
             <View>
-              <Text style={[styles.orange_color]}>Account</Text>
+              <Text style={[styles.orange_color]}>{t('settings.account')}</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -324,7 +329,7 @@ export class HiddenMenu extends React.Component {
             }
             style={[styles.orange_color]}
           >
-            Logout
+            {t('logout')}
           </Text>
         </View>
       </View>
