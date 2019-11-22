@@ -22,7 +22,7 @@ import images from '../assets/images'
 
 class OrderItem extends React.PureComponent {
   render() {
-    const { order, navigation, handleOrderSubmit, handleDelete } = this.props
+    const { order, navigation, handleOrderSubmit, handleDelete, tableId } = this.props
     var timeDifference = get_time_diff(order.createdTime)
     return (
       <TouchableOpacity
@@ -36,22 +36,24 @@ class OrderItem extends React.PureComponent {
         onPress={() =>
           navigation.navigate('OrdersSummary', {
             orderId: order.orderId,
-            handleOrderSubmit: handleOrderSubmit,
-            handleDelete: handleDelete
+            onSubmit: handleOrderSubmit,
+            handleDelete: handleDelete,
+            tableId: tableId,
+            orderState: order.state
           })
         }
       >
-        <View style={[styles.quarter_width]}>
+        <View style={{marginRight: 15}}>
           <TouchableOpacity>
             <View>
-              <Text>
+              <Text style={{paddingTop: 6}}>
                 {order.tableName}
               </Text>
             </View>
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.quarter_width]}>
+        <View style={{marginRight: 15}}>
           <TouchableOpacity
           //onPress={() => this.props.navigation.navigate('Orders')}
           >
@@ -65,7 +67,7 @@ class OrderItem extends React.PureComponent {
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.quarter_width]}>
+        <View style={{width: '32%'}}>
           <TouchableOpacity
           //onPress={() => this.props.navigation.navigate('Orders')}
           >
@@ -74,26 +76,28 @@ class OrderItem extends React.PureComponent {
               	timeDifference < 29 ? (
                 <FontAwesomeIcon name={'clock-o'} color="#f18d1a" size={25}>
                   <Text style={{ fontSize: 12 }}>
-                    &nbsp;&nbsp;{timeDifference + ' min'}
+                    &nbsp;&nbsp;{timeDifference +' min'}
                   </Text>
                 </FontAwesomeIcon>
-              ) : timeDifference >= 30 ? (
+              ) : timeDifference < 60 ? (
                 <FontAwesomeIcon name={'clock-o'} color="red" size={25}>
                   <Text style={{ fontSize: 12 }}>
-                   &nbsp;&nbsp;{ Math.floor(timeDifference%60) + ' min'}
+                   &nbsp;&nbsp;{ Math.floor(timeDifference%60) +' min'}
                   </Text>
                 </FontAwesomeIcon>
-              ) : timeDifference >= 60 || timeDifference < 1439 ? (
+              ) : 
+              timeDifference < 1440 ? (
                 <FontAwesomeIcon name={'clock-o'} color="red" size={25}>
                   <Text style={{ fontSize: 12 }}>
-                   &nbsp;&nbsp;{Math.floor(timeDifference/60) + ' hr' + Math.floor(timeDifference%60) + ' min'}
+                   &nbsp;&nbsp;{Math.floor(timeDifference/60) + 'hr '+ Math.floor(timeDifference%60) + 'min'}
                   </Text>
                 </FontAwesomeIcon>
-              ) : (
-                timeDifference > 1440 && (
-                  <FontAwesomeIcon name={'clock-o'} color="#f1f1f1" size={25}>
+              ) 
+              : (
+                timeDifference >= 1440 && (
+                  <FontAwesomeIcon name={'clock-o'} color="#888" size={25}>
                     <Text style={{ fontSize: 12 }}>
-                      &nbsp;&nbsp;{Math.floor(timeDifference/(60*24)) + ' day' + Math.floor(timeDifference/60) + ' hr' + Math.floor(timeDifference%60) + ' min'}
+                      &nbsp;&nbsp;{Math.floor(timeDifference/(60*24)) + 'day ' + Math.floor(timeDifference/60) + 'hr ' + Math.floor(timeDifference%60) + 'min '}
                     </Text>
                   </FontAwesomeIcon>
                 )
@@ -102,12 +106,13 @@ class OrderItem extends React.PureComponent {
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.quarter_width, styles.leftpadd20]}>
+        <View>
           <TouchableOpacity
           //onPress={() => this.props.navigation.navigate('Orders')}
           >
             {order.state === 'OPEN' ? (
-              <Image source={images.order} />
+              <Image source={images.completed} style={{ width: 28, height: 20 }}
+              />
             ) : order.state === 'IN_PROCESS' ? (
               <Image
                 source={images.process}
@@ -117,7 +122,7 @@ class OrderItem extends React.PureComponent {
               order.state === 'COMPLETED' && (
                 <Image
                   source={images.completed}
-                  style={{ width: 30, height: 20 }}
+                  style={{ width: 30, height: 300 }}
                 />
               )
             )}
@@ -127,7 +132,7 @@ class OrderItem extends React.PureComponent {
           style={{
             color: '#000',
             fontSize: 12,
-            marginLeft: -40
+            paddingTop: 6
           }}
         >
           &nbsp;{order.state}

@@ -31,7 +31,8 @@ import {
   getfetchOrderInflights,
   get_time_diff,
   clearOrder,
-  clearProduct
+  clearProduct,
+  getOrder
 } from '../actions'
 import styles from '../styles'
 
@@ -44,7 +45,7 @@ class TablesScreen extends React.Component {
   }
 
   state = {
-    refreshing: false,    
+    refreshing: false
   }
 
   constructor(props) {
@@ -129,9 +130,13 @@ class TablesScreen extends React.Component {
           if (res.hasOwnProperty('orderId')) {
             this.props.navigation.navigate('Tables')
             this.props.getfetchOrderInflights()
-            AsyncStorage.removeItem('orderInfo');
-            //this.props.clearOrder(orderId)
-            this.setState({ refreshing: true })
+            //this.props.getOrder(res.orderId)//bad
+            //AsyncStorage.removeItem('orderInfo');//cannot clear old orderInfo form Async
+            this.props.clearOrder(res.orderId)
+            this.setState({ 
+            	refreshing: true,
+							orderId: res.orderId
+            })
           } else {
             alert(res.message === undefined ? 'pls try again' : res.message)
           }
@@ -165,7 +170,8 @@ class TablesScreen extends React.Component {
             this.props.navigation.navigate('Tables')
             this.props.getfetchOrderInflights()
             this.props.getTableLayouts()
-            AsyncStorage.removeItem('orderInfo')
+            //AsyncStorage.removeItem('orderInfo')
+            this.props.clearOrder(id)
           } else {
             alert('pls try again')
           }
@@ -331,8 +337,8 @@ class TablesScreen extends React.Component {
             </View>
 
             {
-            	tblLayouts.map((tblLayout, ix) => 
-      
+            	tblLayouts.map((tblLayout, ix) =>
+            	      
                 <View
                   style={styles.mgrbtn40}
                   key={tblLayout.tableLayoutId + ix}
@@ -363,6 +369,7 @@ class TablesScreen extends React.Component {
                                 handleOrderSubmit={this.handleOrderSubmit}
                                 handleDelete={this.handleDelete}
                                 key={item.orderId}
+                                tableId={tblLayout.tableLayoutId}
                               />
                             )
                           }}
@@ -394,7 +401,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
   getTableLayouts: () => dispatch(getTableLayouts()),
   getShiftStatus: () => dispatch(getShiftStatus()),
-  //clearOrder: () => dispatch(clearOrder(props.navigation.state.params.orderId)),
+  clearOrder: () => dispatch(clearOrder()),
   clearProduct: () => dispatch(clearProduct())
 })
 export default connect(

@@ -62,7 +62,7 @@ class OrderFormIV extends React.Component {
             >
               {this.props.navigation.state.params.prdItemName}
             </Text>
-            <Text style={styles.textBold}>Option</Text>
+            <Text style={[styles.textBold, styles.paddBottom_20]}>Option</Text>
             {product.productOptions !== undefined &&
               product.productOptions.map(prdOption => {
                 var ArrForTrueState = []
@@ -77,7 +77,7 @@ class OrderFormIV extends React.Component {
 
                 return (
                   <View key={prdOption.versionId}>
-                    <Text>{prdOption.optionName}</Text>
+                    <Text style={{backgroundColor: '#f1f1f1', color: '#f18d1a', padding: 8}}>{prdOption.optionName}</Text>
                     {prdOption.multipleChoice === false ? (
                       <View>
                         {prdOption.optionValues.map((optVal, ix) => {
@@ -89,7 +89,7 @@ class OrderFormIV extends React.Component {
 
                           return (
                             <View
-                              style={styles.paddingTopBtn20}
+                              style={styles.paddingTopBtn8}
                               key={prdOption.id + ix}
                             >
                               <Field
@@ -130,7 +130,11 @@ class OrderFormIV extends React.Component {
 
             <View style={styles.paddingTopBtn20}>
               <Text style={styles.textBold}>Quantity</Text>
-              <Field name="quantity" component={RenderStepper} startPt={1}/>
+              <Field 
+              	name="quantity" 
+              	component={RenderStepper} 
+              	validate={isRequired}
+              	/>
             </View>
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>

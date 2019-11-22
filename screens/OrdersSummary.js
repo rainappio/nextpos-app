@@ -79,8 +79,6 @@ class OrdersSummary extends React.Component {
             isLoading={isLoading}
             haveError={haveError}
             haveData={haveData}
-            onSubmit={this.props.navigation.state.params.handleOrderSubmit}
-            handleDelete={this.props.navigation.state.params.handleDelete}
             initialValues={initialValues}
           />
         )}

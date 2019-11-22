@@ -29,6 +29,7 @@ import {
 } from '@ant-design/react-native'
 import { readableDateFormat } from '../actions'
 import BackBtn from '../components/BackBtn'
+import AddBtn from '../components/AddBtn'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 
@@ -82,7 +83,13 @@ class OrdersSummaryRow extends React.Component {
                       styles.orange_color
                     ]}
                   >
-                    {order.tableInfo.tableName}
+                    {
+                    	!this.props.navigation.state.params.tableName 
+                    	?
+                    	 order.tableInfo.tableName
+                    		:
+                    			this.props.navigation.state.params.tableName
+                    		}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -101,9 +108,15 @@ class OrdersSummaryRow extends React.Component {
                   >
                     <Text style={[styles.textBig, styles.orange_color]}>
                       &nbsp;
-                      {order.demographicData.male +
+                      {
+                      	!this.props.navigation.state.params.customerCount 
+                      	?
+                      	order.demographicData.male +
                         order.demographicData.female +
-                        order.demographicData.kid}
+                        order.demographicData.kid
+                        :
+                        this.props.navigation.state.params.customerCount
+                      }
                     </Text>
                   </FontAwesomeIcon>
                 </View>
@@ -172,6 +185,16 @@ class OrdersSummaryRow extends React.Component {
 
         <View style={[styles.container]}>
           <Text style={styles.textBold}>{order.orderId}</Text>
+          {
+          	// this.props.navigation.state.params.orderState === 'OPEN' &&          
+          	<AddBtn onPress={() => this.props.navigation.navigate('OrderFormII',{
+          		tableId: this.props.navigation.state.params.tableId,
+							orderId: order.orderId,
+							onSubmit: this.props.navigation.state.params.onSubmit,
+							handleDelete: this.props.navigation.state.params.handleDelete
+          	})}/>
+        	}
+
           {order.lineItems.map(lineItem => (
             <View key={lineItem.lineItemId}>
               <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
@@ -259,7 +282,7 @@ class OrdersSummaryRow extends React.Component {
               }}
             >
               <TouchableOpacity
-                onPress={() => this.props.onSubmit(order.orderId)}
+                onPress={() => this.props.navigation.state.params.onSubmit(order.orderId)}
                 //onPress={this.props.handleSubmit}
               >
                 <Text style={[styles.signInText, styles.whiteColor]}>
@@ -280,7 +303,7 @@ class OrdersSummaryRow extends React.Component {
               }}
             >
               <TouchableOpacity
-                onPress={() => this.props.onSubmit(order.orderId)}
+                onPress={() => this.props.navigation.state.params.onSubmit(order.orderId)}
                 //onPress={this.props.handleSubmit}
               >
                 <Text style={[styles.signInText, styles.whiteColor]}>
@@ -301,7 +324,7 @@ class OrdersSummaryRow extends React.Component {
               }}
             >
               <TouchableOpacity
-                onPress={() => this.props.onSubmit(order.orderId)}
+                onPress={() => this.props.navigation.state.params.onSubmit(order.orderId)}
                 //onPress={this.props.handleSubmit}
               >
                 <Text style={[styles.signInText, styles.whiteColor]}>
@@ -340,8 +363,7 @@ class OrdersSummaryRow extends React.Component {
           >
             <TouchableOpacity
               onPress={() => {
-                //this.props.navigation.goBack()
-                this.props.handleDelete(order.orderId)
+                this.props.navigation.state.params.handleDelete(order.orderId)
               }}
             >
               <Text style={styles.signInText}>Delete</Text>

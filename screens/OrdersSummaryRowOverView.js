@@ -73,8 +73,6 @@ export const OrdersSummaryRowOverView = ({
     <OrdersSummaryRow
       order={order}
       navigation={navigation}
-      onSubmit={onSubmit}
-      handleDelete={handleDelete}
       initialValues={initialValues}
     />
   )

@@ -136,7 +136,7 @@ class OrderForm extends Component {
             </View>
 
             <View style={styles.paddBottom_20}>
-              <Text>LoreumIpsum</Text>
+              <Text>Visited Frequency</Text>
               <View style={[styles.flex_dir_row]}>
                 <View style={[styles.half_width]}>
                   {visitedFrequenciesI.map((visitedFreq, ix) => (

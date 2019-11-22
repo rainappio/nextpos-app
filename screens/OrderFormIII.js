@@ -55,7 +55,8 @@ class OrderFormIII extends React.Component {
       refreshing: false,
       status: '',
       labelId: null,
-      totalItems: null
+      totalItems: null,
+      orderInfo: null
     }
     this.onChange = activeSections => {
       this.setState({ activeSections })
@@ -64,8 +65,8 @@ class OrderFormIII extends React.Component {
 
   handleSubmit = values => {
     let createOrderObj = {}
-    let lineItemsArr = []
-    let lineItemObj = {}
+    // let lineItemsArr = []
+    // let lineItemObj = {}
 
     createOrderObj['productId'] = this.props.navigation.state.params.prdId
     createOrderObj['quantity'] = values.quantity
@@ -116,8 +117,30 @@ class OrderFormIII extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
-          	AsyncStorage.setItem('orderInfo',JSON.stringify(createOrderObj))
-            this.props.navigation.navigate('OrderFormII')
+          	//AsyncStorage.setItem('orderInfo', JSON.stringify(this.props.order));
+          	//not work-----------
+      //     	AsyncStorage.getItem('orderInfo')
+						// .then(value => {
+						// 	if(value != null){
+      //     			this.setState({
+      //     				orderInfo: JSON.parse(value)
+      //     			});
+      //     			if(!this.state.orderInfo){
+      //     				this.props.navigation.navigate('OrderFormII',{
+      //       				orderInfo: this.state.orderInfo
+      //       			})
+      //     			}
+      //     		}		
+      //   			else{
+      //     			console.log("no token exist")
+      //   			}
+						// })
+						// .done();		
+            this.props.navigation.navigate('OrderFormII',{
+            	//orderInfo: AsyncStorage.getItem('orderInfo'),
+            	orderId: orderId
+            })
+            this.props.getOrder(orderId)
           }
         })
         .catch(error => console.log(error))
@@ -126,6 +149,10 @@ class OrderFormIII extends React.Component {
 
   render() {
     const { navigation, haveData, haveError, isLoading, order } = this.props
+    // console.log(order)
+    // console.log(this.props.navigation.state.params)
+    // console.log("III")
+    //&& AsyncStorage.setItem('orderInfo',JSON.Stringify(order))
 
     function Item({ title, price }) {
       return (
@@ -213,7 +240,10 @@ class OrderFormIII extends React.Component {
                     styles.whiteColor
                   ]}
                 >
-                  {this.props.navigation.state.params.tableLayout}
+                  {
+                  	//Object.keys(order).length !== 0 && order.tableInfo.tableName//Obj length not equal ze with err msg
+                  	order.hasOwnProperty('tableInfo') && order.tableInfo.tableName
+                  }
                 </Text>
               </View>
             </TouchableOpacity>
@@ -232,7 +262,9 @@ class OrderFormIII extends React.Component {
                 >
                   <Text style={[styles.textBig, styles.whiteColor]}>
                     &nbsp;&nbsp;
-                    {Object.keys(order).length !== 0 &&                    	
+                    {
+                    	//Object.keys(order).length !== 0 &&          
+                    	order.hasOwnProperty('demographicData') &&           	
                       order.demographicData.male +
                       order.demographicData.female +
                       order.demographicData.kid
@@ -247,7 +279,7 @@ class OrderFormIII extends React.Component {
             <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate('OrdersSummary', {
-                  handleOrderSubmit: this.props.navigation.state.params
+                  onSubmit: this.props.navigation.state.params
                     .onSubmit,
                   orderId: this.props.navigation.state.params.orderId,
                   handleDelete: this.props.navigation.state.params.handleDelete
@@ -262,7 +294,11 @@ class OrderFormIII extends React.Component {
                   style={[styles.toRight, styles.mgrtotop8, styles.mgr_20]}
                 />
                 <Text style={styles.itemCount}>
-                  {Object.keys(order).length !== 0 && order.lineItems.length}
+                  {
+                  	//Object.keys(order).length !== 0 
+                  	order.hasOwnProperty('lineItems')
+                  	&& order.lineItems.length
+                  }
                 </Text>
               </View>
             </TouchableOpacity>

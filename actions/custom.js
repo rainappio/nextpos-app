@@ -1,3 +1,5 @@
+import { AsyncStorage } from 'react-native'
+
 export function get_time_diff (datetime) {
   var t = datetime.split(/[- :T]/)
   var date = new Date(
@@ -69,4 +71,13 @@ export const readableDateFormat = date => {
   var formattedDateTime =
     subShortDate[2] + ' ' + getMonthName(monthCount) + ' ' + subShortDate[0]
   return formattedDateTime
+}
+
+async function getItem(item) {
+  try {
+    const value = await AsyncStorage.getItem(item);
+    return value;
+  } catch (error) {
+    // Handle errors here
+  }
 }
