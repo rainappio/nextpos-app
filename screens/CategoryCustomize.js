@@ -1,10 +1,17 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {ActivityIndicator, Text, View} from 'react-native'
+import { connect } from 'react-redux'
+import { ActivityIndicator, Text, View } from 'react-native'
 import CategoryCustomizeScreen from './CategoryCustomizeScreen'
-import {clearLabel, getLabel, getLables, getProductOptions, getProducts, getWorkingAreas} from '../actions'
+import {
+  clearLabel,
+  getLabel,
+  getLables,
+  getProductOptions,
+  getProducts,
+  getWorkingAreas
+} from '../actions'
 import styles from '../styles'
-import {api, makeFetchRequest} from "../constants/Backend";
+import { api, makeFetchRequest } from '../constants/Backend'
 
 class CategoryCustomize extends React.Component {
   static navigationOptions = {
@@ -24,8 +31,8 @@ class CategoryCustomize extends React.Component {
   handleSubmit = values => {
     const labelId = this.props.navigation.state.params.labelId
 
-    makeFetchRequest((token) => {
-      console.log(token);
+    makeFetchRequest(token => {
+      console.log(token)
       fetch(api.productLabel.getById(labelId), {
         method: 'POST',
         withCredentials: true,
@@ -37,7 +44,7 @@ class CategoryCustomize extends React.Component {
         body: JSON.stringify(values)
       })
         .then(response => {
-          console.log(response);
+          console.log(response)
           if (response.status === 200) {
             this.props.clearLabel()
             this.props.getLables()
@@ -46,11 +53,11 @@ class CategoryCustomize extends React.Component {
               refreshing: true
             })
             this.props.getProducts() !== undefined &&
-            this.props.getProducts().then(() => {
-              this.setState({
-                refreshing: false
+              this.props.getProducts().then(() => {
+                this.setState({
+                  refreshing: false
+                })
               })
-            })
           } else {
             alert('pls try again')
           }

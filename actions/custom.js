@@ -1,3 +1,5 @@
+import { AsyncStorage } from 'react-native'
+
 export function get_time_diff (datetime) {
   var t = datetime.split(/[- :T]/)
   var date = new Date(
@@ -10,8 +12,8 @@ export function get_time_diff (datetime) {
   )
   var orderStart = new Date(date).getTime()
   var now = new Date().getTime()
-	var timeZoneOffset = new Date(date).getTimezoneOffset();
-	
+  var timeZoneOffset = new Date(date).getTimezoneOffset()
+
   if (isNaN(orderStart)) {
     return ''
   }

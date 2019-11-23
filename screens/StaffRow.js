@@ -1,26 +1,10 @@
 import React from 'react'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-  TouchableHighlight,
-  TextInput,
-  RefreshControl,
-  AsyncStorage
-} from 'react-native'
-import { connect } from 'react-redux'
+import { ScrollView, Text, View, RefreshControl } from 'react-native'
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
 import Icon from 'react-native-vector-icons/Ionicons'
-import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
-import DropDown from '../components/DropDown'
-import PopUp from '../components/PopUp'
 import styles from '../styles'
 
 class StaffRow extends React.Component {

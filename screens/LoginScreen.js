@@ -1,9 +1,15 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
-import {Image, KeyboardAvoidingView, Text, TouchableOpacity, View} from 'react-native'
-import {isEmail, isRequired} from '../validators'
+import { Field, reduxForm } from 'redux-form'
+import {
+  Image,
+  KeyboardAvoidingView,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native'
+import { isEmail, isRequired } from '../validators'
 import InputText from '../components/InputText'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 import { withNavigation } from 'react-navigation'
 
@@ -13,7 +19,7 @@ class LoginScreen extends React.Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.props.screenProps.localize({
       en: {
@@ -26,11 +32,15 @@ class LoginScreen extends React.Component {
   }
   render() {
     const { handleSubmit } = this.props
-    const {t} = this.props.screenProps
+    const { t } = this.props.screenProps
 
     return (
       <DismissKeyboard>
-        <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior="padding"
+          enabled
+        >
           <View style={[{ position: 'absolute', top: 0 }]}>
             <Image
               source={
@@ -83,7 +93,9 @@ class LoginScreen extends React.Component {
               }
             ]}
           >
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('Intro')}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Intro')}
+            >
               <Text style={styles.gsText}>{t('cancel')}</Text>
             </TouchableOpacity>
           </View>

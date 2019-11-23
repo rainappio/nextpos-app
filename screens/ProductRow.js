@@ -1,34 +1,12 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-  TouchableHighlight,
-  TouchableOpacity,
-  TextInput,
-  RefreshControl,
-  AsyncStorage
-} from 'react-native'
+import { ScrollView, Text, View, RefreshControl } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import {
-  Accordion,
-  List,
-  SwipeListView,
-  SwipeRow,
-  SwipeAction
-} from '@ant-design/react-native'
-import InputText from '../components/InputText'
+import { Accordion, List, SwipeAction } from '@ant-design/react-native'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
-import AddBtn from '../components/AddBtn'
-import DropDown from '../components/DropDown'
 import PopUp from '../components/PopUp'
 import { getProducts, clearLabel } from '../actions'
 import styles from '../styles'
@@ -101,17 +79,12 @@ class ProductRow extends React.Component {
 
     const right = [
       {
-        text: (
-          <Icon
-            name="md-create"
-            size={25}
-            color="#fff"
-          />
-        ),
-        onPress: () => this.props.navigation.navigate('ProductEdit', {
-          productId: this.state.productId,
-          labelId: this.state.labelId
-        }),
+        text: <Icon name="md-create" size={25} color="#fff" />,
+        onPress: () =>
+          this.props.navigation.navigate('ProductEdit', {
+            productId: this.state.productId,
+            labelId: this.state.labelId
+          }),
         style: { backgroundColor: '#f18d1a90' }
       }
     ]

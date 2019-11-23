@@ -193,20 +193,20 @@ Reports.navigationOptions = ({ screenProps: { t } }) => ({
 var tabBar = createBottomTabNavigator({
   Home: {
     screen: Home,
-    navigationOptions: ({ navigation, screenProps: {t} }) => {
+    navigationOptions: ({ navigation, screenProps: { t } }) => {
       if (navigation.state.routes.length > 0) {
         navigation.state.routes.map(route => {
-					if (
-            	route.routeName === 'Home' ||
-            	route.routeName === 'Intro' ||
-            	route.routeName === 'Login'
-          	) {
-            	tabBarVisible = false
-          	}else{
-            	tabBarVisible = true
-          	}
+          if (
+            route.routeName === 'Home' ||
+            route.routeName === 'Intro' ||
+            route.routeName === 'Login'
+          ) {
+            tabBarVisible = false
+          } else {
+            tabBarVisible = true
+          }
         })
-        return { title: t('menu.home') , tabBarVisible }
+        return { title: t('menu.home'), tabBarVisible }
       }
     }
   },

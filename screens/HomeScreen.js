@@ -18,21 +18,20 @@ export default class HomeScreen extends React.Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.props.screenProps.localize({
       en: {
         getStarted: 'Get Started'
       },
       zh: {
-          getStarted: '開始'
-        }
+        getStarted: '開始'
       }
-    );
+    })
   }
 
   render() {
-    let {t} = this.props.screenProps;
+    let { t } = this.props.screenProps
 
     return (
       <View style={styles.container}>

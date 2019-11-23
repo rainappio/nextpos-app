@@ -1,37 +1,19 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import { reduxForm } from 'redux-form'
 import {
-  Image,
-  Platform,
   ScrollView,
-  StyleSheet,
   Text,
-  TouchableWithoutFeedback,
   View,
-  TouchableHighlight,
-  TextInput,
   RefreshControl,
   AsyncStorage,
   ActivityIndicator,
   TouchableOpacity,
-  SafeAreaView,
-  FlatList
+  SafeAreaView
 } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
-import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import {
-  Accordion,
-  List,
-  SwipeListView,
-  SwipeRow,
-  SwipeAction
-} from '@ant-design/react-native'
-import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
-import AddBtn from '../components/AddBtn'
-import DropDown from '../components/DropDown'
 import { getProduct, getOrder } from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
@@ -55,7 +37,8 @@ class OrderFormIII extends React.Component {
       refreshing: false,
       status: '',
       labelId: null,
-      totalItems: null
+      totalItems: null,
+      orderInfo: null
     }
     this.onChange = activeSections => {
       this.setState({ activeSections })
@@ -64,8 +47,6 @@ class OrderFormIII extends React.Component {
 
   handleSubmit = values => {
     let createOrderObj = {}
-    let lineItemsArr = []
-    let lineItemObj = {}
 
     createOrderObj['productId'] = this.props.navigation.state.params.prdId
     createOrderObj['quantity'] = values.quantity
@@ -116,8 +97,10 @@ class OrderFormIII extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
-          	AsyncStorage.setItem('orderInfo',JSON.stringify(createOrderObj))
-            this.props.navigation.navigate('OrderFormII')
+            this.props.navigation.navigate('OrderFormII', {
+              orderId: orderId
+            })
+            this.props.getOrder(orderId)
           }
         })
         .catch(error => console.log(error))
@@ -125,7 +108,7 @@ class OrderFormIII extends React.Component {
   }
 
   render() {
-    const { navigation, haveData, haveError, isLoading, order } = this.props
+    const { navigation, haveError, isLoading, order } = this.props
 
     function Item({ title, price }) {
       return (
@@ -202,53 +185,43 @@ class OrderFormIII extends React.Component {
           style={[styles.orange_bg, styles.flex_dir_row, styles.shoppingBar]}
         >
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <TouchableOpacity
-            //onPress={() => this.props.navigation.navigate('Orders')}
-            >
-              <View>
-                <Text
-                  style={[
-                    styles.paddingTopBtn8,
-                    styles.textBig,
-                    styles.whiteColor
-                  ]}
-                >
-                  {this.props.navigation.state.params.tableLayout}
-                </Text>
-              </View>
-            </TouchableOpacity>
+            <View>
+              <Text
+                style={[
+                  styles.paddingTopBtn8,
+                  styles.textBig,
+                  styles.whiteColor
+                ]}
+              >
+                {order.hasOwnProperty('tableInfo') && order.tableInfo.tableName}
+              </Text>
+            </View>
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <TouchableOpacity
-            //onPress={() => this.props.navigation.navigate('Orders')}
-            >
-              <View>
-                <FontAwesomeIcon
-                  name="user"
-                  size={30}
-                  color="#fff"
-                  style={[styles.centerText]}
-                >
-                  <Text style={[styles.textBig, styles.whiteColor]}>
-                    &nbsp;&nbsp;
-                    {Object.keys(order).length !== 0 &&                    	
-                      order.demographicData.male +
+            <View>
+              <FontAwesomeIcon
+                name="user"
+                size={30}
+                color="#fff"
+                style={[styles.centerText]}
+              >
+                <Text style={[styles.textBig, styles.whiteColor]}>
+                  &nbsp;&nbsp;
+                  {order.hasOwnProperty('demographicData') &&
+                    order.demographicData.male +
                       order.demographicData.female +
-                      order.demographicData.kid
-                      }
-                  </Text>
-                </FontAwesomeIcon>
-              </View>
-            </TouchableOpacity>
+                      order.demographicData.kid}
+                </Text>
+              </FontAwesomeIcon>
+            </View>
           </View>
 
           <View style={[styles.half_width, styles.verticalMiddle]}>
             <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate('OrdersSummary', {
-                  handleOrderSubmit: this.props.navigation.state.params
-                    .onSubmit,
+                  onSubmit: this.props.navigation.state.params.onSubmit,
                   orderId: this.props.navigation.state.params.orderId,
                   handleDelete: this.props.navigation.state.params.handleDelete
                 })
@@ -262,7 +235,7 @@ class OrderFormIII extends React.Component {
                   style={[styles.toRight, styles.mgrtotop8, styles.mgr_20]}
                 />
                 <Text style={styles.itemCount}>
-                  {Object.keys(order).length !== 0 && order.lineItems.length}
+                  {order.hasOwnProperty('lineItems') && order.lineItems.length}
                 </Text>
               </View>
             </TouchableOpacity>

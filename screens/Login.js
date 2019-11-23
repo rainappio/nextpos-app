@@ -1,10 +1,9 @@
 import React from 'react'
-import { AsyncStorage, View } from 'react-native'
+import { AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 import { encode as btoa } from 'base-64'
 import { doLoggedIn, getClientUsrs } from '../actions'
 import LoginScreen from './LoginScreen'
-import LoginSuccessScreen from './LoginSuccessScreen'
 
 class Login extends React.Component {
   static navigationOptions = {
@@ -59,7 +58,12 @@ class Login extends React.Component {
 
   render() {
     const { isLoggedIn, navigation, clientusers } = this.props
-    return <LoginScreen onSubmit={this.handleSubmit} screenProps={this.props.screenProps} />
+    return (
+      <LoginScreen
+        onSubmit={this.handleSubmit}
+        screenProps={this.props.screenProps}
+      />
+    )
   }
 }
 

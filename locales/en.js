@@ -23,6 +23,6 @@ const en = {
     language: 'Language'
   },
   bar: 'Bar {{someValue}}'
-};
+}
 
 export default en

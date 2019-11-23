@@ -3,10 +3,8 @@ import {
   AsyncStorage,
   View,
   Text,
-  ScrollView,
   Image,
   FlatList,
-  TouchableOpacity,
   RefreshControl,
   TouchableHighlight
 } from 'react-native'

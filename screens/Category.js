@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AsyncStorage, View, Text } from 'react-native'
+import { AsyncStorage } from 'react-native'
 import { getProducts, getLables } from '../actions'
 import CategoryFormScreen from './CategoryFormScreen'
 

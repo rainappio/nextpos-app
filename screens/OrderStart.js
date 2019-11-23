@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AsyncStorage, View, Text } from 'react-native'
-import ProductFormScreen from './ProductFormScreen'
-import { getProducts, getLables, getLabel, clearProduct } from '../actions'
+import { AsyncStorage } from 'react-native'
+import { clearProduct } from '../actions'
 import OrderForm from './OrderForm'
 
 class OrderStart extends React.Component {
@@ -29,6 +28,7 @@ class OrderStart extends React.Component {
     var female = Person.female !== undefined ? Person.male : 0
     var kid = Person.kid !== undefined ? Person.kid : 0
     var customerCount = male + female + kid
+
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)

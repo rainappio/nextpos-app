@@ -1,15 +1,9 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import { reduxForm } from 'redux-form'
 import {
-  Image,
-  Platform,
   ScrollView,
-  StyleSheet,
   Text,
-  TouchableWithoutFeedback,
   View,
-  TouchableHighlight,
-  TextInput,
   RefreshControl,
   AsyncStorage,
   ActivityIndicator,
@@ -17,19 +11,8 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
-import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import {
-  Accordion,
-  List,
-  SwipeListView,
-  SwipeRow,
-  SwipeAction
-} from '@ant-design/react-native'
-import InputText from '../components/InputText'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import { Accordion, List } from '@ant-design/react-native'
 import BackBtn from '../components/BackBtn'
-import AddBtn from '../components/AddBtn'
-import DropDown from '../components/DropDown'
 import {
   getProducts,
   getLables,
@@ -65,7 +48,8 @@ class OrderFormII extends React.Component {
     this.props.getLables()
     this.props.getProducts()
     this.props.getfetchOrderInflights()
-    // this.props.getOrder()//get err, just try by Async way
+    this.props.navigation.state.params.orderId !== undefined &&
+      this.props.getOrder(this.props.navigation.state.params.orderId)
 
     //By Async Way
     AsyncStorage.getItem('tables')
@@ -73,20 +57,7 @@ class OrderFormII extends React.Component {
         this.setState({ tables: JSON.parse(value) })
       })
       .done()
-
-		AsyncStorage.getItem('orderInfo')
-			.then(value => {
-				value != null 
-				? 
-          this.setState({
-          	orderInfo: JSON.parse(value)
-          })
-        :
-          console.log("no token exist")
-			})
-			.done()		
-
-	}
+  }
 
   PanelHeader = (labelName, labelId) => {
     return (
@@ -115,30 +86,36 @@ class OrderFormII extends React.Component {
       ordersInflight,
       order
     } = this.props
-    const { selectedProducts, tables, orderInfo } = this.state
-    var map = new Map(Object.entries(products))		                      
-	
+    const { selectedProducts, tables } = this.state
+    var map = new Map(Object.entries(products))
     let orderIdArr = []
+    var recentlyAddedOrderId = null
     var keysArr = ordersInflight !== undefined && Object.keys(ordersInflight)
-    var valsArr = ordersInflight !== undefined && Object.keys(ordersInflight)
+    var valsArr = ordersInflight !== undefined && Object.values(ordersInflight)
 
-    keysArr !== false &&
-      keysArr.map(
-        key =>
-          (orderIdArr = ordersInflight[key].map(order => {
-            //return orderIdArr.push(order)
-            return order.tableLayoutId === key && order.orderId
-          }))
-      )
+    for (var i = 0; i < keysArr.length; i++) {
+      var key = keysArr[i]
+      for (var j = 0; j < ordersInflight[key].length; j++) {
+        orderIdArr.push({
+          createdTime: ordersInflight[key][j].createdTime,
+          orderId: ordersInflight[key][j].orderId
+        })
+      }
+    }
 
-    valsArr !== false &&
-      valsArr.map(
-        key =>
-          (orderIdArr = ordersInflight[key].map(order => {
-            //return order.tableLayoutId === key && order.orderId
-            return order.orderId
-          }))
-      )
+    var recentlyAddedOrderId = orderIdArr
+      .map(order => {
+        var latestTime = orderIdArr
+          .map(function(e) {
+            return e.createdTime
+          })
+          .sort()
+          .reverse()[0]
+        return order.createdTime === latestTime && order.orderId
+      })
+      .filter(latestorder => {
+        return latestorder !== false
+      })
 
     let tableLayout =
       tables !== null &&
@@ -223,10 +200,13 @@ class OrderFormII extends React.Component {
                         onPress={() =>
                           this.props.navigation.navigate('OrderFormIII', {
                             prdName: prd.name,
-                            // customerCount: customerCount,
                             tableLayout: tableLayout,
                             prdId: prd.id,
-                            orderId: orderIdArr[orderIdArr.length - 1],
+                            orderId:
+                              this.props.navigation.state.params.orderId !==
+                              undefined
+                                ? this.props.navigation.state.params.orderId
+                                : recentlyAddedOrderId[0],
                             onSubmit: this.props.navigation.state.params
                               .onSubmit,
                             handleDelete: this.props.navigation.state.params
@@ -259,7 +239,9 @@ class OrderFormII extends React.Component {
                     styles.whiteColor
                   ]}
                 >
-                  {tableLayout}
+                  {order.hasOwnProperty('tableInfo')
+                    ? order.tableInfo.tableName
+                    : tableLayout}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -278,7 +260,12 @@ class OrderFormII extends React.Component {
                 >
                   <Text style={[styles.textBig, styles.whiteColor]}>
                     &nbsp;&nbsp;
-                    {this.props.navigation.state.params.customerCount}
+                    {// Object.keys(order).length !== 0 //not good
+                    order.hasOwnProperty('demographicData')
+                      ? order.demographicData.male +
+                        order.demographicData.female +
+                        order.demographicData.kid
+                      : this.props.navigation.state.params.customerCount}
                   </Text>
                 </FontAwesomeIcon>
               </View>
@@ -289,10 +276,15 @@ class OrderFormII extends React.Component {
             <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate('OrdersSummary', {
-                  orderId: orderIdArr[orderIdArr.length - 1],
-                  handleOrderSubmit: this.props.navigation.state.params
-                    .onSubmit,
-                  handleDelete: this.props.navigation.state.params.handleDelete
+                  orderId:
+                    this.props.navigation.state.params.orderId !== undefined
+                      ? this.props.navigation.state.params.orderId
+                      : recentlyAddedOrderId[0],
+                  onSubmit: this.props.navigation.state.params.onSubmit,
+                  handleDelete: this.props.navigation.state.params.handleDelete,
+                  tableName: tableLayout,
+                  customerCount: this.props.navigation.state.params
+                    .customerCount
                 })
               }
             >
@@ -303,7 +295,9 @@ class OrderFormII extends React.Component {
                   color="#fff"
                   style={[styles.toRight, styles.mgrtotop8, styles.mgr_20]}
                 />
-                <Text style={styles.itemCount}></Text>
+                <Text style={styles.itemCount}>
+                  {order.hasOwnProperty('lineItems') && order.lineItems.length}
+                </Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -320,16 +314,16 @@ const mapStateToProps = state => ({
   haveData: state.products.haveData,
   haveError: state.products.haveError,
   isLoading: state.products.loading,
-  ordersInflight: state.ordersinflight.data.orders
-  // order: state.order.data
+  ordersInflight: state.ordersinflight.data.orders,
+  order: state.order.data
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getLables: () => dispatch(getLables()),
   getProducts: () => dispatch(getProducts()),
-  getfetchOrderInflights: () => dispatch(getfetchOrderInflights())
-  // getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
+  getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
+  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
 })
 
 OrderFormII = reduxForm({

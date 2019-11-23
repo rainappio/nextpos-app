@@ -22,7 +22,7 @@ const zh = {
     workingArea: '工作區/出單機',
     language: '語言'
   },
-  bar: 'Bar {{someValue}}',
-};
+  bar: 'Bar {{someValue}}'
+}
 
 export default zh
