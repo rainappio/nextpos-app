@@ -1,20 +1,12 @@
 import React from 'react'
 import {
   Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
   Text,
-  TouchableOpacity,
   View,
   TouchableHighlight,
   AsyncStorage
 } from 'react-native'
-import { WebBrowser } from 'expo'
 import { connect } from 'react-redux'
-import HomeScreen from './HomeScreen'
-import CreateAccScreen from './CreateAccScreen'
-import { MonoText } from '../components/StyledText'
 import styles from '../styles'
 import { doLogout } from '../actions'
 
@@ -24,7 +16,7 @@ class IntroAppScreen extends React.Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.props.screenProps.localize({
       en: {
@@ -60,7 +52,7 @@ class IntroAppScreen extends React.Component {
   }
 
   render() {
-    let {t} = this.props.screenProps;
+    let { t } = this.props.screenProps
 
     return (
       <View style={styles.container}>

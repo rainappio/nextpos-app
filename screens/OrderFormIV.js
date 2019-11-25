@@ -1,41 +1,9 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-  TouchableHighlight,
-  TextInput,
-  RefreshControl,
-  AsyncStorage,
-  ActivityIndicator,
-  TouchableOpacity,
-  SafeAreaView,
-  FlatList
-} from 'react-native'
-import { connect } from 'react-redux'
-import Icon from 'react-native-vector-icons/Ionicons'
-import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import {
-  Accordion,
-  List,
-  SwipeListView,
-  SwipeRow,
-  SwipeAction
-} from '@ant-design/react-native'
-import InputText from '../components/InputText'
+import { Text, View, TouchableOpacity } from 'react-native'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
-import AddBtn from '../components/AddBtn'
-import DropDown from '../components/DropDown'
 import CheckBoxGroupObjPick from '../components/CheckBoxGroupObjPick'
 import RadioItemObjPick from '../components/RadioItemObjPick'
-import { getProducts, getLables } from '../actions'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import RenderStepper from '../components/RenderStepper'
 import { isRequired } from '../validators'
 import styles from '../styles'
@@ -46,7 +14,7 @@ class OrderFormIV extends React.Component {
   }
 
   render() {
-    const { navigation, haveData, haveError, isLoading, product } = this.props
+    const { product } = this.props
 
     return (
       <View style={styles.modalContainer}>
@@ -62,7 +30,7 @@ class OrderFormIV extends React.Component {
             >
               {this.props.navigation.state.params.prdItemName}
             </Text>
-            <Text style={styles.textBold}>Option</Text>
+            <Text style={[styles.textBold, styles.paddBottom_20]}>Option</Text>
             {product.productOptions !== undefined &&
               product.productOptions.map(prdOption => {
                 var ArrForTrueState = []
@@ -77,7 +45,15 @@ class OrderFormIV extends React.Component {
 
                 return (
                   <View key={prdOption.versionId}>
-                    <Text>{prdOption.optionName}</Text>
+                    <Text
+                      style={{
+                        backgroundColor: '#f1f1f1',
+                        color: '#f18d1a',
+                        padding: 8
+                      }}
+                    >
+                      {prdOption.optionName}
+                    </Text>
                     {prdOption.multipleChoice === false ? (
                       <View>
                         {prdOption.optionValues.map((optVal, ix) => {
@@ -89,7 +65,7 @@ class OrderFormIV extends React.Component {
 
                           return (
                             <View
-                              style={styles.paddingTopBtn20}
+                              style={styles.paddingTopBtn8}
                               key={prdOption.id + ix}
                             >
                               <Field
@@ -130,7 +106,11 @@ class OrderFormIV extends React.Component {
 
             <View style={styles.paddingTopBtn20}>
               <Text style={styles.textBold}>Quantity</Text>
-              <Field name="quantity" component={RenderStepper} startPt={1}/>
+              <Field
+                name="quantity"
+                component={RenderStepper}
+                validate={isRequired}
+              />
             </View>
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>

@@ -1,16 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput
-} from 'react-native'
+import { Text, View, TouchableHighlight } from 'react-native'
 import { isRequired } from '../validators'
 import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'

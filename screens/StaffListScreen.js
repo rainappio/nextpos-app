@@ -1,18 +1,5 @@
 import React from 'react'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-  TouchableHighlight,
-  TextInput,
-  RefreshControl,
-  AsyncStorage,
-  ActivityIndicator
-} from 'react-native'
+import { Text, View, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import StaffRow from './StaffRow'
 import styles from '../styles'
@@ -21,9 +8,7 @@ export const StaffListScreen = ({
   isLoading,
   haveError,
   clientusers,
-  navigation,
-  getProduct,
-  dispatch
+  navigation
 }) => {
   if (isLoading) {
     return (

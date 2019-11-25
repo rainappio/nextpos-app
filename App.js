@@ -18,11 +18,10 @@ import { Icon, Ionicons } from '@expo/vector-icons'
 import { doLoggedIn } from './actions'
 import AppNavigator from './navigation/AppNavigator'
 import styles from './styles'
-import * as Localization from "expo-localization";
-import i18n from 'i18n-js';
-import globalEn from "./locales/en"
-import globalZh from "./locales/zh"
-
+import * as Localization from 'expo-localization'
+import i18n from 'i18n-js'
+import globalEn from './locales/en'
+import globalZh from './locales/zh'
 
 const store = createStore(
   rootReducer,
@@ -47,16 +46,16 @@ restoreAuth(store.dispatch)
 
 export default class App extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       isLoadingComplete: false,
       locale: Localization.locale
     }
 
-    i18n.fallbacks = true;
-    i18n.locale = Localization.locale;
-    i18n.translations = { en: {...globalEn}, zh: {...globalZh} };
+    i18n.fallbacks = true
+    i18n.locale = Localization.locale
+    i18n.translations = { en: { ...globalEn }, zh: { ...globalZh } }
   }
 
   /**
@@ -70,23 +69,23 @@ export default class App extends React.Component {
    * react-i18next (another implementation)
    * @param locale
    */
-  localize = (locale) => {
+  localize = locale => {
     const en = { ...globalEn, ...locale.en }
     const zh = { ...globalZh, ...locale.zh }
 
-    i18n.translations = { en, zh };
+    i18n.translations = { en, zh }
   }
 
   changeLanguage = () => {
-    let locale = this.state.locale === 'zh-TW' ? 'en-TW' : 'zh-TW';
-    console.log(`Change to ${locale}`);
+    let locale = this.state.locale === 'zh-TW' ? 'en-TW' : 'zh-TW'
+    console.log(`Change to ${locale}`)
 
-    this.setState({ locale });
-  };
+    this.setState({ locale })
+  }
 
   t = (scope, options) => {
-    return i18n.t(scope, { locale: this.state.locale, ...options });
-  };
+    return i18n.t(scope, { locale: this.state.locale, ...options })
+  }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -102,12 +101,14 @@ export default class App extends React.Component {
         <Provider store={store}>
           <View style={styles.mainContainer}>
             {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-            <AppNavigator screenProps={{
-              t: this.t,
-              locale: this.state.locale,
-              localize: this.localize,
-              changeLanguage: this.changeLanguage,
-            }}/>
+            <AppNavigator
+              screenProps={{
+                t: this.t,
+                locale: this.state.locale,
+                localize: this.localize,
+                changeLanguage: this.changeLanguage
+              }}
+            />
           </View>
         </Provider>
       )

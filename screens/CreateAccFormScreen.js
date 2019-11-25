@@ -1,19 +1,8 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput,
-  Button
-} from 'react-native'
+import { Image, Text, TouchableOpacity, View } from 'react-native'
 import { PropTypes } from 'prop-types'
-import { isRequired, isEmail, isvalidPassword } from '../validators'
+import { isEmail, isvalidPassword } from '../validators'
 import validate from '../validate'
 import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
@@ -26,7 +15,7 @@ class CreateAccFormScreen extends React.Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.props.screenProps.localize({
       en: {
@@ -40,7 +29,7 @@ class CreateAccFormScreen extends React.Component {
 
   render() {
     const { handleSubmit, submitting } = this.props
-    const {t} = this.props.screenProps
+    const { t } = this.props.screenProps
     return (
       <View style={styles.container}>
         <DismissKeyboard>
@@ -101,7 +90,9 @@ class CreateAccFormScreen extends React.Component {
               <TouchableOpacity onPress={handleSubmit}>
                 <Text style={styles.gsText}>{t('signUp')}</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('Intro')}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Intro')}
+              >
                 <Text style={styles.gsText}>{t('cancel')}</Text>
               </TouchableOpacity>
             </View>

@@ -1,13 +1,6 @@
 import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  ScrollView
-} from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
+import { Text, View, TouchableOpacity, ScrollView } from 'react-native'
 import DropDown from '../components/DropDown'
 import RenderRadioBtn from '../components/RadioItem'
 import RenderStepper from '../components/RenderStepper'
@@ -136,7 +129,7 @@ class OrderForm extends Component {
             </View>
 
             <View style={styles.paddBottom_20}>
-              <Text>LoreumIpsum</Text>
+              <Text>Visited Frequency</Text>
               <View style={[styles.flex_dir_row]}>
                 <View style={[styles.half_width]}>
                   {visitedFrequenciesI.map((visitedFreq, ix) => (

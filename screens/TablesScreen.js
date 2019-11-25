@@ -31,12 +31,12 @@ import {
   getfetchOrderInflights,
   get_time_diff,
   clearOrder,
-  clearProduct
+  clearProduct,
+  getOrder
 } from '../actions'
 import styles from '../styles'
 
 let tblsArr = []
-let uniqueFloorNames = []
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -44,7 +44,7 @@ class TablesScreen extends React.Component {
   }
 
   state = {
-    refreshing: false,    
+    refreshing: false
   }
 
   constructor(props) {
@@ -122,16 +122,17 @@ class TablesScreen extends React.Component {
         headers: {
           Authorization: 'Bearer ' + tokenObj.access_token
         },
-        body: formData // this get Network Err
+        body: formData
       })
         .then(response => response.json())
         .then(res => {
           if (res.hasOwnProperty('orderId')) {
             this.props.navigation.navigate('Tables')
             this.props.getfetchOrderInflights()
-            AsyncStorage.removeItem('orderInfo');
-            //this.props.clearOrder(orderId)
-            this.setState({ refreshing: true })
+            this.props.clearOrder(res.orderId)
+            this.setState({
+              refreshing: true
+            })
           } else {
             alert(res.message === undefined ? 'pls try again' : res.message)
           }
@@ -165,7 +166,8 @@ class TablesScreen extends React.Component {
             this.props.navigation.navigate('Tables')
             this.props.getfetchOrderInflights()
             this.props.getTableLayouts()
-            AsyncStorage.removeItem('orderInfo')
+            //AsyncStorage.removeItem('orderInfo')
+            this.props.clearOrder(id)
           } else {
             alert('pls try again')
           }
@@ -215,12 +217,6 @@ class TablesScreen extends React.Component {
       return array.filter(obj => !lookup.has(obj[key]) && lookup.add(obj[key]))
     }
     var tblLayouts = removeDuplicates(tblsArr, 'tableLayoutId')
-
-    function convertDateForRealDevices(date) {
-      var arr = date.split(/[- :]/)
-      date = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5])
-      return date
-    }
 
     if (isLoading) {
       return (
@@ -330,48 +326,42 @@ class TablesScreen extends React.Component {
               />
             </View>
 
-            {
-            	tblLayouts.map((tblLayout, ix) => 
-      
-                <View
-                  style={styles.mgrbtn40}
-                  key={tblLayout.tableLayoutId + ix}
-                  >
-                  <Text
-                    style={[
-                      styles.orange_bg,
-                      styles.whiteColor,
-                      styles.paddBottom_10,
-                      styles.paddingTopBtn8,
-                      styles.centerText,
-                      styles.mgrbtn20,
-                      styles.textBig
-                    ]}
-                  >
-                    {tblLayout.tableLayout}
-                  </Text>
+            {tblLayouts.map((tblLayout, ix) => (
+              <View style={styles.mgrbtn40} key={tblLayout.tableLayoutId + ix}>
+                <Text
+                  style={[
+                    styles.orange_bg,
+                    styles.whiteColor,
+                    styles.paddBottom_10,
+                    styles.paddingTopBtn8,
+                    styles.centerText,
+                    styles.mgrbtn20,
+                    styles.textBig
+                  ]}
+                >
+                  {tblLayout.tableLayout}
+                </Text>
 
-                  {                  	
-                  	ordersInflight[tblLayout.tableLayoutId] !== undefined &&
-                       <FlatList
-                          data={ordersInflight[tblLayout.tableLayoutId]}
-                          renderItem={({ item }) => {
-                            return (
-                              <OrderItem
-                                order={item}
-                                navigation={navigation}
-                                handleOrderSubmit={this.handleOrderSubmit}
-                                handleDelete={this.handleDelete}
-                                key={item.orderId}
-                              />
-                            )
-                          }}
-                          keyExtractor={(item, ix) => item.orderId}
+                {ordersInflight[tblLayout.tableLayoutId] !== undefined && (
+                  <FlatList
+                    data={ordersInflight[tblLayout.tableLayoutId]}
+                    renderItem={({ item }) => {
+                      return (
+                        <OrderItem
+                          order={item}
+                          navigation={navigation}
+                          handleOrderSubmit={this.handleOrderSubmit}
+                          handleDelete={this.handleDelete}
+                          key={item.orderId}
+                          tableId={tblLayout.tableLayoutId}
                         />
-                  }
-                </View>
-            	)
-          	}
+                      )
+                    }}
+                    keyExtractor={(item, ix) => item.orderId}
+                  />
+                )}
+              </View>
+            ))}
           </View>
         </DismissKeyboard>
       </ScrollView>
@@ -394,7 +384,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
   getTableLayouts: () => dispatch(getTableLayouts()),
   getShiftStatus: () => dispatch(getShiftStatus()),
-  //clearOrder: () => dispatch(clearOrder(props.navigation.state.params.orderId)),
+  clearOrder: () => dispatch(clearOrder()),
   clearProduct: () => dispatch(clearProduct())
 })
 export default connect(

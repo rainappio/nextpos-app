@@ -1,16 +1,4 @@
 import React from 'react'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput,
-  AsyncStorage
-} from 'react-native'
 import { connect } from 'react-redux'
 import { getClientUsrs } from '../actions'
 import StaffListScreen from './StaffListScreen'

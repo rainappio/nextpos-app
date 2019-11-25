@@ -1,38 +1,18 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-  TouchableHighlight,
-  TextInput,
-  RefreshControl,
-  AsyncStorage,
-  ActivityIndicator,
-  TouchableOpacity,
-  SafeAreaView,
-  FlatList
-} from 'react-native'
+import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-import Icon from 'react-native-vector-icons/Ionicons'
-import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import {
-  Accordion,
-  List,
-  SwipeListView,
-  SwipeRow,
-  SwipeAction
-} from '@ant-design/react-native'
-import { readableDateFormat } from '../actions'
+import { readableDateFormat, clearOrder } from '../actions'
 import BackBtn from '../components/BackBtn'
+import AddBtn from '../components/AddBtn'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 
 class OrdersSummaryRow extends React.Component {
+  handleCancel = () => {
+    this.props.clearOrder()
+    this.props.navigation.navigate('Tables')
+  }
+
   render() {
     const {
       products = [],
@@ -82,7 +62,11 @@ class OrdersSummaryRow extends React.Component {
                       styles.orange_color
                     ]}
                   >
-                    {order.tableInfo.tableName}
+                    {this.props.navigation.state.params.tableName ===
+                      undefined ||
+                    this.props.navigation.state.params.tableName == 0
+                      ? order.tableInfo.tableName
+                      : this.props.navigation.state.params.tableName}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -101,9 +85,11 @@ class OrdersSummaryRow extends React.Component {
                   >
                     <Text style={[styles.textBig, styles.orange_color]}>
                       &nbsp;
-                      {order.demographicData.male +
-                        order.demographicData.female +
-                        order.demographicData.kid}
+                      {!this.props.navigation.state.params.customerCount
+                        ? order.demographicData.male +
+                          order.demographicData.female +
+                          order.demographicData.kid
+                        : this.props.navigation.state.params.customerCount}
                     </Text>
                   </FontAwesomeIcon>
                 </View>
@@ -136,9 +122,7 @@ class OrdersSummaryRow extends React.Component {
           ]}
         >
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <TouchableOpacity
-            //onPress={() => this.props.navigation.navigate('Orders')}
-            >
+            <TouchableOpacity>
               <Text style={[styles.paddingTopBtn8, styles.whiteColor]}>
                 Product
               </Text>
@@ -146,25 +130,19 @@ class OrdersSummaryRow extends React.Component {
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <TouchableOpacity
-            //onPress={() => this.props.navigation.navigate('Orders')}
-            >
+            <TouchableOpacity>
               <Text style={[styles.whiteColor]}>&nbsp;&nbsp;QTY</Text>
             </TouchableOpacity>
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('OrdersSummary')}
-            >
+            <TouchableOpacity>
               <Text style={styles.whiteColor}>U/P</Text>
             </TouchableOpacity>
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('OrdersSummary')}
-            >
+            <TouchableOpacity>
               <Text style={styles.whiteColor}>Subtotal</Text>
             </TouchableOpacity>
           </View>
@@ -172,6 +150,20 @@ class OrdersSummaryRow extends React.Component {
 
         <View style={[styles.container]}>
           <Text style={styles.textBold}>{order.orderId}</Text>
+          {
+            // this.props.navigation.state.params.orderState === 'OPEN' &&
+            <AddBtn
+              onPress={() =>
+                this.props.navigation.navigate('OrderFormII', {
+                  tableId: this.props.navigation.state.params.tableId,
+                  orderId: order.orderId,
+                  onSubmit: this.props.navigation.state.params.onSubmit,
+                  handleDelete: this.props.navigation.state.params.handleDelete
+                })
+              }
+            />
+          }
+
           {order.lineItems.map(lineItem => (
             <View key={lineItem.lineItemId}>
               <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
@@ -259,7 +251,9 @@ class OrdersSummaryRow extends React.Component {
               }}
             >
               <TouchableOpacity
-                onPress={() => this.props.onSubmit(order.orderId)}
+                onPress={() =>
+                  this.props.navigation.state.params.onSubmit(order.orderId)
+                }
                 //onPress={this.props.handleSubmit}
               >
                 <Text style={[styles.signInText, styles.whiteColor]}>
@@ -280,7 +274,9 @@ class OrdersSummaryRow extends React.Component {
               }}
             >
               <TouchableOpacity
-                onPress={() => this.props.onSubmit(order.orderId)}
+                onPress={() =>
+                  this.props.navigation.state.params.onSubmit(order.orderId)
+                }
                 //onPress={this.props.handleSubmit}
               >
                 <Text style={[styles.signInText, styles.whiteColor]}>
@@ -301,7 +297,9 @@ class OrdersSummaryRow extends React.Component {
               }}
             >
               <TouchableOpacity
-                onPress={() => this.props.onSubmit(order.orderId)}
+                onPress={() =>
+                  this.props.navigation.state.params.onSubmit(order.orderId)
+                }
                 //onPress={this.props.handleSubmit}
               >
                 <Text style={[styles.signInText, styles.whiteColor]}>
@@ -320,11 +318,7 @@ class OrdersSummaryRow extends React.Component {
               marginTop: 8
             }}
           >
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.goBack()
-              }}
-            >
+            <TouchableOpacity onPress={() => this.handleCancel()}>
               <Text style={styles.signInText}>Cancel</Text>
             </TouchableOpacity>
           </View>
@@ -340,8 +334,7 @@ class OrdersSummaryRow extends React.Component {
           >
             <TouchableOpacity
               onPress={() => {
-                //this.props.navigation.goBack()
-                this.props.handleDelete(order.orderId)
+                this.props.navigation.state.params.handleDelete(order.orderId)
               }}
             >
               <Text style={styles.signInText}>Delete</Text>
@@ -353,4 +346,11 @@ class OrdersSummaryRow extends React.Component {
   }
 }
 
-export default OrdersSummaryRow
+const mapDispatchToProps = (dispatch, props) => ({
+  clearOrder: () => dispatch(clearOrder(props.order.orderId))
+})
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(OrdersSummaryRow)

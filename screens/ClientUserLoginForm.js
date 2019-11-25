@@ -1,25 +1,14 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput,
-  AsyncStorage
-} from 'react-native'
+import { Image, Text, View, AsyncStorage } from 'react-native'
 import { encode as btoa } from 'base-64'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import InputText from "../components/InputText";
-import {isRequired} from "../validators";
-import {api} from '../constants/Backend'
+import InputText from '../components/InputText'
+import { isRequired } from '../validators'
+import { api } from '../constants/Backend'
 
 class ClientUserLoginForm extends React.Component {
   static navigationOptions = {

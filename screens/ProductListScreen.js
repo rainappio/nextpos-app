@@ -1,19 +1,5 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-  TouchableHighlight,
-  TextInput,
-  RefreshControl,
-  AsyncStorage,
-  ActivityIndicator
-} from 'react-native'
+import { Text, View, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import ProductRow from './ProductRow'
 import styles from '../styles'

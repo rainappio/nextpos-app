@@ -1,10 +1,17 @@
-import React, {Component} from 'react'
-import {ActivityIndicator, View} from 'react-native'
-import {connect} from 'react-redux'
+import React, { Component } from 'react'
+import { ActivityIndicator, View } from 'react-native'
+import { connect } from 'react-redux'
 import ProductFormScreen from './ProductFormScreen'
-import {clearProduct, getLables, getProduct, getProductOptions, getProducts, getWorkingAreas} from '../actions'
+import {
+  clearProduct,
+  getLables,
+  getProduct,
+  getProductOptions,
+  getProducts,
+  getWorkingAreas
+} from '../actions'
 import styles from '../styles'
-import {api, makeFetchRequest} from "../constants/Backend";
+import { api, makeFetchRequest } from '../constants/Backend'
 
 class ProductEdit extends Component {
   static navigationOptions = {
@@ -35,7 +42,7 @@ class ProductEdit extends Component {
   handleUpdate = values => {
     let prdId = this.props.navigation.state.params.productId
 
-    makeFetchRequest((token) => {
+    makeFetchRequest(token => {
       fetch(api.product.update(prdId), {
         method: 'POST',
         withCredentials: true,
@@ -59,11 +66,11 @@ class ProductEdit extends Component {
               refreshing: true
             })
             this.props.getProducts() !== undefined &&
-            this.props.getProducts().then(() => {
-              this.setState({
-                refreshing: false
+              this.props.getProducts().then(() => {
+                this.setState({
+                  refreshing: false
+                })
               })
-            })
           } else {
             alert('pls try again')
           }
@@ -81,7 +88,7 @@ class ProductEdit extends Component {
   handleDelete = () => {
     let productId = this.props.navigation.state.params.productId
 
-    makeFetchRequest((token) => {
+    makeFetchRequest(token => {
       fetch(api.product.delete(productId), {
         method: 'DELETE',
         withCredentials: true,
@@ -173,7 +180,8 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(clearProduct(props.navigation.state.params.productId)),
   getProducts: () => dispatch(getProducts()),
   getWorkingAreas: () => dispatch(getWorkingAreas()),
-  getProductOptions: () => dispatch(getProductOptions(props.navigation.state.params.labelId)),
+  getProductOptions: () =>
+    dispatch(getProductOptions(props.navigation.state.params.labelId)),
   getProduct: () =>
     dispatch(getProduct(props.navigation.state.params.productId))
 })

@@ -9,29 +9,36 @@ export default class RenderStepper extends React.Component {
       input: { onBlur, onChange, onFocus, value },
       customValue,
       optionName,
-      startPt,
-      meta: { error, toched, valid },
+      meta: { error, touched, valid },
       ...rest
     } = this.props
 
     return (
-      <View style={styles.flex_dir_row}>
-        <View style={{ width: '60%' }}>
-          <Text>{optionName}</Text>
-        </View>
+      <View>
+        <View style={styles.flex_dir_row}>
+          <View style={{ width: '60%' }}>
+            <Text>{optionName}</Text>
+          </View>
 
-        <View style={{ width: '40%' }}>
-          <Stepper
-            key={1}
-            clear
-            error
-            onChange={onChange}
-            max={10}
-            min={!startPt ? 0 : startPt}
-            readOnly={false}
-            defaultValue={!startPt ? 0 : startPt}
-            styles={{ backgroundColor: 'pink' }}
-          />
+          <View style={{ width: '40%' }}>
+            <Stepper
+              key={1}
+              clear
+              error
+              onChange={onChange}
+              max={10}
+              min={0}
+              readOnly={false}
+              defaultValue={0}
+            />
+          </View>
+        </View>
+        <View style={{ width: '100%' }}>
+          {!valid && touched && (
+            <Text style={styles.rootError}>
+              Please choose at least 1 item to create order
+            </Text>
+          )}
         </View>
       </View>
     )

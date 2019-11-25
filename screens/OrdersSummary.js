@@ -1,38 +1,9 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-  TouchableHighlight,
-  TextInput,
-  RefreshControl,
-  AsyncStorage,
-  ActivityIndicator,
-  TouchableOpacity,
-  SafeAreaView,
-  FlatList
-} from 'react-native'
+import { View } from 'react-native'
 import { connect } from 'react-redux'
-import Icon from 'react-native-vector-icons/Ionicons'
-import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import {
-  Accordion,
-  List,
-  SwipeListView,
-  SwipeRow,
-  SwipeAction
-} from '@ant-design/react-native'
-import BackBtn from '../components/BackBtn'
-import AddBtn from '../components/AddBtn'
-import RenderCheckboxGroup from '../components/CheckBoxGroup'
-import { getProducts, getLables, getOrder } from '../actions'
+import { getOrder } from '../actions'
 import OrdersSummaryRowOverView from './OrdersSummaryRowOverView'
-import styles from '../styles'
 
 class OrdersSummary extends React.Component {
   componentDidMount() {
@@ -59,8 +30,6 @@ class OrdersSummary extends React.Component {
 
   render() {
     const {
-      // products = [],
-      // labels = [],
       navigation,
       haveData,
       haveError,
@@ -79,8 +48,6 @@ class OrdersSummary extends React.Component {
             isLoading={isLoading}
             haveError={haveError}
             haveData={haveData}
-            onSubmit={this.props.navigation.state.params.handleOrderSubmit}
-            handleDelete={this.props.navigation.state.params.handleDelete}
             initialValues={initialValues}
           />
         )}
@@ -109,6 +76,5 @@ export default connect(
 )(
   reduxForm({
     form: 'ordersummaryForm'
-    //initialValues: {"name" : "shin"}
   })(OrdersSummary)
 )

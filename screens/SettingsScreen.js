@@ -11,12 +11,10 @@ import {
   TouchableHighlight,
   TextInput
 } from 'react-native'
-import { connect } from 'react-redux'
-import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
-import {default as MaterialIcon} from 'react-native-vector-icons/MaterialIcons'
+import { default as MaterialIcon } from 'react-native-vector-icons/MaterialIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 
@@ -26,7 +24,7 @@ class SettingsScreen extends React.Component {
   }
 
   render() {
-    let {t, changeLanguage} = this.props.screenProps
+    let { t, changeLanguage } = this.props.screenProps
 
     return (
       <ScrollView>
@@ -65,7 +63,9 @@ class SettingsScreen extends React.Component {
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>{t('settings.account')}</Text>
+                    <Text style={styles.centerText}>
+                      {t('settings.account')}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -90,7 +90,9 @@ class SettingsScreen extends React.Component {
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>{t('settings.stores')}</Text>
+                    <Text style={styles.centerText}>
+                      {t('settings.stores')}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -119,7 +121,9 @@ class SettingsScreen extends React.Component {
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>{t('settings.products')}</Text>
+                    <Text style={styles.centerText}>
+                      {t('settings.products')}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -173,7 +177,9 @@ class SettingsScreen extends React.Component {
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>{t('settings.workingArea')}</Text>
+                    <Text style={styles.centerText}>
+                      {t('settings.workingArea')}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -188,9 +194,7 @@ class SettingsScreen extends React.Component {
                   styles.paddBottom_30
                 ]}
               >
-                <TouchableOpacity
-                  onPress={() => changeLanguage()}
-                >
+                <TouchableOpacity onPress={() => changeLanguage()}>
                   <View>
                     <MaterialIcon
                       name="language"
@@ -198,7 +202,9 @@ class SettingsScreen extends React.Component {
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>{t('settings.language')}</Text>
+                    <Text style={styles.centerText}>
+                      {t('settings.language')}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               </View>

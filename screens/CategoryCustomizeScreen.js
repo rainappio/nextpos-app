@@ -1,26 +1,12 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput,
-  AsyncStorage
-} from 'react-native'
-import { connect } from 'react-redux'
+import { ScrollView, Text, View, TouchableHighlight } from 'react-native'
 import InputText from '../components/InputText'
-import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import RNSwitch from '../components/RNSwitch'
 import RenderRadioBtn from '../components/RadioItem'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
-import RenderRadioGroup from '../components/RadioGroup'
 import styles from '../styles'
 
 class CategoryCustomizeScreen extends React.Component {
