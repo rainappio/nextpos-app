@@ -11,7 +11,8 @@ import {
   getWorkingAreas
 } from '../actions'
 import styles from '../styles'
-import { api, makeFetchRequest } from '../constants/Backend'
+import {api, errorAlert, makeFetchRequest, successMessage} from '../constants/Backend'
+import {NavigationEvents} from 'react-navigation'
 
 class CategoryCustomize extends React.Component {
   static navigationOptions = {
@@ -26,13 +27,12 @@ class CategoryCustomize extends React.Component {
     this.props.getProductOptions()
     this.props.getWorkingAreas()
     this.props.getLabel()
-  }
+}
 
   handleSubmit = values => {
     const labelId = this.props.navigation.state.params.labelId
 
     makeFetchRequest(token => {
-      console.log(token)
       fetch(api.productLabel.getById(labelId), {
         method: 'POST',
         withCredentials: true,
@@ -44,8 +44,9 @@ class CategoryCustomize extends React.Component {
         body: JSON.stringify(values)
       })
         .then(response => {
-          console.log(response)
           if (response.status === 200) {
+            successMessage('Saved')
+
             this.props.clearLabel()
             this.props.getLables()
             this.props.navigation.navigate('ProductsOverview')
@@ -59,7 +60,7 @@ class CategoryCustomize extends React.Component {
                 })
               })
           } else {
-            alert('pls try again')
+            errorAlert(response)
           }
         })
         .catch(error => {
@@ -106,16 +107,25 @@ class CategoryCustomize extends React.Component {
       )
     }
     return (
-      <CategoryCustomizeScreen
-        onSubmit={this.handleSubmit}
-        navigation={navigation}
-        refreshing={refreshing}
-        labelName={navigation.state.params.labelName}
-        initialValues={label}
-        prodctoptions={prodctoptions}
-        workingareas={workingareas}
-        onCancel={this.handleEditCancel}
-      />
+      <View>
+        <NavigationEvents
+          onWillFocus={() => {
+            console.log('React to navigation event: get the latest product options list')
+            this.props.getProductOptions()
+          }}
+        />
+        <CategoryCustomizeScreen
+          onSubmit={this.handleSubmit}
+          navigation={navigation}
+          refreshing={refreshing}
+          labelName={navigation.state.params.labelName}
+          initialValues={label}
+          prodctoptions={prodctoptions}
+          workingareas={workingareas}
+          onCancel={this.handleEditCancel}
+          screenProps={this.props.screenProps}
+        />
+      </View>
     )
   }
 }

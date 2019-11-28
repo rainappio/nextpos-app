@@ -26,7 +26,11 @@ const en = {
     save: 'Save',
     cancel: 'Cancel',
     delete: 'Delete',
-    dismiss: 'Dismiss'
+    dismiss: 'Dismiss',
+    confirmMessageTitle: 'Confirm Action',
+    confirmMessage: 'Are you sure?',
+    yes: 'Yes',
+    no: 'No'
   },
   bar: 'Bar {{someValue}}'
 }

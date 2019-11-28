@@ -152,6 +152,7 @@ class ProductEdit extends Component {
           refreshing={refreshing}
           workingareas={workingareas}
           prodctoptions={prodctoptions}
+          screenProps={this.props.screenProps}
         />
       )
     } else {

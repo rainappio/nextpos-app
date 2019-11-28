@@ -14,6 +14,24 @@ class CategoryCustomizeScreen extends React.Component {
     header: null
   }
 
+  componentDidMount() {
+
+    this.props.screenProps.localize({
+      en: {
+        categoryTitle: 'Customize Category',
+        options: 'Options',
+        applyToProducts: 'Apply to Products',
+        workingArea: 'Working Area'
+      },
+      zh: {
+        categoryTitle: '修改產品分類',
+        options: '產品選項',
+        applyToProducts: '套用設定到產品',
+        workingArea: '工作區'
+      }
+    })
+  }
+
   render() {
     const {
       labels,
@@ -22,6 +40,8 @@ class CategoryCustomizeScreen extends React.Component {
       handleSubmit,
       onCancel
     } = this.props
+
+    const { t } = this.props.screenProps
 
     return (
       // scroll bar in the center issue: https://github.com/facebook/react-native/issues/26610
@@ -36,7 +56,7 @@ class CategoryCustomizeScreen extends React.Component {
               styles.textBold
             ]}
           >
-            Customize Category
+            {t('categoryTitle')}
           </Text>
 
           <View>
@@ -55,7 +75,7 @@ class CategoryCustomizeScreen extends React.Component {
                 styles.minustopMargin10
               ]}
             >
-              <Text style={styles.textBold}>Option</Text>
+              <Text style={styles.textBold}>{t('options')}</Text>
               <AddBtn
                 onPress={() =>
                   this.props.navigation.navigate('Option', {
@@ -69,6 +89,7 @@ class CategoryCustomizeScreen extends React.Component {
               name="productOptionIds"
               component={RenderCheckboxGroup}
               customarr={prodctoptions}
+              navigation={this.props.navigation}
             />
 
             <View
@@ -80,7 +101,7 @@ class CategoryCustomizeScreen extends React.Component {
               ]}
             >
               <View>
-                <Text style={styles.textBold}>Apply To Product</Text>
+                <Text style={styles.textBold}>{t('applyToProducts')}</Text>
               </View>
               <View style={[styles.onesixthWidth]}>
                 <Field
@@ -93,7 +114,7 @@ class CategoryCustomizeScreen extends React.Component {
 
             <View>
               <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
-                <Text style={styles.textBold}>Working Area</Text>
+                <Text style={styles.textBold}>{t('workingArea')}</Text>
               </View>
               {workingareas !== undefined &&
                 workingareas.map(workarea => (
@@ -122,7 +143,7 @@ class CategoryCustomizeScreen extends React.Component {
               ]}
             >
               <TouchableHighlight onPress={handleSubmit}>
-                <Text style={styles.gsText}>Save</Text>
+                <Text style={styles.gsText}>{t('action.save')}</Text>
               </TouchableHighlight>
             </View>
 
@@ -138,7 +159,7 @@ class CategoryCustomizeScreen extends React.Component {
               ]}
             >
               <TouchableHighlight onPress={() => onCancel()}>
-                <Text style={styles.signInText}>Cancel</Text>
+                <Text style={styles.signInText}>{t('action.cancel')}</Text>
               </TouchableHighlight>
             </View>
           </View>

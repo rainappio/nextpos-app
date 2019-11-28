@@ -53,7 +53,6 @@ export const getProductOption = id => {
     })
   }
 }
-getProductOption()
 
 function handleErrors (response) {
   if (!response.ok) {

@@ -1,42 +1,26 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AsyncStorage } from 'react-native'
 import OptionFormScreen from './OptionFormScreen'
-import { getClientUsr, getClientUsrs, getProductOptions } from '../actions'
+import {api, errorAlert, makeFetchRequest} from "../constants/Backend";
 
 class Option extends React.Component {
   static navigationOptions = {
     header: null
   }
 
-  state = {
-    refreshing: false
-  }
-
-  componentDidMount() {
-    this.props.getProductOptions()
-  }
-
   handleSubmit = values => {
-    values.optionType === true
+    values.multipleChoice === true
       ? (values.optionType = 'MULTIPLE_CHOICE')
       : (values.optionType = 'ONE_CHOICE')
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      fetch('http://35.234.63.193/productoptions', {
+
+    makeFetchRequest(token => {
+      fetch(api.productOption.new, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-client-id': tokenObj.clientId,
-          Authorization: 'Bearer ' + tokenObj.access_token
+          Authorization: `Bearer ${token.access_token}`
         },
         body: JSON.stringify(values)
       })
@@ -45,18 +29,8 @@ class Option extends React.Component {
             this.props.navigation.navigate(
               this.props.navigation.state.params.customRoute
             )
-            this.setState({
-              refreshing: true
-            })
-            this.props.getProductOptions() !== undefined &&
-              this.props.getProductOptions().then(() => {
-                this.setState({
-                  refreshing: false
-                })
-              })
           } else {
-            //this.props.navigation.navigate('Login')
-            alert('pls add at least one value')
+            errorAlert(response)
           }
         })
         .catch(error => {
@@ -66,26 +40,23 @@ class Option extends React.Component {
   }
 
   render() {
-    const { navigation, clientuser } = this.props
-    const { refreshing } = this.state
+    const { navigation } = this.props
     return (
       <OptionFormScreen
         onSubmit={this.handleSubmit}
         navigation={navigation}
-        refreshing={refreshing}
+        screenProps={this.props.screenProps}
       />
     )
   }
 }
 
 const mapStateToProps = state => ({
-  clientuser: state.clientuser.data
+
 })
 
 const mapDispatchToProps = dispatch => ({
-  dispatch,
-  getClientUsr: () => dispatch(getClientUsr()),
-  getProductOptions: () => dispatch(getProductOptions())
+  dispatch
 })
 
 export default connect(
