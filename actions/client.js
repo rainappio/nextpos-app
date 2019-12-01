@@ -34,7 +34,6 @@ export const getCurrentClient = () => {
       })
         .then(res => res.json())
         .then(data => {
-          console.log(`returned client: ${data}`)
           dispatch(fetchClientSuccess(data))
           return data
         })

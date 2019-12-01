@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import StaffFormScreen from './StaffFormScreen'
 import { clearClient, getClientUsr, getClientUsrs } from '../actions'
 import styles from '../styles'
+import {errorAlert, successMessage} from "../constants/Backend";
 
 class StaffEditScreen extends Component {
   static navigationOptions = {
@@ -52,13 +53,13 @@ class StaffEditScreen extends Component {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          // 'x-client-id': tokenObj.clientId,
           Authorization: 'Bearer ' + tokenObj.access_token
         },
         body: JSON.stringify(values)
       })
         .then(response => {
           if (response.status === 200) {
+            successMessage('Saved')
             this.props.clearClient()
             this.props.navigation.navigate('StaffsOverview', {
               staffname: staffname
@@ -76,7 +77,7 @@ class StaffEditScreen extends Component {
                 })
               })
           } else {
-            alert('pls try again')
+            errorAlert(response)
           }
         })
         .catch(error => {
@@ -119,6 +120,7 @@ class StaffEditScreen extends Component {
           handleEditCancel={this.handleEditCancel}
           onSubmit={this.handleUpdate}
           refreshing={refreshing}
+          screenProps={this.props.screenProps}
         />
       )
     } else {

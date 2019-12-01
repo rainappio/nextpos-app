@@ -58,6 +58,7 @@ class LoginScreen extends React.Component {
             validate={[isRequired, isEmail]}
             placeholder={t('email')}
             autoFocus={true}
+            autoCapitalize="none"
           />
 
           <Field

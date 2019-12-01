@@ -42,6 +42,8 @@ export const api = {
     }
   },
   order: {
+    openShift: `${apiRoot}/shifts/open`,
+    closeShift: `${apiRoot}/shifts/close`,
     new: `${apiRoot}/orders`
   },
   printer: {

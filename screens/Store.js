@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { api, makeFetchRequest } from '../constants/Backend'
+import {api, makeFetchRequest, successMessage} from '../constants/Backend'
 import { getCurrentClient } from '../actions/client'
 import StoreFormScreen from './StoreFormScreen'
 import { ActivityIndicator, View } from 'react-native'
@@ -42,6 +42,7 @@ class Store extends React.Component {
         .then(response => {
           console.log(response)
           if (response.status === 200) {
+            successMessage('Saved')
             this.props.navigation.navigate('SettingScr')
           } else {
             this.setState({ errorResponse: response }, () => {

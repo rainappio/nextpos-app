@@ -51,6 +51,7 @@ class ClientUserLoginForm extends React.Component {
           .then(res => {
             if (res.error) {
               alert(res.error)
+              this.props.navigation.navigate('ClientUsers')
             } else {
               let clientusrTokenexpiration = new Date().setSeconds(
                 new Date().getSeconds() + parseInt(res.expires_in)

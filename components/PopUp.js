@@ -9,20 +9,24 @@ import {
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 export default class PopUp extends Component {
-  state = {
-    isVisible: false
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      isVisible: false,
+      t: context.t
+    }
   }
 
   toggleModal = visible => {
     this.setState({
       isVisible: visible
     })
-  }
-
-  ismodalClose = msg => {
-    console.log(msg)
   }
 
   render() {
@@ -34,6 +38,8 @@ export default class PopUp extends Component {
       navigation,
       dataArr
     } = this.props
+    const { t } = this.state
+
     return (
       <View style={{ position: 'absolute', right: 0, top: -8 }}>
         <TouchableOpacity
@@ -72,7 +78,7 @@ export default class PopUp extends Component {
                       styles.mgrbtn40
                     ]}
                   >
-                    Add
+                    {t('newItem.new')}
                   </Text>
                   <View
                     style={[styles.jc_alignIem_center, styles.flex_dir_row]}
@@ -94,7 +100,6 @@ export default class PopUp extends Component {
                         }}
                       >
                         <Text style={[styles.signInText, styles.whiteColor]}>
-                          {/*Category*/}
                           {textForRoute1}
                         </Text>
                       </TouchableOpacity>

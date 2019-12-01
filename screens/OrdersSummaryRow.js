@@ -208,7 +208,7 @@ class OrdersSummaryRow extends React.Component {
                     }
                   >
                     <Text style={{ marginRight: -24 }}>
-                      {lineItem.subTotal.amountWithoutTax} TX
+                      {lineItem.subTotal.amountWithoutTax}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -238,7 +238,7 @@ class OrdersSummaryRow extends React.Component {
                 onPress={() => this.props.navigation.navigate('OrdersSummary')}
               >
                 <Text style={{ textAlign: 'right', marginRight: -26 }}>
-                  {order.orderTotal} TX
+                  {order.orderTotal}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -325,7 +325,7 @@ class OrdersSummaryRow extends React.Component {
             }}
           >
             <TouchableOpacity onPress={() => this.handleCancel()}>
-              <Text style={styles.signInText}>Cancel</Text>
+              <Text style={styles.signInText}>Back to Tables</Text>
             </TouchableOpacity>
           </View>
 

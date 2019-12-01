@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { ScrollView, Text, View, TouchableHighlight } from 'react-native'
+import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
 import { isRequired } from '../validators'
 import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
@@ -11,13 +11,53 @@ import RenderRadioBtn from '../components/RadioItem'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
 import DeleteBtn from '../components/DeleteBtn'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class ProductFormScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      t: context.t
+    }
+  }
+
+  componentDidMount() {
+
+    this.context.localize({
+      en: {
+        newProduct: 'New Product',
+        editProduct: 'Edit Product',
+        productName: 'Product Name',
+        sku: 'SKU',
+        price: 'Price',
+        productLabel: 'Product Label',
+        description: 'Description',
+        options: 'Options',
+        workingArea: 'Working Area'
+      },
+      zh: {
+        newProduct: '新增產品',
+        editProduct: '修改產品',
+        productName: '產品名稱',
+        sku: 'SKU',
+        price: '價格',
+        productLabel: '分類',
+        description: '產品敘述',
+        options: '產品選項',
+        workingArea: '工作區'
+      }
+    })
+  }
 
   render() {
+    const { t } = this.state
+
     const {
       handleSubmit,
       labels,
@@ -45,7 +85,7 @@ class ProductFormScreen extends React.Component {
                   styles.mgrbtn80
                 ]}
               >
-                Edit Product
+                {t('editProduct')}
               </Text>
             ) : (
               <View>
@@ -57,7 +97,7 @@ class ProductFormScreen extends React.Component {
                     styles.textBold
                   ]}
                 >
-                  Add Product
+                  {t('newProduct')}
                 </Text>
               </View>
             )}
@@ -66,14 +106,14 @@ class ProductFormScreen extends React.Component {
               name="name"
               component={InputText}
               validate={isRequired}
-              placeholder="Product Name"
+              placeholder={t('productName')}
               secureTextEntry={false}
             />
 
             <Field
               name="sku"
               component={InputText}
-              placeholder="SKU"
+              placeholder={t('sku')}
               secureTextEntry={false}
             />
 
@@ -81,7 +121,7 @@ class ProductFormScreen extends React.Component {
               name="price"
               component={InputText}
               validate={isRequired}
-              placeholder="Price"
+              placeholder={t('price')}
               secureTextEntry={false}
               keyboardType={'numeric'}
             />
@@ -93,14 +133,14 @@ class ProductFormScreen extends React.Component {
               search
               selection
               fluid
-              placeholder="Product Label"
+              placeholder={t('productLabel')}
             />
 
             <View style={{ marginBottom: 20 }}>
               <Field
                 name="description"
                 component={InputText}
-                placeholder="Description"
+                placeholder={t('description')}
                 secureTextEntry={false}
               />
             </View>
@@ -114,7 +154,7 @@ class ProductFormScreen extends React.Component {
                     styles.minustopMargin10
                   ]}
                 >
-                  <Text style={styles.textBold}>Option</Text>
+                  <Text style={styles.textBold}>{t('options')}</Text>
                   <AddBtn
                     onPress={() =>
                       this.props.navigation.navigate('Option', {
@@ -136,7 +176,7 @@ class ProductFormScreen extends React.Component {
                   <View
                     style={[styles.paddingTopBtn20, styles.borderBottomLine]}
                   >
-                    <Text style={styles.textBold}>Working Area</Text>
+                    <Text style={styles.textBold}>{t('workingArea')}</Text>
                   </View>
                   {workingareas !== undefined &&
                     workingareas.map(workarea => (
@@ -159,60 +199,30 @@ class ProductFormScreen extends React.Component {
               </View>
             )}
 
-            <View
-              style={[
-                {
-                  width: '100%',
-                  backgroundColor: '#F39F86',
-                  marginBottom: 8,
-                  borderRadius: 4
-                }
-              ]}
-            >
+            <View style={[styles.bottom]}>
+              <TouchableOpacity onPress={handleSubmit}>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
+              </TouchableOpacity>
+
               {isEditForm ? (
-                <TouchableHighlight onPress={handleSubmit}>
-                  <Text style={styles.gsText}>Update</Text>
-                </TouchableHighlight>
+                <View>
+                  <TouchableOpacity onPress={handleEditCancel}>
+                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                  </TouchableOpacity>
+                  <DeleteBtn
+                    handleDeleteAction={handleDeleteProduct}
+                  />
+                </View>
               ) : (
-                <TouchableHighlight onPress={handleSubmit}>
-                  <Text style={styles.gsText}>Save</Text>
-                </TouchableHighlight>
-              )}
-            </View>
-            <View
-              style={[
-                {
-                  width: '100%',
-                  // position: 'absolute',
-                  // bottom: 0,
-                  borderRadius: 4,
-                  borderWidth: 1,
-                  borderColor: '#F39F86'
-                }
-              ]}
-            >
-              {isEditForm ? (
-                <TouchableHighlight onPress={handleEditCancel}>
-                  <Text style={styles.signInText}>Cancel</Text>
-                </TouchableHighlight>
-              ) : (
-                <TouchableHighlight
+                <TouchableOpacity
                   onPress={() =>
                     this.props.navigation.navigate('ProductsOverview')
                   }
                 >
-                  <Text style={styles.signInText}>Cancel</Text>
-                </TouchableHighlight>
+                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                </TouchableOpacity>
               )}
             </View>
-            {isEditForm ? (
-              <DeleteBtn
-                handleDeleteAction={handleDeleteProduct}
-                screenProps={this.props.screenProps}
-              />
-            ) : (
-              <View />
-            )}
           </View>
         </DismissKeyboard>
       </ScrollView>

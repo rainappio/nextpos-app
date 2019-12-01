@@ -1,11 +1,17 @@
 import React from 'react'
 import { Alert, Text, TouchableOpacity } from 'react-native'
 import styles from '../styles'
-import GenericPopUp from './GenericPopUp'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class DeleteBtn extends React.Component {
-  constructor(props) {
+  static contextType = LocaleContext
+
+  constructor(props, context) {
     super(props)
+
+    this.state = {
+      t: context.t
+    }
 
     // https://www.freecodecamp.org/news/react-changing-state-of-child-component-from-parent-8ab547436271/
     this.deletePopUpReference = React.createRef()
@@ -17,7 +23,7 @@ class DeleteBtn extends React.Component {
 
   render() {
     const { handleDeleteAction, params } = this.props
-    const { t } = this.props.screenProps
+    const { t } = this.state
 
     return (
       <TouchableOpacity
@@ -38,17 +44,8 @@ class DeleteBtn extends React.Component {
             ]
           )
         }}
-        style={[
-          {
-            width: '100%',
-            borderRadius: 4,
-            borderWidth: 1,
-            marginTop: 10,
-            borderColor: '#F39F86'
-          }
-        ]}
       >
-        <Text style={styles.signInText}>{t('action.delete')}</Text>
+        <Text style={[styles.bottomActionButton, styles.deleteButton]}>{t('action.delete')}</Text>
       </TouchableOpacity>
     )
   }

@@ -10,7 +10,8 @@ import {
   View,
   TouchableHighlight,
   RefreshControl,
-  AsyncStorage
+  AsyncStorage,
+  Keyboard
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux'
@@ -25,19 +26,38 @@ import { getClientUsrs } from '../actions'
 import EditPasswordPopUp from '../components/EditPasswordPopUp'
 import RNSwitch from '../components/RNSwitch'
 import styles from '../styles'
+import DeleteBtn from "../components/DeleteBtn";
+import {errorAlert, successMessage} from "../constants/Backend";
+import {Header} from "react-native-elements";
 
 class StaffFormScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
 
-  hangleToggle = value => {
-    this.setState({
-      switchedVal: value
+  constructor(props) {
+    super(props);
+
+    this.props.screenProps.localize({
+      en: {
+        staffTitle: 'Staff',
+        nickName: 'Nick Name',
+        username: 'User Name',
+        password: 'Password',
+        manager: 'Manager Role'
+      },
+      zh: {
+        staffTitle: '員工',
+        nickName: '匿稱',
+        username: '使用者名稱',
+        password: '密碼',
+        manager: '主管權限'
+      }
     })
   }
 
-  handleDelete = name => {
+
+  handleDelete = values => {
     AsyncStorage.getItem('token', (err, value) => {
       if (err) {
         console.log(err)
@@ -46,18 +66,18 @@ class StaffFormScreen extends React.Component {
       }
     }).then(val => {
       var tokenObj = JSON.parse(val)
-      fetch(`http://35.234.63.193/clients/me/users/${name}`, {
+      fetch(`http://35.234.63.193/clients/me/users/${values.name}`, {
         method: 'DELETE',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-client-id': tokenObj.clientId,
           Authorization: 'Bearer ' + tokenObj.access_token
         }
       })
         .then(response => {
           if (response.status === 204) {
+            successMessage('Deleted')
             this.props.navigation.navigate('StaffsOverview')
             this.setState({ refreshing: true })
             this.props.getClientUsrs() !== undefined &&
@@ -67,7 +87,7 @@ class StaffFormScreen extends React.Component {
                 })
               })
           } else {
-            alert('pls try again')
+            errorAlert(response)
           }
         })
         .catch(error => {
@@ -85,6 +105,7 @@ class StaffFormScreen extends React.Component {
       initialValues,
       onCancel
     } = this.props
+    const { t } = this.props.screenProps
 
     return (
       <DismissKeyboard>
@@ -100,7 +121,7 @@ class StaffFormScreen extends React.Component {
                   styles.mgrbtn80
                 ]}
               >
-                Staff - {this.props.navigation.state.params.staffname}
+                {t('staffTitle')} - {this.props.navigation.state.params.staffname}
               </Text>
             ) : (
               <Text
@@ -112,26 +133,26 @@ class StaffFormScreen extends React.Component {
                   styles.mgrbtn80
                 ]}
               >
-                Add Staff
+                {t('staffTitle')}
               </Text>
             )}
 
-            <View style={styles.colordelIcon}>
-              <Icon
-                name="md-trash"
-                size={25}
-                color="#f18d1a"
-                onPress={() =>
-                  this.handleDelete(
-                    this.props.navigation.state.params.staffname
-                  )
-                }
-              />
-            </View>
+            {/*<View style={styles.colordelIcon}>*/}
+            {/*  <Icon*/}
+            {/*    name="md-trash"*/}
+            {/*    size={25}*/}
+            {/*    color="#f18d1a"*/}
+            {/*    onPress={() =>*/}
+            {/*      this.handleDelete(*/}
+            {/*        this.props.navigation.state.params.staffname*/}
+            {/*      )*/}
+            {/*    }*/}
+            {/*  />*/}
+            {/*</View>*/}
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-                <Text>Nick Name</Text>
+                <Text>{t('nickName')}</Text>
               </View>
               <View style={[styles.onesixthWidth]}>
                 <Field
@@ -139,13 +160,14 @@ class StaffFormScreen extends React.Component {
                   component={InputText}
                   placeholder="Nick Name"
                   secureTextEntry={false}
+                  autoFocus={!isEditForm}
                 />
               </View>
             </View>
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-                <Text>User Name</Text>
+                <Text>{t('username')}</Text>
               </View>
               <View style={[styles.onesixthWidth]}>
                 <Field
@@ -162,13 +184,13 @@ class StaffFormScreen extends React.Component {
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-                <Text>Password</Text>
+                <Text>{t('password')}</Text>
               </View>
               <View style={[styles.onesixthWidth, styles.mgrtotop8]}>
                 <Field
                   name="password"
                   component={PinCodeInput}
-                  onChange={val => this.val}
+                  onChange={val => Keyboard.dismiss()}
                   customHeight={40}
                   editable={!isEditForm}
                 />
@@ -187,7 +209,7 @@ class StaffFormScreen extends React.Component {
             {isEditForm ? (
               <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
                 <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-                  <Text>Manager</Text>
+                  <Text>{t('manager')}</Text>
                 </View>
                 <View style={[styles.onesixthWidth, styles.mgrtotop8]}>
                   <Field name="roles" component={RNSwitch} />
@@ -196,7 +218,7 @@ class StaffFormScreen extends React.Component {
             ) : (
               <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
                 <View style={[styles.onethirdWidth, styles.mgrtotop20]}>
-                  <Text>Manager</Text>
+                  <Text>{t('manager')}</Text>
                 </View>
                 <View style={[styles.onesixthWidth, styles.mgrtotop20]}>
                   <Field name="roles" component={RNSwitch} />
@@ -205,47 +227,26 @@ class StaffFormScreen extends React.Component {
             )}
           </View>
 
-          <View
-            style={[
-              {
-                width: '100%',
-                backgroundColor: '#F39F86',
-                position: 'absolute',
-                bottom: 48,
-                borderRadius: 4
-              }
-            ]}
-          >
+          <View style={[styles.bottom]}>
+            <TouchableOpacity onPress={handleSubmit}>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
+            </TouchableOpacity>
+
             {isEditForm ? (
-              <TouchableHighlight onPress={handleSubmit}>
-                <Text style={styles.gsText}>Update</Text>
-              </TouchableHighlight>
+              <View>
+                <TouchableOpacity onPress={handleEditCancel}>
+                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                </TouchableOpacity>
+                <DeleteBtn handleDeleteAction={this.handleDelete}
+                           params={{name: this.props.navigation.state.params.staffname}}
+                />
+              </View>
             ) : (
-              <TouchableHighlight onPress={handleSubmit}>
-                <Text style={styles.gsText}>Save</Text>
-              </TouchableHighlight>
-            )}
-          </View>
-          <View
-            style={[
-              {
-                width: '100%',
-                position: 'absolute',
-                bottom: 0,
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86'
-              }
-            ]}
-          >
-            {isEditForm ? (
-              <TouchableHighlight onPress={handleEditCancel}>
-                <Text style={styles.signInText}>Cancel</Text>
-              </TouchableHighlight>
-            ) : (
-              <TouchableHighlight onPress={onCancel}>
-                <Text style={styles.signInText}>Cancel</Text>
-              </TouchableHighlight>
+              <View>
+                <TouchableOpacity onPress={onCancel}>
+                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                </TouchableOpacity>
+              </View>
             )}
           </View>
         </View>

@@ -11,7 +11,7 @@ import {
   getWorkingAreas
 } from '../actions'
 import styles from '../styles'
-import { api, makeFetchRequest } from '../constants/Backend'
+import {api, errorAlert, makeFetchRequest, successMessage} from '../constants/Backend'
 
 class ProductEdit extends Component {
   static navigationOptions = {
@@ -55,6 +55,7 @@ class ProductEdit extends Component {
       })
         .then(response => {
           if (response.status === 200) {
+            successMessage('Saved')
             this.props.clearProduct(prdId)
             this.props.navigation.navigate('ProductsOverview', {
               productId: prdId
@@ -72,7 +73,7 @@ class ProductEdit extends Component {
                 })
               })
           } else {
-            alert('pls try again')
+            errorAlert(response)
           }
         })
         .catch(error => {
@@ -100,6 +101,7 @@ class ProductEdit extends Component {
       })
         .then(response => {
           if (response.status === 204) {
+            successMessage('Deleted')
             this.props.navigation.navigate('ProductsOverview')
             this.setState({ refreshing: true })
             this.props.getProducts() !== undefined &&
@@ -109,7 +111,7 @@ class ProductEdit extends Component {
                 })
               })
           } else {
-            alert('pls try again')
+            errorAlert(response)
           }
         })
         .catch(error => {
@@ -131,7 +133,7 @@ class ProductEdit extends Component {
       workingareas
     } = this.props
     const { isEditForm, refreshing } = this.state
-    product.price != undefined ? (product.price += '') : null
+    product.price !== undefined ? (product.price += '') : null
 
     if (isLoading) {
       return (
@@ -152,7 +154,6 @@ class ProductEdit extends Component {
           refreshing={refreshing}
           workingareas={workingareas}
           prodctoptions={prodctoptions}
-          screenProps={this.props.screenProps}
         />
       )
     } else {

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
 import ProductFormScreen from './ProductFormScreen'
 import { getProducts, getLables, getLabel } from '../actions'
+import {successMessage} from "../constants/Backend";
 
 class Product extends React.Component {
   static navigationOptions = {
@@ -33,13 +34,13 @@ class Product extends React.Component {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-client-id': tokenObj.clientId,
           Authorization: 'Bearer ' + tokenObj.access_token
         },
         body: JSON.stringify(values)
       })
         .then(response => {
           if (response.status === 200) {
+            successMessage('Saved')
             this.props.navigation.navigate('ProductsOverview', {
               productId: values.productLabelId
             })
@@ -72,6 +73,7 @@ class Product extends React.Component {
         onSubmit={this.handleSubmit}
         navigation={navigation}
         refreshing={refreshing}
+        screenProps={this.props.screenProps}
       />
     )
   }

@@ -108,36 +108,15 @@ class StoreFormScreen extends React.Component {
               </View>
             </View>
 
-            <View
-              style={[
-                {
-                  width: '100%',
-                  backgroundColor: '#F39F86',
-                  marginBottom: 8,
-                  borderRadius: 4
-                }
-              ]}
-            >
+            <View style={styles.bottom}>
               <TouchableHighlight onPress={handleSubmit}>
-                <Text style={styles.gsText}>{t('action.save')}</Text>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
               </TouchableHighlight>
-            </View>
-            <View
-              style={[
-                {
-                  width: '100%',
-                  // position: 'absolute',
-                  // bottom: 0,
-                  borderRadius: 4,
-                  borderWidth: 1,
-                  borderColor: '#F39F86'
-                }
-              ]}
-            >
+
               <TouchableHighlight
                 onPress={() => this.props.navigation.goBack()}
               >
-                <Text style={styles.signInText}>{t('action.cancel')}</Text>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
               </TouchableHighlight>
             </View>
           </View>

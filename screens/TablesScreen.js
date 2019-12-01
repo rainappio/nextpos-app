@@ -35,6 +35,7 @@ import {
   getOrder
 } from '../actions'
 import styles from '../styles'
+import {api, makeFetchRequest} from "../constants/Backend";
 
 let tblsArr = []
 
@@ -55,52 +56,24 @@ class TablesScreen extends React.Component {
   }
 
   handleOpenShift = () => {
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      const formData = new FormData()
-      formData.append('grant_type', 'password')
-      formData.append('username', tokenObj.cli_userName)
-      formData.append('password', tokenObj.cli_masterPwd)
 
-      var auth =
-        'Basic ' + btoa(tokenObj.cli_userName + ':' + tokenObj.cli_masterPwd)
-
-      fetch('http://35.234.63.193/oauth/token', {
+    makeFetchRequest(token => {
+      fetch(api.order.openShift, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
-          Authorization: auth
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token.access_token}`
         },
-        body: formData
-      })
-        .then(response => response.json())
-        .then(res => {
-          AsyncStorage.setItem('orderToken', JSON.stringify(res))
-          fetch('http://35.234.63.193/shifts/open', {
-            method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-              // 'x-client-id': tokenObj.clientId,
-              Authorization: 'Bearer' + res.access_token
-            },
-            body: JSON.stringify({
-              balance: '1000'
-            })
-          }).then(response => {
-            if (response.status === 200) {
-              this.props.dispatch(getShiftStatus())
-            }
-          })
+        body: JSON.stringify({
+          balance: '1000'
         })
+      }).then(response => {
+        if (response.status === 200) {
+          this.props.dispatch(getShiftStatus())
+        }
+      })
     })
   }
 

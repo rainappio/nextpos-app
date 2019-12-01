@@ -16,10 +16,10 @@ class Login extends React.Component {
 
   handleSubmit = values => {
     const formData = new FormData()
-    formData.append('grant_type', 'password') //client_credentials
+    formData.append('grant_type', 'password')
     formData.append('password', values.masterPassword)
     formData.append('username', values.username)
-    var auth = 'Basic ' + btoa(values.username + ':' + values.masterPassword)
+    const auth = 'Basic ' + btoa(values.username + ':' + values.masterPassword)
 
     fetch('http://35.234.63.193/oauth/token', {
       method: 'POST',
@@ -35,6 +35,9 @@ class Login extends React.Component {
         if (res.error) {
           alert(res.error)
         } else {
+          AsyncStorage.removeItem('token')
+          AsyncStorage.removeItem('clientusrToken')
+
           var tokenexpiration = new Date().setSeconds(
             new Date().getSeconds() + parseInt(3599)
           )
