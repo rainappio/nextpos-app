@@ -8,6 +8,13 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 
 class OrdersSummaryRow extends React.Component {
+
+  constructor(props) {
+    super(props)
+
+    console.debug(`order id: ${this.props.order.orderId}`)
+  }
+
   handleCancel = () => {
     this.props.clearOrder()
     this.props.navigation.navigate('Tables')

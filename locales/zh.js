@@ -22,6 +22,12 @@ const zh = {
     workingArea: '工作區/出單機',
     language: '語言'
   },
+  action: {
+    save: '儲存',
+    cancel: '取消',
+    delete: '刪除',
+    dismiss: '好'
+  },
   bar: 'Bar {{someValue}}'
 }
 

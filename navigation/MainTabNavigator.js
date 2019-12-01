@@ -45,6 +45,7 @@ import OrderFormII from '../screens/OrderFormII'
 import OrderFormIII from '../screens/OrderFormIII'
 import OrderFormIV from '../screens/OrderFormIV'
 import OrdersSummary from '../screens/OrdersSummary'
+import Store from "../screens/Store";
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -81,6 +82,7 @@ Home.navigationOptions = {
 const Settings = createStackNavigator({
   SettingScr: SettingsScreen,
   Account: AccountScreen,
+  Store: Store,
   ProductList: ProductListScreen,
   ProductForm: ProductFormScreen,
   Product: Product,

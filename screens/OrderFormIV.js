@@ -90,8 +90,6 @@ class OrderFormIV extends React.Component {
                         ]}
                         key={prdOption.id}
                       >
-                        <Text style={styles.textBold}>true</Text>
-
                         <Field
                           name={prdOption.optionName}
                           component={CheckBoxGroupObjPick}

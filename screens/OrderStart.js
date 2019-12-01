@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
 import { clearProduct } from '../actions'
 import OrderForm from './OrderForm'
+import {api, makeFetchRequest} from "../constants/Backend";
 
 class OrderStart extends React.Component {
   static navigationOptions = {
@@ -29,22 +30,14 @@ class OrderStart extends React.Component {
     var kid = Person.kid !== undefined ? Person.kid : 0
     var customerCount = male + female + kid
 
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      fetch('http://35.234.63.193/orders', {
+    makeFetchRequest((token) => {
+      fetch(api.order.new, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-client-id': tokenObj.application_client_id,
-          Authorization: 'Bearer ' + tokenObj.access_token
+          Authorization: `Bearer ${token.access_token}`
         },
         body: JSON.stringify(createOrder)
       })

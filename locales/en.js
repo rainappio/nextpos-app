@@ -22,6 +22,12 @@ const en = {
     workingArea: 'Working Area & Printer',
     language: 'Language'
   },
+  action: {
+    save: 'Save',
+    cancel: 'Cancel',
+    delete: 'Delete',
+    dismiss: 'Dismiss'
+  },
   bar: 'Bar {{someValue}}'
 }
 
