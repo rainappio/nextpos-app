@@ -36,7 +36,7 @@ class Login extends React.Component {
           alert(res.error)
         } else {
           var tokenexpiration = new Date().setSeconds(
-            new Date().getSeconds() + parseInt(3599)
+            new Date().getSeconds() + parseInt(86399)
           )
           res.tokenExp = tokenexpiration
           res.cli_userName = values.username

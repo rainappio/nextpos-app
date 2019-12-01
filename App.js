@@ -22,6 +22,7 @@ import * as Localization from 'expo-localization'
 import i18n from 'i18n-js'
 import globalEn from './locales/en'
 import globalZh from './locales/zh'
+import FlashMessage from "react-native-flash-message";
 
 const store = createStore(
   rootReducer,
@@ -109,6 +110,8 @@ export default class App extends React.Component {
                 changeLanguage: this.changeLanguage
               }}
             />
+            {/*https://www.npmjs.com/package/react-native-flash-message?activeTab=readme*/}
+            <FlashMessage position="bottom" />
           </View>
         </Provider>
       )

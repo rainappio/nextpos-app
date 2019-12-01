@@ -77,7 +77,6 @@ class StoreFormScreen extends React.Component {
                 <Field
                   name="username"
                   component={InputText}
-                  validate={isRequired}
                   placeholder="User Email Address"
                   editable={false}
                 />

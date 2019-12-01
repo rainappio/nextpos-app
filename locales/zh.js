@@ -26,7 +26,11 @@ const zh = {
     save: '儲存',
     cancel: '取消',
     delete: '刪除',
-    dismiss: '好'
+    dismiss: '好',
+    confirmMessageTitle: '執行確認',
+    confirmMessage: '確定執行嗎？',
+    yes: '是',
+    no: '不是'
   },
   bar: 'Bar {{someValue}}'
 }

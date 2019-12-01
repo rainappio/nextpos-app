@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, TouchableOpacity } from 'react-native'
+import {Alert, Text, TouchableOpacity} from 'react-native'
 import styles from '../styles'
 import GenericPopUp from './GenericPopUp'
 
@@ -16,10 +16,17 @@ class DeleteBtn extends React.Component {
   }
 
   render() {
-    const { handleDeleteAction } = this.props
+    const { handleDeleteAction, params } = this.props
+    const { t } = this.props.screenProps
+
     return (
       <TouchableOpacity
-        onPress={this.showDeletePopUp}
+        onPress={() => {
+          Alert.alert(`${t('action.confirmMessageTitle')}`, `${t('action.confirmMessage')}`,
+            [{text: `${t('action.yes')}`, onPress: () => handleDeleteAction(params)},
+              {text: `${t('action.no')}`, onPress: () => console.log("Cancelled"), style: 'cancel'}
+            ])
+        }}
         style={[
           {
             width: '100%',
@@ -30,12 +37,7 @@ class DeleteBtn extends React.Component {
           }
         ]}
       >
-        <Text style={styles.signInText}>Delete</Text>
-
-        <GenericPopUp
-          handleConfirmAction={handleDeleteAction}
-          ref={this.deletePopUpReference}
-        />
+        <Text style={styles.signInText}>{t('action.delete')}</Text>
       </TouchableOpacity>
     )
   }

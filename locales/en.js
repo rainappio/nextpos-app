@@ -19,14 +19,18 @@ const en = {
     stores: 'Stores',
     products: 'Products',
     staff: 'Staff',
-    workingArea: 'Working Area & Printer',
+    workingArea: 'Printer & KDS',
     language: 'Language'
   },
   action: {
     save: 'Save',
     cancel: 'Cancel',
     delete: 'Delete',
-    dismiss: 'Dismiss'
+    dismiss: 'Dismiss',
+    confirmMessageTitle: 'Confirm Action',
+    confirmMessage: 'Are you sure?',
+    yes: 'Yes',
+    no: 'No'
   },
   bar: 'Bar {{someValue}}'
 }

@@ -16,6 +16,9 @@ import { reducer as tablelayoutReducer } from './tablelayout'
 import { reducer as shiftReducer } from './shift'
 import { reducer as ordersinflightReducer } from './ordersinflight'
 import { reducer as orderReducer } from './order'
+import { reducer as printersReducer } from './printers'
+import { reducer as printerReducer } from './printer'
+import { reducer as workingareaReducer } from './workingarea'
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -34,6 +37,9 @@ const rootReducer = combineReducers({
   tablelayout: tablelayoutReducer,
   shift: shiftReducer,
   ordersinflight: ordersinflightReducer,
-  order: orderReducer
+  order: orderReducer,
+  printers: printersReducer,
+  printer: printerReducer,
+  workingarea: workingareaReducer
 })
 export default rootReducer

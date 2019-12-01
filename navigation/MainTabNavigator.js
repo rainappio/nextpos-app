@@ -46,6 +46,12 @@ import OrderFormIII from '../screens/OrderFormIII'
 import OrderFormIV from '../screens/OrderFormIV'
 import OrdersSummary from '../screens/OrdersSummary'
 import Store from "../screens/Store";
+import OptionEdit from "../screens/OptionEdit"
+import PrinternKDS from '../screens/PrinternKDS'
+import PrinterAdd from '../screens/PrinterAdd'
+import PrinterEdit from '../screens/PrinterEdit'
+import WorkingAreaAdd from '../screens/WorkingAreaAdd'
+import WorkingAreaEdit from '../screens/WorkingAreaEdit'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -93,12 +99,18 @@ const Settings = createStackNavigator({
   StaffsOverview: StaffsOverview,
   OptionScreen: OptionFormScreen,
   Option: Option,
+  OptionEdit: OptionEdit,
   Category: Category,
   CategoryList: CategoryListScreen,
   CategoryCustomize: CategoryCustomize,
   ClientUsers: ClientUsers,
   ClientUserLoginS: ClientUserLogin,
-  LoginSuccess: LoginSuccessScreen
+  LoginSuccess: LoginSuccessScreen,
+  PrinternKDS: PrinternKDS,
+  PrinterAdd: PrinterAdd,
+  PrinterEdit: PrinterEdit,
+  WorkingAreaAdd: WorkingAreaAdd,
+  WorkingAreaEdit:WorkingAreaEdit
 })
 Settings.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.settings'),

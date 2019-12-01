@@ -25,7 +25,8 @@ class GenericPopUp extends React.Component {
   }
 
   render() {
-    const { handleConfirmAction } = this.props
+    const { handleConfirmAction, params } = this.props
+    const { t } = this.props.screenProps
 
     return (
       <View>
@@ -56,7 +57,7 @@ class GenericPopUp extends React.Component {
                       styles.mgrbtn40
                     ]}
                   >
-                    Are you sure?
+                    {t('action.confirmMessage')}
                   </Text>
 
                   <View
@@ -67,11 +68,14 @@ class GenericPopUp extends React.Component {
                       styles.paddRight20
                     ]}
                   >
-                    <TouchableHighlight onPress={() => handleConfirmAction()}>
-                      <Text style={styles.signInText}>Yes</Text>
+                    <TouchableHighlight onPress={() => {
+                      this.toggleModal(false)
+                      handleConfirmAction(params)
+                    }}>
+                      <Text style={styles.signInText}>{t('action.yes')}</Text>
                     </TouchableHighlight>
                     <TouchableHighlight onPress={() => this.toggleModal(false)}>
-                      <Text style={styles.signInText}>No</Text>
+                      <Text style={styles.signInText}>{t('action.no')}</Text>
                     </TouchableHighlight>
                   </View>
                 </View>

@@ -41,7 +41,7 @@ const InputText = ({
       onFocus={onFocus}
       secureTextEntry={secureTextEntry}
       keyboardType={keyboardType}
-      value={value}
+      value={'' + value}
       editable={editable}
       autoCapitalize={autoCapitalize}
       {...rest}
@@ -62,8 +62,7 @@ InputText.propTypes = {
   input: PropTypes.shape({
     onBlur: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
-    onFocus: PropTypes.func.isRequired,
-    value: PropTypes.string.isRequired
+    onFocus: PropTypes.func.isRequired
   }).isRequired,
   meta: PropTypes.shape({
     error: PropTypes.string,
