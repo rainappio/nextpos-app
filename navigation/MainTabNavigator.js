@@ -46,6 +46,7 @@ import OrderFormIII from '../screens/OrderFormIII'
 import OrderFormIV from '../screens/OrderFormIV'
 import OrdersSummary from '../screens/OrdersSummary'
 import Store from "../screens/Store";
+import OptionEdit from "../screens/OptionEdit";
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -93,6 +94,7 @@ const Settings = createStackNavigator({
   StaffsOverview: StaffsOverview,
   OptionScreen: OptionFormScreen,
   Option: Option,
+  OptionEdit: OptionEdit,
   Category: Category,
   CategoryList: CategoryListScreen,
   CategoryCustomize: CategoryCustomize,

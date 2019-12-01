@@ -4,6 +4,8 @@ import React from 'react'
 
 /**
  * https://stackoverflow.com/questions/42329240/react-native-onpress-being-called-automatically
+ *
+ * @deprecated
  */
 class FetchErrorPopUp extends React.Component {
   state = {

@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native'
+import {showMessage} from "react-native-flash-message";
 
 const storage = {
   clientAccessToken: 'token',
@@ -29,6 +30,15 @@ export const api = {
   productLabel: {
     getById: id => {
       return `${apiRoot}/labels/${id}`
+    }
+  },
+  productOption: {
+    new: `${apiRoot}/productoptions`,
+    update: id => {
+      return `${apiRoot}/productoptions/${id}`
+    },
+    deleteById: id => {
+      return `${apiRoot}/productoptions/${id}`
     }
   },
   order: {
@@ -81,4 +91,46 @@ export function fetchAuthenticatedRequest (fetchRequest) {
     const tokenObj = JSON.parse(accessToken)
     fetchRequest(tokenObj)
   })
+}
+
+export const successMessage = (message) => {
+
+  showMessage({
+    message: message,
+    type: "success",
+    autoHide: true
+  });
+
+}
+
+export const errorAlert = (response) => {
+
+  let errorMessage = null
+
+  response.json().then(content => {
+    console.debug(`${response.status} - ${JSON.stringify(content)}`)
+
+    switch (response.status) {
+      case 401:
+        errorMessage = "Your are not authenticated for this operation."
+        break
+      case 403:
+        errorMessage = "You are not authorized for this operation."
+        break
+      case 412:
+        errorMessage = content.message
+        break
+      default:
+        errorMessage = "Encountered an error with your request. Please consult service provider."
+    }
+
+    showMessage({
+      message: errorMessage,
+      type: "warning",
+      icon: 'auto',
+      autoHide: false
+    });
+  })
+
+
 }
