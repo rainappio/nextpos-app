@@ -26,7 +26,14 @@ export default class PopUp extends Component {
   }
 
   render() {
-  	const { toRoute1, toRoute2, textForRoute1, textForRoute2, navigation, dataArr } = this.props
+    const {
+      toRoute1,
+      toRoute2,
+      textForRoute1,
+      textForRoute2,
+      navigation,
+      dataArr
+    } = this.props
     return (
       <View style={{ position: 'absolute', right: 0, top: -8 }}>
         <TouchableOpacity
@@ -87,7 +94,7 @@ export default class PopUp extends Component {
                         }}
                       >
                         <Text style={[styles.signInText, styles.whiteColor]}>
-                          { /*Category*/ }
+                          {/*Category*/}
                           {textForRoute1}
                         </Text>
                       </TouchableOpacity>
@@ -104,8 +111,8 @@ export default class PopUp extends Component {
                     >
                       <TouchableOpacity
                         onPress={() => {
-                          navigation.navigate(toRoute2,{
-                          	dataArr: dataArr
+                          navigation.navigate(toRoute2, {
+                            dataArr: dataArr
                           })
                           this.toggleModal(false)
                         }}

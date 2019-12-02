@@ -1,5 +1,5 @@
 import React from 'react'
-import {Alert, Text, TouchableOpacity} from 'react-native'
+import { Alert, Text, TouchableOpacity } from 'react-native'
 import styles from '../styles'
 import GenericPopUp from './GenericPopUp'
 
@@ -22,10 +22,21 @@ class DeleteBtn extends React.Component {
     return (
       <TouchableOpacity
         onPress={() => {
-          Alert.alert(`${t('action.confirmMessageTitle')}`, `${t('action.confirmMessage')}`,
-            [{text: `${t('action.yes')}`, onPress: () => handleDeleteAction(params)},
-              {text: `${t('action.no')}`, onPress: () => console.log("Cancelled"), style: 'cancel'}
-            ])
+          Alert.alert(
+            `${t('action.confirmMessageTitle')}`,
+            `${t('action.confirmMessage')}`,
+            [
+              {
+                text: `${t('action.yes')}`,
+                onPress: () => handleDeleteAction(params)
+              },
+              {
+                text: `${t('action.no')}`,
+                onPress: () => console.log('Cancelled'),
+                style: 'cancel'
+              }
+            ]
+          )
         }}
         style={[
           {

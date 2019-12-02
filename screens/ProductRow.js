@@ -106,13 +106,13 @@ class ProductRow extends React.Component {
             >
               Product List
             </Text>
-            <PopUp 
-            	navigation={navigation}
-            	toRoute1={'Category'}
-            	toRoute2={'Product'}
-            	textForRoute1={'Category'}
-            	textForRoute2={'Product'}
-            	/>
+            <PopUp
+              navigation={navigation}
+              toRoute1={'Category'}
+              toRoute2={'Product'}
+              textForRoute1={'Category'}
+              textForRoute2={'Product'}
+            />
 
             <Accordion
               onChange={this.onChange}

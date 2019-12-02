@@ -1,8 +1,8 @@
+import { api, makeFetchRequest } from '../constants/Backend'
 export const FETCH_PRINTER = 'FETCH_PRINTER'
 export const FETCH_PRINTER_SUCCESS = 'FETCH_PRINTER_SUCCESS'
 export const FETCH_PRINTER_FAILURE = 'FETCH_PRINTER_FAILURE'
 export const CLEAR_PRINTER = 'CLEAR_PRINTER'
-import { api, makeFetchRequest } from '../constants/Backend'
 
 export const fetchPrinter = id => ({
   type: FETCH_PRINTER,
@@ -25,9 +25,9 @@ export const clearPrinter = () => ({
 
 export const getPrinter = id => {
   return dispatch => {
-  dispatch(fetchPrinter(id))
-  makeFetchRequest(token => {
-    fetch(api.printer.getPrinter + `${id}`,{
+    dispatch(fetchPrinter(id))
+    makeFetchRequest(token => {
+      fetch(api.printer.getPrinter + `${id}`, {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -36,13 +36,13 @@ export const getPrinter = id => {
           'x-client-id': token.application_client_id,
           Authorization: 'Bearer ' + token.access_token
         }
-    	})
-    	.then(res => res.json())
-    	.then(data => {
-        dispatch(fetchPrinterSuccess(data))
-        return data
       })
-      .catch(error => dispatch(fetchPrinterFailure(error)))
+        .then(res => res.json())
+        .then(data => {
+          dispatch(fetchPrinterSuccess(data))
+          return data
+        })
+        .catch(error => dispatch(fetchPrinterFailure(error)))
     })
   }
 }

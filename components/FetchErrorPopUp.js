@@ -1,4 +1,12 @@
-import {Modal, ScrollView, Text, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native'
+import {
+  Modal,
+  ScrollView,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View
+} from 'react-native'
 import styles from '../styles'
 import React from 'react'
 
@@ -19,21 +27,22 @@ class FetchErrorPopUp extends React.Component {
   }
 
   render() {
-    const {errorResponse} = this.props
-    const {t} = this.props.screenProps
+    const { errorResponse } = this.props
+    const { t } = this.props.screenProps
 
     let errorMessage = ''
 
     if (errorResponse != null) {
       switch (errorResponse.status) {
         case 401:
-          errorMessage = "Your are not authenticated for this operation."
+          errorMessage = 'Your are not authenticated for this operation.'
           break
         case 403:
-          errorMessage = "You are not authorized for this operation."
+          errorMessage = 'You are not authorized for this operation.'
           break
         default:
-          errorMessage = "Encountered an error with your request. Please consult service provider."
+          errorMessage =
+            'Encountered an error with your request. Please consult service provider.'
       }
     }
 
@@ -78,7 +87,9 @@ class FetchErrorPopUp extends React.Component {
                     ]}
                   >
                     <TouchableHighlight onPress={() => this.toggleModal(false)}>
-                      <Text style={styles.signInText}>{t('action.dismiss')}</Text>
+                      <Text style={styles.signInText}>
+                        {t('action.dismiss')}
+                      </Text>
                     </TouchableHighlight>
                   </View>
                 </View>

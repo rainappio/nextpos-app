@@ -45,8 +45,8 @@ import OrderFormII from '../screens/OrderFormII'
 import OrderFormIII from '../screens/OrderFormIII'
 import OrderFormIV from '../screens/OrderFormIV'
 import OrdersSummary from '../screens/OrdersSummary'
-import Store from "../screens/Store";
-import OptionEdit from "../screens/OptionEdit"
+import Store from '../screens/Store'
+import OptionEdit from '../screens/OptionEdit'
 import PrinternKDS from '../screens/PrinternKDS'
 import PrinterAdd from '../screens/PrinterAdd'
 import PrinterEdit from '../screens/PrinterEdit'
@@ -110,7 +110,7 @@ const Settings = createStackNavigator({
   PrinterAdd: PrinterAdd,
   PrinterEdit: PrinterEdit,
   WorkingAreaAdd: WorkingAreaAdd,
-  WorkingAreaEdit:WorkingAreaEdit
+  WorkingAreaEdit: WorkingAreaEdit
 })
 Settings.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.settings'),

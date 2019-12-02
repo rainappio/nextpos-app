@@ -39,7 +39,7 @@ export const reducer = (state = initialState, action) => {
         error: action.error,
         data: []
       }
-      
+
     default:
       return state
   }

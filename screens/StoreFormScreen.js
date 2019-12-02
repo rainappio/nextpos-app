@@ -1,12 +1,12 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
-import {ScrollView, Text, TouchableHighlight, View} from 'react-native'
-import {isRequired} from '../validators'
+import { Field, reduxForm } from 'redux-form'
+import { ScrollView, Text, TouchableHighlight, View } from 'react-native'
+import { isRequired } from '../validators'
 import InputText from '../components/InputText'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
-import RNSwitch from "../components/RNSwitch";
+import RNSwitch from '../components/RNSwitch'
 
 class StoreFormScreen extends React.Component {
   static navigationOptions = {
@@ -14,7 +14,7 @@ class StoreFormScreen extends React.Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.props.screenProps.localize({
       en: {
@@ -32,16 +32,15 @@ class StoreFormScreen extends React.Component {
     })
   }
 
-
   render() {
-    const {t} = this.props.screenProps
-    const {handleSubmit} = this.props
+    const { t } = this.props.screenProps
+    const { handleSubmit } = this.props
 
     return (
-      <ScrollView scrollIndicatorInsets={{right: 1}}>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View style={styles.container_nocenterCnt}>
-            <BackBtn/>
+            <BackBtn />
             <View>
               <Text
                 style={[
@@ -136,8 +135,7 @@ class StoreFormScreen extends React.Component {
               ]}
             >
               <TouchableHighlight
-                onPress={() => this.props.navigation.goBack()
-                }
+                onPress={() => this.props.navigation.goBack()}
               >
                 <Text style={styles.signInText}>{t('action.cancel')}</Text>
               </TouchableHighlight>

@@ -3,7 +3,7 @@ import { Text, View } from 'react-native'
 import { Checkbox } from '@ant-design/react-native'
 import PropTypes from 'prop-types'
 import styles from '../styles'
-import AntDesignIcon from "react-native-vector-icons/AntDesign";
+import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 
 export default class RenderCheckboxGroup extends React.Component {
   render() {

@@ -206,8 +206,9 @@ class ProductFormScreen extends React.Component {
               )}
             </View>
             {isEditForm ? (
-              <DeleteBtn handleDeleteAction={handleDeleteProduct}
-                         screenProps={this.props.screenProps}
+              <DeleteBtn
+                handleDeleteAction={handleDeleteProduct}
+                screenProps={this.props.screenProps}
               />
             ) : (
               <View />

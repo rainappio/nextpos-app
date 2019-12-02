@@ -1,11 +1,11 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {api, makeFetchRequest} from "../constants/Backend";
-import {getCurrentClient} from "../actions/client";
-import StoreFormScreen from "./StoreFormScreen";
-import {ActivityIndicator, View} from "react-native";
-import styles from "../styles";
-import FetchErrorPopUp from "../components/FetchErrorPopUp";
+import { connect } from 'react-redux'
+import { api, makeFetchRequest } from '../constants/Backend'
+import { getCurrentClient } from '../actions/client'
+import StoreFormScreen from './StoreFormScreen'
+import { ActivityIndicator, View } from 'react-native'
+import styles from '../styles'
+import FetchErrorPopUp from '../components/FetchErrorPopUp'
 
 class Store extends React.Component {
   static navigationOptions = {
@@ -23,13 +23,12 @@ class Store extends React.Component {
     this.popupReference = React.createRef()
   }
 
-
   componentDidMount() {
     this.props.getCurrentClient()
   }
 
   handleSubmit = values => {
-    makeFetchRequest((token) => {
+    makeFetchRequest(token => {
       fetch(api.client.update, {
         method: 'POST',
         withCredentials: true,
@@ -69,7 +68,11 @@ class Store extends React.Component {
     } else if (haveData) {
       return (
         <View>
-          <FetchErrorPopUp errorResponse={errorResponse} ref={this.popupReference} screenProps={this.props.screenProps}/>
+          <FetchErrorPopUp
+            errorResponse={errorResponse}
+            ref={this.popupReference}
+            screenProps={this.props.screenProps}
+          />
           <StoreFormScreen
             initialValues={client}
             onSubmit={this.handleSubmit}

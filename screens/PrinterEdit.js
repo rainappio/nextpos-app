@@ -5,7 +5,12 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import PrinterForm from '../screens/PrinterForm'
-import { getWorkingAreas, getPrinters, getPrinter, clearPrinter } from '../actions'
+import {
+  getWorkingAreas,
+  getPrinters,
+  getPrinter,
+  clearPrinter
+} from '../actions'
 import { api, makeFetchRequest } from '../constants/Backend'
 import styles from '../styles'
 
@@ -14,68 +19,72 @@ class PrinterEdit extends React.Component {
     header: null
   }
 
-	componentDidMount(){
-		this.props.getPrinter(this.props.navigation.state.params.customId == undefined ? this.props.navigation.state.params.id : this.props.navigation.state.params.customId)
-	}
+  componentDidMount() {
+    this.props.getPrinter(
+      this.props.navigation.state.params.customId == undefined
+        ? this.props.navigation.state.params.id
+        : this.props.navigation.state.params.customId
+    )
+  }
 
-  handleUpdate = (values) => {
-  	var id = values.id;
-  	makeFetchRequest(token => {
-    fetch(api.printer.update + `${id}`,{
-          method: 'POST',
-          withCredentials: true,
-          credentials: 'include',
-          headers: {
-          	'Content-Type': 'application/json',
-          	'x-client-id': token.application_client_id,
-            Authorization: 'Bearer ' + token.access_token
-          },
-          body: JSON.stringify(values)
-    	})
-    	.then(response => {
-    		if(response.status === 200){    			
-					this.props.navigation.navigate('PrinternKDS')
-					this.props.getWorkingAreas()
-					this.props.getPrinters()
-    		}else{
-    			alert('pls try again')
-    		}
+  handleUpdate = values => {
+    var id = values.id
+    makeFetchRequest(token => {
+      fetch(api.printer.update + `${id}`, {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-client-id': token.application_client_id,
+          Authorization: 'Bearer ' + token.access_token
+        },
+        body: JSON.stringify(values)
       })
-      .catch(error =>{ 
-      	console.error(error)
-      })
+        .then(response => {
+          if (response.status === 200) {
+            this.props.navigation.navigate('PrinternKDS')
+            this.props.getWorkingAreas()
+            this.props.getPrinters()
+          } else {
+            alert('pls try again')
+          }
+        })
+        .catch(error => {
+          console.error(error)
+        })
     })
   }
 
-  handleEditCancel = () => {  	
-  	this.props.clearPrinter()
-  	this.props.getWorkingAreas()
-  	this.props.navigation.navigate('PrinternKDS')
+  handleEditCancel = () => {
+    this.props.clearPrinter()
+    this.props.getWorkingAreas()
+    this.props.navigation.navigate('PrinternKDS')
   }
 
   render() {
-  	const { navigation, printer, loading, haveData, haveError } = this.props
-		const { t } = this.props.screenProps
+    const { navigation, printer, loading, haveData, haveError } = this.props
+    const { t } = this.props.screenProps
 
-  	if(loading){
-		  return (
-      	<View style={[styles.container]}>
-        	<ActivityIndicator size="large" color="#ccc" />
-      	</View>
-    	)
-  	} else if (haveError) {
-    	return (
-      	<View style={[styles.container]}>
-        	<Text>Err during loading, check internet conn...</Text>
-      	</View>
-    	)
-  	} else if (Object.keys(printer).length == 0) {
-    	return (
-      	<View style={[styles.container]}>
-        	<Text>no printer ...</Text>
-      	</View>
-    	)
-  	}
+    if (loading) {
+      return (
+        <View style={[styles.container]}>
+          <ActivityIndicator size="large" color="#ccc" />
+        </View>
+      )
+    } else if (haveError) {
+      return (
+        <View style={[styles.container]}>
+          <Text>Err during loading, check internet conn...</Text>
+        </View>
+      )
+    } else if (Object.keys(printer).length == 0) {
+      return (
+        <View style={[styles.container]}>
+          <Text>no printer ...</Text>
+        </View>
+      )
+    }
     return (
       <ScrollView>
         <DismissKeyboard>
@@ -89,14 +98,14 @@ class PrinterEdit extends React.Component {
                 styles.textBold
               ]}
             >
-             {t('settings.workingArea')}
+              {t('settings.workingArea')}
             </Text>
             <PrinterForm
-							navigation={navigation}
-							onSubmit={this.handleUpdate}
-							isEdit={true}
-							initialValues={printer}
-							handleEditCancel={this.handleEditCancel}
+              navigation={navigation}
+              onSubmit={this.handleUpdate}
+              isEdit={true}
+              initialValues={printer}
+              handleEditCancel={this.handleEditCancel}
             />
           </View>
         </DismissKeyboard>
@@ -106,18 +115,21 @@ class PrinterEdit extends React.Component {
 }
 
 const mapStateToProps = state => ({
-	css: state,
-	printer: state.printer.data,
-	haveData: state.printer.haveData,
-	haveError: state.printer.haveError,
-	loading: state.printer.loading
+  css: state,
+  printer: state.printer.data,
+  haveData: state.printer.haveData,
+  haveError: state.printer.haveError,
+  loading: state.printer.loading
 })
 const mapDispatchToProps = (dispatch, props) => ({
-	dispatch,
-	getPrinters: () => dispatch(getPrinters()),
-	getWorkingAreas: () => dispatch(getWorkingAreas()),
-	getPrinter: (id) => dispatch(getPrinter(id)),
-	clearPrinter: () => dispatch(clearPrinter())
+  dispatch,
+  getPrinters: () => dispatch(getPrinters()),
+  getWorkingAreas: () => dispatch(getWorkingAreas()),
+  getPrinter: id => dispatch(getPrinter(id)),
+  clearPrinter: () => dispatch(clearPrinter())
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PrinterEdit)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PrinterEdit)

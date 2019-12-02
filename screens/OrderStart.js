@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
 import { clearProduct } from '../actions'
 import OrderForm from './OrderForm'
-import {api, makeFetchRequest} from "../constants/Backend";
+import { api, makeFetchRequest } from '../constants/Backend'
 
 class OrderStart extends React.Component {
   static navigationOptions = {
@@ -30,7 +30,7 @@ class OrderStart extends React.Component {
     var kid = Person.kid !== undefined ? Person.kid : 0
     var customerCount = male + female + kid
 
-    makeFetchRequest((token) => {
+    makeFetchRequest(token => {
       fetch(api.order.new, {
         method: 'POST',
         withCredentials: true,

@@ -24,11 +24,12 @@ class PrinterForm extends React.Component {
 
     return (
       <DismissKeyboard>
-        <KeyboardAvoidingView          
-          behavior="padding"
-          enabled
-        >
-        	<Text style={[styles.textBig, styles.centerText, styles.paddingTopBtn20]}>{isEdit ? 'Edit Printers' : 'Add Printers'}</Text>
+        <KeyboardAvoidingView behavior="padding" enabled>
+          <Text
+            style={[styles.textBig, styles.centerText, styles.paddingTopBtn20]}
+          >
+            {isEdit ? 'Edit Printers' : 'Add Printers'}
+          </Text>
           <Field
             name="name"
             component={InputText}
@@ -48,10 +49,10 @@ class PrinterForm extends React.Component {
           />
 
           <Field
-						name="serviceType"
-						component={InputText}
-						validate={isRequired}
-						placeholder="Service Type"
+            name="serviceType"
+            component={InputText}
+            validate={isRequired}
+            placeholder="Service Type"
           />
 
           <View
@@ -65,8 +66,8 @@ class PrinterForm extends React.Component {
             ]}
           >
             <TouchableOpacity onPress={handleSubmit}>
-             {/* <Text style={styles.gsText}>{t('login')}</Text>*/}
-              <Text style={styles.gsText}>{ isEdit? 'Update' : 'Save' }</Text>
+              {/* <Text style={styles.gsText}>{t('login')}</Text>*/}
+              <Text style={styles.gsText}>{isEdit ? 'Update' : 'Save'}</Text>
             </TouchableOpacity>
           </View>
 
@@ -76,24 +77,24 @@ class PrinterForm extends React.Component {
                 width: '100%',
                 marginTop: 8,
                 borderRadius: 4,
-              	borderWidth: 1,
-              	borderColor: '#F39F86'
+                borderWidth: 1,
+                borderColor: '#F39F86'
               }
             ]}
           >
             {isEdit ? (
-                <TouchableOpacity onPress={handleEditCancel}>
-                  <Text style={styles.signInText}>Cancel</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate('PrinternKDS')
-                  }
-                >
-                  <Text style={[styles.signInText, styles.orange_color]}>Cancel</Text>
-                </TouchableOpacity>
-              )}
+              <TouchableOpacity onPress={handleEditCancel}>
+                <Text style={styles.signInText}>Cancel</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('PrinternKDS')}
+              >
+                <Text style={[styles.signInText, styles.orange_color]}>
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </KeyboardAvoidingView>
       </DismissKeyboard>

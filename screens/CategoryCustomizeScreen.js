@@ -15,7 +15,6 @@ class CategoryCustomizeScreen extends React.Component {
   }
 
   componentDidMount() {
-
     this.props.screenProps.localize({
       en: {
         categoryTitle: 'Customize Category',

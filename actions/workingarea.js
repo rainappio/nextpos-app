@@ -1,8 +1,8 @@
+import { api, makeFetchRequest } from '../constants/Backend'
 export const FETCH_WORKING_AREA = 'FETCH_WORKING_AREA'
 export const FETCH_WORKING_AREA_SUCCESS = 'FETCH_WORKING_AREA_SUCCESS'
 export const FETCH_WORKING_AREA_FAILURE = 'FETCH_WORKING_AREA_FAILURE'
 export const CLEAR_WORKING_AREA = 'CLEAR_WORKING_AREA'
-import { api, makeFetchRequest } from '../constants/Backend'
 
 export const fetchWorkingArea = id => ({
   type: FETCH_WORKING_AREA,
@@ -25,24 +25,24 @@ export const clearWorkingArea = () => ({
 
 export const getWorkingArea = id => {
   return dispatch => {
-  dispatch(fetchWorkingArea(id))
-  makeFetchRequest(token => {
-    fetch(api.workingarea.getworkingArea + `${id}`,{
-          method: 'GET',
-          withCredentials: true,
-          credentials: 'include',
-          headers: {
-          	'Content-Type': 'application/json',
-          	'x-client-id': token.application_client_id,
-            Authorization: 'Bearer ' + token.access_token
-          }
-    	})
-    	.then(res => res.json())
-    	.then(data => {
-        dispatch(fetchWorkingAreaSuccess(data))
-        return data
+    dispatch(fetchWorkingArea(id))
+    makeFetchRequest(token => {
+      fetch(api.workingarea.getworkingArea + `${id}`, {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-client-id': token.application_client_id,
+          Authorization: 'Bearer ' + token.access_token
+        }
       })
-      .catch(error => dispatch(fetchWorkingAreaFailure(error)))
+        .then(res => res.json())
+        .then(data => {
+          dispatch(fetchWorkingAreaSuccess(data))
+          return data
+        })
+        .catch(error => dispatch(fetchWorkingAreaFailure(error)))
     })
   }
 }

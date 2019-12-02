@@ -22,7 +22,7 @@ import * as Localization from 'expo-localization'
 import i18n from 'i18n-js'
 import globalEn from './locales/en'
 import globalZh from './locales/zh'
-import FlashMessage from "react-native-flash-message";
+import FlashMessage from 'react-native-flash-message'
 
 const store = createStore(
   rootReducer,

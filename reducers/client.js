@@ -14,8 +14,7 @@ const initialState = {
 }
 
 export const reducer = (state = initialState, action) => {
-
-  //console.debug(`state: ${JSON.stringify(state)}, action: ${JSON.stringify(action)}`)
+  // console.debug(`state: ${JSON.stringify(state)}, action: ${JSON.stringify(action)}`)
 
   switch (action.type) {
     case FETCH_CLIENT:

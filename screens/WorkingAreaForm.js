@@ -23,11 +23,12 @@ class WorkingAreaForm extends React.Component {
     //const { t } = this.props.screenProps
     return (
       <DismissKeyboard>
-        <KeyboardAvoidingView          
-          behavior="padding"
-          enabled
-        >
-        	<Text style={[styles.textBig, styles.centerText, styles.paddingTopBtn20]}>{isEdit ? 'Edit Woking Areas' : 'Add Working Areas'}</Text>
+        <KeyboardAvoidingView behavior="padding" enabled>
+          <Text
+            style={[styles.textBig, styles.centerText, styles.paddingTopBtn20]}
+          >
+            {isEdit ? 'Edit Woking Areas' : 'Add Working Areas'}
+          </Text>
           <Field
             name="name"
             component={InputText}
@@ -48,11 +49,15 @@ class WorkingAreaForm extends React.Component {
           />
 
           <Field
-          	name="printerIds"
-						component={RenderCheckboxGroup}
-						customarr={isEdit ? this.props.dataArr : this.props.navigation.state.params.dataArr}
-						navigation={navigation}
-						customRoute={'PrinterEdit'}
+            name="printerIds"
+            component={RenderCheckboxGroup}
+            customarr={
+              isEdit
+                ? this.props.dataArr
+                : this.props.navigation.state.params.dataArr
+            }
+            navigation={navigation}
+            customRoute={'PrinterEdit'}
           />
 
           <View
@@ -66,8 +71,8 @@ class WorkingAreaForm extends React.Component {
             ]}
           >
             <TouchableHighlight onPress={handleSubmit}>
-             {/* <Text style={styles.gsText}>{t('login')}</Text>*/}
-              <Text style={styles.gsText}>{ isEdit? 'Update' : 'Save' }</Text>
+              {/* <Text style={styles.gsText}>{t('login')}</Text>*/}
+              <Text style={styles.gsText}>{isEdit ? 'Update' : 'Save'}</Text>
             </TouchableHighlight>
           </View>
 
@@ -77,24 +82,24 @@ class WorkingAreaForm extends React.Component {
                 width: '100%',
                 marginTop: 8,
                 borderRadius: 4,
-              	borderWidth: 1,
-              	borderColor: '#F39F86'
+                borderWidth: 1,
+                borderColor: '#F39F86'
               }
             ]}
           >
-           {isEdit ? (
-                <TouchableHighlight onPress={handleEditCancel}>
-                  <Text style={styles.signInText}>Cancel</Text>
-                </TouchableHighlight>
-              ) : (
-                <TouchableHighlight
-                  onPress={() =>
-                    this.props.navigation.navigate('PrinternKDS')
-                  }
-                >
-                  <Text style={[styles.signInText, styles.orange_color]}>Cancel</Text>
-                </TouchableHighlight>
-              )}
+            {isEdit ? (
+              <TouchableHighlight onPress={handleEditCancel}>
+                <Text style={styles.signInText}>Cancel</Text>
+              </TouchableHighlight>
+            ) : (
+              <TouchableHighlight
+                onPress={() => this.props.navigation.navigate('PrinternKDS')}
+              >
+                <Text style={[styles.signInText, styles.orange_color]}>
+                  Cancel
+                </Text>
+              </TouchableHighlight>
+            )}
           </View>
         </KeyboardAvoidingView>
       </DismissKeyboard>
