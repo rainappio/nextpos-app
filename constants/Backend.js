@@ -1,5 +1,5 @@
 import { AsyncStorage } from 'react-native'
-import {showMessage} from "react-native-flash-message";
+import { showMessage } from 'react-native-flash-message'
 
 const storage = {
   clientAccessToken: 'token',
@@ -43,14 +43,26 @@ export const api = {
   },
   order: {
     new: `${apiRoot}/orders`
+  },
+  printer: {
+    create: `${apiRoot}/printers`,
+    getPrinters: `${apiRoot}/printers`,
+    getPrinter: `${apiRoot}/printers/`,
+    update: `${apiRoot}/printers/`
+  },
+  workingarea: {
+    create: `${apiRoot}/workingareas`,
+    getWorkingAreas: `${apiRoot}/workingareas`,
+    getworkingArea: `${apiRoot}/workingareas/`,
+    update: `${apiRoot}/workingareas/`
   }
 }
 
-export const makeFetchRequest = async (fetchRequest) => {
-
+export const makeFetchRequest = async fetchRequest => {
   try {
     let useClientUserToken = true
-    let token = await AsyncStorage.getItem(storage.clientUserAccessToken)
+    // let token = await AsyncStorage.getItem(storage.clientUserAccessToken)
+    let token = await AsyncStorage.getItem(storage.clientAccessToken)
 
     if (token == null) {
       useClientUserToken = false
@@ -93,18 +105,15 @@ export function fetchAuthenticatedRequest (fetchRequest) {
   })
 }
 
-export const successMessage = (message) => {
-
+export const successMessage = message => {
   showMessage({
     message: message,
-    type: "success",
+    type: 'success',
     autoHide: true
-  });
-
+  })
 }
 
-export const errorAlert = (response) => {
-
+export const errorAlert = response => {
   let errorMessage = null
 
   response.json().then(content => {
@@ -112,25 +121,24 @@ export const errorAlert = (response) => {
 
     switch (response.status) {
       case 401:
-        errorMessage = "Your are not authenticated for this operation."
+        errorMessage = 'Your are not authenticated for this operation.'
         break
       case 403:
-        errorMessage = "You are not authorized for this operation."
+        errorMessage = 'You are not authorized for this operation.'
         break
       case 412:
         errorMessage = content.message
         break
       default:
-        errorMessage = "Encountered an error with your request. Please consult service provider."
+        errorMessage =
+          'Encountered an error with your request. Please consult service provider.'
     }
 
     showMessage({
       message: errorMessage,
-      type: "warning",
+      type: 'warning',
       icon: 'auto',
       autoHide: false
-    });
+    })
   })
-
-
 }

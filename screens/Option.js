@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import OptionFormScreen from './OptionFormScreen'
-import {api, errorAlert, makeFetchRequest} from "../constants/Backend";
+import { api, errorAlert, makeFetchRequest } from '../constants/Backend'
 
 class Option extends React.Component {
   static navigationOptions = {
@@ -51,9 +51,7 @@ class Option extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-
-})
+const mapStateToProps = state => ({})
 
 const mapDispatchToProps = dispatch => ({
   dispatch

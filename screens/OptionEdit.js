@@ -1,10 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {ActivityIndicator, AsyncStorage, View, Alert} from 'react-native'
+import { ActivityIndicator, AsyncStorage, View, Alert } from 'react-native'
 import OptionFormScreen from './OptionFormScreen'
 import { getProductOption } from '../actions'
-import styles from "../styles";
-import {api, errorAlert, makeFetchRequest, successMessage} from "../constants/Backend";
+import styles from '../styles'
+import {
+  api,
+  errorAlert,
+  makeFetchRequest,
+  successMessage
+} from '../constants/Backend'
 
 class Option extends React.Component {
   static navigationOptions = {
@@ -12,7 +17,7 @@ class Option extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getProductOption(this.props.navigation.state.params.productOptionId)
+    this.props.getProductOption(this.props.navigation.state.params.customId)
   }
 
   handleSubmit = values => {
@@ -34,7 +39,9 @@ class Option extends React.Component {
         .then(response => {
           if (response.status === 200) {
             successMessage('Saved')
-            console.debug(`route to this screen: ${this.props.navigation.state.params.customRoute}`)
+            console.debug(
+              `route to this screen: ${this.props.navigation.state.params.customRoute}`
+            )
 
             this.props.navigation.navigate(
               this.props.navigation.state.params.customRoute
@@ -49,7 +56,7 @@ class Option extends React.Component {
     })
   }
 
-  handleDeleteOption = (values) => {
+  handleDeleteOption = values => {
     makeFetchRequest(token => {
       fetch(api.productOption.deleteById(values.id), {
         method: 'DELETE',
@@ -86,13 +93,12 @@ class Option extends React.Component {
       multipleChoice: productOption.multipleChoice,
       required: productOption.required,
       optionValues: productOption.optionValues
-
     }
 
     if (loading) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc"/>
+          <ActivityIndicator size="large" color="#ccc" />
         </View>
       )
     } else if (haveData) {
@@ -121,7 +127,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getProductOption: (id) => dispatch(getProductOption(id))
+  getProductOption: id => dispatch(getProductOption(id))
 })
 
 export default connect(

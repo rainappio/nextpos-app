@@ -11,8 +11,13 @@ import {
   getWorkingAreas
 } from '../actions'
 import styles from '../styles'
-import {api, errorAlert, makeFetchRequest, successMessage} from '../constants/Backend'
-import {NavigationEvents} from 'react-navigation'
+import {
+  api,
+  errorAlert,
+  makeFetchRequest,
+  successMessage
+} from '../constants/Backend'
+import { NavigationEvents } from 'react-navigation'
 
 class CategoryCustomize extends React.Component {
   static navigationOptions = {
@@ -27,7 +32,7 @@ class CategoryCustomize extends React.Component {
     this.props.getProductOptions()
     this.props.getWorkingAreas()
     this.props.getLabel()
-}
+  }
 
   handleSubmit = values => {
     const labelId = this.props.navigation.state.params.labelId
@@ -110,7 +115,9 @@ class CategoryCustomize extends React.Component {
       <View>
         <NavigationEvents
           onWillFocus={() => {
-            console.log('React to navigation event: get the latest product options list')
+            console.log(
+              'React to navigation event: get the latest product options list'
+            )
             this.props.getProductOptions()
           }}
         />

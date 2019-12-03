@@ -68,10 +68,12 @@ class GenericPopUp extends React.Component {
                       styles.paddRight20
                     ]}
                   >
-                    <TouchableHighlight onPress={() => {
-                      this.toggleModal(false)
-                      handleConfirmAction(params)
-                    }}>
+                    <TouchableHighlight
+                      onPress={() => {
+                        this.toggleModal(false)
+                        handleConfirmAction(params)
+                      }}
+                    >
                       <Text style={styles.signInText}>{t('action.yes')}</Text>
                     </TouchableHighlight>
                     <TouchableHighlight onPress={() => this.toggleModal(false)}>

@@ -15,7 +15,6 @@ class CategoryCustomizeScreen extends React.Component {
   }
 
   componentDidMount() {
-
     this.props.screenProps.localize({
       en: {
         categoryTitle: 'Customize Category',
@@ -90,6 +89,7 @@ class CategoryCustomizeScreen extends React.Component {
               component={RenderCheckboxGroup}
               customarr={prodctoptions}
               navigation={this.props.navigation}
+              customRoute={'OptionEdit'}
             />
 
             <View

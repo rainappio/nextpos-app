@@ -1,12 +1,11 @@
 import {
-  FETCH_CLIENT,
-  FETCH_CLIENT_SUCCESS,
-  FETCH_CLIENT_FAILURE,
-  CLEAR_CLIENT
+  FETCH_PRINTERS,
+  FETCH_PRINTERS_SUCCESS,
+  FETCH_PRINTERS_FAILURE
 } from '../actions'
 
 const initialState = {
-  data: {},
+  data: [],
   loading: false,
   haveData: false,
   haveError: false,
@@ -14,10 +13,8 @@ const initialState = {
 }
 
 export const reducer = (state = initialState, action) => {
-  // console.debug(`state: ${JSON.stringify(state)}, action: ${JSON.stringify(action)}`)
-
   switch (action.type) {
-    case FETCH_CLIENT:
+    case FETCH_PRINTERS:
       return {
         ...state,
         loading: true,
@@ -25,7 +22,7 @@ export const reducer = (state = initialState, action) => {
         haveError: false,
         error: null
       }
-    case FETCH_CLIENT_SUCCESS:
+    case FETCH_PRINTERS_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -33,17 +30,16 @@ export const reducer = (state = initialState, action) => {
         haveError: false,
         data: action.data
       }
-    case FETCH_CLIENT_FAILURE:
+    case FETCH_PRINTERS_FAILURE:
       return {
         ...state,
         loading: false,
         haveData: false,
         haveError: true,
         error: action.error,
-        data: {}
+        data: []
       }
-    case CLEAR_CLIENT:
-      return initialState
+
     default:
       return state
   }
