@@ -1,8 +1,8 @@
 import {
-  FETCH_CLIENT,
-  FETCH_CLIENT_SUCCESS,
-  FETCH_CLIENT_FAILURE,
-  CLEAR_CLIENT
+  FETCH_WORKING_AREA,
+  FETCH_WORKING_AREA_SUCCESS,
+  FETCH_WORKING_AREA_FAILURE,
+  CLEAR_WORKING_AREA
 } from '../actions'
 
 const initialState = {
@@ -14,10 +14,8 @@ const initialState = {
 }
 
 export const reducer = (state = initialState, action) => {
-  // console.debug(`state: ${JSON.stringify(state)}, action: ${JSON.stringify(action)}`)
-
   switch (action.type) {
-    case FETCH_CLIENT:
+    case FETCH_WORKING_AREA:
       return {
         ...state,
         loading: true,
@@ -25,7 +23,7 @@ export const reducer = (state = initialState, action) => {
         haveError: false,
         error: null
       }
-    case FETCH_CLIENT_SUCCESS:
+    case FETCH_WORKING_AREA_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -33,7 +31,7 @@ export const reducer = (state = initialState, action) => {
         haveError: false,
         data: action.data
       }
-    case FETCH_CLIENT_FAILURE:
+    case FETCH_WORKING_AREA_FAILURE:
       return {
         ...state,
         loading: false,
@@ -42,7 +40,7 @@ export const reducer = (state = initialState, action) => {
         error: action.error,
         data: {}
       }
-    case CLEAR_CLIENT:
+    case CLEAR_WORKING_AREA:
       return initialState
     default:
       return state

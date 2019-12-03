@@ -8,7 +8,6 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 
 class OrdersSummaryRow extends React.Component {
-
   constructor(props) {
     super(props)
 

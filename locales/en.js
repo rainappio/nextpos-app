@@ -19,7 +19,7 @@ const en = {
     stores: 'Stores',
     products: 'Products',
     staff: 'Staff',
-    workingArea: 'Working Area & Printer',
+    workingArea: 'Printer & KDS',
     language: 'Language'
   },
   action: {

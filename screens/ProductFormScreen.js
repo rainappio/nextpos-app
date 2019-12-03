@@ -26,7 +26,8 @@ class ProductFormScreen extends React.Component {
       handleEditCancel,
       handleDeleteProduct,
       workingareas,
-      prodctoptions
+      prodctoptions,
+      navigation
     } = this.props
 
     return (
@@ -127,6 +128,8 @@ class ProductFormScreen extends React.Component {
                   name="productOptionIds"
                   component={RenderCheckboxGroup}
                   customarr={prodctoptions}
+                  navigation={navigation}
+                  customRoute={'OptionEdit'}
                 />
 
                 <View>
@@ -203,8 +206,9 @@ class ProductFormScreen extends React.Component {
               )}
             </View>
             {isEditForm ? (
-              <DeleteBtn handleDeleteAction={handleDeleteProduct}
-                         screenProps={this.props.screenProps}
+              <DeleteBtn
+                handleDeleteAction={handleDeleteProduct}
+                screenProps={this.props.screenProps}
               />
             ) : (
               <View />

@@ -1,4 +1,4 @@
-import {api, makeFetchRequest} from "../constants/Backend";
+import { api, makeFetchRequest } from '../constants/Backend'
 
 export const FETCH_CLIENT = 'FETCH_CLIENT'
 export const FETCH_CLIENT_SUCCESS = 'FETCH_CLIENT_SUCCESS'
@@ -22,19 +22,16 @@ export const getCurrentClient = () => {
   return dispatch => {
     dispatch(fetchClient())
 
-    makeFetchRequest((token) => {
-      return fetch(
-        api.client.get,
-        {
-          method: 'GET',
-          withCredentials: true,
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token.access_token}`
-          }
+    makeFetchRequest(token => {
+      return fetch(api.client.get, {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token.access_token}`
         }
-      )
+      })
         .then(res => res.json())
         .then(data => {
           console.log(`returned client: ${data}`)
