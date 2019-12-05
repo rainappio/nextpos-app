@@ -82,8 +82,8 @@ class PrinternKDS extends React.Component {
                 navigation={navigation}
                 toRoute1={'PrinterAdd'}
                 toRoute2={'WorkingAreaAdd'}
-                textForRoute1={'Printer'}
-                textForRoute2={'Working Area'}
+                textForRoute1={t('newItem.printer')}
+                textForRoute2={t('newItem.workingArea')}
                 dataArr={printers}
               />
             </View>

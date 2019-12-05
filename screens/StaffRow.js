@@ -2,18 +2,37 @@ import React from 'react'
 import { ScrollView, Text, View, RefreshControl } from 'react-native'
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class StaffRow extends React.Component {
   static navigationOptions = {
     header: null
   }
 
-  state = {
-    refreshing: false
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      refreshing: false,
+      t: context.t
+    }
+  }
+
+  componentDidMount = async () => {
+    this.context.localize({
+      en: {
+        staffListTitle: 'Staffs List'
+      },
+      zh: {
+        staffListTitle: '員工列表'
+      }
+    })
   }
 
   render() {
@@ -25,6 +44,8 @@ class StaffRow extends React.Component {
       haveError,
       isLoading
     } = this.props
+
+    const { t } = this.state
 
     var clientusersOnly = clientusers.filter(function(el) {
       return el.defaultUser === false
@@ -45,7 +66,7 @@ class StaffRow extends React.Component {
                 styles.textBold
               ]}
             >
-              Staffs List
+              {t('staffListTitle')}
             </Text>
             <AddBtn onPress={() => this.props.navigation.navigate('Staff')} />
 

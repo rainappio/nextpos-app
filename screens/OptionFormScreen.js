@@ -15,14 +15,24 @@ import styles from '../styles'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { isRequired } from '../validators'
 import DeleteBtn from '../components/DeleteBtn'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class OptionFormScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props);
+
+    this.state = {
+      t: context.t
+    }
+  }
 
   componentDidMount() {
-    this.props.screenProps.localize({
+    this.context.localize({
       en: {
         productOptionTitle: 'Product Option',
         optionName: 'Option Name',
@@ -45,7 +55,7 @@ class OptionFormScreen extends React.Component {
   }
 
   render() {
-    const { t } = this.props.screenProps
+    const { t } = this.state
     const { handleSubmit, handleDeleteOption, initialValues } = this.props
 
     const renderOptionValPopup = (name, index, fields) => (
@@ -165,32 +175,10 @@ class OptionFormScreen extends React.Component {
               label={t('values')}
             />
 
-            <View
-              style={[
-                {
-                  width: '100%',
-                  backgroundColor: '#F39F86',
-                  borderRadius: 4,
-                  marginBottom: 8
-                }
-              ]}
-            >
+            <View style={styles.bottom}>
               <TouchableHighlight onPress={handleSubmit}>
-                <Text style={styles.gsText}>{t('action.save')}</Text>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
               </TouchableHighlight>
-            </View>
-
-            <View
-              style={[
-                {
-                  width: '100%',
-                  bottom: 0,
-                  borderRadius: 4,
-                  borderWidth: 1,
-                  borderColor: '#F39F86'
-                }
-              ]}
-            >
               <TouchableHighlight
                 onPress={() =>
                   this.props.navigation.navigate(
@@ -198,18 +186,16 @@ class OptionFormScreen extends React.Component {
                   )
                 }
               >
-                <Text style={styles.signInText}>{t('action.cancel')}</Text>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
               </TouchableHighlight>
+              {
+                initialValues !== undefined && initialValues.id != null && (
+                  <DeleteBtn
+                    handleDeleteAction={handleDeleteOption}
+                    params={{ id: initialValues.id }}
+                  />
+                )}
             </View>
-            {initialValues !== undefined && initialValues.id != null ? (
-              <DeleteBtn
-                handleDeleteAction={handleDeleteOption}
-                params={{ id: initialValues.id }}
-                screenProps={this.props.screenProps}
-              />
-            ) : (
-              <View />
-            )}
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

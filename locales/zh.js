@@ -22,6 +22,13 @@ const zh = {
     workingArea: '工作區/出單機',
     language: '語言'
   },
+  newItem: {
+    new: '新增',
+    product: '產品',
+    category: '分類',
+    printer: '出單機',
+    workingArea: '工作區'
+  },
   action: {
     save: '儲存',
     cancel: '取消',

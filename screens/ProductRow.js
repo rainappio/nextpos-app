@@ -10,25 +10,42 @@ import BackBtn from '../components/BackBtn'
 import PopUp from '../components/PopUp'
 import { getProducts, clearLabel } from '../actions'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class ProductRow extends React.Component {
   static navigationOptions = {
     header: null
   }
 
-  constructor() {
-    super(...arguments)
+  static contextType = LocaleContext;
+
+
+  constructor(props, context) {
+    super(props, context)
+
     this.state = {
       activeSections: [],
       selectedProducts: [],
       refreshing: false,
       status: '',
       labelId: null,
-      productId: null
+      productId: null,
+      t: context.t
     }
     this.onChange = activeSections => {
       this.setState({ activeSections })
     }
+  }
+
+  componentDidMount() {
+    this.context.localize({
+      en: {
+        productListTitle: 'Product List'
+      },
+      zh: {
+        productListTitle: '產品'
+      }
+    })
   }
 
   PanelHeader = (labelName, labelId) => {
@@ -74,7 +91,8 @@ class ProductRow extends React.Component {
       isLoading,
       label
     } = this.props
-    const { selectedProducts } = this.state
+    const { t } = this.state
+
     var map = new Map(Object.entries(products))
 
     const right = [
@@ -104,14 +122,14 @@ class ProductRow extends React.Component {
                 styles.textBold
               ]}
             >
-              Product List
+              {t('productListTitle')}
             </Text>
             <PopUp
               navigation={navigation}
               toRoute1={'Category'}
               toRoute2={'Product'}
-              textForRoute1={'Category'}
-              textForRoute2={'Product'}
+              textForRoute1={t('newItem.category')}
+              textForRoute2={t('newItem.product')}
             />
 
             <Accordion

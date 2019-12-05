@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
 import StaffFormScreen from './StaffFormScreen'
 import { getClientUsr, getClientUsrs } from '../actions'
+import {errorAlert, successMessage} from "../constants/Backend";
 
 class Staff extends React.Component {
   static navigationOptions = {
@@ -46,11 +47,10 @@ class Staff extends React.Component {
         body: JSON.stringify(values)
       })
         .then(response => {
-          console.log(response) //400 bad request
           if (response.status === 200) {
+            successMessage('Saved')
             this.props.navigation.navigate(
               'StaffsOverview'
-              // ,{productId: values.productLabelId}
             )
             this.setState({
               refreshing: true
@@ -62,8 +62,7 @@ class Staff extends React.Component {
                 })
               })
           } else {
-            //this.props.navigation.navigate('Login')
-            alert('pls try again')
+            errorAlert(response)
           }
         })
         .catch(error => {
@@ -77,10 +76,12 @@ class Staff extends React.Component {
     const { refreshing } = this.state
     return (
       <StaffFormScreen
+        isEditForm={false}
         onSubmit={this.handleSubmit}
         navigation={navigation}
         refreshing={refreshing}
         onCancel={this.handleCancel}
+        screenProps={this.props.screenProps}
       />
     )
   }

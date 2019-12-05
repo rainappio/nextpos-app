@@ -6,14 +6,40 @@ import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class CategoryFormScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
 
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      t: context.t
+    }
+  }
+
+  componentDidMount() {
+    this.context.localize({
+      en: {
+        newCategoryTitle: 'New Category',
+        categoryName: 'Category Name'
+      },
+      zh: {
+        newCategoryTitle: '新增類別',
+        categoryName: '類別名稱'
+      }
+    })
+  }
+
   render() {
     const { handleSubmit } = this.props
+    const { t } = this.state
+
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
@@ -27,14 +53,14 @@ class CategoryFormScreen extends React.Component {
               styles.mgrbtn80
             ]}
           >
-            Add Categories
+            {t('newCategoryTitle')}
           </Text>
 
           <Field
             name="label"
             component={InputText}
             validate={isRequired}
-            placeholder="New Categories"
+            placeholder={t('categoryName')}
             secureTextEntry={false}
           />
 
@@ -50,7 +76,7 @@ class CategoryFormScreen extends React.Component {
             ]}
           >
             <TouchableHighlight onPress={handleSubmit}>
-              <Text style={styles.gsText}>Save</Text>
+              <Text style={styles.gsText}>{t('action.save')}</Text>
             </TouchableHighlight>
           </View>
 
@@ -69,7 +95,7 @@ class CategoryFormScreen extends React.Component {
             <TouchableHighlight
               onPress={() => this.props.navigation.navigate('ProductsOverview')}
             >
-              <Text style={styles.signInText}>Cancel</Text>
+              <Text style={styles.signInText}>{t('action.cancel')}</Text>
             </TouchableHighlight>
           </View>
         </View>

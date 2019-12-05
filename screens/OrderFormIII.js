@@ -180,67 +180,6 @@ class OrderFormIII extends React.Component {
             </View>
           </DismissKeyboard>
         </ScrollView>
-
-        <View
-          style={[styles.orange_bg, styles.flex_dir_row, styles.shoppingBar]}
-        >
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <View>
-              <Text
-                style={[
-                  styles.paddingTopBtn8,
-                  styles.textBig,
-                  styles.whiteColor
-                ]}
-              >
-                {order.hasOwnProperty('tableInfo') && order.tableInfo.tableName}
-              </Text>
-            </View>
-          </View>
-
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <View>
-              <FontAwesomeIcon
-                name="user"
-                size={30}
-                color="#fff"
-                style={[styles.centerText]}
-              >
-                <Text style={[styles.textBig, styles.whiteColor]}>
-                  &nbsp;&nbsp;
-                  {order.hasOwnProperty('demographicData') &&
-                    order.demographicData.male +
-                      order.demographicData.female +
-                      order.demographicData.kid}
-                </Text>
-              </FontAwesomeIcon>
-            </View>
-          </View>
-
-          <View style={[styles.half_width, styles.verticalMiddle]}>
-            <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate('OrdersSummary', {
-                  onSubmit: this.props.navigation.state.params.onSubmit,
-                  orderId: this.props.navigation.state.params.orderId,
-                  handleDelete: this.props.navigation.state.params.handleDelete
-                })
-              }
-            >
-              <View>
-                <FontAwesomeIcon
-                  name="shopping-cart"
-                  size={30}
-                  color="#fff"
-                  style={[styles.toRight, styles.mgrtotop8, styles.mgr_20]}
-                />
-                <Text style={styles.itemCount}>
-                  {order.hasOwnProperty('lineItems') && order.lineItems.length}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
       </View>
     )
   }

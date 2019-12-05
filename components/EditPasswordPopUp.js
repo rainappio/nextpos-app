@@ -16,6 +16,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import { getClientUsr } from '../actions'
 import styles from '../styles'
+import {successMessage} from "../constants/Backend";
 
 class EditPasswordPopUp extends Component {
   constructor(props) {
@@ -65,13 +66,11 @@ class EditPasswordPopUp extends Component {
         .then(response => response.json())
         .then(res => {
           if (res.username) {
-            //alert('Successfully updated password')
+            successMessage('Password updated')
           }
         })
         .then(() => {
-          setTimeout(() => {
-            this.toggleModal(false)
-          }, 1000)
+          this.toggleModal(false)
         })
         .catch(error => {
           console.error(error)

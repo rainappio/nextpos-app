@@ -8,14 +8,25 @@ import RNSwitch from '../components/RNSwitch'
 import RenderRadioBtn from '../components/RadioItem'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class CategoryCustomizeScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      t: context.t
+    }
+  }
+
 
   componentDidMount() {
-    this.props.screenProps.localize({
+    this.context.localize({
       en: {
         categoryTitle: 'Customize Category',
         options: 'Options',
@@ -40,7 +51,7 @@ class CategoryCustomizeScreen extends React.Component {
       onCancel
     } = this.props
 
-    const { t } = this.props.screenProps
+    const { t } = this.state
 
     return (
       // scroll bar in the center issue: https://github.com/facebook/react-native/issues/26610
@@ -103,7 +114,7 @@ class CategoryCustomizeScreen extends React.Component {
               <View>
                 <Text style={styles.textBold}>{t('applyToProducts')}</Text>
               </View>
-              <View style={[styles.onesixthWidth]}>
+              <View style={[styles.onesixthWidth, {alignItems: 'flex-end'}]}>
                 <Field
                   name="appliesToProducts"
                   component={RNSwitch}

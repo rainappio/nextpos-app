@@ -22,6 +22,13 @@ const en = {
     workingArea: 'Printer & KDS',
     language: 'Language'
   },
+  newItem: {
+    new: 'New',
+    product: 'Product',
+    category: 'Category',
+    printer: 'Printer',
+    workingArea: 'Working Area'
+  },
   action: {
     save: 'Save',
     cancel: 'Cancel',

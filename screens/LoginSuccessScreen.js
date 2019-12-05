@@ -118,13 +118,14 @@ class LoginSuccessScreen extends React.Component {
             >
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Orders')}
+                disabled={true}
               >
                 <View>
                   <Icon
                     name="md-document"
                     size={40}
                     color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.centerText, styles.margin_15, {opacity: 0.3}]}
                   />
                   <Text style={styles.centerText}>{t('menu.orders')}</Text>
                 </View>
@@ -145,13 +146,14 @@ class LoginSuccessScreen extends React.Component {
             >
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Reservation')}
+                disabled={true}
               >
                 <View>
                   <Icon
                     name="ios-calendar"
                     size={40}
                     color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.centerText, styles.margin_15, {opacity: 0.3}]}
                   />
                   <Text style={styles.centerText}>
                     {t('menu.reservations')}
@@ -172,13 +174,14 @@ class LoginSuccessScreen extends React.Component {
             >
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Reports')}
+                disabled={true}
               >
                 <View>
                   <FontAwesomeIcon
                     name="bar-chart"
                     size={40}
                     color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.centerText, styles.margin_15, {opacity: 0.3}]}
                   />
                   <Text style={styles.centerText}>{t('menu.reporting')}</Text>
                 </View>
@@ -313,7 +316,6 @@ export class HiddenMenu extends React.Component {
         >
           <TouchableOpacity
             onPress={() => {
-              changeLanguage('en-TW')
               this.props.navigation.navigate('Account')
             }}
           >

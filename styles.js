@@ -424,4 +424,34 @@ export default StyleSheet.create({
   no_mgrTop: {
     marginTop: 0
   }
+
+  ,
+  bottom: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: 10
+  },
+  bottomActionButton: {
+    width: '100%',
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#fff',
+    backgroundColor: '#F39F86',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#F39F86',
+    padding: 10,
+    marginBottom: 10
+  },
+  actionButton: {
+    backgroundColor: '#F39F86',
+    color: '#fff'
+  },
+  cancelButton: {
+    backgroundColor: '#fff',
+    color: '#F39F86'
+  },
+  deleteButton: {
+    backgroundColor: '#ff6d07'
+  }
 })

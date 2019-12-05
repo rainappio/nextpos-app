@@ -130,7 +130,6 @@ class CategoryCustomize extends React.Component {
           prodctoptions={prodctoptions}
           workingareas={workingareas}
           onCancel={this.handleEditCancel}
-          screenProps={this.props.screenProps}
         />
       </View>
     )

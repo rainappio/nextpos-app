@@ -30,7 +30,7 @@ class OrderFormII extends React.Component {
   constructor() {
     super(...arguments)
     this.state = {
-      activeSections: [2, 0],
+      activeSections: [],
       selectedProducts: [],
       refreshing: false,
       status: '',

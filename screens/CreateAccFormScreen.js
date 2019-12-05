@@ -60,6 +60,7 @@ class CreateAccFormScreen extends React.Component {
               validate={isEmail}
               placeholder={t('email')}
               secureTextEntry={false}
+              autoCapitalize="none"
             />
             <Field
               name="masterPassword"
