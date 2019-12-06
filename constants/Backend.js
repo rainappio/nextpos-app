@@ -57,6 +57,11 @@ export const api = {
     getWorkingAreas: `${apiRoot}/workingareas`,
     getworkingArea: `${apiRoot}/workingareas/`,
     update: `${apiRoot}/workingareas/`
+  },
+  shift: {
+  	open: `${apiRoot}/shifts/open`,
+  	close: `${apiRoot}/shifts/close`,
+  	active: `${apiRoot}/shifts/active`
   }
 }
 

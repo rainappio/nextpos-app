@@ -37,7 +37,8 @@ export const readableDateFormat = date => {
   var shortDate = date.slice(0, 10)
   var subShortDate = shortDate.split('-')
   var monthCount = subShortDate[1].replace(/\b(0(?!\b))+/g, '')
-
+	var getHours = new Date(date).getHours();
+	var getMinutes = new Date(date).getMinutes()
   function getMonthName (monthCount) {
     switch (monthCount) {
       case '1':
@@ -69,6 +70,6 @@ export const readableDateFormat = date => {
     }
   }
   var formattedDateTime =
-    subShortDate[2] + ' ' + getMonthName(monthCount) + ' ' + subShortDate[0]
+    subShortDate[2] + ' ' + getMonthName(monthCount) + ' ' + subShortDate[0] + ' ' + getHours + ':' + getMinutes
   return formattedDateTime
 }

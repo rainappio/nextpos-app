@@ -253,7 +253,7 @@ class TablesScreen extends React.Component {
                   >
                     <TouchableOpacity
                       onPress={() => {
-                        this.props.navigation.navigate('Tables')
+                        this.props.navigation.navigate('LoginSuccess')
                       }}
                     >
                       <Text style={styles.signInText}>Cancel</Text>

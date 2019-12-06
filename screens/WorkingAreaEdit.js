@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { ScrollView, Text, View, ActivityIndicator } from 'react-native'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
+import BackBtnCustom from '../components/BackBtnCustom'
 import AddBtn from '../components/AddBtn'
 import WorkingAreaForm from './WorkingAreaForm'
 import {
@@ -87,7 +87,7 @@ class WorkingAreaEdit extends React.Component {
       <ScrollView>
         <DismissKeyboard>
           <View style={styles.container}>
-            <BackBtn />
+            <BackBtnCustom onPress={() => this.handleEditCancel()}/>
             <Text
               style={[
                 styles.welcomeText,

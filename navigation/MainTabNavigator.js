@@ -52,6 +52,7 @@ import PrinterAdd from '../screens/PrinterAdd'
 import PrinterEdit from '../screens/PrinterEdit'
 import WorkingAreaAdd from '../screens/WorkingAreaAdd'
 import WorkingAreaEdit from '../screens/WorkingAreaEdit'
+import ShiftClose from '../screens/ShiftClose'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -110,7 +111,8 @@ const Settings = createStackNavigator({
   PrinterAdd: PrinterAdd,
   PrinterEdit: PrinterEdit,
   WorkingAreaAdd: WorkingAreaAdd,
-  WorkingAreaEdit: WorkingAreaEdit
+  WorkingAreaEdit: WorkingAreaEdit,
+  ShiftClose: ShiftClose
 })
 Settings.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.settings'),
