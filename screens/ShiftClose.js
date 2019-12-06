@@ -24,7 +24,7 @@ import AddBtn from '../components/AddBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { getShiftStatus } from '../actions'
-import { api, makeFetchRequest } from '../constants/Backend'
+import { api, makeFetchRequest, successMessage } from '../constants/Backend'
 import styles from '../styles'
 
 let tblsArr = []
@@ -70,8 +70,11 @@ class ShiftClose extends React.Component {
           }).then(response => {
             if (response.status === 200) {
               this.props.dispatch(getShiftStatus())
-              alert('successfully closed')
+              successMessage('successfully closed')
             }
+            else {
+            	errorAlert(response)
+          	}
           })
         })
     })

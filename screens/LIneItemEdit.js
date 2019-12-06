@@ -9,7 +9,7 @@ import {
 import { connect } from 'react-redux'
 import LIneItemForm from './LIneItemForm'
 import { getOrder } from '../actions'
-import { api, makeFetchRequest } from '../constants/Backend'
+import { api, makeFetchRequest, errorAlert, successMessage } from '../constants/Backend'
 import styles from '../styles'
 
 class LIneItemEdit extends Component {
@@ -20,12 +20,6 @@ class LIneItemEdit extends Component {
   componentDidMount() {
     this.props.getOrder()
   }
-
-  // handleEditCancel = () => {
-  //   this.props.clearClient()
-  //   this.props.getClientUsrs()
-  //   this.props.navigation.navigate('StaffsOverview')
-  // }
 
   handleUpdate = values => {
     var lineItemId = this.props.navigation.state.params.lineItemId
@@ -39,17 +33,17 @@ class LIneItemEdit extends Component {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-client-id': token.application_client_id,
           Authorization: 'Bearer ' + token.access_token
         },
         body: JSON.stringify(updatedLineItemCount)
       })
         .then(response => {
           if (response.status === 200) {
+          	successMessage('Saved')
             this.props.navigation.navigate('OrdersSummary')
             this.props.getOrder()
           } else {
-            alert('pls try again')
+            errorAlert(response)
           }
         })
         .catch(error => {
@@ -79,7 +73,6 @@ class LIneItemEdit extends Component {
         <LIneItemForm
           navigation={navigation}
           initialValues={this.props.navigation.state.params.initialValues}
-          // handleEditCancel={this.handleEditCancel}
           onSubmit={this.handleUpdate}
         />
       )

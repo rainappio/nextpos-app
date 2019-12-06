@@ -8,7 +8,7 @@ import AddBtn from '../components/AddBtn'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import Icon from 'react-native-vector-icons/Ionicons'
 import DeleteBtn from '../components/DeleteBtn'
-import { api, makeFetchRequest } from '../constants/Backend'
+import { api, makeFetchRequest, errorAlert, successMessage } from '../constants/Backend'
 import styles from '../styles'
 
 class OrdersSummaryRow extends React.Component {
@@ -31,17 +31,17 @@ class OrdersSummaryRow extends React.Component {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-client-id': token.application_client_id,
           Authorization: 'Bearer ' + token.access_token
         },
         body: JSON.stringify({ quantity: 0 })
       })
         .then(response => {
           if (response.status === 200) {
+          	successMessage('Deleted')
             this.props.navigation.navigate('OrdersSummary')
             this.props.getOrder()
           } else {
-            alert('pls try again')
+            errorAlert(response)
           }
         })
         .catch(error => {
