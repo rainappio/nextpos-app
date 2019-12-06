@@ -125,7 +125,11 @@ class LoginSuccessScreen extends React.Component {
                     name="md-document"
                     size={40}
                     color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15, {opacity: 0.3}]}
+                    style={[
+                      styles.centerText,
+                      styles.margin_15,
+                      { opacity: 0.3 }
+                    ]}
                   />
                   <Text style={styles.centerText}>{t('menu.orders')}</Text>
                 </View>
@@ -153,7 +157,11 @@ class LoginSuccessScreen extends React.Component {
                     name="ios-calendar"
                     size={40}
                     color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15, {opacity: 0.3}]}
+                    style={[
+                      styles.centerText,
+                      styles.margin_15,
+                      { opacity: 0.3 }
+                    ]}
                   />
                   <Text style={styles.centerText}>
                     {t('menu.reservations')}
@@ -181,7 +189,11 @@ class LoginSuccessScreen extends React.Component {
                     name="bar-chart"
                     size={40}
                     color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15, {opacity: 0.3}]}
+                    style={[
+                      styles.centerText,
+                      styles.margin_15,
+                      { opacity: 0.3 }
+                    ]}
                   />
                   <Text style={styles.centerText}>{t('menu.reporting')}</Text>
                 </View>

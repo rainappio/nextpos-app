@@ -2,11 +2,11 @@ import React from 'react'
 import { ScrollView, Text, View, RefreshControl } from 'react-native'
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
 import Icon from 'react-native-vector-icons/Ionicons'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class StaffRow extends React.Component {
   static navigationOptions = {
@@ -16,7 +16,7 @@ class StaffRow extends React.Component {
   static contextType = LocaleContext
 
   constructor(props, context) {
-    super(props, context);
+    super(props, context)
 
     this.state = {
       refreshing: false,

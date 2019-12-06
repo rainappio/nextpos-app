@@ -1,6 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TextInput, Text, View, Keyboard, InputAccessoryView, TouchableOpacity, Platform } from 'react-native'
+import {
+  TextInput,
+  Text,
+  View,
+  Keyboard,
+  InputAccessoryView,
+  TouchableOpacity,
+  Platform
+} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../styles'
 
@@ -55,16 +63,23 @@ const InputText = ({
         iscustomizeCate ? styles.textBig : ''
       ]}
     />
-    { Platform.OS === 'ios' &&
+    {Platform.OS === 'ios' && (
       <InputAccessoryView nativeID="stateless">
         <TouchableOpacity
           onPress={() => Keyboard.dismiss()}
-          style={[{ flex: 1, flexDirection: 'row-reverse'}, styles.grayBg]}
+          style={[{ flex: 1, flexDirection: 'row-reverse' }, styles.grayBg]}
         >
-          <Text style={[styles.margin_15, {fontSize: 16, fontWeight: 'bold', color: '#F39F86'}]}>Done</Text>
+          <Text
+            style={[
+              styles.margin_15,
+              { fontSize: 16, fontWeight: 'bold', color: '#F39F86' }
+            ]}
+          >
+            Done
+          </Text>
         </TouchableOpacity>
       </InputAccessoryView>
-    }
+    )}
     {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
   </View>
 )

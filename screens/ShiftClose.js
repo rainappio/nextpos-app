@@ -23,9 +23,7 @@ import BackBtnCustom from '../components/BackBtnCustom'
 import AddBtn from '../components/AddBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import {
-  getShiftStatus
-} from '../actions'
+import { getShiftStatus } from '../actions'
 import { api, makeFetchRequest } from '../constants/Backend'
 import styles from '../styles'
 
@@ -37,7 +35,7 @@ class ShiftClose extends React.Component {
   }
 
   handleCloseShift = () => {
-  	makeFetchRequest(tokenObj => {     
+    makeFetchRequest(tokenObj => {
       const formData = new FormData()
       formData.append('grant_type', 'password')
       formData.append('username', tokenObj.cli_userName)
@@ -58,7 +56,7 @@ class ShiftClose extends React.Component {
         .then(response => response.json())
         .then(res => {
           AsyncStorage.setItem('orderToken', JSON.stringify(res))
-          fetch(api.shift.close,{
+          fetch(api.shift.close, {
             method: 'POST',
             withCredentials: true,
             credentials: 'include',
@@ -70,9 +68,9 @@ class ShiftClose extends React.Component {
               balance: '1000'
             })
           }).then(response => {
-            if (response.status === 200) {            	
+            if (response.status === 200) {
               this.props.dispatch(getShiftStatus())
-              alert("successfully closed")
+              alert('successfully closed')
             }
           })
         })
@@ -87,7 +85,7 @@ class ShiftClose extends React.Component {
       isLoading,
       shiftStatus,
       ordersInflight
-    } = this.props   
+    } = this.props
 
     return (
       <ScrollView>
@@ -106,8 +104,19 @@ class ShiftClose extends React.Component {
               ]}
             >
               Close Shift
-            </Text>    
-            <Text style={{backgroundColor:'darkblue', padding: 8, color: '#fff', borderRadius: 8, margin: 8}} onPress={() => this.handleCloseShift()}>CloseShft</Text>      
+            </Text>
+            <Text
+              style={{
+                backgroundColor: 'darkblue',
+                padding: 8,
+                color: '#fff',
+                borderRadius: 8,
+                margin: 8
+              }}
+              onPress={() => this.handleCloseShift()}
+            >
+              CloseShft
+            </Text>
           </View>
         </DismissKeyboard>
       </ScrollView>

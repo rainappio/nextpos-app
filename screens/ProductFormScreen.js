@@ -11,7 +11,7 @@ import RenderRadioBtn from '../components/RadioItem'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
 import DeleteBtn from '../components/DeleteBtn'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class ProductFormScreen extends React.Component {
   static navigationOptions = {
@@ -20,7 +20,7 @@ class ProductFormScreen extends React.Component {
   static contextType = LocaleContext
 
   constructor(props, context) {
-    super(props, context);
+    super(props, context)
 
     this.state = {
       t: context.t
@@ -28,7 +28,6 @@ class ProductFormScreen extends React.Component {
   }
 
   componentDidMount() {
-
     this.context.localize({
       en: {
         newProduct: 'New Product',
@@ -201,17 +200,21 @@ class ProductFormScreen extends React.Component {
 
             <View style={[styles.bottom]}>
               <TouchableOpacity onPress={handleSubmit}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  {t('action.save')}
+                </Text>
               </TouchableOpacity>
 
               {isEditForm ? (
                 <View>
                   <TouchableOpacity onPress={handleEditCancel}>
-                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                    <Text
+                      style={[styles.bottomActionButton, styles.cancelButton]}
+                    >
+                      {t('action.cancel')}
+                    </Text>
                   </TouchableOpacity>
-                  <DeleteBtn
-                    handleDeleteAction={handleDeleteProduct}
-                  />
+                  <DeleteBtn handleDeleteAction={handleDeleteProduct} />
                 </View>
               ) : (
                 <TouchableOpacity
@@ -219,7 +222,11 @@ class ProductFormScreen extends React.Component {
                     this.props.navigation.navigate('ProductsOverview')
                   }
                 >
-                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                  <Text
+                    style={[styles.bottomActionButton, styles.cancelButton]}
+                  >
+                    {t('action.cancel')}
+                  </Text>
                 </TouchableOpacity>
               )}
             </View>

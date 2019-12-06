@@ -9,6 +9,7 @@ const storage = {
 const apiRoot = 'http://35.234.63.193'
 
 export const api = {
+  apiRoot,
   getAuthToken: `${apiRoot}/oauth/token`,
   client: {
     get: `${apiRoot}/clients/me`,
@@ -59,9 +60,9 @@ export const api = {
     update: `${apiRoot}/workingareas/`
   },
   shift: {
-  	open: `${apiRoot}/shifts/open`,
-  	close: `${apiRoot}/shifts/close`,
-  	active: `${apiRoot}/shifts/active`
+    open: `${apiRoot}/shifts/open`,
+    close: `${apiRoot}/shifts/close`,
+    active: `${apiRoot}/shifts/active`
   }
 }
 

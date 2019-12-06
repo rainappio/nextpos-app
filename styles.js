@@ -423,9 +423,8 @@ export default StyleSheet.create({
   },
   no_mgrTop: {
     marginTop: 0
-  }
+  },
 
-  ,
   bottom: {
     flex: 1,
     justifyContent: 'flex-end',

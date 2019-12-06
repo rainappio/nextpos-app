@@ -26,9 +26,9 @@ import { getClientUsrs } from '../actions'
 import EditPasswordPopUp from '../components/EditPasswordPopUp'
 import RNSwitch from '../components/RNSwitch'
 import styles from '../styles'
-import DeleteBtn from "../components/DeleteBtn";
-import {errorAlert, successMessage} from "../constants/Backend";
-import {Header} from "react-native-elements";
+import DeleteBtn from '../components/DeleteBtn'
+import { errorAlert, successMessage } from '../constants/Backend'
+import { Header } from 'react-native-elements'
 
 class StaffFormScreen extends React.Component {
   static navigationOptions = {
@@ -36,7 +36,7 @@ class StaffFormScreen extends React.Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.props.screenProps.localize({
       en: {
@@ -55,7 +55,6 @@ class StaffFormScreen extends React.Component {
       }
     })
   }
-
 
   handleDelete = values => {
     AsyncStorage.getItem('token', (err, value) => {
@@ -121,7 +120,8 @@ class StaffFormScreen extends React.Component {
                   styles.mgrbtn80
                 ]}
               >
-                {t('staffTitle')} - {this.props.navigation.state.params.staffname}
+                {t('staffTitle')} -{' '}
+                {this.props.navigation.state.params.staffname}
               </Text>
             ) : (
               <Text
@@ -229,22 +229,35 @@ class StaffFormScreen extends React.Component {
 
           <View style={[styles.bottom]}>
             <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                {t('action.save')}
+              </Text>
             </TouchableOpacity>
 
             {isEditForm ? (
               <View>
                 <TouchableOpacity onPress={handleEditCancel}>
-                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                  <Text
+                    style={[styles.bottomActionButton, styles.cancelButton]}
+                  >
+                    {t('action.cancel')}
+                  </Text>
                 </TouchableOpacity>
-                <DeleteBtn handleDeleteAction={this.handleDelete}
-                           params={{name: this.props.navigation.state.params.staffname}}
+                <DeleteBtn
+                  handleDeleteAction={this.handleDelete}
+                  params={{
+                    name: this.props.navigation.state.params.staffname
+                  }}
                 />
               </View>
             ) : (
               <View>
                 <TouchableOpacity onPress={onCancel}>
-                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                  <Text
+                    style={[styles.bottomActionButton, styles.cancelButton]}
+                  >
+                    {t('action.cancel')}
+                  </Text>
                 </TouchableOpacity>
               </View>
             )}

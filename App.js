@@ -23,7 +23,7 @@ import i18n from 'i18n-js'
 import globalEn from './locales/en'
 import globalZh from './locales/zh'
 import FlashMessage from 'react-native-flash-message'
-import {LocaleContext} from './locales/LocaleContext'
+import { LocaleContext } from './locales/LocaleContext'
 
 const store = createStore(
   rootReducer,
@@ -70,14 +70,19 @@ export default class App extends React.Component {
   mergeLocaleResource = async locales => {
     const updatedLocaleResource = {
       en: {
-        ...this.state.localeResource.en, ...locales.en
+        ...this.state.localeResource.en,
+        ...locales.en
       },
       zh: {
-        ...this.state.localeResource.zh, ...locales.zh
+        ...this.state.localeResource.zh,
+        ...locales.zh
       }
     }
 
-    i18n.translations = { en: updatedLocaleResource.en, zh: updatedLocaleResource.zh }
+    i18n.translations = {
+      en: updatedLocaleResource.en,
+      zh: updatedLocaleResource.zh
+    }
 
     await this.promisedSetState({
       localeResource: updatedLocaleResource
@@ -88,12 +93,12 @@ export default class App extends React.Component {
    * Example of setting state using await:
    * https://medium.com/horizon-alpha/await-setstate-in-react-native-631d182e8738
    */
-  promisedSetState = (newState) => {
-    return new Promise((resolve) => {
+  promisedSetState = newState => {
+    return new Promise(resolve => {
       this.setState(newState, () => {
         resolve()
-      });
-    });
+      })
+    })
   }
 
   /**
@@ -106,7 +111,7 @@ export default class App extends React.Component {
    *
    * react-i18next (another implementation)
    */
-  localize = (locales) => this.mergeLocaleResource(locales)
+  localize = locales => this.mergeLocaleResource(locales)
 
   changeLanguage = () => {
     let toLocale = this.state.locale === 'zh-TW' ? 'en-TW' : 'zh-TW'
@@ -132,7 +137,11 @@ export default class App extends React.Component {
       return (
         <Provider store={store}>
           <View style={styles.mainContainer}>
-            <StatusBar translucent={true} hidden={false} barStyle="dark-content"/>
+            <StatusBar
+              translucent={true}
+              hidden={false}
+              barStyle="dark-content"
+            />
             <LocaleContext.Provider value={this.state}>
               <AppNavigator
                 screenProps={{

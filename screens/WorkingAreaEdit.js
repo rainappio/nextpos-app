@@ -87,7 +87,7 @@ class WorkingAreaEdit extends React.Component {
       <ScrollView>
         <DismissKeyboard>
           <View style={styles.container}>
-            <BackBtnCustom onPress={() => this.handleEditCancel()}/>
+            <BackBtnCustom onPress={() => this.handleEditCancel()} />
             <Text
               style={[
                 styles.welcomeText,

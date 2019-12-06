@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
 import ProductFormScreen from './ProductFormScreen'
 import { getProducts, getLables, getLabel } from '../actions'
-import {successMessage} from "../constants/Backend";
+import { successMessage } from '../constants/Backend'
 
 class Product extends React.Component {
   static navigationOptions = {

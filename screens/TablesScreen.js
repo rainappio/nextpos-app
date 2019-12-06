@@ -35,7 +35,7 @@ import {
   getOrder
 } from '../actions'
 import styles from '../styles'
-import {api, makeFetchRequest} from "../constants/Backend";
+import { api, makeFetchRequest } from '../constants/Backend'
 
 let tblsArr = []
 
@@ -56,7 +56,6 @@ class TablesScreen extends React.Component {
   }
 
   handleOpenShift = () => {
-
     makeFetchRequest(token => {
       fetch(api.order.openShift, {
         method: 'POST',

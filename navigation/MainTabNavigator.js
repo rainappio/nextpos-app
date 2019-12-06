@@ -53,6 +53,7 @@ import PrinterEdit from '../screens/PrinterEdit'
 import WorkingAreaAdd from '../screens/WorkingAreaAdd'
 import WorkingAreaEdit from '../screens/WorkingAreaEdit'
 import ShiftClose from '../screens/ShiftClose'
+import LIneItemEdit from '../screens/LIneItemEdit'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -150,7 +151,8 @@ const Tables = createStackNavigator({
   OrderFormII: OrderFormII,
   OrderFormIII: OrderFormIII,
   OrderFormIV: OrderFormIV,
-  OrdersSummary: OrdersSummary
+  OrdersSummary: OrdersSummary,
+  LIneItemEdit: LIneItemEdit
 })
 Tables.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.tables'),

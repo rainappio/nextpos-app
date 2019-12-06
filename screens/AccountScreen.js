@@ -1,10 +1,17 @@
 import React from 'react'
-import {ScrollView, Text, View, AsyncStorage, Button, Alert} from 'react-native'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import {
+  ScrollView,
+  Text,
+  View,
+  AsyncStorage,
+  Button,
+  Alert
+} from 'react-native'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
-import {Avatar, Badge, Divider} from "react-native-elements";
-import {LocaleContext} from '../locales/LocaleContext'
+import { Avatar, Badge, Divider } from 'react-native-elements'
+import { LocaleContext } from '../locales/LocaleContext'
 
 class AccountScreen extends React.Component {
   static navigationOptions = {
@@ -14,7 +21,7 @@ class AccountScreen extends React.Component {
   static contextType = LocaleContext
 
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       objects: []
@@ -26,14 +33,13 @@ class AccountScreen extends React.Component {
    */
   async componentDidMount() {
     this.context.localize({
-        en: {
-          username: 'User Name'
-        },
-        zh: {
-          username: '使用者名稱'
-        }
+      en: {
+        username: 'User Name'
+      },
+      zh: {
+        username: '使用者名稱'
       }
-    )
+    })
 
     const objects = []
     let storedKeys = []
@@ -43,8 +49,8 @@ class AccountScreen extends React.Component {
     })
 
     for (const key of storedKeys) {
-      const value = await AsyncStorage.getItem(key);
-      objects.push({key: key, value: value})
+      const value = await AsyncStorage.getItem(key)
+      objects.push({ key: key, value: value })
     }
 
     this.setState({
@@ -59,19 +65,19 @@ class AccountScreen extends React.Component {
           <Text style={styles.text}>{obj.key}</Text>
           <Button
             title="Show value"
-            onPress={() => Alert.alert('Value', obj.value, [{text: 'Ok'}])}
+            onPress={() => Alert.alert('Value', obj.value, [{ text: 'Ok' }])}
           />
         </View>
       )
     })
 
-    const {t} = this.props.screenProps
+    const { t } = this.props.screenProps
 
     return (
       <ScrollView>
         <DismissKeyboard>
           <View style={styles.container_nocenterCnt}>
-            <BackBtn/>
+            <BackBtn />
             <Text
               style={[
                 styles.welcomeText,
@@ -82,13 +88,9 @@ class AccountScreen extends React.Component {
             >
               {t('settings.account')}
             </Text>
-            <View style={{alignItems: 'center'}}>
+            <View style={{ alignItems: 'center' }}>
               <View>
-                <Avatar
-                  rounded
-                  title="RA"
-                  size="large"
-                />
+                <Avatar rounded title="RA" size="large" />
                 <Badge
                   status="success"
                   badgeStyle={{
@@ -97,19 +99,20 @@ class AccountScreen extends React.Component {
                     minWidth: 0,
                     width: 18
                   }}
-                  containerStyle={{position: 'absolute', top: 0, right: 0, left: 60, bottom: 0}}
+                  containerStyle={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    left: 60,
+                    bottom: 0
+                  }}
                 />
               </View>
-              <Text style={styles.text}>
-                {t('username')}
-              </Text>
-              <Divider style={{ height: 1, backgroundColor: '#1c3830'}}/>
-              <View>
-                {storageItems}
-              </View>
+              <Text style={styles.text}>{t('username')}</Text>
+              <Divider style={{ height: 1, backgroundColor: '#1c3830' }} />
+              <View>{storageItems}</View>
             </View>
           </View>
-
         </DismissKeyboard>
       </ScrollView>
     )
