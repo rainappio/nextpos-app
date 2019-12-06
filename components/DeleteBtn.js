@@ -1,7 +1,8 @@
 import React from 'react'
 import { Alert, Text, TouchableOpacity } from 'react-native'
+import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class DeleteBtn extends React.Component {
   static contextType = LocaleContext
@@ -22,7 +23,7 @@ class DeleteBtn extends React.Component {
   }
 
   render() {
-    const { handleDeleteAction, params } = this.props
+    const { handleDeleteAction, params, islineItemDelete } = this.props
     const { t } = this.state
 
     return (
@@ -45,7 +46,18 @@ class DeleteBtn extends React.Component {
           )
         }}
       >
-        <Text style={[styles.bottomActionButton, styles.deleteButton]}>{t('action.delete')}</Text>
+        {islineItemDelete ? (
+          <Icon
+            name="md-trash"
+            size={25}
+            color="#fff"
+            // style={{textAlign: 'right', backgroundColor: 'pink'}}
+          />
+        ) : (
+          <Text style={[styles.bottomActionButton, styles.deleteButton]}>
+            {t('action.delete')}
+          </Text>
+        )}
       </TouchableOpacity>
     )
   }

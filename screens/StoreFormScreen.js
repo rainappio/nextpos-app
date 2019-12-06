@@ -110,13 +110,17 @@ class StoreFormScreen extends React.Component {
 
             <View style={styles.bottom}>
               <TouchableHighlight onPress={handleSubmit}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  {t('action.save')}
+                </Text>
               </TouchableHighlight>
 
               <TouchableHighlight
                 onPress={() => this.props.navigation.goBack()}
               >
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                  {t('action.cancel')}
+                </Text>
               </TouchableHighlight>
             </View>
           </View>

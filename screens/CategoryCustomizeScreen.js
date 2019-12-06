@@ -8,7 +8,7 @@ import RNSwitch from '../components/RNSwitch'
 import RenderRadioBtn from '../components/RadioItem'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class CategoryCustomizeScreen extends React.Component {
   static navigationOptions = {
@@ -17,13 +17,12 @@ class CategoryCustomizeScreen extends React.Component {
   static contextType = LocaleContext
 
   constructor(props, context) {
-    super(props, context);
+    super(props, context)
 
     this.state = {
       t: context.t
     }
   }
-
 
   componentDidMount() {
     this.context.localize({
@@ -114,7 +113,7 @@ class CategoryCustomizeScreen extends React.Component {
               <View>
                 <Text style={styles.textBold}>{t('applyToProducts')}</Text>
               </View>
-              <View style={[styles.onesixthWidth, {alignItems: 'flex-end'}]}>
+              <View style={[styles.onesixthWidth, { alignItems: 'flex-end' }]}>
                 <Field
                   name="appliesToProducts"
                   component={RNSwitch}

@@ -6,7 +6,7 @@ import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class CategoryFormScreen extends React.Component {
   static navigationOptions = {
@@ -16,7 +16,7 @@ class CategoryFormScreen extends React.Component {
   static contextType = LocaleContext
 
   constructor(props, context) {
-    super(props, context);
+    super(props, context)
 
     this.state = {
       t: context.t

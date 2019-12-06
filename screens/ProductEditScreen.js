@@ -11,7 +11,12 @@ import {
   getWorkingAreas
 } from '../actions'
 import styles from '../styles'
-import {api, errorAlert, makeFetchRequest, successMessage} from '../constants/Backend'
+import {
+  api,
+  errorAlert,
+  makeFetchRequest,
+  successMessage
+} from '../constants/Backend'
 
 class ProductEdit extends Component {
   static navigationOptions = {

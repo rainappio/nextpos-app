@@ -15,7 +15,7 @@ import styles from '../styles'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { isRequired } from '../validators'
 import DeleteBtn from '../components/DeleteBtn'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class OptionFormScreen extends React.Component {
   static navigationOptions = {
@@ -24,7 +24,7 @@ class OptionFormScreen extends React.Component {
   static contextType = LocaleContext
 
   constructor(props, context) {
-    super(props);
+    super(props)
 
     this.state = {
       t: context.t
@@ -177,7 +177,9 @@ class OptionFormScreen extends React.Component {
 
             <View style={styles.bottom}>
               <TouchableHighlight onPress={handleSubmit}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  {t('action.save')}
+                </Text>
               </TouchableHighlight>
               <TouchableHighlight
                 onPress={() =>
@@ -186,15 +188,16 @@ class OptionFormScreen extends React.Component {
                   )
                 }
               >
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                  {t('action.cancel')}
+                </Text>
               </TouchableHighlight>
-              {
-                initialValues !== undefined && initialValues.id != null && (
-                  <DeleteBtn
-                    handleDeleteAction={handleDeleteOption}
-                    params={{ id: initialValues.id }}
-                  />
-                )}
+              {initialValues !== undefined && initialValues.id != null && (
+                <DeleteBtn
+                  handleDeleteAction={handleDeleteOption}
+                  params={{ id: initialValues.id }}
+                />
+              )}
             </View>
           </View>
         </ScrollView>

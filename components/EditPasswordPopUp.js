@@ -16,7 +16,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import { getClientUsr } from '../actions'
 import styles from '../styles'
-import {successMessage} from "../constants/Backend";
+import { successMessage } from '../constants/Backend'
 
 class EditPasswordPopUp extends Component {
   constructor(props) {

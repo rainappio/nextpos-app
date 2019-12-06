@@ -10,15 +10,14 @@ import BackBtn from '../components/BackBtn'
 import PopUp from '../components/PopUp'
 import { getProducts, clearLabel } from '../actions'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class ProductRow extends React.Component {
   static navigationOptions = {
     header: null
   }
 
-  static contextType = LocaleContext;
-
+  static contextType = LocaleContext
 
   constructor(props, context) {
     super(props, context)

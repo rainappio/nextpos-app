@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {api, makeFetchRequest, successMessage} from '../constants/Backend'
+import { api, makeFetchRequest, successMessage } from '../constants/Backend'
 import { getCurrentClient } from '../actions/client'
 import StoreFormScreen from './StoreFormScreen'
 import { ActivityIndicator, View } from 'react-native'

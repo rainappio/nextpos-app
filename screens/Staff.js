@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
 import StaffFormScreen from './StaffFormScreen'
 import { getClientUsr, getClientUsrs } from '../actions'
-import {errorAlert, successMessage} from "../constants/Backend";
+import { errorAlert, successMessage } from '../constants/Backend'
 
 class Staff extends React.Component {
   static navigationOptions = {
@@ -49,9 +49,7 @@ class Staff extends React.Component {
         .then(response => {
           if (response.status === 200) {
             successMessage('Saved')
-            this.props.navigation.navigate(
-              'StaffsOverview'
-            )
+            this.props.navigation.navigate('StaffsOverview')
             this.setState({
               refreshing: true
             })

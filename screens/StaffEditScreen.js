@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import StaffFormScreen from './StaffFormScreen'
 import { clearClient, getClientUsr, getClientUsrs } from '../actions'
 import styles from '../styles'
-import {errorAlert, successMessage} from "../constants/Backend";
+import { errorAlert, successMessage } from '../constants/Backend'
 
 class StaffEditScreen extends Component {
   static navigationOptions = {
