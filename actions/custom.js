@@ -37,6 +37,16 @@ export const readableDateFormat = date => {
   var shortDate = date.slice(0, 10)
   var subShortDate = shortDate.split('-')
   var monthCount = subShortDate[1].replace(/\b(0(?!\b))+/g, '')
+
+  var t = date.split(/[- :T]/)
+  var date = new Date(
+    parseInt(t[0]),
+    parseInt(t[1] - 1),
+    parseInt(t[2]),
+    parseInt(t[3]),
+    parseInt(t[4]),
+    parseInt(t[5])
+  )
   var getHours = new Date(date).getHours()
   var getMinutes = new Date(date).getMinutes()
   function getMonthName (monthCount) {

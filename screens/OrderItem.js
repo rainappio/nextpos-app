@@ -38,13 +38,13 @@ class OrderItem extends React.PureComponent {
       >
         <View style={{ marginRight: 15 }}>
           <View>
-            <Text style={{ paddingTop: 6 }}>{order.tableName}</Text>
+            <Text style={{ paddingTop: 3 }}>{order.tableName}</Text>
           </View>
         </View>
 
         <View style={{ marginRight: 15 }}>
           <View>
-            <FontAwesomeIcon name={'user'} color="#ccc" size={25}>
+            <FontAwesomeIcon name={'user'} color="#ccc" size={20}>
               <Text style={{ color: '#000', fontSize: 12 }}>
                 &nbsp;&nbsp;{order.customerCount}
               </Text>
@@ -55,19 +55,19 @@ class OrderItem extends React.PureComponent {
         <View style={{ width: '32%' }}>
           <View>
             {timeDifference < 29 ? (
-              <FontAwesomeIcon name={'clock-o'} color="#f18d1a" size={25}>
+              <FontAwesomeIcon name={'clock-o'} color="#f18d1a" size={20}>
                 <Text style={{ fontSize: 12 }}>
                   &nbsp;&nbsp;{timeDifference + ' min'}
                 </Text>
               </FontAwesomeIcon>
             ) : timeDifference < 60 ? (
-              <FontAwesomeIcon name={'clock-o'} color="red" size={25}>
+              <FontAwesomeIcon name={'clock-o'} color="red" size={20}>
                 <Text style={{ fontSize: 12 }}>
                   &nbsp;&nbsp;{Math.floor(timeDifference % 60) + ' min'}
                 </Text>
               </FontAwesomeIcon>
             ) : timeDifference < 1440 ? (
-              <FontAwesomeIcon name={'clock-o'} color="red" size={25}>
+              <FontAwesomeIcon name={'clock-o'} color="red" size={20}>
                 <Text style={{ fontSize: 12 }}>
                   &nbsp;&nbsp;
                   {Math.floor(timeDifference / 60) +
@@ -78,7 +78,7 @@ class OrderItem extends React.PureComponent {
               </FontAwesomeIcon>
             ) : (
               timeDifference >= 1440 && (
-                <FontAwesomeIcon name={'clock-o'} color="#888" size={25}>
+                <FontAwesomeIcon name={'clock-o'} color="#888" size={20}>
                   <Text style={{ fontSize: 12 }}>
                     &nbsp;&nbsp;
                     {Math.floor(timeDifference / (60 * 24)) +
@@ -96,7 +96,7 @@ class OrderItem extends React.PureComponent {
 
         <View>
           {order.state === 'OPEN' ? (
-            <Image source={images.order} />
+            <Image source={images.order} style={{ width: 15, height: 20 }} />
           ) : order.state === 'IN_PROCESS' ? (
             <Image source={images.process} style={{ width: 30, height: 20 }} />
           ) : (

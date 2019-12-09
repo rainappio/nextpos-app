@@ -95,7 +95,7 @@ class PrinternKDS extends React.Component {
                   styles.whiteColor,
                   styles.paddingTopBtn8,
                   styles.centerText,
-                  styles.textBig,
+                  styles.textMedium,
                   styles.mgrtotop20
                 ]}
               >
@@ -144,7 +144,7 @@ class PrinternKDS extends React.Component {
                   styles.whiteColor,
                   styles.paddingTopBtn8,
                   styles.centerText,
-                  styles.textBig
+                  styles.textMedium
                 ]}
               >
                 Working Area

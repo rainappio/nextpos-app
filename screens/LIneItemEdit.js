@@ -9,7 +9,12 @@ import {
 import { connect } from 'react-redux'
 import LIneItemForm from './LIneItemForm'
 import { getOrder } from '../actions'
-import { api, makeFetchRequest, errorAlert, successMessage } from '../constants/Backend'
+import {
+  api,
+  makeFetchRequest,
+  errorAlert,
+  successMessage
+} from '../constants/Backend'
 import styles from '../styles'
 
 class LIneItemEdit extends Component {
@@ -39,7 +44,7 @@ class LIneItemEdit extends Component {
       })
         .then(response => {
           if (response.status === 200) {
-          	successMessage('Saved')
+            successMessage('Saved')
             this.props.navigation.navigate('OrdersSummary')
             this.props.getOrder()
           } else {

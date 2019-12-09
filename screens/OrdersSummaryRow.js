@@ -8,7 +8,12 @@ import AddBtn from '../components/AddBtn'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import Icon from 'react-native-vector-icons/Ionicons'
 import DeleteBtn from '../components/DeleteBtn'
-import { api, makeFetchRequest, errorAlert, successMessage } from '../constants/Backend'
+import {
+  api,
+  makeFetchRequest,
+  errorAlert,
+  successMessage
+} from '../constants/Backend'
 import styles from '../styles'
 
 class OrdersSummaryRow extends React.Component {
@@ -37,7 +42,7 @@ class OrdersSummaryRow extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
-          	successMessage('Deleted')
+            successMessage('Deleted')
             this.props.navigation.navigate('OrdersSummary')
             this.props.getOrder()
           } else {
@@ -199,13 +204,8 @@ class OrdersSummaryRow extends React.Component {
                 <View style={styles.rowFront}>
                   <View key={rowMap}>
                     <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-                      <View
-                        style={[
-                          styles.quarter_width,
-                          styles.jc_alignIem_center
-                        ]}
-                      >
-                        <Text style={{ textAlign: 'left', marginLeft: -28 }}>
+                      <View style={[styles.quarter_width]}>
+                        <Text style={{ textAlign: 'left' }}>
                           {data.item.productName}
                         </Text>
                       </View>
@@ -234,9 +234,7 @@ class OrdersSummaryRow extends React.Component {
                           styles.jc_alignIem_center
                         ]}
                       >
-                        <Text style={{ marginRight: -24 }}>
-                          {data.item.subTotal.amountWithoutTax} TX
-                        </Text>
+                        <Text>{data.item.subTotal.amountWithoutTax} TX</Text>
                       </View>
                     </View>
                     <View style={[styles.mgrbtn20]}>

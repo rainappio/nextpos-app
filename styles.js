@@ -6,10 +6,10 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    marginTop: 62,
+    marginTop: 53,
     marginLeft: 35,
     marginRight: 35,
-    marginBottom: 62,
+    marginBottom: 36,
     position: 'relative'
   },
   childContainer: {
@@ -72,6 +72,9 @@ export default StyleSheet.create({
   },
   grayBg: {
     backgroundColor: '#f5f5f5'
+  },
+  lightgrayBg: {
+    backgroundColor: '#f1f1f1'
   },
   paddTop_30: {
     paddingTop: 30
@@ -217,8 +220,8 @@ export default StyleSheet.create({
   rowFront: {
     backgroundColor: '#fff',
     borderBottomColor: '#f1f1f1',
-    borderBottomWidth: 1,
-    paddingLeft: 10
+    borderBottomWidth: 1
+    // paddingLeft: 10
   },
   rowBack: {
     alignItems: 'center',
@@ -249,6 +252,9 @@ export default StyleSheet.create({
   },
   textBig: {
     fontSize: 22
+  },
+  textMedium: {
+    fontSize: 18
   },
   textBold: {
     fontWeight: 'bold'
@@ -341,13 +347,12 @@ export default StyleSheet.create({
   },
   userIcon: {
     color: '#fff',
-    fontSize: 22,
-    flex: 1,
+    fontSize: 28,
     textAlign: 'center',
     width: 30,
     height: 30,
-    borderRadius: 30,
-    top: 0
+    lineHeight: 30,
+    borderRadius: 30
   },
   quarter_width: {
     width: '25%'
@@ -452,5 +457,12 @@ export default StyleSheet.create({
   },
   deleteButton: {
     backgroundColor: '#ff6d07'
+  },
+  LRmgr_35minus: {
+    marginLeft: -30,
+    marginRight: -30
+  },
+  Rightmgr_30minus: {
+    marginRight: -30
   }
 })

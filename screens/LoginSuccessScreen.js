@@ -6,7 +6,8 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  RefreshControl
 } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -21,16 +22,33 @@ class LoginSuccessScreen extends React.Component {
   }
 
   state = {
-    showHiddenMenu: false
+    showHiddenMenu: false,
+    clientusrToken: null,
+    clientusersName: null
   }
 
   async handleClientUserLogout(navigation) {
     try {
       await AsyncStorage.removeItem('clientusrToken')
+      await AsyncStorage.removeItem('clientusersName')
       navigation.navigate('ClientUsers')
     } catch (err) {
       console.log(`The error is: ${err}`)
     }
+  }
+
+  componentDidMount() {
+    AsyncStorage.getItem('clientusrToken')
+      .then(value => {
+        this.setState({ clientusrToken: JSON.parse(value) })
+      })
+      .done()
+
+    AsyncStorage.getItem('clientusersName')
+      .then(value => {
+        this.setState({ clientusersName: value })
+      })
+      .done()
   }
 
   _toggleShow = () => {
@@ -40,6 +58,7 @@ class LoginSuccessScreen extends React.Component {
   render() {
     const { doLogout, navigation, clientusers } = this.props
     const { t } = this.props.screenProps
+    const { clientusrToken, clientusersName } = this.state
 
     var isAuthClientUser =
       this.props.navigation.state.params !== undefined &&
@@ -48,10 +67,13 @@ class LoginSuccessScreen extends React.Component {
       this.props.navigation.state.params !== undefined &&
       this.props.navigation.state.params.clientusersName
 
+    var isAuthClientUserAfterRefresh =
+      clientusrToken !== null && clientusrToken.hasOwnProperty('access_token')
+
     return (
       <ScrollView>
-        <View style={styles.container}>
-          <View style={[styles.paddBottom_10]}>
+        <View style={[styles.container, styles.nomgrBottom]}>
+          <View style={{ marginLeft: 4, marginRight: 4 }}>
             <Image
               source={
                 __DEV__
@@ -61,13 +83,16 @@ class LoginSuccessScreen extends React.Component {
               style={styles.welcomeImage}
             />
 
-            {isAuthClientUser ? (
+            {isAuthClientUserAfterRefresh == true ||
+            isAuthClientUser == true ? (
               <View style={{ alignItems: 'flex-end', marginTop: -30 }}>
                 <Text
                   style={[styles.orange_bg, styles.userIcon]}
                   onPress={this._toggleShow}
                 >
-                  {authClientUserName[0]}
+                  {clientusersName !== null
+                    ? clientusersName
+                    : authClientUserName[0]}
                 </Text>
                 {this.state.showHiddenMenu && (
                   <HiddenMenu
@@ -227,7 +252,7 @@ class LoginSuccessScreen extends React.Component {
               </TouchableOpacity>
             </View>
 
-            {isAuthClientUser ? (
+            {isAuthClientUserAfterRefresh || isAuthClientUser ? (
               <View
                 style={[
                   styles.margin_15,
@@ -316,14 +341,16 @@ export class HiddenMenu extends React.Component {
         style={[
           styles.jc_alignIem_center,
           styles.flex_dir_row,
-          styles.mgrtotop12
+          styles.mgrtotop8,
+          styles.lightgrayBg
         ]}
       >
         <View
           style={[
             styles.half_width,
             styles.jc_alignIem_center,
-            styles.paddingTopBtn20
+            styles.paddingTopBtn20,
+            { marginLeft: 7.5, marginRight: 7.5 }
           ]}
         >
           <TouchableOpacity
@@ -341,7 +368,8 @@ export class HiddenMenu extends React.Component {
           style={[
             styles.half_width,
             styles.jc_alignIem_center,
-            styles.paddingTopBtn20
+            styles.paddingTopBtn20,
+            { marginLeft: 7.5, marginRight: 7.5 }
           ]}
         >
           <Text

@@ -58,7 +58,10 @@ class ClientUserLoginForm extends React.Component {
               )
               res.clientusrTokenExp = clientusrTokenexpiration
               AsyncStorage.setItem('clientusrToken', JSON.stringify(res))
-
+              AsyncStorage.setItem(
+                'clientusersName',
+                this.props.clientusersName
+              )
               AsyncStorage.getItem('clientusrToken', (err, value) => {
                 if (err) {
                   console.log(err)
