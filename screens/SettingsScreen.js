@@ -3,7 +3,6 @@ import { Field, reduxForm } from 'redux-form'
 import {
   Image,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -28,7 +27,7 @@ class SettingsScreen extends React.Component {
     let { t, changeLanguage } = this.props.screenProps
 
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, styles.nomgrBottom]}>
         <BackBtnCustom
           onPress={() => this.props.navigation.navigate('LoginSuccess')}
         />
@@ -37,13 +36,14 @@ class SettingsScreen extends React.Component {
             styles.welcomeText,
             styles.orange_color,
             styles.textMedium,
-            styles.textBold
+            styles.textBold,
+            styles.nomgrBottom
           ]}
         >
           {t('menu.settings')}
         </Text>
         <Pages indicatorColor="#FF9100">
-          <View style={styles.mgrtotop20}>
+          <View style={{ flex: 1, justifyContent: 'center' }}>
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View
                 style={[
@@ -213,7 +213,7 @@ class SettingsScreen extends React.Component {
             </View>
           </View>
 
-          <View style={styles.mgrtotop20}>
+          <View style={{ flex: 1, justifyContent: 'center' }}>
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View
                 style={[

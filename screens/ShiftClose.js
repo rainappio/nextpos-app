@@ -71,10 +71,9 @@ class ShiftClose extends React.Component {
             if (response.status === 200) {
               this.props.dispatch(getShiftStatus())
               successMessage('successfully closed')
+            } else {
+              errorAlert(response)
             }
-            else {
-            	errorAlert(response)
-          	}
           })
         })
     })

@@ -267,12 +267,10 @@ class TablesScreen extends React.Component {
     }
 
     return (
-      <ScrollView
-      //refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
-      >
+      <ScrollView>
         <DismissKeyboard>
           <View>
-            <View style={styles.container}>
+            <View style={[styles.container, styles.nomgrBottom]}>
               <BackBtnCustom
                 onPress={() => this.props.navigation.navigate('LoginSuccess')}
               />
@@ -281,8 +279,7 @@ class TablesScreen extends React.Component {
                   styles.welcomeText,
                   styles.orange_color,
                   styles.textMedium,
-                  styles.textBold,
-                  styles.nomgrBottom
+                  styles.textBold
                 ]}
               >
                 Tables
@@ -299,16 +296,14 @@ class TablesScreen extends React.Component {
             </View>
 
             {tblLayouts.map((tblLayout, ix) => (
-              <View style={styles.mgrbtn40} key={tblLayout.tableLayoutId + ix}>
+              <View style={styles.mgrbtn20} key={tblLayout.tableLayoutId + ix}>
                 <Text
                   style={[
                     styles.orange_bg,
                     styles.whiteColor,
-                    styles.paddBottom_10,
                     styles.paddingTopBtn8,
                     styles.centerText,
-                    styles.mgrbtn20,
-                    styles.textBig
+                    styles.textMedium
                   ]}
                 >
                   {tblLayout.tableLayout}
