@@ -83,8 +83,7 @@ class LoginSuccessScreen extends React.Component {
               style={styles.welcomeImage}
             />
 
-            {isAuthClientUserAfterRefresh == true ||
-            isAuthClientUser == true ? (
+            {isAuthClientUser ? (
               <View style={{ alignItems: 'flex-end', marginTop: -30 }}>
                 <Text
                   style={[styles.orange_bg, styles.userIcon]}
@@ -252,7 +251,7 @@ class LoginSuccessScreen extends React.Component {
               </TouchableOpacity>
             </View>
 
-            {isAuthClientUserAfterRefresh || isAuthClientUser ? (
+            {isAuthClientUser ? (
               <View
                 style={[
                   styles.margin_15,

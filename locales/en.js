@@ -37,7 +37,8 @@ const en = {
     confirmMessageTitle: 'Confirm Action',
     confirmMessage: 'Are you sure?',
     yes: 'Yes',
-    no: 'No'
+    no: 'No',
+    update: 'Update'
   },
   bar: 'Bar {{someValue}}'
 }
