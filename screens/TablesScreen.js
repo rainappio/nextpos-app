@@ -337,7 +337,6 @@ class TablesScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  checkS: state,
   tablelayouts: state.tablelayouts.data,
   ordersInflight: state.ordersinflight.data.orders,
   haveData: state.ordersinflight.haveData,

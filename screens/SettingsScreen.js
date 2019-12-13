@@ -226,7 +226,7 @@ class SettingsScreen extends React.Component {
                 ]}
               >
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Account')}
+                  onPress={() => this.props.navigation.navigate('TableLayouts')}
                 >
                   <View>
                     <Icon
@@ -237,7 +237,7 @@ class SettingsScreen extends React.Component {
                     />
                     <Text style={styles.centerText}>
                       {/*t('settings.account')*/}
-                      Tables Setting
+                      Table Layouts
                     </Text>
                   </View>
                 </TouchableOpacity>

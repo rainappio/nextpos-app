@@ -63,6 +63,12 @@ export const api = {
     open: `${apiRoot}/shifts/open`,
     close: `${apiRoot}/shifts/close`,
     active: `${apiRoot}/shifts/active`
+  },
+  tablelayout: {
+    create: `${apiRoot}/tablelayouts`,
+    getlayouts: `${apiRoot}/tablelayouts`,
+    getlayout: `${apiRoot}/tablelayouts/`,
+    update: `${apiRoot}/tablelayouts/`
   }
 }
 
