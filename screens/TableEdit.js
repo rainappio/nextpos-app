@@ -27,7 +27,6 @@ class TableEdit extends React.Component {
   }
 
   handleEditCancel = () => {
-    // this.props.clearTableLayout(this.props.navigation.state.params.layoutId)
     this.props.navigation.navigate('TableLayoutEdit')
   }
 
@@ -46,7 +45,6 @@ class TableEdit extends React.Component {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-client-id': token.application_client_id,
           Authorization: 'Bearer ' + token.access_token
         },
         body: JSON.stringify(values)

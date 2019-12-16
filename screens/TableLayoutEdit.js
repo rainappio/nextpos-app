@@ -45,7 +45,6 @@ class TableLayoutEdit extends React.Component {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-client-id': token.application_client_id,
           Authorization: 'Bearer ' + token.access_token
         },
         body: JSON.stringify(values)

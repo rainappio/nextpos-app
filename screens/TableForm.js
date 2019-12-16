@@ -66,7 +66,7 @@ class TableForm extends React.Component {
             ]}
           >
             <View style={[styles.onethirdWidth]}>
-              <Text>Location X</Text>
+              <Text>t()</Text>
             </View>
             <View style={[styles.onesixthWidth]}>
               {isEdit ? (

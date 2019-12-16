@@ -67,6 +67,7 @@ class TableLayouts extends React.Component {
 
   render() {
     const { navigation, tablelayouts = [], loading } = this.props
+    const { t } = this.props.screenProps
 
     if (loading) {
       return (
@@ -117,7 +118,6 @@ class TableLayouts extends React.Component {
                       {tblLayout.tables.map(tbl => (
                         <SwipeAction
                           autoClose={true}
-                          //right={right}
                           onOpen={() => this.onOpenNP(tbl.tableId)}
                           onClose={() => {}}
                           key={tbl.tableId}
@@ -144,7 +144,6 @@ class TableLayouts extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  cs: state,
   tablelayouts: state.tablelayouts.data.tableLayouts,
   haveData: state.tablelayouts.haveData,
   haveError: state.tablelayouts.haveError,
