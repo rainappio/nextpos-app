@@ -74,7 +74,6 @@ class TableEdit extends React.Component {
       isLoading
     } = this.props
     const { t } = this.props.screenProps
-
     var choosenTbl = tablelayout.tables.find(
       table => table.tableId === this.props.navigation.state.params.tableId
     )
