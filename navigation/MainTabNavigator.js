@@ -54,6 +54,11 @@ import WorkingAreaAdd from '../screens/WorkingAreaAdd'
 import WorkingAreaEdit from '../screens/WorkingAreaEdit'
 import ShiftClose from '../screens/ShiftClose'
 import LIneItemEdit from '../screens/LIneItemEdit'
+import TableLayouts from '../screens/TableLayouts'
+import TableLayoutEdit from '../screens/TableLayoutEdit'
+import TableLayoutAdd from '../screens/TableLayoutAdd'
+import TableAdd from '../screens/TableAdd'
+import TableEdit from '../screens/TableEdit'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -113,7 +118,12 @@ const Settings = createStackNavigator({
   PrinterEdit: PrinterEdit,
   WorkingAreaAdd: WorkingAreaAdd,
   WorkingAreaEdit: WorkingAreaEdit,
-  ShiftClose: ShiftClose
+  ShiftClose: ShiftClose,
+  TableLayouts: TableLayouts,
+  TableLayoutAdd: TableLayoutAdd,
+  TableLayoutEdit: TableLayoutEdit,
+  TableAdd: TableAdd,
+  TableEdit: TableEdit
 })
 Settings.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.settings'),

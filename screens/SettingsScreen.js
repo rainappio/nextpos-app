@@ -43,7 +43,7 @@ class SettingsScreen extends React.Component {
           {t('menu.settings')}
         </Text>
         <Pages indicatorColor="#FF9100">
-          <View style={{ flex: 1, justifyContent: 'center' }}>
+          <View>
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View
                 style={[
@@ -213,7 +213,7 @@ class SettingsScreen extends React.Component {
             </View>
           </View>
 
-          <View style={{ flex: 1, justifyContent: 'center' }}>
+          <View>
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View
                 style={[
@@ -226,7 +226,7 @@ class SettingsScreen extends React.Component {
                 ]}
               >
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Account')}
+                  onPress={() => this.props.navigation.navigate('TableLayouts')}
                 >
                   <View>
                     <Icon
@@ -237,7 +237,7 @@ class SettingsScreen extends React.Component {
                     />
                     <Text style={styles.centerText}>
                       {/*t('settings.account')*/}
-                      Tables Setting
+                      Table Layouts
                     </Text>
                   </View>
                 </TouchableOpacity>
