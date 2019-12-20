@@ -69,6 +69,12 @@ export const api = {
     getlayouts: `${apiRoot}/tablelayouts`,
     getlayout: `${apiRoot}/tablelayouts/`,
     update: `${apiRoot}/tablelayouts/`
+  },
+  payment: {
+    charge: `${apiRoot}/orders/transactions`
+  },
+  table: {
+    getavailTable: `${apiRoot}/orders/availableTables`
   }
 }
 
@@ -154,5 +160,13 @@ export const errorAlert = response => {
       icon: 'auto',
       autoHide: false
     })
+  })
+}
+
+export const warningMessage = message => {
+  showMessage({
+    message: message,
+    type: 'warning',
+    autoHide: true
   })
 }

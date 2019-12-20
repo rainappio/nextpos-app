@@ -59,6 +59,9 @@ import TableLayoutEdit from '../screens/TableLayoutEdit'
 import TableLayoutAdd from '../screens/TableLayoutAdd'
 import TableAdd from '../screens/TableAdd'
 import TableEdit from '../screens/TableEdit'
+import Payment from '../screens/Payment'
+import PaymentOrder from '../screens/PaymentOrder'
+import CheckoutComplete from '../screens/CheckoutComplete'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -123,7 +126,10 @@ const Settings = createStackNavigator({
   TableLayoutAdd: TableLayoutAdd,
   TableLayoutEdit: TableLayoutEdit,
   TableAdd: TableAdd,
-  TableEdit: TableEdit
+  TableEdit: TableEdit,
+  Payment: Payment,
+  PaymentOrder: PaymentOrder,
+  CheckoutComplete: CheckoutComplete
 })
 Settings.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.settings'),
@@ -155,7 +161,7 @@ Settings.navigationOptions = ({ screenProps: { t } }) => ({
 })
 
 const Tables = createStackNavigator({
-  Tables: TablesScreen,
+  TablesSrc: TablesScreen,
   OrderStart: OrderStart,
   NewOrderForm: OrderForm,
   OrderFormII: OrderFormII,
@@ -171,6 +177,21 @@ Tables.navigationOptions = ({ screenProps: { t } }) => ({
   ),
   tabBarOptions: {
     activeTintColor: '#f18d1a'
+  },
+  tabBarOnPress: ({ navigation, defaultHandler }) => {
+    navigation.dispatch(
+      StackActions.reset({
+        index: 0,
+        key: navigation.state.routes[0].key,
+        actions: [
+          NavigationActions.navigate({
+            routeName: navigation.state.routes[0].routeName
+          })
+        ]
+      })
+    )
+    navigation.navigate('TablesSrc')
+    defaultHandler()
   }
 })
 

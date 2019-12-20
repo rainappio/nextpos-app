@@ -9,7 +9,11 @@ import {
 } from 'react-native'
 import { Accordion, List, SwipeAction } from '@ant-design/react-native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import { getTableLayout, clearTableLayout } from '../actions'
+import {
+  getTableLayout,
+  clearTableLayout,
+  getfetchOrderInflights
+} from '../actions'
 import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
 import { DismissKeyboard } from '../components/DismissKeyboard'
@@ -55,6 +59,7 @@ class TableEdit extends React.Component {
               layoutId: tablelayoutId
             })
             this.props.getTableLayout(tablelayoutId)
+            this.props.getfetchOrderInflights()
           } else {
             errorAlert(response)
           }
@@ -128,7 +133,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   dispatch,
   getTableLayout: id => dispatch(getTableLayout(id)),
-  clearTableLayout: id => dispatch(clearTableLayout(id))
+  clearTableLayout: id => dispatch(clearTableLayout(id)),
+  getfetchOrderInflights: () => dispatch(getfetchOrderInflights())
 })
 export default connect(
   mapStateToProps,

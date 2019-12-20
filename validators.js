@@ -76,3 +76,6 @@ export const fieldValidate = values => {
   }
   return errors
 }
+
+export const isCountZero = value =>
+  value === 0 ? 'Please Choose at least 1 count' : undefined

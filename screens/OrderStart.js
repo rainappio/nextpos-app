@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
-import { clearProduct } from '../actions'
+import { clearProduct, getTablesAvailable } from '../actions'
 import OrderForm from './OrderForm'
 import { api, makeFetchRequest } from '../constants/Backend'
 
@@ -43,6 +43,7 @@ class OrderStart extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
+            this.props.getTablesAvailable()
             this.props.navigation.navigate('OrderFormII', {
               tableId: createOrder.tableId,
               onSubmit: this.props.navigation.state.params.handleOrderSubmit,
@@ -75,7 +76,8 @@ class OrderStart extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  clearProduct: () => dispatch(clearProduct())
+  clearProduct: () => dispatch(clearProduct()),
+  getTablesAvailable: () => dispatch(getTablesAvailable())
 })
 export default connect(
   null,

@@ -12,7 +12,8 @@ import {
   api,
   makeFetchRequest,
   errorAlert,
-  successMessage
+  successMessage,
+  warningMessage
 } from '../constants/Backend'
 import styles from '../styles'
 
@@ -23,9 +24,9 @@ class OrdersSummaryRow extends React.Component {
     console.debug(`order id: ${this.props.order.orderId}`)
   }
 
-  handleCancel = () => {
-    this.props.clearOrder()
-    this.props.navigation.navigate('Tables')
+  handleCancel = orderId => {
+    this.props.clearOrder(orderId)
+    this.props.navigation.navigate('TablesSrc')
   }
 
   handleDeleteLineItem = (orderId, lineItemId) => {
@@ -44,7 +45,7 @@ class OrdersSummaryRow extends React.Component {
           if (response.status === 200) {
             successMessage('Deleted')
             this.props.navigation.navigate('OrdersSummary')
-            this.props.getOrder()
+            this.props.getOrder(this.props.order.orderId)
           } else {
             errorAlert(response)
           }
@@ -194,6 +195,7 @@ class OrdersSummaryRow extends React.Component {
                   handleDelete: this.props.navigation.state.params.handleDelete
                 })
               }
+              disabled={order.state === 'SETTLED' && true}
             />
           }
 
@@ -288,7 +290,8 @@ class OrdersSummaryRow extends React.Component {
               styles.flex_dir_row,
               styles.mgrtotop20,
               styles.grayBg,
-              styles.paddingTopBtn8
+              styles.paddingTopBtn8,
+              styles.mgrbtn20
             ]}
           >
             <View style={[styles.half_width]}>
@@ -296,13 +299,9 @@ class OrdersSummaryRow extends React.Component {
             </View>
 
             <View style={[styles.half_width]}>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('OrdersSummary')}
-              >
-                <Text style={{ textAlign: 'right', marginRight: -26 }}>
-                  {order.orderTotal}
-                </Text>
-              </TouchableOpacity>
+              <Text style={{ textAlign: 'right', marginRight: -26 }}>
+                {order.orderTotal}
+              </Text>
             </View>
           </View>
 
@@ -320,9 +319,13 @@ class OrdersSummaryRow extends React.Component {
             >
               <TouchableOpacity
                 onPress={() =>
-                  this.props.navigation.state.params.onSubmit(order.orderId)
+                  order.lineItems.length == 0
+                    ? warningMessage(
+                        'At Least One Order Item Need To Proceed..'
+                      )
+                    : this.props.navigation.state.params.onSubmit(order.orderId)
                 }
-                //onPress={this.props.handleSubmit}
+                // disabled={order.state === 'DELIVERED' ? false : true}
               >
                 <Text style={[styles.signInText, styles.whiteColor]}>
                   Submit
@@ -368,7 +371,7 @@ class OrdersSummaryRow extends React.Component {
                 onPress={() =>
                   this.props.navigation.state.params.onSubmit(order.orderId)
                 }
-                //onPress={this.props.handleSubmit}
+                disabled={true}
               >
                 <Text style={[styles.signInText, styles.whiteColor]}>
                   Submit
@@ -386,7 +389,7 @@ class OrdersSummaryRow extends React.Component {
               marginTop: 8
             }}
           >
-            <TouchableOpacity onPress={() => this.handleCancel()}>
+            <TouchableOpacity onPress={() => this.handleCancel(order.orderId)}>
               <Text style={styles.signInText}>Back to Tables</Text>
             </TouchableOpacity>
           </View>
@@ -408,6 +411,55 @@ class OrdersSummaryRow extends React.Component {
               <Text style={styles.signInText}>Delete</Text>
             </TouchableOpacity>
           </View>
+
+          {order.state !== 'SETTLED' &&
+            order.state !== 'DELIVERED' &&
+            order.state !== 'OPEN' && (
+              <View
+                style={{
+                  width: '100%',
+                  borderRadius: 4,
+                  borderWidth: 1,
+                  borderColor: '#F39F86',
+                  marginTop: 8
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.state.params.handleDeliver(
+                      order.orderId
+                    )
+                  }}
+                >
+                  <Text style={styles.signInText}>Deliver</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+          {order.state === 'DELIVERED' && (
+            <View
+              style={{
+                width: '100%',
+                borderRadius: 4,
+                borderWidth: 1,
+                borderColor: '#F39F86',
+                marginTop: 8
+              }}
+            >
+              <TouchableOpacity
+                onPress={() =>
+                  order.lineItems.length == 0
+                    ? warningMessage('At Least One Order Item Need Proceed..')
+                    : this.props.navigation.navigate('Payment', {
+                        order: order
+                      })
+                }
+                //disabled={order.state === 'DELIVERED' ? false : true}
+              >
+                <Text style={styles.signInText}>Payment</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </ScrollView>
     )
@@ -416,7 +468,7 @@ class OrdersSummaryRow extends React.Component {
 
 const mapDispatchToProps = (dispatch, props) => ({
   clearOrder: () => dispatch(clearOrder(props.order.orderId)),
-  getOrder: () => dispatch(getOrder(props.order.orderId))
+  getOrder: id => dispatch(getOrder(id))
 })
 
 export default connect(

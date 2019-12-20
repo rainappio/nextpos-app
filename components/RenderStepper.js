@@ -33,12 +33,10 @@ export default class RenderStepper extends React.Component {
             />
           </View>
         </View>
-        <View style={{ width: '100%' }}>
-          {!valid && touched && (
-            <Text style={styles.rootError}>
-              Please choose at least 1 item to create order
-            </Text>
-          )}
+        <View style={{ width: '100%', marginTop: 8 }}>
+          {!valid &&
+            touched &&
+            (error && <Text style={styles.rootError}>{error}</Text>)}
         </View>
       </View>
     )

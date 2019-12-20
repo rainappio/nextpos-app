@@ -57,7 +57,6 @@ class OrdersSummary extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  mee: state,
   order: state.order.data,
   haveData: state.order.haveData,
   haveError: state.order.haveError,
