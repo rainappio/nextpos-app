@@ -12,12 +12,13 @@ import {
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Accordion, List } from '@ant-design/react-native'
-import BackBtn from '../components/BackBtn'
+import BackBtnCustom from '../components/BackBtnCustom'
 import {
   getProducts,
   getLables,
   getfetchOrderInflights,
-  getOrder
+  getOrder,
+  getTablesAvailable
 } from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
@@ -58,6 +59,11 @@ class OrderFormII extends React.Component {
       })
       .done()
   }
+
+  // handleBack = () => {
+  // 	this.props.navigation.goBack();
+  // 	this.props.getTablesAvailable()
+  // }
 
   PanelHeader = (labelName, labelId) => {
     return (
@@ -172,7 +178,7 @@ class OrderFormII extends React.Component {
           refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
         >
           <View style={styles.container}>
-            <BackBtn />
+            {/*<BackBtnCustom onPress={() => this.handleBack()}/>*/}
             <Text
               style={[
                 styles.welcomeText,
@@ -323,7 +329,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   getLables: () => dispatch(getLables()),
   getProducts: () => dispatch(getProducts()),
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
-  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
+  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId)),
+  getTablesAvailable: () => dispatch(getTablesAvailable())
 })
 
 OrderFormII = reduxForm({

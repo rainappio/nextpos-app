@@ -29,6 +29,7 @@ const InputText = ({
   meta: { error, touched, valid },
   isgrayBg,
   iscustomizeCate,
+  cashVal,
   ...rest
 }) => (
   <View>
@@ -49,7 +50,7 @@ const InputText = ({
       onFocus={onFocus}
       secureTextEntry={secureTextEntry}
       keyboardType={keyboardType}
-      value={'' + value}
+      value={!cashVal ? '' + value : '' + cashVal}
       editable={editable}
       autoCapitalize={autoCapitalize}
       inputAccessoryViewID="stateless"
