@@ -32,20 +32,15 @@ import {
   get_time_diff,
   clearOrder,
   clearProduct,
-  getOrder
+  getOrder,
+  getTablesAvailable
 } from '../actions'
 import styles from '../styles'
 import { api, makeFetchRequest } from '../constants/Backend'
 
-let tblsArr = []
-
 class TablesScreen extends React.Component {
   static navigationOptions = {
     header: null
-  }
-
-  state = {
-    refreshing: false
   }
 
   constructor(props) {
@@ -53,6 +48,7 @@ class TablesScreen extends React.Component {
     this.props.getTableLayouts()
     this.props.getfetchOrderInflights()
     this.props.getShiftStatus()
+    this.props.getTablesAvailable()
   }
 
   handleOpenShift = () => {
@@ -99,12 +95,9 @@ class TablesScreen extends React.Component {
         .then(response => response.json())
         .then(res => {
           if (res.hasOwnProperty('orderId')) {
-            this.props.navigation.navigate('Tables')
+            this.props.navigation.navigate('TablesSrc')
             this.props.getfetchOrderInflights()
             this.props.clearOrder(res.orderId)
-            this.setState({
-              refreshing: true
-            })
           } else {
             alert(res.message === undefined ? 'pls try again' : res.message)
           }
@@ -135,9 +128,10 @@ class TablesScreen extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
-            this.props.navigation.navigate('Tables')
+            this.props.navigation.navigate('TablesSrc')
             this.props.getfetchOrderInflights()
             this.props.getTableLayouts()
+            this.props.getTablesAvailable()
             //AsyncStorage.removeItem('orderInfo')
             this.props.clearOrder(id)
           } else {
@@ -158,22 +152,24 @@ class TablesScreen extends React.Component {
       isLoading,
       tablelayouts,
       shiftStatus,
-      ordersInflight
+      ordersInflight,
+      getavailTables
     } = this.props
 
-    let tables = []
-    let tblLength =
-      tablelayouts.tableLayouts !== undefined &&
-      tablelayouts.tableLayouts.length
-    for (var i = 0; i < tblLength; i++) {
-      tablelayouts.tableLayouts[i].tables !== undefined &&
-        tablelayouts.tableLayouts[i].tables.map(tbl =>
-          tables.push({
-            value: tbl.tableId,
-            label: tbl.tableName
+    let tables = [],
+      tblsArr = []
+    var keysArr = getavailTables !== undefined && Object.keys(getavailTables)
+    keysArr !== false &&
+      keysArr.map(
+        key =>
+          getavailTables !== undefined &&
+          getavailTables[key].map(order => {
+            tables.push({
+              value: order.id,
+              label: order.name
+            })
           })
-        )
-    }
+      )
     AsyncStorage.setItem('tables', JSON.stringify(tables))
 
     var keysArr = ordersInflight !== undefined && Object.keys(ordersInflight)
@@ -342,7 +338,8 @@ const mapStateToProps = state => ({
   haveData: state.ordersinflight.haveData,
   haveError: state.ordersinflight.haveError,
   isLoading: state.ordersinflight.loading,
-  shiftStatus: state.shift.data.shiftStatus
+  shiftStatus: state.shift.data.shiftStatus,
+  getavailTables: state.tablesavailable.data.availableTables
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -351,7 +348,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   getTableLayouts: () => dispatch(getTableLayouts()),
   getShiftStatus: () => dispatch(getShiftStatus()),
   clearOrder: () => dispatch(clearOrder()),
-  clearProduct: () => dispatch(clearProduct())
+  clearProduct: () => dispatch(clearProduct()),
+  getTablesAvailable: () => dispatch(getTablesAvailable())
 })
 export default connect(
   mapStateToProps,

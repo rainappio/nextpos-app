@@ -91,3 +91,7 @@ export const readableDateFormat = date => {
     getMinutes
   return formattedDateTime
 }
+
+export function calculatePercentage (Amount, percent) {
+  return (Amount * percent) / 100
+}

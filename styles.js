@@ -33,6 +33,11 @@ export default StyleSheet.create({
     fontSize: 12,
     fontStyle: 'italic'
   },
+  rootWarn: {
+    color: 'yellow',
+    fontSize: 12,
+    fontStyle: 'italic'
+  },
   welcomeImage: {
     width: 40,
     height: 40,

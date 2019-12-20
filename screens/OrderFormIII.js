@@ -1,5 +1,5 @@
 import React from 'react'
-import { reduxForm } from 'redux-form'
+// import { reduxForm } from 'redux-form'
 import {
   ScrollView,
   Text,
@@ -199,9 +199,9 @@ const mapDispatchToProps = (dispatch, props) => ({
   getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
 })
 
-OrderFormIII = reduxForm({
-  form: 'orderformIII'
-})(OrderFormIII)
+// OrderFormIII = reduxForm({
+//   form: 'orderformIII',
+// })(OrderFormIII)
 
 export default connect(
   mapStateToProps,

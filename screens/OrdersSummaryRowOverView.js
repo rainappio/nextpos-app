@@ -8,7 +8,8 @@ export const OrdersSummaryRowOverView = ({
   haveError,
   order,
   navigation,
-  initialValues
+  initialValues,
+  handlePayment
 }) => {
   if (isLoading) {
     return (

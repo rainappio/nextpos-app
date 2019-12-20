@@ -207,7 +207,8 @@ class OrderForm extends Component {
                   }}
                 >
                   <Text style={[styles.signInText, styles.whiteColor]}>
-                    Next
+                    {/*Next*/}
+                    Open Order
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -223,7 +224,7 @@ class OrderForm extends Component {
               >
                 <TouchableOpacity
                   onPress={() => {
-                    this.props.navigation.navigate('Tables')
+                    this.props.navigation.navigate('TablesSrc')
                   }}
                 >
                   <Text style={styles.signInText}>Cancel</Text>
