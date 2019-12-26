@@ -12,15 +12,52 @@ import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
+import RenderRadioBtn from "../components/RadioItem";
 
 class PrinterForm extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        editPrinterTitle: 'Edit Printer',
+        addPrinterTitle: 'Add Printer',
+        printerName: 'Printer Name',
+        ipAddress: 'IP Address',
+        serviceType: {
+          title: 'Service Type',
+          workingArea: 'Working Area',
+          checkout: 'Checkout'
+        },
+      },
+      zh: {
+        editPrinterTitle: '編輯出單機',
+        addPrinterTitle: '新增出單機',
+        printerName: '名稱',
+        ipAddress: 'IP地址',
+        serviceType: {
+          title: '綁定區域',
+          workingArea: '工作區',
+          checkout: '結帳區'
+        }
+      }
+    })
+
+    this.state = {
+      t: context.t
+    }
+  }
+
 
   render() {
     const { handleSubmit, isEdit, handleEditCancel } = this.props
-    //const { t } = this.props.screenProps
+    const { t } = this.state
 
     return (
       <DismissKeyboard>
@@ -28,32 +65,54 @@ class PrinterForm extends React.Component {
           <Text
             style={[styles.textBig, styles.centerText, styles.paddingTopBtn20]}
           >
-            {isEdit ? 'Edit Printers' : 'Add Printers'}
+            {isEdit ? t('editPrinterTitle') : t('addPrinterTitle')}
           </Text>
           <Field
             name="name"
             component={InputText}
             type="text"
             validate={[isRequired]}
-            //placeholder={t('email')}
-            placeholder="Name"
-            autoFocus={true}
+            placeholder={t('printerName')}
           />
           <Field
             name="ipAddress"
             component={InputText}
             validate={isRequired}
-            //placeholder={t('password')}
-            placeholder="IP Address"
-            // secureTextEntry={true}
+            placeholder={t('ipAddress')}
+            keyboardType="numeric"
           />
 
-          <Field
-            name="serviceType"
-            component={InputText}
-            validate={isRequired}
-            placeholder="Service Type"
-          />
+          <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
+            <Text style={styles.textBold}>{t('serviceType.title')}</Text>
+          </View>
+
+          <View
+            style={[
+              styles.borderBottomLine,
+              styles.paddingTopBtn20
+            ]}
+          >
+            <Field
+              name="serviceType"
+              component={RenderRadioBtn}
+              customValue="WORKING_AREA"
+              optionName={t('serviceType.workingArea')}
+            />
+          </View>
+
+          <View
+            style={[
+              styles.borderBottomLine,
+              styles.paddingTopBtn20
+            ]}
+          >
+            <Field
+              name="serviceType"
+              component={RenderRadioBtn}
+              customValue="CHECKOUT"
+              optionName={t('serviceType.checkout')}
+            />
+          </View>
 
           <View
             style={[
@@ -66,8 +125,7 @@ class PrinterForm extends React.Component {
             ]}
           >
             <TouchableOpacity onPress={handleSubmit}>
-              {/* <Text style={styles.gsText}>{t('login')}</Text>*/}
-              <Text style={styles.gsText}>{isEdit ? 'Update' : 'Save'}</Text>
+              <Text style={styles.gsText}>{isEdit ? t('action.update') : t('action.save')}</Text>
             </TouchableOpacity>
           </View>
 
@@ -84,14 +142,14 @@ class PrinterForm extends React.Component {
           >
             {isEdit ? (
               <TouchableOpacity onPress={handleEditCancel}>
-                <Text style={styles.signInText}>Cancel</Text>
+                <Text style={styles.signInText}>{t('action.cancel')}</Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('PrinternKDS')}
               >
                 <Text style={[styles.signInText, styles.orange_color]}>
-                  Cancel
+                  {t('action.cancel')}
                 </Text>
               </TouchableOpacity>
             )}

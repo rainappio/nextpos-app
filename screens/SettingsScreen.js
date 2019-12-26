@@ -236,8 +236,7 @@ class SettingsScreen extends React.Component {
                       style={[styles.centerText, styles.margin_15]}
                     />
                     <Text style={styles.centerText}>
-                      {/*t('settings.account')*/}
-                      Table Layouts
+                      {t('settings.tableLayouts')}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -264,8 +263,7 @@ class SettingsScreen extends React.Component {
                       style={[styles.centerText, styles.margin_15]}
                     />
                     <Text style={styles.centerText}>
-                      {/*t('settings.stores')*/}
-                      Shift Close
+                      {t('settings.manageShifts')}
                     </Text>
                   </View>
                 </TouchableOpacity>

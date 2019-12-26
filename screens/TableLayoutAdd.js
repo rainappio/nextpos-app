@@ -16,6 +16,8 @@ class TableLayoutAdd extends React.Component {
   }
 
   handleSubmit = values => {
+    console.log(JSON.stringify(values))
+
     makeFetchRequest(token => {
       fetch(api.tablelayout.create, {
         method: 'POST',
@@ -60,7 +62,7 @@ class TableLayoutAdd extends React.Component {
                 ]}
               >
                 {/* {t('settings.workingArea')}*/}
-                Add Table Layouts
+                Add Table Layout
               </Text>
             </View>
 

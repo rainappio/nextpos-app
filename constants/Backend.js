@@ -158,7 +158,7 @@ export const errorAlert = response => {
       message: errorMessage,
       type: 'warning',
       icon: 'auto',
-      autoHide: false
+      autoHide: true
     })
   })
 }

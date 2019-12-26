@@ -15,21 +15,43 @@ import InputNumber from '../components/InputNumber'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import AddBtn from '../components/AddBtn'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class TableLayoutForm extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        layoutName: 'Layout Name',
+        totalCapacity: 'Total Floor Capacity',
+        tables: 'Tables'
+      },
+      zh: {
+        layoutName: '樓面名稱',
+        totalCapacity: '桌位總數',
+        tables: '桌位'
+      }
+    })
+
+    this.state = {
+      t: context.t
+    }
+  }
   render() {
     const {
       handleSubmit,
-      t,
       isEdit,
       initialValues,
       tables = [],
       handleEditCancel
     } = this.props
+    const { t } = this.state
 
     Item = ({ table, layoutId }) => {
       return (
@@ -72,71 +94,24 @@ class TableLayoutForm extends React.Component {
             ]}
           >
             <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-              <Text>Layout Name</Text>
+              <Text>{t('layoutName')}</Text>
             </View>
             <View style={[styles.onesixthWidth]}>
               <Field
                 name="layoutName"
                 component={InputText}
                 validate={isRequired}
-                //placeholder={t('email')}
                 placeholder="Layout Name"
-                autoFocus={true}
                 autoCapitalize="none"
               />
             </View>
           </View>
 
-          <View
-            style={[
-              styles.jc_alignIem_center,
-              styles.flex_dir_row,
-              styles.mgrbtn20
-            ]}
-          >
-            <View style={[styles.onethirdWidth]}>
-              <Text>Grid X</Text>
-            </View>
-            <View style={[styles.onesixthWidth]}>
-              <Field
-                name="gridSizeX"
-                component={InputNumber}
-                type="up-down"
-                // placeholder={t('password')}
-                placeholder="Grid Y"
-                minValue={0}
-                customVal={isEdit && initialValues.gridSizeX}
-              />
-            </View>
-          </View>
-
-          <View
-            style={[
-              styles.jc_alignIem_center,
-              styles.flex_dir_row,
-              styles.mgrbtn20
-            ]}
-          >
-            <View style={[styles.onethirdWidth]}>
-              <Text>Grid Y</Text>
-            </View>
-            <View style={[styles.onesixthWidth]}>
-              <Field
-                name="gridSizeY"
-                component={InputNumber}
-                type="up-down"
-                // placeholder={t('password')}
-                minValue={0}
-                placeholder="Grid Y"
-                customVal={isEdit && initialValues.gridSizeY}
-              />
-            </View>
-          </View>
           {isEdit ? (
             <View>
               <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
                 <View style={[styles.onethirdWidth]}>
-                  <Text>Total Capactity</Text>
+                  <Text>{t('totalCapacity')}</Text>
                 </View>
                 <View style={[styles.onesixthWidth]}>
                   <Text
@@ -164,7 +139,7 @@ class TableLayoutForm extends React.Component {
                     styles.textMedium
                   ]}
                 >
-                  Add Tables
+                  {t('tables')}
                 </Text>
                 <AddBtn
                   onPress={() =>

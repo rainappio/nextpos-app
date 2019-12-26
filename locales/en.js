@@ -19,8 +19,10 @@ const en = {
     stores: 'Stores',
     products: 'Products',
     staff: 'Staff',
-    workingArea: 'Printer & KDS',
-    language: 'Language'
+    workingArea: 'Printer/Working Area',
+    language: 'Language',
+    tableLayouts: 'Table Layouts',
+    manageShifts: 'Manage Shift'
   },
   newItem: {
     new: 'New',
@@ -31,6 +33,7 @@ const en = {
   },
   action: {
     save: 'Save',
+    update: 'Update',
     cancel: 'Cancel',
     delete: 'Delete',
     dismiss: 'Dismiss',
@@ -38,7 +41,6 @@ const en = {
     confirmMessage: 'Are you sure?',
     yes: 'Yes',
     no: 'No',
-    update: 'Update'
   },
   bar: 'Bar {{someValue}}'
 }

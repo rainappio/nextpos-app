@@ -10,21 +10,39 @@ import AddBtn from '../components/AddBtn'
 import { getPrinters, getWorkingAreas } from '../actions'
 import PopUp from '../components/PopUp'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class PrinternKDS extends React.Component {
-  constructor() {
-    super(...arguments)
+  static navigationOptions = {
+    header: null
+  }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        printerTitle: 'Printer',
+        workingAreaTitle: 'Working Area'
+      },
+      zh: {
+        printerTitle: '出單機',
+        workingAreaTitle: '工作區'
+      }
+    })
+
     this.state = {
-      activeSections: [2, 0]
+      activeSections: [],
+      t: context.t
     }
+
     this.onChange = activeSections => {
       this.setState({ activeSections })
     }
   }
 
-  static navigationOptions = {
-    header: null
-  }
+
 
   componentDidMount() {
     this.props.getPrinters()
@@ -40,7 +58,7 @@ class PrinternKDS extends React.Component {
       haveError,
       haveData
     } = this.props
-    const { t } = this.props.screenProps
+    const { t } = this.state
 
     if (loading) {
       return (
@@ -52,12 +70,6 @@ class PrinternKDS extends React.Component {
       return (
         <View style={[styles.container]}>
           <Text>Err during loading, check internet conn...</Text>
-        </View>
-      )
-    } else if (workingareas.length === 0) {
-      return (
-        <View style={[styles.container]}>
-          <Text>no workingareas ...</Text>
         </View>
       )
     }
@@ -99,7 +111,7 @@ class PrinternKDS extends React.Component {
                   styles.mgrtotop20
                 ]}
               >
-                Printers
+                {t('printerTitle')}
               </Text>
               <View
                 style={[styles.container, styles.no_mgrTop, styles.mgrbtn20]}
@@ -147,7 +159,7 @@ class PrinternKDS extends React.Component {
                   styles.textMedium
                 ]}
               >
-                Working Area
+                {t('workingAreaTitle')}
               </Text>
 
               <View style={[styles.container, styles.no_mgrTop]}>

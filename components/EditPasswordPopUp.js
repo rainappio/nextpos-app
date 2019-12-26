@@ -58,7 +58,6 @@ class EditPasswordPopUp extends Component {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          // 'x-client-id': tokenObj.clientId,
           Authorization: 'Bearer ' + tokenObj.access_token
         },
         body: JSON.stringify(newPwd)
