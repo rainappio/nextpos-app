@@ -12,7 +12,8 @@ class OrderItem extends React.PureComponent {
       navigation,
       handleOrderSubmit,
       handleDelete,
-      tableId
+      tableId,
+      handleDeliver
     } = this.props
     var timeDifference = get_time_diff(order.createdTime)
 
@@ -32,7 +33,8 @@ class OrderItem extends React.PureComponent {
             handleDelete: handleDelete,
             tableId: tableId,
             orderState: order.state,
-            tableName: order.tableName
+            tableName: order.tableName,
+            handleDeliver: handleDeliver
           })
         }
       >

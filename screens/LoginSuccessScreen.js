@@ -116,7 +116,7 @@ class LoginSuccessScreen extends React.Component {
               ]}
             >
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Tables')}
+                onPress={() => this.props.navigation.navigate('TablesSrc')}
               >
                 <View>
                   <Icon

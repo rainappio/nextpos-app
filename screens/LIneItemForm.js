@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { Text, View, TouchableOpacity } from 'react-native'
 import RenderStepper from '../components/RenderStepper'
-import { isRequired } from '../validators'
+import { isRequired, isCountZero } from '../validators'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 
@@ -23,6 +23,7 @@ class LIneItemForm extends Component {
               component={RenderStepper}
               customValue={this.props.initialValues.quantity}
               optionName="Items Count"
+              validate={isCountZero}
             />
           </View>
 

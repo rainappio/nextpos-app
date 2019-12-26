@@ -5,7 +5,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import CheckBoxGroupObjPick from '../components/CheckBoxGroupObjPick'
 import RadioItemObjPick from '../components/RadioItemObjPick'
 import RenderStepper from '../components/RenderStepper'
-import { isRequired } from '../validators'
+import { isRequired, isCountZero } from '../validators'
 import styles from '../styles'
 
 class OrderFormIV extends React.Component {
@@ -107,7 +107,7 @@ class OrderFormIV extends React.Component {
               <Field
                 name="quantity"
                 component={RenderStepper}
-                validate={isRequired}
+                validate={[isRequired, isCountZero]}
               />
             </View>
 
