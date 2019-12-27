@@ -35,7 +35,6 @@ export const getTableLayouts = () => {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-client-id': tokenObj.clientId,
           Authorization: auth
         }
       })

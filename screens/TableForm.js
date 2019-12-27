@@ -15,22 +15,44 @@ import InputNumber from '../components/InputNumber'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import AddBtn from '../components/AddBtn'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class TableForm extends React.Component {
   static navigationOptions = {
     header: null
+  }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        tableName: 'Table Name',
+        tableCapacity: 'Table Capacity'
+      },
+      zh: {
+        tableName: '桌位名稱',
+        tableCapacity: '桌位人數'
+      }
+    })
+
+    this.state = {
+      t: context.t
+    }
   }
 
   render() {
     const {
       navigation,
       handleSubmit,
-      t,
       isEdit,
       initialValues,
       tables = [],
       handleEditCancel
     } = this.props
+
+    const { t } = this.state
 
     return (
       <DismissKeyboard>
@@ -43,113 +65,30 @@ class TableForm extends React.Component {
             ]}
           >
             <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-              <Text>Table Name</Text>
+              <Text>{t('tableName')}</Text>
             </View>
             <View style={[styles.onesixthWidth]}>
               <Field
                 name="tableName"
                 component={InputText}
                 validate={isRequired}
-                //placeholder={t('email')}
-                placeholder="Table Name"
-                autoFocus={true}
+                placeholder={t('tableName')}
                 autoCapitalize="none"
               />
             </View>
           </View>
 
-          <View
-            style={[
-              styles.jc_alignIem_center,
-              styles.flex_dir_row,
-              styles.mgrbtn20
-            ]}
-          >
-            <View style={[styles.onethirdWidth]}>
-              <Text>t()</Text>
-            </View>
-            <View style={[styles.onesixthWidth]}>
-              {isEdit ? (
-                <Text
-                  style={{
-                    borderWidth: 1,
-                    borderColor: '#ddd',
-                    width: 125,
-                    fontSize: 19,
-                    color: '#888',
-                    paddingTop: 10,
-                    paddingBottom: 10,
-                    paddingLeft: 25
-                  }}
-                >
-                  {isEdit && initialValues.xcoordinate}
-                </Text>
-              ) : (
-                <Field
-                  name="coordinateX"
-                  component={InputNumber}
-                  type="up-down"
-                  // placeholder={t('password')}
-                  placeholder="Location X"
-                  minValue={0}
-                  customVal={isEdit && initialValues.xcoordinate}
-                />
-              )}
-            </View>
-          </View>
-
-          <View
-            style={[
-              styles.jc_alignIem_center,
-              styles.flex_dir_row,
-              styles.mgrbtn20
-            ]}
-          >
-            <View style={[styles.onethirdWidth]}>
-              <Text>Location Y</Text>
-            </View>
-            <View style={[styles.onesixthWidth]}>
-              {isEdit ? (
-                <Text
-                  style={{
-                    borderWidth: 1,
-                    borderColor: '#ddd',
-                    width: 125,
-                    fontSize: 19,
-                    color: '#888',
-                    paddingTop: 10,
-                    paddingBottom: 10,
-                    paddingLeft: 25
-                  }}
-                >
-                  {isEdit && initialValues.ycoordinate}
-                </Text>
-              ) : (
-                <Field
-                  name="coordinateY"
-                  component={InputNumber}
-                  type="up-down"
-                  // placeholder={t('password')}
-                  placeholder="Location Y"
-                  minValue={0}
-                  customVal={isEdit && initialValues.ycoordinate}
-                />
-              )}
-            </View>
-          </View>
-
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
             <View style={[styles.onethirdWidth]}>
-              <Text>Table Capactity</Text>
+              <Text>{t('tableCapacity')}</Text>
             </View>
             <View style={[styles.onesixthWidth]}>
               <Field
                 name="capacity"
                 component={InputNumber}
                 type="up-down"
-                // placeholder={t('password')}
-                placeholder="Total Capactity"
-                minValue={0}
+                placeholder={t('tableCapacity')}
+                minValue={1}
                 customVal={isEdit && initialValues.capacity}
               />
             </View>

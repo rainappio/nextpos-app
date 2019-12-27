@@ -20,7 +20,9 @@ const zh = {
     products: '產品管理',
     staff: '員工',
     workingArea: '工作區/出單機',
-    language: '語言'
+    language: '語言',
+    tableLayouts: '座位管理',
+    manageShifts: '開關帳'
   },
   newItem: {
     new: '新增',
@@ -31,6 +33,7 @@ const zh = {
   },
   action: {
     save: '儲存',
+    update: '更新',
     cancel: '取消',
     delete: '刪除',
     dismiss: '好',
