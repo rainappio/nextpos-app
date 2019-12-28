@@ -15,7 +15,7 @@ import InputNumber from '../components/InputNumber'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import AddBtn from '../components/AddBtn'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class TableForm extends React.Component {
   static navigationOptions = {

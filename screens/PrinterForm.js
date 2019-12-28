@@ -12,8 +12,8 @@ import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
-import RenderRadioBtn from "../components/RadioItem";
+import { LocaleContext } from '../locales/LocaleContext'
+import RenderRadioBtn from '../components/RadioItem'
 
 class PrinterForm extends React.Component {
   static navigationOptions = {
@@ -34,7 +34,7 @@ class PrinterForm extends React.Component {
           title: 'Service Type',
           workingArea: 'Working Area',
           checkout: 'Checkout'
-        },
+        }
       },
       zh: {
         editPrinterTitle: '編輯出單機',
@@ -53,7 +53,6 @@ class PrinterForm extends React.Component {
       t: context.t
     }
   }
-
 
   render() {
     const { handleSubmit, isEdit, handleEditCancel } = this.props
@@ -86,12 +85,7 @@ class PrinterForm extends React.Component {
             <Text style={styles.textBold}>{t('serviceType.title')}</Text>
           </View>
 
-          <View
-            style={[
-              styles.borderBottomLine,
-              styles.paddingTopBtn20
-            ]}
-          >
+          <View style={[styles.borderBottomLine, styles.paddingTopBtn20]}>
             <Field
               name="serviceType"
               component={RenderRadioBtn}
@@ -100,12 +94,7 @@ class PrinterForm extends React.Component {
             />
           </View>
 
-          <View
-            style={[
-              styles.borderBottomLine,
-              styles.paddingTopBtn20
-            ]}
-          >
+          <View style={[styles.borderBottomLine, styles.paddingTopBtn20]}>
             <Field
               name="serviceType"
               component={RenderRadioBtn}
@@ -125,7 +114,9 @@ class PrinterForm extends React.Component {
             ]}
           >
             <TouchableOpacity onPress={handleSubmit}>
-              <Text style={styles.gsText}>{isEdit ? t('action.update') : t('action.save')}</Text>
+              <Text style={styles.gsText}>
+                {isEdit ? t('action.update') : t('action.save')}
+              </Text>
             </TouchableOpacity>
           </View>
 

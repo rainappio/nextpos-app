@@ -1,10 +1,15 @@
 import React from 'react'
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
-import {connect} from 'react-redux'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { connect } from 'react-redux'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtnCustom from '../components/BackBtnCustom'
-import {getShiftStatus} from '../actions'
-import {api, errorAlert, makeFetchRequest, successMessage} from '../constants/Backend'
+import { getShiftStatus } from '../actions'
+import {
+  api,
+  errorAlert,
+  makeFetchRequest,
+  successMessage
+} from '../constants/Backend'
 import styles from '../styles'
 
 let tblsArr = []
@@ -32,7 +37,6 @@ class ShiftClose extends React.Component {
           successMessage('Shift closed successfully')
           this.props.dispatch(getShiftStatus())
           this.props.navigation.navigate('LoginSuccess')
-
         } else {
           errorAlert(response)
         }

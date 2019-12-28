@@ -25,39 +25,50 @@ class Payment extends React.Component {
   handlePayment = values => {
     var discountTotal =
       values.orderTotal -
-      calculatePercentage(values.orderTotal, values.discountPercent)
+      calculatePercentage(values.orderTotal, values.discount.discount)
     this.setState({
       discountTotal: discountTotal
     })
-
-    var orderId = this.props.navigation.state.params.order.orderId
-    makeFetchRequest(token => {
-      fetch(`${api.apiRoot}/orders/${orderId}/applyDiscount`, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        },
-        body: JSON.stringify({ discount: values.discountPercent / 100 })
+    if (values.discount.discount === 0) {
+      this.props.navigation.navigate('PaymentOrder', {
+        order: this.props.navigation.state.params.order,
+        navigation: this.props.navigation,
+        discountTotal: discountTotal
       })
-        .then(response => {
-          if (response.status === 200) {
-            successMessage('Saved %')
-            this.props.navigation.navigate('PaymentOrder', {
-              order: this.props.navigation.state.params.order,
-              navigation: this.props.navigation,
-              discountTotal: discountTotal
-            })
-          } else {
-            errorAlert(response)
-          }
+    } else {
+      var orderId = this.props.navigation.state.params.order.orderId
+      makeFetchRequest(token => {
+        fetch(`${api.apiRoot}/orders/${orderId}/applyDiscount`, {
+          method: 'POST',
+          withCredentials: true,
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token.access_token
+          },
+          // body: JSON.stringify({
+          //   discount: values.discount,
+          //   orderDiscount: values.orderDiscount
+          // })
+          body: JSON.stringify(values.discount)
         })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+          .then(response => {
+            if (response.status === 200) {
+              successMessage('Saved %')
+              this.props.navigation.navigate('PaymentOrder', {
+                order: this.props.navigation.state.params.order,
+                navigation: this.props.navigation,
+                discountTotal: discountTotal
+              })
+            } else {
+              errorAlert(response)
+            }
+          })
+          .catch(error => {
+            console.error(error)
+          })
+      })
+    }
   }
 
   render() {

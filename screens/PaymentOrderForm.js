@@ -9,7 +9,7 @@ import InputText from '../components/InputText'
 import { isRequired } from '../validators'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-let vv = 0
+
 class PaymentOrderForm extends React.Component {
   static navigationOptions = {
     header: null

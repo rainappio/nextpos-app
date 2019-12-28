@@ -2,7 +2,12 @@ import React from 'react'
 import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
 import { SwipeListView } from 'react-native-swipe-list-view'
 import { connect } from 'react-redux'
-import { readableDateFormat, clearOrder, getOrder } from '../actions'
+import {
+  readableDateFormat,
+  clearOrder,
+  getOrder,
+  getfetchOrderInflights
+} from '../actions'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -48,6 +53,35 @@ class OrdersSummaryRow extends React.Component {
             this.props.getOrder(this.props.order.orderId)
           } else {
             errorAlert(response)
+          }
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    })
+  }
+
+  handleComplete = id => {
+    makeFetchRequest(token => {
+      const formData = new FormData()
+      formData.append('action', 'COMPLETED')
+      fetch(`${api.apiRoot}/orders/${id}/process?action=COMPLETE`, {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          Authorization: 'Bearer ' + token.access_token
+        },
+        body: formData
+      })
+        .then(response => response.json())
+        .then(res => {
+          if (res) {
+            this.props.navigation.navigate('TablesSrc')
+            this.props.getfetchOrderInflights()
+            this.props.clearOrder(id)
+          } else {
+            alert(res.message === undefined ? 'pls try again' : res.message)
           }
         })
         .catch(error => {
@@ -262,6 +296,7 @@ class OrdersSummaryRow extends React.Component {
                           initialValues: data.item
                         })
                       }
+                      disabled={order.state === 'DELIVERED' ? true : false}
                     />
                   </View>
                   <View style={styles.delIcon}>
@@ -276,6 +311,7 @@ class OrdersSummaryRow extends React.Component {
                         this.props.navigation.state.params.screenProps
                       }
                       islineItemDelete={true}
+                      disabled={order.state === 'DELIVERED' ? true : false}
                     />
                   </View>
                 </View>
@@ -460,6 +496,25 @@ class OrdersSummaryRow extends React.Component {
               </TouchableOpacity>
             </View>
           )}
+
+          {order.state === 'SETTLED' && (
+            <View
+              style={{
+                width: '100%',
+                borderRadius: 4,
+                borderWidth: 1,
+                borderColor: '#F39F86',
+                marginTop: 8
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => this.handleComplete(order.orderId)}
+                //disabled={order.state === 'DELIVERED' ? false : true}
+              >
+                <Text style={styles.signInText}>Complete</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </ScrollView>
     )
@@ -468,7 +523,8 @@ class OrdersSummaryRow extends React.Component {
 
 const mapDispatchToProps = (dispatch, props) => ({
   clearOrder: () => dispatch(clearOrder(props.order.orderId)),
-  getOrder: id => dispatch(getOrder(id))
+  getOrder: id => dispatch(getOrder(id)),
+  getfetchOrderInflights: () => dispatch(getfetchOrderInflights())
 })
 
 export default connect(
