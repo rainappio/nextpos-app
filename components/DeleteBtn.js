@@ -23,7 +23,12 @@ class DeleteBtn extends React.Component {
   }
 
   render() {
-    const { handleDeleteAction, params, islineItemDelete } = this.props
+    const {
+      handleDeleteAction,
+      params,
+      islineItemDelete,
+      disabled
+    } = this.props
     const { t } = this.state
 
     return (
@@ -45,6 +50,7 @@ class DeleteBtn extends React.Component {
             ]
           )
         }}
+        disabled={disabled}
       >
         {islineItemDelete ? (
           <Icon

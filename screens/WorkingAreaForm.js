@@ -12,7 +12,7 @@ import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class WorkingAreaForm extends React.Component {
   static navigationOptions = {
@@ -43,9 +43,7 @@ class WorkingAreaForm extends React.Component {
     this.state = {
       t: context.t
     }
-
   }
-
 
   render() {
     const { handleSubmit, isEdit, handleEditCancel, navigation } = this.props
@@ -102,7 +100,9 @@ class WorkingAreaForm extends React.Component {
             ]}
           >
             <TouchableHighlight onPress={handleSubmit}>
-              <Text style={styles.gsText}>{isEdit ? t('action.update') : t('action.save')}</Text>
+              <Text style={styles.gsText}>
+                {isEdit ? t('action.update') : t('action.save')}
+              </Text>
             </TouchableHighlight>
           </View>
 

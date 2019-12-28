@@ -10,7 +10,7 @@ import AddBtn from '../components/AddBtn'
 import { getPrinters, getWorkingAreas } from '../actions'
 import PopUp from '../components/PopUp'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class PrinternKDS extends React.Component {
   static navigationOptions = {
@@ -41,8 +41,6 @@ class PrinternKDS extends React.Component {
       this.setState({ activeSections })
     }
   }
-
-
 
   componentDidMount() {
     this.props.getPrinters()
