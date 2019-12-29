@@ -194,21 +194,10 @@ class ClockIn extends React.Component {
             </View>
           </View>
 
-          <View
-            style={[
-              {
-                width: '100%',
-                position: 'absolute',
-                bottom: 0,
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86'
-              }
-            ]}
-          >
+          <View style={[styles.bottom]}>
             <TouchableHighlight>
               <Text
-                style={styles.signInText}
+                style={[styles.bottomActionButton, styles.cancelButton]}
                 onPress={() => this.props.navigation.goBack()}
               >
                 Cancel

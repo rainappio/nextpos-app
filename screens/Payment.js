@@ -50,7 +50,7 @@ class Payment extends React.Component {
         })
           .then(response => {
             if (response.status === 200) {
-              successMessage('Saved %')
+              successMessage('Discount applied')
               this.props.navigation.navigate('PaymentOrder', {
                 order: this.props.navigation.state.params.order,
                 navigation: this.props.navigation,

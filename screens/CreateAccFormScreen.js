@@ -28,12 +28,13 @@ class CreateAccFormScreen extends React.Component {
   }
 
   render() {
-    const { handleSubmit, submitting } = this.props
+    const { handleSubmit } = this.props
     const { t } = this.props.screenProps
+
     return (
-      <View style={styles.container}>
-        <DismissKeyboard>
-          <View style={styles.childContainer}>
+      <DismissKeyboard>
+        <View style={styles.container}>
+          <View style={{flex: 3, justifyContent: 'center'}}>
             <View style={[{ position: 'absolute', top: 0 }]}>
               <Image
                 source={
@@ -76,30 +77,22 @@ class CreateAccFormScreen extends React.Component {
             <Text style={styles.textSmall}>
               View Seller Agreement and Privacy Policy
             </Text>
-
-            <View
-              style={[
-                {
-                  width: '100%',
-                  backgroundColor: '#F39F86',
-                  position: 'absolute',
-                  bottom: 0,
-                  borderRadius: 4
-                }
-              ]}
-            >
-              <TouchableOpacity onPress={handleSubmit}>
-                <Text style={styles.gsText}>{t('signUp')}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Intro')}
-              >
-                <Text style={styles.gsText}>{t('cancel')}</Text>
-              </TouchableOpacity>
-            </View>
           </View>
-        </DismissKeyboard>
-      </View>
+
+          <View style={[styles.bottom]}>
+            <TouchableOpacity onPress={handleSubmit}>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                {t('signUp')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Intro')}
+            >
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('cancel')}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </DismissKeyboard>
     )
   }
 }

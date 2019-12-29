@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native'
+import {makeFetchRequest} from "../constants/Backend";
 export const FETCH_SHIFT = 'FETCH_PRODUCT'
 export const FETCH_SHIFT_SUCCESS = 'FETCH_SHIFT_SUCCESS'
 export const FETCH_SHIFT_FAILURE = 'FETCH_SHIFT_FAILURE'
@@ -20,22 +21,14 @@ export const fetchShiftFailure = error => ({
 export const getShiftStatus = () => {
   return dispatch => {
     dispatch(fetchShift())
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        return JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      var auth = 'Bearer ' + tokenObj.access_token
+
+    makeFetchRequest(token => {
       return fetch('http://35.234.63.193/shifts/active', {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
         headers: {
-          'x-client-id': tokenObj.clientId,
-          Authorization: auth
+          Authorization: 'Bearer ' + token.access_token
         }
       })
         .then(res => res.json())

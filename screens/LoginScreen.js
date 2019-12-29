@@ -5,7 +5,8 @@ import {
   KeyboardAvoidingView,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Keyboard
 } from 'react-native'
 import { isEmail, isRequired } from '../validators'
 import InputText from '../components/InputText'
@@ -41,63 +42,43 @@ class LoginScreen extends React.Component {
           behavior="padding"
           enabled
         >
-          <View style={[{ position: 'absolute', top: 0 }]}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/logo.png')
-                  : require('../assets/images/logo.png')
-              }
-              style={styles.welcomeImage}
+          <View style={{flex: 3, justifyContent: 'center'}}>
+            <View style={[{position: 'absolute', top: 0}]}>
+              <Image
+                source={
+                  __DEV__
+                    ? require('../assets/images/logo.png')
+                    : require('../assets/images/logo.png')
+                }
+                style={styles.welcomeImage}
+              />
+            </View>
+
+            <Field
+              name="username"
+              component={InputText}
+              validate={[isRequired, isEmail]}
+              placeholder={t('email')}
+              autoCapitalize="none"
+            />
+
+            <Field
+              name="masterPassword"
+              component={InputText}
+              validate={isRequired}
+              placeholder={t('password')}
+              secureTextEntry={true}
             />
           </View>
 
-          <Field
-            name="username"
-            component={InputText}
-            validate={[isRequired, isEmail]}
-            placeholder={t('email')}
-            autoFocus={true}
-            autoCapitalize="none"
-          />
-
-          <Field
-            name="masterPassword"
-            component={InputText}
-            validate={isRequired}
-            placeholder={t('password')}
-            secureTextEntry={true}
-          />
-
-          <View
-            style={[
-              {
-                width: '100%',
-                backgroundColor: '#F39F86',
-                marginTop: 40,
-                borderRadius: 4
-              }
-            ]}
-          >
-            <TouchableOpacity onPress={handleSubmit}>
-              <Text style={styles.gsText}>{t('login')}</Text>
+          <View style={[styles.bottom]}>
+            <TouchableOpacity onPress={() => { Keyboard.dismiss() ; handleSubmit() } }>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('login')}</Text>
             </TouchableOpacity>
-          </View>
-
-          <View
-            style={[
-              {
-                width: '100%',
-                marginTop: 8,
-                borderRadius: 4,
-                backgroundColor: '#F39F86'
-              }
-            ]}
-          >
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Intro')}
             >
-              <Text style={styles.gsText}>{t('cancel')}</Text>
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('cancel')}</Text>
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>

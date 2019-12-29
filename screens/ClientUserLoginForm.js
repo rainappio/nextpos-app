@@ -1,14 +1,14 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { Image, Text, View, AsyncStorage } from 'react-native'
-import { encode as btoa } from 'base-64'
+import {Field, reduxForm} from 'redux-form'
+import {AsyncStorage, Image, Text, View} from 'react-native'
+import {encode as btoa} from 'base-64'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import styles from '../styles'
 import InputText from '../components/InputText'
-import { isRequired } from '../validators'
-import { api } from '../constants/Backend'
+import {isRequired} from '../validators'
+import {api, warningMessage} from '../constants/Backend'
 
 class ClientUserLoginForm extends React.Component {
   static navigationOptions = {
@@ -19,80 +19,56 @@ class ClientUserLoginForm extends React.Component {
     isAuthClientUser: false
   }
 
-  clientLogin = passWord => {
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        return JSON.parse(value)
-      }
+  clientLogin = async passWord => {
+
+    let token = await AsyncStorage.getItem('token')
+    const tokenObj = JSON.parse(token)
+    const username = tokenObj.cli_userName
+    const masterPassword = tokenObj.cli_masterPwd
+
+    const formData = new FormData()
+    formData.append('grant_type', 'password')
+    formData.append('username', this.props.clientusersName)
+    formData.append('password', passWord)
+
+    const auth = 'Basic ' + btoa(username + ':' + masterPassword)
+
+    let response = await fetch(api.getAuthToken, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        Authorization: auth
+      },
+      body: formData
     })
-      .then(val => {
-        var tokenObj = JSON.parse(val)
-        var username = tokenObj.cli_userName
-        var masterPassword = tokenObj.cli_masterPwd
 
-        const formData = new FormData()
-        formData.append('grant_type', 'password')
-        formData.append('username', this.props.clientusersName)
-        formData.append('password', passWord)
+    if (response.status === 400) {
+      this.props.navigation.navigate('ClientUsers')
+      warningMessage('Incorrect password.')
 
-        var auth = 'Basic ' + btoa(username + ':' + masterPassword)
-        fetch(api.getAuthToken, {
-          method: 'POST',
-          withCredentials: true,
-          credentials: 'include',
-          headers: {
-            Authorization: auth
-          },
-          body: formData
-        })
-          .then(response => response.json())
-          .then(res => {
-            if (res.error) {
-              alert(res.error)
-              this.props.navigation.navigate('ClientUsers')
-            } else {
-              let clientusrTokenexpiration = new Date().setSeconds(
-                new Date().getSeconds() + parseInt(res.expires_in)
-              )
-              res.clientusrTokenExp = clientusrTokenexpiration
-              AsyncStorage.setItem('clientusrToken', JSON.stringify(res))
-              AsyncStorage.setItem(
-                'clientusersName',
-                this.props.clientusersName
-              )
-              AsyncStorage.getItem('clientusrToken', (err, value) => {
-                if (err) {
-                  console.log(err)
-                } else {
-                  return JSON.parse(value)
-                }
-              }).then(val => {
-                let tokenObj = JSON.parse(val)
-                let accessToken = tokenObj.refresh_token
-                if (accessToken !== null) {
-                  this.props.navigation.navigate('LoginSuccess', {
-                    isAuthClientUser: true,
-                    clientusersName: this.props.clientusersName
-                  })
-                }
-              })
-            }
-            return res
-          })
-          .catch(error => console.log(error))
+    } else {
+      const res = await response.json()
+      res.tokenExp = new Date().setSeconds(
+        new Date().getSeconds() + parseInt(res.expires_in)
+      )
+      await AsyncStorage.setItem('clientusrToken', JSON.stringify(res))
+      await AsyncStorage.setItem('clientusersName', this.props.clientusersName)
+
+      this.props.navigation.navigate('LoginSuccess', {
+        isAuthClientUser: true,
+        clientusersName: this.props.clientusersName
       })
-      .catch(error => console.log(error))
+    }
   }
 
   render() {
-    const { clientusersName } = this.props
+    const {clientusersName} = this.props
 
     return (
       <DismissKeyboard>
         <View style={styles.container}>
-          <View style={[{ position: 'absolute', top: 0 }]}>
+          <View style={[{position: 'absolute', top: 0}]}>
             <Image
               source={
                 __DEV__

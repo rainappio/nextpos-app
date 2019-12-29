@@ -20,10 +20,20 @@ class AccountScreen extends React.Component {
 
   static contextType = LocaleContext
 
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        username: 'User Name'
+      },
+      zh: {
+        username: '使用者名稱'
+      }
+    })
 
     this.state = {
+      t: context.t,
       objects: []
     }
   }
@@ -32,14 +42,6 @@ class AccountScreen extends React.Component {
    * https://stackoverflow.com/questions/49809884/access-react-context-outside-of-render-function
    */
   async componentDidMount() {
-    this.context.localize({
-      en: {
-        username: 'User Name'
-      },
-      zh: {
-        username: '使用者名稱'
-      }
-    })
 
     const objects = []
     let storedKeys = []
@@ -71,12 +73,12 @@ class AccountScreen extends React.Component {
       )
     })
 
-    const { t } = this.props.screenProps
+    const { t } = this.state
 
     return (
       <ScrollView>
         <DismissKeyboard>
-          <View style={styles.container_nocenterCnt}>
+          <View style={styles.container}>
             <BackBtn />
             <Text
               style={[
@@ -88,8 +90,8 @@ class AccountScreen extends React.Component {
             >
               {t('settings.account')}
             </Text>
-            <View style={{ alignItems: 'center' }}>
-              <View>
+            <View>
+              <View style={{flexDirection: 'row'}}>
                 <Avatar rounded title="RA" size="large" />
                 <Badge
                   status="success"
@@ -107,9 +109,14 @@ class AccountScreen extends React.Component {
                     bottom: 0
                   }}
                 />
+                <Text style={styles.text}>{t('username')}</Text>
+                <Text style={styles.text}>test</Text>
               </View>
-              <Text style={styles.text}>{t('username')}</Text>
               <Divider style={{ height: 1, backgroundColor: '#1c3830' }} />
+
+              <View>
+                <Text style={styles.fieldTitle}>Item List</Text>
+              </View>
               <View>{storageItems}</View>
             </View>
           </View>

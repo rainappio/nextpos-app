@@ -6,7 +6,7 @@ import {
   readableDateFormat,
   clearOrder,
   getOrder,
-  getfetchOrderInflights
+  getfetchOrderInflights, formatDate
 } from '../actions'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
@@ -171,7 +171,7 @@ class OrdersSummaryRow extends React.Component {
                     Staff - {order.servedBy}
                   </Text>
                   <Text style={[styles.toRight, styles.mgr_20]}>
-                    {readableDateFormat(order.createdDate)}
+                    {formatDate(order.createdDate)}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -270,7 +270,7 @@ class OrdersSummaryRow extends React.Component {
                           styles.jc_alignIem_center
                         ]}
                       >
-                        <Text>{data.item.subTotal.amountWithoutTax} TX</Text>
+                        <Text>{data.item.subTotal.amountWithTax}</Text>
                       </View>
                     </View>
                     <View style={[styles.mgrbtn20]}>
@@ -324,19 +324,33 @@ class OrdersSummaryRow extends React.Component {
           <View
             style={[
               styles.flex_dir_row,
-              styles.mgrtotop20,
               styles.grayBg,
               styles.paddingTopBtn8,
-              styles.mgrbtn20
             ]}
           >
             <View style={[styles.half_width]}>
               <Text>Total</Text>
             </View>
-
             <View style={[styles.half_width]}>
               <Text style={{ textAlign: 'right', marginRight: -26 }}>
-                {order.orderTotal}
+                {order.total.amountWithTax}
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={[
+              styles.flex_dir_row,
+              styles.grayBg,
+              styles.paddingTopBtn8,
+            ]}
+          >
+            <View style={[styles.half_width]}>
+              <Text>Service Charge</Text>
+            </View>
+            <View style={[styles.half_width]}>
+              <Text style={{textAlign: 'right', marginRight: -26}}>
+                {order.serviceCharge}
               </Text>
             </View>
           </View>

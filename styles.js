@@ -435,9 +435,21 @@ export default StyleSheet.create({
     marginTop: 0
   },
 
+  fieldContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
+  fieldTitle: {
+    fontWeight: 'bold',
+    paddingBottom: 20,
+    borderBottomColor: '#f1f1f1',
+    borderBottomWidth: 1
+  },
   bottom: {
     flex: 1,
     justifyContent: 'flex-end',
+    marginTop: 10,
     marginBottom: 10
   },
   bottomActionButton: {

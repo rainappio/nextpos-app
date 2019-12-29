@@ -7,9 +7,33 @@ import RenderStepper from '../components/RenderStepper'
 import { isRequired } from '../validators'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class OrderForm extends Component {
+
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        selectTable: 'Select a table'
+      },
+      zh: {
+        selectTable: '選擇桌位'
+      }
+    })
+
+    this.state = {
+      t: context.t
+    }
+  }
+
+
   render() {
+    const { t } = this.state
+
     const ageGroupsA = [
       {
         label: '20-29',
@@ -84,7 +108,7 @@ class OrderForm extends Component {
                 search
                 selection
                 fluid
-                placeholder="Product Label"
+                placeholder={{value: null, label: t('selectTable')}}
                 validate={isRequired}
               />
             </View>

@@ -11,10 +11,21 @@ import {
 import { connect } from 'react-redux'
 import { getClientUsrs, doLogout } from '../actions'
 import styles from '../styles'
+import BackBtn from "../components/BackBtn";
+import {LocaleContext} from "../locales/LocaleContext";
 
 class ClientUsers extends React.Component {
   static navigationOptions = {
     header: null
+  }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      t: context.t
+    }
   }
 
   componentDidMount() {
@@ -33,23 +44,14 @@ class ClientUsers extends React.Component {
 
   render() {
     const { clientusers, refreshing, navigation } = this.props
+    const { t } = this.state
 
     return (
       <View
         style={[styles.container]}
         refreshControl={<RefreshControl refreshing={refreshing} />}
       >
-        <View style={[{ position: 'absolute', top: 0 }]}>
-          <Image
-            source={
-              __DEV__
-                ? require('../assets/images/logo.png')
-                : require('../assets/images/logo.png')
-            }
-            style={styles.welcomeImage}
-          />
-        </View>
-
+        <BackBtn />
         <View
           style={[
             {
@@ -64,7 +66,7 @@ class ClientUsers extends React.Component {
               style={{ textAlign: 'right', color: '#f18d1a', marginTop: 12 }}
               onPress={() => this.handleDefaultUserLogout(navigation)}
             >
-              Logout
+              {t('logout')}
             </Text>
           </TouchableHighlight>
         </View>

@@ -22,6 +22,17 @@ class ProductRow extends React.Component {
   constructor(props, context) {
     super(props, context)
 
+    context.localize({
+      en: {
+        productListTitle: 'Product List',
+        ungrouped: 'Ungrouped'
+      },
+      zh: {
+        productListTitle: '產品列表',
+        ungrouped: '未分類'
+      }
+    })
+
     this.state = {
       activeSections: [],
       selectedProducts: [],
@@ -36,17 +47,6 @@ class ProductRow extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.context.localize({
-      en: {
-        productListTitle: 'Product List'
-      },
-      zh: {
-        productListTitle: '產品'
-      }
-    })
-  }
-
   PanelHeader = (labelName, labelId) => {
     return (
       <View
@@ -58,17 +58,19 @@ class ProductRow extends React.Component {
         }}
       >
         <Text style={{ fontSize: 16 }}>{labelName}</Text>
-        <AntDesignIcon
-          name="ellipsis1"
-          size={25}
-          color="black"
-          style={{ position: 'absolute', right: 0, top: 15 }}
-          onPress={() => {
-            this.props.navigation.navigate('CategoryCustomize', {
-              labelId: labelId
-            })
-          }}
-        />
+        {labelId !== '0' &&
+          <AntDesignIcon
+            name="ellipsis1"
+            size={25}
+            color="black"
+            style={{position: 'absolute', right: 0, top: 15}}
+            onPress={() => {
+              this.props.navigation.navigate('CategoryCustomize', {
+                labelId: labelId
+              })
+            }}
+          />
+        }
       </View>
     )
   }
@@ -162,6 +164,31 @@ class ProductRow extends React.Component {
                   </List>
                 </Accordion.Panel>
               ))}
+
+              <Accordion.Panel
+                header={this.PanelHeader(t('ungrouped'), '0')}
+                key='ungrouped'
+              >
+                <List>
+                  {map.get('ungrouped').map(prd => (
+                    <SwipeAction
+                      autoClose={true}
+                      right={right}
+                      onOpen={() => this.onOpenNP(prd.id, '0')}
+                      onClose={() => {}}
+                      key={prd.id}
+                    >
+                      <List.Item key={prd.id}
+                        style={{
+                          backgroundColor: '#f1f1f1'
+                        }}
+                      >
+                        {prd.name}
+                      </List.Item>
+                    </SwipeAction>
+                  ))}
+                </List>
+              </Accordion.Panel>
             </Accordion>
           </View>
         </DismissKeyboard>

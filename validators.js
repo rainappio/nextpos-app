@@ -14,7 +14,7 @@ export const isEmail = value =>
 
 export const isvalidPassword = value =>
   value && !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/.test(value)
-    ? 'Password must have at least one Char and one digit and length 6'
+    ? 'Password must be: at least one uppercase character, one digit and minimum length of 6 characters'
     : undefined
 
 export const isPhoneNumber = value =>

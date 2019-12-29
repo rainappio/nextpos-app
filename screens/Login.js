@@ -1,27 +1,24 @@
 import React from 'react'
-import { AsyncStorage } from 'react-native'
-import { connect } from 'react-redux'
-import { encode as btoa } from 'base-64'
-import { doLoggedIn, getClientUsrs } from '../actions'
+import {AsyncStorage} from 'react-native'
+import {connect} from 'react-redux'
+import {encode as btoa} from 'base-64'
+import {doLoggedIn, getClientUsrs} from '../actions'
 import LoginScreen from './LoginScreen'
+import {api, warningMessage} from "../constants/Backend";
 
 class Login extends React.Component {
   static navigationOptions = {
     header: null
   }
 
-  componentDidMount() {
-    this.props.getClientUsrs()
-  }
-
-  handleSubmit = values => {
+  handleSubmit = async values => {
     const formData = new FormData()
     formData.append('grant_type', 'password')
     formData.append('password', values.masterPassword)
     formData.append('username', values.username)
     const auth = 'Basic ' + btoa(values.username + ':' + values.masterPassword)
 
-    fetch('http://35.234.63.193/oauth/token', {
+    let response = await fetch(api.getAuthToken, {
       method: 'POST',
       withCredentials: true,
       credentials: 'include',
@@ -30,37 +27,31 @@ class Login extends React.Component {
       },
       body: formData
     })
-      .then(response => response.json())
-      .then(res => {
-        if (res.error) {
-          alert(res.error)
-        } else {
-          AsyncStorage.removeItem('token')
-          AsyncStorage.removeItem('clientusrToken')
 
-          var tokenexpiration = new Date().setSeconds(
-            new Date().getSeconds() + parseInt(3599)
-          )
-          res.tokenExp = tokenexpiration
-          res.cli_userName = values.username
-          res.cli_masterPwd = values.masterPassword
-          AsyncStorage.setItem('token', JSON.stringify(res))
-            .then(x => AsyncStorage.getItem('token'))
-            .then(val => {
-              var tokenObj = JSON.parse(val)
-              var accessToken = tokenObj !== null && tokenObj.access_token
-              this.props.dispatch(doLoggedIn(accessToken))
-              this.props.getClientUsrs()
-              this.props.navigation.navigate('LoginSuccess')
-            })
-        }
-        return res
-      })
-      .catch(error => console.log(error))
+    if (!response.ok) {
+      warningMessage('Incorrect username or password.')
+
+    } else {
+      let res = await response.json()
+      await AsyncStorage.removeItem('token')
+      await AsyncStorage.removeItem('clientusrToken')
+
+      res.tokenExp = new Date().setSeconds(
+        new Date().getSeconds() + parseInt(res.expires_in)
+      )
+
+      res.cli_userName = values.username
+      res.cli_masterPwd = values.masterPassword
+
+      await AsyncStorage.setItem('token', JSON.stringify(res))
+      this.props.dispatch(doLoggedIn(res.access_token))
+      this.props.navigation.navigate('LoginSuccess')
+    }
+
+    return response
   }
 
   render() {
-    const { isLoggedIn, navigation, clientusers } = this.props
     return (
       <LoginScreen
         onSubmit={this.handleSubmit}
@@ -79,9 +70,6 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
   doLoggedIn: () => {
     dispatch(doLoggedIn())
-  },
-  getClientUsrs: () => {
-    dispatch(getClientUsrs())
   }
 })
 
