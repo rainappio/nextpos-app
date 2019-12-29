@@ -29,11 +29,12 @@ class RenderCheckBox extends React.Component {
       meta: { error, toched, valid },
       ...rest
     } = this.props
+
     return (
       <View>
         <CheckBox
           title={
-            typeof customValue === 'string' ? (
+            typeof customValue.discount === 'string' ? (
               <TextInput
                 style={{
                   height: 40,
@@ -43,10 +44,11 @@ class RenderCheckBox extends React.Component {
                   paddingLeft: 15
                 }}
                 onChangeText={val => {
-                  onChange(val)
+                  onChange({ discount: val, orderDiscount: 'ENTER_DISCOUNT' })
                   getPercent(val)
                 }}
                 keyboardType={'numeric'}
+                placeholder="Enter Discount"
               />
             ) : (
               optionName
@@ -65,13 +67,13 @@ class RenderCheckBox extends React.Component {
             />
           }
           checked={
-            typeof value !== 'string'
-              ? value === customValue
-              : typeof value === typeof customValue
+            typeof value.discount !== 'string'
+              ? value.discount === customValue.discount
+              : typeof value.discount == typeof customValue.discount
           }
           onPress={() => {
             onChange(customValue)
-            getPercent(customValue)
+            getPercent(customValue.discount)
           }}
         />
       </View>

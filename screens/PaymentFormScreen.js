@@ -2,10 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
-import { getProducts, getLables, getLabel } from '../actions'
+import {
+  getProducts,
+  getLables,
+  getLabel,
+  getfetchglobalOrderOffers
+} from '../actions'
 import BackBtnCustom from '../components/BackBtnCustom'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import RenderCheckBox from '../components/rn-elements/CheckBox'
+import RenderPureCheckBox from '../components/rn-elements/PureCheckBox'
 import InputText from '../components/InputText'
 import {
   api,
@@ -26,6 +32,10 @@ class PaymentFormScreen extends React.Component {
     getPercent: null
   }
 
+  componentDidMount() {
+    this.props.getfetchglobalOrderOffers()
+  }
+
   getPercent = percent => {
     this.setState({
       getPercent: percent
@@ -33,22 +43,23 @@ class PaymentFormScreen extends React.Component {
   }
 
   render() {
-    const { order, navigation, handleSubmit, reset } = this.props
-    const discounts = [
-      {
-        label: 'Staff 20%',
-        value: 20
-      },
-      {
-        label: 'VIP 15%',
-        value: 15
-      },
-      {
-        label: 'Enter Discount',
-        value: ''
-      }
-    ]
-
+    const { order, navigation, handleSubmit, globalorderoffers } = this.props
+    var discounts = []
+    var discountoffers = []
+    globalorderoffers !== undefined &&
+      globalorderoffers.map(globalorderoffer => {
+        discounts.push({
+          label: globalorderoffer.displayName,
+          value: {
+            discount: globalorderoffer.discountValue,
+            orderDiscount: globalorderoffer.offerName
+          }
+        })
+      })
+    discounts.push({
+      label: 'ENTER DISCOUNT',
+      value: { discount: '', orderDiscount: 'ENTER DISCOUNT' }
+    })
     return (
       <ScrollView>
         <DismissKeyboard>
@@ -114,21 +125,26 @@ class PaymentFormScreen extends React.Component {
               </View>
             </View>
 
-            {discounts.map((discount, ix) => (
-              <View
-                style={[styles.borderBottomLine, styles.paddingTopBtn8]}
-                key={ix}
-              >
-                <Field
-                  name="discountPercent"
-                  component={RenderCheckBox}
-                  customValue={discount.value}
-                  optionName={discount.label}
-                  total={order.orderTotal}
-                  getPercent={this.getPercent}
-                />
+            <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
+              <View style={[styles.half_width, styles.textBold]}>
+                <Text>Discount Amounts</Text>
               </View>
-            ))}
+              {discounts.map((discount, ix) => (
+                <View
+                  style={[styles.borderBottomLine, styles.paddingTopBtn8]}
+                  key={ix}
+                >
+                  <Field
+                    name="discount"
+                    component={RenderCheckBox}
+                    customValue={discount.value}
+                    optionName={discount.label}
+                    total={order.orderTotal}
+                    getPercent={this.getPercent}
+                  />
+                </View>
+              ))}
+            </View>
 
             <View
               style={[
@@ -160,7 +176,7 @@ class PaymentFormScreen extends React.Component {
             <View style={[styles.bottom]}>
               <TouchableOpacity onPress={() => handleSubmit()}>
                 <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                  {/*  {t('action.save')}*/}
+                  {/*{t('action.save')}*/}
                   Pay
                 </Text>
               </TouchableOpacity>
@@ -178,15 +194,6 @@ class PaymentFormScreen extends React.Component {
                 </TouchableOpacity>
               </View>
             </View>
-
-            <View>
-              <TouchableOpacity onPress={() => reset()}>
-                <Text style={[styles.graybg, styles.cancelButton]}>
-                  {/* {t('action.cancel')}*/}
-                  Reset
-                </Text>
-              </TouchableOpacity>
-            </View>
           </View>
         </DismissKeyboard>
       </ScrollView>
@@ -195,14 +202,19 @@ class PaymentFormScreen extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
+  globalorderoffers: state.globalorderoffers.data.results,
   initialValues: {
     orderTotal: props.order.orderTotal
   }
 })
 
+const mapDispatchToProps = dispatch => ({
+  getfetchglobalOrderOffers: () => dispatch(getfetchglobalOrderOffers())
+})
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(
   reduxForm({
     form: 'paymentForm',

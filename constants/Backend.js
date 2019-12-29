@@ -45,7 +45,8 @@ export const api = {
   order: {
     openShift: `${apiRoot}/shifts/open`,
     closeShift: `${apiRoot}/shifts/close`,
-    new: `${apiRoot}/orders`
+    new: `${apiRoot}/orders`,
+    get_globalOrderOffers: `${apiRoot}/offers/globalOrderOffers`
   },
   printer: {
     create: `${apiRoot}/printers`,
