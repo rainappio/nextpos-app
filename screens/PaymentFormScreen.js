@@ -50,13 +50,16 @@ class PaymentFormScreen extends React.Component {
       globalorderoffers.map(globalorderoffer => {
         discounts.push({
           label: globalorderoffer.displayName,
-          value: {discount: globalorderoffer.discountValue,orderDiscount: globalorderoffer.offerName},
+          value: {
+            discount: globalorderoffer.discountValue,
+            orderDiscount: globalorderoffer.offerName
+          }
         })
       })
-    	discounts.push({
-      	label: 'ENTER DISCOUNT',
-      	value: {discount: '', orderDiscount: 'ENTER DISCOUNT'}
-    	})
+    discounts.push({
+      label: 'ENTER DISCOUNT',
+      value: { discount: '', orderDiscount: 'ENTER DISCOUNT' }
+    })
     return (
       <ScrollView>
         <DismissKeyboard>

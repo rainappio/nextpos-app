@@ -46,10 +46,6 @@ class Payment extends React.Component {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + token.access_token
           },
-          // body: JSON.stringify({
-          //   discount: values.discount,
-          //   orderDiscount: values.orderDiscount
-          // })
           body: JSON.stringify(values.discount)
         })
           .then(response => {
