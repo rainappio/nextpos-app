@@ -5,16 +5,39 @@ import RenderStepper from '../components/RenderStepper'
 import { isRequired, isCountZero } from '../validators'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class LIneItemForm extends Component {
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        editLineItemTitle: 'Edit LineItem Quantity',
+        quantity: 'Quantity'
+      },
+      zh: {
+        editLineItemTitle: '編輯產品數量',
+        quantity: '數量'
+      }
+    })
+
+    this.state = {
+      t: context.t
+    }
+  }
   render() {
+    const { t } = this.state
+
     return (
       <DismissKeyboard>
         <View style={styles.container}>
           <Text
             style={[styles.welcomeText, styles.orange_color, styles.mgrbtn20]}
           >
-            Edit LineItem Count
+            {t('editLineItemTitle')}
           </Text>
 
           <View style={[styles.paddingTopBtn8]}>
@@ -22,7 +45,7 @@ class LIneItemForm extends Component {
               name="quantity"
               component={RenderStepper}
               customValue={this.props.initialValues.quantity}
-              optionName="Items Count"
+              optionName={t('quantity')}
               validate={isCountZero}
             />
           </View>
@@ -51,7 +74,7 @@ class LIneItemForm extends Component {
                 }}
               >
                 <Text style={[styles.signInText, styles.whiteColor]}>
-                  Update
+                  {t('action.update')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -70,7 +93,7 @@ class LIneItemForm extends Component {
                   this.props.navigation.navigate('OrdersSummary')
                 }}
               >
-                <Text style={styles.signInText}>Cancel</Text>
+                <Text style={styles.signInText}>{t('action.cancel')}</Text>
               </TouchableOpacity>
             </View>
           </View>

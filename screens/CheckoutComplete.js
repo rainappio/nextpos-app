@@ -4,13 +4,45 @@ import { ScrollView, Text, View, Image, TouchableOpacity } from 'react-native'
 import images from '../assets/images'
 import { getfetchOrderInflights, getOrder } from '../actions'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class CheckoutComplete extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        checkoutCompletedTitle: 'Checkout Completed',
+        totalAmount: 'Total Amount',
+        serviceCharge: 'Service Charge',
+        change: 'Change',
+        done: 'Done',
+        completeOrder: 'Complete Order'
+      },
+      zh: {
+        checkoutCompletedTitle: '結帳完成',
+        totalAmount: '總金額',
+        serviceCharge: '服務費',
+        change: '找錢',
+        done: '結束',
+        completeOrder: '結束訂單'
+      }
+    })
+
+    this.state = {
+      t: context.t
+    }
+  }
 
   render() {
+    const { t } = this.state
+    const { transactionResponse } = this.props.navigation.state.params
+
     return (
       <View style={styles.container_nocenterCnt}>
         <Text
@@ -21,7 +53,7 @@ class CheckoutComplete extends React.Component {
             styles.textBold
           ]}
         >
-          Checkout Completed
+          {t('checkoutCompletedTitle')}
         </Text>
 
         <View
@@ -32,10 +64,10 @@ class CheckoutComplete extends React.Component {
             style={{ width: 60, height: 60, marginBottom: 40 }}
           />
           <Text style={styles.centerText}>
-            Total Amount: $&nbsp;
-            {this.props.navigation.state.params.discountTotal.toFixed(2)}
+            {t('totalAmount')}: $&nbsp;
+            {transactionResponse.settleAmount}
           </Text>
-          <Text style={styles.centerText}>Service Charge: $&nbsp;0</Text>
+          <Text style={styles.centerText}>{t('change')}: $&nbsp;{transactionResponse.cashChange}</Text>
         </View>
 
         <View
@@ -52,7 +84,7 @@ class CheckoutComplete extends React.Component {
               this.props.getfetchOrderInflights()
             }}
           >
-            <Text style={[styles.signInText, styles.whiteColor]}>Done</Text>
+            <Text style={[styles.signInText, styles.whiteColor]}>{t('done')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -68,11 +100,11 @@ class CheckoutComplete extends React.Component {
           <TouchableOpacity
             onPress={() =>
               this.props.navigation.state.params.onSubmit(
-                this.props.navigation.state.params.orderId
+                transactionResponse.orderId
               )
             }
           >
-            <Text style={styles.signInText}>Completed</Text>
+            <Text style={styles.signInText}>{t('completeOrder')}</Text>
           </TouchableOpacity>
         </View>
       </View>

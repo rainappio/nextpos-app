@@ -36,19 +36,42 @@ import {
   getTablesAvailable
 } from '../actions'
 import styles from '../styles'
-import { api, makeFetchRequest, errorAlert } from '../constants/Backend'
+import {api, makeFetchRequest, errorAlert, successMessage} from '../constants/Backend'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
     this.props.getTableLayouts()
     this.props.getfetchOrderInflights()
     this.props.getShiftStatus()
     this.props.getTablesAvailable()
+
+    context.localize({
+      en: {
+        openShift: {
+          title: 'Open shift to start sales.',
+          open: 'Open',
+          cancel: 'Cancel'
+        }
+      },
+      zh: {
+        openShift: {
+          title: '請開帳來開始銷售',
+          open: '開帳',
+          cancel: '取消'
+        }
+      }
+    })
+
+    this.state = {
+      t: context.t
+    }
   }
 
   handleOpenShift = () => {
@@ -66,6 +89,7 @@ class TablesScreen extends React.Component {
         })
       }).then(response => {
         if (response.status === 200) {
+          successMessage('Shift opened')
           this.props.dispatch(getShiftStatus())
         }
       })
@@ -182,6 +206,7 @@ class TablesScreen extends React.Component {
       ordersInflight,
       getavailTables
     } = this.props
+    const { t } = this.state
 
     let tables = [],
       tblsArr = []
@@ -244,7 +269,7 @@ class TablesScreen extends React.Component {
                     styles.centerText
                   ]}
                 >
-                  Open Shift
+                  {t('openShift.title')}
                 </Text>
                 <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
                   <View
@@ -259,7 +284,7 @@ class TablesScreen extends React.Component {
                   >
                     <TouchableOpacity onPress={() => this.handleOpenShift()}>
                       <Text style={[styles.signInText, styles.whiteColor]}>
-                        Open
+                        {t('openShift.open')}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -278,7 +303,7 @@ class TablesScreen extends React.Component {
                         this.props.navigation.navigate('LoginSuccess')
                       }}
                     >
-                      <Text style={styles.signInText}>Cancel</Text>
+                      <Text style={styles.signInText}>{t('openShift.cancel')}</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -305,7 +330,7 @@ class TablesScreen extends React.Component {
                   styles.textBold
                 ]}
               >
-                Tables
+                {t('menu.tables')}
               </Text>
               <AddBtn
                 onPress={() =>

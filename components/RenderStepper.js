@@ -15,7 +15,7 @@ export default class RenderStepper extends React.Component {
 
     return (
       <View>
-        <View style={styles.flex_dir_row}>
+        <View style={[styles.flex_dir_row, {alignItems: 'center'}]}>
           <View style={{ width: '60%' }}>
             <Text>{optionName}</Text>
           </View>

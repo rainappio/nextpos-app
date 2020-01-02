@@ -7,14 +7,37 @@ import RadioItemObjPick from '../components/RadioItemObjPick'
 import RenderStepper from '../components/RenderStepper'
 import { isRequired, isCountZero } from '../validators'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class OrderFormIV extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        productOptions: 'Select Product Option(s)',
+        quantity: 'Quanaity'
+      },
+      zh: {
+        productOptions: '選擇產品客制',
+        quantity: '數量'
+      }
+    })
+
+    this.state = {
+      t: context.t
+    }
+  }
+
 
   render() {
     const { product } = this.props
+    const { t } = this.state
 
     return (
       <View style={styles.modalContainer}>
@@ -30,7 +53,10 @@ class OrderFormIV extends React.Component {
             >
               {this.props.navigation.state.params.prdItemName}
             </Text>
-            <Text style={[styles.textBold, styles.paddBottom_20]}>Option</Text>
+            {product.productOptions !== undefined && product.productOptions.length > 0 &&
+            <Text style={[styles.textBold, styles.paddBottom_20]}>{t('productOptions')}</Text>
+            }
+
             {product.productOptions !== undefined &&
               product.productOptions.map(prdOption => {
                 var ArrForTrueState = []
@@ -46,16 +72,12 @@ class OrderFormIV extends React.Component {
                 return (
                   <View key={prdOption.versionId}>
                     <Text
-                      style={{
-                        backgroundColor: '#f1f1f1',
-                        color: '#f18d1a',
-                        padding: 8
-                      }}
+                      style={styles.fieldTitle}
                     >
                       {prdOption.optionName}
                     </Text>
                     {prdOption.multipleChoice === false ? (
-                      <View>
+                      <View style={{borderColor: '#ffab0f', borderWidth: 1}}>
                         {prdOption.optionValues.map((optVal, ix) => {
                           let optionObj = {}
                           optionObj['optionName'] = prdOption.optionName
@@ -64,10 +86,7 @@ class OrderFormIV extends React.Component {
                           optionObj['id'] = prdOption.id
 
                           return (
-                            <View
-                              style={styles.paddingTopBtn8}
-                              key={prdOption.id + ix}
-                            >
+                            <View key={prdOption.id + ix}>
                               <Field
                                 name={prdOption.optionName}
                                 component={RadioItemObjPick}
@@ -103,10 +122,10 @@ class OrderFormIV extends React.Component {
               })}
 
             <View style={styles.paddingTopBtn20}>
-              <Text style={styles.textBold}>Quantity</Text>
               <Field
                 name="quantity"
                 component={RenderStepper}
+                optionName={t('quantity')}
                 validate={[isRequired, isCountZero]}
               />
             </View>
@@ -127,7 +146,7 @@ class OrderFormIV extends React.Component {
                   onPress={this.props.handleSubmit}
                 >
                   <Text style={[styles.signInText, styles.whiteColor]}>
-                    Save
+                    {t('action.save')}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -146,7 +165,7 @@ class OrderFormIV extends React.Component {
                     this.props.navigation.navigate('OrderFormII')
                   }}
                 >
-                  <Text style={styles.signInText}>Cancel</Text>
+                  <Text style={styles.signInText}>{t('action.cancel')}</Text>
                 </TouchableOpacity>
               </View>
             </View>

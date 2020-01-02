@@ -23,13 +23,13 @@ class Payment extends React.Component {
   }
 
   handlePayment = values => {
-    var discountTotal =
-      values.orderTotal -
-      calculatePercentage(values.orderTotal, values.discount.discount)
+    const hasDiscount = values.discount !== undefined && values.discount.discount > 0
+    const discountTotal = values.orderTotal - calculatePercentage(values.orderTotal, values.discount.discount)
     this.setState({
       discountTotal: discountTotal
     })
-    if (values.discount.discount === 0) {
+
+    if (!hasDiscount) {
       this.props.navigation.navigate('PaymentOrder', {
         order: this.props.navigation.state.params.order,
         navigation: this.props.navigation,

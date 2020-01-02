@@ -113,30 +113,33 @@ class ProductRow extends React.Component {
         refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
       >
         <DismissKeyboard>
-          <View style={styles.container}>
-            <BackBtn />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
-              {t('productListTitle')}
-            </Text>
-            <PopUp
-              navigation={navigation}
-              toRoute1={'Category'}
-              toRoute2={'Product'}
-              textForRoute1={t('newItem.category')}
-              textForRoute2={t('newItem.product')}
-            />
+          <View>
+            <View  style={styles.container}>
+              <BackBtn/>
+              <Text
+                style={[
+                  styles.welcomeText,
+                  styles.orange_color,
+                  styles.textMedium,
+                  styles.textBold
+                ]}
+              >
+                {t('productListTitle')}
+              </Text>
+              <PopUp
+                navigation={navigation}
+                toRoute1={'Category'}
+                toRoute2={'Product'}
+                textForRoute1={t('newItem.category')}
+                textForRoute2={t('newItem.product')}
+              />
+            </View>
 
             <Accordion
               onChange={this.onChange}
               activeSections={this.state.activeSections}
               duration={300}
+              style={styles.childContainer}
             >
               {labels.map(lbl => (
                 <Accordion.Panel
@@ -170,7 +173,7 @@ class ProductRow extends React.Component {
                 key="ungrouped"
               >
                 <List>
-                  {map.get('ungrouped').map(prd => (
+                  {map.get('ungrouped') !== undefined && map.get('ungrouped').map(prd => (
                     <SwipeAction
                       autoClose={true}
                       right={right}

@@ -34,7 +34,7 @@ class RenderCheckBox extends React.Component {
       <View>
         <CheckBox
           title={
-            typeof customValue.discount === 'string' ? (
+            customValue.discount === 0 ? (
               <TextInput
                 style={{
                   height: 40,
@@ -66,11 +66,7 @@ class RenderCheckBox extends React.Component {
               style={{ width: 35, height: 35 }}
             />
           }
-          checked={
-            typeof value.discount !== 'string'
-              ? value.discount === customValue.discount
-              : typeof value.discount == typeof customValue.discount
-          }
+          checked={value.orderDiscount === customValue.orderDiscount}
           onPress={() => {
             onChange(customValue)
             getPercent(customValue.discount)

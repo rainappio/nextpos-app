@@ -14,16 +14,20 @@ import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class TableLayouts extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
+
     this.state = {
-      activeSections: [],
+      t: context.t,
+      activeSections: [0],
       tableId: null
     }
     this.onChange = activeSections => {
@@ -37,8 +41,8 @@ class TableLayouts extends React.Component {
       <View
         style={{
           width: '100%',
-          paddingTop: 15,
-          paddingBottom: 15
+          paddingTop: 8,
+          paddingBottom: 8
         }}
       >
         <Text style={[styles.whiteColor, styles.centerText, styles.textMedium]}>
@@ -48,7 +52,7 @@ class TableLayouts extends React.Component {
           name="ellipsis1"
           size={25}
           color="black"
-          style={{ position: 'absolute', right: 0, top: 15 }}
+          style={[styles.whiteColor, { position: 'absolute', right: 3, top: 8 }]}
           onPress={() => {
             this.props.navigation.navigate('TableLayoutEdit', {
               layoutId: layoutId
@@ -67,7 +71,7 @@ class TableLayouts extends React.Component {
 
   render() {
     const { navigation, tablelayouts = [], loading } = this.props
-    const { t } = this.props.screenProps
+    const { t } = this.state
 
     if (loading) {
       return (
@@ -90,8 +94,7 @@ class TableLayouts extends React.Component {
                   styles.textBold
                 ]}
               >
-                {/* {t('settings.workingArea')}*/}
-                Table Layouts
+                {t('settings.tableLayouts')}
               </Text>
 
               <AddBtn

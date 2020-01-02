@@ -18,13 +18,35 @@ import BackBtn from '../components/BackBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class Sales extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        salesDashboard: 'Sales Dashboard'
+      },
+      zh: {
+        salesDashboard: '銷售總覽'
+      }
+    })
+
+    this.state = {
+      t: context.t
+    }
+  }
+
 
   render() {
+    const { t } = this.state
+
     return (
       <ScrollView>
         <View
@@ -62,7 +84,7 @@ class Sales extends React.Component {
               onPress={() => this.props.navigation.navigate('SalesCharts')}
             >
               <Text style={[styles.paddingTopBtn8, styles.whiteColor]}>
-                Sales
+                {t('salesDashboard')}
               </Text>
             </TouchableOpacity>
           </View>
