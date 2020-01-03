@@ -28,7 +28,7 @@ class Store extends React.Component {
   }
 
   handleSubmit = values => {
-    const enabled = values.clientSettings.TAX_INCLUSIVE.enabled;
+    const enabled = values.clientSettings.TAX_INCLUSIVE.enabled
     values.clientSettings.TAX_INCLUSIVE.value = enabled
     console.log(`values: ${JSON.stringify(values)}`)
 

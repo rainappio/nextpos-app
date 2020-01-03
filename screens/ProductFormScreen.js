@@ -123,7 +123,7 @@ class ProductFormScreen extends React.Component {
               search
               selection
               fluid
-              placeholder={{value: null, label: t('productLabel')}}
+              placeholder={{ value: null, label: t('productLabel') }}
             />
 
             <View style={{ marginBottom: 20 }}>

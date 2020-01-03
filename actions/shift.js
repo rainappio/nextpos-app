@@ -1,5 +1,5 @@
 import { AsyncStorage } from 'react-native'
-import {makeFetchRequest} from "../constants/Backend";
+import { makeFetchRequest } from '../constants/Backend'
 export const FETCH_SHIFT = 'FETCH_PRODUCT'
 export const FETCH_SHIFT_SUCCESS = 'FETCH_SHIFT_SUCCESS'
 export const FETCH_SHIFT_FAILURE = 'FETCH_SHIFT_FAILURE'

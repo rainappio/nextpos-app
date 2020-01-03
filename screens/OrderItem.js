@@ -2,6 +2,8 @@ import React from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
 import { get_time_diff } from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import Icon from 'react-native-vector-icons/Ionicons'
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import styles from '../styles'
 import images from '../assets/images'
 
@@ -101,6 +103,20 @@ class OrderItem extends React.PureComponent {
             <Image source={images.order} style={{ width: 15, height: 20 }} />
           ) : order.state === 'IN_PROCESS' ? (
             <Image source={images.process} style={{ width: 30, height: 20 }} />
+          ) : order.state === 'SETTLED' ? (
+            <Icon
+              name={'md-checkmark-circle-outline'}
+              color="#4cbb17"
+              size={25}
+              style={{ marginLeft: 8, marginRight: 8, fontWeight: 'bold' }}
+            />
+          ) : order.state === 'DELIVERED' ? (
+            <MCIcon
+              name={'truck-delivery'}
+              size={25}
+              style={{ marginLeft: 8, marginRight: 8, fontWeight: 'bold' }}
+              color="#f18d1a"
+            />
           ) : (
             order.state === 'COMPLETED' && (
               <Image

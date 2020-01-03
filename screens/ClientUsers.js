@@ -11,8 +11,8 @@ import {
 import { connect } from 'react-redux'
 import { getClientUsrs, doLogout } from '../actions'
 import styles from '../styles'
-import BackBtn from "../components/BackBtn";
-import {LocaleContext} from "../locales/LocaleContext";
+import BackBtn from '../components/BackBtn'
+import { LocaleContext } from '../locales/LocaleContext'
 
 class ClientUsers extends React.Component {
   static navigationOptions = {

@@ -31,10 +31,13 @@ export function checkNaN (value) {
   isNaN(value) ? 0 : value
 }
 
-export const formatDate = (date) => {
+export const formatDate = date => {
   const dateMillis = Date.parse(date.slice(0, date.length - 5))
   const dateObj = new Date(dateMillis)
-  return dateObj.toLocaleString('en-TW', {dateStyle: 'long', timeZone: 'Asia/Taipei'})
+  return dateObj.toLocaleString('en-TW', {
+    dateStyle: 'long',
+    timeZone: 'Asia/Taipei'
+  })
 }
 
 export const readableDateFormat = date => {

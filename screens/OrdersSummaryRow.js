@@ -6,7 +6,8 @@ import {
   readableDateFormat,
   clearOrder,
   getOrder,
-  getfetchOrderInflights, formatDate
+  getfetchOrderInflights,
+  formatDate
 } from '../actions'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
@@ -322,11 +323,7 @@ class OrdersSummaryRow extends React.Component {
           </View>
 
           <View
-            style={[
-              styles.flex_dir_row,
-              styles.grayBg,
-              styles.paddingTopBtn8,
-            ]}
+            style={[styles.flex_dir_row, styles.grayBg, styles.paddingTopBtn8]}
           >
             <View style={[styles.half_width]}>
               <Text>Total</Text>
@@ -339,17 +336,13 @@ class OrdersSummaryRow extends React.Component {
           </View>
 
           <View
-            style={[
-              styles.flex_dir_row,
-              styles.grayBg,
-              styles.paddingTopBtn8,
-            ]}
+            style={[styles.flex_dir_row, styles.grayBg, styles.paddingTopBtn8]}
           >
             <View style={[styles.half_width]}>
               <Text>Service Charge</Text>
             </View>
             <View style={[styles.half_width]}>
-              <Text style={{textAlign: 'right', marginRight: -26}}>
+              <Text style={{ textAlign: 'right', marginRight: -26 }}>
                 {order.serviceCharge}
               </Text>
             </View>

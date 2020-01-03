@@ -1,10 +1,10 @@
 import React from 'react'
-import {AsyncStorage} from 'react-native'
-import {connect} from 'react-redux'
-import {encode as btoa} from 'base-64'
-import {doLoggedIn, getClientUsrs} from '../actions'
+import { AsyncStorage } from 'react-native'
+import { connect } from 'react-redux'
+import { encode as btoa } from 'base-64'
+import { doLoggedIn, getClientUsrs } from '../actions'
 import LoginScreen from './LoginScreen'
-import {api, warningMessage} from "../constants/Backend";
+import { api, warningMessage } from '../constants/Backend'
 
 class Login extends React.Component {
   static navigationOptions = {
@@ -30,7 +30,6 @@ class Login extends React.Component {
 
     if (!response.ok) {
       warningMessage('Incorrect username or password.')
-
     } else {
       let res = await response.json()
       await AsyncStorage.removeItem('token')

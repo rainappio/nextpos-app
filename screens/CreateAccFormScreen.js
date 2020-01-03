@@ -34,7 +34,7 @@ class CreateAccFormScreen extends React.Component {
     return (
       <DismissKeyboard>
         <View style={styles.container}>
-          <View style={{flex: 3, justifyContent: 'center'}}>
+          <View style={{ flex: 3, justifyContent: 'center' }}>
             <View style={[{ position: 'absolute', top: 0 }]}>
               <Image
                 source={
@@ -88,7 +88,9 @@ class CreateAccFormScreen extends React.Component {
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Intro')}
             >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('cancel')}</Text>
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                {t('cancel')}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -7,10 +7,9 @@ import RenderStepper from '../components/RenderStepper'
 import { isRequired } from '../validators'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class OrderForm extends Component {
-
   static contextType = LocaleContext
 
   constructor(props, context) {
@@ -29,7 +28,6 @@ class OrderForm extends Component {
       t: context.t
     }
   }
-
 
   render() {
     const { t } = this.state
@@ -108,7 +106,7 @@ class OrderForm extends Component {
                 search
                 selection
                 fluid
-                placeholder={{value: null, label: t('selectTable')}}
+                placeholder={{ value: null, label: t('selectTable') }}
                 validate={isRequired}
               />
             </View>
