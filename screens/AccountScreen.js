@@ -42,7 +42,6 @@ class AccountScreen extends React.Component {
    * https://stackoverflow.com/questions/49809884/access-react-context-outside-of-render-function
    */
   async componentDidMount() {
-
     const objects = []
     let storedKeys = []
 
@@ -91,7 +90,7 @@ class AccountScreen extends React.Component {
               {t('settings.account')}
             </Text>
             <View>
-              <View style={{flexDirection: 'row'}}>
+              <View style={{ flexDirection: 'row' }}>
                 <Avatar rounded title="RA" size="large" />
                 <Badge
                   status="success"

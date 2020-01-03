@@ -32,7 +32,6 @@ class IntroAppScreen extends React.Component {
   }
 
   isTokenAlive = async () => {
-
     let token = await AsyncStorage.getItem('clientusrToken')
 
     if (token == null) {
@@ -43,11 +42,9 @@ class IntroAppScreen extends React.Component {
 
     if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {
       this.props.navigation.navigate('LoginSuccess')
-
     } else if (tokenObj == null) {
       this.props.dispatch(doLogout())
       this.props.navigation.navigate('Login')
-
     } else {
       this.props.dispatch(doLogout())
       this.props.navigation.navigate('Login')
@@ -59,8 +56,8 @@ class IntroAppScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <View style={{flex: 3, justifyContent: 'center'}}>
-          <View style={[{position: 'absolute', top: 0}]}>
+        <View style={{ flex: 3, justifyContent: 'center' }}>
+          <View style={[{ position: 'absolute', top: 0 }]}>
             <Image
               source={
                 __DEV__
@@ -79,10 +76,14 @@ class IntroAppScreen extends React.Component {
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('CreateAcc')}
           >
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('createAccount')}</Text>
+            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              {t('createAccount')}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={this.isTokenAlive}>
-            <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('signIn')}</Text>
+            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+              {t('signIn')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

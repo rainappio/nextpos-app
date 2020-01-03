@@ -1,12 +1,17 @@
 import React from 'react'
-import {Text, View} from 'react-native'
-import {connect} from 'react-redux'
+import { Text, View } from 'react-native'
+import { connect } from 'react-redux'
 import BackBtnCustom from '../components/BackBtnCustom'
-import {getShiftStatus} from '../actions'
-import {api, errorAlert, makeFetchRequest, successMessage} from '../constants/Backend'
+import { getShiftStatus } from '../actions'
+import {
+  api,
+  errorAlert,
+  makeFetchRequest,
+  successMessage
+} from '../constants/Backend'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
-import ConfirmActionButton from "../components/ConfirmActionButton";
+import { LocaleContext } from '../locales/LocaleContext'
+import ConfirmActionButton from '../components/ConfirmActionButton'
 
 class ShiftClose extends React.Component {
   static navigationOptions = {
@@ -43,7 +48,6 @@ class ShiftClose extends React.Component {
     this.props.getShiftStatus()
   }
 
-
   handleCloseShift = () => {
     makeFetchRequest(token => {
       fetch(api.shift.close, {
@@ -70,13 +74,8 @@ class ShiftClose extends React.Component {
   }
 
   render() {
-    const {
-      haveData,
-      haveError,
-      isLoading,
-      shift,
-    } = this.props
-    const {t} = this.state
+    const { haveData, haveError, isLoading, shift } = this.props
+    const { t } = this.state
 
     return (
       <View style={styles.container}>
@@ -97,23 +96,27 @@ class ShiftClose extends React.Component {
           </Text>
         </View>
 
-        <View style={{flex: 3, justifyContent: 'center'}}>
+        <View style={{ flex: 3, justifyContent: 'center' }}>
           <Text style={[styles.fieldTitle]}>
             {t('shiftStatus')}: {shift.shiftStatus}
           </Text>
 
-          {shift.shiftStatus === 'ACTIVE' &&
-          <View>
-            <Text style={[styles.fieldTitle]}>{t('openAt')}: {shift.open.timestamp}</Text>
-            <Text style={[styles.fieldTitle]}>{t('openBy')}: {shift.open.who}</Text>
-          </View>
-          }
+          {shift.shiftStatus === 'ACTIVE' && (
+            <View>
+              <Text style={[styles.fieldTitle]}>
+                {t('openAt')}: {shift.open.timestamp}
+              </Text>
+              <Text style={[styles.fieldTitle]}>
+                {t('openBy')}: {shift.open.who}
+              </Text>
+            </View>
+          )}
         </View>
 
         <View style={[styles.bottom]}>
           <ConfirmActionButton
             handleConfirmAction={this.handleCloseShift}
-            buttonTitle='closeShift'
+            buttonTitle="closeShift"
           />
         </View>
       </View>
@@ -129,7 +132,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getShiftStatus: () => dispatch(getShiftStatus())
-
 })
 export default connect(
   mapStateToProps,

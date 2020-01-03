@@ -58,19 +58,19 @@ class ProductRow extends React.Component {
         }}
       >
         <Text style={{ fontSize: 16 }}>{labelName}</Text>
-        {labelId !== '0' &&
+        {labelId !== '0' && (
           <AntDesignIcon
             name="ellipsis1"
             size={25}
             color="black"
-            style={{position: 'absolute', right: 0, top: 15}}
+            style={{ position: 'absolute', right: 0, top: 15 }}
             onPress={() => {
               this.props.navigation.navigate('CategoryCustomize', {
                 labelId: labelId
               })
             }}
           />
-        }
+        )}
       </View>
     )
   }
@@ -167,7 +167,7 @@ class ProductRow extends React.Component {
 
               <Accordion.Panel
                 header={this.PanelHeader(t('ungrouped'), '0')}
-                key='ungrouped'
+                key="ungrouped"
               >
                 <List>
                   {map.get('ungrouped').map(prd => (
@@ -178,7 +178,8 @@ class ProductRow extends React.Component {
                       onClose={() => {}}
                       key={prd.id}
                     >
-                      <List.Item key={prd.id}
+                      <List.Item
+                        key={prd.id}
                         style={{
                           backgroundColor: '#f1f1f1'
                         }}

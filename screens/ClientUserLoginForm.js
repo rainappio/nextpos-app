@@ -1,14 +1,14 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
-import {AsyncStorage, Image, Text, View} from 'react-native'
-import {encode as btoa} from 'base-64'
+import { Field, reduxForm } from 'redux-form'
+import { AsyncStorage, Image, Text, View } from 'react-native'
+import { encode as btoa } from 'base-64'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 import InputText from '../components/InputText'
-import {isRequired} from '../validators'
-import {api, warningMessage} from '../constants/Backend'
+import { isRequired } from '../validators'
+import { api, warningMessage } from '../constants/Backend'
 
 class ClientUserLoginForm extends React.Component {
   static navigationOptions = {
@@ -20,7 +20,6 @@ class ClientUserLoginForm extends React.Component {
   }
 
   clientLogin = async passWord => {
-
     let token = await AsyncStorage.getItem('token')
     const tokenObj = JSON.parse(token)
     const username = tokenObj.cli_userName
@@ -46,7 +45,6 @@ class ClientUserLoginForm extends React.Component {
     if (response.status === 400) {
       this.props.navigation.navigate('ClientUsers')
       warningMessage('Incorrect password.')
-
     } else {
       const res = await response.json()
       res.tokenExp = new Date().setSeconds(
@@ -63,12 +61,12 @@ class ClientUserLoginForm extends React.Component {
   }
 
   render() {
-    const {clientusersName} = this.props
+    const { clientusersName } = this.props
 
     return (
       <DismissKeyboard>
         <View style={styles.container}>
-          <View style={[{position: 'absolute', top: 0}]}>
+          <View style={[{ position: 'absolute', top: 0 }]}>
             <Image
               source={
                 __DEV__
