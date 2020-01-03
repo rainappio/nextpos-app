@@ -42,8 +42,8 @@ class LoginScreen extends React.Component {
           behavior="padding"
           enabled
         >
-          <View style={{flex: 3, justifyContent: 'center'}}>
-            <View style={[{position: 'absolute', top: 0}]}>
+          <View style={{ flex: 3, justifyContent: 'center' }}>
+            <View style={[{ position: 'absolute', top: 0 }]}>
               <Image
                 source={
                   __DEV__
@@ -72,13 +72,22 @@ class LoginScreen extends React.Component {
           </View>
 
           <View style={[styles.bottom]}>
-            <TouchableOpacity onPress={() => { Keyboard.dismiss() ; handleSubmit() } }>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('login')}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                Keyboard.dismiss()
+                handleSubmit()
+              }}
+            >
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                {t('login')}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Intro')}
             >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('cancel')}</Text>
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                {t('cancel')}
+              </Text>
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>

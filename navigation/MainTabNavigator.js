@@ -62,6 +62,8 @@ import TableEdit from '../screens/TableEdit'
 import Payment from '../screens/Payment'
 import PaymentOrder from '../screens/PaymentOrder'
 import CheckoutComplete from '../screens/CheckoutComplete'
+import Sales from '../screens/Sales'
+import SalesCharts from '../screens/SalesCharts'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -222,7 +224,9 @@ Reservation.navigationOptions = ({ screenProps: { t } }) => ({
 })
 
 const Reports = createStackNavigator({
-  Reports: ReportsScreen
+  Reports: ReportsScreen,
+  Sales: Sales,
+  SalesCharts: SalesCharts
 })
 Reports.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.reporting'),

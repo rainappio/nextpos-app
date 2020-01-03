@@ -1,7 +1,9 @@
 import React from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import { ScrollView, Text, View, TouchableOpacity, Image } from 'react-native'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
+import BackBtnCustom from '../components/BackBtnCustom'
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import images from '../assets/images'
 import styles from '../styles'
 
 class ReportsScreen extends React.Component {
@@ -14,7 +16,9 @@ class ReportsScreen extends React.Component {
       <ScrollView>
         <DismissKeyboard>
           <View style={styles.container}>
-            <BackBtn />
+            <BackBtnCustom
+              onPress={() => this.props.navigation.navigate('LoginSuccess')}
+            />
             <Text
               style={[
                 styles.welcomeText,
@@ -25,6 +29,67 @@ class ReportsScreen extends React.Component {
             >
               Reports
             </Text>
+
+            <View style={[styles.jc_alignIem_center]}>
+              <View
+                style={[
+                  styles.margin_15,
+                  styles.orange_bg,
+                  styles.half_width,
+                  styles.jc_alignIem_center,
+                  styles.paddTop_30,
+                  styles.paddBottom_30
+                ]}
+              >
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Sales')}
+                >
+                  <View>
+                    <FontAwesomeIcon
+                      name="bar-chart"
+                      size={40}
+                      color="#fff"
+                      style={[styles.centerText, styles.margin_15]}
+                    />
+                    <Text
+                      style={[
+                        styles.centerText,
+                        styles.textBold,
+                        styles.whiteColor
+                      ]}
+                    >
+                      Sales
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={[styles.jc_alignIem_center]}>
+              <View
+                style={[
+                  styles.margin_15,
+                  styles.lightgrayBg,
+                  styles.half_width,
+                  styles.jc_alignIem_center,
+                  styles.paddingTopBtn20
+                ]}
+              >
+                <TouchableOpacity
+                //onPress={() => this.props.navigation.navigate('TablesSrc')}
+                >
+                  <View style={styles.jc_alignIem_center}>
+                    <Image
+                      source={images.beenclock}
+                      style={{ width: 50, height: 50, margin: 15 }}
+                    />
+                    <Text style={[styles.centerText, styles.textBold]}>
+                      Staff TimeCard
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </DismissKeyboard>
       </ScrollView>

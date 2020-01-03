@@ -21,6 +21,7 @@ import { reducer as printerReducer } from './printer'
 import { reducer as workingareaReducer } from './workingarea'
 import { reducer as tablesavailableReducer } from './tablesavailable'
 import { reducer as globalorderoffersReducer } from './globalorderoffers'
+import { reducer as rangedsalesreportReducer } from './rangedsalesreport'
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -44,6 +45,7 @@ const rootReducer = combineReducers({
   printer: printerReducer,
   workingarea: workingareaReducer,
   tablesavailable: tablesavailableReducer,
-  globalorderoffers: globalorderoffersReducer
+  globalorderoffers: globalorderoffersReducer,
+  getrangedsalesreport: rangedsalesreportReducer
 })
 export default rootReducer
