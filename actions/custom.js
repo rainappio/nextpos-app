@@ -1,5 +1,3 @@
-import { AsyncStorage } from 'react-native'
-
 export function get_time_diff (datetime) {
   var t = datetime.split(/[- :T]/)
   var date = new Date(
@@ -31,6 +29,12 @@ export function get_time_diff (datetime) {
 export function checkNaN (value) {
   var value = parseInt(value)
   isNaN(value) ? 0 : value
+}
+
+export const formatDate = (date) => {
+  const dateMillis = Date.parse(date.slice(0, date.length - 5))
+  const dateObj = new Date(dateMillis)
+  return dateObj.toLocaleString('en-TW', {dateStyle: 'long', timeZone: 'Asia/Taipei'})
 }
 
 export const readableDateFormat = date => {

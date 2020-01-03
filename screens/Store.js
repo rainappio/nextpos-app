@@ -28,6 +28,10 @@ class Store extends React.Component {
   }
 
   handleSubmit = values => {
+    const enabled = values.clientSettings.TAX_INCLUSIVE.enabled;
+    values.clientSettings.TAX_INCLUSIVE.value = enabled
+    console.log(`values: ${JSON.stringify(values)}`)
+
     makeFetchRequest(token => {
       fetch(api.client.update, {
         method: 'POST',
@@ -40,7 +44,6 @@ class Store extends React.Component {
         body: JSON.stringify(values)
       })
         .then(response => {
-          console.log(response)
           if (response.status === 200) {
             successMessage('Saved')
             this.props.navigation.navigate('SettingScr')
@@ -59,6 +62,8 @@ class Store extends React.Component {
   render() {
     const { client, navigation, loading, haveData } = this.props
     const { refreshing, errorResponse } = this.state
+
+    console.log(client)
 
     if (loading) {
       return (

@@ -82,8 +82,8 @@ export const api = {
 export const makeFetchRequest = async fetchRequest => {
   try {
     let useClientUserToken = true
-    // let token = await AsyncStorage.getItem(storage.clientUserAccessToken)
-    let token = await AsyncStorage.getItem(storage.clientAccessToken)
+    let token = await AsyncStorage.getItem(storage.clientUserAccessToken)
+    //let token = await AsyncStorage.getItem(storage.clientAccessToken)
 
     if (token == null) {
       useClientUserToken = false

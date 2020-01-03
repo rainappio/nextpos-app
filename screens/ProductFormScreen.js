@@ -33,7 +33,6 @@ class ProductFormScreen extends React.Component {
         newProduct: 'New Product',
         editProduct: 'Edit Product',
         productName: 'Product Name',
-        sku: 'SKU',
         price: 'Price',
         productLabel: 'Product Label',
         description: 'Description',
@@ -44,9 +43,8 @@ class ProductFormScreen extends React.Component {
         newProduct: '新增產品',
         editProduct: '修改產品',
         productName: '產品名稱',
-        sku: 'SKU',
         price: '價格',
-        productLabel: '分類',
+        productLabel: '產品分類',
         description: '產品敘述',
         options: '產品選項',
         workingArea: '工作區'
@@ -110,13 +108,6 @@ class ProductFormScreen extends React.Component {
             />
 
             <Field
-              name="sku"
-              component={InputText}
-              placeholder={t('sku')}
-              secureTextEntry={false}
-            />
-
-            <Field
               name="price"
               component={InputText}
               validate={isRequired}
@@ -132,7 +123,7 @@ class ProductFormScreen extends React.Component {
               search
               selection
               fluid
-              placeholder={t('productLabel')}
+              placeholder={{value: null, label: t('productLabel')}}
             />
 
             <View style={{ marginBottom: 20 }}>

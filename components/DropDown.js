@@ -9,7 +9,8 @@ export default class DropDown extends Component {
       input: { onChange, value, ...inputProps },
       children,
       meta: { error, touched, valid },
-      options
+      options,
+      placeholder
     } = this.props
 
     return (
@@ -25,6 +26,7 @@ export default class DropDown extends Component {
           }}
         >
           <RNPickerSelect
+            placeholder={placeholder}
             items={options}
             onValueChange={value => onChange(value)}
             value={value}
