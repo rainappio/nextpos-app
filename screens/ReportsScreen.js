@@ -5,13 +5,36 @@ import BackBtnCustom from '../components/BackBtnCustom'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import images from '../assets/images'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class ReportsScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        salesReport: 'Sales Reports',
+        staffTimeCardReport: 'Staff Time Card'
+      },
+      zh: {
+        salesReport: '銷售報表',
+        staffTimeCardReport: '職員打卡表'
+      }
+    })
+
+    this.state = {
+      t: context.t
+    }
+  }
 
   render() {
+    const { t } = this.state
+
     return (
       <ScrollView>
         <DismissKeyboard>
@@ -27,7 +50,7 @@ class ReportsScreen extends React.Component {
                 styles.textBold
               ]}
             >
-              Reports
+              {t('menu.reporting')}
             </Text>
 
             <View style={[styles.jc_alignIem_center]}>
@@ -58,7 +81,7 @@ class ReportsScreen extends React.Component {
                         styles.whiteColor
                       ]}
                     >
-                      Sales
+                      {t('salesReport')}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -84,7 +107,7 @@ class ReportsScreen extends React.Component {
                       style={{ width: 50, height: 50, margin: 15 }}
                     />
                     <Text style={[styles.centerText, styles.textBold]}>
-                      Staff TimeCard
+                      {t('staffTimeCardReport')}
                     </Text>
                   </View>
                 </TouchableOpacity>

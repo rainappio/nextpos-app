@@ -20,11 +20,22 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import TableForm from './TableForm'
 import { api, makeFetchRequest, errorAlert } from '../constants/Backend'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class TableEdit extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      t: context.t
+    }
+  }
+
 
   componentDidMount() {
     this.props.getTableLayout(this.props.navigation.state.params.layoutId)
@@ -78,7 +89,7 @@ class TableEdit extends React.Component {
       haveError,
       isLoading
     } = this.props
-    const { t } = this.props.screenProps
+    const { t } = this.state
     var choosenTbl = tablelayout.tables.find(
       table => table.tableId === this.props.navigation.state.params.tableId
     )
@@ -104,8 +115,7 @@ class TableEdit extends React.Component {
                   styles.textBold
                 ]}
               >
-                {/* {t('settings.workingArea')}*/}
-                Edit Table
+                {t('editTableTitle')}
               </Text>
               <TableForm
                 onSubmit={this.handleSubmit}

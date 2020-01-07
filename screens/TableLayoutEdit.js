@@ -13,12 +13,22 @@ import { getTableLayouts, getTableLayout, clearTableLayout } from '../actions'
 import BackBtn from '../components/BackBtn'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import TableLayoutForm from './TableLayoutForm'
-import { api, makeFetchRequest, errorAlert } from '../constants/Backend'
+import {api, makeFetchRequest, errorAlert, successMessage} from '../constants/Backend'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class TableLayoutEdit extends React.Component {
   static navigationOptions = {
     header: null
+  }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      t: context.t
+    }
   }
 
   componentDidMount() {
@@ -51,6 +61,7 @@ class TableLayoutEdit extends React.Component {
       })
         .then(response => {
           if (response.status === 200) {
+            successMessage('Saved')
             this.props.navigation.navigate('TableLayouts')
             this.props.getTableLayouts()
           } else {
@@ -71,7 +82,7 @@ class TableLayoutEdit extends React.Component {
       haveError,
       isLoading
     } = this.props
-    const { t } = this.props.screenProps
+    const { t } = this.state
 
     if (isLoading) {
       return (
@@ -94,8 +105,7 @@ class TableLayoutEdit extends React.Component {
                   styles.textBold
                 ]}
               >
-                {/* {t('settings.workingArea')}*/}
-                Edit Table Layouts
+                {t('editTableLayoutTitle')}
               </Text>
             </View>
 

@@ -31,9 +31,11 @@ class Sales extends React.Component {
 
     context.localize({
       en: {
+        salesReportTitle: 'Sales Reports',
         salesDashboard: 'Sales Dashboard'
       },
       zh: {
+        salesReportTitle: '銷售報表',
         salesDashboard: '銷售總覽'
       }
     })
@@ -65,7 +67,7 @@ class Sales extends React.Component {
               styles.textBold
             ]}
           >
-            Sales
+            {t('salesReportTitle')}
           </Text>
         </View>
 
