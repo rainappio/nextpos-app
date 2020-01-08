@@ -5,7 +5,7 @@ import {
   View,
   AsyncStorage,
   Button,
-  Alert
+  Alert, TouchableOpacity
 } from 'react-native'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
@@ -62,12 +62,11 @@ class AccountScreen extends React.Component {
   render() {
     const storageItems = this.state.objects.map(obj => {
       return (
-        <View key={obj.key}>
-          <Text style={styles.text}>{obj.key}</Text>
-          <Button
-            title="Show value"
-            onPress={() => Alert.alert('Value', obj.value, [{ text: 'Ok' }])}
-          />
+        <View key={obj.key} style={styles.fieldContainer}>
+          <Text style={[styles.fieldTitle, {flex: 2}]}>{obj.key}</Text>
+          <TouchableOpacity onPress={() => Alert.alert('Value', obj.value, [{ text: 'Ok' }])}>
+            <Text style={{flex: 1}}>Details</Text>
+          </TouchableOpacity>
         </View>
       )
     })
@@ -90,31 +89,14 @@ class AccountScreen extends React.Component {
               {t('settings.account')}
             </Text>
             <View>
-              <View style={{ flexDirection: 'row' }}>
+              <View style={[styles.fieldTitle, {flexDirection: 'row', justifyContent: 'space-between'}]}>
                 <Avatar rounded title="RA" size="large" />
-                <Badge
-                  status="success"
-                  badgeStyle={{
-                    borderRadius: 9,
-                    height: 18,
-                    minWidth: 0,
-                    width: 18
-                  }}
-                  containerStyle={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    left: 60,
-                    bottom: 0
-                  }}
-                />
-                <Text style={styles.text}>{t('username')}</Text>
-                <Text style={styles.text}>test</Text>
+                <Text style={styles.text}>{t('username')}: </Text>
+                <Text style={styles.text}>XXXX</Text>
               </View>
-              <Divider style={{ height: 1, backgroundColor: '#1c3830' }} />
 
-              <View>
-                <Text style={styles.fieldTitle}>Item List</Text>
+              <View style={styles.fieldContainer}>
+                <Text style={styles.fieldTitle}>Developer Section</Text>
               </View>
               <View>{storageItems}</View>
             </View>

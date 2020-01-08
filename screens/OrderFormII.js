@@ -23,15 +23,28 @@ import {
 } from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  constructor() {
-    super(...arguments)
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        newOrderTitle: 'New Order'
+      },
+      zh: {
+        newOrderTitle: '新訂單'
+      }
+    })
+
     this.state = {
+      t: context.t,
       activeSections: [],
       selectedProducts: [],
       refreshing: false,
@@ -95,7 +108,7 @@ class OrderFormII extends React.Component {
       ordersInflight,
       order
     } = this.props
-    const { selectedProducts, tables } = this.state
+    const { t, tables } = this.state
     var map = new Map(Object.entries(products))
     let orderIdArr = []
     var recentlyAddedOrderId = null
@@ -178,7 +191,7 @@ class OrderFormII extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <ScrollView
-          refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
+          refreshControl={<RefreshControl refreshing={this.state.refreshing}/>}
         >
           <View style={styles.container}>
             {/*<BackBtnCustom onPress={() => this.handleBack(recentlyAddedOrderId[0])}/>*/}
@@ -190,9 +203,10 @@ class OrderFormII extends React.Component {
                 styles.textBold
               ]}
             >
-              New Order
+              {t('newOrderTitle')}
             </Text>
-
+          </View>
+          <View style={styles.childContainer}>
             <Accordion
               onChange={this.onChange}
               activeSections={this.state.activeSections}
@@ -223,7 +237,10 @@ class OrderFormII extends React.Component {
                           })
                         }
                       >
-                        {prd.name}
+                        <View style={{flex: 1, flexDirection: 'row'}}>
+                          <Text style={{flex: 1}}>{prd.name}</Text>
+                          <Text style={{flex: 1, justifyContent: 'flex-end'}}>${prd.price}</Text>
+                        </View>
                       </List.Item>
                     ))}
                   </List>

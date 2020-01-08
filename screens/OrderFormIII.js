@@ -18,20 +18,19 @@ import { getProduct, getOrder } from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 import OrderFormIV from './OrderFormIV'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class OrderFormIII extends React.Component {
-  componentDidMount() {
-    this.props.getProduct()
-    this.props.getOrder(this.props.navigation.state.params.orderId)
-  }
-
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  constructor() {
-    super(...arguments)
+  constructor(props, context) {
+    super(props, context)
+
     this.state = {
+      t: context.t,
       activeSections: [2, 0],
       selectedProducts: [],
       refreshing: false,
@@ -43,6 +42,11 @@ class OrderFormIII extends React.Component {
     this.onChange = activeSections => {
       this.setState({ activeSections })
     }
+  }
+
+  componentDidMount() {
+    this.props.getProduct()
+    this.props.getOrder(this.props.navigation.state.params.orderId)
   }
 
   handleSubmit = values => {
@@ -109,6 +113,7 @@ class OrderFormIII extends React.Component {
 
   render() {
     const { navigation, haveError, isLoading, order } = this.props
+    const { t } = this.state
 
     function Item({ title, price }) {
       return (

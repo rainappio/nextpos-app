@@ -97,11 +97,14 @@ class PaymentOrder extends React.Component {
         .then(response => {
           if (response.status === 200) {
             successMessage('Charged')
-            this.props.navigation.navigate('CheckoutComplete', {
-              discountTotal: this.props.navigation.state.params.discountTotal,
-              onSubmit: this.handleComplete,
-              orderId: this.props.navigation.state.params.order.orderId
+
+            response.json().then(data => {
+              this.props.navigation.navigate('CheckoutComplete', {
+                transactionResponse: data,
+                onSubmit: this.handleComplete
+              })
             })
+
           } else {
             errorAlert(response)
           }

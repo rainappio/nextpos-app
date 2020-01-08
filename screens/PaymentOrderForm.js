@@ -9,11 +9,43 @@ import InputText from '../components/InputText'
 import { isRequired } from '../validators'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class PaymentOrderForm extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        paymentMethodTitle: 'Payment Method',
+        totalAmount: 'Total Amount',
+        cash: 'Cash',
+        enterCash: 'Enter Cash',
+        taxIDNumber: 'Tax ID Number',
+        enterTaxIDNumber: 'Enter Tax ID Number',
+        charge: 'Charge'
+      },
+      zh: {
+        paymentMethodTitle: '付費方式',
+        totalAmount: '總金額',
+        cash: '現金',
+        enterCash: '輸入現金',
+        taxIDNumber: '統一編號',
+        enterTaxIDNumber: '輸入統一編號',
+        charge: '結帳'
+      }
+    })
+
+    this.state = {
+      t: context.t
+    }
+  }
+
 
   render() {
     const moneyAmts = [
@@ -47,6 +79,9 @@ class PaymentOrderForm extends React.Component {
       addNum,
       dynamicTotal
     } = this.props
+
+    const { t } = this.state
+
     return (
       <ScrollView>
         <View
@@ -66,7 +101,7 @@ class PaymentOrderForm extends React.Component {
               styles.textBold
             ]}
           >
-            Payment Order
+            {t('paymentMethodTitle')}
           </Text>
 
           <View
@@ -105,7 +140,7 @@ class PaymentOrderForm extends React.Component {
         >
           <View style={[styles.half_width]}>
             <Text style={[styles.textMedium, styles.whiteColor]}>
-              Total Amount
+              {t('totalAmount')}
             </Text>
           </View>
 
@@ -119,7 +154,6 @@ class PaymentOrderForm extends React.Component {
               ]}
             >
               $&nbsp;{discountTotal.toFixed(2)}
-              &nbsp;TX
             </Text>
           </View>
         </View>
@@ -127,14 +161,13 @@ class PaymentOrderForm extends React.Component {
         <View style={[styles.container, styles.no_mgrTop]}>
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
             <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-              {/*<Text>{t('clientName')}</Text>*/}
-              <Text>Cash</Text>
+              <Text>{t('cash')}</Text>
             </View>
             <View style={[styles.onesixthWidth]}>
               <Field
                 name="cash"
                 component={InputText}
-                placeholder="Enter Cash"
+                placeholder={t('enterCash')}
                 keyboardType={'numeric'}
               />
             </View>
@@ -180,14 +213,13 @@ class PaymentOrderForm extends React.Component {
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
             <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
               {/*<Text>{t('clientName')}</Text>*/}
-              <Text>Tax ID Number</Text>
+              <Text>{t('taxIDNumber')}</Text>
             </View>
             <View style={[styles.onesixthWidth]}>
               <Field
                 name="idnumber"
                 component={InputText}
-                // validate={isRequired}
-                placeholder="Enter ID Number"
+                placeholder={t('enterTaxIDNumber')}
                 keyboardType={'numeric'}
               />
             </View>
@@ -196,8 +228,7 @@ class PaymentOrderForm extends React.Component {
           <View style={[styles.mgrtotop20]}>
             <TouchableOpacity onPress={() => handleSubmit()}>
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {/*  {t('action.save')}*/}
-                Charge
+                {t('charge')}
               </Text>
             </TouchableOpacity>
 
@@ -206,8 +237,7 @@ class PaymentOrderForm extends React.Component {
                 onPress={() => this.props.navigation.navigate('Payment')}
               >
                 <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                  {/* {t('action.cancel')}*/}
-                  Cancel
+                  {t('action.cancel')}
                 </Text>
               </TouchableOpacity>
             </View>

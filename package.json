@@ -54,7 +54,8 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-form": "^8.2.4",
     "redux-thunk": "^2.3.0",
-    "validator": "^11.1.0"
+    "validator": "^11.1.0",
+    "expo-constants": "latest"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0",

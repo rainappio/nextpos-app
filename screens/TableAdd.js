@@ -16,10 +16,20 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import TableForm from './TableForm'
 import { api, makeFetchRequest, errorAlert } from '../constants/Backend'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class TableAdd extends React.Component {
   static navigationOptions = {
     header: null
+  }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      t: context.t
+    }
   }
 
   handleSubmit = values => {
@@ -52,7 +62,7 @@ class TableAdd extends React.Component {
 
   render() {
     const { navigation, tablelayout } = this.props
-    const { t } = this.props.screenProps
+    const { t } = this.state
 
     return (
       <ScrollView>
@@ -68,8 +78,7 @@ class TableAdd extends React.Component {
                   styles.textBold
                 ]}
               >
-                {/* {t('settings.workingArea')}*/}
-                Add Table
+                {t('addTableTitle')}
               </Text>
             </View>
             <TableForm

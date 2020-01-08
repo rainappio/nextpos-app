@@ -22,14 +22,42 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { LineChart } from 'react-native-chart-kit'
 import { getRangedSalesReport } from '../actions'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class SalesCharts extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  state = {
-    dataArr: []
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        salesDashboardTitle: 'Sales Dashboard',
+        todaySales: 'Today\'s Sales',
+        product: 'Product',
+        quantity: 'Quantity',
+        amount: 'Amount',
+        percentage: 'Percentage',
+        noSalesData: 'No sales data'
+      },
+      zh: {
+        salesDashboardTitle: '銷售總覽',
+        todaySales: '今日營業額',
+        product: '產品',
+        quantity: '總數量',
+        amount: '金額',
+        percentage: '比例',
+        noSalesData: '目前沒有銷售資料'
+      }
+    })
+
+    this.state = {
+      t: context.t,
+      dataArr: []
+    }
   }
 
   componentDidMount() {
@@ -38,13 +66,17 @@ class SalesCharts extends React.Component {
 
   render() {
     const { getrangedSalesReport, isLoading, haveData } = this.props
+    const { t } = this.state
+
     let data = {}
     data.labels = []
     data.datasets = []
     let innerObj = {}
     innerObj.data = []
 
-    if (haveData) {
+    const containSalesData = haveData && getrangedSalesReport.salesByRange !== undefined && getrangedSalesReport.salesByRange.length > 0
+
+    if (containSalesData) {
       for (var i = 0; i < getrangedSalesReport.salesByRange.length; i++) {
         data.labels.push(getrangedSalesReport.salesByRange[i].formattedDate)
         innerObj.data.push(getrangedSalesReport.salesByRange[i].total)
@@ -83,15 +115,15 @@ class SalesCharts extends React.Component {
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
+            <Text>{salesByPrdData.salesQuantity}</Text>
+          </View>
+
+          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
             <Text>&nbsp;&nbsp;{salesByPrdData.productSales}</Text>
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
             <Text>{salesByPrdData.percentage}&nbsp;%</Text>
-          </View>
-
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <Text>{salesByPrdData.salesQuantity}</Text>
           </View>
         </View>
       )
@@ -103,7 +135,27 @@ class SalesCharts extends React.Component {
           <ActivityIndicator size="large" color="#ccc" />
         </View>
       )
+    } else if (!containSalesData) {
+      return (
+        <View style={[styles.container, styles.nomgrBottom]}>
+          <View style={{flex: 1}}>
+            <BackBtn/>
+            <Text
+              style={[
+                styles.welcomeText,
+                styles.orange_color,
+                styles.textMedium,
+                styles.textBold
+              ]}
+            >
+              {t('salesDashboardTitle')}
+            </Text>
+          </View>
+          <Text style={{flex: 3, alignSelf: 'center'}}>{t('noSalesData')}</Text>
+        </View>
+      )
     }
+
     return (
       <ScrollView>
         <View style={[styles.container, styles.nomgrBottom]}>
@@ -116,7 +168,7 @@ class SalesCharts extends React.Component {
               styles.textBold
             ]}
           >
-            Sales Charts
+            {t('salesDashboardTitle')}
           </Text>
 
           <Text
@@ -127,7 +179,7 @@ class SalesCharts extends React.Component {
               styles.textBold
             ]}
           >
-            Today Total Sales - {getrangedSalesReport.todayTotal}
+            {t('todaySales')} - ${getrangedSalesReport.todayTotal}
           </Text>
         </View>
         {data.labels.length !== 0 && (
@@ -150,25 +202,25 @@ class SalesCharts extends React.Component {
         >
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text style={[styles.paddingTopBtn8]}>Product Name</Text>
+              <Text style={[styles.paddingTopBtn8]}>{t('product')}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text style={{ marginLeft: -20 }}>&nbsp;&nbsp;Amount</Text>
+              <Text style={{ marginLeft: -20 }}>{t('quantity')}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text>Percentage</Text>
+              <Text>{t('amount')}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text>Quantity</Text>
+              <Text>{t('percentage')}</Text>
             </TouchableOpacity>
           </View>
         </View>

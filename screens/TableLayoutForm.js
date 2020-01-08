@@ -28,11 +28,15 @@ class TableLayoutForm extends React.Component {
 
     context.localize({
       en: {
+        addTableLayoutTitle: 'Add Table Layout',
+        editTableLayoutTitle: 'Edit Table Layout',
         layoutName: 'Layout Name',
         totalCapacity: 'Total Floor Capacity',
         tables: 'Tables'
       },
       zh: {
+        addTableLayoutTitle: '新增樓面',
+        editTableLayoutTitle: '編輯樓面',
         layoutName: '樓面名稱',
         totalCapacity: '桌位總數',
         tables: '桌位'
@@ -43,6 +47,7 @@ class TableLayoutForm extends React.Component {
       t: context.t
     }
   }
+
   render() {
     const {
       handleSubmit,
@@ -101,7 +106,7 @@ class TableLayoutForm extends React.Component {
                 name="layoutName"
                 component={InputText}
                 validate={isRequired}
-                placeholder="Layout Name"
+                placeholder={t('layoutName')}
                 autoCapitalize="none"
               />
             </View>

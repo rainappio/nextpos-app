@@ -28,10 +28,14 @@ class TableForm extends React.Component {
 
     context.localize({
       en: {
+        addTableTitle: 'Add Table',
+        editTableTitle: 'Edit Table',
         tableName: 'Table Name',
         tableCapacity: 'Table Capacity'
       },
       zh: {
+        addTableTitle: '新增桌位',
+        editTableTitle: '編輯桌位',
         tableName: '桌位名稱',
         tableCapacity: '桌位人數'
       }

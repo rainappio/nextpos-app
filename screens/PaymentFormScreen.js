@@ -22,14 +22,40 @@ import {
 import { isRequired } from '../validators'
 import { calculatePercentage } from '../actions'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class PaymentFormScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  state = {
-    getPercent: null
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        paymentTitle: 'Payment',
+        total: 'Total',
+        serviceCharge: 'Service Charge',
+        discount: 'Discount',
+        grandTotal: 'Grand Total',
+        payOrder: 'Pay'
+      },
+      zh: {
+        paymentTitle: '付款',
+        total: '總計',
+        serviceCharge: '服務費',
+        discount: '折扣',
+        grandTotal: '總金額',
+        payOrder: '付帳'
+      }
+    })
+
+    this.state = {
+      t: context.t,
+      getPercent: null
+    }
   }
 
   componentDidMount() {
@@ -44,8 +70,14 @@ class PaymentFormScreen extends React.Component {
 
   render() {
     const { order, navigation, handleSubmit, globalorderoffers } = this.props
+    const { t } = this.state
+
     var discounts = []
-    var discountoffers = []
+    discounts.push({
+      label: 'No Discount',
+      value: { discount: null, orderDiscount: 'NO_DISCOUNT' }
+    })
+
     globalorderoffers !== undefined &&
       globalorderoffers.map(globalorderoffer => {
         discounts.push({
@@ -56,10 +88,6 @@ class PaymentFormScreen extends React.Component {
           }
         })
       })
-    discounts.push({
-      label: 'ENTER DISCOUNT',
-      value: { discount: '', orderDiscount: 'ENTER DISCOUNT' }
-    })
     return (
       <ScrollView>
         <DismissKeyboard>
@@ -75,7 +103,7 @@ class PaymentFormScreen extends React.Component {
                 styles.textBold
               ]}
             >
-              Payment
+              {t('paymentTitle')}
             </Text>
 
             <View
@@ -87,7 +115,7 @@ class PaymentFormScreen extends React.Component {
               ]}
             >
               <View style={[styles.half_width, styles.textBold]}>
-                <Text>Total</Text>
+                <Text>{t('total')}</Text>
               </View>
 
               <View style={[styles.half_width]}>
@@ -97,7 +125,7 @@ class PaymentFormScreen extends React.Component {
                     styles.textBold
                   ]}
                 >
-                  $&nbsp;{order.orderTotal.toFixed(2)}
+                  $&nbsp;{order.total.amountWithTax.toFixed(2)}
                 </Text>
               </View>
             </View>
@@ -110,7 +138,7 @@ class PaymentFormScreen extends React.Component {
               ]}
             >
               <View style={[styles.half_width, styles.textBold]}>
-                <Text>Service Fees</Text>
+                <Text>{t('serviceCharge')}</Text>
               </View>
 
               <View style={[styles.half_width]}>
@@ -127,7 +155,7 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
               <View style={[styles.half_width, styles.textBold]}>
-                <Text>Discount Amounts</Text>
+                <Text>{t('discount')}</Text>
               </View>
               {discounts.map((discount, ix) => (
                 <View
@@ -154,7 +182,7 @@ class PaymentFormScreen extends React.Component {
               ]}
             >
               <View style={[styles.half_width, styles.textBold]}>
-                <Text>Total Amount</Text>
+                <Text>{t('grandTotal')}</Text>
               </View>
 
               <View style={[styles.half_width]}>
@@ -176,8 +204,7 @@ class PaymentFormScreen extends React.Component {
             <View style={[styles.bottom]}>
               <TouchableOpacity onPress={() => handleSubmit()}>
                 <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                  {/*{t('action.save')}*/}
-                  Pay
+                  {t('payOrder')}
                 </Text>
               </TouchableOpacity>
 
@@ -188,8 +215,7 @@ class PaymentFormScreen extends React.Component {
                   <Text
                     style={[styles.bottomActionButton, styles.cancelButton]}
                   >
-                    {/* {t('action.cancel')}*/}
-                    Cancel
+                     {t('action.cancel')}
                   </Text>
                 </TouchableOpacity>
               </View>

@@ -16,10 +16,10 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginTop: 8,
-    marginLeft: 35,
-    marginRight: 35,
     marginBottom: 20,
-    position: 'relative'
+    marginLeft: 0,
+    marginRight: 0,
+    paddingRight: 0
   },
   rootInput: {
     height: 44,
@@ -202,8 +202,8 @@ export default StyleSheet.create({
     bottom: 4
   },
   standalone: {
-    marginTop: 30,
-    marginBottom: 30
+    marginTop: 20,
+    marginBottom: 20
   },
   standaloneRowFront: {
     alignItems: 'center',
@@ -362,6 +362,9 @@ export default StyleSheet.create({
   quarter_width: {
     width: '25%'
   },
+  oneFifthWidth: {
+    width: '20%'
+  },
   myradio: {
     borderWidth: 1,
     borderColor: '#ccc',
@@ -436,7 +439,7 @@ export default StyleSheet.create({
   },
 
   fieldContainer: {
-    justifyContent: 'center',
+    //justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row'
   },
@@ -456,8 +459,6 @@ export default StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     fontSize: 16,
-    color: '#fff',
-    backgroundColor: '#F39F86',
     borderRadius: 4,
     borderWidth: 1,
     borderColor: '#F39F86',

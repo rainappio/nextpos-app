@@ -6,26 +6,12 @@ import { getOrder } from '../actions'
 import OrdersSummaryRowOverView from './OrdersSummaryRowOverView'
 
 class OrdersSummary extends React.Component {
-  componentDidMount() {
-    this.props.getOrder()
-  }
-
   static navigationOptions = {
     header: null
   }
 
-  constructor() {
-    super(...arguments)
-    this.state = {
-      activeSections: [2, 0],
-      selectedProducts: [],
-      refreshing: false,
-      status: '',
-      labelId: null
-    }
-    this.onChange = activeSections => {
-      this.setState({ activeSections })
-    }
+  componentDidMount() {
+    this.props.getOrder()
   }
 
   render() {

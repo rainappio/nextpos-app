@@ -17,10 +17,22 @@ class OrderForm extends Component {
 
     context.localize({
       en: {
-        selectTable: 'Select a table'
+        newOrderTitle: 'New Order',
+        table: 'Table',
+        selectTable: 'Select a table',
+        ageGroup: 'Age Group',
+        visitFrequency: 'Visit Frequency',
+        peopleCount: 'People Count',
+        openOrder: 'Open Order'
       },
       zh: {
-        selectTable: '選擇桌位'
+        newOrderTitle: '新訂單',
+        table: '桌位',
+        selectTable: '選擇桌位',
+        ageGroup: '來客年齡層',
+        visitFrequency: '造訪次數',
+        peopleCount: '來客數',
+        openOrder: '建立訂單'
       }
     })
 
@@ -94,11 +106,11 @@ class OrderForm extends Component {
             <Text
               style={[styles.welcomeText, styles.orange_color, styles.mgrbtn20]}
             >
-              New Order
+              {t('newOrderTitle')}
             </Text>
 
             <View>
-              <Text>Table</Text>
+              <Text>{t('table')}</Text>
               <Field
                 component={DropDown}
                 name="tableId"
@@ -112,7 +124,7 @@ class OrderForm extends Component {
             </View>
 
             <View style={styles.paddingTopBtn20}>
-              <Text>Age Group</Text>
+              <Text>{t('ageGroup')}</Text>
               <View style={[styles.flex_dir_row]}>
                 <View style={[styles.half_width]}>
                   {ageGroupsA.map((ageGp, ix) => (
@@ -151,7 +163,7 @@ class OrderForm extends Component {
             </View>
 
             <View style={styles.paddBottom_20}>
-              <Text>Visited Frequency</Text>
+              <Text>{t('visitFrequency')}</Text>
               <View style={[styles.flex_dir_row]}>
                 <View style={[styles.half_width]}>
                   {visitedFrequenciesI.map((visitedFreq, ix) => (
@@ -188,7 +200,7 @@ class OrderForm extends Component {
               </View>
             </View>
 
-            <Text>Gender/People</Text>
+            <Text>{t('peopleCount')}</Text>
             <View>
               {people.map((people, ix) => (
                 <View
@@ -224,13 +236,11 @@ class OrderForm extends Component {
               >
                 <TouchableOpacity
                   onPress={() => {
-                    //this.props.navigation.navigate('OrderFormII')
                     this.props.handleSubmit()
                   }}
                 >
                   <Text style={[styles.signInText, styles.whiteColor]}>
-                    {/*Next*/}
-                    Open Order
+                    {t('openOrder')}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -249,7 +259,7 @@ class OrderForm extends Component {
                     this.props.navigation.navigate('TablesSrc')
                   }}
                 >
-                  <Text style={styles.signInText}>Cancel</Text>
+                  <Text style={styles.signInText}>{t('action.cancel')}</Text>
                 </TouchableOpacity>
               </View>
             </View>

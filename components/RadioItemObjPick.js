@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import {Text, TouchableOpacity, View} from 'react-native'
 import { Radio, List } from '@ant-design/react-native'
 import styles from '../styles'
 
@@ -13,7 +13,7 @@ export default class RadioItemObjPick extends React.Component {
       ...rest
     } = this.props
     return (
-      <View>
+      <View style={{padding: 15}}>
         <Radio
           key={customValueOrder}
           clear

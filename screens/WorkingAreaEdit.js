@@ -11,7 +11,7 @@ import {
   getPrinters,
   clearWorkingArea
 } from '../actions'
-import { api, makeFetchRequest } from '../constants/Backend'
+import {api, errorAlert, makeFetchRequest, successMessage} from '../constants/Backend'
 import styles from '../styles'
 
 class WorkingAreaEdit extends React.Component {
@@ -32,19 +32,19 @@ class WorkingAreaEdit extends React.Component {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'x-client-id': token.application_client_id,
           Authorization: 'Bearer ' + token.access_token
         },
         body: JSON.stringify(values)
       })
         .then(response => {
           if (response.status === 200) {
+            successMessage('Saved')
             this.props.navigation.navigate('PrinternKDS')
             this.props.getWorkingAreas()
             this.props.getPrinters()
             this.props.clearWorkingArea()
           } else {
-            alert('pls try again')
+            errorAlert(response)
           }
         })
         .catch(error => {

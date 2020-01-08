@@ -71,6 +71,9 @@ class WorkingAreaForm extends React.Component {
             validate={isRequired}
             placeholder={t('noOfPrintCopies')}
             keyboardType="numeric"
+            format={(value, name) => {
+              return value !== undefined && value !== null ? String(value) : ''
+            }}
           />
 
           <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
