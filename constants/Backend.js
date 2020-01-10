@@ -83,11 +83,20 @@ export const api = {
   }
 }
 
+export const getToken = async () => {
+  let token = await AsyncStorage.getItem(storage.clientUserAccessToken)
+
+  if (token == null) {
+    token = await AsyncStorage.getItem(storage.clientAccessToken)
+  }
+
+  return JSON.parse(token)
+}
+
 export const makeFetchRequest = async fetchRequest => {
   try {
     let useClientUserToken = true
     let token = await AsyncStorage.getItem(storage.clientUserAccessToken)
-    // let token = await AsyncStorage.getItem(storage.clientAccessToken)
 
     if (token == null) {
       useClientUserToken = false
@@ -104,30 +113,46 @@ export const makeFetchRequest = async fetchRequest => {
   } catch (error) {
     console.error(error)
   }
-
-  // AsyncStorage.getItem(storage.clientAccessToken, (err, value) => {
-  //   if (err) {
-  //     console.error(err)
-  //   } else {
-  //     JSON.parse(value)
-  //   }
-  // }).then(accessToken => {
-  //   const tokenObj = JSON.parse(accessToken)
-  //   fetchRequest(tokenObj)
-  // })
 }
 
-export function fetchAuthenticatedRequest (fetchRequest) {
-  AsyncStorage.getItem(storage.clientUserAccessToken, (err, value) => {
-    if (err) {
-      console.error(err)
-    } else {
-      JSON.parse(value)
+export const dispatchFetchRequest = async (endpoint, payload, successCallback, failCallback) => {
+  try {
+    let useClientUserToken = true
+    let token = await AsyncStorage.getItem(storage.clientUserAccessToken)
+
+    if (token == null) {
+      useClientUserToken = false
+      token = await AsyncStorage.getItem(storage.clientAccessToken)
     }
-  }).then(accessToken => {
-    const tokenObj = JSON.parse(accessToken)
-    fetchRequest(tokenObj)
-  })
+
+    if (token != null) {
+      console.debug(`Use client user token: ${useClientUserToken}`)
+      const tokenObj = JSON.parse(token)
+      payload.headers.Authorization = `Bearer ${tokenObj.access_token}`
+
+      const response = await fetch(endpoint, payload)
+
+      if (!response.ok) {
+        errorAlert(response)
+        failCallback(response)
+      } else {
+        successCallback(response)
+      }
+
+      return response
+
+    } else {
+      const errorMessage = 'Token does not exist. Please consult your service provider.'
+
+      showMessage({
+        message: errorMessage,
+        type: 'warning',
+        autoHide: true
+      })
+    }
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 export const successMessage = message => {

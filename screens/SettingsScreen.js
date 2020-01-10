@@ -28,9 +28,6 @@ class SettingsScreen extends React.Component {
 
     return (
       <View style={[styles.container, styles.nomgrBottom]}>
-        <BackBtnCustom
-          onPress={() => this.props.navigation.navigate('LoginSuccess')}
-        />
         <Text
           style={[
             styles.welcomeText,

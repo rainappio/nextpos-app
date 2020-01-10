@@ -3,17 +3,40 @@ import { Text, TouchableHighlight, TouchableOpacity, View } from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import { api, fetchAuthenticatedRequest } from '../constants/Backend'
+import {api, makeFetchRequest} from '../constants/Backend'
+import {LocaleContext} from "../locales/LocaleContext";
+import {dateToLocaleString, formatDate} from "../actions";
 
 class ClockIn extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        timeCardTitle: 'Staff Time Card',
+        username: 'Username',
+        currentTime: 'Current Time',
+        timeCardStatus: 'Status',
+        clockIn: 'Clock In',
+        clockOut: 'Clock Out'
+      },
+      zh: {
+        timeCardTitle: '員工打卡',
+        username: '使用者名稱',
+        currentTime: '現在時間',
+        timeCardStatus: '狀態',
+        clockIn: '上班',
+        clockOut: '下班'
+      }
+    })
 
     this.state = {
+      t: context.t,
       timecard: null
     }
   }
@@ -23,7 +46,7 @@ class ClockIn extends React.Component {
   }
 
   getUserTimeCard = () => {
-    fetchAuthenticatedRequest(token => {
+    makeFetchRequest(token => {
       fetch(api.timecard.getActive, {
         method: 'GET',
         withCredentials: true,
@@ -46,7 +69,7 @@ class ClockIn extends React.Component {
   }
 
   handleClockIn = () => {
-    fetchAuthenticatedRequest(token => {
+    makeFetchRequest(token => {
       fetch(api.timecard.clockin, {
         method: 'POST',
         withCredentials: true,
@@ -71,7 +94,7 @@ class ClockIn extends React.Component {
   }
 
   handleClockOut = () => {
-    fetchAuthenticatedRequest(token => {
+    makeFetchRequest(token => {
       fetch(api.timecard.clockout, {
         method: 'POST',
         withCredentials: true,
@@ -96,6 +119,8 @@ class ClockIn extends React.Component {
   }
 
   render() {
+    const { t } = this.state
+
     /**
      * This check exists to circumvent the issue that the first render() call hasn't set the this.state.timecard object yet.
      * https://stackoverflow.com/questions/50082423/why-is-render-being-called-twice-in-reactnative
@@ -114,51 +139,34 @@ class ClockIn extends React.Component {
     if (timeCardStatus === 'ACTIVE') {
       let clockIn = this.state.timecard.clockIn
       let index = clockIn.indexOf('+')
-      clockedIn = new Date(clockIn.slice(0, index)).toLocaleTimeString()
+      clockedIn = formatDate(clockIn);
     }
 
     return (
       <DismissKeyboard>
         <View style={styles.container}>
-          <View
-            style={[
-              {
-                width: '100%',
-                position: 'absolute',
-                top: 0
-              }
-            ]}
-          >
+          <View>
             <TouchableHighlight>
-              <Text
-                style={{
-                  color: '#F39F86',
-                  fontSize: 26,
-                  textAlign: 'center'
-                }}
-              >
-                Time Card
+              <Text style={styles.screenTitle}>
+                {t('timeCardTitle')}
               </Text>
             </TouchableHighlight>
           </View>
 
-          <Text style={[styles.welcomeText, styles.textBig, styles.textBold]}>
-            {authClientUserName}
-          </Text>
+          <View style={[styles.jc_alignIem_center]}>
+            <Text style={styles.textSmall}>
+              {t('username')}: {authClientUserName}
+            </Text>
 
-          <Text
-            style={{ marginTop: 25, marginBottom: 35, textAlign: 'center' }}
-          >
-            Current time:{' '}
-            {`${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`}
-          </Text>
+            <Text style={styles.textSmall}>
+              {t('currentTime')}: {`${dateToLocaleString(new Date())}`}
+            </Text>
 
-          <Text
-            style={{ marginTop: 25, marginBottom: 35, textAlign: 'center' }}
-          >
-            Status: {timeCardStatus}{' '}
-            {clockedIn != null ? `at ${clockedIn}` : ''}
-          </Text>
+            <Text style={styles.textSmall}>
+              {t('timeCardStatus')}: {timeCardStatus}{' '}
+              {clockedIn != null ? `at ${clockedIn}` : ''}
+            </Text>
+          </View>
 
           <View style={[styles.jc_alignIem_center]}>
             <View
@@ -186,8 +194,8 @@ class ClockIn extends React.Component {
                     color="#fff"
                     style={[styles.centerText, styles.margin_15]}
                   />
-                  <Text style={(styles.centerText, styles.whiteColor)}>
-                    {timeCardStatus === 'ACTIVE' ? 'Clock Out' : 'Clock In'}
+                  <Text style={[styles.centerText, styles.whiteColor]}>
+                    {timeCardStatus === 'ACTIVE' ? t('clockOut') : t('clockIn')}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -195,14 +203,13 @@ class ClockIn extends React.Component {
           </View>
 
           <View style={[styles.bottom]}>
-            <TouchableHighlight>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
               <Text
                 style={[styles.bottomActionButton, styles.cancelButton]}
-                onPress={() => this.props.navigation.goBack()}
               >
-                Cancel
+                {t('action.cancel')}
               </Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
       </DismissKeyboard>

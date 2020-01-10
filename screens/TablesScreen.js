@@ -163,7 +163,6 @@ class TablesScreen extends React.Component {
             this.props.getfetchOrderInflights()
             this.props.getTableLayouts()
             this.props.getTablesAvailable()
-            //AsyncStorage.removeItem('orderInfo')
             this.props.clearOrder(id)
           } else {
             alert('pls try again')
@@ -230,7 +229,6 @@ class TablesScreen extends React.Component {
             })
           })
       )
-    AsyncStorage.setItem('tables', JSON.stringify(tables))
 
     var keysArr = ordersInflight !== undefined && Object.keys(ordersInflight)
     keysArr !== false &&

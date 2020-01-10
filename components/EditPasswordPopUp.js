@@ -17,17 +17,36 @@ import PinCodeInput from '../components/PinCodeInput'
 import { getClientUsr } from '../actions'
 import styles from '../styles'
 import { successMessage } from '../constants/Backend'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class EditPasswordPopUp extends Component {
-  constructor(props) {
-    super(props)
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      t: context.t,
+      isVisible: false
+    }
 
     // https://reactjs.org/docs/handling-events.html
     this.handleChangePwd = this.handleChangePwd.bind(this)
   }
 
-  state = {
-    isVisible: false
+  async componentDidMount() {
+    await this.context.localize({
+      en: {
+        passwordTitle: 'Password',
+        editPassword: 'Edit Password',
+        enterNewPassword: 'Enter New Password'
+      },
+      zh: {
+        passwordTitle: '設定密碼',
+        editPassword: '編輯密碼',
+        enterNewPassword: '輸入新密碼'
+      }
+    })
   }
 
   toggleModal = visible => {
@@ -85,6 +104,8 @@ class EditPasswordPopUp extends Component {
    * https://medium.com/@payalmaniyar/deep-understanding-of-ref-direct-manipulation-in-react-native-e89726ddb78e
    */
   render() {
+    const { t } = this.state
+
     return (
       <View>
         <TouchableOpacity
@@ -93,7 +114,7 @@ class EditPasswordPopUp extends Component {
           }}
         >
           <Icon name="md-create" size={22} color="#f18d1a">
-            &nbsp;<Text style={{ fontSize: 15 }}>Edit Password</Text>
+            &nbsp;<Text style={{ fontSize: 15 }}>{t('passwordTitle')}</Text>
           </Icon>
         </TouchableOpacity>
 
@@ -125,11 +146,11 @@ class EditPasswordPopUp extends Component {
                       styles.mgrbtn40
                     ]}
                   >
-                    Edit Password
+                    {t('editPassword')}
                   </Text>
 
                   <Text style={{ marginBottom: 10, textAlign: 'center' }}>
-                    Enter New Password
+                    {t('enterNewPassword')}
                   </Text>
                   <View
                     style={[

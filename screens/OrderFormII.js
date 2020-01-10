@@ -50,7 +50,6 @@ class OrderFormII extends React.Component {
       refreshing: false,
       status: '',
       labelId: null,
-      tables: null,
       cc: null,
       orderInfo: null
     }
@@ -64,14 +63,7 @@ class OrderFormII extends React.Component {
     this.props.getProducts()
     this.props.getfetchOrderInflights()
     this.props.navigation.state.params.orderId !== undefined &&
-      this.props.getOrder(this.props.navigation.state.params.orderId)
-
-    //By Async Way
-    AsyncStorage.getItem('tables')
-      .then(value => {
-        this.setState({ tables: JSON.parse(value) })
-      })
-      .done()
+    this.props.getOrder(this.props.navigation.state.params.orderId)
   }
 
   handleBack = recentlyAddedOrderId => {
@@ -108,7 +100,7 @@ class OrderFormII extends React.Component {
       ordersInflight,
       order
     } = this.props
-    const { t, tables } = this.state
+    const { t } = this.state
     var map = new Map(Object.entries(products))
     let orderIdArr = []
     var recentlyAddedOrderId = null
@@ -138,16 +130,6 @@ class OrderFormII extends React.Component {
       .filter(latestorder => {
         return latestorder !== false
       })
-
-    let tableLayout =
-      tables !== null &&
-      tables
-        .filter(tbl => {
-          return tbl.value === this.props.navigation.state.params.tableId
-        })
-        .map(tbl => {
-          return tbl.label
-        })
 
     const right = [
       {
@@ -223,7 +205,6 @@ class OrderFormII extends React.Component {
                         onPress={() =>
                           this.props.navigation.navigate('OrderFormIII', {
                             prdName: prd.name,
-                            tableLayout: tableLayout,
                             prdId: prd.id,
                             orderId:
                               this.props.navigation.state.params.orderId !==
@@ -267,9 +248,7 @@ class OrderFormII extends React.Component {
                     styles.whiteColor
                   ]}
                 >
-                  {order.hasOwnProperty('tableInfo')
-                    ? order.tableInfo.tableName
-                    : tableLayout}
+                  {order.hasOwnProperty('tableInfo') ? order.tableInfo.tableName : 'No Table'}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -310,7 +289,6 @@ class OrderFormII extends React.Component {
                       : recentlyAddedOrderId[0],
                   onSubmit: this.props.navigation.state.params.onSubmit,
                   handleDelete: this.props.navigation.state.params.handleDelete,
-                  tableName: tableLayout,
                   customerCount: this.props.navigation.state.params
                     .customerCount
                 })

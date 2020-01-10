@@ -29,16 +29,24 @@ import styles from '../styles'
 import DeleteBtn from '../components/DeleteBtn'
 import { errorAlert, successMessage } from '../constants/Backend'
 import { Header } from 'react-native-elements'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class StaffFormScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
 
-    this.props.screenProps.localize({
+    this.state = {
+      t: context.t
+    }
+  }
+
+  async componentDidMount() {
+    await this.context.localize({
       en: {
         staffTitle: 'Staff',
         nickName: 'Nick Name',
@@ -104,7 +112,7 @@ class StaffFormScreen extends React.Component {
       initialValues,
       onCancel
     } = this.props
-    const { t } = this.props.screenProps
+    const { t } = this.state
 
     return (
       <DismissKeyboard>
@@ -120,8 +128,7 @@ class StaffFormScreen extends React.Component {
                   styles.mgrbtn80
                 ]}
               >
-                {t('staffTitle')} -{' '}
-                {this.props.navigation.state.params.staffname}
+                {t('staffTitle')}
               </Text>
             ) : (
               <Text
@@ -200,7 +207,6 @@ class StaffFormScreen extends React.Component {
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               {isEditForm && (
                 <EditPasswordPopUp
-                  navigation={this.props.navigation}
                   name={initialValues.username}
                 />
               )}
@@ -212,7 +218,7 @@ class StaffFormScreen extends React.Component {
                   <Text>{t('manager')}</Text>
                 </View>
                 <View style={[styles.onesixthWidth, styles.mgrtotop8]}>
-                  <Field name="roles" component={RNSwitch} />
+                  <Field name="isManager" component={RNSwitch} />
                 </View>
               </View>
             ) : (
@@ -221,7 +227,7 @@ class StaffFormScreen extends React.Component {
                   <Text>{t('manager')}</Text>
                 </View>
                 <View style={[styles.onesixthWidth, styles.mgrtotop20]}>
-                  <Field name="roles" component={RNSwitch} />
+                  <Field name="isManager" component={RNSwitch} />
                 </View>
               </View>
             )}

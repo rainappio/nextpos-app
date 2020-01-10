@@ -103,43 +103,21 @@ class PrinterForm extends React.Component {
             />
           </View>
 
-          <View
-            style={[
-              {
-                width: '100%',
-                backgroundColor: '#F39F86',
-                marginTop: 40,
-                borderRadius: 4
-              }
-            ]}
-          >
+          <View style={styles.bottom}>
             <TouchableOpacity onPress={handleSubmit}>
-              <Text style={styles.gsText}>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>
                 {isEdit ? t('action.update') : t('action.save')}
               </Text>
             </TouchableOpacity>
-          </View>
-
-          <View
-            style={[
-              {
-                width: '100%',
-                marginTop: 8,
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86'
-              }
-            ]}
-          >
             {isEdit ? (
               <TouchableOpacity onPress={handleEditCancel}>
-                <Text style={styles.signInText}>{t('action.cancel')}</Text>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('PrinternKDS')}
               >
-                <Text style={[styles.signInText, styles.orange_color]}>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
                   {t('action.cancel')}
                 </Text>
               </TouchableOpacity>

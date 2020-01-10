@@ -1,39 +1,47 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput,
-  FlatList,
-  ActivityIndicator,
-  Modal
-} from 'react-native'
-import { connect } from 'react-redux'
-import InputText from '../components/InputText'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View} from 'react-native'
+import {connect} from 'react-redux'
 import BackBtnCustom from '../components/BackBtnCustom'
 import Icon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import images from '../assets/images'
-import { getOrdersByDateRange, readableDateFormat } from '../actions'
-import { ListItem } from 'react-native-elements'
+import {formatDate, getOrdersByDateRange} from '../actions'
+import {ListItem} from 'react-native-elements'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class OrdersScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  state = {
-    isVisible: false,
-    scrollPosition: ''
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        ordersTitle: 'Orders',
+        date: 'Date',
+        total: 'Total',
+        orderStatus: 'Order Status'
+      },
+      zh: {
+        ordersTitle: '訂單歷史',
+        date: '日期',
+        total: '總金額',
+        orderStatus: '狀態'
+      }
+    })
+
+    this.state = {
+      t: context.t,
+      isVisible: false,
+      scrollPosition: ''
+    }
   }
+
+
 
   componentDidMount() {
     this.props.getOrdersByDateRange()
@@ -52,7 +60,7 @@ class OrdersScreen extends React.Component {
       subtitle={
         <View style={[styles.flex_dir_row]}>
           <View style={{ width: '55%', marginLeft: -10 }}>
-            <Text>{readableDateFormat(item.createdTime)}</Text>
+            <Text>{formatDate(item.createdTime)}</Text>
           </View>
 
           <View style={{ width: '22%' }}>
@@ -124,6 +132,8 @@ class OrdersScreen extends React.Component {
 
   render() {
     const { getordersByDateRange, isLoading } = this.props
+    const { t } = this.state
+
     let keysArr =
       getordersByDateRange !== undefined && Object.keys(getordersByDateRange)
     let orders = []
@@ -149,9 +159,6 @@ class OrdersScreen extends React.Component {
           { marginLeft: 20, marginRight: 20 }
         ]}
       >
-        <BackBtnCustom
-          onPress={() => this.props.navigation.navigate('LoginSuccess')}
-        />
         <Text
           style={[
             styles.welcomeText,
@@ -160,20 +167,20 @@ class OrdersScreen extends React.Component {
             styles.textBold
           ]}
         >
-          Orders
+          {t('ordersTitle')}
         </Text>
 
         <View style={[styles.flex_dir_row]}>
           <View style={{ width: '50%' }}>
-            <Text style={styles.orange_color}>Date</Text>
+            <Text style={styles.orange_color}>{t('date')}</Text>
           </View>
 
           <View style={{ width: '22%' }}>
-            <Text style={styles.orange_color}>Total</Text>
+            <Text style={styles.orange_color}>{t('total')}</Text>
           </View>
 
           <View>
-            <Text style={styles.orange_color}>Order Status</Text>
+            <Text style={styles.orange_color}>{t('orderStatus')}</Text>
           </View>
         </View>
         <FlatList

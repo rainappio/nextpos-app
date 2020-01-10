@@ -64,7 +64,9 @@ export default StyleSheet.create({
     marginBottom: 6
   },
   textSmall: {
-    fontSize: 12
+    fontSize: 12,
+    marginTop: 10,
+    marginBottom: 10
   },
   signInText: {
     color: '#F39F86',
@@ -438,6 +440,17 @@ export default StyleSheet.create({
     marginTop: 0
   },
 
+  screenTitle: {
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    fontSize: 20,
+    letterSpacing: 2,
+    lineHeight: 32,
+    marginBottom: 16,
+    marginTop: -8,
+    color: '#f18d1a',
+    fontWeight: 'bold'
+  },
   fieldContainer: {
     // justifyContent: 'center',
     alignItems: 'center',
@@ -445,9 +458,7 @@ export default StyleSheet.create({
   },
   fieldTitle: {
     fontWeight: 'bold',
-    paddingBottom: 20,
-    borderBottomColor: '#f1f1f1',
-    borderBottomWidth: 1
+    paddingBottom: 12,
   },
   bottom: {
     flex: 1,

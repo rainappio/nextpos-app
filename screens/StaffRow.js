@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, Text, View, RefreshControl } from 'react-native'
+import { ScrollView, Text, View, RefreshControl, TouchableOpacity } from 'react-native'
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { DismissKeyboard } from '../components/DismissKeyboard'
@@ -56,52 +56,42 @@ class StaffRow extends React.Component {
         refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
       >
         <DismissKeyboard>
-          <View style={styles.container}>
-            <BackBtn />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
-              {t('staffListTitle')}
-            </Text>
-            <AddBtn onPress={() => this.props.navigation.navigate('Staff')} />
+          <View>
+            <View style={styles.container}>
+              <BackBtn/>
+              <Text
+                style={[
+                  styles.welcomeText,
+                  styles.orange_color,
+                  styles.textMedium,
+                  styles.textBold
+                ]}
+              >
+                {t('staffListTitle')}
+              </Text>
+              <AddBtn onPress={() => this.props.navigation.navigate('Staff')}/>
+            </View>
 
-            <View style={styles.standalone}>
+            <View style={styles.childContainer}>
               <SwipeListView
                 data={clientusersOnly}
                 renderItem={(data, rowMap) => (
-                  <View style={styles.rowFront}>
-                    <Text
-                      key={rowMap}
-                      style={{ paddingTop: 20, paddingBottom: 20 }}
-                    >
-                      {data.item.username}
-                    </Text>
-                  </View>
+                  <TouchableOpacity onPress={() =>
+                    this.props.navigation.navigate('StaffEdit', {
+                      staffname: data.item.username
+                    })
+                  }>
+                    <View style={styles.rowFront}>
+                      <Text
+                        key={rowMap}
+                        style={{paddingTop: 20, paddingBottom: 20, paddingLeft: 20}}
+                      >
+                        {data.item.username}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
                 )}
                 keyExtractor={(data, rowMap) => rowMap.toString()}
-                renderHiddenItem={(data, rowMap) => (
-                  <View style={styles.rowBack} key={rowMap}>
-                    <View style={styles.editIconII}>
-                      <Icon
-                        name="md-create"
-                        size={25}
-                        color="#fff"
-                        onPress={() =>
-                          this.props.navigation.navigate('StaffEdit', {
-                            staffname: data.item.username
-                          })
-                        }
-                      />
-                    </View>
-                  </View>
-                )}
-                leftOpenValue={0}
-                rightOpenValue={-80}
               />
             </View>
           </View>
