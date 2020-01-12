@@ -6,7 +6,12 @@ import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import PrinterForm from '../screens/PrinterForm'
 import { getWorkingAreas, getPrinters } from '../actions'
-import {api, errorAlert, makeFetchRequest, successMessage} from '../constants/Backend'
+import {
+  api,
+  errorAlert,
+  makeFetchRequest,
+  successMessage
+} from '../constants/Backend'
 import styles from '../styles'
 
 class PrinterAdd extends React.Component {

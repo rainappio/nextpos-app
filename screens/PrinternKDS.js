@@ -111,17 +111,12 @@ class PrinternKDS extends React.Component {
               >
                 {t('printerTitle')}
               </Text>
-              <View
-                style={[styles.no_mgrTop, styles.mgrbtn20]}
-              >
+              <View style={[styles.no_mgrTop, styles.mgrbtn20]}>
                 <SwipeListView
                   data={printers}
                   renderItem={(data, rowMap) => (
                     <View style={styles.rowFront}>
-                      <Text
-                        key={rowMap}
-                        style={{ padding: 15 }}
-                      >
+                      <Text key={rowMap} style={{ padding: 15 }}>
                         {data.item.name}
                       </Text>
                     </View>
@@ -165,10 +160,7 @@ class PrinternKDS extends React.Component {
                   data={workingareas}
                   renderItem={(data, rowMap) => (
                     <View style={styles.rowFront}>
-                      <Text
-                        key={rowMap}
-                        style={{ padding: 15 }}
-                      >
+                      <Text key={rowMap} style={{ padding: 15 }}>
                         {data.item.name}
                       </Text>
                     </View>

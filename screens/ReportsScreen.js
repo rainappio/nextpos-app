@@ -5,7 +5,7 @@ import BackBtnCustom from '../components/BackBtnCustom'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import images from '../assets/images'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class ReportsScreen extends React.Component {
   static navigationOptions = {

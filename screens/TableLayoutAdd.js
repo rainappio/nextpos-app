@@ -6,10 +6,15 @@ import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import BackBtn from '../components/BackBtn'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import TableLayoutForm from './TableLayoutForm'
-import {api, makeFetchRequest, errorAlert, successMessage} from '../constants/Backend'
+import {
+  api,
+  makeFetchRequest,
+  errorAlert,
+  successMessage
+} from '../constants/Backend'
 import { getTableLayouts } from '../actions'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class TableLayoutAdd extends React.Component {
   static navigationOptions = {

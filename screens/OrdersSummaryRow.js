@@ -7,7 +7,8 @@ import {
   clearOrder,
   getOrder,
   getfetchOrderInflights,
-  formatDate
+  formatDate,
+  getOrdersByDateRange
 } from '../actions'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
@@ -22,8 +23,8 @@ import {
   warningMessage
 } from '../constants/Backend'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
-import {Tooltip} from "react-native-elements";
+import { LocaleContext } from '../locales/LocaleContext'
+import { Tooltip } from 'react-native-elements'
 
 class OrdersSummaryRow extends React.Component {
   static contextType = LocaleContext
@@ -114,10 +115,18 @@ class OrdersSummaryRow extends React.Component {
   renderStateToolTip = (state, t) => {
     const tooltip = (
       <View>
-        <Text>{t('stateTip.open.display')}: {t('stateTip.open.note')}</Text>
-        <Text>{t('stateTip.inProcess.display')}: {t('stateTip.inProcess.note')}</Text>
-        <Text>{t('stateTip.delivered.display')}: {t('stateTip.delivered.note')}</Text>
-        <Text>{t('stateTip.settled.display')}: {t('stateTip.settled.note')}</Text>
+        <Text>
+          {t('stateTip.open.display')}: {t('stateTip.open.note')}
+        </Text>
+        <Text>
+          {t('stateTip.inProcess.display')}: {t('stateTip.inProcess.note')}
+        </Text>
+        <Text>
+          {t('stateTip.delivered.display')}: {t('stateTip.delivered.note')}
+        </Text>
+        <Text>
+          {t('stateTip.settled.display')}: {t('stateTip.settled.note')}
+        </Text>
       </View>
     )
 
@@ -125,8 +134,13 @@ class OrdersSummaryRow extends React.Component {
       <Tooltip popover={tooltip} height={120} width={200}>
         <View>
           {state === 'OPEN' && <Text>{t('stateTip.open.display')}</Text>}
-          {state === 'IN_PROCESS' || state === 'ALREADY_IN_PROCESS' && <Text>{t('stateTip.inProcess.display')}</Text>}
-          {state === 'DELIVERED' && <Text>{t('stateTip.delivered.display')}</Text>}
+          {state === 'IN_PROCESS' ||
+            (state === 'ALREADY_IN_PROCESS' && (
+              <Text>{t('stateTip.inProcess.display')}</Text>
+            ))}
+          {state === 'DELIVERED' && (
+            <Text>{t('stateTip.delivered.display')}</Text>
+          )}
           {state === 'SETTLED' && <Text>{t('stateTip.settled.display')}</Text>}
         </View>
       </Tooltip>
@@ -184,6 +198,7 @@ class OrdersSummaryRow extends React.Component {
             this.props.navigation.navigate('TablesSrc')
             this.props.getfetchOrderInflights()
             this.props.clearOrder(id)
+            this.props.getOrdersByDateRange()
           } else {
             alert(res.message === undefined ? 'pls try again' : res.message)
           }
@@ -232,7 +247,7 @@ class OrdersSummaryRow extends React.Component {
             {t('orderSummaryTitle')}
           </Text>
 
-          <View style={[styles.flex_dir_row, {alignItems: 'center'}]}>
+          <View style={[styles.flex_dir_row, { alignItems: 'center' }]}>
             <View style={[styles.quarter_width]}>
               <View>
                 <Text
@@ -305,7 +320,9 @@ class OrdersSummaryRow extends React.Component {
 
           <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text style={[styles.whiteColor]}>&nbsp;&nbsp;{t('quantity')}</Text>
+              <Text style={[styles.whiteColor]}>
+                &nbsp;&nbsp;{t('quantity')}
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -330,8 +347,7 @@ class OrdersSummaryRow extends React.Component {
 
         <View style={[styles.container]}>
           <Text style={styles.textBold}>{order.orderId}</Text>
-          {
-            order.state !== 'SETTLED' &&
+          {order.state !== 'SETTLED' && (
             <AddBtn
               onPress={() =>
                 this.props.navigation.navigate('OrderFormII', {
@@ -342,7 +358,7 @@ class OrdersSummaryRow extends React.Component {
                 })
               }
             />
-          }
+          )}
 
           <View style={styles.standalone}>
             <SwipeListView
@@ -644,7 +660,8 @@ class OrdersSummaryRow extends React.Component {
 const mapDispatchToProps = (dispatch, props) => ({
   clearOrder: () => dispatch(clearOrder(props.order.orderId)),
   getOrder: id => dispatch(getOrder(id)),
-  getfetchOrderInflights: () => dispatch(getfetchOrderInflights())
+  getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
+  getOrdersByDateRange: () => dispatch(getOrdersByDateRange())
 })
 
 export default connect(

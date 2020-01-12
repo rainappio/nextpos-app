@@ -20,7 +20,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import TableForm from './TableForm'
 import { api, makeFetchRequest, errorAlert } from '../constants/Backend'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class TableEdit extends React.Component {
   static navigationOptions = {
@@ -35,7 +35,6 @@ class TableEdit extends React.Component {
       t: context.t
     }
   }
-
 
   componentDidMount() {
     this.props.getTableLayout(this.props.navigation.state.params.layoutId)

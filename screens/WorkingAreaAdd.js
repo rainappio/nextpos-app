@@ -5,7 +5,12 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import WorkingAreaForm from './WorkingAreaForm'
-import {api, errorAlert, makeFetchRequest, successMessage} from '../constants/Backend'
+import {
+  api,
+  errorAlert,
+  makeFetchRequest,
+  successMessage
+} from '../constants/Backend'
 import { getWorkingAreas, getPrinters } from '../actions'
 import styles from '../styles'
 

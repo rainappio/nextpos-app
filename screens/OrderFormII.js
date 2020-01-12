@@ -23,7 +23,7 @@ import {
 } from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
@@ -191,7 +191,7 @@ class OrderFormII extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <ScrollView
-          refreshControl={<RefreshControl refreshing={this.state.refreshing}/>}
+          refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
         >
           <View style={styles.container}>
             {/*<BackBtnCustom onPress={() => this.handleBack(recentlyAddedOrderId[0])}/>*/}
@@ -237,9 +237,11 @@ class OrderFormII extends React.Component {
                           })
                         }
                       >
-                        <View style={{flex: 1, flexDirection: 'row'}}>
-                          <Text style={{flex: 1}}>{prd.name}</Text>
-                          <Text style={{flex: 1, justifyContent: 'flex-end'}}>${prd.price}</Text>
+                        <View style={{ flex: 1, flexDirection: 'row' }}>
+                          <Text style={{ flex: 1 }}>{prd.name}</Text>
+                          <Text style={{ flex: 1, justifyContent: 'flex-end' }}>
+                            ${prd.price}
+                          </Text>
                         </View>
                       </List.Item>
                     ))}

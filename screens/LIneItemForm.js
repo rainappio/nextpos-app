@@ -5,7 +5,7 @@ import RenderStepper from '../components/RenderStepper'
 import { isRequired, isCountZero } from '../validators'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class LIneItemForm extends Component {
   static contextType = LocaleContext

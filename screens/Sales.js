@@ -18,7 +18,7 @@ import BackBtn from '../components/BackBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class Sales extends React.Component {
   static navigationOptions = {
@@ -44,7 +44,6 @@ class Sales extends React.Component {
       t: context.t
     }
   }
-
 
   render() {
     const { t } = this.state
@@ -81,7 +80,7 @@ class Sales extends React.Component {
             // styles.top40
           ]}
         >
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
+          <View style={[styles.jc_alignIem_center]}>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('SalesCharts')}
             >

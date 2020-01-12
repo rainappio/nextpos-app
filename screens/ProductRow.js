@@ -114,8 +114,8 @@ class ProductRow extends React.Component {
       >
         <DismissKeyboard>
           <View>
-            <View  style={styles.container}>
-              <BackBtn/>
+            <View style={styles.container}>
+              <BackBtn />
               <Text
                 style={[
                   styles.welcomeText,
@@ -173,24 +173,25 @@ class ProductRow extends React.Component {
                 key="ungrouped"
               >
                 <List>
-                  {map.get('ungrouped') !== undefined && map.get('ungrouped').map(prd => (
-                    <SwipeAction
-                      autoClose={true}
-                      right={right}
-                      onOpen={() => this.onOpenNP(prd.id, '0')}
-                      onClose={() => {}}
-                      key={prd.id}
-                    >
-                      <List.Item
+                  {map.get('ungrouped') !== undefined &&
+                    map.get('ungrouped').map(prd => (
+                      <SwipeAction
+                        autoClose={true}
+                        right={right}
+                        onOpen={() => this.onOpenNP(prd.id, '0')}
+                        onClose={() => {}}
                         key={prd.id}
-                        style={{
-                          backgroundColor: '#f1f1f1'
-                        }}
                       >
-                        {prd.name}
-                      </List.Item>
-                    </SwipeAction>
-                  ))}
+                        <List.Item
+                          key={prd.id}
+                          style={{
+                            backgroundColor: '#f1f1f1'
+                          }}
+                        >
+                          {prd.name}
+                        </List.Item>
+                      </SwipeAction>
+                    ))}
                 </List>
               </Accordion.Panel>
             </Accordion>

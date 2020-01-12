@@ -11,7 +11,12 @@ import {
   getPrinters,
   clearWorkingArea
 } from '../actions'
-import {api, errorAlert, makeFetchRequest, successMessage} from '../constants/Backend'
+import {
+  api,
+  errorAlert,
+  makeFetchRequest,
+  successMessage
+} from '../constants/Backend'
 import styles from '../styles'
 
 class WorkingAreaEdit extends React.Component {
