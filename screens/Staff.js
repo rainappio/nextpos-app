@@ -79,7 +79,6 @@ class Staff extends React.Component {
         navigation={navigation}
         refreshing={refreshing}
         onCancel={this.handleCancel}
-        screenProps={this.props.screenProps}
       />
     )
   }

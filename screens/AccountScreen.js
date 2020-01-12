@@ -11,8 +11,11 @@ import {
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
-import { Avatar, Badge, Divider } from 'react-native-elements'
 import { LocaleContext } from '../locales/LocaleContext'
+import {doLogout, getClientUsr} from "../actions";
+import {connect} from "react-redux";
+import EditPasswordPopUp from "../components/EditPasswordPopUp";
+import {reduxForm} from "redux-form";
 
 class AccountScreen extends React.Component {
   static navigationOptions = {
@@ -23,15 +26,6 @@ class AccountScreen extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    context.localize({
-      en: {
-        username: 'User Name'
-      },
-      zh: {
-        username: '使用者名稱'
-      }
-    })
 
     this.state = {
       t: context.t,
@@ -58,6 +52,17 @@ class AccountScreen extends React.Component {
     this.setState({
       objects: objects
     })
+
+    await this.context.localize({
+      en: {
+        username: 'User Name',
+        nickname: 'Nick Name'
+      },
+      zh: {
+        username: '使用者名稱',
+        nickname: '暱稱'
+      }
+    })
   }
 
   render() {
@@ -73,7 +78,7 @@ class AccountScreen extends React.Component {
         </View>
       )
     })
-
+    const { currentUser } = this.props
     const { t } = this.state
 
     return (
@@ -92,21 +97,27 @@ class AccountScreen extends React.Component {
               {t('settings.account')}
             </Text>
             <View>
-              <View
-                style={[
-                  styles.fieldTitle,
-                  { flexDirection: 'row', justifyContent: 'space-between' }
-                ]}
-              >
-                <Avatar rounded title="RA" size="large" />
-                <Text style={styles.text}>{t('username')}: </Text>
-                <Text style={styles.text}>XXXX</Text>
+              <View style={[{flexDirection: 'row', justifyContent: 'space-between'}]}>
+                <Text style={styles.fieldTitle}>{t('username')}: {currentUser.username}</Text>
+              </View>
+              <View style={[{flexDirection: 'row', justifyContent: 'space-between'}]}>
+                <Text style={styles.fieldTitle}>{t('nickname')}: {currentUser.nickname}</Text>
               </View>
 
-              <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>Developer Section</Text>
+              <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+                <EditPasswordPopUp
+                  name={currentUser.username}
+                />
               </View>
-              <View>{storageItems}</View>
+
+              { currentUser.defaultUser &&
+                <View>
+                  <View style={[styles.fieldContainer, styles.mgrtotop12]}>
+                    <Text style={styles.fieldTitle}>Developer Section</Text>
+                  </View>
+                  <View>{storageItems}</View>
+                </View>
+              }
             </View>
           </View>
         </DismissKeyboard>
@@ -115,4 +126,23 @@ class AccountScreen extends React.Component {
   }
 }
 
-export default AccountScreen
+const mapStateToProps = state => ({
+  currentUser: state.clientuser.data,
+  haveData: state.clientuser.haveData,
+  haveError: state.clientuser.haveError,
+  isLoading: state.clientuser.loading
+})
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+  getCurrentUser: (name) => dispatch(getClientUsr(name))
+})
+
+AccountScreen = reduxForm({
+  form: 'accountForm'
+})(AccountScreen)
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AccountScreen)

@@ -7,72 +7,114 @@ import {
   ScrollView,
   TouchableOpacity,
   AsyncStorage,
-  RefreshControl
+  RefreshControl, ActivityIndicator
 } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { doLogout } from '../actions'
+import {doLogout, formatDateFromMillis, formatDateObj, getClientUsr, getRangedSalesReport} from '../actions'
 // import ClientUsers from './ClientUsers'
 import styles from '../styles'
+import BackendErrorScreen from "./BackendErrorScreen";
+import {NavigationEvents} from "react-navigation";
+import {getToken} from "../constants/Backend";
+import {LocaleContext} from "../locales/LocaleContext";
+import {Avatar} from "react-native-elements";
 
 class LoginSuccessScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  state = {
-    showHiddenMenu: false,
-    clientusrToken: null,
-    clientusersName: null
+  constructor(props, context) {
+    super(props, context)
+
+    context.localize({
+      en: {
+        welcome: 'Welcome,',
+        loggedIn: 'Logged in at',
+        validUntil: 'Valid until'
+      },
+      zh: {
+        welcome: '歡迎,',
+        loggedIn: '登入時間:',
+        validUntil: '有效登入至:'
+      }
+    })
+
+    this.state = {
+      showHiddenMenu: false,
+      token: null,
+      username: " ",
+      loggedIn: null,
+      tokenExpiry: null,
+      mainViewOpacity: 1
+    }
   }
 
   async handleClientUserLogout(navigation) {
     try {
       await AsyncStorage.removeItem('clientusrToken')
-      await AsyncStorage.removeItem('clientusersName')
       navigation.navigate('ClientUsers')
     } catch (err) {
       console.log(`The error is: ${err}`)
     }
   }
 
+  /**
+   * Navigation lifecycle reference:
+   * https://reactnavigation.org/docs/en/navigation-lifecycle.html
+   */
   componentDidMount() {
-    AsyncStorage.getItem('clientusrToken')
-      .then(value => {
-        this.setState({ clientusrToken: JSON.parse(value) })
-      })
-      .done()
+    // <NavigationEvent> component in the render function takes care of loading user info.
+  }
 
-    AsyncStorage.getItem('clientusersName')
-      .then(value => {
-        this.setState({ clientusersName: value })
-      })
-      .done()
+  loadUserInfo = async () => {
+    let token = await getToken();
+    this.props.getCurrentUser(token.username)
+
+    this.setState({ token: token, username: token.username, loggedIn: token.loggedIn, tokenExpiry: token.tokenExp, showHiddenMenu: false, mainViewOpacity: 1 })
   }
 
   _toggleShow = () => {
-    this.setState({ showHiddenMenu: !this.state.showHiddenMenu })
+    const opacity = !this.state.showHiddenMenu ? 0.3 : 1
+    this.setState({ showHiddenMenu: !this.state.showHiddenMenu, mainViewOpacity: opacity })
   }
 
   render() {
-    const { doLogout, navigation, clientusers } = this.props
+    const { doLogout, navigation, currentUser, isLoading, haveError } = this.props
     const { t } = this.props.screenProps
-    const { clientusrToken, clientusersName } = this.state
+    const { username, loggedIn, tokenExpiry } = this.state
 
-    var isAuthClientUser =
-      this.props.navigation.state.params !== undefined &&
-      this.props.navigation.state.params.isAuthClientUser
-    var authClientUserName =
-      this.props.navigation.state.params !== undefined &&
-      this.props.navigation.state.params.clientusersName
-
-    var isAuthClientUserAfterRefresh =
-      clientusrToken !== null && clientusrToken.hasOwnProperty('access_token')
+    if (isLoading) {
+      return (
+        <View style={[styles.container]}>
+          <ActivityIndicator size="large" color="#ccc"/>
+        </View>
+      )
+    } else if (haveError) {
+      return (<BackendErrorScreen/>)
+    }
 
     return (
       <ScrollView>
-        <View style={[styles.container, styles.nomgrBottom]}>
+        <NavigationEvents
+          onWillFocus={() => {
+            console.log("reloading user info")
+            this.loadUserInfo().then()
+          }}
+        />
+
+        {this.state.showHiddenMenu && (
+          <HiddenMenu
+            navigation={navigation}
+            handleClientUserLogout={this.handleClientUserLogout}
+            screenProps={this.props.screenProps}
+          />
+        )}
+
+        <View style={[styles.container, styles.nomgrBottom]} opacity={this.state.mainViewOpacity}>
           <View style={{ marginLeft: 4, marginRight: 4 }}>
             <Image
               source={
@@ -83,42 +125,36 @@ class LoginSuccessScreen extends React.Component {
               style={styles.welcomeImage}
             />
 
-            {isAuthClientUser ? (
-              <View style={{ alignItems: 'flex-end', marginTop: -30 }}>
-                <Text
-                  style={[styles.orange_bg, styles.userIcon]}
-                  onPress={this._toggleShow}
-                >
-                  {clientusersName !== null
-                    ? clientusersName
-                    : authClientUserName[0]}
-                </Text>
-                {this.state.showHiddenMenu && (
-                  <HiddenMenu
-                    navigation={navigation}
-                    handleClientUserLogout={this.handleClientUserLogout}
-                    screenProps={this.props.screenProps}
-                  />
-                )}
-              </View>
-            ) : null}
+            <View style={{ alignItems: 'flex-end', marginTop: -30 }}>
+              <Avatar rounded
+                      title={username != null && username.charAt(0)}
+                      size="small"
+                      overlayContainerStyle={[styles.orange_bg]}
+                      titleStyle={styles.whiteColor}
+                      onPress={this._toggleShow}
+              />
+            </View>
           </View>
 
-          <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+          <View>
+            <Text style={[styles.text, styles.textBig, styles.orange_color]}>{t('welcome')} {currentUser.displayName}</Text>
+            <Text style={[styles.textSmall]}>{t('loggedIn')} {formatDateObj(loggedIn)}</Text>
+            <Text style={[styles.textSmall]}>{t('validUntil')} {formatDateFromMillis(tokenExpiry)}</Text>
+          </View>
+
+          <View style={[styles.mgrtotop12, styles.jc_alignIem_center, styles.flex_dir_row]}>
             <View
               style={[
                 styles.margin_15,
                 styles.grayBg,
-                styles.half_width,
                 styles.jc_alignIem_center,
-                styles.paddTop_30,
-                styles.paddBottom_30
+                styles.fullWidth
               ]}
             >
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('TablesSrc')}
               >
-                <View>
+                <View style={[styles.flex_dir_row, styles.jc_alignIem_center]}>
                   <Icon
                     name="md-people"
                     size={40}
@@ -129,36 +165,6 @@ class LoginSuccessScreen extends React.Component {
                 </View>
               </TouchableOpacity>
             </View>
-
-            <View
-              style={[
-                styles.margin_15,
-                styles.grayBg,
-                styles.half_width,
-                styles.jc_alignIem_center,
-                styles.paddTop_30,
-                styles.paddBottom_30
-              ]}
-            >
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Orders')}
-                disabled={true}
-              >
-                <View>
-                  <Icon
-                    name="md-document"
-                    size={40}
-                    color="#f18d1a"
-                    style={[
-                      styles.centerText,
-                      styles.margin_15,
-                      { opacity: 0.3 }
-                    ]}
-                  />
-                  <Text style={styles.centerText}>{t('menu.orders')}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
           </View>
 
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
@@ -169,26 +175,26 @@ class LoginSuccessScreen extends React.Component {
                 styles.half_width,
                 styles.jc_alignIem_center,
                 styles.paddTop_30,
-                styles.paddBottom_30
+                styles.paddBottom_30,
+                styles.borderRadius4
               ]}
             >
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Reservation')}
-                disabled={true}
+                onPress={() =>
+                  this.props.navigation.navigate('ClockIn', {
+                    authClientUserName: username
+                  })
+                }
               >
                 <View>
-                  <Icon
-                    name="ios-calendar"
+                  <FontAwesomeIcon
+                    name="clock-o"
                     size={40}
                     color="#f18d1a"
-                    style={[
-                      styles.centerText,
-                      styles.margin_15,
-                      { opacity: 0.3 }
-                    ]}
+                    style={[styles.centerText, styles.margin_15]}
                   />
-                  <Text style={styles.centerText}>
-                    {t('menu.reservations')}
+                  <Text style={[styles.centerText]}>
+                    {t('menu.timecard')}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -205,108 +211,21 @@ class LoginSuccessScreen extends React.Component {
               ]}
             >
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Reports')}
-              >
-                <View>
-                  <FontAwesomeIcon
-                    name="bar-chart"
-                    size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
-                  />
-                  <Text style={styles.centerText}>{t('menu.reporting')}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-            <View
-              style={[
-                styles.margin_15,
-                styles.grayBg,
-                styles.half_width,
-                styles.jc_alignIem_center,
-                styles.paddTop_30,
-                styles.paddBottom_30
-              ]}
-            >
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('SettingScr')}
+                onPress={() => this.props.navigation.navigate('ClientUsers')}
               >
                 <View>
                   <Icon
-                    name="md-settings"
+                    name="ios-log-out"
                     size={40}
                     color="#f18d1a"
                     style={[styles.centerText, styles.margin_15]}
                   />
-                  <Text style={styles.centerText}>{t('menu.settings')}</Text>
+                  <Text style={styles.centerText}>
+                    {t('menu.clientUsers')}
+                  </Text>
                 </View>
               </TouchableOpacity>
             </View>
-
-            {isAuthClientUser ? (
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.orange_bg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30,
-                  styles.borderRadius4
-                ]}
-              >
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate('ClockIn', {
-                      authClientUserName: authClientUserName
-                    })
-                  }
-                >
-                  <View>
-                    <FontAwesomeIcon
-                      name="clock-o"
-                      size={40}
-                      color="#fff"
-                      style={[styles.centerText, styles.margin_15]}
-                    />
-                    <Text style={[styles.centerText, styles.whiteColor]}>
-                      {t('menu.timecard')}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
-              >
-                <TouchableOpacity
-                  //onPress={this.goToClentUsersList}
-                  onPress={() => this.props.navigation.navigate('ClientUsers')}
-                >
-                  <View>
-                    <Icon
-                      name="ios-log-out"
-                      size={40}
-                      color="#f18d1a"
-                      style={[styles.centerText, styles.margin_15]}
-                    />
-                    <Text style={styles.centerText}>
-                      {t('menu.clientUsers')}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            )}
           </View>
         </View>
       </ScrollView>
@@ -314,15 +233,24 @@ class LoginSuccessScreen extends React.Component {
   }
 }
 
+const mapStateToProps = state => ({
+  chkS: state,
+  currentUser: state.clientuser.data,
+  haveData: state.clientuser.haveData,
+  haveError: state.clientuser.haveError,
+  isLoading: state.clientuser.loading
+})
+
 const mapDispatchToProps = dispatch => ({
   dispatch,
+  getCurrentUser: (name) => dispatch(getClientUsr(name)),
   doLogout: () => {
     dispatch(doLogout())
   }
 })
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(LoginSuccessScreen)
 
@@ -336,7 +264,7 @@ export class HiddenMenu extends React.Component {
           styles.jc_alignIem_center,
           styles.flex_dir_row,
           styles.mgrtotop8,
-          styles.lightgrayBg
+          {position: 'absolute', top: 100, width: '100%', backgroundColor: '#858585', opacity: 1, zIndex: 10}
         ]}
       >
         <View
@@ -353,7 +281,7 @@ export class HiddenMenu extends React.Component {
             }}
           >
             <View>
-              <Text style={[styles.orange_color]}>{t('settings.account')}</Text>
+              <Text style={[styles.whiteColor]}>{t('settings.account')}</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -370,7 +298,7 @@ export class HiddenMenu extends React.Component {
             onPress={() =>
               this.props.handleClientUserLogout(this.props.navigation)
             }
-            style={[styles.orange_color]}
+            style={[styles.whiteColor]}
           >
             {t('logout')}
           </Text>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { AsyncStorage, Image, Text, View } from 'react-native'
+import {AsyncStorage, Image, Text, TouchableOpacity, View} from 'react-native'
 import { encode as btoa } from 'base-64'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
@@ -13,10 +13,6 @@ import { api, warningMessage } from '../constants/Backend'
 class ClientUserLoginForm extends React.Component {
   static navigationOptions = {
     header: null
-  }
-
-  state = {
-    isAuthClientUser: false
   }
 
   clientLogin = async passWord => {
@@ -47,16 +43,15 @@ class ClientUserLoginForm extends React.Component {
       warningMessage('Incorrect password.')
     } else {
       const res = await response.json()
+      const loggedIn = new Date()
+      res.loggedIn = loggedIn
       res.tokenExp = new Date().setSeconds(
-        new Date().getSeconds() + parseInt(res.expires_in)
+        loggedIn.getSeconds() + parseInt(res.expires_in)
       )
+      res.username = this.props.clientusersName
       await AsyncStorage.setItem('clientusrToken', JSON.stringify(res))
-      await AsyncStorage.setItem('clientusersName', this.props.clientusersName)
 
-      this.props.navigation.navigate('LoginSuccess', {
-        isAuthClientUser: true,
-        clientusersName: this.props.clientusersName
-      })
+      this.props.navigation.navigate('LoginSuccess')
     }
   }
 

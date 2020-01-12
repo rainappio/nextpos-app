@@ -23,6 +23,7 @@ import { LineChart } from 'react-native-chart-kit'
 import { getRangedSalesReport } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import BackendErrorScreen from "./BackendErrorScreen"
 
 class SalesCharts extends React.Component {
   static navigationOptions = {
@@ -65,7 +66,7 @@ class SalesCharts extends React.Component {
   }
 
   render() {
-    const { getrangedSalesReport, isLoading, haveData } = this.props
+    const { getrangedSalesReport, isLoading, haveData, haveError } = this.props
     const { t } = this.state
 
     let data = {}
@@ -135,9 +136,12 @@ class SalesCharts extends React.Component {
     if (isLoading) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
+          <ActivityIndicator size="large" color="#ccc"/>
         </View>
       )
+    } else if (haveError) {
+      return (<BackendErrorScreen/>)
+
     } else if (!containSalesData) {
       return (
         <View style={[styles.container, styles.nomgrBottom]}>

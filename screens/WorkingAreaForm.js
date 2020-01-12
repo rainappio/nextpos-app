@@ -4,7 +4,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
   View
 } from 'react-native'
 import { isRequired } from '../validators'
@@ -92,46 +92,24 @@ class WorkingAreaForm extends React.Component {
             customRoute={'PrinterEdit'}
           />
 
-          <View
-            style={[
-              {
-                width: '100%',
-                backgroundColor: '#F39F86',
-                marginTop: 40,
-                borderRadius: 4
-              }
-            ]}
-          >
-            <TouchableHighlight onPress={handleSubmit}>
-              <Text style={styles.gsText}>
+          <View style={styles.bottom}>
+            <TouchableOpacity onPress={handleSubmit}>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>
                 {isEdit ? t('action.update') : t('action.save')}
               </Text>
-            </TouchableHighlight>
-          </View>
-
-          <View
-            style={[
-              {
-                width: '100%',
-                marginTop: 8,
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86'
-              }
-            ]}
-          >
+            </TouchableOpacity>
             {isEdit ? (
-              <TouchableHighlight onPress={handleEditCancel}>
-                <Text style={styles.signInText}>{t('action.cancel')}</Text>
-              </TouchableHighlight>
+              <TouchableOpacity onPress={handleEditCancel}>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+              </TouchableOpacity>
             ) : (
-              <TouchableHighlight
+              <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('PrinternKDS')}
               >
-                <Text style={[styles.signInText, styles.orange_color]}>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
                   {t('action.cancel')}
                 </Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
             )}
           </View>
         </KeyboardAvoidingView>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { ScrollView, Text, View, ActivityIndicator } from 'react-native'
+import { ScrollView, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Accordion, List } from '@ant-design/react-native'
@@ -115,29 +115,22 @@ class PrinternKDS extends React.Component {
                 <SwipeListView
                   data={printers}
                   renderItem={(data, rowMap) => (
-                    <View style={styles.rowFront}>
-                      <Text key={rowMap} style={{ padding: 15 }}>
-                        {data.item.name}
-                      </Text>
-                    </View>
+                    <TouchableOpacity onPress={() => {
+                      this.props.navigation.navigate('PrinterEdit', {
+                        id: data.item.id
+                      })
+                    }}>
+                      <View style={styles.rowFront}>
+                        <Text
+                          key={rowMap}
+                          style={{padding: 15}}
+                        >
+                          {data.item.name}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
                   )}
                   keyExtractor={(data, rowMap) => rowMap.toString()}
-                  renderHiddenItem={(data, rowMap) => (
-                    <View style={styles.rowBack} key={rowMap}>
-                      <View style={styles.editIconII}>
-                        <Icon
-                          name="md-create"
-                          size={25}
-                          color="#fff"
-                          onPress={() =>
-                            this.props.navigation.navigate('PrinterEdit', {
-                              id: data.item.id
-                            })
-                          }
-                        />
-                      </View>
-                    </View>
-                  )}
                   leftOpenValue={0}
                   rightOpenValue={-80}
                 />
@@ -159,30 +152,23 @@ class PrinternKDS extends React.Component {
                 <SwipeListView
                   data={workingareas}
                   renderItem={(data, rowMap) => (
-                    <View style={styles.rowFront}>
-                      <Text key={rowMap} style={{ padding: 15 }}>
-                        {data.item.name}
-                      </Text>
-                    </View>
+                    <TouchableOpacity onPress={() => {
+                      this.props.navigation.navigate('WorkingAreaEdit', {
+                        id: data.item.id,
+                        printers: printers
+                      })
+                    }}>
+                      <View style={styles.rowFront}>
+                        <Text
+                          key={rowMap}
+                          style={{padding: 15}}
+                        >
+                          {data.item.name}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
                   )}
                   keyExtractor={(data, rowMap) => rowMap.toString()}
-                  renderHiddenItem={(data, rowMap) => (
-                    <View style={styles.rowBack} key={rowMap}>
-                      <View style={styles.editIconII}>
-                        <Icon
-                          name="md-create"
-                          size={25}
-                          color="#fff"
-                          onPress={() =>
-                            this.props.navigation.navigate('WorkingAreaEdit', {
-                              id: data.item.id,
-                              printers: printers
-                            })
-                          }
-                        />
-                      </View>
-                    </View>
-                  )}
                   leftOpenValue={0}
                   rightOpenValue={-80}
                 />

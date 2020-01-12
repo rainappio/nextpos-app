@@ -68,7 +68,7 @@ class StoreFormScreen extends React.Component {
               <View style={{ flex: 1 }}>
                 <Text>{t('clientName')}</Text>
               </View>
-              <View style={{ flex: 2 }}>
+              <View style={{ flex: 3 }}>
                 <Field
                   name="clientName"
                   component={InputText}
@@ -82,7 +82,7 @@ class StoreFormScreen extends React.Component {
               <View style={{ flex: 1 }}>
                 <Text>{t('clientEmail')}</Text>
               </View>
-              <View style={{ flex: 2 }}>
+              <View style={{ flex: 3 }}>
                 <Field
                   name="username"
                   component={InputText}
@@ -96,7 +96,7 @@ class StoreFormScreen extends React.Component {
               <View style={{ flex: 1 }}>
                 <Text>{t('address')}</Text>
               </View>
-              <View style={{ flex: 2 }}>
+              <View style={{ flex: 3 }}>
                 <Field
                   name="attributes.address"
                   component={InputText}
@@ -109,7 +109,7 @@ class StoreFormScreen extends React.Component {
               <View style={{ flex: 1 }}>
                 <Text>{t('ubn')}</Text>
               </View>
-              <View style={{ flex: 2 }}>
+              <View style={{ flex: 3 }}>
                 <Field
                   name="attributes.UBN"
                   component={InputText}
@@ -127,9 +127,10 @@ class StoreFormScreen extends React.Component {
                   name="clientSettings.SERVICE_CHARGE.value"
                   component={InputText}
                   placeholder={t('serviceCharge')}
+                  keyboardType='numeric'
                 />
               </View>
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 1, flexDirection: 'row-reverse' }}>
                 <Field
                   name="clientSettings.SERVICE_CHARGE.enabled"
                   component={RNSwitch}
@@ -146,7 +147,7 @@ class StoreFormScreen extends React.Component {
               <View style={{ flex: 1 }}>
                 <Text>{t('taxInclusive')}</Text>
               </View>
-              <View style={{ flex: 3 }}>
+              <View style={{ flex: 3, flexDirection: 'row-reverse' }}>
                 <Field
                   name="clientSettings.TAX_INCLUSIVE.enabled"
                   component={RNSwitch}

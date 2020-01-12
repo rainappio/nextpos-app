@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, View } from 'react-native'
 import { connect } from 'react-redux'
 import BackBtnCustom from '../components/BackBtnCustom'
-import { getShiftStatus } from '../actions'
+import {formatDate, getShiftStatus} from '../actions'
 import {
   api,
   errorAlert,
@@ -104,7 +104,7 @@ class ShiftClose extends React.Component {
           {shift.shiftStatus === 'ACTIVE' && (
             <View>
               <Text style={[styles.fieldTitle]}>
-                {t('openAt')}: {shift.open.timestamp}
+                {t('openAt')}: {formatDate(shift.open.timestamp)}
               </Text>
               <Text style={[styles.fieldTitle]}>
                 {t('openBy')}: {shift.open.who}

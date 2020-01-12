@@ -1,4 +1,4 @@
-import { api, makeFetchRequest } from '../constants/Backend'
+import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_RANGED_SALES_REPORT = 'FETCH_RANGED_SALES_REPORT'
 export const FETCH_RANGED_SALES_REPORT_SUCCESS =
   'FETCH_RANGED_SALES_REPORT_SUCCESS'
@@ -23,22 +23,22 @@ export const getRangedSalesReport = () => {
   return dispatch => {
     dispatch(fetchRangedSalesReport())
 
-    makeFetchRequest(token => {
-      fetch(api.report.getrangedSalesReport, {
+    dispatchFetchRequest(api.report.getrangedSalesReport,
+      {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + token.access_token
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
+        headers: {}
+      },
+      response => {
+        response.json().then(data => {
           dispatch(fetchRangedSalesReportSuccess(data))
-          return data
         })
-        .catch(error => dispatch(fetchRangedSalesReportFailure(error)))
-    })
+      },
+      response => {
+        dispatch(fetchRangedSalesReportFailure(response))
+      }
+    ).then()
   }
 }
 

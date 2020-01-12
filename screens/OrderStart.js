@@ -80,12 +80,19 @@ class OrderStart extends React.Component {
   }
 }
 
+const mapStateToProps = state => ({
+  availableTables: state.tablesavailable.data.availableTables,
+  haveData: state.tablesavailable.haveData,
+  haveError: state.tablesavailable.haveError,
+  isLoading: state.tablesavailable.loading
+})
+
 const mapDispatchToProps = dispatch => ({
   clearProduct: () => dispatch(clearProduct()),
   getTablesAvailable: () => dispatch(getTablesAvailable()),
   getOrdersByDateRange: () => dispatch(getOrdersByDateRange())
 })
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(OrderStart)

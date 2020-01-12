@@ -35,7 +35,7 @@ class StaffEditScreen extends Component {
   }
 
   handleUpdate = values => {
-    values.roles === true
+    values.isManager === true
       ? (values.roles = ['MANAGER', 'USER'])
       : (values.roles = ['USER'])
     var staffname = this.props.navigation.state.params.staffname
@@ -102,8 +102,8 @@ class StaffEditScreen extends Component {
     const { isEditForm, refreshing } = this.state
 
     Array.isArray(clientuser.roles) && clientuser.roles.includes('MANAGER')
-      ? (clientuser.roles = true)
-      : (clientuser.roles = false)
+      ? (clientuser.isManager = true)
+      : (clientuser.isManager = false)
 
     if (isLoading) {
       return (
@@ -120,7 +120,6 @@ class StaffEditScreen extends Component {
           handleEditCancel={this.handleEditCancel}
           onSubmit={this.handleUpdate}
           refreshing={refreshing}
-          screenProps={this.props.screenProps}
         />
       )
     } else {

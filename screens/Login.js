@@ -35,14 +35,19 @@ class Login extends React.Component {
       await AsyncStorage.removeItem('token')
       await AsyncStorage.removeItem('clientusrToken')
 
+      const loggedIn = new Date()
+      res.loggedIn = loggedIn
       res.tokenExp = new Date().setSeconds(
-        new Date().getSeconds() + parseInt(res.expires_in)
+        loggedIn.getSeconds() + parseInt(res.expires_in)
       )
 
       res.cli_userName = values.username
       res.cli_masterPwd = values.masterPassword
 
-      await AsyncStorage.setItem('token', JSON.stringify(res))
+      // this is used for LoginSuccessScreen.
+      res.username = res.cli_userName
+
+        await AsyncStorage.setItem('token', JSON.stringify(res))
       this.props.dispatch(doLoggedIn(res.access_token))
       this.props.navigation.navigate('LoginSuccess')
     }

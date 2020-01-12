@@ -257,10 +257,7 @@ class OrdersSummaryRow extends React.Component {
                     styles.orange_color
                   ]}
                 >
-                  {this.props.navigation.state.params.tableName === undefined ||
-                  this.props.navigation.state.params.tableName === 0
-                    ? order.tableInfo.tableName
-                    : this.props.navigation.state.params.tableName}
+                  {order.tableInfo != null && order.tableInfo.tableName}
                 </Text>
               </View>
             </View>
