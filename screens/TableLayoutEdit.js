@@ -13,9 +13,14 @@ import { getTableLayouts, getTableLayout, clearTableLayout } from '../actions'
 import BackBtn from '../components/BackBtn'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import TableLayoutForm from './TableLayoutForm'
-import {api, makeFetchRequest, errorAlert, successMessage} from '../constants/Backend'
+import {
+  api,
+  makeFetchRequest,
+  errorAlert,
+  successMessage
+} from '../constants/Backend'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class TableLayoutEdit extends React.Component {
   static navigationOptions = {

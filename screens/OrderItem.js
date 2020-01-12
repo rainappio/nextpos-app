@@ -6,6 +6,8 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import styles from '../styles'
 import images from '../assets/images'
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en'
 
 class OrderItem extends React.PureComponent {
   render() {
@@ -18,6 +20,9 @@ class OrderItem extends React.PureComponent {
       handleDeliver
     } = this.props
     var timeDifference = get_time_diff(order.createdTime)
+
+    TimeAgo.addLocale(en)
+    const timeAgo = new TimeAgo('en-US')
 
     return (
       <TouchableOpacity
@@ -57,45 +62,43 @@ class OrderItem extends React.PureComponent {
         </View>
 
         <View style={{ width: '32%' }}>
-          <View>
-            {timeDifference < 29 ? (
-              <FontAwesomeIcon name={'clock-o'} color="#f18d1a" size={20}>
-                <Text style={{ fontSize: 12 }}>
-                  &nbsp;&nbsp;{timeDifference + ' min'}
-                </Text>
-              </FontAwesomeIcon>
-            ) : timeDifference < 60 ? (
-              <FontAwesomeIcon name={'clock-o'} color="red" size={20}>
-                <Text style={{ fontSize: 12 }}>
-                  &nbsp;&nbsp;{Math.floor(timeDifference % 60) + ' min'}
-                </Text>
-              </FontAwesomeIcon>
-            ) : timeDifference < 1440 ? (
-              <FontAwesomeIcon name={'clock-o'} color="red" size={20}>
-                <Text style={{ fontSize: 12 }}>
-                  &nbsp;&nbsp;
-                  {Math.floor(timeDifference / 60) +
-                    'hr ' +
-                    Math.floor(timeDifference % 60) +
-                    'min'}
-                </Text>
-              </FontAwesomeIcon>
-            ) : (
-              timeDifference >= 1440 && (
-                <FontAwesomeIcon name={'clock-o'} color="#888" size={20}>
+          {(order.state === 'OPEN' || order.state === 'IN_PROCESS') && (
+            <View>
+              {timeDifference < 29 ? (
+                <FontAwesomeIcon name={'clock-o'} color="#f18d1a" size={20}>
                   <Text style={{ fontSize: 12 }}>
                     &nbsp;&nbsp;
-                    {Math.floor(timeDifference / (60 * 24)) +
-                      'day ' +
-                      Math.floor((timeDifference % (60 * 24)) / 60) +
-                      'hr ' +
-                      Math.floor(((timeDifference % (60 * 24)) % 60) / 60) +
-                      'min '}
+                    {timeAgo.format(Date.now() - 15 * 60 * 1000)}
                   </Text>
                 </FontAwesomeIcon>
-              )
-            )}
-          </View>
+              ) : timeDifference < 60 ? (
+                <FontAwesomeIcon name={'clock-o'} color="red" size={20}>
+                  <Text style={{ fontSize: 12 }}>
+                    &nbsp;&nbsp;{timeAgo.format(Date.now() - 60 * 60 * 1000)}
+                  </Text>
+                </FontAwesomeIcon>
+              ) : timeDifference < 1440 ? (
+                <FontAwesomeIcon name={'clock-o'} color="red" size={20}>
+                  <Text style={{ fontSize: 12 }}>
+                    &nbsp;&nbsp;
+                    {timeAgo.format(Date.now() - 24 * 60 * 60 * 1000)}
+                  </Text>
+                </FontAwesomeIcon>
+              ) : (
+                timeDifference >= 1440 && (
+                  <FontAwesomeIcon name={'clock-o'} color="#888" size={20}>
+                    <Text style={{ fontSize: 12 }}>
+                      &nbsp;&nbsp;
+                      {timeAgo.format(
+                        Date.now() - 365 * 24 * 60 * 60 * 1000,
+                        'twitter'
+                      )}
+                    </Text>
+                  </FontAwesomeIcon>
+                )
+              )}
+            </View>
+          )}
         </View>
 
         <View>

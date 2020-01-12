@@ -7,7 +7,7 @@ import RadioItemObjPick from '../components/RadioItemObjPick'
 import RenderStepper from '../components/RenderStepper'
 import { isRequired, isCountZero } from '../validators'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class OrderFormIV extends React.Component {
   static navigationOptions = {
@@ -34,7 +34,6 @@ class OrderFormIV extends React.Component {
     }
   }
 
-
   render() {
     const { product } = this.props
     const { t } = this.state
@@ -53,9 +52,12 @@ class OrderFormIV extends React.Component {
             >
               {this.props.navigation.state.params.prdItemName}
             </Text>
-            {product.productOptions !== undefined && product.productOptions.length > 0 &&
-            <Text style={[styles.textBold, styles.paddBottom_20]}>{t('productOptions')}</Text>
-            }
+            {product.productOptions !== undefined &&
+              product.productOptions.length > 0 && (
+                <Text style={[styles.textBold, styles.paddBottom_20]}>
+                  {t('productOptions')}
+                </Text>
+              )}
 
             {product.productOptions !== undefined &&
               product.productOptions.map(prdOption => {
@@ -71,13 +73,11 @@ class OrderFormIV extends React.Component {
 
                 return (
                   <View key={prdOption.versionId}>
-                    <Text
-                      style={styles.fieldTitle}
-                    >
+                    <Text style={styles.fieldTitle}>
                       {prdOption.optionName}
                     </Text>
                     {prdOption.multipleChoice === false ? (
-                      <View style={{borderColor: '#ffab0f', borderWidth: 1}}>
+                      <View style={{ borderColor: '#ffab0f', borderWidth: 1 }}>
                         {prdOption.optionValues.map((optVal, ix) => {
                           let optionObj = {}
                           optionObj['optionName'] = prdOption.optionName

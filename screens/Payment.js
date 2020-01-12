@@ -23,8 +23,14 @@ class Payment extends React.Component {
   }
 
   handlePayment = values => {
-    const hasDiscount = values.discount !== undefined && values.discount.discount > 0
-    const discountTotal = values.orderTotal - calculatePercentage(values.orderTotal, values.discount.discount)
+    const hasDiscount =
+      values.discount !== undefined && values.discount.discount > 0
+    const discountTotal =
+      values.orderTotal -
+      calculatePercentage(
+        values.orderTotal,
+        hasDiscount && values.discount.discount
+      )
     this.setState({
       discountTotal: discountTotal
     })

@@ -14,7 +14,7 @@ import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class TableLayouts extends React.Component {
   static navigationOptions = {
@@ -52,7 +52,10 @@ class TableLayouts extends React.Component {
           name="ellipsis1"
           size={25}
           color="black"
-          style={[styles.whiteColor, { position: 'absolute', right: 3, top: 8 }]}
+          style={[
+            styles.whiteColor,
+            { position: 'absolute', right: 3, top: 8 }
+          ]}
           onPress={() => {
             this.props.navigation.navigate('TableLayoutEdit', {
               layoutId: layoutId

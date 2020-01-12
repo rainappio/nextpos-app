@@ -16,7 +16,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import TableForm from './TableForm'
 import { api, makeFetchRequest, errorAlert } from '../constants/Backend'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class TableAdd extends React.Component {
   static navigationOptions = {

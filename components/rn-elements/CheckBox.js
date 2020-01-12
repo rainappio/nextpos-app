@@ -26,10 +26,12 @@ class RenderCheckBox extends React.Component {
       optionName,
       total,
       getPercent,
+      orderTotal,
+      grandTotal,
       meta: { error, toched, valid },
       ...rest
     } = this.props
-
+    var isnoDiscount = optionName === 'No Discount' && orderTotal === grandTotal
     return (
       <View>
         <CheckBox
@@ -66,7 +68,9 @@ class RenderCheckBox extends React.Component {
               style={{ width: 35, height: 35 }}
             />
           }
-          checked={value.orderDiscount === customValue.orderDiscount}
+          checked={
+            isnoDiscount || value.orderDiscount === customValue.orderDiscount
+          }
           onPress={() => {
             onChange(customValue)
             getPercent(customValue.discount)

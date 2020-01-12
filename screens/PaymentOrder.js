@@ -8,7 +8,8 @@ import {
   getLabel,
   getfetchOrderInflights,
   clearOrder,
-  getOrder
+  getOrder,
+  getOrdersByDateRange
 } from '../actions'
 import {
   successMessage,
@@ -66,6 +67,7 @@ class PaymentOrder extends React.Component {
             this.props.navigation.navigate('TablesSrc')
             this.props.getfetchOrderInflights()
             this.props.clearOrder(id)
+            this.props.getOrdersByDateRange()
           } else {
             alert(res.message === undefined ? 'pls try again' : res.message)
           }
@@ -104,7 +106,7 @@ class PaymentOrder extends React.Component {
                 onSubmit: this.handleComplete
               })
             })
-
+            this.props.getOrdersByDateRange()
           } else {
             errorAlert(response)
           }
@@ -131,7 +133,8 @@ class PaymentOrder extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
-  clearOrder: id => dispatch(clearOrder(id))
+  clearOrder: id => dispatch(clearOrder(id)),
+  getOrdersByDateRange: () => dispatch(getOrdersByDateRange())
 })
 export default connect(
   null,

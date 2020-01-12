@@ -22,7 +22,7 @@ import {
 import { isRequired } from '../validators'
 import { calculatePercentage } from '../actions'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class PaymentFormScreen extends React.Component {
   static navigationOptions = {
@@ -169,6 +169,14 @@ class PaymentFormScreen extends React.Component {
                     optionName={discount.label}
                     total={order.orderTotal}
                     getPercent={this.getPercent}
+                    orderTotal={order.total.amountWithTax.toFixed(2)}
+                    grandTotal={(
+                      order.orderTotal -
+                      calculatePercentage(
+                        order.orderTotal,
+                        this.state.getPercent
+                      )
+                    ).toFixed(2)}
                   />
                 </View>
               ))}
@@ -215,7 +223,7 @@ class PaymentFormScreen extends React.Component {
                   <Text
                     style={[styles.bottomActionButton, styles.cancelButton]}
                   >
-                     {t('action.cancel')}
+                    {t('action.cancel')}
                   </Text>
                 </TouchableOpacity>
               </View>

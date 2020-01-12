@@ -9,7 +9,7 @@ import InputText from '../components/InputText'
 import { isRequired } from '../validators'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class PaymentOrderForm extends React.Component {
   static navigationOptions = {
@@ -45,7 +45,6 @@ class PaymentOrderForm extends React.Component {
       t: context.t
     }
   }
-
 
   render() {
     const moneyAmts = [

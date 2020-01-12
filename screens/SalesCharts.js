@@ -22,7 +22,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { LineChart } from 'react-native-chart-kit'
 import { getRangedSalesReport } from '../actions'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class SalesCharts extends React.Component {
   static navigationOptions = {
@@ -36,7 +36,7 @@ class SalesCharts extends React.Component {
     context.localize({
       en: {
         salesDashboardTitle: 'Sales Dashboard',
-        todaySales: 'Today\'s Sales',
+        todaySales: "Today's Sales",
         product: 'Product',
         quantity: 'Quantity',
         amount: 'Amount',
@@ -74,7 +74,10 @@ class SalesCharts extends React.Component {
     let innerObj = {}
     innerObj.data = []
 
-    const containSalesData = haveData && getrangedSalesReport.salesByRange !== undefined && getrangedSalesReport.salesByRange.length > 0
+    const containSalesData =
+      haveData &&
+      getrangedSalesReport.salesByRange !== undefined &&
+      getrangedSalesReport.salesByRange.length > 0
 
     if (containSalesData) {
       for (var i = 0; i < getrangedSalesReport.salesByRange.length; i++) {
@@ -138,8 +141,8 @@ class SalesCharts extends React.Component {
     } else if (!containSalesData) {
       return (
         <View style={[styles.container, styles.nomgrBottom]}>
-          <View style={{flex: 1}}>
-            <BackBtn/>
+          <View style={{ flex: 1 }}>
+            <BackBtn />
             <Text
               style={[
                 styles.welcomeText,
@@ -151,7 +154,9 @@ class SalesCharts extends React.Component {
               {t('salesDashboardTitle')}
             </Text>
           </View>
-          <Text style={{flex: 3, alignSelf: 'center'}}>{t('noSalesData')}</Text>
+          <Text style={{ flex: 3, alignSelf: 'center' }}>
+            {t('noSalesData')}
+          </Text>
         </View>
       )
     }
@@ -171,23 +176,51 @@ class SalesCharts extends React.Component {
             {t('salesDashboardTitle')}
           </Text>
 
-          <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold
-            ]}
-          >
-            {t('todaySales')} - ${getrangedSalesReport.todayTotal}
-          </Text>
+          <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
+            <View style={{ width: '80%' }}>
+              <Text
+                style={[
+                  styles.welcomeText,
+                  styles.orange_color,
+                  styles.textBold,
+                  styles.paddingTopBtn8,
+                  { fontSize: 14 }
+                ]}
+              >
+                {t('todaySales')} - ${getrangedSalesReport.todayTotal}
+              </Text>
+            </View>
+            <View>
+              <Text
+                style={[
+                  styles.orange_color,
+                  styles.toRight,
+                  {
+                    borderWidth: 1,
+                    borderColor: '#f18d1a',
+                    padding: 6,
+                    marginLeft: 8
+                  }
+                ]}
+                onPress={() => {
+                  this.props.navigation.navigate('Orders')
+                }}
+              >
+                Details
+              </Text>
+            </View>
+          </View>
         </View>
+
         {data.labels.length !== 0 && (
           <LineChart
             data={data}
             width={screenWidth}
             height={220}
             chartConfig={chartConfig}
+            onDataPointClick={({ value, dataset, getColor, ix }) =>
+              alert(value)
+            }
           />
         )}
 
@@ -195,7 +228,6 @@ class SalesCharts extends React.Component {
           style={[
             styles.orange_bg,
             styles.flex_dir_row,
-            styles.paddLeft20,
             styles.mgrtotop20,
             styles.paddingTopBtn8
           ]}

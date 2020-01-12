@@ -439,7 +439,7 @@ export default StyleSheet.create({
   },
 
   fieldContainer: {
-    //justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row'
   },
@@ -482,5 +482,21 @@ export default StyleSheet.create({
   },
   Rightmgr_30minus: {
     marginRight: -30
+  },
+  upButtonImage: {
+    resizeMode: 'contain',
+    width: 22,
+    height: 20,
+    marginRight: 8,
+    padding: 8
+  },
+  upButton: {
+    position: 'absolute',
+    // width: 50,
+    // height: 30,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    right: 0,
+    bottom: 0
   }
 })

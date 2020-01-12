@@ -11,7 +11,12 @@ import {
   getPrinter,
   clearPrinter
 } from '../actions'
-import {api, errorAlert, makeFetchRequest, successMessage} from '../constants/Backend'
+import {
+  api,
+  errorAlert,
+  makeFetchRequest,
+  successMessage
+} from '../constants/Backend'
 import styles from '../styles'
 
 class PrinterEdit extends React.Component {

@@ -33,11 +33,17 @@ import {
   clearOrder,
   clearProduct,
   getOrder,
-  getTablesAvailable
+  getTablesAvailable,
+  getOrdersByDateRange
 } from '../actions'
 import styles from '../styles'
-import {api, makeFetchRequest, errorAlert, successMessage} from '../constants/Backend'
-import {LocaleContext} from "../locales/LocaleContext";
+import {
+  api,
+  makeFetchRequest,
+  errorAlert,
+  successMessage
+} from '../constants/Backend'
+import { LocaleContext } from '../locales/LocaleContext'
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -122,6 +128,7 @@ class TablesScreen extends React.Component {
             this.props.navigation.navigate('TablesSrc')
             this.props.getfetchOrderInflights()
             this.props.clearOrder(res.orderId)
+            this.props.getOrdersByDateRange()
           } else {
             alert(res.message === undefined ? 'pls try again' : res.message)
           }
@@ -188,6 +195,7 @@ class TablesScreen extends React.Component {
           this.props.getTableLayouts()
           this.props.getTablesAvailable()
           this.props.clearOrder(id)
+          this.props.getOrdersByDateRange()
         } else {
           errorAlert(response)
         }
@@ -303,7 +311,9 @@ class TablesScreen extends React.Component {
                         this.props.navigation.navigate('LoginSuccess')
                       }}
                     >
-                      <Text style={styles.signInText}>{t('openShift.cancel')}</Text>
+                      <Text style={styles.signInText}>
+                        {t('openShift.cancel')}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -402,7 +412,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   getShiftStatus: () => dispatch(getShiftStatus()),
   clearOrder: () => dispatch(clearOrder()),
   clearProduct: () => dispatch(clearProduct()),
-  getTablesAvailable: () => dispatch(getTablesAvailable())
+  getTablesAvailable: () => dispatch(getTablesAvailable()),
+  getOrdersByDateRange: () => dispatch(getOrdersByDateRange())
 })
 export default connect(
   mapStateToProps,

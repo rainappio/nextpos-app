@@ -1,7 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
-import { clearProduct, getTablesAvailable } from '../actions'
+import {
+  clearProduct,
+  getTablesAvailable,
+  getOrdersByDateRange
+} from '../actions'
 import OrderForm from './OrderForm'
 import { api, makeFetchRequest } from '../constants/Backend'
 
@@ -50,6 +54,7 @@ class OrderStart extends React.Component {
               handleDelete: this.props.navigation.state.params.handleDelete,
               customerCount: customerCount
             })
+            this.props.getOrdersByDateRange()
           } else {
             alert('pls try again')
           }
@@ -77,7 +82,8 @@ class OrderStart extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
   clearProduct: () => dispatch(clearProduct()),
-  getTablesAvailable: () => dispatch(getTablesAvailable())
+  getTablesAvailable: () => dispatch(getTablesAvailable()),
+  getOrdersByDateRange: () => dispatch(getOrdersByDateRange())
 })
 export default connect(
   null,

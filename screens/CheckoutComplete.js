@@ -4,7 +4,7 @@ import { ScrollView, Text, View, Image, TouchableOpacity } from 'react-native'
 import images from '../assets/images'
 import { getfetchOrderInflights, getOrder } from '../actions'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class CheckoutComplete extends React.Component {
   static navigationOptions = {
@@ -67,7 +67,9 @@ class CheckoutComplete extends React.Component {
             {t('totalAmount')}: $&nbsp;
             {transactionResponse.settleAmount}
           </Text>
-          <Text style={styles.centerText}>{t('change')}: $&nbsp;{transactionResponse.cashChange}</Text>
+          <Text style={styles.centerText}>
+            {t('change')}: $&nbsp;{transactionResponse.cashChange}
+          </Text>
         </View>
 
         <View
@@ -84,7 +86,9 @@ class CheckoutComplete extends React.Component {
               this.props.getfetchOrderInflights()
             }}
           >
-            <Text style={[styles.signInText, styles.whiteColor]}>{t('done')}</Text>
+            <Text style={[styles.signInText, styles.whiteColor]}>
+              {t('done')}
+            </Text>
           </TouchableOpacity>
         </View>
 

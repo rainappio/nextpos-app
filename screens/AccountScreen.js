@@ -5,7 +5,8 @@ import {
   View,
   AsyncStorage,
   Button,
-  Alert, TouchableOpacity
+  Alert,
+  TouchableOpacity
 } from 'react-native'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
@@ -63,9 +64,11 @@ class AccountScreen extends React.Component {
     const storageItems = this.state.objects.map(obj => {
       return (
         <View key={obj.key} style={styles.fieldContainer}>
-          <Text style={[styles.fieldTitle, {flex: 2}]}>{obj.key}</Text>
-          <TouchableOpacity onPress={() => Alert.alert('Value', obj.value, [{ text: 'Ok' }])}>
-            <Text style={{flex: 1}}>Details</Text>
+          <Text style={[styles.fieldTitle, { flex: 2 }]}>{obj.key}</Text>
+          <TouchableOpacity
+            onPress={() => Alert.alert('Value', obj.value, [{ text: 'Ok' }])}
+          >
+            <Text style={{ flex: 1 }}>Details</Text>
           </TouchableOpacity>
         </View>
       )
@@ -89,7 +92,12 @@ class AccountScreen extends React.Component {
               {t('settings.account')}
             </Text>
             <View>
-              <View style={[styles.fieldTitle, {flexDirection: 'row', justifyContent: 'space-between'}]}>
+              <View
+                style={[
+                  styles.fieldTitle,
+                  { flexDirection: 'row', justifyContent: 'space-between' }
+                ]}
+              >
                 <Avatar rounded title="RA" size="large" />
                 <Text style={styles.text}>{t('username')}: </Text>
                 <Text style={styles.text}>XXXX</Text>
