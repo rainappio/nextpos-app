@@ -3,7 +3,6 @@ import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
 import { SwipeListView } from 'react-native-swipe-list-view'
 import { connect } from 'react-redux'
 import {
-  readableDateFormat,
   clearOrder,
   getOrder,
   getfetchOrderInflights,

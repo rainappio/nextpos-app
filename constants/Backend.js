@@ -13,7 +13,24 @@ export const api = {
   getAuthToken: `${apiRoot}/oauth/token`,
   client: {
     get: `${apiRoot}/clients/me`,
+    new: `${apiRoot}/clients`,
     update: `${apiRoot}/clients/me`
+  },
+  clientUser: {
+    new: `${apiRoot}/clients/me/users`,
+    get: (name) => {
+      return `${apiRoot}/clients/me/users/${name}`
+    },
+    getAll: `${apiRoot}/clients/me/users/`,
+    update: (name) => {
+      return `${apiRoot}/clients/me/users/${name}`
+    },
+    updatePassword: (name) => {
+      return `${apiRoot}/clients/me/users/${name}/password`
+    },
+    delete: (name) => {
+      return `${apiRoot}/clients/me/users/${name}`
+    }
   },
   timecard: {
     getActive: `${apiRoot}/timecards/active`,
@@ -21,6 +38,11 @@ export const api = {
     clockout: `${apiRoot}/timecards/clockout`
   },
   product: {
+    new: `${apiRoot}/products`,
+    getById: id => {
+      return `${apiRoot}/products/${id}/?version=DESIGN`
+    },
+    getAllGrouped: `${apiRoot}/searches/products/grouped?state=DESIGN`,
     update: id => {
       return `${apiRoot}/products/${id}`
     },
@@ -31,10 +53,18 @@ export const api = {
   productLabel: {
     getById: id => {
       return `${apiRoot}/labels/${id}`
-    }
+    },
+    getAll: `${apiRoot}/labels`,
+    new: `${apiRoot}/labels`
   },
   productOption: {
     new: `${apiRoot}/productoptions`,
+    getById: id => {
+      return `${apiRoot}/productoptions/${id}?version=DESIGN`
+    },
+    getAll: labelId => {
+      return `${apiRoot}/productoptions${labelId === undefined ? '' : `?productLabelId=${labelId}`}`
+    },
     update: id => {
       return `${apiRoot}/productoptions/${id}`
     },
@@ -46,19 +76,36 @@ export const api = {
     openShift: `${apiRoot}/shifts/open`,
     closeShift: `${apiRoot}/shifts/close`,
     new: `${apiRoot}/orders`,
-    get_globalOrderOffers: `${apiRoot}/offers/globalOrderOffers`,
+    getById: (id) => {
+      return `${apiRoot}/orders/${id}`
+    },
+    newLineItem: orderId => {
+      return `${apiRoot}/orders/${orderId}/lineitems`
+    },
+    process: orderId => {
+      return `${apiRoot}/orders/${orderId}/process`
+    },
+    delete: orderId => {
+      return `${apiRoot}/orders/${orderId}`
+    },
+    inflightOrders: `${apiRoot}/orders/inflight`,
+    getGlobalOrderOffers: `${apiRoot}/offers/globalOrderOffers`,
     getordersByDateRange: `${apiRoot}/orders`
   },
   printer: {
     create: `${apiRoot}/printers`,
     getPrinters: `${apiRoot}/printers`,
-    getPrinter: `${apiRoot}/printers/`,
+    getPrinter: (id) => {
+      return `${apiRoot}/printers/${id}`
+    },
     update: `${apiRoot}/printers/`
   },
   workingarea: {
     create: `${apiRoot}/workingareas`,
-    getWorkingAreas: `${apiRoot}/workingareas`,
-    getworkingArea: `${apiRoot}/workingareas/`,
+    getById: id => {
+      return `${apiRoot}/workingareas/${id}`
+    },
+    getAll: `${apiRoot}/workingareas`,
     update: `${apiRoot}/workingareas/`
   },
   shift: {
@@ -68,8 +115,10 @@ export const api = {
   },
   tablelayout: {
     create: `${apiRoot}/tablelayouts`,
-    getlayouts: `${apiRoot}/tablelayouts`,
-    getlayout: `${apiRoot}/tablelayouts/`,
+    getById: id => {
+      return `${apiRoot}/tablelayouts/${id}`
+    },
+    getAll: `${apiRoot}/tablelayouts`,
     update: `${apiRoot}/tablelayouts/`
   },
   payment: {
@@ -134,7 +183,10 @@ export const dispatchFetchRequest = async (endpoint, payload, successCallback, f
 
       if (!response.ok) {
         errorAlert(response)
-        failCallback(response)
+
+        if (failCallback !== undefined) {
+          failCallback(response)
+        }
       } else {
         successCallback(response)
       }

@@ -11,16 +11,24 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
 
-    this.props.screenProps.localize({
+    this.state = {
+      t: context.t
+    }
+  }
+
+  componentDidMount() {
+    this.context.localize({
       en: {
         getStarted: 'Get Started'
       },
@@ -31,7 +39,7 @@ export default class HomeScreen extends React.Component {
   }
 
   render() {
-    let { t } = this.props.screenProps
+    let { t } = this.state
 
     return (
       <View style={styles.container}>

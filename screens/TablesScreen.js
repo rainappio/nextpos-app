@@ -41,7 +41,7 @@ import {
   api,
   makeFetchRequest,
   errorAlert,
-  successMessage
+  successMessage, dispatchFetchRequest
 } from '../constants/Backend'
 import { LocaleContext } from '../locales/LocaleContext'
 
@@ -105,73 +105,44 @@ class TablesScreen extends React.Component {
   handleOrderSubmit = id => {
     const formData = new FormData()
     formData.append('action', 'SUBMIT')
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      fetch(`http://35.234.63.193/orders/${id}/process`, {
+
+    dispatchFetchRequest(api.order.process(id), {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + tokenObj.access_token
-        },
+        headers: {},
         body: formData
-      })
-        .then(response => response.json())
-        .then(res => {
-          if (res.hasOwnProperty('orderId')) {
+      },
+      response => {
+        response.json().then(data => {
+          if (data.hasOwnProperty('orderId')) {
+            successMessage('Order submitted')
             this.props.navigation.navigate('TablesSrc')
             this.props.getfetchOrderInflights()
-            this.props.clearOrder(res.orderId)
+            this.props.clearOrder(data.orderId)
             this.props.getOrdersByDateRange()
-          } else {
-            alert(res.message === undefined ? 'pls try again' : res.message)
           }
         })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+      }).then()
   }
 
   handleDelete = id => {
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      fetch(`http://35.234.63.193/orders/${id}`, {
+    dispatchFetchRequest(api.order.delete(id), {
         method: 'DELETE',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + tokenObj.access_token
         }
-      })
-        .then(response => {
-          if (response.status === 200) {
-            this.props.navigation.navigate('TablesSrc')
-            this.props.getfetchOrderInflights()
-            this.props.getTableLayouts()
-            this.props.getTablesAvailable()
-            this.props.clearOrder(id)
-          } else {
-            alert('pls try again')
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+      },
+      response => {
+        successMessage('Deleted')
+        this.props.navigation.navigate('TablesSrc')
+        this.props.getfetchOrderInflights()
+        this.props.getTableLayouts()
+        this.props.getTablesAvailable()
+        this.props.clearOrder(id)
+      }).then()
   }
 
   handleDeliver = id => {

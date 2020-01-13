@@ -30,19 +30,6 @@ class LoginSuccessScreen extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    context.localize({
-      en: {
-        welcome: 'Welcome,',
-        loggedIn: 'Logged in at',
-        validUntil: 'Valid until'
-      },
-      zh: {
-        welcome: '歡迎,',
-        loggedIn: '登入時間:',
-        validUntil: '有效登入至:'
-      }
-    })
-
     this.state = {
       showHiddenMenu: false,
       token: null,
@@ -67,6 +54,19 @@ class LoginSuccessScreen extends React.Component {
    * https://reactnavigation.org/docs/en/navigation-lifecycle.html
    */
   componentDidMount() {
+    this.context.localize({
+      en: {
+        welcome: 'Welcome,',
+        loggedIn: 'Logged in at',
+        validUntil: 'Valid until'
+      },
+      zh: {
+        welcome: '歡迎,',
+        loggedIn: '登入時間:',
+        validUntil: '有效登入至:'
+      }
+    })
+
     // <NavigationEvent> component in the render function takes care of loading user info.
   }
 
@@ -142,18 +142,19 @@ class LoginSuccessScreen extends React.Component {
             <Text style={[styles.textSmall]}>{t('validUntil')} {formatDateFromMillis(tokenExpiry)}</Text>
           </View>
 
-          <View style={[styles.mgrtotop12, styles.jc_alignIem_center, styles.flex_dir_row]}>
-            <View
-              style={[
-                styles.margin_15,
-                styles.grayBg,
-                styles.jc_alignIem_center,
-                styles.fullWidth
-              ]}
+          <View style={[styles.mgrtotop12, styles.jc_alignIem_center]}>
+            <TouchableOpacity
+              style={styles.fullWidth}
+              onPress={() => this.props.navigation.navigate('TablesSrc')}
             >
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('TablesSrc')}
+              <View
+                style={[
+                  styles.margin_15,
+                  styles.grayBg,
+                  styles.jc_alignIem_center,
+                ]}
               >
+
                 <View style={[styles.flex_dir_row, styles.jc_alignIem_center]}>
                   <Icon
                     name="md-people"
@@ -163,8 +164,9 @@ class LoginSuccessScreen extends React.Component {
                   />
                   <Text style={styles.centerText}>{t('menu.tables')}</Text>
                 </View>
-              </TouchableOpacity>
-            </View>
+
+              </View>
+            </TouchableOpacity>
           </View>
 
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>

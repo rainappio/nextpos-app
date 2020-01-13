@@ -20,7 +20,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import images from '../assets/images'
-import { getOrdersByDateRange, readableDateFormat, getOrder } from '../actions'
+import {getOrdersByDateRange, getOrder, formatDate} from '../actions'
 import styles from '../styles'
 
 class OrderDetail extends React.Component {
@@ -53,7 +53,7 @@ class OrderDetail extends React.Component {
                 styles.textBold
               ]}
             >
-              {readableDateFormat(order.createdDate)}
+              {formatDate(order.createdDate)}
             </Text>
 
             <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>

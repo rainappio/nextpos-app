@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import StaffFormScreen from './StaffFormScreen'
 import { clearClient, getClientUsr, getClientUsrs } from '../actions'
 import styles from '../styles'
-import { errorAlert, successMessage } from '../constants/Backend'
+import {api, dispatchFetchRequest, errorAlert, successMessage} from '../constants/Backend'
 
 class StaffEditScreen extends Component {
   static navigationOptions = {
@@ -19,9 +19,6 @@ class StaffEditScreen extends Component {
 
   state = {
     isEditForm: true,
-    isSaving: false,
-    saveError: true,
-    refreshing: false
   }
 
   componentDidMount() {
@@ -38,56 +35,22 @@ class StaffEditScreen extends Component {
     values.isManager === true
       ? (values.roles = ['MANAGER', 'USER'])
       : (values.roles = ['USER'])
-    var staffname = this.props.navigation.state.params.staffname
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      fetch(`http://35.234.63.193/clients/me/users/${staffname}`, {
+    const staffname = this.props.navigation.state.params.staffname
+
+    dispatchFetchRequest(api.clientUser.update(staffname), {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + tokenObj.access_token
         },
         body: JSON.stringify(values)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            successMessage('Saved')
-            this.props.clearClient()
-            this.props.navigation.navigate('StaffsOverview', {
-              staffname: staffname
-            })
-
-            this.setState({
-              isSaving: true,
-              saveError: false,
-              refreshing: true
-            })
-            this.props.getClientUsrs() !== undefined &&
-              this.props.getClientUsrs().then(() => {
-                this.setState({
-                  refreshing: false
-                })
-              })
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          this.setState({
-            isSaving: false,
-            saveError: true
-          })
-          console.error(error)
-        })
-    })
+      },
+      response => {
+        successMessage('Saved')
+        this.props.navigation.navigate('StaffsOverview')
+        this.props.getClientUsrs()
+      }).then()
   }
 
   render() {
@@ -99,7 +62,7 @@ class StaffEditScreen extends Component {
       haveError,
       isLoading
     } = this.props
-    const { isEditForm, refreshing } = this.state
+    const { isEditForm } = this.state
 
     Array.isArray(clientuser.roles) && clientuser.roles.includes('MANAGER')
       ? (clientuser.isManager = true)
@@ -119,7 +82,6 @@ class StaffEditScreen extends Component {
           initialValues={clientuser}
           handleEditCancel={this.handleEditCancel}
           onSubmit={this.handleUpdate}
-          refreshing={refreshing}
         />
       )
     } else {

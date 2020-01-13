@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
 import ProductFormScreen from './ProductFormScreen'
 import { getProducts, getLables, getLabel } from '../actions'
-import { successMessage } from '../constants/Backend'
+import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 
 class Product extends React.Component {
   static navigationOptions = {
@@ -20,59 +20,31 @@ class Product extends React.Component {
   }
 
   handleSubmit = values => {
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      fetch('http://35.234.63.193/products', {
+
+    dispatchFetchRequest(api.product.new, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + tokenObj.access_token
         },
         body: JSON.stringify(values)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            successMessage('Saved')
-            this.props.navigation.navigate('ProductsOverview', {
-              productId: values.productLabelId
-            })
-            this.setState({
-              refreshing: true
-            })
-            this.props.getProducts() !== undefined &&
-              this.props.getProducts().then(() => {
-                this.setState({
-                  refreshing: false
-                })
-              })
-          } else {
-            //this.props.navigation.navigate('Login')
-            alert('pls try again')
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+      },
+      response => {
+        successMessage('Saved')
+        this.props.navigation.navigate('ProductsOverview')
+        this.props.getProducts()
+      }).then()
   }
 
   render() {
     const { labels = [], navigation } = this.props
-    const { refreshing } = this.state
+
     return (
       <ProductFormScreen
         labels={labels}
         onSubmit={this.handleSubmit}
         navigation={navigation}
-        refreshing={refreshing}
         screenProps={this.props.screenProps}
       />
     )

@@ -1,4 +1,4 @@
-import { api, makeFetchRequest } from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 export const FETCH_ORDERS_BY_DATE_RANGE = 'FETCH_ORDERS_BY_DATE_RANGE'
 export const FETCH_ORDERS_BY_DATE_RANGE_SUCCESS =
   'FETCH_ORDERS_BY_DATE_RANGE_SUCCESS'
@@ -23,28 +23,19 @@ export const getOrdersByDateRange = () => {
   return dispatch => {
     dispatch(fetchOrdersByDateRange())
 
-    makeFetchRequest(token => {
-      fetch(api.order.getordersByDateRange, {
+    dispatchFetchRequest(api.order.getordersByDateRange, {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + token.access_token
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
+        headers: {}
+      },
+      response => {
+        response.json().then(data => {
           dispatch(fetchOrdersByDateRangeSuccess(data))
-          return data
         })
-        .catch(error => dispatch(fetchOrdersByDateRangeFailure(error)))
-    })
+      },
+      response => {
+        dispatch(fetchOrdersByDateRangeFailure(response))
+      }).then()
   }
-}
-
-function handleErrors (response) {
-  if (!response.ok) {
-    throw Error(response.statusText)
-  }
-  return response
 }

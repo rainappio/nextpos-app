@@ -79,65 +79,6 @@ export const dateToLocaleString = dateObj => {
   })
 }
 
-export const readableDateFormat = date => {
-  var shortDate = date.slice(0, 10)
-  var subShortDate = shortDate.split('-')
-  var monthCount = subShortDate[1].replace(/\b(0(?!\b))+/g, '')
-
-  var t = date.split(/[- :T]/)
-  var date = new Date(
-    parseInt(t[0]),
-    parseInt(t[1] - 1),
-    parseInt(t[2]),
-    parseInt(t[3]),
-    parseInt(t[4]),
-    parseInt(t[5])
-  )
-  var getHours = new Date(date).getHours()
-  var getMinutes = new Date(date).getMinutes()
-  function getMonthName (monthCount) {
-    switch (monthCount) {
-      case '1':
-        return 'Jan'
-      case '2':
-        return 'Feb'
-      case '3':
-        return 'Mar'
-      case '4':
-        return 'April'
-      case '5':
-        return 'May'
-      case '6':
-        return 'Jun'
-      case '7':
-        return 'Jul'
-      case '8':
-        return 'Aug'
-      case '9':
-        return 'Sept'
-      case '10':
-        return 'Oct'
-      case '11':
-        return 'Nov'
-      case '12':
-        return 'Dec'
-      default:
-        return 'pls check ur dateCount'
-    }
-  }
-  var formattedDateTime =
-    subShortDate[2] +
-    ' ' +
-    getMonthName(monthCount) +
-    ' ' +
-    subShortDate[0] +
-    ' ' +
-    getHours +
-    ':' +
-    getMinutes
-  return formattedDateTime
-}
-
 export function calculatePercentage (Amount, percent) {
   return (Amount * percent) / 100
 }

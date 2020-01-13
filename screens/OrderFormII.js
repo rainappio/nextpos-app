@@ -131,25 +131,6 @@ class OrderFormII extends React.Component {
         return latestorder !== false
       })
 
-    const right = [
-      {
-        text: (
-          <Icon
-            name="md-create"
-            size={25}
-            color="#fff"
-            onPress={() =>
-              this.props.navigation.navigate('ProductEdit', {
-                productId: this.state.labelId
-              })
-            }
-          />
-        ),
-        onPress: () => console.log('read'),
-        style: { backgroundColor: '#f18d1a90' }
-      }
-    ]
-
     if (isLoading) {
       return (
         <View style={[styles.container]}>
