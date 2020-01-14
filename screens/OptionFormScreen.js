@@ -4,7 +4,7 @@ import {
   ScrollView,
   Text,
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   KeyboardAvoidingView
 } from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign'
@@ -176,12 +176,12 @@ class OptionFormScreen extends React.Component {
             />
 
             <View style={styles.bottom}>
-              <TouchableHighlight onPress={handleSubmit}>
+              <TouchableOpacity onPress={handleSubmit}>
                 <Text style={[styles.bottomActionButton, styles.actionButton]}>
                   {t('action.save')}
                 </Text>
-              </TouchableHighlight>
-              <TouchableHighlight
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={() =>
                   this.props.navigation.navigate(
                     this.props.navigation.state.params.customRoute
@@ -191,7 +191,7 @@ class OptionFormScreen extends React.Component {
                 <Text style={[styles.bottomActionButton, styles.cancelButton]}>
                   {t('action.cancel')}
                 </Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
               {initialValues !== undefined && initialValues.id != null && (
                 <DeleteBtn
                   handleDeleteAction={handleDeleteOption}

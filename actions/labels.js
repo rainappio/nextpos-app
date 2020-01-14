@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native'
+import {api, dispatchFetchRequest} from "../constants/Backend"
 export const FETCH_LABELS = 'FETCH_LABELS'
 export const FETCH_LABELS_SUCCESS = 'FETCFETCH_LABELS_SUCCESSH_L'
 export const FETCH_LABELS_FAILURE = 'FETCH_LABELS_FAILURE'
@@ -20,32 +20,21 @@ export const fetchLabelsFailure = error => ({
 export const getLables = () => {
   return dispatch => {
     dispatch(fetchLabels())
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      var auth = 'Bearer ' + tokenObj.access_token
-      return fetch('http://35.234.63.193/labels', {
+
+    dispatchFetchRequest(api.productLabel.getAll, {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'x-client-id': tokenObj.clientId,
-          Authorization: auth
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
+        headers: {}
+      },
+      response => {
+        response.json().then(data => {
           dispatch(fetchLabelsSuccess(data))
-          return data
         })
-        .catch(error => dispatch(fetchLabelsFailure(error)))
-    })
+      },
+      response => {
+        dispatch(fetchLabelsFailure(response))
+      }).then()
   }
 }
 

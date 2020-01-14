@@ -187,8 +187,13 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(clearProduct(props.navigation.state.params.productId)),
   getProducts: () => dispatch(getProducts()),
   getWorkingAreas: () => dispatch(getWorkingAreas()),
-  getProductOptions: () =>
-    dispatch(getProductOptions(props.navigation.state.params.labelId)),
+  getProductOptions: () => {
+    const labelId = props.navigation.state.params.labelId
+
+    if (labelId !== undefined && labelId !== '0') {
+      dispatch(getProductOptions(props.navigation.state.params.labelId))
+    }
+  },
   getProduct: () =>
     dispatch(getProduct(props.navigation.state.params.productId))
 })

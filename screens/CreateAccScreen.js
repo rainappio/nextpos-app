@@ -1,24 +1,48 @@
 import React from 'react'
 import CreateAccFormScreen from './CreateAccFormScreen'
+import {api, errorAlert, successMessage, warningMessage} from "../constants/Backend";
+import {LocaleContext} from "../locales/LocaleContext";
 
 class CreateAccScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      t: context.t
+    }
+  }
+
+  componentDidMount() {
+    this.context.localize({
+      en: {
+        signUp: 'Sign Up',
+        errorMessage: 'Email is already registered, please choose another email address.'
+      },
+      zh: {
+        signUp: '註冊',
+        errorMessage: '此email已經註冊過，請使用新的email來註冊。'
+      }
+    })
+  }
 
   handleSubmit = values => {
-    fetch('http://35.234.63.193/clients', {
-      method: 'POST', // or 'PUT'
+    fetch(api.client.new, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(values) // data can be `string` or {object}!
     })
       .then(response => {
-        console.warn(response)
-        if (response.ok !== true) {
-          alert('username already taken')
+        if (!response.ok) {
+          warningMessage(this.state.t('errorMessage'))
         } else {
+          successMessage('Client created')
           this.props.navigation.navigate('Login')
         }
       })

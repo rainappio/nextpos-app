@@ -59,7 +59,6 @@ class ProductFormScreen extends React.Component {
       handleSubmit,
       labels,
       isEditForm,
-      refreshing,
       handleEditCancel,
       handleDeleteProduct,
       workingareas,

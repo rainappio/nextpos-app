@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { ScrollView, Text, View, TouchableHighlight } from 'react-native'
+import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
 import InputText from '../components/InputText'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
@@ -142,35 +142,13 @@ class CategoryCustomizeScreen extends React.Component {
                 ))}
             </View>
 
-            <View
-              style={[
-                {
-                  width: '100%',
-                  backgroundColor: '#F39F86',
-                  borderRadius: 4,
-                  marginBottom: 8
-                }
-              ]}
-            >
-              <TouchableHighlight onPress={handleSubmit}>
-                <Text style={styles.gsText}>{t('action.save')}</Text>
-              </TouchableHighlight>
-            </View>
-
-            <View
-              style={[
-                {
-                  width: '100%',
-                  bottom: 0,
-                  borderRadius: 4,
-                  borderWidth: 1,
-                  borderColor: '#F39F86'
-                }
-              ]}
-            >
-              <TouchableHighlight onPress={() => onCancel()}>
-                <Text style={styles.signInText}>{t('action.cancel')}</Text>
-              </TouchableHighlight>
+            <View style={styles.bottom}>
+              <TouchableOpacity onPress={handleSubmit}>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => onCancel()}>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

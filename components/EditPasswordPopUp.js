@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Field, reduxForm } from 'redux-form'
+import { Field } from 'redux-form'
 import {
   Text,
   View,
@@ -7,16 +7,12 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   ScrollView,
-  TouchableHighlight,
-  AsyncStorage,
   Keyboard
 } from 'react-native'
-import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
-import { getClientUsr } from '../actions'
 import styles from '../styles'
-import { successMessage } from '../constants/Backend'
+import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext";
 
 class EditPasswordPopUp extends Component {
@@ -63,37 +59,25 @@ class EditPasswordPopUp extends Component {
     // dismiss keyboard after pin code is fulfilled.
     Keyboard.dismiss()
 
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      fetch(`http://35.234.63.193/clients/me/users/${name}/password`, {
+    dispatchFetchRequest(api.clientUser.updatePassword(name), {
         method: 'PATCH',
         withCredentials: true,
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + tokenObj.access_token
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(newPwd)
-      })
-        .then(response => response.json())
-        .then(res => {
-          if (res.username) {
+      },
+      response => {
+        // async/await is to avoid update on unmounted component error in SmoothPinCodeInput.
+        response.json().then(async data => {
+          if (data.username) {
             successMessage('Password updated')
           }
+
+          await this.toggleModal(false)
         })
-        .then(() => {
-          this.toggleModal(false)
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+      }).then()
   }
 
   /**

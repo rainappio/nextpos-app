@@ -8,28 +8,25 @@ import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 import { withNavigation } from 'react-navigation'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class CreateAccFormScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  constructor(props) {
+  constructor(props, context) {
     super(props)
 
-    this.props.screenProps.localize({
-      en: {
-        signUp: 'Sign Up'
-      },
-      zh: {
-        signUp: '註冊'
-      }
-    })
+    this.state = {
+      t: context.t,
+    }
   }
 
   render() {
     const { handleSubmit } = this.props
-    const { t } = this.props.screenProps
+    const { t } = this.state
 
     return (
       <DismissKeyboard>

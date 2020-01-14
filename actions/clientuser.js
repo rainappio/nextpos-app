@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native'
+import {api, dispatchFetchRequest} from "../constants/Backend"
 export const FETCH_CLIENT = 'FETCH_CLIENT'
 export const FETCH_CLIENT_SUCCESS = 'FETCH_CLIENT_SUCCESS'
 export const FETCH_CLIENT_FAILURE = 'FETCH_CLIENT_FAILURE'
@@ -26,38 +26,21 @@ export const clearClient = () => ({
 export const getClientUsr = name => {
   return dispatch => {
     dispatch(fetchClient(name))
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      var auth = 'Bearer ' + tokenObj.access_token
-      return fetch(`http://35.234.63.193/clients/me/users/${name}`, {
+
+    dispatchFetchRequest(api.clientUser.get(name), {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'x-client-id': tokenObj.clientId,
-          Authorization: auth
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
+        headers: {},
+      },
+      response => {
+        response.json().then(data => {
           dispatch(fetchClientSuccess(data))
-          return data
         })
-        .catch(error => dispatch(fetchClientFailure(error)))
-    })
+      },
+      response => {
+        dispatch(fetchClientFailure(response))
+      }
+    ).then()
   }
-}
-
-function handleErrors (response) {
-  if (!response.ok) {
-    throw Error(response.statusText)
-  }
-  return response
 }

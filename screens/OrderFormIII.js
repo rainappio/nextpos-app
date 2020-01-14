@@ -19,6 +19,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 import OrderFormIV from './OrderFormIV'
 import { LocaleContext } from '../locales/LocaleContext'
+import {api, dispatchFetchRequest, successMessage} from "../constants/Backend";
 
 class OrderFormIII extends React.Component {
   static navigationOptions = {
@@ -81,34 +82,22 @@ class OrderFormIII extends React.Component {
     createOrderObj['productOptions'] = prdOptionsCollections
     var orderId = this.props.navigation.state.params.orderId
 
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      fetch(`http://35.234.63.193/orders/${orderId}/lineitems/`, {
+    dispatchFetchRequest(api.order.newLineItem(orderId), {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + tokenObj.access_token
         },
         body: JSON.stringify(createOrderObj)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            this.props.navigation.navigate('OrderFormII', {
-              orderId: orderId
-            })
-            this.props.getOrder(orderId)
-          }
+      },
+      response => {
+        successMessage('Line item saved')
+        this.props.navigation.navigate('OrderFormII', {
+          orderId: orderId
         })
-        .catch(error => console.log(error))
-    })
+        this.props.getOrder(orderId)
+      }).then()
   }
 
   render() {
@@ -123,25 +112,6 @@ class OrderFormIII extends React.Component {
         </View>
       )
     }
-
-    const right = [
-      {
-        text: (
-          <Icon
-            name="md-create"
-            size={25}
-            color="#fff"
-            onPress={() =>
-              this.props.navigation.navigate('ProductEdit', {
-                productId: this.state.labelId
-              })
-            }
-          />
-        ),
-        onPress: () => console.log('read'),
-        style: { backgroundColor: '#f18d1a90' }
-      }
-    ]
 
     if (isLoading) {
       return (

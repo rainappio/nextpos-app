@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native'
+import {api, dispatchFetchRequest} from "../constants/Backend"
 export const FETCH_ORDER = 'FETCH_ORDER'
 export const FETCH_ORDER_SUCCESS = 'FETCH_ORDER_SUCCESS'
 export const FETCH_ORDER_FAILURE = 'FETCH_ORDER_FAILURE'
@@ -26,37 +26,20 @@ export const clearOrder = () => ({
 export const getOrder = id => {
   return dispatch => {
     dispatch(fetchOrder(id))
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        return JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      var auth = 'Bearer ' + tokenObj.access_token
-      return fetch(`http://35.234.63.193/orders/${id}`, {
+
+    dispatchFetchRequest(api.order.getById(id), {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
-        headers: {
-          'x-client-id': tokenObj.clientId,
-          Authorization: auth
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
+        headers: {}
+      },
+      response => {
+        response.json().then(data => {
           dispatch(fetchOrderSuccess(data))
-          return data
         })
-        .catch(error => dispatch(fetchOrderFailure(error)))
-    })
+      },
+      response => {
+        dispatch(fetchOrderFailure(response))
+      }).then()
   }
-}
-
-function handleErrors (response) {
-  if (!response.ok) {
-    throw Error(response.statusText)
-  }
-  return response
 }

@@ -30,7 +30,6 @@ class Store extends React.Component {
   handleSubmit = values => {
     const enabled = values.clientSettings.TAX_INCLUSIVE.enabled
     values.clientSettings.TAX_INCLUSIVE.value = enabled
-    console.log(`values: ${JSON.stringify(values)}`)
 
     makeFetchRequest(token => {
       fetch(api.client.update, {
@@ -62,8 +61,6 @@ class Store extends React.Component {
   render() {
     const { client, navigation, loading, haveData } = this.props
     const { refreshing, errorResponse } = this.state
-
-    console.log(client)
 
     if (loading) {
       return (

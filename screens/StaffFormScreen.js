@@ -1,34 +1,17 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  RefreshControl,
-  AsyncStorage,
-  Keyboard
-} from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
-import { connect } from 'react-redux'
-import { isRequired } from '../validators'
+import {Field, reduxForm} from 'redux-form'
+import {Keyboard, Text, TouchableOpacity, View} from 'react-native'
+import {connect} from 'react-redux'
+import {isRequired} from '../validators'
 import InputText from '../components/InputText'
 import PinCodeInput from '../components/PinCodeInput'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
-import DropDown from '../components/DropDown'
-import MultiDropDown from '../components/MultiDropDown'
-import { getClientUsrs } from '../actions'
+import {DismissKeyboard} from '../components/DismissKeyboard'
+import {getClientUsrs} from '../actions'
 import EditPasswordPopUp from '../components/EditPasswordPopUp'
 import RNSwitch from '../components/RNSwitch'
 import styles from '../styles'
 import DeleteBtn from '../components/DeleteBtn'
-import { errorAlert, successMessage } from '../constants/Backend'
-import { Header } from 'react-native-elements'
+import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext";
 
 class StaffFormScreen extends React.Component {
@@ -45,8 +28,8 @@ class StaffFormScreen extends React.Component {
     }
   }
 
-  async componentDidMount() {
-    await this.context.localize({
+  componentDidMount() {
+    this.context.localize({
       en: {
         staffTitle: 'Staff',
         nickName: 'Nick Name',
@@ -65,49 +48,25 @@ class StaffFormScreen extends React.Component {
   }
 
   handleDelete = values => {
-    AsyncStorage.getItem('token', (err, value) => {
-      if (err) {
-        console.log(err)
-      } else {
-        JSON.parse(value)
-      }
-    }).then(val => {
-      var tokenObj = JSON.parse(val)
-      fetch(`http://35.234.63.193/clients/me/users/${values.name}`, {
+    dispatchFetchRequest(api.clientUser.delete(values.name), {
         method: 'DELETE',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + tokenObj.access_token
         }
-      })
-        .then(response => {
-          if (response.status === 204) {
-            successMessage('Deleted')
-            this.props.navigation.navigate('StaffsOverview')
-            this.setState({ refreshing: true })
-            this.props.getClientUsrs() !== undefined &&
-              this.props.getClientUsrs().then(() => {
-                this.setState({
-                  refreshing: false
-                })
-              })
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+      },
+      response => {
+        successMessage('Deleted')
+        this.props.navigation.navigate('StaffsOverview')
+        this.props.getClientUsrs()
+      }).then()
   }
 
   render() {
     const {
       handleSubmit,
       isEditForm,
-      refreshing,
       handleEditCancel,
       initialValues,
       onCancel

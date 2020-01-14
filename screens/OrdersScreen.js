@@ -126,7 +126,7 @@ class OrdersScreen extends React.Component {
   )
 
   //https://stackoverflow.com/questions/48061234/how-to-keep-scroll-position-using-flatlist-when-navigating-back-in-react-native
-  handleScroll = (event: Object) => {
+  handleScroll = (event) => {
     this.setState({ scrollPosition: event.nativeEvent.contentOffset.y })
   }
 
