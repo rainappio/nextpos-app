@@ -114,8 +114,8 @@ export default class App extends React.Component {
   localize = locales => this.mergeLocaleResource(locales)
 
   changeLanguage = () => {
-    let toLocale = this.state.locale === 'zh-TW' ? 'en-TW' : 'zh-TW'
-    console.log(`Change to ${toLocale}`)
+    let toLocale = this.state.locale === 'zh-Hant-TW' ? 'en-TW' : 'zh-Hant-TW'
+    console.log(`Default locale: ${Localization.locale}, current locale: ${this.state.locale}, changing to ${toLocale}`)
 
     this.setState({ locale: toLocale })
   }

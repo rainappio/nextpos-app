@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import {
   AsyncStorage,
   View,
@@ -7,7 +7,7 @@ import {
   ScrollView,
   ActivityIndicator
 } from 'react-native'
-import { Accordion, List, SwipeAction } from '@ant-design/react-native'
+import {Accordion, List, SwipeAction} from '@ant-design/react-native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import {
   getTableLayout,
@@ -16,11 +16,11 @@ import {
 } from '../actions'
 import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import TableForm from './TableForm'
-import { api, makeFetchRequest, errorAlert } from '../constants/Backend'
+import {api, makeFetchRequest, errorAlert} from '../constants/Backend'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 
 class TableEdit extends React.Component {
   static navigationOptions = {
@@ -38,10 +38,6 @@ class TableEdit extends React.Component {
 
   componentDidMount() {
     this.props.getTableLayout(this.props.navigation.state.params.layoutId)
-  }
-
-  handleEditCancel = () => {
-    this.props.navigation.navigate('TableLayoutEdit')
   }
 
   handleSubmit = values => {
@@ -69,7 +65,6 @@ class TableEdit extends React.Component {
               layoutId: tablelayoutId
             })
             this.props.getTableLayout(tablelayoutId)
-            this.props.getfetchOrderInflights()
           } else {
             errorAlert(response)
           }
@@ -88,46 +83,37 @@ class TableEdit extends React.Component {
       haveError,
       isLoading
     } = this.props
-    const { t } = this.state
-    var choosenTbl = tablelayout.tables.find(
-      table => table.tableId === this.props.navigation.state.params.tableId
-    )
+    const {t} = this.state
 
-    if (isLoading) {
+    if (isLoading || !haveData) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
+          <ActivityIndicator size="large" color="#ccc"/>
         </View>
       )
     }
+
+    const choosenTbl = tablelayout.tables.find(
+      table => table.tableId === this.props.navigation.state.params.tableId
+    )
+
     return (
-      <ScrollView>
-        <DismissKeyboard>
+      <DismissKeyboard>
+        <View style={[styles.container_nocenterCnt]}>
           <View>
-            <View style={[styles.container, styles.nomgrBottom]}>
-              <BackBtn />
-              <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold
-                ]}
-              >
-                {t('editTableTitle')}
-              </Text>
-              <TableForm
-                onSubmit={this.handleSubmit}
-                t={t}
-                initialValues={choosenTbl}
-                isEdit={true}
-                navigation={navigation}
-                handleEditCancel={this.handleEditCancel}
-              />
-            </View>
+            <BackBtn/>
+            <Text style={styles.screenTitle}>
+              {t('editTableTitle')}
+            </Text>
           </View>
-        </DismissKeyboard>
-      </ScrollView>
+          <TableForm
+            onSubmit={this.handleSubmit}
+            initialValues={choosenTbl}
+            isEdit={true}
+            navigation={navigation}
+          />
+        </View>
+      </DismissKeyboard>
     )
   }
 }
@@ -143,7 +129,6 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
   getTableLayout: id => dispatch(getTableLayout(id)),
   clearTableLayout: id => dispatch(clearTableLayout(id)),
-  getfetchOrderInflights: () => dispatch(getfetchOrderInflights())
 })
 export default connect(
   mapStateToProps,

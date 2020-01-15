@@ -1,18 +1,18 @@
 import React from 'react'
-import { Field, reduxForm, FieldArray } from 'redux-form'
+import {Field, reduxForm, FieldArray} from 'redux-form'
 import {
   Image,
-  KeyboardAvoidingView,
+  KeyboardAvoidingView, ScrollView,
   Text,
   TouchableOpacity,
   View
 } from 'react-native'
-import { isRequired } from '../validators'
+import {isRequired} from '../validators'
 import InputText from '../components/InputText'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import RenderRadioBtn from '../components/RadioItem'
 
 class PrinterForm extends React.Component {
@@ -39,7 +39,7 @@ class PrinterForm extends React.Component {
       zh: {
         editPrinterTitle: '編輯出單機',
         addPrinterTitle: '新增出單機',
-        printerName: '名稱',
+        printerName: '出單機名稱',
         ipAddress: 'IP地址',
         serviceType: {
           title: '綁定區域',
@@ -55,34 +55,44 @@ class PrinterForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, isEdit, handleEditCancel } = this.props
-    const { t } = this.state
+    const {handleSubmit, isEdit, handleEditCancel} = this.props
+    const {t} = this.state
 
     return (
-      <DismissKeyboard>
-        <KeyboardAvoidingView behavior="padding" enabled>
-          <Text
-            style={[styles.textBig, styles.centerText, styles.paddingTopBtn20]}
-          >
-            {isEdit ? t('editPrinterTitle') : t('addPrinterTitle')}
-          </Text>
-          <Field
-            name="name"
-            component={InputText}
-            type="text"
-            validate={[isRequired]}
-            placeholder={t('printerName')}
-          />
-          <Field
-            name="ipAddress"
-            component={InputText}
-            validate={isRequired}
-            placeholder={t('ipAddress')}
-            keyboardType="numeric"
-          />
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <View>
+          <View style={styles.fieldContainer}>
+            <View style={{flex: 1}}>
+              <Text style={styles.fieldTitle}>{t('printerName')}</Text>
+            </View>
+            <View style={{flex: 2}}>
+              <Field
+                name="name"
+                component={InputText}
+                type="text"
+                validate={[isRequired]}
+                placeholder={t('printerName')}
+              />
+            </View>
+          </View>
+
+          <View style={styles.fieldContainer}>
+            <View style={{flex: 1}}>
+              <Text style={styles.fieldTitle}>{t('ipAddress')}</Text>
+            </View>
+            <View style={{flex: 2}}>
+              <Field
+                name="ipAddress"
+                component={InputText}
+                validate={isRequired}
+                placeholder={t('ipAddress')}
+                keyboardType="numeric"
+              />
+            </View>
+          </View>
 
           <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
-            <Text style={styles.textBold}>{t('serviceType.title')}</Text>
+            <Text style={styles.fieldTitle}>{t('serviceType.title')}</Text>
           </View>
 
           <View style={[styles.borderBottomLine, styles.paddingTopBtn20]}>
@@ -102,29 +112,29 @@ class PrinterForm extends React.Component {
               optionName={t('serviceType.checkout')}
             />
           </View>
+        </View>
 
-          <View style={styles.bottom}>
-            <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {isEdit ? t('action.update') : t('action.save')}
+        <View style={styles.bottom}>
+          <TouchableOpacity onPress={handleSubmit}>
+            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              {isEdit ? t('action.update') : t('action.save')}
+            </Text>
+          </TouchableOpacity>
+          {isEdit ? (
+            <TouchableOpacity onPress={handleEditCancel}>
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('PrinternKDS')}
+            >
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                {t('action.cancel')}
               </Text>
             </TouchableOpacity>
-            {isEdit ? (
-              <TouchableOpacity onPress={handleEditCancel}>
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('PrinternKDS')}
-              >
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                  {t('action.cancel')}
-                </Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </KeyboardAvoidingView>
-      </DismissKeyboard>
+          )}
+        </View>
+      </ScrollView>
     )
   }
 }

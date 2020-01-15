@@ -1,11 +1,11 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { ScrollView, Text, View } from 'react-native'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {connect} from 'react-redux'
+import {ScrollView, Text, View} from 'react-native'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import PrinterForm from '../screens/PrinterForm'
-import { getWorkingAreas, getPrinters } from '../actions'
+import {getWorkingAreas, getPrinters} from '../actions'
 import {
   api,
   errorAlert,
@@ -13,10 +13,20 @@ import {
   successMessage
 } from '../constants/Backend'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class PrinterAdd extends React.Component {
   static navigationOptions = {
     header: null
+  }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      t: context.t
+    }
   }
 
   handleSubmit = values => {
@@ -48,28 +58,19 @@ class PrinterAdd extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
-    const { t } = this.props.screenProps
+    const {navigation} = this.props
+    const {t} = this.state
 
     return (
-      <ScrollView>
-        <DismissKeyboard>
-          <View style={styles.container}>
-            <BackBtn />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
-              {t('settings.workingArea')}
-            </Text>
-            <PrinterForm navigation={navigation} onSubmit={this.handleSubmit} />
-          </View>
-        </DismissKeyboard>
-      </ScrollView>
+      <DismissKeyboard>
+        <View style={styles.container_nocenterCnt}>
+          <BackBtn/>
+          <Text style={styles.screenTitle}>
+            {t('addPrinterTitle')}
+          </Text>
+          <PrinterForm navigation={navigation} onSubmit={this.handleSubmit}/>
+        </View>
+      </DismissKeyboard>
     )
   }
 }

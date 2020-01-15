@@ -1,7 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { ScrollView, Text, View, ActivityIndicator } from 'react-native'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {connect} from 'react-redux'
+import {ScrollView, Text, View, ActivityIndicator} from 'react-native'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import PrinterForm from '../screens/PrinterForm'
@@ -18,11 +18,22 @@ import {
   successMessage
 } from '../constants/Backend'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class PrinterEdit extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      t: context.t
+    }
+  }
+
 
   componentDidMount() {
     this.props.getPrinter(
@@ -68,13 +79,13 @@ class PrinterEdit extends React.Component {
   }
 
   render() {
-    const { navigation, printer, loading, haveData, haveError } = this.props
-    const { t } = this.props.screenProps
+    const {navigation, printer, loading, haveData, haveError} = this.props
+    const {t} = this.state
 
     if (loading) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
+          <ActivityIndicator size="large" color="#ccc"/>
         </View>
       )
     } else if (haveError) {
@@ -83,38 +94,24 @@ class PrinterEdit extends React.Component {
           <Text>Err during loading, check internet conn...</Text>
         </View>
       )
-    } else if (Object.keys(printer).length == 0) {
-      return (
-        <View style={[styles.container]}>
-          <Text>no printer ...</Text>
-        </View>
-      )
     }
+
     return (
-      <ScrollView>
-        <DismissKeyboard>
-          <View style={styles.container}>
-            <BackBtn />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
-              {t('settings.workingArea')}
-            </Text>
-            <PrinterForm
-              navigation={navigation}
-              onSubmit={this.handleUpdate}
-              isEdit={true}
-              initialValues={printer}
-              handleEditCancel={this.handleEditCancel}
-            />
-          </View>
-        </DismissKeyboard>
-      </ScrollView>
+      <DismissKeyboard>
+        <View style={styles.container_nocenterCnt}>
+          <BackBtn/>
+          <Text style={styles.screenTitle}>
+            {t('editPrinterTitle')}
+          </Text>
+          <PrinterForm
+            navigation={navigation}
+            onSubmit={this.handleUpdate}
+            isEdit={true}
+            initialValues={printer}
+            handleEditCancel={this.handleEditCancel}
+          />
+        </View>
+      </DismissKeyboard>
     )
   }
 }

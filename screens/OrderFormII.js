@@ -75,15 +75,8 @@ class OrderFormII extends React.Component {
 
   PanelHeader = (labelName, labelId) => {
     return (
-      <View
-        style={{
-          width: '100%',
-          marginRight: 8,
-          paddingTop: 15,
-          paddingBottom: 15
-        }}
-      >
-        <Text style={{ fontSize: 16 }}>{labelName}</Text>
+      <View style={styles.listPanel}>
+        <Text style={styles.listPanelText}>{labelName}</Text>
       </View>
     )
   }

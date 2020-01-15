@@ -1,5 +1,5 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import {Field, reduxForm} from 'redux-form'
 import {
   Image,
   Platform,
@@ -11,9 +11,9 @@ import {
   TouchableHighlight,
   TextInput
 } from 'react-native'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import InputText from '../components/InputText'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -27,21 +27,23 @@ class ReservationScreen extends React.Component {
   render() {
     return (
       <ScrollView>
-        <DismissKeyboard>
-          <View style={styles.container}>
-            <BackBtn />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
-              Reservation
-            </Text>
-          </View>
-        </DismissKeyboard>
+        <View style={styles.container}>
+          <BackBtn/>
+          <Text
+            style={[
+              styles.welcomeText,
+              styles.orange_color,
+              styles.textMedium,
+              styles.textBold
+            ]}
+          >
+            Reservation
+          </Text>
+          <Text>
+            Feature in development.
+          </Text>
+        </View>
+
       </ScrollView>
     )
   }

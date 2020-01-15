@@ -24,11 +24,15 @@ class PrinternKDS extends React.Component {
     context.localize({
       en: {
         printerTitle: 'Printer',
-        workingAreaTitle: 'Working Area'
+        workingAreaTitle: 'Working Area',
+        noPrinter: 'No Printer',
+        noWorkingArea: 'No Working Area'
       },
       zh: {
         printerTitle: '出單機',
-        workingAreaTitle: '工作區'
+        workingAreaTitle: '工作區',
+        noPrinter: '沒有資料',
+        noWorkingArea: '沒有資料'
       }
     })
 
@@ -112,6 +116,12 @@ class PrinternKDS extends React.Component {
                 {t('printerTitle')}
               </Text>
               <View style={[styles.no_mgrTop, styles.mgrbtn20]}>
+                { printers.length === 0 && (
+                  <View>
+                    <Text style={styles.messageBlock}>{t('noPrinter')}</Text>
+                  </View>
+                )}
+
                 <SwipeListView
                   data={printers}
                   renderItem={(data, rowMap) => (
@@ -123,7 +133,7 @@ class PrinternKDS extends React.Component {
                       <View style={styles.rowFront}>
                         <Text
                           key={rowMap}
-                          style={{padding: 15}}
+                          style={styles.rowFrontText}
                         >
                           {data.item.name}
                         </Text>
@@ -149,6 +159,12 @@ class PrinternKDS extends React.Component {
               </Text>
 
               <View style={[styles.no_mgrTop, styles.mgrbtn20]}>
+                { workingareas.length === 0 && (
+                  <View>
+                    <Text style={styles.messageBlock}>{t('noWorkingArea')}</Text>
+                  </View>
+                )}
+
                 <SwipeListView
                   data={workingareas}
                   renderItem={(data, rowMap) => (
@@ -161,7 +177,7 @@ class PrinternKDS extends React.Component {
                       <View style={styles.rowFront}>
                         <Text
                           key={rowMap}
-                          style={{padding: 15}}
+                          style={styles.rowFrontText}
                         >
                           {data.item.name}
                         </Text>

@@ -13,10 +13,20 @@ import {
 } from '../constants/Backend'
 import { getWorkingAreas, getPrinters } from '../actions'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class WorkingAreaAdd extends React.Component {
   static navigationOptions = {
     header: null
+  }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props);
+
+    this.state = {
+      t: context.t
+    }
   }
 
   handleSubmit = values => {
@@ -48,31 +58,21 @@ class WorkingAreaAdd extends React.Component {
 
   render() {
     const { navigation } = this.props
-    const { t } = this.props.screenProps
+    const { t } = this.state
 
     return (
-      <ScrollView>
-        <DismissKeyboard>
-          <View style={styles.container}>
-            <BackBtn />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
-              {t('settings.workingArea')}
-            </Text>
-            {/*<AddBtn/>*/}
-            <WorkingAreaForm
-              onSubmit={this.handleSubmit}
-              navigation={navigation}
-            />
-          </View>
-        </DismissKeyboard>
-      </ScrollView>
+      <DismissKeyboard>
+        <View style={styles.container_nocenterCnt}>
+          <BackBtn/>
+          <Text style={styles.screenTitle}>
+            {t('addWorkingAreaTitle')}
+          </Text>
+          <WorkingAreaForm
+            onSubmit={this.handleSubmit}
+            navigation={navigation}
+          />
+        </View>
+      </DismissKeyboard>
     )
   }
 }

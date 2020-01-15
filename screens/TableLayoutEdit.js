@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import {
   AsyncStorage,
   View,
@@ -7,11 +7,11 @@ import {
   ScrollView,
   ActivityIndicator
 } from 'react-native'
-import { Accordion, List, SwipeAction } from '@ant-design/react-native'
+import {Accordion, List, SwipeAction} from '@ant-design/react-native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import { getTableLayouts, getTableLayout, clearTableLayout } from '../actions'
+import {getTableLayouts, getTableLayout, clearTableLayout} from '../actions'
 import BackBtn from '../components/BackBtn'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import TableLayoutForm from './TableLayoutForm'
 import {
   api,
@@ -20,7 +20,7 @@ import {
   successMessage
 } from '../constants/Backend'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 
 class TableLayoutEdit extends React.Component {
   static navigationOptions = {
@@ -87,46 +87,35 @@ class TableLayoutEdit extends React.Component {
       haveError,
       isLoading
     } = this.props
-    const { t } = this.state
+    const {t} = this.state
 
     if (isLoading) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
+          <ActivityIndicator size="large" color="#ccc"/>
         </View>
       )
     }
     return (
-      <ScrollView>
-        <DismissKeyboard>
+      <DismissKeyboard>
+        <View  style={[styles.container_nocenterCnt]}>
           <View>
-            <View style={[styles.container, styles.nomgrBottom]}>
-              <BackBtn />
-              <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold
-                ]}
-              >
-                {t('editTableLayoutTitle')}
-              </Text>
-            </View>
-
-            <View>
-              <TableLayoutForm
-                onSubmit={this.handleSubmit}
-                t={t}
-                initialValues={tablelayout}
-                isEdit={true}
-                navigation={navigation}
-                handleEditCancel={this.handleEditCancel}
-              />
-            </View>
+            <BackBtn/>
+            <Text style={styles.screenTitle}>
+              {t('editTableLayoutTitle')}
+            </Text>
           </View>
-        </DismissKeyboard>
-      </ScrollView>
+
+          <TableLayoutForm
+            onSubmit={this.handleSubmit}
+            t={t}
+            initialValues={tablelayout}
+            isEdit={true}
+            navigation={navigation}
+            handleEditCancel={this.handleEditCancel}
+          />
+        </View>
+      </DismissKeyboard>
     )
   }
 }

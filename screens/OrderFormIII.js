@@ -10,15 +10,15 @@ import {
   TouchableOpacity,
   SafeAreaView
 } from 'react-native'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
-import { getProduct, getOrder } from '../actions'
+import {getProduct, getOrder} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 import OrderFormIV from './OrderFormIV'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import {api, dispatchFetchRequest, successMessage} from "../constants/Backend";
 
 class OrderFormIII extends React.Component {
@@ -32,16 +32,6 @@ class OrderFormIII extends React.Component {
 
     this.state = {
       t: context.t,
-      activeSections: [2, 0],
-      selectedProducts: [],
-      refreshing: false,
-      status: '',
-      labelId: null,
-      totalItems: null,
-      orderInfo: null
-    }
-    this.onChange = activeSections => {
-      this.setState({ activeSections })
     }
   }
 
@@ -101,22 +91,12 @@ class OrderFormIII extends React.Component {
   }
 
   render() {
-    const { navigation, haveError, isLoading, order } = this.props
-    const { t } = this.state
-
-    function Item({ title, price }) {
-      return (
-        <View style={[styles.item, styles.paddingTopBtn20]}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.rightAlign}>{price}</Text>
-        </View>
-      )
-    }
+    const {navigation, haveError, isLoading} = this.props
 
     if (isLoading) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
+          <ActivityIndicator size="large" color="#ccc"/>
         </View>
       )
     } else if (haveError) {
@@ -127,35 +107,11 @@ class OrderFormIII extends React.Component {
       )
     }
     return (
-      <View style={{ flex: 1 }}>
-        <ScrollView
-          refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
-        >
-          <DismissKeyboard>
-            <View style={[styles.container]}>
-              <BackBtn />
-              <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold
-                ]}
-              >
-                {this.props.navigation.state.params.prdName}
-              </Text>
-
-              <SafeAreaView>
-                <OrderFormIV
-                  onSubmit={this.handleSubmit}
-                  product={this.props.product}
-                  navigation={navigation}
-                />
-              </SafeAreaView>
-            </View>
-          </DismissKeyboard>
-        </ScrollView>
-      </View>
+      <OrderFormIV
+        onSubmit={this.handleSubmit}
+        product={this.props.product}
+        navigation={navigation}
+      />
     )
   }
 }
@@ -173,10 +129,6 @@ const mapDispatchToProps = (dispatch, props) => ({
   getProduct: () => dispatch(getProduct(props.navigation.state.params.prdId)),
   getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
 })
-
-// OrderFormIII = reduxForm({
-//   form: 'orderformIII',
-// })(OrderFormIII)
 
 export default connect(
   mapStateToProps,

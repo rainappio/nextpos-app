@@ -175,14 +175,17 @@ export const dispatchFetchRequest = async (endpoint, payload, successCallback, f
     }
 
     if (token != null) {
-      console.debug(`Use client user token: ${useClientUserToken}`)
+      console.trace(`Use client user token: ${useClientUserToken}`)
       const tokenObj = JSON.parse(token)
       payload.headers.Authorization = `Bearer ${tokenObj.access_token}`
 
+      const suppressError = payload.headers['x-suppress-error']
       const response = await fetch(endpoint, payload)
 
       if (!response.ok) {
-        errorAlert(response)
+        if (suppressError === undefined || !suppressError) {
+          errorAlert(response)
+        }
 
         if (failCallback !== undefined) {
           failCallback(response)
@@ -228,12 +231,15 @@ export const errorAlert = response => {
       case 403:
         errorMessage = 'You are not authorized for this operation.'
         break
+      case 404:
+        errorMessage = 'The id you used to look for an item cannot be found'
+        break
       case 412:
         errorMessage = content.message
         break
       default:
         errorMessage =
-          'Encountered an error with your request. Please consult service provider.'
+          `Encountered an error with your request. (${content.message})`
     }
 
     showMessage({

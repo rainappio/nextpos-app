@@ -70,20 +70,13 @@ class Store extends React.Component {
       )
     } else if (haveData) {
       return (
-        <View>
-          <FetchErrorPopUp
-            errorResponse={errorResponse}
-            ref={this.popupReference}
-            screenProps={this.props.screenProps}
-          />
-          <StoreFormScreen
-            initialValues={client}
-            onSubmit={this.handleSubmit}
-            navigation={navigation}
-            refreshing={refreshing}
-            screenProps={this.props.screenProps}
-          />
-        </View>
+        <StoreFormScreen
+          initialValues={client}
+          onSubmit={this.handleSubmit}
+          navigation={navigation}
+          refreshing={refreshing}
+          screenProps={this.props.screenProps}
+        />
       )
     } else {
       return null

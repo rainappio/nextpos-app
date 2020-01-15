@@ -1,21 +1,11 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  KeyboardAvoidingView,
-  Text,
-  TouchableOpacity,
-  View,
-  FlatList
-} from 'react-native'
-import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import { isEmail, isRequired } from '../validators'
+import {Field, reduxForm} from 'redux-form'
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
+import {isRequired} from '../validators'
 import InputText from '../components/InputText'
 import InputNumber from '../components/InputNumber'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import AddBtn from '../components/AddBtn'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 
 class TableForm extends React.Component {
   static navigationOptions = {
@@ -52,26 +42,18 @@ class TableForm extends React.Component {
       handleSubmit,
       isEdit,
       initialValues,
-      tables = [],
-      handleEditCancel
     } = this.props
 
-    const { t } = this.state
+    const {t} = this.state
 
     return (
-      <DismissKeyboard>
-        <KeyboardAvoidingView>
-          <View
-            style={[
-              styles.jc_alignIem_center,
-              styles.flex_dir_row,
-              styles.mgrbtn20
-            ]}
-          >
-            <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-              <Text>{t('tableName')}</Text>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <View>
+          <View style={[styles.fieldContainer]}>
+            <View style={[{flex: 1}]}>
+              <Text style={styles.fieldTitle}>{t('tableName')}</Text>
             </View>
-            <View style={[styles.onesixthWidth]}>
+            <View style={[{flex: 3}]}>
               <Field
                 name="tableName"
                 component={InputText}
@@ -82,11 +64,11 @@ class TableForm extends React.Component {
             </View>
           </View>
 
-          <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-            <View style={[styles.onethirdWidth]}>
-              <Text>{t('tableCapacity')}</Text>
+          <View style={[styles.fieldContainer]}>
+            <View style={[{flex: 1}]}>
+              <Text style={styles.fieldTitle}>{t('tableCapacity')}</Text>
             </View>
-            <View style={[styles.onesixthWidth]}>
+            <View style={[{flex: 3}]}>
               <Field
                 name="capacity"
                 component={InputNumber}
@@ -97,52 +79,25 @@ class TableForm extends React.Component {
               />
             </View>
           </View>
+        </View>
 
-          <View
-            style={[
-              {
-                width: '100%',
-                backgroundColor: '#F39F86',
-                marginTop: 40,
-                borderRadius: 4
-              }
-            ]}
+        <View style={[styles.bottom]}>
+          {isEdit ? (
+            <TouchableOpacity onPress={handleSubmit}>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.update')}</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={handleSubmit}>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
           >
-            {isEdit ? (
-              <TouchableOpacity onPress={handleSubmit}>
-                <Text style={styles.gsText}>{t('action.update')}</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={handleSubmit}>
-                <Text style={styles.gsText}>{t('action.save')}</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-
-          <View
-            style={[
-              {
-                width: '100%',
-                marginTop: 8,
-                borderRadius: 4,
-                backgroundColor: '#F39F86'
-              }
-            ]}
-          >
-            {isEdit ? (
-              <TouchableOpacity onPress={() => handleEditCancel()}>
-                <Text style={styles.gsText}>{t('action.cancel')}</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('TableLayoutEdit')}
-              >
-                <Text style={styles.gsText}>{t('action.cancel')}</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </KeyboardAvoidingView>
-      </DismissKeyboard>
+            <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     )
   }
 }
