@@ -193,7 +193,7 @@ Tables.navigationOptions = ({ screenProps: { t } }) => ({
         ]
       })
     )
-    navigation.navigate('TablesSrc')
+    //navigation.navigate('TablesSrc')
     defaultHandler()
   }
 })

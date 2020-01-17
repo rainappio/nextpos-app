@@ -16,6 +16,7 @@ import {doLogout, getClientUsr} from "../actions";
 import {connect} from "react-redux";
 import EditPasswordPopUp from "../components/EditPasswordPopUp";
 import {reduxForm} from "redux-form";
+import {getToken} from "../constants/Backend";
 
 class AccountScreen extends React.Component {
   static navigationOptions = {
@@ -37,6 +38,9 @@ class AccountScreen extends React.Component {
    * https://stackoverflow.com/questions/49809884/access-react-context-outside-of-render-function
    */
   async componentDidMount() {
+    let token = await getToken()
+    this.props.getCurrentUser(token.username)
+
     const objects = []
     let storedKeys = []
 
@@ -82,46 +86,43 @@ class AccountScreen extends React.Component {
     const { t } = this.state
 
     return (
-      <ScrollView>
-        <DismissKeyboard>
           <View style={styles.container}>
             <BackBtn />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
+            <Text style={styles.screenTitle}>
               {t('settings.account')}
             </Text>
-            <View>
-              <View style={[{flexDirection: 'row', justifyContent: 'space-between'}]}>
-                <Text style={styles.fieldTitle}>{t('username')}: {currentUser.username}</Text>
+            <View style={{flex: 3}}>
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.fieldTitle}>{t('username')}</Text>
+                </View>
+                <View style={{flex: 3}}>
+                  <Text style={{alignSelf: 'flex-end'}}>{currentUser.username}</Text>
+                </View>
               </View>
-              <View style={[{flexDirection: 'row', justifyContent: 'space-between'}]}>
-                <Text style={styles.fieldTitle}>{t('nickname')}: {currentUser.nickname}</Text>
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.fieldTitle}>{t('nickname')}</Text>
+                </View>
+                <View style={{flex: 3}}>
+                  <Text style={{alignSelf: 'flex-end'}}>{currentUser.nickname}</Text>
+                </View>
               </View>
-
-              <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+              <View style={[styles.fieldContainer, {alignSelf: 'center'}]}>
                 <EditPasswordPopUp
                   name={currentUser.username}
                 />
               </View>
-
-              { currentUser.defaultUser &&
-                <View>
-                  <View style={[styles.fieldContainer, styles.mgrtotop12]}>
-                    <Text style={styles.fieldTitle}>Developer Section</Text>
-                  </View>
-                  <View>{storageItems}</View>
-                </View>
-              }
             </View>
+            {currentUser.defaultUser &&
+            <View style={{flex: 2, justifyContent: 'flex-end'}}>
+              <View style={[styles.fieldContainer]}>
+                <Text style={styles.fieldTitle}>Developer Section</Text>
+              </View>
+              <View>{storageItems}</View>
+            </View>
+            }
           </View>
-        </DismissKeyboard>
-      </ScrollView>
     )
   }
 }

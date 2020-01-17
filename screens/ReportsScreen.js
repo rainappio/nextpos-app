@@ -39,9 +39,6 @@ class ReportsScreen extends React.Component {
       <ScrollView>
         <DismissKeyboard>
           <View style={styles.container}>
-            <BackBtnCustom
-              onPress={() => this.props.navigation.navigate('LoginSuccess')}
-            />
             <Text
               style={[
                 styles.welcomeText,

@@ -35,14 +35,20 @@ class StaffFormScreen extends React.Component {
         nickName: 'Nick Name',
         username: 'User Name',
         password: 'Password',
-        manager: 'Manager Role'
+        manager: 'Manager Role',
+        passwordTitle: 'Password',
+        editPassword: 'Edit Password',
+        enterNewPassword: 'Enter New Password'
       },
       zh: {
         staffTitle: '員工',
         nickName: '匿稱',
         username: '使用者名稱',
         password: '密碼',
-        manager: '主管權限'
+        manager: '主管權限',
+        passwordTitle: '設定密碼',
+        editPassword: '編輯密碼',
+        enterNewPassword: '輸入新密碼'
       }
     })
   }
@@ -102,19 +108,6 @@ class StaffFormScreen extends React.Component {
                 {t('staffTitle')}
               </Text>
             )}
-
-            {/*<View style={styles.colordelIcon}>*/}
-            {/*  <Icon*/}
-            {/*    name="md-trash"*/}
-            {/*    size={25}*/}
-            {/*    color="#f18d1a"*/}
-            {/*    onPress={() =>*/}
-            {/*      this.handleDelete(*/}
-            {/*        this.props.navigation.state.params.staffname*/}
-            {/*      )*/}
-            {/*    }*/}
-            {/*  />*/}
-            {/*</View>*/}
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View style={[styles.onethirdWidth, styles.mgrtotop8]}>

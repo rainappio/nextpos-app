@@ -39,7 +39,7 @@ class SettingsScreen extends React.Component {
         >
           {t('menu.settings')}
         </Text>
-        <Pages indicatorColor="#FF9100">
+        <Pages indicatorColor="#FF9100" style={{marginTop: 20}}>
           <View>
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View

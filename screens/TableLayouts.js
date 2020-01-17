@@ -1,20 +1,14 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import {
-  AsyncStorage,
-  View,
-  Text,
-  ScrollView,
-  ActivityIndicator
-} from 'react-native'
-import { Accordion, List, SwipeAction } from '@ant-design/react-native'
-import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import { getTableLayouts } from '../actions'
+import {connect} from 'react-redux'
+import {ActivityIndicator, ScrollView, Text, View,} from 'react-native'
+import {Accordion, List} from '@ant-design/react-native'
+import {getTableLayouts} from '../actions'
 import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
+import MaterialIcon from "react-native-vector-icons/MaterialIcons"
 
 class TableLayouts extends React.Component {
   static navigationOptions = {
@@ -27,49 +21,42 @@ class TableLayouts extends React.Component {
 
     this.state = {
       t: context.t,
-      activeSections: [0],
-      tableId: null
+      activeSections: [0]
     }
+
     this.onChange = activeSections => {
       this.setState({ activeSections })
     }
     this.props.getTableLayouts()
   }
 
+  componentDidMount() {
+    this.context.localize({
+      en: {
+        noTableLayout: 'No table layout'
+      },
+      zh: {
+        noTableLayout: '沒有資料'
+      }
+    })
+  }
+
   PanelHeader = (layoutName, layoutId) => {
     return (
-      <View
-        style={{
-          width: '100%',
-          paddingTop: 8,
-          paddingBottom: 8
-        }}
-      >
-        <Text style={[styles.whiteColor, styles.centerText, styles.textMedium]}>
+      <View style={[styles.listPanel]}>
+        <Text style={[styles.listPanelText, {flex: 9}]}>
           {layoutName}
         </Text>
-        <AntDesignIcon
-          name="ellipsis1"
-          size={25}
-          color="black"
-          style={[
-            styles.whiteColor,
-            { position: 'absolute', right: 3, top: 8 }
-          ]}
-          onPress={() => {
-            this.props.navigation.navigate('TableLayoutEdit', {
-              layoutId: layoutId
-            })
-          }}
+        <MaterialIcon name="edit" size={22}
+              style={styles.listPanelIcon}
+              onPress={() => {
+                this.props.navigation.navigate('TableLayoutEdit', {
+                  layoutId: layoutId
+                })
+              }}
         />
       </View>
     )
-  }
-
-  onOpenNP = tableId => {
-    this.setState({
-      tableId: tableId
-    })
   }
 
   render() {
@@ -84,64 +71,60 @@ class TableLayouts extends React.Component {
       )
     }
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View>
-            <View style={[styles.container, styles.nomgrBottom]}>
+            <View style={[styles.container]}>
               <BackBtn />
-              <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold
-                ]}
-              >
+              <Text style={styles.screenTitle}>
                 {t('settings.tableLayouts')}
               </Text>
-
               <AddBtn
                 onPress={() => this.props.navigation.navigate('TableLayoutAdd')}
               />
             </View>
 
-            <View>
-              <Accordion
-                onChange={this.onChange}
-                activeSections={this.state.activeSections}
-                duration={300}
-              >
-                {tablelayouts.map(tblLayout => (
-                  <Accordion.Panel
-                    header={this.PanelHeader(
-                      tblLayout.layoutName,
-                      tblLayout.id
-                    )}
-                    key={tblLayout.id}
-                    style={{ backgroundColor: '#f18d1a', marginBottom: 2 }}
-                  >
-                    <List>
-                      {tblLayout.tables.map(tbl => (
-                        <SwipeAction
-                          autoClose={true}
-                          onOpen={() => this.onOpenNP(tbl.tableId)}
-                          onClose={() => {}}
-                          key={tbl.tableId}
-                        >
-                          <List.Item
-                            style={{
-                              backgroundColor: '#f1f1f1'
-                            }}
-                          >
-                            {tbl.tableName}
-                          </List.Item>
-                        </SwipeAction>
-                      ))}
-                    </List>
-                  </Accordion.Panel>
-                ))}
-              </Accordion>
-            </View>
+            {tablelayouts.length === 0 && (
+              <View>
+                <Text style={styles.messageBlock}>{t('noTableLayout')}</Text>
+              </View>
+            )}
+
+            <Accordion
+              onChange={this.onChange}
+              activeSections={this.state.activeSections}
+              duration={300}
+              style={styles.childContainer}
+            >
+              {tablelayouts.map(tblLayout => (
+                <Accordion.Panel
+                  header={this.PanelHeader(
+                    tblLayout.layoutName,
+                    tblLayout.id
+                  )}
+                  key={tblLayout.id}
+                >
+                  <List>
+                    {tblLayout.tables.map(tbl => (
+                      <List.Item
+                        key={tbl.tableId}
+                        style={{
+                          backgroundColor: '#f1f1f1'
+                        }}
+                        onPress={() => {
+                          this.props.navigation.navigate('TableEdit', {
+                            tableId: tbl.tableId,
+                            layoutId: tblLayout.id
+                          })
+                        }}
+                      >
+                        {tbl.tableName}
+                      </List.Item>
+                    ))}
+                  </List>
+                </Accordion.Panel>
+              ))}
+            </Accordion>
           </View>
         </DismissKeyboard>
       </ScrollView>

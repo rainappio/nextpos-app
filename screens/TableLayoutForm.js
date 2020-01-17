@@ -1,21 +1,21 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import {Field, reduxForm} from 'redux-form'
 import {
   Image,
   KeyboardAvoidingView,
   Text,
   TouchableOpacity,
   View,
-  FlatList
+  FlatList, ScrollView
 } from 'react-native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import { isEmail, isRequired } from '../validators'
+import {isEmail, isRequired} from '../validators'
 import InputText from '../components/InputText'
 import InputNumber from '../components/InputNumber'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import AddBtn from '../components/AddBtn'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 
 class TableLayoutForm extends React.Component {
   static navigationOptions = {
@@ -56,9 +56,9 @@ class TableLayoutForm extends React.Component {
       tables = [],
       handleEditCancel
     } = this.props
-    const { t } = this.state
+    const {t} = this.state
 
-    Item = ({ table, layoutId }) => {
+    Item = ({table, layoutId}) => {
       return (
         <View
           style={{
@@ -72,7 +72,7 @@ class TableLayoutForm extends React.Component {
             name="ellipsis1"
             size={25}
             color="black"
-            style={{ position: 'absolute', right: 0, top: 15 }}
+            style={{position: 'absolute', right: 0, top: 15}}
             onPress={() => {
               this.props.navigation.navigate('TableEdit', {
                 tableId: table.tableId,
@@ -85,23 +85,13 @@ class TableLayoutForm extends React.Component {
     }
 
     return (
-      <DismissKeyboard>
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior="padding"
-          enabled
-        >
-          <View
-            style={[
-              styles.jc_alignIem_center,
-              styles.flex_dir_row,
-              styles.mgrbtn20
-            ]}
-          >
-            <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-              <Text>{t('layoutName')}</Text>
+      <ScrollView contentContainerStyle={[styles.contentContainer]}>
+        <View>
+          <View style={styles.fieldContainer}>
+            <View style={{flex: 1}}>
+              <Text style={styles.fieldTitle}>{t('layoutName')}</Text>
             </View>
-            <View style={[styles.onesixthWidth]}>
+            <View style={{flex: 3}}>
               <Field
                 name="layoutName"
                 component={InputText}
@@ -114,11 +104,11 @@ class TableLayoutForm extends React.Component {
 
           {isEdit ? (
             <View>
-              <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-                <View style={[styles.onethirdWidth]}>
-                  <Text>{t('totalCapacity')}</Text>
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.fieldTitle}>{t('totalCapacity')}</Text>
                 </View>
-                <View style={[styles.onesixthWidth]}>
+                <View style={{flex: 3}}>
                   <Text
                     style={{
                       borderWidth: 1,
@@ -136,79 +126,48 @@ class TableLayoutForm extends React.Component {
                 </View>
               </View>
 
-              <View style={styles.mgrtotop20}>
-                <Text
-                  style={[
-                    styles.orange_color,
-                    styles.textBold,
-                    styles.textMedium
-                  ]}
-                >
-                  {t('tables')}
-                </Text>
-                <AddBtn
-                  onPress={() =>
-                    this.props.navigation.navigate('TableAdd', {
-                      layoutId: initialValues.id
-                    })
-                  }
+              <View style={styles.mgrtotop12}>
+                <View style={styles.fieldContainer}>
+                  <Text style={styles.fieldTitle}>
+                    {t('tables')}
+                  </Text>
+                  <AddBtn
+                    onPress={() =>
+                      this.props.navigation.navigate('TableAdd', {
+                        layoutId: initialValues.id
+                      })
+                    }
+                  />
+                </View>
+                <FlatList
+                  data={initialValues.tables}
+                  renderItem={({item}) => (
+                    <Item table={item} layoutId={initialValues.id}/>
+                  )}
+                  keyExtractor={item => item.tableId}
                 />
               </View>
-              <FlatList
-                data={initialValues.tables}
-                renderItem={({ item }) => (
-                  <Item table={item} layoutId={initialValues.id} />
-                )}
-                keyExtractor={item => item.tableId}
-              />
             </View>
           ) : null}
+        </View>
 
-          <View
-            style={[
-              {
-                width: '100%',
-                backgroundColor: '#F39F86',
-                marginTop: 40,
-                borderRadius: 4
-              }
-            ]}
+        <View style={styles.bottom}>
+          {isEdit ? (
+            <TouchableOpacity onPress={handleSubmit}>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.update')}</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={handleSubmit}>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('TableLayouts')}
           >
-            {isEdit ? (
-              <TouchableOpacity onPress={handleSubmit}>
-                <Text style={styles.gsText}>{t('action.update')}</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={handleSubmit}>
-                <Text style={styles.gsText}>{t('action.save')}</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-
-          <View
-            style={[
-              {
-                width: '100%',
-                marginTop: 8,
-                borderRadius: 4,
-                backgroundColor: '#F39F86'
-              }
-            ]}
-          >
-            {isEdit ? (
-              <TouchableOpacity onPress={() => handleEditCancel()}>
-                <Text style={styles.gsText}>{t('action.cancel')}</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('TableLayouts')}
-              >
-                <Text style={styles.gsText}>{t('action.cancel')}</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </KeyboardAvoidingView>
-      </DismissKeyboard>
+            <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     )
   }
 }

@@ -1,17 +1,18 @@
 import React from 'react'
-import { Text, View } from 'react-native'
-import { connect } from 'react-redux'
+import {Text, TextInput, View} from 'react-native'
+import {connect} from 'react-redux'
 import BackBtnCustom from '../components/BackBtnCustom'
 import {formatDate, getShiftStatus} from '../actions'
 import {
-  api,
+  api, dispatchFetchRequest,
   errorAlert,
   makeFetchRequest,
   successMessage
 } from '../constants/Backend'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
+import {DismissKeyboard} from "../components/DismissKeyboard";
 
 class ShiftClose extends React.Component {
   static navigationOptions = {
@@ -27,20 +28,27 @@ class ShiftClose extends React.Component {
         shiftTitle: 'Manage Shift',
         shiftStatus: 'Shift Status',
         openAt: 'Open at',
+        openBalance: 'Open Balance',
         openBy: 'Open by',
-        closeShift: 'Close Shift'
+        cash: 'Open/Close Cash',
+        openShiftAction: 'Open Shift',
+        closeShiftAction: 'Close Shift'
       },
       zh: {
         shiftTitle: '開關帳',
         shiftStatus: '帳狀態',
         openAt: '開帳時間',
+        openBalance: '開帳現金',
         openBy: '開帳員工',
-        closeShift: '關帳'
+        cash: '開關帳現金',
+        openShiftAction: '開帳',
+        closeShiftAction: '關帳'
       }
     })
 
     this.state = {
-      t: context.t
+      t: context.t,
+      balance: 0
     }
   }
 
@@ -48,78 +56,140 @@ class ShiftClose extends React.Component {
     this.props.getShiftStatus()
   }
 
-  handleCloseShift = () => {
-    makeFetchRequest(token => {
-      fetch(api.shift.close, {
+  handleOpenShift = () => {
+    dispatchFetchRequest(api.shift.open, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer' + token.access_token
         },
         body: JSON.stringify({
-          balance: '1000'
+          balance: this.state.balance
         })
-      }).then(response => {
-        if (response.status === 200) {
-          successMessage('Shift closed successfully')
-          this.props.dispatch(getShiftStatus())
-          this.props.navigation.navigate('LoginSuccess')
-        } else {
-          errorAlert(response)
-        }
-      })
-    })
+      },
+      respponse => {
+        successMessage('Shift opened')
+        this.props.dispatch(getShiftStatus())
+      }).then()
+  }
+
+  handleCloseShift = () => {
+    dispatchFetchRequest(api.shift.close, {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          balance: this.state.balance
+        })
+      },
+      respponse => {
+        successMessage('Shift closed')
+        this.props.dispatch(getShiftStatus())
+      }).then()
   }
 
   render() {
-    const { haveData, haveError, isLoading, shift } = this.props
-    const { t } = this.state
+    const {haveData, haveError, isLoading, shift} = this.props
+    const {t} = this.state
 
     return (
-      <View style={styles.container}>
-        <View>
-          <BackBtnCustom
-            onPress={() => this.props.navigation.navigate('LoginSuccess')}
-          />
-          <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold,
-              styles.nomgrBottom
-            ]}
-          >
-            {t('shiftTitle')}
-          </Text>
-        </View>
+      <DismissKeyboard>
+        <View style={styles.container}>
+          <View>
+            <BackBtnCustom
+              onPress={() => this.props.navigation.navigate('LoginSuccess')}
+            />
+            <Text style={styles.screenTitle}>
+              {t('shiftTitle')}
+            </Text>
+          </View>
 
-        <View style={{ flex: 3, justifyContent: 'center' }}>
-          <Text style={[styles.fieldTitle]}>
-            {t('shiftStatus')}: {shift.shiftStatus}
-          </Text>
-
-          {shift.shiftStatus === 'ACTIVE' && (
-            <View>
-              <Text style={[styles.fieldTitle]}>
-                {t('openAt')}: {formatDate(shift.open.timestamp)}
-              </Text>
-              <Text style={[styles.fieldTitle]}>
-                {t('openBy')}: {shift.open.who}
-              </Text>
+          <View style={{flex: 3, justifyContent: 'center'}}>
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 1}}>
+                <Text style={[styles.fieldTitle]}>
+                  {t('shiftStatus')}
+                </Text>
+              </View>
+              <View style={{flex: 3}}>
+                <Text style={{alignSelf: 'flex-end'}}>{shift.shiftStatus}</Text>
+              </View>
             </View>
-          )}
-        </View>
 
-        <View style={[styles.bottom]}>
-          <ConfirmActionButton
-            handleConfirmAction={this.handleCloseShift}
-            buttonTitle="closeShift"
-          />
+            {shift.shiftStatus === 'ACTIVE' && (
+              <View>
+                <View style={styles.fieldContainer}>
+                  <View style={{flex: 1}}>
+                    <Text style={[styles.fieldTitle]}>
+                      {t('openAt')}
+                    </Text>
+                  </View>
+                  <View style={{flex: 3}}>
+                    <Text style={{alignSelf: 'flex-end'}}>{formatDate(shift.open.timestamp)}</Text>
+                  </View>
+                </View>
+                <View style={styles.fieldContainer}>
+                  <View style={{flex: 1}}>
+                    <Text style={[styles.fieldTitle]}>
+                      {t('openBalance')}
+                    </Text>
+                  </View>
+                  <View style={{flex: 3}}>
+                    <Text style={{alignSelf: 'flex-end'}}>{shift.open.balance}</Text>
+                  </View>
+                </View>
+                <View style={styles.fieldContainer}>
+                  <View style={{flex: 1}}>
+                    <Text style={[styles.fieldTitle]}>
+                      {t('openBy')}
+                    </Text>
+                  </View>
+                  <View style={{flex: 3}}>
+                    <Text style={{alignSelf: 'flex-end'}}>{shift.open.who}</Text>
+                  </View>
+                </View>
+              </View>
+            )}
+          </View>
+
+          <View style={[styles.bottom]}>
+            <View style={[styles.fieldContainer]}>
+              <Text style={[styles.fieldTitle, {flex: 2}]}>
+                {t('cash')}
+              </Text>
+              <TextInput
+                name="balance"
+                value={String(this.state.balance)}
+                type='text'
+                onChangeText={(value) => this.setState({balance: value})}
+                placeholder={t('cash')}
+                keyboardType={`numeric`}
+                style={[{flex: 3, height: 44, borderBottomColor: '#f1f1f1', borderBottomWidth: 1}]}
+              />
+            </View>
+
+            {
+              shift.shiftStatus === 'ACTIVE' ?
+                (
+                  <ConfirmActionButton
+                    handleConfirmAction={this.handleCloseShift}
+                    buttonTitle="closeShiftAction"
+                  />
+                ) :
+                (
+                  <ConfirmActionButton
+                    handleConfirmAction={this.handleOpenShift}
+                    buttonTitle="openShiftAction"
+                  />
+                )
+            }
+          </View>
         </View>
-      </View>
+      </DismissKeyboard>
     )
   }
 }

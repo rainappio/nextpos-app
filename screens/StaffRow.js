@@ -27,10 +27,12 @@ class StaffRow extends React.Component {
   componentDidMount = async () => {
     this.context.localize({
       en: {
-        staffListTitle: 'Staffs List'
+        staffListTitle: 'Staffs List',
+        noStaff: 'No Staff'
       },
       zh: {
-        staffListTitle: '員工列表'
+        staffListTitle: '員工列表',
+        noStaff: '沒有資料'
       }
     })
   }
@@ -47,7 +49,7 @@ class StaffRow extends React.Component {
 
     const { t } = this.state
 
-    var clientusersOnly = clientusers.filter(function(el) {
+    const clientusersOnly = clientusers.filter(function(el) {
       return el.defaultUser === false
     })
 
@@ -73,6 +75,11 @@ class StaffRow extends React.Component {
             </View>
 
             <View style={styles.childContainer}>
+              {clientusersOnly.length === 0 && (
+                <View>
+                  <Text style={styles.messageBlock}>{t('noStaff')}</Text>
+                </View>
+              )}
               <SwipeListView
                 data={clientusersOnly}
                 renderItem={(data, rowMap) => (
@@ -84,7 +91,7 @@ class StaffRow extends React.Component {
                     <View style={styles.rowFront}>
                       <Text
                         key={rowMap}
-                        style={{paddingTop: 20, paddingBottom: 20, paddingLeft: 20}}
+                        style={styles.rowFrontText}
                       >
                         {data.item.username}
                       </Text>

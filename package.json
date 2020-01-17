@@ -19,6 +19,7 @@
     "base-64": "^0.1.0",
     "expo": "^35.0.0",
     "expo-asset": "^7.0.0",
+    "expo-constants": "latest",
     "expo-font": "^7.0.0",
     "expo-localization": "^7.0.0",
     "i18n-js": "^3.3.0",
@@ -41,6 +42,7 @@
     "react-native-safe-area-context": "^0.3.6",
     "react-native-screens": "^1.0.0-alpha.23",
     "react-native-sectioned-multi-select": "^0.7.1",
+    "react-native-segmented-control-tab": "^3.4.1",
     "react-native-smooth-pincode-input": "^1.0.7",
     "react-native-svg": "^9.13.6",
     "react-native-swipe-list-view": "^2.0.0",
@@ -55,8 +57,7 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-form": "^8.2.4",
     "redux-thunk": "^2.3.0",
-    "validator": "^11.1.0",
-    "expo-constants": "latest"
+    "validator": "^11.1.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0",

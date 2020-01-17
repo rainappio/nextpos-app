@@ -10,7 +10,6 @@ export default StyleSheet.create({
     marginLeft: 35,
     marginRight: 35,
     marginBottom: 36,
-    position: 'relative'
   },
   childContainer: {
     flex: 1,
@@ -125,8 +124,7 @@ export default StyleSheet.create({
     marginTop: 62,
     marginLeft: 35,
     marginRight: 35,
-    marginBottom: 20,
-    position: 'relative'
+    marginBottom: 20
   },
   mgrbtn40: {
     marginBottom: 40
@@ -229,6 +227,9 @@ export default StyleSheet.create({
     borderBottomColor: '#f1f1f1',
     borderBottomWidth: 1
     // paddingLeft: 10
+  },
+  rowFrontText: {
+    padding: 15
   },
   rowBack: {
     alignItems: 'center',
@@ -440,6 +441,12 @@ export default StyleSheet.create({
     marginTop: 0
   },
 
+
+  // named styles for applying to components
+  contentContainer: {
+    flex: 1,
+    justifyContent: 'space-between'
+  },
   screenTitle: {
     textAlign: 'center',
     textTransform: 'uppercase',
@@ -451,14 +458,47 @@ export default StyleSheet.create({
     color: '#f18d1a',
     fontWeight: 'bold'
   },
+  squareButton: {
+    margin: 10,
+    backgroundColor: '#f18d1a',
+    width: '45%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 30,
+    paddingBottom: 30,
+    borderRadius: 4
+  },
+  listPanel: {
+    flex: 1,
+    flexDirection: 'row',
+    width: '100%',
+    marginRight: 0,
+    paddingTop: 12,
+    paddingBottom: 12
+  },
+  listPanelText: {
+    flex: 9,
+    fontSize: 16,
+  },
+  listPanelIcon: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    color: '#f18d1a'
+  },
   fieldContainer: {
     // justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginTop: 2,
+    marginBottom: 5
   },
   fieldTitle: {
     fontWeight: 'bold',
-    paddingBottom: 12,
+  },
+  messageBlock: {
+    padding: 10,
+    textAlign: 'center',
+    alignItems: 'center'
   },
   bottom: {
     flex: 1,

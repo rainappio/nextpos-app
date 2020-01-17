@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { Text, View, TouchableHighlight } from 'react-native'
+import { Text, View, TouchableOpacity } from 'react-native'
 import { isRequired } from '../validators'
 import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
@@ -42,61 +42,38 @@ class CategoryFormScreen extends React.Component {
 
     return (
       <DismissKeyboard>
-        <View style={styles.container_nocenterCnt}>
-          <BackBtn />
-          <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold,
-              styles.mgrbtn80
-            ]}
-          >
-            {t('newCategoryTitle')}
-          </Text>
+        <View style={styles.container}>
+          <View style={{flex: 3}}>
+            <BackBtn/>
+            <Text
+              style={[
+                styles.welcomeText,
+                styles.orange_color,
+                styles.textMedium,
+                styles.textBold,
+                styles.mgrbtn80
+              ]}
+            >
+              {t('newCategoryTitle')}
+            </Text>
 
-          <Field
-            name="label"
-            component={InputText}
-            validate={isRequired}
-            placeholder={t('categoryName')}
-            secureTextEntry={false}
-          />
-
-          <View
-            style={[
-              {
-                width: '100%',
-                backgroundColor: '#F39F86',
-                position: 'absolute',
-                bottom: 48,
-                borderRadius: 4
-              }
-            ]}
-          >
-            <TouchableHighlight onPress={handleSubmit}>
-              <Text style={styles.gsText}>{t('action.save')}</Text>
-            </TouchableHighlight>
+            <Field
+              name="label"
+              component={InputText}
+              validate={isRequired}
+              placeholder={t('categoryName')}
+              secureTextEntry={false}
+            />
           </View>
-
-          <View
-            style={[
-              {
-                width: '100%',
-                position: 'absolute',
-                bottom: 0,
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86'
-              }
-            ]}
-          >
-            <TouchableHighlight
+          <View stlye={styles.bottom}>
+            <TouchableOpacity onPress={handleSubmit}>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={() => this.props.navigation.navigate('ProductsOverview')}
             >
-              <Text style={styles.signInText}>{t('action.cancel')}</Text>
-            </TouchableHighlight>
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </DismissKeyboard>

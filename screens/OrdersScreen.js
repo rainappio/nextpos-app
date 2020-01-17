@@ -24,19 +24,20 @@ class OrdersScreen extends React.Component {
         ordersTitle: 'Orders',
         date: 'Date',
         total: 'Total',
-        orderStatus: 'Order Status'
+        orderStatus: 'Order Status',
+        noOrder: 'No Order'
       },
       zh: {
         ordersTitle: '訂單歷史',
         date: '日期',
         total: '總金額',
-        orderStatus: '狀態'
+        orderStatus: '狀態',
+        noOrder: '沒有資料'
       }
     })
 
     this.state = {
       t: context.t,
-      isVisible: false,
       scrollPosition: ''
     }
   }
@@ -140,7 +141,7 @@ class OrdersScreen extends React.Component {
     keysArr !== false &&
       keysArr.map(key =>
         getordersByDateRange[key].map(order => {
-          order.tableLayoutId == key ? orders.push(order) : ''
+          order.tableLayoutId === key ? orders.push(order) : ''
         })
       )
 
@@ -159,17 +160,23 @@ class OrdersScreen extends React.Component {
           { marginLeft: 20, marginRight: 20 }
         ]}
       >
-        <Text
-          style={[
-            styles.welcomeText,
-            styles.orange_color,
-            styles.textMedium,
-            styles.textBold
-          ]}
-        >
-          {t('ordersTitle')}
-        </Text>
-
+        <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+          <View style={{justifyContent: 'space-between'}}>
+            <Text style={styles.screenTitle}>
+              {t('ordersTitle')}
+            </Text>
+          </View>
+          <View style={{position: 'absolute', right: 0}}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("reloading orders")
+                this.props.getOrdersByDateRange()
+              }}
+            >
+              <Icon name="md-refresh" size={30} color="#f18d1a"/>
+            </TouchableOpacity>
+          </View>
+        </View>
         <View style={[styles.flex_dir_row]}>
           <View style={{ width: '50%' }}>
             <Text style={styles.orange_color}>{t('date')}</Text>
@@ -183,6 +190,11 @@ class OrdersScreen extends React.Component {
             <Text style={styles.orange_color}>{t('orderStatus')}</Text>
           </View>
         </View>
+        { orders.length === 0 && (
+          <View>
+            <Text style={styles.messageBlock}>{t('noOrder')}</Text>
+          </View>
+        )}
         <FlatList
           keyExtractor={this.keyExtractor}
           data={orders}

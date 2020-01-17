@@ -47,111 +47,107 @@ class StoreFormScreen extends React.Component {
     const { handleSubmit } = this.props
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      <ScrollView scrollIndicatorInsets={{right: 1}} contentContainerStyle={styles.contentContainer}>
         <DismissKeyboard>
           <View style={styles.container_nocenterCnt}>
-            <BackBtn />
             <View>
-              <Text
+              <View>
+                <BackBtn/>
+                <View>
+                  <Text style={styles.screenTitle}>
+                    {t('settings.stores')}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.fieldTitle}>{t('clientName')}</Text>
+                </View>
+                <View style={{flex: 3}}>
+                  <Field
+                    name="clientName"
+                    component={InputText}
+                    validate={isRequired}
+                    placeholder="Client Name"
+                  />
+                </View>
+              </View>
+
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.fieldTitle}>{t('clientEmail')}</Text>
+                </View>
+                <View style={{flex: 3}}>
+                  <Field
+                    name="username"
+                    component={InputText}
+                    placeholder="User Email Address"
+                    editable={false}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.fieldTitle}>{t('address')}</Text>
+                </View>
+                <View style={{flex: 3}}>
+                  <Field
+                    name="attributes.address"
+                    component={InputText}
+                    placeholder="Address"
+                  />
+                </View>
+              </View>
+
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.fieldTitle}>{t('ubn')}</Text>
+                </View>
+                <View style={{flex: 3}}>
+                  <Field
+                    name="attributes.UBN"
+                    component={InputText}
+                    placeholder="UBN"
+                  />
+                </View>
+              </View>
+
+              <View style={[styles.fieldContainer]}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.fieldTitle}>{t('serviceCharge')}</Text>
+                </View>
+                <View style={{flex: 2}}>
+                  <Field
+                    name="clientSettings.SERVICE_CHARGE.value"
+                    component={InputText}
+                    placeholder={t('serviceCharge')}
+                    keyboardType='numeric'
+                  />
+                </View>
+                <View style={{flex: 1, flexDirection: 'row-reverse'}}>
+                  <Field
+                    name="clientSettings.SERVICE_CHARGE.enabled"
+                    component={RNSwitch}
+                  />
+                </View>
+              </View>
+
+              <View
                 style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold
+                  {justifyContent: 'space-between'},
+                  styles.fieldContainer
                 ]}
               >
-                {t('settings.stores')}
-              </Text>
-            </View>
-
-            <View style={styles.fieldContainer}>
-              <View style={{ flex: 1 }}>
-                <Text>{t('clientName')}</Text>
-              </View>
-              <View style={{ flex: 3 }}>
-                <Field
-                  name="clientName"
-                  component={InputText}
-                  validate={isRequired}
-                  placeholder="Client Name"
-                />
-              </View>
-            </View>
-
-            <View style={styles.fieldContainer}>
-              <View style={{ flex: 1 }}>
-                <Text>{t('clientEmail')}</Text>
-              </View>
-              <View style={{ flex: 3 }}>
-                <Field
-                  name="username"
-                  component={InputText}
-                  placeholder="User Email Address"
-                  editable={false}
-                />
-              </View>
-            </View>
-
-            <View style={styles.fieldContainer}>
-              <View style={{ flex: 1 }}>
-                <Text>{t('address')}</Text>
-              </View>
-              <View style={{ flex: 3 }}>
-                <Field
-                  name="attributes.address"
-                  component={InputText}
-                  placeholder="Address"
-                />
-              </View>
-            </View>
-
-            <View style={styles.fieldContainer}>
-              <View style={{ flex: 1 }}>
-                <Text>{t('ubn')}</Text>
-              </View>
-              <View style={{ flex: 3 }}>
-                <Field
-                  name="attributes.UBN"
-                  component={InputText}
-                  placeholder="UBN"
-                />
-              </View>
-            </View>
-
-            <View style={[styles.fieldContainer]}>
-              <View style={{ flex: 1 }}>
-                <Text>{t('serviceCharge')}</Text>
-              </View>
-              <View style={{ flex: 2 }}>
-                <Field
-                  name="clientSettings.SERVICE_CHARGE.value"
-                  component={InputText}
-                  placeholder={t('serviceCharge')}
-                  keyboardType='numeric'
-                />
-              </View>
-              <View style={{ flex: 1, flexDirection: 'row-reverse' }}>
-                <Field
-                  name="clientSettings.SERVICE_CHARGE.enabled"
-                  component={RNSwitch}
-                />
-              </View>
-            </View>
-
-            <View
-              style={[
-                { justifyContent: 'space-between' },
-                styles.fieldContainer
-              ]}
-            >
-              <View style={{ flex: 1 }}>
-                <Text>{t('taxInclusive')}</Text>
-              </View>
-              <View style={{ flex: 3, flexDirection: 'row-reverse' }}>
-                <Field
-                  name="clientSettings.TAX_INCLUSIVE.enabled"
-                  component={RNSwitch}
-                />
+                <View style={{flex: 1}}>
+                  <Text style={styles.fieldTitle}>{t('taxInclusive')}</Text>
+                </View>
+                <View style={{flex: 3, flexDirection: 'row-reverse'}}>
+                  <Field
+                    name="clientSettings.TAX_INCLUSIVE.enabled"
+                    component={RNSwitch}
+                  />
+                </View>
               </View>
             </View>
 

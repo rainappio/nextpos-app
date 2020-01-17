@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AsyncStorage } from 'react-native'
+import {ActivityIndicator, AsyncStorage, Text, View} from 'react-native'
 import {
   clearProduct,
   getTablesAvailable,
@@ -8,14 +8,35 @@ import {
 } from '../actions'
 import OrderForm from './OrderForm'
 import { api, makeFetchRequest } from '../constants/Backend'
+import styles from "../styles";
+import {LocaleContext} from "../locales/LocaleContext";
+import BackBtn from "../components/BackBtn";
 
 class OrderStart extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  state = {
-    refreshing: false
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      t: context.t
+    }
+  }
+
+  componentDidMount() {
+    this.props.getTablesAvailable()
+
+    this.context.localize({
+      en: {
+        noAvailableTables: 'There is no available table.'
+      },
+      zh: {
+        noAvailableTables: '目前沒有空桌.'
+      }
+    })
   }
 
   handleSubmit = values => {
@@ -66,15 +87,41 @@ class OrderStart extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
-    const { refreshing } = this.state
+    const { navigation, isLoading, haveData, availableTables } = this.props
+    const { t } = this.state
+
+    let tables = []
+    const availableTablesArr = availableTables !== undefined && Object.keys(availableTables)
+    availableTablesArr && availableTablesArr.map(key => {
+        availableTables[key].map(table => {
+          tables.push({
+            value: table.id,
+            label: table.name
+          })
+        })
+      }
+    )
+
+    if (isLoading || !haveData) {
+      return (
+        <View style={[styles.container]}>
+          <ActivityIndicator size="large" color="#ccc"/>
+        </View>
+      )
+    } else if (!availableTablesArr || availableTablesArr.length === 0) {
+      return (
+        <View style={[styles.container]}>
+          <BackBtn/>
+          <Text>{t('noAvailableTables')}</Text>
+        </View>
+      )
+    }
 
     return (
       <OrderForm
         onSubmit={this.handleSubmit}
         navigation={navigation}
-        refreshing={refreshing}
-        tables={this.props.navigation.state.params.tables}
+        tables={tables}
       />
     )
   }

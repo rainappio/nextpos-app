@@ -1,10 +1,10 @@
 import React from 'react'
-import { View, Text, ScrollView } from 'react-native'
-import { connect } from 'react-redux'
-import { Accordion, List, SwipeAction } from '@ant-design/react-native'
+import {View, Text, ScrollView} from 'react-native'
+import {connect} from 'react-redux'
+import {Accordion, List, SwipeAction} from '@ant-design/react-native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import BackBtn from '../components/BackBtn'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import TableLayoutForm from './TableLayoutForm'
 import {
   api,
@@ -12,9 +12,9 @@ import {
   errorAlert,
   successMessage
 } from '../constants/Backend'
-import { getTableLayouts } from '../actions'
+import {getTableLayouts} from '../actions'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 
 class TableLayoutAdd extends React.Component {
   static navigationOptions = {
@@ -62,36 +62,24 @@ class TableLayoutAdd extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
-    const { t } = this.state
+    const {navigation} = this.props
+    const {t} = this.state
 
     return (
-      <ScrollView>
-        <DismissKeyboard>
+      <DismissKeyboard>
+        <View style={styles.container_nocenterCnt}>
           <View>
-            <View style={[styles.container, styles.nomgrBottom]}>
-              <BackBtn />
-              <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold
-                ]}
-              >
-                {t('addTableLayoutTitle')}
-              </Text>
-            </View>
-
-            <View>
-              <TableLayoutForm
-                onSubmit={this.handleSubmit}
-                navigation={navigation}
-              />
-            </View>
+            <BackBtn/>
+            <Text style={styles.screenTitle}>
+              {t('addTableLayoutTitle')}
+            </Text>
           </View>
-        </DismissKeyboard>
-      </ScrollView>
+          <TableLayoutForm
+            onSubmit={this.handleSubmit}
+            navigation={navigation}
+          />
+        </View>
+      </DismissKeyboard>
     )
   }
 }

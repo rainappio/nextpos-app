@@ -18,10 +18,10 @@ export const fetchShiftFailure = error => ({
 })
 
 export const getShiftStatus = () => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(fetchShift())
 
-    dispatchFetchRequest(api.shift.active, {
+    return await dispatchFetchRequest(api.shift.active, {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',

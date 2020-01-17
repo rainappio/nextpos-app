@@ -1,8 +1,9 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { ScrollView, Text, View, RefreshControl } from 'react-native'
+import {ScrollView, Text, View, RefreshControl, TouchableOpacity, Alert} from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import { Accordion, List, SwipeAction } from '@ant-design/react-native'
 import { DismissKeyboard } from '../components/DismissKeyboard'
@@ -11,6 +12,7 @@ import PopUp from '../components/PopUp'
 import { getProducts, clearLabel } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import {api, dispatchFetchRequest, successMessage} from "../constants/Backend";
 
 class ProductRow extends React.Component {
   static navigationOptions = {
@@ -36,8 +38,6 @@ class ProductRow extends React.Component {
     this.state = {
       activeSections: [],
       selectedProducts: [],
-      refreshing: false,
-      status: '',
       labelId: null,
       productId: null,
       t: context.t
@@ -47,19 +47,38 @@ class ProductRow extends React.Component {
     }
   }
 
+  handleDelete = (productId) => {
+    //let productId = this.props.navigation.state.params.productId
+
+    dispatchFetchRequest(api.product.delete(productId), {
+        method: 'DELETE',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      },
+      response => {
+        successMessage('Deleted')
+        this.props.navigation.navigate('ProductsOverview')
+        this.props.getProducts()
+      }).then()
+  }
+
   PanelHeader = (labelName, labelId) => {
     return (
-      <View
-        style={{
-          width: '100%',
-          marginRight: 8,
-          paddingTop: 15,
-          paddingBottom: 15
-        }}
-      >
-        <Text style={{ fontSize: 16 }}>{labelName}</Text>
+      <View style={styles.listPanel}>
+        <Text style={styles.listPanelText}>{labelName}</Text>
         {labelId !== '0' && (
-          <AntDesignIcon
+          <MaterialIcon name="edit" size={22}
+                style={styles.listPanelIcon}
+                onPress={() => {
+                  this.props.navigation.navigate('CategoryCustomize', {
+                    labelId: labelId
+                  })
+                }}
+          />
+          /*<AntDesignIcon
             name="ellipsis1"
             size={25}
             color="black"
@@ -69,7 +88,7 @@ class ProductRow extends React.Component {
                 labelId: labelId
               })
             }}
-          />
+          />*/
         )}
       </View>
     )
@@ -98,32 +117,35 @@ class ProductRow extends React.Component {
 
     const right = [
       {
-        text: <Icon name="md-create" size={25} color="#fff" />,
-        onPress: () =>
-          this.props.navigation.navigate('ProductEdit', {
-            productId: this.state.productId,
-            labelId: this.state.labelId
-          }),
+        text: <Icon name="md-close" size={25} color="#fff" />,
+        onPress: () => {
+          Alert.alert(
+            `${t('action.confirmMessageTitle')}`,
+            `${t('action.confirmMessage')}`,
+            [
+              {
+                text: `${t('action.yes')}`,
+                onPress: () => this.handleDelete(this.state.productId)
+              },
+              {
+                text: `${t('action.no')}`,
+                onPress: () => console.log('Cancelled'),
+                style: 'cancel'
+              }
+            ]
+          )
+        },
         style: { backgroundColor: '#f18d1a90' }
       }
     ]
 
     return (
-      <ScrollView
-        refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
-      >
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View>
             <View style={styles.container}>
               <BackBtn />
-              <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold
-                ]}
-              >
+              <Text style={styles.screenTitle}>
                 {t('productListTitle')}
               </Text>
               <PopUp
@@ -156,8 +178,15 @@ class ProductRow extends React.Component {
                         key={prd.id}
                       >
                         <List.Item
+                          key={prd.id}
                           style={{
                             backgroundColor: '#f1f1f1'
+                          }}
+                          onPress={ () => {
+                            this.props.navigation.navigate('ProductEdit', {
+                              productId: prd.id,
+                              labelId: prd.productLabelId
+                            })
                           }}
                         >
                           {prd.name}
@@ -186,6 +215,12 @@ class ProductRow extends React.Component {
                           key={prd.id}
                           style={{
                             backgroundColor: '#f1f1f1'
+                          }}
+                          onPress={ () => {
+                            this.props.navigation.navigate('ProductEdit', {
+                              productId: prd.id,
+                              labelId: prd.productLabelId
+                            })
                           }}
                         >
                           {prd.name}

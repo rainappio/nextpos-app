@@ -6,6 +6,7 @@ import styles from '../styles'
 import {api, makeFetchRequest} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext";
 import {dateToLocaleString, formatDate} from "../actions";
+import BackBtn from "../components/BackBtn";
 
 class ClockIn extends React.Component {
   static navigationOptions = {
@@ -145,6 +146,7 @@ class ClockIn extends React.Component {
     return (
       <DismissKeyboard>
         <View style={styles.container}>
+          <BackBtn/>
           <View>
             <TouchableHighlight>
               <Text style={styles.screenTitle}>
@@ -153,33 +155,41 @@ class ClockIn extends React.Component {
             </TouchableHighlight>
           </View>
 
-          <View style={[styles.jc_alignIem_center]}>
-            <Text style={styles.textSmall}>
-              {t('username')}: {authClientUserName}
-            </Text>
-
-            <Text style={styles.textSmall}>
-              {t('currentTime')}: {`${dateToLocaleString(new Date())}`}
-            </Text>
-
-            <Text style={styles.textSmall}>
-              {t('timeCardStatus')}: {timeCardStatus}{' '}
-              {clockedIn != null ? `at ${clockedIn}` : ''}
-            </Text>
+          <View style={{flex: 2, justifyContent: 'center'}}>
+            <View style={[styles.fieldContainer]}>
+              <View style={{flex: 1}}>
+                <Text style={styles.fieldTitle}>
+                  {t('username')}
+                </Text>
+              </View>
+              <View style={{flex: 3}}>
+                <Text style={{alignSelf: 'flex-end'}}>{authClientUserName}</Text>
+              </View>
+            </View>
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 1}}>
+                <Text style={[styles.fieldTitle]}>
+                  {t('currentTime')}
+                </Text>
+              </View>
+              <View style={{flex: 3}}>
+                <Text style={{alignSelf: 'flex-end'}}>{`${dateToLocaleString(new Date())}`}</Text>
+              </View>
+            </View>
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.fieldTitle}>
+                  {t('timeCardStatus')}:
+                </Text>
+              </View>
+              <View style={{flex: 3}}>
+                <Text style={{alignSelf: 'flex-end'}}>{timeCardStatus} {clockedIn != null ? `at ${clockedIn}` : ''}</Text>
+              </View>
+            </View>
           </View>
 
-          <View style={[styles.jc_alignIem_center]}>
-            <View
-              style={[
-                styles.margin_15,
-                styles.orange_bg,
-                styles.half_width,
-                styles.jc_alignIem_center,
-                styles.paddTop_30,
-                styles.paddBottom_30,
-                styles.borderRadius4
-              ]}
-            >
+          <View style={[{flex: 3, alignItems: 'center'}]}>
+            <View style={styles.squareButton}>
               <TouchableOpacity
                 onPress={
                   timeCardStatus === 'ACTIVE'
@@ -200,16 +210,6 @@ class ClockIn extends React.Component {
                 </View>
               </TouchableOpacity>
             </View>
-          </View>
-
-          <View style={[styles.bottom]}>
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-              <Text
-                style={[styles.bottomActionButton, styles.cancelButton]}
-              >
-                {t('action.cancel')}
-              </Text>
-            </TouchableOpacity>
           </View>
         </View>
       </DismissKeyboard>

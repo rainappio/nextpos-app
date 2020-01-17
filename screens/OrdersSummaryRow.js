@@ -347,7 +347,6 @@ class OrdersSummaryRow extends React.Component {
             <AddBtn
               onPress={() =>
                 this.props.navigation.navigate('OrderFormII', {
-                  tableId: this.props.navigation.state.params.tableId,
                   orderId: order.orderId,
                   onSubmit: this.props.navigation.state.params.onSubmit,
                   handleDelete: this.props.navigation.state.params.handleDelete

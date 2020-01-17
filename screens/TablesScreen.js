@@ -29,12 +29,6 @@ import {
   getTableLayouts,
   getShiftStatus,
   getfetchOrderInflights,
-  get_time_diff,
-  clearOrder,
-  clearProduct,
-  getOrder,
-  getTablesAvailable,
-  getOrdersByDateRange
 } from '../actions'
 import styles from '../styles'
 import {
@@ -53,31 +47,55 @@ class TablesScreen extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-    this.props.getTableLayouts()
-    this.props.getfetchOrderInflights()
-    this.props.getShiftStatus()
-    this.props.getTablesAvailable()
 
-    context.localize({
+    this.state = {
+      t: context.t,
+      openBalance: 0,
+      refreshing: false
+    }
+  }
+
+  componentDidMount() {
+
+    this.props.getTableLayouts()
+    this.props.getShiftStatus()
+    this.props.getfetchOrderInflights()
+
+    this.context.localize({
       en: {
+        noTableLayout: 'You need to define at least one table layout and one table.',
+        noInflightOrders: 'No order on this table layout',
         openShift: {
           title: 'Open shift to start sales.',
+          openBalance: 'Open Balance',
           open: 'Open',
           cancel: 'Cancel'
         }
       },
       zh: {
+        noTableLayout: '需要創建至少一個桌面跟一個桌位.',
+        noInflightOrders: '此樓面沒有訂單',
         openShift: {
           title: '請開帳來開始銷售',
+          openBalance: '開帳現金',
           open: '開帳',
           cancel: '取消'
         }
       }
     })
+  }
 
-    this.state = {
-      t: context.t
-    }
+  onRefresh = async () => {
+    this.setState({ refreshing: true })
+
+    this.props.getfetchOrderInflights()
+    this.props.getTableLayouts()
+    this.props.getShiftStatus()
+
+    this.setState({ refreshing: false }, () => {
+      successMessage('Refreshed')
+    })
+
   }
 
   handleOpenShift = () => {
@@ -91,7 +109,7 @@ class TablesScreen extends React.Component {
           Authorization: `Bearer ${token.access_token}`
         },
         body: JSON.stringify({
-          balance: '1000'
+          balance: this.state.openBalance
         })
       }).then(response => {
         if (response.status === 200) {
@@ -119,8 +137,6 @@ class TablesScreen extends React.Component {
             successMessage('Order submitted')
             this.props.navigation.navigate('TablesSrc')
             this.props.getfetchOrderInflights()
-            this.props.clearOrder(data.orderId)
-            this.props.getOrdersByDateRange()
           }
         })
       }).then()
@@ -140,8 +156,6 @@ class TablesScreen extends React.Component {
         this.props.navigation.navigate('TablesSrc')
         this.props.getfetchOrderInflights()
         this.props.getTableLayouts()
-        this.props.getTablesAvailable()
-        this.props.clearOrder(id)
       }).then()
   }
 
@@ -154,18 +168,12 @@ class TablesScreen extends React.Component {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token.access_token}`
-        },
-        body: JSON.stringify({
-          balance: '1000'
-        })
+        }
       }).then(response => {
         if (response.status === 200) {
           this.props.navigation.navigate('TablesSrc')
           this.props.getfetchOrderInflights()
           this.props.getTableLayouts()
-          this.props.getTablesAvailable()
-          this.props.clearOrder(id)
-          this.props.getOrdersByDateRange()
         } else {
           errorAlert(response)
         }
@@ -182,51 +190,25 @@ class TablesScreen extends React.Component {
       tablelayouts,
       shiftStatus,
       ordersInflight,
-      getavailTables
     } = this.props
     const { t } = this.state
-
-    let tables = [],
-      tblsArr = []
-    var keysArr = getavailTables !== undefined && Object.keys(getavailTables)
-    keysArr !== false &&
-      keysArr.map(
-        key =>
-          getavailTables !== undefined &&
-          getavailTables[key].map(order => {
-            tables.push({
-              value: order.id,
-              label: order.name
-            })
-          })
-      )
-
-    var keysArr = ordersInflight !== undefined && Object.keys(ordersInflight)
-    keysArr !== false &&
-      keysArr.map(key =>
-        ordersInflight[key].map(order => {
-          order.tableLayoutId == key ? tblsArr.push(order) : ''
-        })
-      )
-
-    function removeDuplicates(array, key) {
-      let lookup = new Set()
-      return array.filter(obj => !lookup.has(obj[key]) && lookup.add(obj[key]))
-    }
-    var tblLayouts = removeDuplicates(tblsArr, 'tableLayoutId')
 
     if (isLoading) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
+          <ActivityIndicator size="large" color="#ccc"/>
         </View>
       )
-    } else if (haveError) {
-      return (
-        <View style={[styles.container]}>
-          <Text>Err during loading, check internet conn...</Text>
-        </View>
-      )
+    } else if (tablelayouts === undefined || tablelayouts.length === 0) {
+        return (
+          <ScrollView
+            contentContainerStyle={styles.contentContainer}
+            refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>}>
+            <View style={styles.container}>
+              <Text style={styles.messageBlock}>{t('noTableLayout')}</Text>
+            </View>
+          </ScrollView>
+        )
     } else if (shiftStatus === 'INACTIVE') {
       return (
         <View style={styles.container}>
@@ -248,6 +230,20 @@ class TablesScreen extends React.Component {
                 >
                   {t('openShift.title')}
                 </Text>
+                <View style={styles.fieldContainer}>
+                  <Text style={[styles.fieldTitle, {flex: 1}]}>
+                    {t('openShift.openBalance')}
+                  </Text>
+                  <TextInput
+                    name="balance"
+                    value={String(this.state.openBalance)}
+                    type='text'
+                    onChangeText={(value) => this.setState({openBalance: value})}
+                    placeholder={t('openShift.openBalance')}
+                    keyboardType={`numeric`}
+                    style={[styles.rootInput, {flex: 2}]}
+                  />
+                </View>
                 <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
                   <View
                     style={{
@@ -265,7 +261,6 @@ class TablesScreen extends React.Component {
                       </Text>
                     </TouchableOpacity>
                   </View>
-
                   <View
                     style={{
                       width: '46%',
@@ -294,27 +289,20 @@ class TablesScreen extends React.Component {
     }
 
     return (
-      <ScrollView>
+      <ScrollView
+        refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}>
         <DismissKeyboard>
           <View>
             <View style={[styles.container, styles.nomgrBottom]}>
               <BackBtnCustom
                 onPress={() => this.props.navigation.navigate('LoginSuccess')}
               />
-              <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold
-                ]}
-              >
+              <Text style={styles.screenTitle}>
                 {t('menu.tables')}
               </Text>
               <AddBtn
                 onPress={() =>
                   this.props.navigation.navigate('OrderStart', {
-                    tables: tables,
                     handleOrderSubmit: this.handleOrderSubmit,
                     handleDelete: this.handleDelete
                   })
@@ -322,8 +310,8 @@ class TablesScreen extends React.Component {
               />
             </View>
 
-            {tblLayouts.map((tblLayout, ix) => (
-              <View style={styles.mgrbtn20} key={tblLayout.tableLayoutId + ix}>
+            {tablelayouts.map((tblLayout, idx) => (
+              <View style={styles.mgrbtn20} key={idx}>
                 <Text
                   style={[
                     styles.orange_bg,
@@ -333,12 +321,12 @@ class TablesScreen extends React.Component {
                     styles.textMedium
                   ]}
                 >
-                  {tblLayout.tableLayout}
+                  {tblLayout.layoutName}
                 </Text>
 
-                {ordersInflight[tblLayout.tableLayoutId] !== undefined && (
+                {ordersInflight !== undefined && ordersInflight[tblLayout.id] !== undefined ? (
                   <FlatList
-                    data={ordersInflight[tblLayout.tableLayoutId]}
+                    data={ordersInflight[tblLayout.id]}
                     renderItem={({ item }) => {
                       return (
                         <OrderItem
@@ -347,13 +335,16 @@ class TablesScreen extends React.Component {
                           handleOrderSubmit={this.handleOrderSubmit}
                           handleDelete={this.handleDelete}
                           key={item.orderId}
-                          tableId={tblLayout.tableLayoutId}
                           handleDeliver={this.handleDeliver}
                         />
                       )
                     }}
-                    keyExtractor={(item, ix) => item.orderId}
+                    keyExtractor={(item, idx) => item.orderId}
                   />
+                ) : (
+                  <View>
+                    <Text style={styles.messageBlock}>{t('noInflightOrders')}</Text>
+                  </View>
                 )}
               </View>
             ))}
@@ -365,13 +356,13 @@ class TablesScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  tablelayouts: state.tablelayouts.data,
+  reduxState: state,
+  tablelayouts: state.tablelayouts.data.tableLayouts,
   ordersInflight: state.ordersinflight.data.orders,
   haveData: state.ordersinflight.haveData,
   haveError: state.ordersinflight.haveError,
   isLoading: state.ordersinflight.loading,
   shiftStatus: state.shift.data.shiftStatus,
-  getavailTables: state.tablesavailable.data.availableTables
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -379,10 +370,6 @@ const mapDispatchToProps = (dispatch, props) => ({
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
   getTableLayouts: () => dispatch(getTableLayouts()),
   getShiftStatus: () => dispatch(getShiftStatus()),
-  clearOrder: () => dispatch(clearOrder()),
-  clearProduct: () => dispatch(clearProduct()),
-  getTablesAvailable: () => dispatch(getTablesAvailable()),
-  getOrdersByDateRange: () => dispatch(getOrdersByDateRange())
 })
 export default connect(
   mapStateToProps,

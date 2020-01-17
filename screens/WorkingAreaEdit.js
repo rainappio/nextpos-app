@@ -1,7 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { ScrollView, Text, View, ActivityIndicator } from 'react-native'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {connect} from 'react-redux'
+import {ScrollView, Text, View, ActivityIndicator} from 'react-native'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import BackBtnCustom from '../components/BackBtnCustom'
 import AddBtn from '../components/AddBtn'
 import WorkingAreaForm from './WorkingAreaForm'
@@ -18,10 +18,20 @@ import {
   successMessage
 } from '../constants/Backend'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class WorkingAreaEdit extends React.Component {
   static navigationOptions = {
     header: null
+  }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      t: context.t
+    }
   }
 
   componentDidMount() {
@@ -66,13 +76,13 @@ class WorkingAreaEdit extends React.Component {
   }
 
   render() {
-    const { navigation, workingarea, loading, haveError, haveData } = this.props
-    const { t } = this.props.screenProps
+    const {navigation, workingarea, loading, haveError, haveData} = this.props
+    const {t} = this.state
 
     if (loading) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
+          <ActivityIndicator size="large" color="#ccc"/>
         </View>
       )
     } else if (haveError) {
@@ -81,40 +91,25 @@ class WorkingAreaEdit extends React.Component {
           <Text>Err during loading, check internet conn...</Text>
         </View>
       )
-    } else if (Object.keys(workingarea).length == 0) {
-      return (
-        <View style={[styles.container]}>
-          <Text>no workingarea ...</Text>
-        </View>
-      )
     }
-    return (
-      <ScrollView>
-        <DismissKeyboard>
-          <View style={styles.container}>
-            <BackBtnCustom onPress={() => this.handleEditCancel()} />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
-              {t('settings.workingArea')}
-            </Text>
 
-            <WorkingAreaForm
-              onSubmit={this.handleUpdate}
-              navigation={navigation}
-              initialValues={workingarea}
-              isEdit={true}
-              dataArr={this.props.navigation.state.params.printers}
-              handleEditCancel={this.handleEditCancel}
-            />
-          </View>
-        </DismissKeyboard>
-      </ScrollView>
+    return (
+      <DismissKeyboard>
+        <View style={styles.container_nocenterCnt}>
+          <BackBtnCustom onPress={() => this.handleEditCancel()}/>
+          <Text style={styles.screenTitle}>
+            {t('editWorkingAreaTitle')}
+          </Text>
+          <WorkingAreaForm
+            onSubmit={this.handleUpdate}
+            navigation={navigation}
+            initialValues={workingarea}
+            isEdit={true}
+            dataArr={this.props.navigation.state.params.printers}
+            handleEditCancel={this.handleEditCancel}
+          />
+        </View>
+      </DismissKeyboard>
     )
   }
 }

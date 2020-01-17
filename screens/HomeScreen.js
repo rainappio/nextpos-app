@@ -9,7 +9,7 @@ import {
   View,
   TouchableHighlight
 } from 'react-native'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 
@@ -39,40 +39,32 @@ export default class HomeScreen extends React.Component {
   }
 
   render() {
-    let { t } = this.state
+    let {t} = this.state
 
     return (
       <View style={styles.container}>
-        <View style={[{ position: 'absolute', top: 0 }]}>
-          <Image
-            source={
-              __DEV__
-                ? require('../assets/images/logo.png')
-                : require('../assets/images/logo.png')
-            }
-            style={styles.welcomeImage}
-          />
+        <View style={{flex: 3, justifyContent: 'center'}}>
+          <View style={[{position: 'absolute', top: 0}]}>
+            <Image
+              source={
+                __DEV__
+                  ? require('../assets/images/logo.png')
+                  : require('../assets/images/logo.png')
+              }
+              style={styles.welcomeImage}
+            />
+          </View>
+          <Text style={styles.welcomeText}>Quickly</Text>
+          <Text style={styles.welcomeText}>Easily</Text>
+          <Text style={styles.welcomeText}>Securely</Text>
         </View>
-        <Text style={styles.welcomeText}>Quickly</Text>
-        <Text style={styles.welcomeText}>Easily</Text>
-        <Text style={styles.welcomeText}>Securely</Text>
 
-        <View
-          style={[
-            {
-              width: '100%',
-              backgroundColor: '#F39F86',
-              position: 'absolute',
-              bottom: 0,
-              borderRadius: 4
-            }
-          ]}
-        >
-          <TouchableHighlight
+        <View style={styles.bottom}>
+          <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Intro')}
           >
-            <Text style={styles.gsText}>{t('getStarted')}</Text>
-          </TouchableHighlight>
+            <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('getStarted')}</Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
