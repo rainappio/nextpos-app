@@ -24,10 +24,6 @@ class AnnouncementsEdit extends React.Component {
     header: null
   }
 
-  // componentDidMount(){
-  // 	this.props.getAnnouncement()
-  // }
-
   handleUpdate = values => {
     console.log('handleUpdate hit')
     const announcementId = this.props.navigation.state.params.announcementId
@@ -60,21 +56,6 @@ class AnnouncementsEdit extends React.Component {
   }
 
   handleDelete = id => {
-    // return;
-    // dispatchFetchRequest(api.announcements.delete(id), {
-    //     method: 'DELETE',
-    //     withCredentials: true,
-    //     credentials: 'include',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     }
-    //   },
-    //   response => {
-    //     successMessage('Deleted')
-    //     this.props.navigation.navigate('Announcements')
-    //     this.props.getAnnouncements()
-    //   }).then()
-
     const announcementId = this.props.navigation.state.params.announcementId
     makeFetchRequest(token => {
       fetch(api.announcements.delete(announcementId), {

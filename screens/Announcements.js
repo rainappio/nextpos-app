@@ -79,47 +79,47 @@ class Announcements extends React.Component {
     // const { t } = this.props.screenProps
 
     return (
-      <View style={styles.container}>
-        <BackBtn />
-        <Text
-          style={[
-            styles.welcomeText,
-            styles.orange_color,
-            styles.textMedium,
-            styles.textBold
-          ]}
-        >
-          {/*t('settings.workingArea')*/}
-          Announcements
-        </Text>
+    	
+      <View style={styles.container_nocenterCnt}>
+      	<View>
+        	<BackBtn />
+        	<Text
+          	style={[
+            	styles.welcomeText,
+            	styles.orange_color,
+            	styles.textMedium,
+            	styles.textBold
+          	]}
+        	>
+          	{/*t('settings.workingArea')*/}
+          	Announcements
+        	</Text>
 
-        <AddBtn
-          onPress={() =>
-            this.props.navigation.navigate('AnnouncementsAdd', {
-              // tables: tables,
-              // handleOrderSubmit: this.handleOrderSubmit,
-              // handleDelete: this.handleDelete
-            })
-          }
-        />
+        	<AddBtn
+          	onPress={() =>
+            	this.props.navigation.navigate('AnnouncementsAdd')
+          	}
+        	/>
+      	</View>
 
-        {Object.keys(getannouncements).length !== 0 && (
-          <SortableList
-            // style={styles.list}
-            // contentContainerStyle={styles.contentContainer}
-            data={getannouncements.results}
-            vertical={true}
-            renderRow={this._renderRow}
-            onReleaseRow={(key, currentOrder) =>
-              this.handleItemOrderUpdate(
-                key,
-                currentOrder,
-                getannouncements.results
-              )
-            }
-          />
-        )}
-      </View>
+        	{Object.keys(getannouncements).length !== 0 && (
+          	<SortableList
+            	// style={styles.list}
+            	// contentContainerStyle={styles.contentContainer}
+            	data={getannouncements.results}
+            	vertical={true}
+            	renderRow={this._renderRow}
+            	onReleaseRow={(key, currentOrder) =>
+              	this.handleItemOrderUpdate(
+                	key,
+                	currentOrder,
+                	getannouncements.results
+              	)
+            	}
+          	/>
+        	)}
+      
+    	</View>
     )
   }
 }

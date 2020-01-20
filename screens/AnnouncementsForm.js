@@ -64,16 +64,6 @@ class AnnouncementsForm extends React.Component {
               component={RenderPureCheckBox}
               customValue={icon.value}
               optionName={icon.label}
-              // total={order.orderTotal}
-              // getPercent={this.getPercent}
-              // orderTotal={order.total.amountWithTax.toFixed(2)}
-              // grandTotal={(
-              //   order.orderTotal -
-              //   calculatePercentage(
-              //     order.orderTotal,
-              //     this.state.getPercent
-              //   )
-              // ).toFixed(2)}
               validate={isRequired}
             />
           </View>
