@@ -9,9 +9,9 @@ import {
   View,
   TouchableHighlight
 } from 'react-native'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -39,12 +39,12 @@ export default class HomeScreen extends React.Component {
   }
 
   render() {
-    let {t} = this.state
+    let { t } = this.state
 
     return (
       <View style={styles.container}>
-        <View style={{flex: 3, justifyContent: 'center'}}>
-          <View style={[{position: 'absolute', top: 0}]}>
+        <View style={{ flex: 3, justifyContent: 'center' }}>
+          <View style={[{ position: 'absolute', top: 0 }]}>
             <Image
               source={
                 __DEV__
@@ -63,7 +63,9 @@ export default class HomeScreen extends React.Component {
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Intro')}
           >
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('getStarted')}</Text>
+            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              {t('getStarted')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -8,7 +8,7 @@ import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 import { withNavigation } from 'react-navigation'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class CreateAccFormScreen extends React.Component {
   static navigationOptions = {
@@ -20,7 +20,7 @@ class CreateAccFormScreen extends React.Component {
     super(props)
 
     this.state = {
-      t: context.t,
+      t: context.t
     }
   }
 

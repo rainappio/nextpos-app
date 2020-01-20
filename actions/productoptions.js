@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from "../constants/Backend"
+import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_PRODUCT_OPTIONS = 'FETCH_PRODUCT_OPTIONS'
 export const FETCH_PRODUCT_OPTIONS_SUCCESS = 'FETCH_PRODUCT_OPTIONS_SUCCESS'
 export const FETCH_PRODUCT_OPTIONS_FAILURE = 'FETCH_PRODUCT_OPTIONS_FAILURE'
@@ -21,17 +21,22 @@ export const fetchProductOptionsFailure = error => ({
 export const getProductOptions = labelId => {
   return dispatch => {
     dispatch(fetchProductOptions())
-    dispatchFetchRequest(api.productOption.getAll(labelId), {
-      method: 'GET',
-      withCredentials: true,
-      credentials: 'include',
-      headers: {}
-    }, response => {
-      response.json().then(data => {
-        dispatch(fetchProductOptionsSuccess(data))
-      })
-    }, response => {
-      dispatch(fetchProductOptionsFailure(response))
-    }).then()
+    dispatchFetchRequest(
+      api.productOption.getAll(labelId),
+      {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {}
+      },
+      response => {
+        response.json().then(data => {
+          dispatch(fetchProductOptionsSuccess(data))
+        })
+      },
+      response => {
+        dispatch(fetchProductOptionsFailure(response))
+      }
+    ).then()
   }
 }

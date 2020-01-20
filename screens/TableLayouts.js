@@ -1,14 +1,14 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {ActivityIndicator, ScrollView, Text, View,} from 'react-native'
-import {Accordion, List} from '@ant-design/react-native'
-import {getTableLayouts} from '../actions'
+import { connect } from 'react-redux'
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native'
+import { Accordion, List } from '@ant-design/react-native'
+import { getTableLayouts } from '../actions'
 import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import {LocaleContext} from '../locales/LocaleContext'
-import MaterialIcon from "react-native-vector-icons/MaterialIcons"
+import { LocaleContext } from '../locales/LocaleContext'
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 
 class TableLayouts extends React.Component {
   static navigationOptions = {
@@ -44,16 +44,16 @@ class TableLayouts extends React.Component {
   PanelHeader = (layoutName, layoutId) => {
     return (
       <View style={[styles.listPanel]}>
-        <Text style={[styles.listPanelText, {flex: 9}]}>
-          {layoutName}
-        </Text>
-        <MaterialIcon name="edit" size={22}
-              style={styles.listPanelIcon}
-              onPress={() => {
-                this.props.navigation.navigate('TableLayoutEdit', {
-                  layoutId: layoutId
-                })
-              }}
+        <Text style={[styles.listPanelText, { flex: 9 }]}>{layoutName}</Text>
+        <MaterialIcon
+          name="edit"
+          size={22}
+          style={styles.listPanelIcon}
+          onPress={() => {
+            this.props.navigation.navigate('TableLayoutEdit', {
+              layoutId: layoutId
+            })
+          }}
         />
       </View>
     )
@@ -98,10 +98,7 @@ class TableLayouts extends React.Component {
             >
               {tablelayouts.map(tblLayout => (
                 <Accordion.Panel
-                  header={this.PanelHeader(
-                    tblLayout.layoutName,
-                    tblLayout.id
-                  )}
+                  header={this.PanelHeader(tblLayout.layoutName, tblLayout.id)}
                   key={tblLayout.id}
                 >
                   <List>

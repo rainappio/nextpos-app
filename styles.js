@@ -9,7 +9,7 @@ export default StyleSheet.create({
     marginTop: 53,
     marginLeft: 35,
     marginRight: 35,
-    marginBottom: 36,
+    marginBottom: 36
   },
   childContainer: {
     flex: 1,
@@ -441,7 +441,6 @@ export default StyleSheet.create({
     marginTop: 0
   },
 
-
   // named styles for applying to components
   contentContainer: {
     flex: 1,
@@ -478,7 +477,7 @@ export default StyleSheet.create({
   },
   listPanelText: {
     flex: 9,
-    fontSize: 16,
+    fontSize: 16
   },
   listPanelIcon: {
     flex: 1,
@@ -493,7 +492,7 @@ export default StyleSheet.create({
     marginBottom: 5
   },
   fieldTitle: {
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   messageBlock: {
     padding: 10,
@@ -549,5 +548,18 @@ export default StyleSheet.create({
     // justifyContent: 'center',
     right: 0,
     bottom: 0
+  },
+  markDownStyle: {
+    backgroundColor: '#f1f1f1',
+    borderWidth: 1
+  },
+  textAreaContainer: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    padding: 0
+  },
+  textArea: {
+    height: 150,
+    justifyContent: 'flex-start'
   }
 })

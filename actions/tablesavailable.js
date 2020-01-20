@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from '../constants/Backend'
+import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_TABLES_AVAILABLE = 'FETCH_TABLES_AVAILABLE'
 export const FETCH_TABLES_AVAILABLE_SUCCESS = 'FETCH_TABLES_AVAILABLE_SUCCESS'
 export const FETCH_TABLES_AVAILABLE_FAILURE = 'FETCH_TABLES_AVAILABLE_FAILURE'
@@ -22,7 +22,9 @@ export const getTablesAvailable = () => {
   return dispatch => {
     dispatch(fetchTablesAvailable())
 
-    dispatchFetchRequest(api.table.getavailTable, {
+    dispatchFetchRequest(
+      api.table.getavailTable,
+      {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -38,6 +40,7 @@ export const getTablesAvailable = () => {
       },
       response => {
         dispatch(fetchTablesAvailableFailure(response))
-      }).then()
+      }
+    ).then()
   }
 }

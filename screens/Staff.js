@@ -3,7 +3,12 @@ import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
 import StaffFormScreen from './StaffFormScreen'
 import { getClientUsr, getClientUsrs } from '../actions'
-import {api, dispatchFetchRequest, errorAlert, successMessage} from '../constants/Backend'
+import {
+  api,
+  dispatchFetchRequest,
+  errorAlert,
+  successMessage
+} from '../constants/Backend'
 
 class Staff extends React.Component {
   static navigationOptions = {
@@ -20,12 +25,14 @@ class Staff extends React.Component {
       ? (values.roles = ['MANAGER', 'USER'])
       : (values.roles = ['USER'])
 
-    dispatchFetchRequest(api.clientUser.new, {
+    dispatchFetchRequest(
+      api.clientUser.new,
+      {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(values)
       },
@@ -33,7 +40,8 @@ class Staff extends React.Component {
         successMessage('Saved')
         this.props.navigation.navigate('StaffsOverview')
         this.props.getClientUsrs()
-      }).then()
+      }
+    ).then()
   }
 
   render() {
@@ -50,9 +58,7 @@ class Staff extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-
-})
+const mapStateToProps = state => ({})
 
 const mapDispatchToProps = dispatch => ({
   dispatch,

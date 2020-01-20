@@ -10,7 +10,12 @@ import { connect } from 'react-redux'
 import StaffFormScreen from './StaffFormScreen'
 import { clearClient, getClientUsr, getClientUsrs } from '../actions'
 import styles from '../styles'
-import {api, dispatchFetchRequest, errorAlert, successMessage} from '../constants/Backend'
+import {
+  api,
+  dispatchFetchRequest,
+  errorAlert,
+  successMessage
+} from '../constants/Backend'
 
 class StaffEditScreen extends Component {
   static navigationOptions = {
@@ -18,7 +23,7 @@ class StaffEditScreen extends Component {
   }
 
   state = {
-    isEditForm: true,
+    isEditForm: true
   }
 
   componentDidMount() {
@@ -37,12 +42,14 @@ class StaffEditScreen extends Component {
       : (values.roles = ['USER'])
     const staffname = this.props.navigation.state.params.staffname
 
-    dispatchFetchRequest(api.clientUser.update(staffname), {
+    dispatchFetchRequest(
+      api.clientUser.update(staffname),
+      {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(values)
       },
@@ -50,7 +57,8 @@ class StaffEditScreen extends Component {
         successMessage('Saved')
         this.props.navigation.navigate('StaffsOverview')
         this.props.getClientUsrs()
-      }).then()
+      }
+    ).then()
   }
 
   render() {

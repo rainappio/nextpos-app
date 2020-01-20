@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from '../constants/Backend'
+import { api, dispatchFetchRequest } from '../constants/Backend'
 
 export const FETCH_CLIENT = 'FETCH_CLIENT'
 export const FETCH_CLIENT_SUCCESS = 'FETCH_CLIENT_SUCCESS'
@@ -22,7 +22,9 @@ export const getCurrentClient = () => {
   return dispatch => {
     dispatch(fetchClient())
 
-    dispatchFetchRequest(api.client.get, {
+    dispatchFetchRequest(
+      api.client.get,
+      {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',

@@ -35,9 +35,8 @@ export function checkNaN (value) {
  * Format date string.
  */
 export const formatDateObj = dateStr => {
-
   if (dateStr != null) {
-    const dateObj = new Date(dateStr);
+    const dateObj = new Date(dateStr)
     return dateObj.toLocaleString('en-TW', {
       dateStyle: 'long',
       timeZone: 'Asia/Taipei'
@@ -51,7 +50,6 @@ export const formatDateObj = dateStr => {
  * Format date from millisecond
  */
 export const formatDateFromMillis = dateMillis => {
-
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleString('en-TW', {
     dateStyle: 'long',
@@ -72,7 +70,6 @@ export const formatDate = date => {
 }
 
 export const dateToLocaleString = dateObj => {
-
   return dateObj.toLocaleString('en-TW', {
     dateStyle: 'long',
     timeZone: 'Asia/Taipei'

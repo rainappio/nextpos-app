@@ -1,11 +1,11 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {ScrollView, Text, View} from 'react-native'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { connect } from 'react-redux'
+import { ScrollView, Text, View } from 'react-native'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import PrinterForm from '../screens/PrinterForm'
-import {getWorkingAreas, getPrinters} from '../actions'
+import { getWorkingAreas, getPrinters } from '../actions'
 import {
   api,
   errorAlert,
@@ -13,7 +13,7 @@ import {
   successMessage
 } from '../constants/Backend'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class PrinterAdd extends React.Component {
   static navigationOptions = {
@@ -58,17 +58,15 @@ class PrinterAdd extends React.Component {
   }
 
   render() {
-    const {navigation} = this.props
-    const {t} = this.state
+    const { navigation } = this.props
+    const { t } = this.state
 
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
-          <BackBtn/>
-          <Text style={styles.screenTitle}>
-            {t('addPrinterTitle')}
-          </Text>
-          <PrinterForm navigation={navigation} onSubmit={this.handleSubmit}/>
+          <BackBtn />
+          <Text style={styles.screenTitle}>{t('addPrinterTitle')}</Text>
+          <PrinterForm navigation={navigation} onSubmit={this.handleSubmit} />
         </View>
       </DismissKeyboard>
     )

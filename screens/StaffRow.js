@@ -1,5 +1,11 @@
 import React from 'react'
-import { ScrollView, Text, View, RefreshControl, TouchableOpacity } from 'react-native'
+import {
+  ScrollView,
+  Text,
+  View,
+  RefreshControl,
+  TouchableOpacity
+} from 'react-native'
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { DismissKeyboard } from '../components/DismissKeyboard'
@@ -60,7 +66,7 @@ class StaffRow extends React.Component {
         <DismissKeyboard>
           <View>
             <View style={styles.container}>
-              <BackBtn/>
+              <BackBtn />
               <Text
                 style={[
                   styles.welcomeText,
@@ -71,7 +77,7 @@ class StaffRow extends React.Component {
               >
                 {t('staffListTitle')}
               </Text>
-              <AddBtn onPress={() => this.props.navigation.navigate('Staff')}/>
+              <AddBtn onPress={() => this.props.navigation.navigate('Staff')} />
             </View>
 
             <View style={styles.childContainer}>
@@ -83,16 +89,15 @@ class StaffRow extends React.Component {
               <SwipeListView
                 data={clientusersOnly}
                 renderItem={(data, rowMap) => (
-                  <TouchableOpacity onPress={() =>
-                    this.props.navigation.navigate('StaffEdit', {
-                      staffname: data.item.username
-                    })
-                  }>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate('StaffEdit', {
+                        staffname: data.item.username
+                      })
+                    }
+                  >
                     <View style={styles.rowFront}>
-                      <Text
-                        key={rowMap}
-                        style={styles.rowFrontText}
-                      >
+                      <Text key={rowMap} style={styles.rowFrontText}>
                         {data.item.username}
                       </Text>
                     </View>

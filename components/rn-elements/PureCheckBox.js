@@ -12,6 +12,7 @@ import {
   AsyncStorage
 } from 'react-native'
 import { CheckBox } from 'react-native-elements'
+import IonIcon from 'react-native-vector-icons/Ionicons'
 import images from '../../assets/images'
 
 class RenderPureCheckBox extends React.Component {
@@ -25,7 +26,6 @@ class RenderPureCheckBox extends React.Component {
       customValue,
       optionName,
       total,
-      getPercent,
       meta: { error, toched, valid },
       ...rest
     } = this.props
@@ -33,17 +33,25 @@ class RenderPureCheckBox extends React.Component {
     return (
       <View>
         <CheckBox
-          title={optionName}
+          title={
+            <IonIcon
+              name={customValue}
+              size={26}
+              color="#f18d1a"
+              //onPress={() => fields.push()}
+              style={{ marginLeft: 22 }}
+            />
+          }
           checkedIcon={
             <Image
               source={images.checkicon}
-              style={{ width: 35, height: 35 }}
+              style={{ width: 20, height: 20 }}
             />
           }
           uncheckedIcon={
             <Image
               source={images.checkiconOutline}
-              style={{ width: 35, height: 35 }}
+              style={{ width: 20, height: 20 }}
             />
           }
           checked={value === customValue}

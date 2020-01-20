@@ -39,7 +39,7 @@ class SettingsScreen extends React.Component {
         >
           {t('menu.settings')}
         </Text>
-        <Pages indicatorColor="#FF9100" style={{marginTop: 20}}>
+        <Pages indicatorColor="#FF9100" style={{ marginTop: 20 }}>
           <View>
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View
@@ -262,6 +262,35 @@ class SettingsScreen extends React.Component {
                     <Text style={styles.centerText}>
                       {t('settings.manageShifts')}
                     </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+              <View
+                style={[
+                  styles.margin_15,
+                  styles.grayBg,
+                  styles.half_width,
+                  styles.jc_alignIem_center,
+                  styles.paddTop_30,
+                  styles.paddBottom_30
+                ]}
+              >
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('Announcements')
+                  }
+                >
+                  <View>
+                    <FontAwesomeIcon
+                      name="commenting"
+                      size={40}
+                      color="#f18d1a"
+                      style={[styles.centerText, styles.margin_15]}
+                    />
+                    <Text style={styles.centerText}>Announcements</Text>
                   </View>
                 </TouchableOpacity>
               </View>

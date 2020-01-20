@@ -1,5 +1,5 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import {
   AsyncStorage,
   View,
@@ -7,7 +7,7 @@ import {
   ScrollView,
   ActivityIndicator
 } from 'react-native'
-import {Accordion, List, SwipeAction} from '@ant-design/react-native'
+import { Accordion, List, SwipeAction } from '@ant-design/react-native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import {
   getTableLayout,
@@ -16,11 +16,11 @@ import {
 } from '../actions'
 import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import TableForm from './TableForm'
-import {api, makeFetchRequest, errorAlert} from '../constants/Backend'
+import { api, makeFetchRequest, errorAlert } from '../constants/Backend'
 import styles from '../styles'
-import {LocaleContext} from '../locales/LocaleContext'
+import { LocaleContext } from '../locales/LocaleContext'
 
 class TableEdit extends React.Component {
   static navigationOptions = {
@@ -83,12 +83,12 @@ class TableEdit extends React.Component {
       haveError,
       isLoading
     } = this.props
-    const {t} = this.state
+    const { t } = this.state
 
     if (isLoading || !haveData) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc"/>
+          <ActivityIndicator size="large" color="#ccc" />
         </View>
       )
     }
@@ -101,10 +101,8 @@ class TableEdit extends React.Component {
       <DismissKeyboard>
         <View style={[styles.container_nocenterCnt]}>
           <View>
-            <BackBtn/>
-            <Text style={styles.screenTitle}>
-              {t('editTableTitle')}
-            </Text>
+            <BackBtn />
+            <Text style={styles.screenTitle}>{t('editTableTitle')}</Text>
           </View>
           <TableForm
             onSubmit={this.handleSubmit}
@@ -128,7 +126,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   dispatch,
   getTableLayout: id => dispatch(getTableLayout(id)),
-  clearTableLayout: id => dispatch(clearTableLayout(id)),
+  clearTableLayout: id => dispatch(clearTableLayout(id))
 })
 export default connect(
   mapStateToProps,

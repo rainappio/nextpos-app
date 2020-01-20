@@ -47,7 +47,7 @@ class Login extends React.Component {
       // this is used for LoginSuccessScreen.
       res.username = res.cli_userName
 
-        await AsyncStorage.setItem('token', JSON.stringify(res))
+      await AsyncStorage.setItem('token', JSON.stringify(res))
       this.props.dispatch(doLoggedIn(res.access_token))
       this.props.navigation.navigate('LoginSuccess')
     }

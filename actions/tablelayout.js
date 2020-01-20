@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from "../constants/Backend"
+import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_TABLELAYOUT = 'FETCH_TABLELAYOUT'
 export const FETCH_TABLELAYOUT_SUCCESS = 'FETCH_TABLELAYOUT_SUCCESS'
 export const FETCH_TABLELAYOUT_FAILURE = 'FETCH_TABLELAYOUT_FAILURE'
@@ -27,7 +27,9 @@ export const getTableLayout = id => {
   return dispatch => {
     dispatch(fetchTableLayout(id))
 
-    dispatchFetchRequest(api.tablelayout.getById(id), {
+    dispatchFetchRequest(
+      api.tablelayout.getById(id),
+      {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -37,8 +39,10 @@ export const getTableLayout = id => {
         response.json().then(data => {
           dispatch(fetchTableLayoutSuccess(data))
         })
-      }, response => {
+      },
+      response => {
         dispatch(fetchTableLayoutFailure(response))
-      }).then()
+      }
+    ).then()
   }
 }

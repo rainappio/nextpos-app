@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {ActivityIndicator, AsyncStorage, Text, View} from 'react-native'
+import { ActivityIndicator, AsyncStorage, Text, View } from 'react-native'
 import {
   clearProduct,
   getTablesAvailable,
@@ -8,9 +8,9 @@ import {
 } from '../actions'
 import OrderForm from './OrderForm'
 import { api, makeFetchRequest } from '../constants/Backend'
-import styles from "../styles";
-import {LocaleContext} from "../locales/LocaleContext";
-import BackBtn from "../components/BackBtn";
+import styles from '../styles'
+import { LocaleContext } from '../locales/LocaleContext'
+import BackBtn from '../components/BackBtn'
 
 class OrderStart extends React.Component {
   static navigationOptions = {
@@ -91,27 +91,28 @@ class OrderStart extends React.Component {
     const { t } = this.state
 
     let tables = []
-    const availableTablesArr = availableTables !== undefined && Object.keys(availableTables)
-    availableTablesArr && availableTablesArr.map(key => {
+    const availableTablesArr =
+      availableTables !== undefined && Object.keys(availableTables)
+    availableTablesArr &&
+      availableTablesArr.map(key => {
         availableTables[key].map(table => {
           tables.push({
             value: table.id,
             label: table.name
           })
         })
-      }
-    )
+      })
 
     if (isLoading || !haveData) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc"/>
+          <ActivityIndicator size="large" color="#ccc" />
         </View>
       )
     } else if (!availableTablesArr || availableTablesArr.length === 0) {
       return (
         <View style={[styles.container]}>
-          <BackBtn/>
+          <BackBtn />
           <Text>{t('noAvailableTables')}</Text>
         </View>
       )

@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from "../constants/Backend"
+import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_LABEL = 'FETCH_LABEL'
 export const FETCH_LABEL_SUCCESS = 'FETCH_LABEL_SUCCESS'
 export const FETCH_LABEL_FAILURE = 'FETCH_LABEL_FAILURE'
@@ -27,7 +27,9 @@ export const getLabel = id => {
   return dispatch => {
     dispatch(fetchLabel(id))
 
-    dispatchFetchRequest(api.productLabel.getById(id), {
+    dispatchFetchRequest(
+      api.productLabel.getById(id),
+      {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -40,6 +42,7 @@ export const getLabel = id => {
       },
       response => {
         dispatch(fetchLabelFailure(response))
-      }).then()
+      }
+    ).then()
   }
 }

@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from '../constants/Backend'
+import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_PRINTERS = 'FETCH_PRINTERS'
 export const FETCH_PRINTERS_SUCCESS = 'FETCH_PRINTERS_SUCCESS'
 export const FETCH_PRINTERS_FAILURE = 'FETCH_PRINTERS_FAILURE'
@@ -21,7 +21,9 @@ export const getPrinters = () => {
   return dispatch => {
     dispatch(fetchPrinters())
 
-    dispatchFetchRequest(api.printer.getPrinters, {
+    dispatchFetchRequest(
+      api.printer.getPrinters,
+      {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -34,6 +36,7 @@ export const getPrinters = () => {
       },
       response => {
         dispatch(fetchPrintersFailure(response))
-      }).then()
+      }
+    ).then()
   }
 }

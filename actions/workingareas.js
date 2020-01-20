@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from "../constants/Backend"
+import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_WORKING_AREAS = 'FETCH_WORKING_AREA'
 export const FETCH_WORKING_AREAS_SUCCESS = 'FETCH_WORKING_AREAS_SUCCESS'
 export const FETCH_WORKING_AREAS_FAILURE = 'FETCH_WORKING_AREAS_FAILURE'
@@ -21,7 +21,9 @@ export const getWorkingAreas = () => {
   return dispatch => {
     dispatch(fetchWorkingAreas())
 
-    dispatchFetchRequest(api.workingarea.getAll, {
+    dispatchFetchRequest(
+      api.workingarea.getAll,
+      {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -34,6 +36,7 @@ export const getWorkingAreas = () => {
       },
       response => {
         dispatch(fetchWorkingAreasFailure(error))
-      }).then()
+      }
+    ).then()
   }
 }

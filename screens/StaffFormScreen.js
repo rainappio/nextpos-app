@@ -1,18 +1,18 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
-import {Keyboard, Text, TouchableOpacity, View} from 'react-native'
-import {connect} from 'react-redux'
-import {isRequired} from '../validators'
+import { Field, reduxForm } from 'redux-form'
+import { Keyboard, Text, TouchableOpacity, View } from 'react-native'
+import { connect } from 'react-redux'
+import { isRequired } from '../validators'
 import InputText from '../components/InputText'
 import PinCodeInput from '../components/PinCodeInput'
-import {DismissKeyboard} from '../components/DismissKeyboard'
-import {getClientUsrs} from '../actions'
+import { DismissKeyboard } from '../components/DismissKeyboard'
+import { getClientUsrs } from '../actions'
 import EditPasswordPopUp from '../components/EditPasswordPopUp'
 import RNSwitch from '../components/RNSwitch'
 import styles from '../styles'
 import DeleteBtn from '../components/DeleteBtn'
-import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
-import {LocaleContext} from "../locales/LocaleContext";
+import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
+import { LocaleContext } from '../locales/LocaleContext'
 
 class StaffFormScreen extends React.Component {
   static navigationOptions = {
@@ -54,19 +54,22 @@ class StaffFormScreen extends React.Component {
   }
 
   handleDelete = values => {
-    dispatchFetchRequest(api.clientUser.delete(values.name), {
+    dispatchFetchRequest(
+      api.clientUser.delete(values.name),
+      {
         method: 'DELETE',
         withCredentials: true,
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         }
       },
       response => {
         successMessage('Deleted')
         this.props.navigation.navigate('StaffsOverview')
         this.props.getClientUsrs()
-      }).then()
+      }
+    ).then()
   }
 
   render() {
@@ -158,9 +161,7 @@ class StaffFormScreen extends React.Component {
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               {isEditForm && (
-                <EditPasswordPopUp
-                  name={initialValues.username}
-                />
+                <EditPasswordPopUp name={initialValues.username} />
               )}
             </View>
 

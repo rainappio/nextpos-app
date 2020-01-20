@@ -115,7 +115,9 @@ export default class App extends React.Component {
 
   changeLanguage = () => {
     let toLocale = this.state.locale === 'zh-Hant-TW' ? 'en-TW' : 'zh-Hant-TW'
-    console.log(`Default locale: ${Localization.locale}, current locale: ${this.state.locale}, changing to ${toLocale}`)
+    console.log(
+      `Default locale: ${Localization.locale}, current locale: ${this.state.locale}, changing to ${toLocale}`
+    )
 
     this.setState({ locale: toLocale })
   }

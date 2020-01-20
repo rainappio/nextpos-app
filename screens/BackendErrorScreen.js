@@ -1,8 +1,8 @@
 import styles from '../styles'
 import { Text, View } from 'react-native'
 import React from 'react'
-import {LocaleContext} from "../locales/LocaleContext";
-import BackBtn from "../components/BackBtn";
+import { LocaleContext } from '../locales/LocaleContext'
+import BackBtn from '../components/BackBtn'
 
 // todo: use this on all screens that need to show backend error.
 export default class BackendErrorScreen extends React.Component {
@@ -14,7 +14,8 @@ export default class BackendErrorScreen extends React.Component {
     context.localize({
       en: {
         errorScreenTitle: 'Error',
-        errorMessage: 'There is an issue with your request. Please consult your service provider.'
+        errorMessage:
+          'There is an issue with your request. Please consult your service provider.'
       },
       zh: {
         errorScreenTitle: '錯誤',
@@ -27,21 +28,16 @@ export default class BackendErrorScreen extends React.Component {
     }
   }
 
-
   render() {
     const { t } = this.state
 
     return (
-      <View style={[styles.container, {justifyContent: 'space-between'}]}>
-        <View style={{flex: 1}}>
+      <View style={[styles.container, { justifyContent: 'space-between' }]}>
+        <View style={{ flex: 1 }}>
           <BackBtn />
-          <Text style={styles.screenTitle}>
-            {t('errorScreenTitle')}
-          </Text>
+          <Text style={styles.screenTitle}>{t('errorScreenTitle')}</Text>
         </View>
-        <Text style={{flex: 2}}>
-          {t('errorMessage')}
-        </Text>
+        <Text style={{ flex: 2 }}>{t('errorMessage')}</Text>
       </View>
     )
   }

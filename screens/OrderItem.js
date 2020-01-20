@@ -60,42 +60,30 @@ class OrderItem extends React.PureComponent {
         </View>
 
         <View style={{ width: '32%' }}>
-          {(order.state === 'OPEN' || order.state === 'IN_PROCESS') && (
-            <View>
-              {timeDifference < 29 ? (
-                <FontAwesomeIcon name={'clock-o'} color="#f18d1a" size={20}>
-                  <Text style={{ fontSize: 12 }}>
-                    &nbsp;&nbsp;
-                    {timeAgo.format(Date.now() - 15 * 60 * 1000)}
-                  </Text>
-                </FontAwesomeIcon>
-              ) : timeDifference < 60 ? (
-                <FontAwesomeIcon name={'clock-o'} color="red" size={20}>
-                  <Text style={{ fontSize: 12 }}>
-                    &nbsp;&nbsp;{timeAgo.format(Date.now() - 60 * 60 * 1000)}
-                  </Text>
-                </FontAwesomeIcon>
-              ) : timeDifference < 1440 ? (
-                <FontAwesomeIcon name={'clock-o'} color="red" size={20}>
-                  <Text style={{ fontSize: 12 }}>
-                    &nbsp;&nbsp;
-                    {timeAgo.format(Date.now() - 24 * 60 * 60 * 1000)}
-                  </Text>
-                </FontAwesomeIcon>
-              ) : (
-                timeDifference >= 1440 && (
-                  <FontAwesomeIcon name={'clock-o'} color="#888" size={20}>
-                    <Text style={{ fontSize: 12 }}>
-                      &nbsp;&nbsp;
-                      {timeAgo.format(
-                        Date.now() - 365 * 24 * 60 * 60 * 1000,
-                        'twitter'
-                      )}
-                    </Text>
-                  </FontAwesomeIcon>
-                )
-              )}
-            </View>
+          {(order.state === 'OPEN' || order.state === 'IN_PROCESS') &&
+            (timeDifference < 29 ? (
+              <FontAwesomeIcon name={'clock-o'} color="#f18d1a" size={20}>
+                <Text style={{ fontSize: 12 }}>
+                  &nbsp;&nbsp;
+                  {timeAgo.format(Date.now() - timeDifference * 60 * 1000)}
+                </Text>
+              </FontAwesomeIcon>
+            ) : timeDifference > 30 ? (
+              <FontAwesomeIcon name={'clock-o'} color="red" size={20}>
+                <Text style={{ fontSize: 12 }}>
+                  &nbsp;&nbsp;
+                  {timeAgo.format(Date.now() - timeDifference * 60 * 1000)}
+                </Text>
+              </FontAwesomeIcon>
+            ) : null)}
+
+          {(order.state === 'SETTLED' || order.state === 'DELIVERED') && (
+            <FontAwesomeIcon name={'clock-o'} color="#888" size={20}>
+              <Text style={{ fontSize: 12 }}>
+                &nbsp;&nbsp;
+                {timeAgo.format(Date.now() - timeDifference * 60 * 1000)}
+              </Text>
+            </FontAwesomeIcon>
           )}
         </View>
 

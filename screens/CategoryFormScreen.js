@@ -43,8 +43,8 @@ class CategoryFormScreen extends React.Component {
     return (
       <DismissKeyboard>
         <View style={styles.container}>
-          <View style={{flex: 3}}>
-            <BackBtn/>
+          <View style={{ flex: 3 }}>
+            <BackBtn />
             <Text
               style={[
                 styles.welcomeText,
@@ -67,12 +67,16 @@ class CategoryFormScreen extends React.Component {
           </View>
           <View stlye={styles.bottom}>
             <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                {t('action.save')}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('ProductsOverview')}
             >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                {t('action.cancel')}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

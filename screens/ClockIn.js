@@ -3,10 +3,10 @@ import { Text, TouchableHighlight, TouchableOpacity, View } from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import {api, makeFetchRequest} from '../constants/Backend'
-import {LocaleContext} from "../locales/LocaleContext";
-import {dateToLocaleString, formatDate} from "../actions";
-import BackBtn from "../components/BackBtn";
+import { api, makeFetchRequest } from '../constants/Backend'
+import { LocaleContext } from '../locales/LocaleContext'
+import { dateToLocaleString, formatDate } from '../actions'
+import BackBtn from '../components/BackBtn'
 
 class ClockIn extends React.Component {
   static navigationOptions = {
@@ -140,55 +140,53 @@ class ClockIn extends React.Component {
     if (timeCardStatus === 'ACTIVE') {
       let clockIn = this.state.timecard.clockIn
       let index = clockIn.indexOf('+')
-      clockedIn = formatDate(clockIn);
+      clockedIn = formatDate(clockIn)
     }
 
     return (
       <DismissKeyboard>
         <View style={styles.container}>
-          <BackBtn/>
+          <BackBtn />
           <View>
             <TouchableHighlight>
-              <Text style={styles.screenTitle}>
-                {t('timeCardTitle')}
-              </Text>
+              <Text style={styles.screenTitle}>{t('timeCardTitle')}</Text>
             </TouchableHighlight>
           </View>
 
-          <View style={{flex: 2, justifyContent: 'center'}}>
+          <View style={{ flex: 2, justifyContent: 'center' }}>
             <View style={[styles.fieldContainer]}>
-              <View style={{flex: 1}}>
-                <Text style={styles.fieldTitle}>
-                  {t('username')}
-                </Text>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.fieldTitle}>{t('username')}</Text>
               </View>
-              <View style={{flex: 3}}>
-                <Text style={{alignSelf: 'flex-end'}}>{authClientUserName}</Text>
+              <View style={{ flex: 3 }}>
+                <Text style={{ alignSelf: 'flex-end' }}>
+                  {authClientUserName}
+                </Text>
               </View>
             </View>
             <View style={styles.fieldContainer}>
-              <View style={{flex: 1}}>
-                <Text style={[styles.fieldTitle]}>
-                  {t('currentTime')}
-                </Text>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.fieldTitle]}>{t('currentTime')}</Text>
               </View>
-              <View style={{flex: 3}}>
-                <Text style={{alignSelf: 'flex-end'}}>{`${dateToLocaleString(new Date())}`}</Text>
+              <View style={{ flex: 3 }}>
+                <Text style={{ alignSelf: 'flex-end' }}>{`${dateToLocaleString(
+                  new Date()
+                )}`}</Text>
               </View>
             </View>
             <View style={styles.fieldContainer}>
-              <View style={{flex: 1}}>
-                <Text style={styles.fieldTitle}>
-                  {t('timeCardStatus')}:
-                </Text>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.fieldTitle}>{t('timeCardStatus')}:</Text>
               </View>
-              <View style={{flex: 3}}>
-                <Text style={{alignSelf: 'flex-end'}}>{timeCardStatus} {clockedIn != null ? `at ${clockedIn}` : ''}</Text>
+              <View style={{ flex: 3 }}>
+                <Text style={{ alignSelf: 'flex-end' }}>
+                  {timeCardStatus} {clockedIn != null ? `at ${clockedIn}` : ''}
+                </Text>
               </View>
             </View>
           </View>
 
-          <View style={[{flex: 3, alignItems: 'center'}]}>
+          <View style={[{ flex: 3, alignItems: 'center' }]}>
             <View style={styles.squareButton}>
               <TouchableOpacity
                 onPress={

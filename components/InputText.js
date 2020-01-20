@@ -24,7 +24,8 @@ const InputText = ({
     keyboardType,
     editable,
     onPress,
-    autoCapitalize
+    autoCapitalize,
+    height
   },
   meta: { error, touched, valid },
   isgrayBg,
@@ -60,7 +61,8 @@ const InputText = ({
         isgrayBg ? styles.grayBg : '',
         isgrayBg ? styles.leftpadd32 : styles.nopaddingLeft,
         iscustomizeCate ? styles.centerText : '',
-        iscustomizeCate ? styles.textBig : ''
+        iscustomizeCate ? styles.textBig : '',
+        { height: height }
       ]}
     />
     {Platform.OS === 'ios' && (
