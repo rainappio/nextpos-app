@@ -23,6 +23,10 @@ import { reducer as tablesavailableReducer } from './tablesavailable'
 import { reducer as globalorderoffersReducer } from './globalorderoffers'
 import { reducer as rangedsalesreportReducer } from './rangedsalesreport'
 import { reducer as ordersbydaterangeReducer } from './ordersbydaterange'
+import { reducer as salesDistributionReportReducer } from './salesdistributionreport'
+import { reducer as customerCountRepoertReducer } from './customercountreport'
+import { reducer as announcementsReducer } from './announcements'
+import { reducer as announcementReducer } from './announcement'
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -48,6 +52,10 @@ const rootReducer = combineReducers({
   tablesavailable: tablesavailableReducer,
   globalorderoffers: globalorderoffersReducer,
   getrangedsalesreport: rangedsalesreportReducer,
-  ordersbydaterange: ordersbydaterangeReducer
+  ordersbydaterange: ordersbydaterangeReducer,
+  salesdistributionreport: salesDistributionReportReducer,
+  customercountreport: customerCountRepoertReducer,
+  announcements: announcementsReducer,
+  announcement: announcementReducer
 })
 export default rootReducer

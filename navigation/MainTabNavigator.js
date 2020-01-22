@@ -65,6 +65,9 @@ import CheckoutComplete from '../screens/CheckoutComplete'
 import Sales from '../screens/Sales'
 import SalesCharts from '../screens/SalesCharts'
 import OrderDetail from '../screens/OrderDetail'
+import Announcements from '../screens/Announcements'
+import AnnouncementsAdd from '../screens/AnnouncementsAdd'
+import AnnouncementsEdit from '../screens/AnnouncementsEdit'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -132,7 +135,10 @@ const Settings = createStackNavigator({
   TableEdit: TableEdit,
   Payment: Payment,
   PaymentOrder: PaymentOrder,
-  CheckoutComplete: CheckoutComplete
+  CheckoutComplete: CheckoutComplete,
+  Announcements: Announcements,
+  AnnouncementsAdd: AnnouncementsAdd,
+  AnnouncementsEdit: AnnouncementsEdit
 })
 Settings.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.settings'),

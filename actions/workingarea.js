@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from '../constants/Backend'
+import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_WORKING_AREA = 'FETCH_WORKING_AREA'
 export const FETCH_WORKING_AREA_SUCCESS = 'FETCH_WORKING_AREA_SUCCESS'
 export const FETCH_WORKING_AREA_FAILURE = 'FETCH_WORKING_AREA_FAILURE'
@@ -27,7 +27,9 @@ export const getWorkingArea = id => {
   return dispatch => {
     dispatch(fetchWorkingArea(id))
 
-    dispatchFetchRequest(api.workingarea.getById(id), {
+    dispatchFetchRequest(
+      api.workingarea.getById(id),
+      {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -40,6 +42,7 @@ export const getWorkingArea = id => {
       },
       response => {
         dispatch(fetchWorkingAreaFailure(response))
-      }).then()
+      }
+    ).then()
   }
 }

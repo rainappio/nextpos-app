@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
 import { getProducts, getLables } from '../actions'
 import CategoryFormScreen from './CategoryFormScreen'
-import {api, dispatchFetchRequest, successMessage} from "../constants/Backend";
+import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
 
 class Category extends React.Component {
   static navigationOptions = {
@@ -11,7 +11,9 @@ class Category extends React.Component {
   }
 
   handleSubmit = values => {
-    dispatchFetchRequest(api.productLabel.new, {
+    dispatchFetchRequest(
+      api.productLabel.new,
+      {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
@@ -24,9 +26,9 @@ class Category extends React.Component {
         successMessage('Saved')
         this.props.navigation.navigate('ProductsOverview')
         this.props.getProducts()
-        this.props.getLables() !== undefined &&
-        this.props.getLables()
-      }).then()
+        this.props.getLables() !== undefined && this.props.getLables()
+      }
+    ).then()
   }
 
   render() {

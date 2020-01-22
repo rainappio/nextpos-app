@@ -63,7 +63,7 @@ class OrderFormII extends React.Component {
     this.props.getProducts()
     this.props.getfetchOrderInflights()
     this.props.navigation.state.params.orderId !== undefined &&
-    this.props.getOrder(this.props.navigation.state.params.orderId)
+      this.props.getOrder(this.props.navigation.state.params.orderId)
   }
 
   handleBack = recentlyAddedOrderId => {
@@ -222,7 +222,9 @@ class OrderFormII extends React.Component {
                     styles.whiteColor
                   ]}
                 >
-                  {order.hasOwnProperty('tableInfo') ? order.tableInfo.tableName : 'No Table'}
+                  {order.hasOwnProperty('tableInfo')
+                    ? order.tableInfo.tableName
+                    : 'No Table'}
                 </Text>
               </View>
             </TouchableOpacity>

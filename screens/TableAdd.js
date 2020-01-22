@@ -1,5 +1,5 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import {
   AsyncStorage,
   View,
@@ -7,16 +7,16 @@ import {
   ScrollView,
   ActivityIndicator
 } from 'react-native'
-import {Accordion, List, SwipeAction} from '@ant-design/react-native'
+import { Accordion, List, SwipeAction } from '@ant-design/react-native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import {getTableLayout, getTableLayouts} from '../actions'
+import { getTableLayout, getTableLayouts } from '../actions'
 import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import TableForm from './TableForm'
-import {api, makeFetchRequest, errorAlert} from '../constants/Backend'
+import { api, makeFetchRequest, errorAlert } from '../constants/Backend'
 import styles from '../styles'
-import {LocaleContext} from '../locales/LocaleContext'
+import { LocaleContext } from '../locales/LocaleContext'
 
 class TableAdd extends React.Component {
   static navigationOptions = {
@@ -61,22 +61,17 @@ class TableAdd extends React.Component {
   }
 
   render() {
-    const {navigation, tablelayout} = this.props
-    const {t} = this.state
+    const { navigation, tablelayout } = this.props
+    const { t } = this.state
 
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
           <View>
-            <BackBtn/>
-            <Text style={styles.screenTitle}>
-              {t('addTableTitle')}
-            </Text>
+            <BackBtn />
+            <Text style={styles.screenTitle}>{t('addTableTitle')}</Text>
           </View>
-          <TableForm
-            onSubmit={this.handleSubmit}
-            navigation={navigation}
-          />
+          <TableForm onSubmit={this.handleSubmit} navigation={navigation} />
         </View>
       </DismissKeyboard>
     )

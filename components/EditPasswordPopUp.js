@@ -12,8 +12,8 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import styles from '../styles'
-import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
-import {LocaleContext} from "../locales/LocaleContext";
+import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
+import { LocaleContext } from '../locales/LocaleContext'
 
 class EditPasswordPopUp extends Component {
   static contextType = LocaleContext
@@ -59,7 +59,9 @@ class EditPasswordPopUp extends Component {
     // dismiss keyboard after pin code is fulfilled.
     Keyboard.dismiss()
 
-    dispatchFetchRequest(api.clientUser.updatePassword(name), {
+    dispatchFetchRequest(
+      api.clientUser.updatePassword(name),
+      {
         method: 'PATCH',
         withCredentials: true,
         credentials: 'include',
@@ -77,7 +79,8 @@ class EditPasswordPopUp extends Component {
 
           await this.toggleModal(false)
         })
-      }).then()
+      }
+    ).then()
   }
 
   /**

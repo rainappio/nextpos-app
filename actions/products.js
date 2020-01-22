@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from "../constants/Backend"
+import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_PRODUCTS = 'FETCH_PRODUCTS'
 export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS'
 export const FETCH_PRODUCTS_FAILURE = 'FETCH_PRODUCTS_FAILURE'
@@ -21,7 +21,9 @@ export const getProducts = () => {
   return dispatch => {
     dispatch(fetchProducts())
 
-    dispatchFetchRequest(api.product.getAllGrouped, {
+    dispatchFetchRequest(
+      api.product.getAllGrouped,
+      {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -34,6 +36,7 @@ export const getProducts = () => {
       },
       response => {
         dispatch(fetchProductsFailure(response))
-      }).then()
+      }
+    ).then()
   }
 }

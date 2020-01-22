@@ -13,7 +13,7 @@ import {
 } from '../constants/Backend'
 import { getWorkingAreas, getPrinters } from '../actions'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class WorkingAreaAdd extends React.Component {
   static navigationOptions = {
@@ -22,7 +22,7 @@ class WorkingAreaAdd extends React.Component {
   static contextType = LocaleContext
 
   constructor(props, context) {
-    super(props);
+    super(props)
 
     this.state = {
       t: context.t
@@ -63,10 +63,8 @@ class WorkingAreaAdd extends React.Component {
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
-          <BackBtn/>
-          <Text style={styles.screenTitle}>
-            {t('addWorkingAreaTitle')}
-          </Text>
+          <BackBtn />
+          <Text style={styles.screenTitle}>{t('addWorkingAreaTitle')}</Text>
           <WorkingAreaForm
             onSubmit={this.handleSubmit}
             navigation={navigation}

@@ -18,17 +18,17 @@ export const api = {
   },
   clientUser: {
     new: `${apiRoot}/clients/me/users`,
-    get: (name) => {
+    get: name => {
       return `${apiRoot}/clients/me/users/${name}`
     },
     getAll: `${apiRoot}/clients/me/users/`,
-    update: (name) => {
+    update: name => {
       return `${apiRoot}/clients/me/users/${name}`
     },
-    updatePassword: (name) => {
+    updatePassword: name => {
       return `${apiRoot}/clients/me/users/${name}/password`
     },
-    delete: (name) => {
+    delete: name => {
       return `${apiRoot}/clients/me/users/${name}`
     }
   },
@@ -63,7 +63,9 @@ export const api = {
       return `${apiRoot}/productoptions/${id}?version=DESIGN`
     },
     getAll: labelId => {
-      return `${apiRoot}/productoptions${labelId === undefined ? '' : `?productLabelId=${labelId}`}`
+      return `${apiRoot}/productoptions${
+        labelId === undefined ? '' : `?productLabelId=${labelId}`
+      }`
     },
     update: id => {
       return `${apiRoot}/productoptions/${id}`
@@ -76,7 +78,7 @@ export const api = {
     openShift: `${apiRoot}/shifts/open`,
     closeShift: `${apiRoot}/shifts/close`,
     new: `${apiRoot}/orders`,
-    getById: (id) => {
+    getById: id => {
       return `${apiRoot}/orders/${id}`
     },
     newLineItem: orderId => {
@@ -95,7 +97,7 @@ export const api = {
   printer: {
     create: `${apiRoot}/printers`,
     getPrinters: `${apiRoot}/printers`,
-    getPrinter: (id) => {
+    getPrinter: id => {
       return `${apiRoot}/printers/${id}`
     },
     update: `${apiRoot}/printers/`
@@ -128,7 +130,22 @@ export const api = {
     getavailTable: `${apiRoot}/orders/availableTables`
   },
   report: {
-    getrangedSalesReport: `${apiRoot}/reporting/rangedSalesReport`
+    getrangedSalesReport: `${apiRoot}/reporting/rangedSalesReport`,
+    getsalesDistributionReport: `${apiRoot}/reporting/salesDistribution?`,
+    getcustomerCountReport: `${apiRoot}/reporting/customerCount?`
+  },
+  announcements: {
+    create: `${apiRoot}/announcements`,
+    get: `${apiRoot}/announcements`,
+    getById: id => {
+      return `${apiRoot}/announcements/${id}`
+    },
+    update: id => {
+      return `${apiRoot}/announcements/${id}`
+    },
+    delete: id => {
+      return `${apiRoot}/announcements/${id}`
+    }
   }
 }
 
@@ -164,7 +181,12 @@ export const makeFetchRequest = async fetchRequest => {
   }
 }
 
-export const dispatchFetchRequest = async (endpoint, payload, successCallback, failCallback) => {
+export const dispatchFetchRequest = async (
+  endpoint,
+  payload,
+  successCallback,
+  failCallback
+) => {
   try {
     let useClientUserToken = true
     let token = await AsyncStorage.getItem(storage.clientUserAccessToken)
@@ -195,9 +217,9 @@ export const dispatchFetchRequest = async (endpoint, payload, successCallback, f
       }
 
       return response
-
     } else {
-      const errorMessage = 'Token does not exist. Please consult your service provider.'
+      const errorMessage =
+        'Token does not exist. Please consult your service provider.'
 
       showMessage({
         message: errorMessage,
@@ -238,8 +260,7 @@ export const errorAlert = response => {
         errorMessage = content.message
         break
       default:
-        errorMessage =
-          `Encountered an error with your request. (${content.message})`
+        errorMessage = `Encountered an error with your request. (${content.message})`
     }
 
     showMessage({

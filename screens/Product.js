@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
 import ProductFormScreen from './ProductFormScreen'
 import { getProducts, getLables, getLabel } from '../actions'
-import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
+import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
 
 class Product extends React.Component {
   static navigationOptions = {
@@ -20,13 +20,14 @@ class Product extends React.Component {
   }
 
   handleSubmit = values => {
-
-    dispatchFetchRequest(api.product.new, {
+    dispatchFetchRequest(
+      api.product.new,
+      {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(values)
       },
@@ -34,7 +35,8 @@ class Product extends React.Component {
         successMessage('Saved')
         this.props.navigation.navigate('ProductsOverview')
         this.props.getProducts()
-      }).then()
+      }
+    ).then()
   }
 
   render() {

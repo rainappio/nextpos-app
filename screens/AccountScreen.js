@@ -12,11 +12,11 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
-import {doLogout, getClientUsr} from "../actions";
-import {connect} from "react-redux";
-import EditPasswordPopUp from "../components/EditPasswordPopUp";
-import {reduxForm} from "redux-form";
-import {getToken} from "../constants/Backend";
+import { doLogout, getClientUsr } from '../actions'
+import { connect } from 'react-redux'
+import EditPasswordPopUp from '../components/EditPasswordPopUp'
+import { reduxForm } from 'redux-form'
+import { getToken } from '../constants/Backend'
 
 class AccountScreen extends React.Component {
   static navigationOptions = {
@@ -86,43 +86,43 @@ class AccountScreen extends React.Component {
     const { t } = this.state
 
     return (
-          <View style={styles.container}>
-            <BackBtn />
-            <Text style={styles.screenTitle}>
-              {t('settings.account')}
-            </Text>
-            <View style={{flex: 3}}>
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 1}}>
-                  <Text style={styles.fieldTitle}>{t('username')}</Text>
-                </View>
-                <View style={{flex: 3}}>
-                  <Text style={{alignSelf: 'flex-end'}}>{currentUser.username}</Text>
-                </View>
-              </View>
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 1}}>
-                  <Text style={styles.fieldTitle}>{t('nickname')}</Text>
-                </View>
-                <View style={{flex: 3}}>
-                  <Text style={{alignSelf: 'flex-end'}}>{currentUser.nickname}</Text>
-                </View>
-              </View>
-              <View style={[styles.fieldContainer, {alignSelf: 'center'}]}>
-                <EditPasswordPopUp
-                  name={currentUser.username}
-                />
-              </View>
+      <View style={styles.container}>
+        <BackBtn />
+        <Text style={styles.screenTitle}>{t('settings.account')}</Text>
+        <View style={{ flex: 3 }}>
+          <View style={styles.fieldContainer}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.fieldTitle}>{t('username')}</Text>
             </View>
-            {currentUser.defaultUser &&
-            <View style={{flex: 2, justifyContent: 'flex-end'}}>
-              <View style={[styles.fieldContainer]}>
-                <Text style={styles.fieldTitle}>Developer Section</Text>
-              </View>
-              <View>{storageItems}</View>
+            <View style={{ flex: 3 }}>
+              <Text style={{ alignSelf: 'flex-end' }}>
+                {currentUser.username}
+              </Text>
             </View>
-            }
           </View>
+          <View style={styles.fieldContainer}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.fieldTitle}>{t('nickname')}</Text>
+            </View>
+            <View style={{ flex: 3 }}>
+              <Text style={{ alignSelf: 'flex-end' }}>
+                {currentUser.nickname}
+              </Text>
+            </View>
+          </View>
+          <View style={[styles.fieldContainer, { alignSelf: 'center' }]}>
+            <EditPasswordPopUp name={currentUser.username} />
+          </View>
+        </View>
+        {currentUser.defaultUser && (
+          <View style={{ flex: 2, justifyContent: 'flex-end' }}>
+            <View style={[styles.fieldContainer]}>
+              <Text style={styles.fieldTitle}>Developer Section</Text>
+            </View>
+            <View>{storageItems}</View>
+          </View>
+        )}
+      </View>
     )
   }
 }
@@ -136,7 +136,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getCurrentUser: (name) => dispatch(getClientUsr(name))
+  getCurrentUser: name => dispatch(getClientUsr(name))
 })
 
 AccountScreen = reduxForm({

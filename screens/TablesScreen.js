@@ -28,14 +28,15 @@ import OrderItem from './OrderItem'
 import {
   getTableLayouts,
   getShiftStatus,
-  getfetchOrderInflights,
+  getfetchOrderInflights
 } from '../actions'
 import styles from '../styles'
 import {
   api,
   makeFetchRequest,
   errorAlert,
-  successMessage, dispatchFetchRequest
+  successMessage,
+  dispatchFetchRequest
 } from '../constants/Backend'
 import { LocaleContext } from '../locales/LocaleContext'
 
@@ -56,14 +57,14 @@ class TablesScreen extends React.Component {
   }
 
   componentDidMount() {
-
     this.props.getTableLayouts()
     this.props.getShiftStatus()
     this.props.getfetchOrderInflights()
 
     this.context.localize({
       en: {
-        noTableLayout: 'You need to define at least one table layout and one table.',
+        noTableLayout:
+          'You need to define at least one table layout and one table.',
         noInflightOrders: 'No order on this table layout',
         openShift: {
           title: 'Open shift to start sales.',
@@ -95,7 +96,6 @@ class TablesScreen extends React.Component {
     this.setState({ refreshing: false }, () => {
       successMessage('Refreshed')
     })
-
   }
 
   handleOpenShift = () => {
@@ -124,7 +124,9 @@ class TablesScreen extends React.Component {
     const formData = new FormData()
     formData.append('action', 'SUBMIT')
 
-    dispatchFetchRequest(api.order.process(id), {
+    dispatchFetchRequest(
+      api.order.process(id),
+      {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
@@ -139,16 +141,19 @@ class TablesScreen extends React.Component {
             this.props.getfetchOrderInflights()
           }
         })
-      }).then()
+      }
+    ).then()
   }
 
   handleDelete = id => {
-    dispatchFetchRequest(api.order.delete(id), {
+    dispatchFetchRequest(
+      api.order.delete(id),
+      {
         method: 'DELETE',
         withCredentials: true,
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         }
       },
       response => {
@@ -156,7 +161,8 @@ class TablesScreen extends React.Component {
         this.props.navigation.navigate('TablesSrc')
         this.props.getfetchOrderInflights()
         this.props.getTableLayouts()
-      }).then()
+      }
+    ).then()
   }
 
   handleDeliver = id => {
@@ -189,26 +195,32 @@ class TablesScreen extends React.Component {
       isLoading,
       tablelayouts,
       shiftStatus,
-      ordersInflight,
+      ordersInflight
     } = this.props
     const { t } = this.state
 
     if (isLoading) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc"/>
+          <ActivityIndicator size="large" color="#ccc" />
         </View>
       )
     } else if (tablelayouts === undefined || tablelayouts.length === 0) {
-        return (
-          <ScrollView
-            contentContainerStyle={styles.contentContainer}
-            refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>}>
-            <View style={styles.container}>
-              <Text style={styles.messageBlock}>{t('noTableLayout')}</Text>
-            </View>
-          </ScrollView>
-        )
+      return (
+        <ScrollView
+          contentContainerStyle={styles.contentContainer}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh}
+            />
+          }
+        >
+          <View style={styles.container}>
+            <Text style={styles.messageBlock}>{t('noTableLayout')}</Text>
+          </View>
+        </ScrollView>
+      )
     } else if (shiftStatus === 'INACTIVE') {
       return (
         <View style={styles.container}>
@@ -231,17 +243,19 @@ class TablesScreen extends React.Component {
                   {t('openShift.title')}
                 </Text>
                 <View style={styles.fieldContainer}>
-                  <Text style={[styles.fieldTitle, {flex: 1}]}>
+                  <Text style={[styles.fieldTitle, { flex: 1 }]}>
                     {t('openShift.openBalance')}
                   </Text>
                   <TextInput
                     name="balance"
                     value={String(this.state.openBalance)}
-                    type='text'
-                    onChangeText={(value) => this.setState({openBalance: value})}
+                    type="text"
+                    onChangeText={value =>
+                      this.setState({ openBalance: value })
+                    }
                     placeholder={t('openShift.openBalance')}
                     keyboardType={`numeric`}
-                    style={[styles.rootInput, {flex: 2}]}
+                    style={[styles.rootInput, { flex: 2 }]}
                   />
                 </View>
                 <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
@@ -290,16 +304,20 @@ class TablesScreen extends React.Component {
 
     return (
       <ScrollView
-        refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}>
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this.onRefresh}
+          />
+        }
+      >
         <DismissKeyboard>
           <View>
             <View style={[styles.container, styles.nomgrBottom]}>
               <BackBtnCustom
                 onPress={() => this.props.navigation.navigate('LoginSuccess')}
               />
-              <Text style={styles.screenTitle}>
-                {t('menu.tables')}
-              </Text>
+              <Text style={styles.screenTitle}>{t('menu.tables')}</Text>
               <AddBtn
                 onPress={() =>
                   this.props.navigation.navigate('OrderStart', {
@@ -324,7 +342,8 @@ class TablesScreen extends React.Component {
                   {tblLayout.layoutName}
                 </Text>
 
-                {ordersInflight !== undefined && ordersInflight[tblLayout.id] !== undefined ? (
+                {ordersInflight !== undefined &&
+                ordersInflight[tblLayout.id] !== undefined ? (
                   <FlatList
                     data={ordersInflight[tblLayout.id]}
                     renderItem={({ item }) => {
@@ -343,7 +362,9 @@ class TablesScreen extends React.Component {
                   />
                 ) : (
                   <View>
-                    <Text style={styles.messageBlock}>{t('noInflightOrders')}</Text>
+                    <Text style={styles.messageBlock}>
+                      {t('noInflightOrders')}
+                    </Text>
                   </View>
                 )}
               </View>
@@ -362,14 +383,14 @@ const mapStateToProps = state => ({
   haveData: state.ordersinflight.haveData,
   haveError: state.ordersinflight.haveError,
   isLoading: state.ordersinflight.loading,
-  shiftStatus: state.shift.data.shiftStatus,
+  shiftStatus: state.shift.data.shiftStatus
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
   getTableLayouts: () => dispatch(getTableLayouts()),
-  getShiftStatus: () => dispatch(getShiftStatus()),
+  getShiftStatus: () => dispatch(getShiftStatus())
 })
 export default connect(
   mapStateToProps,

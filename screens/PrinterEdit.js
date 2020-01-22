@@ -1,7 +1,7 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {ScrollView, Text, View, ActivityIndicator} from 'react-native'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { connect } from 'react-redux'
+import { ScrollView, Text, View, ActivityIndicator } from 'react-native'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import PrinterForm from '../screens/PrinterForm'
@@ -18,7 +18,7 @@ import {
   successMessage
 } from '../constants/Backend'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class PrinterEdit extends React.Component {
   static navigationOptions = {
@@ -33,7 +33,6 @@ class PrinterEdit extends React.Component {
       t: context.t
     }
   }
-
 
   componentDidMount() {
     this.props.getPrinter(
@@ -79,13 +78,13 @@ class PrinterEdit extends React.Component {
   }
 
   render() {
-    const {navigation, printer, loading, haveData, haveError} = this.props
-    const {t} = this.state
+    const { navigation, printer, loading, haveData, haveError } = this.props
+    const { t } = this.state
 
     if (loading) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc"/>
+          <ActivityIndicator size="large" color="#ccc" />
         </View>
       )
     } else if (haveError) {
@@ -99,10 +98,8 @@ class PrinterEdit extends React.Component {
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
-          <BackBtn/>
-          <Text style={styles.screenTitle}>
-            {t('editPrinterTitle')}
-          </Text>
+          <BackBtn />
+          <Text style={styles.screenTitle}>{t('editPrinterTitle')}</Text>
           <PrinterForm
             navigation={navigation}
             onSubmit={this.handleUpdate}

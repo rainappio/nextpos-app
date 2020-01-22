@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from "../constants/Backend"
+import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_ORDERS_INFLGHT = 'FETCH_ORDERS_INFLGHT'
 export const FETCH_ORDERS_INFLGHT_SUCCESS = 'FETCH_ORDERS_INFLGHT_SUCCESS'
 export const FETCH_ORDERS_INFLGHT_FAILURE = 'FETCH_ORDERS_INFLGHT_FAILURE'
@@ -20,7 +20,9 @@ export const getfetchOrderInflights = () => {
   return dispatch => {
     dispatch(fetchOrderInflights())
 
-    dispatchFetchRequest(api.order.inflightOrders, {
+    dispatchFetchRequest(
+      api.order.inflightOrders,
+      {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -36,6 +38,7 @@ export const getfetchOrderInflights = () => {
       },
       response => {
         dispatch(fetchOrderInflightsFailure(response))
-      }).then()
+      }
+    ).then()
   }
 }

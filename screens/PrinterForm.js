@@ -1,18 +1,19 @@
 import React from 'react'
-import {Field, reduxForm, FieldArray} from 'redux-form'
+import { Field, reduxForm, FieldArray } from 'redux-form'
 import {
   Image,
-  KeyboardAvoidingView, ScrollView,
+  KeyboardAvoidingView,
+  ScrollView,
   Text,
   TouchableOpacity,
   View
 } from 'react-native'
-import {isRequired} from '../validators'
+import { isRequired } from '../validators'
 import InputText from '../components/InputText'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
-import {LocaleContext} from '../locales/LocaleContext'
+import { LocaleContext } from '../locales/LocaleContext'
 import RenderRadioBtn from '../components/RadioItem'
 
 class PrinterForm extends React.Component {
@@ -55,17 +56,17 @@ class PrinterForm extends React.Component {
   }
 
   render() {
-    const {handleSubmit, isEdit, handleEditCancel} = this.props
-    const {t} = this.state
+    const { handleSubmit, isEdit, handleEditCancel } = this.props
+    const { t } = this.state
 
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View>
           <View style={styles.fieldContainer}>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <Text style={styles.fieldTitle}>{t('printerName')}</Text>
             </View>
-            <View style={{flex: 2}}>
+            <View style={{ flex: 2 }}>
               <Field
                 name="name"
                 component={InputText}
@@ -77,10 +78,10 @@ class PrinterForm extends React.Component {
           </View>
 
           <View style={styles.fieldContainer}>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <Text style={styles.fieldTitle}>{t('ipAddress')}</Text>
             </View>
-            <View style={{flex: 2}}>
+            <View style={{ flex: 2 }}>
               <Field
                 name="ipAddress"
                 component={InputText}
@@ -122,7 +123,9 @@ class PrinterForm extends React.Component {
           </TouchableOpacity>
           {isEdit ? (
             <TouchableOpacity onPress={handleEditCancel}>
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                {t('action.cancel')}
+              </Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity

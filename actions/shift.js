@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from '../constants/Backend'
+import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_SHIFT = 'FETCH_PRODUCT'
 export const FETCH_SHIFT_SUCCESS = 'FETCH_SHIFT_SUCCESS'
 export const FETCH_SHIFT_FAILURE = 'FETCH_SHIFT_FAILURE'
@@ -21,7 +21,9 @@ export const getShiftStatus = () => {
   return async dispatch => {
     dispatch(fetchShift())
 
-    return await dispatchFetchRequest(api.shift.active, {
+    return await dispatchFetchRequest(
+      api.shift.active,
+      {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -34,6 +36,7 @@ export const getShiftStatus = () => {
       },
       response => {
         dispatch(fetchShiftFailure(response))
-      }).then()
+      }
+    ).then()
   }
 }

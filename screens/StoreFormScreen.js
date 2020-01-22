@@ -47,23 +47,24 @@ class StoreFormScreen extends React.Component {
     const { handleSubmit } = this.props
 
     return (
-      <ScrollView scrollIndicatorInsets={{right: 1}} contentContainerStyle={styles.contentContainer}>
+      <ScrollView
+        scrollIndicatorInsets={{ right: 1 }}
+        contentContainerStyle={styles.contentContainer}
+      >
         <DismissKeyboard>
           <View style={styles.container_nocenterCnt}>
             <View>
               <View>
-                <BackBtn/>
+                <BackBtn />
                 <View>
-                  <Text style={styles.screenTitle}>
-                    {t('settings.stores')}
-                  </Text>
+                  <Text style={styles.screenTitle}>{t('settings.stores')}</Text>
                 </View>
               </View>
               <View style={styles.fieldContainer}>
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                   <Text style={styles.fieldTitle}>{t('clientName')}</Text>
                 </View>
-                <View style={{flex: 3}}>
+                <View style={{ flex: 3 }}>
                   <Field
                     name="clientName"
                     component={InputText}
@@ -74,10 +75,10 @@ class StoreFormScreen extends React.Component {
               </View>
 
               <View style={styles.fieldContainer}>
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                   <Text style={styles.fieldTitle}>{t('clientEmail')}</Text>
                 </View>
-                <View style={{flex: 3}}>
+                <View style={{ flex: 3 }}>
                   <Field
                     name="username"
                     component={InputText}
@@ -88,10 +89,10 @@ class StoreFormScreen extends React.Component {
               </View>
 
               <View style={styles.fieldContainer}>
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                   <Text style={styles.fieldTitle}>{t('address')}</Text>
                 </View>
-                <View style={{flex: 3}}>
+                <View style={{ flex: 3 }}>
                   <Field
                     name="attributes.address"
                     component={InputText}
@@ -101,10 +102,10 @@ class StoreFormScreen extends React.Component {
               </View>
 
               <View style={styles.fieldContainer}>
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                   <Text style={styles.fieldTitle}>{t('ubn')}</Text>
                 </View>
-                <View style={{flex: 3}}>
+                <View style={{ flex: 3 }}>
                   <Field
                     name="attributes.UBN"
                     component={InputText}
@@ -114,18 +115,18 @@ class StoreFormScreen extends React.Component {
               </View>
 
               <View style={[styles.fieldContainer]}>
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                   <Text style={styles.fieldTitle}>{t('serviceCharge')}</Text>
                 </View>
-                <View style={{flex: 2}}>
+                <View style={{ flex: 2 }}>
                   <Field
                     name="clientSettings.SERVICE_CHARGE.value"
                     component={InputText}
                     placeholder={t('serviceCharge')}
-                    keyboardType='numeric'
+                    keyboardType="numeric"
                   />
                 </View>
-                <View style={{flex: 1, flexDirection: 'row-reverse'}}>
+                <View style={{ flex: 1, flexDirection: 'row-reverse' }}>
                   <Field
                     name="clientSettings.SERVICE_CHARGE.enabled"
                     component={RNSwitch}
@@ -135,14 +136,14 @@ class StoreFormScreen extends React.Component {
 
               <View
                 style={[
-                  {justifyContent: 'space-between'},
+                  { justifyContent: 'space-between' },
                   styles.fieldContainer
                 ]}
               >
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                   <Text style={styles.fieldTitle}>{t('taxInclusive')}</Text>
                 </View>
-                <View style={{flex: 3, flexDirection: 'row-reverse'}}>
+                <View style={{ flex: 3, flexDirection: 'row-reverse' }}>
                   <Field
                     name="clientSettings.TAX_INCLUSIVE.enabled"
                     component={RNSwitch}

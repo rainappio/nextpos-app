@@ -20,7 +20,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import images from '../assets/images'
-import {getOrdersByDateRange, getOrder, formatDate} from '../actions'
+import { getOrdersByDateRange, getOrder, formatDate } from '../actions'
 import styles from '../styles'
 
 class OrderDetail extends React.Component {

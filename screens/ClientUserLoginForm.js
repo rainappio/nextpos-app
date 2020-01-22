@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import {AsyncStorage, Image, Text, TouchableOpacity, View} from 'react-native'
+import { AsyncStorage, Image, Text, TouchableOpacity, View } from 'react-native'
 import { encode as btoa } from 'base-64'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'

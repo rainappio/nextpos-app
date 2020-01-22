@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from '../constants/Backend'
+import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_GLOBAL_ORDER_OFFERS = 'FETCH_GLOBAL_ORDER_OFFERS'
 export const FETCH_GLOBAL_ORDER_OFFERS_SUCCESS =
   'FETCH_GLOBAL_ORDER_OFFERS_SUCCESS'
@@ -23,7 +23,9 @@ export const getfetchglobalOrderOffers = () => {
   return dispatch => {
     dispatch(fetchglobalOrderOffers())
 
-    dispatchFetchRequest(api.order.getGlobalOrderOffers, {
+    dispatchFetchRequest(
+      api.order.getGlobalOrderOffers,
+      {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -36,7 +38,8 @@ export const getfetchglobalOrderOffers = () => {
       },
       response => {
         dispatch(fetchglobalOrderOffersFailure(response))
-      }).then()
+      }
+    ).then()
   }
 }
 

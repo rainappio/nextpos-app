@@ -1,7 +1,7 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {ScrollView, Text, View, ActivityIndicator} from 'react-native'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { connect } from 'react-redux'
+import { ScrollView, Text, View, ActivityIndicator } from 'react-native'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtnCustom from '../components/BackBtnCustom'
 import AddBtn from '../components/AddBtn'
 import WorkingAreaForm from './WorkingAreaForm'
@@ -18,7 +18,7 @@ import {
   successMessage
 } from '../constants/Backend'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class WorkingAreaEdit extends React.Component {
   static navigationOptions = {
@@ -76,13 +76,13 @@ class WorkingAreaEdit extends React.Component {
   }
 
   render() {
-    const {navigation, workingarea, loading, haveError, haveData} = this.props
-    const {t} = this.state
+    const { navigation, workingarea, loading, haveError, haveData } = this.props
+    const { t } = this.state
 
     if (loading) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc"/>
+          <ActivityIndicator size="large" color="#ccc" />
         </View>
       )
     } else if (haveError) {
@@ -96,10 +96,8 @@ class WorkingAreaEdit extends React.Component {
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
-          <BackBtnCustom onPress={() => this.handleEditCancel()}/>
-          <Text style={styles.screenTitle}>
-            {t('editWorkingAreaTitle')}
-          </Text>
+          <BackBtnCustom onPress={() => this.handleEditCancel()} />
+          <Text style={styles.screenTitle}>{t('editWorkingAreaTitle')}</Text>
           <WorkingAreaForm
             onSubmit={this.handleUpdate}
             navigation={navigation}

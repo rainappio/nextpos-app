@@ -1,6 +1,13 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import {ScrollView, Text, View, RefreshControl, TouchableOpacity, Alert} from 'react-native'
+import {
+  ScrollView,
+  Text,
+  View,
+  RefreshControl,
+  TouchableOpacity,
+  Alert
+} from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
@@ -12,7 +19,7 @@ import PopUp from '../components/PopUp'
 import { getProducts, clearLabel } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
-import {api, dispatchFetchRequest, successMessage} from "../constants/Backend";
+import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
 
 class ProductRow extends React.Component {
   static navigationOptions = {
@@ -47,22 +54,25 @@ class ProductRow extends React.Component {
     }
   }
 
-  handleDelete = (productId) => {
+  handleDelete = productId => {
     //let productId = this.props.navigation.state.params.productId
 
-    dispatchFetchRequest(api.product.delete(productId), {
+    dispatchFetchRequest(
+      api.product.delete(productId),
+      {
         method: 'DELETE',
         withCredentials: true,
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         }
       },
       response => {
         successMessage('Deleted')
         this.props.navigation.navigate('ProductsOverview')
         this.props.getProducts()
-      }).then()
+      }
+    ).then()
   }
 
   PanelHeader = (labelName, labelId) => {
@@ -70,13 +80,15 @@ class ProductRow extends React.Component {
       <View style={styles.listPanel}>
         <Text style={styles.listPanelText}>{labelName}</Text>
         {labelId !== '0' && (
-          <MaterialIcon name="edit" size={22}
-                style={styles.listPanelIcon}
-                onPress={() => {
-                  this.props.navigation.navigate('CategoryCustomize', {
-                    labelId: labelId
-                  })
-                }}
+          <MaterialIcon
+            name="edit"
+            size={22}
+            style={styles.listPanelIcon}
+            onPress={() => {
+              this.props.navigation.navigate('CategoryCustomize', {
+                labelId: labelId
+              })
+            }}
           />
           /*<AntDesignIcon
             name="ellipsis1"
@@ -145,9 +157,7 @@ class ProductRow extends React.Component {
           <View>
             <View style={styles.container}>
               <BackBtn />
-              <Text style={styles.screenTitle}>
-                {t('productListTitle')}
-              </Text>
+              <Text style={styles.screenTitle}>{t('productListTitle')}</Text>
               <PopUp
                 navigation={navigation}
                 toRoute1={'Category'}
@@ -182,7 +192,7 @@ class ProductRow extends React.Component {
                           style={{
                             backgroundColor: '#f1f1f1'
                           }}
-                          onPress={ () => {
+                          onPress={() => {
                             this.props.navigation.navigate('ProductEdit', {
                               productId: prd.id,
                               labelId: prd.productLabelId
@@ -216,7 +226,7 @@ class ProductRow extends React.Component {
                           style={{
                             backgroundColor: '#f1f1f1'
                           }}
-                          onPress={ () => {
+                          onPress={() => {
                             this.props.navigation.navigate('ProductEdit', {
                               productId: prd.id,
                               labelId: prd.productLabelId

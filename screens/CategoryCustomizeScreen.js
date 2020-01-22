@@ -144,10 +144,14 @@ class CategoryCustomizeScreen extends React.Component {
 
             <View style={styles.bottom}>
               <TouchableOpacity onPress={handleSubmit}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.save')}</Text>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  {t('action.save')}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => onCancel()}>
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                  {t('action.cancel')}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

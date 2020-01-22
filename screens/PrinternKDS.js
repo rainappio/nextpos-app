@@ -1,6 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { ScrollView, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native'
+import {
+  ScrollView,
+  Text,
+  View,
+  ActivityIndicator,
+  TouchableOpacity
+} from 'react-native'
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Accordion, List } from '@ant-design/react-native'
@@ -116,7 +122,7 @@ class PrinternKDS extends React.Component {
                 {t('printerTitle')}
               </Text>
               <View style={[styles.no_mgrTop, styles.mgrbtn20]}>
-                { printers.length === 0 && (
+                {printers.length === 0 && (
                   <View>
                     <Text style={styles.messageBlock}>{t('noPrinter')}</Text>
                   </View>
@@ -125,16 +131,15 @@ class PrinternKDS extends React.Component {
                 <SwipeListView
                   data={printers}
                   renderItem={(data, rowMap) => (
-                    <TouchableOpacity onPress={() => {
-                      this.props.navigation.navigate('PrinterEdit', {
-                        id: data.item.id
-                      })
-                    }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate('PrinterEdit', {
+                          id: data.item.id
+                        })
+                      }}
+                    >
                       <View style={styles.rowFront}>
-                        <Text
-                          key={rowMap}
-                          style={styles.rowFrontText}
-                        >
+                        <Text key={rowMap} style={styles.rowFrontText}>
                           {data.item.name}
                         </Text>
                       </View>
@@ -159,26 +164,27 @@ class PrinternKDS extends React.Component {
               </Text>
 
               <View style={[styles.no_mgrTop, styles.mgrbtn20]}>
-                { workingareas.length === 0 && (
+                {workingareas.length === 0 && (
                   <View>
-                    <Text style={styles.messageBlock}>{t('noWorkingArea')}</Text>
+                    <Text style={styles.messageBlock}>
+                      {t('noWorkingArea')}
+                    </Text>
                   </View>
                 )}
 
                 <SwipeListView
                   data={workingareas}
                   renderItem={(data, rowMap) => (
-                    <TouchableOpacity onPress={() => {
-                      this.props.navigation.navigate('WorkingAreaEdit', {
-                        id: data.item.id,
-                        printers: printers
-                      })
-                    }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate('WorkingAreaEdit', {
+                          id: data.item.id,
+                          printers: printers
+                        })
+                      }}
+                    >
                       <View style={styles.rowFront}>
-                        <Text
-                          key={rowMap}
-                          style={styles.rowFrontText}
-                        >
+                        <Text key={rowMap} style={styles.rowFrontText}>
                           {data.item.name}
                         </Text>
                       </View>

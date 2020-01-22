@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from "../constants/Backend"
+import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_CLIENTUSERS = 'FETCH_CLIENTUSERS'
 export const FETCH_CLIENTUSERS_SUCCESS = 'FETCH_CLIENTUSERS_SUCCESS'
 export const FETCH_CLIENTUSERS_FAILURE = 'FETCH_CLIENTUSERS_FAILURE'
@@ -21,7 +21,9 @@ export const getClientUsrs = () => {
   return dispatch => {
     dispatch(fetchClientsUsers())
 
-    dispatchFetchRequest(api.clientUser.getAll, {
+    dispatchFetchRequest(
+      api.clientUser.getAll,
+      {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',

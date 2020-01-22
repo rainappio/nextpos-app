@@ -1,18 +1,19 @@
 import React from 'react'
-import {Field, reduxForm, FieldArray} from 'redux-form'
+import { Field, reduxForm, FieldArray } from 'redux-form'
 import {
   Image,
-  KeyboardAvoidingView, ScrollView,
+  KeyboardAvoidingView,
+  ScrollView,
   Text,
   TouchableOpacity,
   View
 } from 'react-native'
-import {isRequired} from '../validators'
+import { isRequired } from '../validators'
 import InputText from '../components/InputText'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
-import {LocaleContext} from '../locales/LocaleContext'
+import { LocaleContext } from '../locales/LocaleContext'
 
 class WorkingAreaForm extends React.Component {
   static navigationOptions = {
@@ -46,17 +47,17 @@ class WorkingAreaForm extends React.Component {
   }
 
   render() {
-    const {handleSubmit, isEdit, handleEditCancel, navigation} = this.props
-    const {t} = this.state
+    const { handleSubmit, isEdit, handleEditCancel, navigation } = this.props
+    const { t } = this.state
 
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View>
           <View style={styles.fieldContainer}>
-            <View style={{flex: 2}}>
+            <View style={{ flex: 2 }}>
               <Text style={styles.fieldTitle}>{t('workingAreaName')}</Text>
             </View>
-            <View style={{flex: 3}}>
+            <View style={{ flex: 3 }}>
               <Field
                 name="name"
                 component={InputText}
@@ -68,10 +69,10 @@ class WorkingAreaForm extends React.Component {
           </View>
 
           <View style={styles.fieldContainer}>
-            <View style={{flex: 2}}>
+            <View style={{ flex: 2 }}>
               <Text style={styles.fieldTitle}>{t('noOfPrintCopies')}</Text>
             </View>
-            <View style={{flex: 3}}>
+            <View style={{ flex: 3 }}>
               <Field
                 name="noOfPrintCopies"
                 component={InputText}
@@ -80,7 +81,9 @@ class WorkingAreaForm extends React.Component {
                 keyboardType="numeric"
                 defaultvalue="1"
                 format={(value, name) => {
-                  return value !== undefined && value !== null ? String(value) : ''
+                  return value !== undefined && value !== null
+                    ? String(value)
+                    : ''
                 }}
               />
             </View>
@@ -111,7 +114,9 @@ class WorkingAreaForm extends React.Component {
           </TouchableOpacity>
           {isEdit ? (
             <TouchableOpacity onPress={handleEditCancel}>
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                {t('action.cancel')}
+              </Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity

@@ -1,14 +1,21 @@
 import React from 'react'
-import {ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View} from 'react-native'
-import {connect} from 'react-redux'
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native'
+import { connect } from 'react-redux'
 import BackBtnCustom from '../components/BackBtnCustom'
 import Icon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import images from '../assets/images'
-import {formatDate, getOrdersByDateRange} from '../actions'
-import {ListItem} from 'react-native-elements'
+import { formatDate, getOrdersByDateRange } from '../actions'
+import { ListItem } from 'react-native-elements'
 import styles from '../styles'
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from '../locales/LocaleContext'
 
 class OrdersScreen extends React.Component {
   static navigationOptions = {
@@ -41,8 +48,6 @@ class OrdersScreen extends React.Component {
       scrollPosition: ''
     }
   }
-
-
 
   componentDidMount() {
     this.props.getOrdersByDateRange()
@@ -127,7 +132,7 @@ class OrdersScreen extends React.Component {
   )
 
   //https://stackoverflow.com/questions/48061234/how-to-keep-scroll-position-using-flatlist-when-navigating-back-in-react-native
-  handleScroll = (event) => {
+  handleScroll = event => {
     this.setState({ scrollPosition: event.nativeEvent.contentOffset.y })
   }
 
@@ -161,19 +166,17 @@ class OrdersScreen extends React.Component {
         ]}
       >
         <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-          <View style={{justifyContent: 'space-between'}}>
-            <Text style={styles.screenTitle}>
-              {t('ordersTitle')}
-            </Text>
+          <View style={{ justifyContent: 'space-between' }}>
+            <Text style={styles.screenTitle}>{t('ordersTitle')}</Text>
           </View>
-          <View style={{position: 'absolute', right: 0}}>
+          <View style={{ position: 'absolute', right: 0 }}>
             <TouchableOpacity
               onPress={() => {
-                console.log("reloading orders")
+                console.log('reloading orders')
                 this.props.getOrdersByDateRange()
               }}
             >
-              <Icon name="md-refresh" size={30} color="#f18d1a"/>
+              <Icon name="md-refresh" size={30} color="#f18d1a" />
             </TouchableOpacity>
           </View>
         </View>
@@ -190,7 +193,7 @@ class OrdersScreen extends React.Component {
             <Text style={styles.orange_color}>{t('orderStatus')}</Text>
           </View>
         </View>
-        { orders.length === 0 && (
+        {orders.length === 0 && (
           <View>
             <Text style={styles.messageBlock}>{t('noOrder')}</Text>
           </View>

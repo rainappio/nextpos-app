@@ -1,7 +1,12 @@
 import React from 'react'
 import CreateAccFormScreen from './CreateAccFormScreen'
-import {api, errorAlert, successMessage, warningMessage} from "../constants/Backend";
-import {LocaleContext} from "../locales/LocaleContext";
+import {
+  api,
+  errorAlert,
+  successMessage,
+  warningMessage
+} from '../constants/Backend'
+import { LocaleContext } from '../locales/LocaleContext'
 
 class CreateAccScreen extends React.Component {
   static navigationOptions = {
@@ -21,7 +26,8 @@ class CreateAccScreen extends React.Component {
     this.context.localize({
       en: {
         signUp: 'Sign Up',
-        errorMessage: 'Email is already registered, please choose another email address.'
+        errorMessage:
+          'Email is already registered, please choose another email address.'
       },
       zh: {
         signUp: '註冊',

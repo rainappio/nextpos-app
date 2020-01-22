@@ -1,7 +1,9 @@
 import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_RANGED_SALES_REPORT = 'FETCH_RANGED_SALES_REPORT'
-export const FETCH_RANGED_SALES_REPORT_SUCCESS = 'FETCH_RANGED_SALES_REPORT_SUCCESS'
-export const FETCH_RANGED_SALES_REPORT_FAILURE = 'FETCH_RANGED_SALES_REPORT_FAILURE'
+export const FETCH_RANGED_SALES_REPORT_SUCCESS =
+  'FETCH_RANGED_SALES_REPORT_SUCCESS'
+export const FETCH_RANGED_SALES_REPORT_FAILURE =
+  'FETCH_RANGED_SALES_REPORT_FAILURE'
 
 export const fetchRangedSalesReport = () => ({
   type: FETCH_RANGED_SALES_REPORT
@@ -21,7 +23,8 @@ export const getRangedSalesReport = () => {
   return dispatch => {
     dispatch(fetchRangedSalesReport())
 
-    dispatchFetchRequest(api.report.getrangedSalesReport,
+    dispatchFetchRequest(
+      api.report.getrangedSalesReport,
       {
         method: 'GET',
         withCredentials: true,
