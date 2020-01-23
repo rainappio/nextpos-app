@@ -8,22 +8,42 @@ import InputText from '../components/InputText'
 import RenderPureCheckBox from '../components/rn-elements/PureCheckBox'
 import { isRequired } from '../validators'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class AnnouncementsForm extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
+  componentDidMount() {
+    this.context.localize({
+      en: {
+        newAnnouncementTitle: 'New Announcement',
+        editAnnouncementTitle: 'Edit Announcement',
+        announcementTitle: 'Title',
+        markdownContent: 'Markdown Content'
+      },
+      zh: {
+        newAnnouncementTitle: '新公告',
+        editAnnouncementTitle: '編輯公告',
+        announcementTitle: '標題',
+        markdownContent: 'Markdown內容'
+      }
+    })
+  }
 
   render() {
     const {
-      navigation,
       handleSubmit,
       isEdit,
       handleEditCancel,
       handleDelete,
       initialValues
     } = this.props
-    // const { t } = this.props.screenProps
+
+    const { t } = this.context
+
     var iconsArr = [
       { label: 'ios-attach', value: 'ios-attach' },
       { label: 'ios-paper', value: 'ios-paper' },
@@ -36,7 +56,7 @@ class AnnouncementsForm extends React.Component {
         <Field
           component={InputText}
           name="title"
-          placeholder="Title"
+          placeholder={t('announcementTitle')}
           validate={isRequired}
         />
 
@@ -45,7 +65,7 @@ class AnnouncementsForm extends React.Component {
             style={[styles.textArea, styles.grayBg]}
             component={InputText}
             name="markdownContent"
-            placeholder="Markdown Content"
+            placeholder={t('markdownContent')}
             validate={isRequired}
             numberOfLines={10}
             multiline={true}
@@ -72,16 +92,14 @@ class AnnouncementsForm extends React.Component {
         <View style={styles.bottom}>
           <TouchableOpacity onPress={handleSubmit}>
             <Text style={[styles.bottomActionButton, styles.actionButton]}>
-              {/*t('action.save')*/}
-              {isEdit ? 'Update' : 'Save'}
+              {t('action.save')}
             </Text>
           </TouchableOpacity>
 
           {isEdit ? (
             <TouchableOpacity onPress={handleEditCancel}>
               <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                {/*t('action.cancel')*/}
-                Cancel
+                {t('action.cancel')}
               </Text>
             </TouchableOpacity>
           ) : (
@@ -89,8 +107,7 @@ class AnnouncementsForm extends React.Component {
               onPress={() => this.props.navigation.navigate('Announcements')}
             >
               <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                {/*t('action.cancel')*/}
-                Cancel
+                {t('action.cancel')}
               </Text>
             </TouchableOpacity>
           )}

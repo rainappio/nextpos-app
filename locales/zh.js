@@ -22,7 +22,8 @@ const zh = {
     workingArea: '工作區/出單機',
     language: '語言',
     tableLayouts: '座位管理',
-    manageShifts: '開關帳'
+    manageShifts: '開關帳',
+    announcements: '公告'
   },
   newItem: {
     new: '新增',

@@ -22,7 +22,8 @@ const en = {
     workingArea: 'Printer/Working Area',
     language: 'Language',
     tableLayouts: 'Table Layouts',
-    manageShifts: 'Manage Shift'
+    manageShifts: 'Manage Shift',
+    announcements: 'Announcements'
   },
   newItem: {
     new: 'New',

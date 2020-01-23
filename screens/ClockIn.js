@@ -1,12 +1,12 @@
 import React from 'react'
-import { Text, TouchableHighlight, TouchableOpacity, View } from 'react-native'
+import {ActivityIndicator, Text, TouchableHighlight, TouchableOpacity, View} from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import { api, makeFetchRequest } from '../constants/Backend'
-import { LocaleContext } from '../locales/LocaleContext'
-import { dateToLocaleString, formatDate } from '../actions'
-import BackBtn from '../components/BackBtn'
+import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
+import {LocaleContext} from "../locales/LocaleContext"
+import {dateToLocaleString, formatDate} from "../actions"
+import BackBtn from "../components/BackBtn"
 
 class ClockIn extends React.Component {
   static navigationOptions = {
@@ -22,7 +22,9 @@ class ClockIn extends React.Component {
         timeCardTitle: 'Staff Time Card',
         username: 'Username',
         currentTime: 'Current Time',
-        timeCardStatus: 'Status',
+        timeCardStatus: 'Time Card Status',
+        clockInTime: 'Clock In Time',
+        clockOutTime: 'Clock Out Time',
         clockIn: 'Clock In',
         clockOut: 'Clock Out'
       },
@@ -30,14 +32,15 @@ class ClockIn extends React.Component {
         timeCardTitle: '員工打卡',
         username: '使用者名稱',
         currentTime: '現在時間',
-        timeCardStatus: '狀態',
+        timeCardStatus: '打卡狀態',
+        clockInTime: '上班時間',
+        clockOutTime: '下班時間',
         clockIn: '上班',
         clockOut: '下班'
       }
     })
 
     this.state = {
-      t: context.t,
       timecard: null
     }
   }
@@ -47,101 +50,69 @@ class ClockIn extends React.Component {
   }
 
   getUserTimeCard = () => {
-    makeFetchRequest(token => {
-      fetch(api.timecard.getActive, {
+    dispatchFetchRequest(api.timecard.mostRecent, {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        }
-      })
-        .then(response => response.json())
-        .then(res => {
-          this.setState({
-            timecard: res
-          })
+        headers: {}
+      },
+      response => {
+        response.json().then(data => {
+          this.setState({ timecard: data })
         })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+      }).then()
   }
 
   handleClockIn = () => {
-    makeFetchRequest(token => {
-      fetch(api.timecard.clockin, {
+    dispatchFetchRequest(api.timecard.clockin, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
         }
-      })
-        .then(response => response.json())
-        .then(res => {
-          if (Object.keys(res).length > 0) {
-            this.props.navigation.navigate('LoginSuccess')
-          } else {
-            alert('pls try again')
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+      },
+      response => {
+        successMessage('Clocked in')
+        this.props.navigation.navigate('LoginSuccess')
+      }).then()
   }
 
   handleClockOut = () => {
-    makeFetchRequest(token => {
-      fetch(api.timecard.clockout, {
+    dispatchFetchRequest(api.timecard.clockout, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
         }
-      })
-        .then(response => response.json())
-        .then(res => {
-          if (Object.keys(res).length > 0) {
-            this.props.navigation.navigate('LoginSuccess')
-          } else {
-            alert(res.error)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+      },
+      response => {
+        successMessage('Clocked out')
+        this.props.navigation.navigate('LoginSuccess')
+      }).then()
   }
 
   render() {
-    const { t } = this.state
+    const { t } = this.context
+    const { timecard } = this.state
 
     /**
      * This check exists to circumvent the issue that the first render() call hasn't set the this.state.timecard object yet.
      * https://stackoverflow.com/questions/50082423/why-is-render-being-called-twice-in-reactnative
      */
-    if (!this.state.timecard) {
-      return <Text>Loading...</Text>
+    if (!timecard) {
+      return (
+        <View style={[styles.container]}>
+          <ActivityIndicator size="large" color="#ccc"/>
+        </View>
+      )
     }
 
-    let timeCardStatus = this.state.timecard.timeCardStatus
+    let timeCardStatus = timecard.timeCardStatus
     let authClientUserName =
       this.props.navigation.state.params !== undefined &&
       this.props.navigation.state.params.authClientUserName
-
-    let clockedIn = null
-
-    if (timeCardStatus === 'ACTIVE') {
-      let clockIn = this.state.timecard.clockIn
-      let index = clockIn.indexOf('+')
-      clockedIn = formatDate(clockIn)
-    }
 
     return (
       <DismissKeyboard>
@@ -178,12 +149,32 @@ class ClockIn extends React.Component {
               <View style={{ flex: 1 }}>
                 <Text style={styles.fieldTitle}>{t('timeCardStatus')}:</Text>
               </View>
-              <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end' }}>
-                  {timeCardStatus} {clockedIn != null ? `at ${clockedIn}` : ''}
-                </Text>
+              <View style={{flex: 3}}>
+                <Text style={{alignSelf: 'flex-end'}}>{timecard.timeCardStatus}</Text>
               </View>
             </View>
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.fieldTitle}>
+                  {t('clockInTime')}:
+                </Text>
+              </View>
+              <View style={{flex: 3}}>
+                <Text style={{alignSelf: 'flex-end'}}>{timecard.clockIn != null ? `${formatDate(timecard.clockIn)}` : ''}</Text>
+              </View>
+            </View>
+            { timeCardStatus === 'COMPLETE' && (
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.fieldTitle}>
+                    {t('clockOutTime')}:
+                  </Text>
+                </View>
+                <View style={{flex: 3}}>
+                  <Text style={{alignSelf: 'flex-end'}}>{timecard.clockOut != null ? `${formatDate(timecard.clockOut)}` : ''}</Text>
+                </View>
+              </View>
+            )}
           </View>
 
           <View style={[{ flex: 3, alignItems: 'center' }]}>

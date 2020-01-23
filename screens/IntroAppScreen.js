@@ -9,7 +9,8 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from '../styles'
-import { doLogout } from '../actions'
+import {doLogout} from '../actions'
+import {getToken} from "../constants/Backend";
 
 class IntroAppScreen extends React.Component {
   static navigationOptions = {
@@ -32,19 +33,10 @@ class IntroAppScreen extends React.Component {
   }
 
   isTokenAlive = async () => {
-    let token = await AsyncStorage.getItem('clientusrToken')
-
-    if (token == null) {
-      token = await AsyncStorage.getItem('token')
-    }
-
-    const tokenObj = JSON.parse(token)
+    const tokenObj = await getToken()
 
     if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {
       this.props.navigation.navigate('LoginSuccess')
-    } else if (tokenObj == null) {
-      this.props.dispatch(doLogout())
-      this.props.navigation.navigate('Login')
     } else {
       this.props.dispatch(doLogout())
       this.props.navigation.navigate('Login')

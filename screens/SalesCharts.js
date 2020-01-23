@@ -39,12 +39,15 @@ class SalesCharts extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-    this.tooltipRef = React.createRef(null)
 
     context.localize({
       en: {
         salesDashboardTitle: 'Sales Dashboard',
         todaySales: "Today's Sales",
+        rangedSalesTitle: 'Weekly Sales',
+        customerCountTitle: 'Customer Count',
+        averageSpendingTitle: 'Average Customer Spending',
+        salesDistributionTitle: 'Sales by Month',
         product: 'Product',
         quantity: 'Quantity',
         amount: 'Amount',
@@ -54,6 +57,10 @@ class SalesCharts extends React.Component {
       zh: {
         salesDashboardTitle: '銷售總覽',
         todaySales: '今日營業額',
+        rangedSalesTitle: '一週銷售圖',
+        customerCountTitle: '來客數量圖',
+        averageSpendingTitle: '客單數圖',
+        salesDistributionTitle: '年度銷售圖',
         product: '產品',
         quantity: '總數量',
         amount: '金額',
@@ -61,17 +68,117 @@ class SalesCharts extends React.Component {
         noSalesData: '目前沒有銷售資料'
       }
     })
-
-    this.state = {
-      t: context.t,
-      dataArr: []
-    }
   }
 
   componentDidMount() {
     this.props.getRangedSalesReport()
     this.props.getSalesDistributionReport()
     this.props.getCustomerCountReport()
+  }
+
+  generateRangedSalesChart = (rangedSalesReport) => {
+
+    let rangedSalesDataObj = {
+      color: 'orange',
+      seriesName: 'rangedSales',
+      data: []
+    }
+
+    rangedSalesReport.salesByRange.map(stats => {
+      rangedSalesDataObj.data.push({
+        x: stats.formattedDate,
+        y: stats.total
+      })
+    })
+
+    return [ rangedSalesDataObj ]
+  }
+
+  generateCustomerStatsChart = (customerStatsReport) => {
+
+    let customerCountDataObj = {
+      color: 'orange',
+      seriesName: 'customerCount',
+      data: []
+    }
+
+    let customerAvgSpendingDataObj = {
+      color: 'orange',
+      seriesName: 'averageSpending',
+      data: []
+    }
+
+    let customerCountLastYearDataObj = {
+      color: 'gray',
+      seriesName: 'customerCountLastYr',
+      data: []
+    }
+
+    let customerAvgSpendingLastYearDataObj = {
+      color: 'gray',
+      seriesName: 'averageSpendingLastYr',
+      data: []
+    }
+
+    customerStatsReport.customerStatsThisMonth.map(stats => {
+      customerCountDataObj.data.push({
+        x: stats.date,
+        y: stats.customerCount
+      })
+
+      customerAvgSpendingDataObj.data.push({
+        x: stats.date,
+        y: stats.averageSpending
+      })
+    })
+
+    customerStatsReport.customerStatsThisMonthLastYear.map(stats => {
+      customerCountLastYearDataObj.data.push({
+        x: stats.date,
+        y: stats.customerCount
+      })
+
+      customerAvgSpendingLastYearDataObj.data.push({
+        x: stats.date,
+        y: stats.averageSpending
+      })
+    })
+
+    const customerCountData = [customerCountDataObj, customerCountLastYearDataObj]
+    const customerAvgSpendingData = [customerAvgSpendingDataObj, customerCountLastYearDataObj]
+
+    return { countData: customerCountData, avgSpendingData: customerAvgSpendingData }
+  }
+
+  generateSalesDistribution = (salesDistributionReport) => {
+
+    let yearlySalesDataObj = {
+      color: 'orange',
+      seriesName: 'salesByMonth',
+      data: []
+    }
+
+    let yearlySalesLastYearDataObj = {
+      color: 'gray',
+      seriesName: 'salesByMonthLastYr',
+      data: []
+    }
+
+    salesDistributionReport.salesByMonth.map(sales => {
+      yearlySalesDataObj.data.push({
+        x: sales.month,
+        y: sales.total
+      })
+    })
+
+    salesDistributionReport.salesByMonthLastYear.map(sales => {
+      yearlySalesLastYearDataObj.data.push({
+        x: sales.month,
+        y: sales.total
+      })
+    })
+
+    return [ yearlySalesDataObj, yearlySalesLastYearDataObj ]
   }
 
   render() {
@@ -84,225 +191,34 @@ class SalesCharts extends React.Component {
       haveError,
       haveSDData
     } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
-    let data = {}
-    data.labels = ['']
-    data.datasets = []
-    let innerObj = {}
-    innerObj.data = [0]
+    const containSalesData = haveData && getrangedSalesReport.salesByRange !== undefined
 
-    const containSalesData =
-      haveData &&
-      getrangedSalesReport.salesByRange !== undefined &&
-      getrangedSalesReport.salesByRange.length > 0
+    // ranged sales
+    let rangedSalesData = []
 
     if (containSalesData) {
-      for (var i = 0; i < getrangedSalesReport.salesByRange.length; i++) {
-        data.labels.push(getrangedSalesReport.salesByRange[i].formattedDate)
-        innerObj.data.push(getrangedSalesReport.salesByRange[i].total)
-      }
+      rangedSalesData = this.generateRangedSalesChart(getrangedSalesReport);
     }
-    data.datasets.push(innerObj)
-    //# react ative chart kit*/
 
-    // react native pure chart
-    let weeklySales = []
-    let weeklySalesObj = { color: 'orange', seriesName: 'weeklySales' }
-    weeklySalesObj.data = []
-
-    let lineColors = ['orange', 'dark blue']
-    let series = ['series1', 'series2', 'series3', 'series4']
-    if (containSalesData) {
-      for (var i = 0; i < getrangedSalesReport.salesByRange.length; i++) {
-        weeklySalesObj.data[0] = {
-          x: getrangedSalesReport.salesByRange[0].formattedDate,
-          y: 0
-        }
-
-        weeklySalesObj.data.push({
-          x: getrangedSalesReport.salesByRange[i].formattedDate,
-          y: getrangedSalesReport.salesByRange[i].total
-        })
-      }
-    }
-    weeklySales.push(weeklySalesObj)
-
-    // react native pure chart for (Monthly Customer Count)
-    let dblLinesChartCustomerCountData = []
-    let dblLinesChartCustomerCountDataObj = {
-      color: 'orange',
-      seriesName: 'customerCount'
-    }
-    dblLinesChartCustomerCountDataObj.data = []
-
-    let dblLinesChartCustomerCountLastYearDataObj = {
-      color: 'dark blue',
-      seriesName: 'customerCountLastYr'
-    }
-    dblLinesChartCustomerCountLastYearDataObj.data = []
+    // customer stats
+    let custCountData = [], custAvgSpendingData = []
 
     if (this.props.haveCCData) {
-      customercountReport.customerStatsThisMonth.map(thismonthData => {
-        // dblLinesChartCustomerCountDataObj.data[0] = {
-        //   x: thismonthData.date,
-        //   y: 0
-        // }
-
-        dblLinesChartCustomerCountDataObj.data.push({
-          x: thismonthData.date,
-          y: thismonthData.customerCount
-        })
-
-        if (customercountReport.customerStatsThisMonthLastYear.length == 0) {
-          dblLinesChartCustomerCountLastYearDataObj.data.push({
-            x: thismonthData.date,
-            y: 0
-          })
-        }
-      })
-
-      customercountReport.customerStatsThisMonthLastYear.map(
-        thismonthLastYearData => {
-          dblLinesChartCustomerCountLastYearDataObj.data[0] = {
-            x: thismonthLastYearData.date,
-            y: 0
-          }
-
-          dblLinesChartCustomerCountLastYearDataObj.data.push({
-            x: thismonthLastYearData.date,
-            y: thismonthLastYearData.customerCount
-          })
-        }
-      )
+      const { countData, avgSpendingData } = this.generateCustomerStatsChart(customercountReport);
+      custCountData = countData
+      custAvgSpendingData = avgSpendingData
     }
-    dblLinesChartCustomerCountData.push(dblLinesChartCustomerCountDataObj)
-    dblLinesChartCustomerCountData.push(
-      dblLinesChartCustomerCountLastYearDataObj
-    )
 
-    // react native pure chart for (Average Customer Spending)
-    let dblLinesChartAvgSpendingData = []
-    let dblLinesChartAvgSpendingDataObj = {
-      color: 'orange',
-      seriesName: 'averageSpending'
-    }
-    dblLinesChartAvgSpendingDataObj.data = []
-
-    let dblLinesChartAvgSpendingDataLastYearDataObj = {
-      color: 'dark blue',
-      seriesName: 'averageSpendingLastYr'
-    }
-    dblLinesChartAvgSpendingDataLastYearDataObj.data = []
-
-    if (this.props.haveCCData) {
-      customercountReport.customerStatsThisMonth.map(thismonthData => {
-        // dblLinesChartAvgSpendingDataObj.data[0] = {
-        //   x: thismonthData.date,
-        //   y: 0
-        // }
-
-        dblLinesChartAvgSpendingDataObj.data.push({
-          x: thismonthData.date,
-          y: thismonthData.averageSpending
-        })
-
-        if (customercountReport.customerStatsThisMonthLastYear.length == 0) {
-          dblLinesChartAvgSpendingDataLastYearDataObj.data.push({
-            x: thismonthData.date,
-            y: 0
-          })
-        }
-      })
-
-      customercountReport.customerStatsThisMonthLastYear.map(
-        thismonthLastYearData => {
-          dblLinesChartAvgSpendingDataLastYearDataObj.data[0] = {
-            x: thismonthLastYearData.date,
-            y: 0
-          }
-
-          dblLinesChartAvgSpendingDataLastYearDataObj.data.push({
-            x: thismonthLastYearData.date,
-            y: thismonthLastYearData.averageSpending
-          })
-        }
-      )
-    }
-    dblLinesChartAvgSpendingData.push(dblLinesChartAvgSpendingDataObj)
-    dblLinesChartAvgSpendingData.push(
-      dblLinesChartAvgSpendingDataLastYearDataObj
-    )
-    //#double line chart
-
-    // react native pure chart for (Yearly Sales By Month)
-    let yearlySalesByMonth = []
-    let yearlySalesByMonthObj = { color: 'orange', seriesName: 'salesByMonth' }
-    yearlySalesByMonthObj.data = []
-
-    let yearlySalesByMonthLastYearObj = {
-      color: 'dark blue',
-      seriesName: 'salesByMonthLastYr'
-    }
-    yearlySalesByMonthLastYearObj.data = []
+    // sales distribution
+    let salesDistributionData = []
 
     if (haveSDData) {
-      salesdistributionReport.salesByMonth.map(thismonthData => {
-        yearlySalesByMonthObj.data[0] = {
-          x: thismonthData.month,
-          y: 0
-        }
-
-        yearlySalesByMonthObj.data.push({
-          x: thismonthData.month,
-          y: thismonthData.total
-        })
-
-        if (salesdistributionReport.salesByMonthLastYear.length == 0) {
-          yearlySalesByMonthLastYearObj.data.push({
-            x: thismonthData.month,
-            y: 0
-          })
-        }
-      })
-
-      salesdistributionReport.salesByMonthLastYear.map(
-        thismonthLastYearData => {
-          yearlySalesByMonthLastYearObj.data[0] = {
-            x: thismonthLastYearData.month,
-            y: 0
-          }
-
-          yearlySalesByMonthLastYearObj.data.push({
-            x: thismonthLastYearData.month,
-            y: thismonthLastYearData.total
-          })
-        }
-      )
-    }
-    yearlySalesByMonth.push(yearlySalesByMonthObj)
-    yearlySalesByMonth.push(yearlySalesByMonthLastYearObj)
-    //#double line chart
-
-    const screenWidth = Dimensions.get('window').width
-    const chartConfig = {
-      backgroundColor: '#e26a00',
-      backgroundGradientFrom: '#fb8c00',
-      backgroundGradientTo: '#ffa726',
-      decimalPlaces: 2, // optional, defaults to 2dp
-      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-      labelColor: (opacity = 0) => `rgba(255, 255, 255, ${opacity})`,
-      style: {
-        borderRadius: 16
-      },
-      propsForDots: {
-        r: '6',
-        strokeWidth: '2',
-        stroke: '#ffa726'
-      }
+      salesDistributionData = this.generateSalesDistribution(salesdistributionReport)
     }
 
-    Item = ({ salesByPrdData }) => {
+    const Item = ({ salesByPrdData }) => {
       return (
         <View
           style={[styles.flex_dir_row, styles.paddingTopBtn8]}
@@ -361,7 +277,7 @@ class SalesCharts extends React.Component {
     }
 
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View style={[styles.container, styles.nomgrBottom]}>
           <BackBtn />
           <Text
@@ -422,9 +338,9 @@ class SalesCharts extends React.Component {
                 { fontSize: 14 }
               ]}
             >
-              Weekly Sales
+              {t('rangedSalesTitle')}
             </Text>
-            <PureChart data={weeklySales} type="line" width={'100%'} />
+            <PureChart data={rangedSalesData} type="bar" width={'100%'} />
           </View>
 
           <View style={(styles.paddingTopBtn20, { marginLeft: -15 })}>
@@ -437,13 +353,13 @@ class SalesCharts extends React.Component {
                 { fontSize: 14 }
               ]}
             >
-              Monthly Customer Count
+              {t('customerCountTitle')}
             </Text>
             {
             	this.props.haveCCData && (
               <PureChart
-                data={dblLinesChartCustomerCountData}
-                type="line"
+                data={custCountData}
+                type="bar"
                 height={120}
                 width={'95%'}
                 style={{ backgroundColor: 'gold' }}
@@ -461,14 +377,13 @@ class SalesCharts extends React.Component {
                 { fontSize: 14 }
               ]}
             >
-              Average Customer Spending
+              {t('averageSpendingTitle')}
             </Text>
             {
             	this.props.haveCCData && (
-            		<PureChart 
-            			data={dblLinesChartAvgSpendingData} 
-            			//data={dblLinesChartData}
-            			type='line'
+            		<PureChart
+            			data={custAvgSpendingData}
+            			type='bar'
             			width={'100%'}
                 	/>
               )}
@@ -484,10 +399,10 @@ class SalesCharts extends React.Component {
                 { fontSize: 14 }
               ]}
             >
-              Yearly Sales By Months
+              {t('salesDistributionTitle')}
             </Text>
             {haveSDData && (
-              <PureChart data={yearlySalesByMonth} type="line" width={'100%'} />
+              <PureChart data={salesDistributionData} type="bar" width={'100%'} />
             )}
           </View>
         </View>

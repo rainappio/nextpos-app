@@ -11,7 +11,7 @@ export default class CheckBoxGroupObjPick extends React.Component {
       customValue,
       optionName,
       customarr,
-      meta: { error, toched, valid },
+      meta: { error, touched, valid },
       ...rest
     } = this.props
     const arr = [...this.props.input.value]
@@ -41,8 +41,9 @@ export default class CheckBoxGroupObjPick extends React.Component {
               //checked={value.length !== 0 && value.includes(ca.id)}
               style={{ position: 'absolute', right: 0 }}
             >
-              <Text>{ca.name == undefined ? ca.optionValue : ca.name}</Text>
+              <Text>{ca.name === undefined ? ca.optionValue : ca.name}</Text>
             </Checkbox>
+            {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
           </View>
         )
       })

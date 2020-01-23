@@ -22,7 +22,7 @@ class OrderFormIV extends React.Component {
     context.localize({
       en: {
         productOptions: 'Select Product Option(s)',
-        quantity: 'Quanaity'
+        quantity: 'Quantity'
       },
       zh: {
         productOptions: '選擇產品客制',
@@ -54,16 +54,18 @@ class OrderFormIV extends React.Component {
             )}
 
           {product.productOptions !== undefined &&
-            product.productOptions.map(prdOption => {
-              var ArrForTrueState = []
-              prdOption.optionValues.map((optVal, x) => {
-                ArrForTrueState.push({
-                  optionName: prdOption.optionName,
-                  optionValue: optVal.value,
-                  optionPrice: optVal.price,
-                  id: prdOption.versionId + x
-                })
+          product.productOptions.map(prdOption => {
+            const requiredOption = prdOption.required
+
+            var ArrForTrueState = []
+            prdOption.optionValues.map((optVal, x) => {
+              ArrForTrueState.push({
+                optionName: prdOption.optionName,
+                optionValue: optVal.value,
+                optionPrice: optVal.price,
+                id: prdOption.versionId + x
               })
+            })
 
               return (
                 <View
@@ -88,32 +90,53 @@ class OrderFormIV extends React.Component {
 
                         return (
                           <View key={prdOption.id + ix}>
-                            <Field
-                              name={prdOption.optionName}
-                              component={RadioItemObjPick}
-                              customValueOrder={
-                                optionObj !== undefined && optionObj
-                              }
-                              optionName={optVal.value}
-                              validate={isRequired}
-                            />
+                            {requiredOption ? (
+                              <Field
+                                name={prdOption.optionName}
+                                component={RadioItemObjPick}
+                                customValueOrder={
+                                  optionObj !== undefined && optionObj
+                                }
+                                optionName={optVal.value}
+                                validate={isRequired}
+                              />
+                            ) : (
+                              <Field
+                                name={prdOption.optionName}
+                                component={RadioItemObjPick}
+                                customValueOrder={
+                                  optionObj !== undefined && optionObj
+                                }
+                                optionName={optVal.value}
+                              />
+                            )}
                           </View>
                         )
                       })}
                     </View>
                   ) : (
-                    <View key={prdOption.id}>
-                      <Field
-                        name={prdOption.optionName}
-                        component={CheckBoxGroupObjPick}
-                        //customarr={prdOption.optionValues}
-                        customarr={ArrForTrueState}
-                      />
+                    <View
+                      key={prdOption.id}
+                    >
+                      {requiredOption ? (
+                        <Field
+                          name={prdOption.optionName}
+                          component={CheckBoxGroupObjPick}
+                          customarr={ArrForTrueState}
+                          validate={isRequired}
+                        />
+                      ) : (
+                        <Field
+                          name={prdOption.optionName}
+                          component={CheckBoxGroupObjPick}
+                          customarr={ArrForTrueState}
+                        />
+                      )}
                     </View>
                   )}
                 </View>
               )
-            })}
+          })}
 
           <View style={styles.paddingTopBtn20}>
             <Field
