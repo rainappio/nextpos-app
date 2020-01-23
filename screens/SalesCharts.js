@@ -104,7 +104,6 @@ class SalesCharts extends React.Component {
       }
     }
     data.datasets.push(innerObj)
-
     //# react ative chart kit*/
 
     // react native pure chart
@@ -129,10 +128,7 @@ class SalesCharts extends React.Component {
     }
     weeklySales.push(weeklySalesObj)
 
-    //=============================================
-
     // react native pure chart for (Monthly Customer Count)
-
     let dblLinesChartCustomerCountData = []
     let dblLinesChartCustomerCountDataObj = {
       color: 'orange',
@@ -147,18 +143,18 @@ class SalesCharts extends React.Component {
     dblLinesChartCustomerCountLastYearDataObj.data = []
 
     if (this.props.haveCCData) {
-      customercountReport.customerCountThisMonth.map(thismonthData => {
-        dblLinesChartCustomerCountDataObj.data[0] = {
-          x: thismonthData.date,
-          y: 0
-        }
+      customercountReport.customerStatsThisMonth.map(thismonthData => {
+        // dblLinesChartCustomerCountDataObj.data[0] = {
+        //   x: thismonthData.date,
+        //   y: 0
+        // }
 
         dblLinesChartCustomerCountDataObj.data.push({
           x: thismonthData.date,
           y: thismonthData.customerCount
         })
 
-        if (customercountReport.customerCountThisMonthLastYear.length == 0) {
+        if (customercountReport.customerStatsThisMonthLastYear.length == 0) {
           dblLinesChartCustomerCountLastYearDataObj.data.push({
             x: thismonthData.date,
             y: 0
@@ -166,7 +162,7 @@ class SalesCharts extends React.Component {
         }
       })
 
-      customercountReport.customerCountThisMonthLastYear.map(
+      customercountReport.customerStatsThisMonthLastYear.map(
         thismonthLastYearData => {
           dblLinesChartCustomerCountLastYearDataObj.data[0] = {
             x: thismonthLastYearData.date,
@@ -185,6 +181,58 @@ class SalesCharts extends React.Component {
       dblLinesChartCustomerCountLastYearDataObj
     )
 
+    // react native pure chart for (Average Customer Spending)
+    let dblLinesChartAvgSpendingData = []
+    let dblLinesChartAvgSpendingDataObj = {
+      color: 'orange',
+      seriesName: 'averageSpending'
+    }
+    dblLinesChartAvgSpendingDataObj.data = []
+
+    let dblLinesChartAvgSpendingDataLastYearDataObj = {
+      color: 'dark blue',
+      seriesName: 'averageSpendingLastYr'
+    }
+    dblLinesChartAvgSpendingDataLastYearDataObj.data = []
+
+    if (this.props.haveCCData) {
+      customercountReport.customerStatsThisMonth.map(thismonthData => {
+        // dblLinesChartAvgSpendingDataObj.data[0] = {
+        //   x: thismonthData.date,
+        //   y: 0
+        // }
+
+        dblLinesChartAvgSpendingDataObj.data.push({
+          x: thismonthData.date,
+          y: thismonthData.averageSpending
+        })
+
+        if (customercountReport.customerStatsThisMonthLastYear.length == 0) {
+          dblLinesChartAvgSpendingDataLastYearDataObj.data.push({
+            x: thismonthData.date,
+            y: 0
+          })
+        }
+      })
+
+      customercountReport.customerStatsThisMonthLastYear.map(
+        thismonthLastYearData => {
+          dblLinesChartAvgSpendingDataLastYearDataObj.data[0] = {
+            x: thismonthLastYearData.date,
+            y: 0
+          }
+
+          dblLinesChartAvgSpendingDataLastYearDataObj.data.push({
+            x: thismonthLastYearData.date,
+            y: thismonthLastYearData.averageSpending
+          })
+        }
+      )
+    }
+    dblLinesChartAvgSpendingData.push(dblLinesChartAvgSpendingDataObj)
+    dblLinesChartAvgSpendingData.push(
+      dblLinesChartAvgSpendingDataLastYearDataObj
+    )
     //#double line chart
 
     // react native pure chart for (Yearly Sales By Month)
@@ -234,7 +282,6 @@ class SalesCharts extends React.Component {
     }
     yearlySalesByMonth.push(yearlySalesByMonthObj)
     yearlySalesByMonth.push(yearlySalesByMonthLastYearObj)
-
     //#double line chart
 
     const screenWidth = Dimensions.get('window').width
@@ -392,7 +439,8 @@ class SalesCharts extends React.Component {
             >
               Monthly Customer Count
             </Text>
-            {this.props.haveCCData && (
+            {
+            	this.props.haveCCData && (
               <PureChart
                 data={dblLinesChartCustomerCountData}
                 type="line"
@@ -415,12 +463,15 @@ class SalesCharts extends React.Component {
             >
               Average Customer Spending
             </Text>
-            {/*<PureChart 
-							data={doubleLinesChartData} 
-							//data={dblLinesChartData}
-							type='line'
-							width={'100%'}
-    					/>*/}
+            {
+            	this.props.haveCCData && (
+            		<PureChart 
+            			data={dblLinesChartAvgSpendingData} 
+            			//data={dblLinesChartData}
+            			type='line'
+            			width={'100%'}
+                	/>
+              )}
           </View>
 
           <View style={styles.paddingTopBtn20}>
@@ -486,7 +537,6 @@ class SalesCharts extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  checkS: state,
   getrangedSalesReport: state.getrangedsalesreport.data,
   salesdistributionReport: state.salesdistributionreport.data,
   customercountReport: state.customercountreport.data,

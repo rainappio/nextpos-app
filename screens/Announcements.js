@@ -46,25 +46,29 @@ class Announcements extends React.Component {
   }
 
   handleItemOrderUpdate = (key, currentOrder, dataArr) => {
-    dataArr[key].order = currentOrder.indexOf(key)
-    const announcementId = dataArr[key].id
-    dispatchFetchRequest(
-      api.announcements.update(announcementId),
-      {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(dataArr[key])
-      },
-      response => {
-        successMessage('Saved')
-        this.props.navigation.navigate('Announcements')
-        this.props.getAnnouncements()
-      }
-    ).then()
+    for(var i=0;i<currentOrder.length;i++){			
+			if(''+i !== currentOrder[i]){
+				dataArr[i].order = currentOrder[i];
+			
+				dispatchFetchRequest(
+      		api.announcements.update(dataArr[i].id),
+      		{
+        		method: 'POST',
+        		withCredentials: true,
+        		credentials: 'include',
+        		headers: {
+          		'Content-Type': 'application/json'
+        		},
+        		body: JSON.stringify(dataArr[i])
+      		},
+      		response => {
+        		successMessage('Saved')
+        		this.props.navigation.navigate('Announcements')
+        		this.props.getAnnouncements()
+      		}
+    		).then()
+			}
+		}
   }
 
   if(isLoading) {
@@ -78,8 +82,7 @@ class Announcements extends React.Component {
     const { navigation, getannouncements, isLoading, haveError } = this.props
     // const { t } = this.props.screenProps
 
-    return (
-    	
+    return (    	
       <View style={styles.container_nocenterCnt}>
       	<View>
         	<BackBtn />
@@ -104,11 +107,10 @@ class Announcements extends React.Component {
 
         	{Object.keys(getannouncements).length !== 0 && (
           	<SortableList
-            	// style={styles.list}
-            	// contentContainerStyle={styles.contentContainer}
-            	data={getannouncements.results}
+             	data={getannouncements.results}
             	vertical={true}
             	renderRow={this._renderRow}
+            	scrollEnabled={false}
             	onReleaseRow={(key, currentOrder) =>
               	this.handleItemOrderUpdate(
                 	key,
@@ -118,7 +120,6 @@ class Announcements extends React.Component {
             	}
           	/>
         	)}
-      
     	</View>
     )
   }

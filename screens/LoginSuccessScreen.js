@@ -15,7 +15,8 @@ import {
   doLogout,
   formatDateFromMillis,
   formatDateObj,
-  getClientUsr
+  getClientUsr,
+  getAnnouncements
 } from '../actions'
 import styles from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
@@ -23,6 +24,8 @@ import { NavigationEvents } from 'react-navigation'
 import { getToken } from '../constants/Backend'
 import { LocaleContext } from '../locales/LocaleContext'
 import { Avatar } from 'react-native-elements'
+import Markdown from 'react-native-markdown-renderer'
+import IonIcon from 'react-native-vector-icons/Ionicons'
 
 class LoginSuccessScreen extends React.Component {
   static navigationOptions = {
@@ -69,7 +72,7 @@ class LoginSuccessScreen extends React.Component {
         validUntil: '有效登入至:'
       }
     })
-
+		this.props.getAnnouncements()
     // <NavigationEvent> component in the render function takes care of loading user info.
   }
 
@@ -101,7 +104,8 @@ class LoginSuccessScreen extends React.Component {
       navigation,
       currentUser,
       isLoading,
-      haveError
+      haveError,
+      getannouncements
     } = this.props
     const { t } = this.props.screenProps
     const { username, loggedIn, tokenExpiry } = this.state
@@ -137,7 +141,13 @@ class LoginSuccessScreen extends React.Component {
           style={[styles.container, styles.nomgrBottom]}
           opacity={this.state.mainViewOpacity}
         >
-          <View style={{ marginLeft: 4, marginRight: 4 }}>
+          <View style={[{ marginLeft: 4, marginRight: 4 },styles.flex_dir_row]}>
+            <View
+              style={[
+                styles.margin_15,
+                styles.half_width,
+              ]}
+            >
             <Image
               source={
                 __DEV__
@@ -146,8 +156,14 @@ class LoginSuccessScreen extends React.Component {
               }
               style={styles.welcomeImage}
             />
+            </View>
 
-            <View style={{ alignItems: 'flex-end', marginTop: -30 }}>
+            <View
+            	style={[
+                styles.margin_15,
+                styles.half_width,
+                {alignItems: 'flex-end'}
+              ]}>
               <Avatar
                 rounded
                 title={username != null && username.charAt(0)}
@@ -159,7 +175,7 @@ class LoginSuccessScreen extends React.Component {
             </View>
           </View>
 
-          <View>
+          <View style={{marginLeft: '3%'}}>
             <Text style={[styles.text, styles.textBig, styles.orange_color]}>
               {t('welcome')} {currentUser.displayName}
             </Text>
@@ -171,29 +187,32 @@ class LoginSuccessScreen extends React.Component {
             </Text>
           </View>
 
-          <View style={[styles.mgrtotop12, styles.jc_alignIem_center]}>
-            <TouchableOpacity
-              style={styles.fullWidth}
-              onPress={() => this.props.navigation.navigate('TablesSrc')}
+          <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+            <View
+              style={[
+                styles.margin_15,
+                styles.grayBg,
+                styles.jc_alignIem_center,
+                styles.paddTop_30,
+                styles.paddBottom_30,
+                styles.borderRadius4,
+                {width: '96%'}
+              ]}
             >
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.jc_alignIem_center
-                ]}
-              >
-                <View style={[styles.flex_dir_row, styles.jc_alignIem_center]}>
-                  <Icon
-                    name="md-people"
-                    size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
-                  />
-                  <Text style={styles.centerText}>{t('menu.tables')}</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+            	<TouchableOpacity              	
+              	onPress={() => this.props.navigation.navigate('TablesSrc')}
+            		>
+              	<View>
+                	<Icon
+                  	name="md-people"
+                  	size={40}
+                  	color="#f18d1a"
+                  	style={[styles.centerText, styles.margin_15]}
+                	/>
+                	<Text style={styles.centerText}>{t('menu.tables')}</Text>
+              	</View>
+            	</TouchableOpacity>
+          	</View>
           </View>
 
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
@@ -252,6 +271,60 @@ class LoginSuccessScreen extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
+
+          <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+            <View
+              style={[
+                styles.margin_15,
+                {width: '96%'}
+              ]}
+            >
+            	<Text
+              	style={[
+                	styles.textMedium,
+                	styles.mgrbtn20
+              	]}>            	
+            		Announcements
+            	</Text>
+             	{
+            		getannouncements.results !== undefined &&
+            		getannouncements.results.map(getannoc => 
+									<View
+            				style={[
+              				{ backgroundColor: '#f1f1f1', padding: 20 },
+              				styles.mgrbtn20
+            				]}
+            				key={getannoc.id}
+          					>
+          					<View style={styles.flex_dir_row}>
+          						<View style={{marginRight: 17}}>
+          							<IonIcon
+              						name={getannoc.titleIcon}
+              						size={31}
+              						color="#f18d1a"
+              						//onPress={() => fields.push()}
+            						/>
+          						</View>
+          						<View>
+												<Text style={[
+                						styles.orange_color,
+                						styles.textMedium,
+              						]}>
+              						{getannoc.title} 
+              					</Text>              					
+          						</View>
+          					</View>          					
+            				
+            				<Markdown style={styles.markDownStyle}>
+              				{getannoc.markdownContent}
+              				{'\n'}
+              			</Markdown>            			
+          				</View>
+            		)
+            	}
+            </View>
+          </View>
+
         </View>
       </ScrollView>
     )
@@ -259,11 +332,11 @@ class LoginSuccessScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  chkS: state,
   currentUser: state.clientuser.data,
   haveData: state.clientuser.haveData,
   haveError: state.clientuser.haveError,
-  isLoading: state.clientuser.loading
+  isLoading: state.clientuser.loading,
+	getannouncements: state.announcements.data,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -271,7 +344,8 @@ const mapDispatchToProps = dispatch => ({
   getCurrentUser: name => dispatch(getClientUsr(name)),
   doLogout: () => {
     dispatch(doLogout())
-  }
+  },
+  getAnnouncements: () => dispatch(getAnnouncements())
 })
 
 export default connect(
