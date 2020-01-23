@@ -37,15 +37,8 @@ export const getCustomerCountReport = () => {
         })
       },
       response => {
-        dispatch(fetchCustomerCountReportFailure(error))
+        dispatch(fetchCustomerCountReportFailure(response))
       }
     ).then()
   }
-}
-
-function handleErrors (response) {
-  if (!response.ok) {
-    throw Error(response.statusText)
-  }
-  return response
 }

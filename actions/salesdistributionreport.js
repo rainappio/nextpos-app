@@ -37,15 +37,8 @@ export const getSalesDistributionReport = () => {
         })
       },
       response => {
-        dispatch(fetchSalesDistributionReportFailure(error))
+        dispatch(fetchSalesDistributionReportFailure(response))
       }
     ).then()
   }
-}
-
-function handleErrors (response) {
-  if (!response.ok) {
-    throw Error(response.statusText)
-  }
-  return response
 }

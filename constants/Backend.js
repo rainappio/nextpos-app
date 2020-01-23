@@ -132,7 +132,8 @@ export const api = {
   report: {
     getrangedSalesReport: `${apiRoot}/reporting/rangedSalesReport`,
     getsalesDistributionReport: `${apiRoot}/reporting/salesDistribution?`,
-    getcustomerCountReport: `${apiRoot}/reporting/customerCount?`
+    // getcustomerCountReport: `${apiRoot}/reporting/customerCount?`
+    getcustomerCountReport: `${apiRoot}/reporting/customerStats`
   },
   announcements: {
     create: `${apiRoot}/announcements`,
