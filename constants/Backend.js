@@ -35,7 +35,8 @@ export const api = {
   timecard: {
     getActive: `${apiRoot}/timecards/active`,
     clockin: `${apiRoot}/timecards/clockin`,
-    clockout: `${apiRoot}/timecards/clockout`
+    clockout: `${apiRoot}/timecards/clockout`,
+    mostRecent: `${apiRoot}/timecards/mostRecent`
   },
   product: {
     new: `${apiRoot}/products`,
@@ -113,7 +114,8 @@ export const api = {
   shift: {
     open: `${apiRoot}/shifts/open`,
     close: `${apiRoot}/shifts/close`,
-    active: `${apiRoot}/shifts/active`
+    active: `${apiRoot}/shifts/active`,
+    mostRecent: `${apiRoot}/shifts/mostRecent`
   },
   tablelayout: {
     create: `${apiRoot}/tablelayouts`,

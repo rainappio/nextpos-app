@@ -29,14 +29,26 @@ import Markdown from 'react-native-markdown-renderer'
 import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class Announcements extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
+
 
   componentDidMount() {
     this.props.getAnnouncements()
+
+    this.context.localize({
+      en: {
+
+      },
+      zh: {
+
+      }
+    })
   }
 
   _renderRow = ({ data, active }) => {
@@ -46,10 +58,10 @@ class Announcements extends React.Component {
   }
 
   handleItemOrderUpdate = (key, currentOrder, dataArr) => {
-    for(var i=0;i<currentOrder.length;i++){			
+    for(var i=0;i<currentOrder.length;i++){
 			if(''+i !== currentOrder[i]){
 				dataArr[i].order = currentOrder[i];
-			
+
 				dispatchFetchRequest(
       		api.announcements.update(dataArr[i].id),
       		{
@@ -80,22 +92,14 @@ class Announcements extends React.Component {
   }
   render() {
     const { navigation, getannouncements, isLoading, haveError } = this.props
-    // const { t } = this.props.screenProps
+     const { t } = this.context
 
-    return (    	
+    return (
       <View style={styles.container_nocenterCnt}>
       	<View>
         	<BackBtn />
-        	<Text
-          	style={[
-            	styles.welcomeText,
-            	styles.orange_color,
-            	styles.textMedium,
-            	styles.textBold
-          	]}
-        	>
-          	{/*t('settings.workingArea')*/}
-          	Announcements
+        	<Text style={styles.screenTitle}>
+            {t('settings.announcements')}
         	</Text>
 
         	<AddBtn
@@ -204,6 +208,11 @@ class Row extends React.Component {
             style={[styles.flex_dir_row, { paddingTop: 4, marginBottom: 17 }]}
           >
             <View style={{ width: '45%' }}>
+              <IonIcon
+                name={data.titleIcon}
+                size={28}
+                color="#f18d1a"
+              />
               <Text style={{ fontSize: 15 }}>{data.title}</Text>
             </View>
 
@@ -220,13 +229,6 @@ class Row extends React.Component {
                 }
                 style={{ textAlign: 'right', marginRight: 30 }}
               />
-              <IonIcon
-                name={data.titleIcon}
-                size={28}
-                color="#f18d1a"
-                //onPress={() => fields.push()}
-                style={{ position: 'absolute', right: 0 }}
-              />
             </View>
           </View>
 
@@ -237,8 +239,7 @@ class Row extends React.Component {
             ]}
           >
             <Markdown style={styles.markDownStyle}>
-              ### {data.markdownContent}
-              {'\n'}
+              {data.markdownContent}
             </Markdown>
             <Text
               style={{

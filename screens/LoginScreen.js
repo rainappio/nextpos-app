@@ -13,16 +13,20 @@ import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 import { withNavigation } from 'react-navigation'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
+  }
 
-    this.props.screenProps.localize({
+  componentDidMount() {
+    this.context.localize({
       en: {
         login: 'Login'
       },
@@ -31,9 +35,10 @@ class LoginScreen extends React.Component {
       }
     })
   }
+
   render() {
     const { handleSubmit } = this.props
-    const { t } = this.props.screenProps
+    const { t } = this.context
 
     return (
       <DismissKeyboard>

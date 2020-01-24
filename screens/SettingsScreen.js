@@ -56,8 +56,8 @@ class SettingsScreen extends React.Component {
                   onPress={() => this.props.navigation.navigate('Account')}
                 >
                   <View>
-                    <Icon
-                      name="md-lock"
+                    <MaterialIcon
+                      name="account-box"
                       size={40}
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
@@ -226,8 +226,8 @@ class SettingsScreen extends React.Component {
                   onPress={() => this.props.navigation.navigate('TableLayouts')}
                 >
                   <View>
-                    <Icon
-                      name="md-lock"
+                    <MaterialIcon
+                      name="event-seat"
                       size={40}
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
@@ -254,7 +254,7 @@ class SettingsScreen extends React.Component {
                 >
                   <View>
                     <Icon
-                      name="md-lock"
+                      name="md-book"
                       size={40}
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
@@ -290,7 +290,7 @@ class SettingsScreen extends React.Component {
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>Announcements</Text>
+                    <Text style={styles.centerText}>{t('settings.announcements')}</Text>
                   </View>
                 </TouchableOpacity>
               </View>

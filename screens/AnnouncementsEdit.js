@@ -18,11 +18,13 @@ import {
 } from '../constants/Backend'
 import AnnouncementsForm from './AnnouncementsForm'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class AnnouncementsEdit extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
   handleUpdate = values => {
     console.log('handleUpdate hit')
@@ -84,8 +86,9 @@ class AnnouncementsEdit extends React.Component {
   }
 
   render() {
-    const { navigation, announcement } = this.props
-    // const { t } = this.props.screenProps
+    const { navigation } = this.props
+    const { t } = this.context
+
     return (
       <ScrollView>
         <DismissKeyboard>
@@ -99,8 +102,7 @@ class AnnouncementsEdit extends React.Component {
                 styles.textBold
               ]}
             >
-              {/*t('settings.workingArea')*/}
-              Edit Announcements
+              {t('editAnnouncementTitle')}
             </Text>
             <AnnouncementsForm
               isEdit={true}

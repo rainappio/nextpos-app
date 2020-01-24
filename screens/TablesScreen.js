@@ -28,7 +28,7 @@ import OrderItem from './OrderItem'
 import {
   getTableLayouts,
   getShiftStatus,
-  getfetchOrderInflights
+  getfetchOrderInflights, getTablesAvailable,
 } from '../actions'
 import styles from '../styles'
 import {
@@ -60,6 +60,7 @@ class TablesScreen extends React.Component {
     this.props.getTableLayouts()
     this.props.getShiftStatus()
     this.props.getfetchOrderInflights()
+    this.props.getAvailableTables()
 
     this.context.localize({
       en: {
@@ -71,7 +72,9 @@ class TablesScreen extends React.Component {
           openBalance: 'Open Balance',
           open: 'Open',
           cancel: 'Cancel'
-        }
+        },
+        seatingCapacity: 'Seats',
+        availableSeats: 'Vacant'
       },
       zh: {
         noTableLayout: '需要創建至少一個桌面跟一個桌位.',
@@ -81,7 +84,9 @@ class TablesScreen extends React.Component {
           openBalance: '開帳現金',
           open: '開帳',
           cancel: '取消'
-        }
+        },
+        seatingCapacity: '座位',
+        availableSeats: '空位'
       }
     })
   }
@@ -92,6 +97,7 @@ class TablesScreen extends React.Component {
     this.props.getfetchOrderInflights()
     this.props.getTableLayouts()
     this.props.getShiftStatus()
+    this.props.getAvailableTables()
 
     this.setState({ refreshing: false }, () => {
       successMessage('Refreshed')
@@ -115,6 +121,7 @@ class TablesScreen extends React.Component {
         if (response.status === 200) {
           successMessage('Shift opened')
           this.props.dispatch(getShiftStatus())
+          this.setState({ openBalance: 0 })
         }
       })
     })
@@ -195,9 +202,23 @@ class TablesScreen extends React.Component {
       isLoading,
       tablelayouts,
       shiftStatus,
-      ordersInflight
+      ordersInflight,
+      availableTables
     } = this.props
     const { t } = this.state
+
+    const floorCapacity = {}
+
+    availableTables && tablelayouts && tablelayouts.forEach((layout, idx) => {
+      let capacityCount = 0
+      const availableTablesOfLayout = availableTables[layout.id]
+
+      availableTablesOfLayout !== undefined && availableTablesOfLayout.forEach((table, idx2) => {
+        capacityCount += table.capacity
+      })
+
+      floorCapacity[layout.id] = capacityCount
+    })
 
     if (isLoading) {
       return (
@@ -330,20 +351,21 @@ class TablesScreen extends React.Component {
 
             {tablelayouts.map((tblLayout, idx) => (
               <View style={styles.mgrbtn20} key={idx}>
-                <Text
-                  style={[
-                    styles.orange_bg,
-                    styles.whiteColor,
-                    styles.paddingTopBtn8,
-                    styles.centerText,
-                    styles.textMedium
-                  ]}
-                >
-                  {tblLayout.layoutName}
-                </Text>
-
-                {ordersInflight !== undefined &&
-                ordersInflight[tblLayout.id] !== undefined ? (
+                <View style={[styles.sectionBar, {flex: 1}]}>
+                  <Text
+                    style={[styles.sectionBarText, {flex: 4}
+                    ]}
+                  >
+                    {tblLayout.layoutName}
+                  </Text>
+                  <Text style={[styles.sectionBarText, {flex: 1}]}>
+                    {t('seatingCapacity')} {tblLayout.totalCapacity}
+                  </Text>
+                  <Text style={[styles.sectionBarText, {flex: 1}]}>
+                    {t('availableSeats')} {floorCapacity[tblLayout.id]}
+                  </Text>
+                </View>
+                {ordersInflight !== undefined && ordersInflight[tblLayout.id] !== undefined ? (
                   <FlatList
                     data={ordersInflight[tblLayout.id]}
                     renderItem={({ item }) => {
@@ -383,14 +405,16 @@ const mapStateToProps = state => ({
   haveData: state.ordersinflight.haveData,
   haveError: state.ordersinflight.haveError,
   isLoading: state.ordersinflight.loading,
-  shiftStatus: state.shift.data.shiftStatus
+  shiftStatus: state.shift.data.shiftStatus,
+  availableTables: state.tablesavailable.data.availableTables
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
   getTableLayouts: () => dispatch(getTableLayouts()),
-  getShiftStatus: () => dispatch(getShiftStatus())
+  getShiftStatus: () => dispatch(getShiftStatus()),
+  getAvailableTables: () => dispatch(getTablesAvailable())
 })
 export default connect(
   mapStateToProps,

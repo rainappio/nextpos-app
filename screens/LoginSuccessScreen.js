@@ -64,21 +64,19 @@ class LoginSuccessScreen extends React.Component {
       en: {
         welcome: 'Welcome,',
         loggedIn: 'Logged in at',
-        validUntil: 'Valid until'
       },
       zh: {
         welcome: '歡迎,',
         loggedIn: '登入時間:',
-        validUntil: '有效登入至:'
       }
     })
-		this.props.getAnnouncements()
     // <NavigationEvent> component in the render function takes care of loading user info.
   }
 
   loadUserInfo = async () => {
     let token = await getToken()
     this.props.getCurrentUser(token.username)
+    this.props.getAnnouncements()
 
     this.setState({
       token: token,
@@ -182,9 +180,6 @@ class LoginSuccessScreen extends React.Component {
             <Text style={[styles.textSmall]}>
               {t('loggedIn')} {formatDateObj(loggedIn)}
             </Text>
-            <Text style={[styles.textSmall]}>
-              {t('validUntil')} {formatDateFromMillis(tokenExpiry)}
-            </Text>
           </View>
 
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
@@ -199,7 +194,7 @@ class LoginSuccessScreen extends React.Component {
                 {width: '96%'}
               ]}
             >
-            	<TouchableOpacity              	
+            	<TouchableOpacity
               	onPress={() => this.props.navigation.navigate('TablesSrc')}
             		>
               	<View>
@@ -279,16 +274,9 @@ class LoginSuccessScreen extends React.Component {
                 {width: '96%'}
               ]}
             >
-            	<Text
-              	style={[
-                	styles.textMedium,
-                	styles.mgrbtn20
-              	]}>            	
-            		Announcements
-            	</Text>
              	{
             		getannouncements.results !== undefined &&
-            		getannouncements.results.map(getannoc => 
+            		getannouncements.results.map(getannoc =>
 									<View
             				style={[
               				{ backgroundColor: '#f1f1f1', padding: 20 },
@@ -310,15 +298,15 @@ class LoginSuccessScreen extends React.Component {
                 						styles.orange_color,
                 						styles.textMedium,
               						]}>
-              						{getannoc.title} 
-              					</Text>              					
+              						{getannoc.title}
+              					</Text>
           						</View>
-          					</View>          					
-            				
+          					</View>
+
             				<Markdown style={styles.markDownStyle}>
               				{getannoc.markdownContent}
               				{'\n'}
-              			</Markdown>            			
+              			</Markdown>
           				</View>
             		)
             	}

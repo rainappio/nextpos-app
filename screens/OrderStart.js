@@ -97,8 +97,8 @@ class OrderStart extends React.Component {
       availableTablesArr.map(key => {
         availableTables[key].map(table => {
           tables.push({
-            value: table.id,
-            label: table.name
+            value: table.tableId,
+            label: table.tableName
           })
         })
       })

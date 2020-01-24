@@ -19,8 +19,7 @@ const InputNumber = ({
     onSubmitEditing,
     onFocus,
     value,
-    placeholder,
-    autoCapitalize
+    minValue
   },
   customVal,
   meta: { error, touched, valid },
@@ -31,7 +30,9 @@ const InputNumber = ({
       onChange={onChange}
       onSubmitEditing={onSubmitEditing}
       onFocus={onFocus}
-      value={parseInt(customVal)}
+      value={parseInt(value)}
+      initValue={customVal}
+      minValue={minValue}
       upDownButtonsBackgroundColor={'#f1f1f1'}
       {...rest}
     />

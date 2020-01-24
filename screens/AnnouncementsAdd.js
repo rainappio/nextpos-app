@@ -17,14 +17,15 @@ import {
 } from '../constants/Backend'
 import AnnouncementsForm from './AnnouncementsForm'
 import styles from '../styles'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class AnnouncementsAdd extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
   handleSubmit = values => {
-    //console.log(values)
     dispatchFetchRequest(
       api.announcements.create,
       {
@@ -46,7 +47,8 @@ class AnnouncementsAdd extends React.Component {
 
   render() {
     const { navigation } = this.props
-    // const { t } = this.props.screenProps
+    const { t } = this.context
+
     return (
       <ScrollView>
         <DismissKeyboard>
@@ -60,8 +62,7 @@ class AnnouncementsAdd extends React.Component {
                 styles.textBold
               ]}
             >
-              {/*t('settings.workingArea')*/}
-              New Announcements
+              {t('newAnnouncementTitle')}
             </Text>
             <AnnouncementsForm
               onSubmit={this.handleSubmit}

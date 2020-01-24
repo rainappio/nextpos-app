@@ -467,6 +467,27 @@ export default StyleSheet.create({
     paddingBottom: 30,
     borderRadius: 4
   },
+  mainSquareButton: {
+    margin: 10,
+    width: '45%',
+    backgroundColor: '#f5f5f5',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 30,
+    borderRadius: 4
+  },
+  sectionBar: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f18d1a',
+    paddingVertical: 8
+  },
+  sectionBarText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 18
+  },
   listPanel: {
     flex: 1,
     flexDirection: 'row',

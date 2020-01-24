@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { api, makeFetchRequest, successMessage } from '../constants/Backend'
+import {api, dispatchFetchRequest, makeFetchRequest, successMessage} from '../constants/Backend'
 import { getCurrentClient } from '../actions/client'
 import StoreFormScreen from './StoreFormScreen'
 import { ActivityIndicator, View } from 'react-native'
@@ -14,13 +14,6 @@ class Store extends React.Component {
 
   constructor(props) {
     super(props)
-
-    this.state = {
-      refreshing: false,
-      errorResponse: null
-    }
-
-    this.popupReference = React.createRef()
   }
 
   componentDidMount() {
@@ -31,36 +24,23 @@ class Store extends React.Component {
     const enabled = values.clientSettings.TAX_INCLUSIVE.enabled
     values.clientSettings.TAX_INCLUSIVE.value = enabled
 
-    makeFetchRequest(token => {
-      fetch(api.client.update, {
+    dispatchFetchRequest(api.client.update, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token.access_token}`
         },
         body: JSON.stringify(values)
+      },
+      response => {
+        successMessage('Saved')
+        this.props.navigation.navigate('SettingScr')
       })
-        .then(response => {
-          if (response.status === 200) {
-            successMessage('Saved')
-            this.props.navigation.navigate('SettingScr')
-          } else {
-            this.setState({ errorResponse: response }, () => {
-              this.popupReference.current.toggleModal(true)
-            })
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
   }
 
   render() {
     const { client, navigation, loading, haveData } = this.props
-    const { refreshing, errorResponse } = this.state
 
     if (loading) {
       return (
@@ -74,8 +54,6 @@ class Store extends React.Component {
           initialValues={client}
           onSubmit={this.handleSubmit}
           navigation={navigation}
-          refreshing={refreshing}
-          screenProps={this.props.screenProps}
         />
       )
     } else {

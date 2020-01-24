@@ -453,11 +453,11 @@ class OrdersSummaryRow extends React.Component {
             style={[styles.flex_dir_row, styles.grayBg, styles.paddingTopBtn8]}
           >
             <View style={[styles.half_width]}>
-              <Text>{t('total')}</Text>
+              <Text>{t('serviceCharge')}</Text>
             </View>
             <View style={[styles.half_width]}>
               <Text style={{ textAlign: 'right', marginRight: -26 }}>
-                ${order.total.amountWithTax}
+                ${order.serviceCharge}
               </Text>
             </View>
           </View>
@@ -466,11 +466,11 @@ class OrdersSummaryRow extends React.Component {
             style={[styles.flex_dir_row, styles.grayBg, styles.paddingTopBtn8]}
           >
             <View style={[styles.half_width]}>
-              <Text>{t('serviceCharge')}</Text>
+              <Text>{t('total')}</Text>
             </View>
             <View style={[styles.half_width]}>
               <Text style={{ textAlign: 'right', marginRight: -26 }}>
-                ${order.serviceCharge}
+                ${order.orderTotal}
               </Text>
             </View>
           </View>
