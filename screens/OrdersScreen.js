@@ -8,7 +8,6 @@ import {
   View
 } from 'react-native'
 import { connect } from 'react-redux'
-import BackBtnCustom from '../components/BackBtnCustom'
 import Icon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import images from '../assets/images'
@@ -167,7 +166,11 @@ class OrdersScreen extends React.Component {
       >
         <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
           <View style={{ justifyContent: 'space-between' }}>
-            <Text style={styles.screenTitle}>{t('ordersTitle')}</Text>
+            <Text style={[
+            	styles.welcomeText,
+            	styles.orange_color,
+            	styles.textBold
+          	]}>{t('ordersTitle')}</Text>
           </View>
           <View style={{ position: 'absolute', right: 0 }}>
             <TouchableOpacity

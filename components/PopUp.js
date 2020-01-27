@@ -8,6 +8,7 @@ import {
   ScrollView
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
+import { isTablet } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 
@@ -47,7 +48,7 @@ export default class PopUp extends Component {
             this.toggleModal(true)
           }}
         >
-          <Icon name="ios-add" size={35} color="#f18d1a" />
+          <Icon name="ios-add" size={isTablet ? 60 : 35} color="#f18d1a" />
         </TouchableOpacity>
 
         <Modal
@@ -99,7 +100,7 @@ export default class PopUp extends Component {
                           this.toggleModal(false)
                         }}
                       >
-                        <Text style={[styles.signInText, styles.whiteColor]}>
+                        <Text style={[styles.signInText, styles.whiteColor, styles.defaultfontSize]}>
                           {textForRoute1}
                         </Text>
                       </TouchableOpacity>
@@ -122,7 +123,7 @@ export default class PopUp extends Component {
                           this.toggleModal(false)
                         }}
                       >
-                        <Text style={styles.signInText}>{textForRoute2}</Text>
+                        <Text style={[styles.signInText, styles.defaultfontSize]}>{textForRoute2}</Text>
                       </TouchableOpacity>
                     </View>
                   </View>

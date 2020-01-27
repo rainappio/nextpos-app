@@ -28,7 +28,9 @@ import OrderItem from './OrderItem'
 import {
   getTableLayouts,
   getShiftStatus,
-  getfetchOrderInflights, getTablesAvailable,
+  getfetchOrderInflights, 
+  getTablesAvailable,
+  isTablet
 } from '../actions'
 import styles from '../styles'
 import {
@@ -337,8 +339,13 @@ class TablesScreen extends React.Component {
             <View style={[styles.container, styles.nomgrBottom]}>
               <BackBtnCustom
                 onPress={() => this.props.navigation.navigate('LoginSuccess')}
+                size={isTablet ? 44 : 24}
               />
-              <Text style={styles.screenTitle}>{t('menu.tables')}</Text>
+              <Text style={[
+            		styles.welcomeText,
+            		styles.orange_color,
+            		styles.textBold
+          		]}>{t('menu.tables')}</Text>
               <AddBtn
                 onPress={() =>
                   this.props.navigation.navigate('OrderStart', {
@@ -346,22 +353,22 @@ class TablesScreen extends React.Component {
                     handleDelete: this.handleDelete
                   })
                 }
+                size={isTablet ? 60 : 28}
               />
             </View>
 
             {tablelayouts.map((tblLayout, idx) => (
-              <View style={styles.mgrbtn20} key={idx}>
-                <View style={[styles.sectionBar, {flex: 1}]}>
+              <View style={[styles.mgrbtn20, styles.paddingTopBtn8]} key={idx}>
+                <View style={[styles.sectionBar]}>
                   <Text
-                    style={[styles.sectionBarText, {flex: 4}
-                    ]}
+                    style={[styles.sectionBarText, styles.defaultfontSize]}
                   >
                     {tblLayout.layoutName}
                   </Text>
-                  <Text style={[styles.sectionBarText, {flex: 1}]}>
+                  <Text style={[styles.sectionBarText, styles.marginLeftRight35, styles.defaultfontSize]}>
                     {t('seatingCapacity')} {tblLayout.totalCapacity}
                   </Text>
-                  <Text style={[styles.sectionBarText, {flex: 1}]}>
+                  <Text style={[styles.sectionBarText, styles.defaultfontSize]}>
                     {t('availableSeats')} {floorCapacity[tblLayout.id]}
                   </Text>
                 </View>
@@ -384,7 +391,7 @@ class TablesScreen extends React.Component {
                   />
                 ) : (
                   <View>
-                    <Text style={styles.messageBlock}>
+                    <Text style={[styles.messageBlock, styles.textMedium]}>
                       {t('noInflightOrders')}
                     </Text>
                   </View>

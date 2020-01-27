@@ -10,6 +10,7 @@ import {
   TouchableHighlight
 } from 'react-native'
 import { connect } from 'react-redux'
+import { isTablet } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 
@@ -42,7 +43,7 @@ export default class HomeScreen extends React.Component {
     let { t } = this.state
 
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, styles.nomgrBottom]}>
         <View style={{ flex: 3, justifyContent: 'center' }}>
           <View style={[{ position: 'absolute', top: 0 }]}>
             <Image
@@ -51,23 +52,22 @@ export default class HomeScreen extends React.Component {
                   ? require('../assets/images/logo.png')
                   : require('../assets/images/logo.png')
               }
-              style={styles.welcomeImage}
+              style={[styles.welcomeImage]}
             />
           </View>
           <Text style={styles.welcomeText}>Quickly</Text>
           <Text style={styles.welcomeText}>Easily</Text>
           <Text style={styles.welcomeText}>Securely</Text>
         </View>
-
-        <View style={styles.bottom}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Intro')}
-          >
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>
-              {t('getStarted')}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('Intro')}
+          style={[styles.jc_alignIem_center, styles.mgrbtn40]}
+        >
+          <Text style={[styles.bottomActionButton, styles.actionButton]}>
+            {t('getStarted')}
+          </Text>
+        </TouchableOpacity>        
       </View>
     )
   }

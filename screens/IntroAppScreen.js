@@ -9,8 +9,8 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from '../styles'
-import {doLogout} from '../actions'
-import {getToken} from "../constants/Backend";
+import {doLogout, isTablet} from '../actions'
+import {getToken} from "../constants/Backend"
 
 class IntroAppScreen extends React.Component {
   static navigationOptions = {
@@ -64,20 +64,23 @@ class IntroAppScreen extends React.Component {
           <Text style={styles.welcomeText}>Selling</Text>
         </View>
 
-        <View style={[styles.bottom]}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('CreateAcc')}
+            style={styles.jc_alignIem_center}
           >
             <Text style={[styles.bottomActionButton, styles.actionButton]}>
               {t('createAccount')}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={this.isTokenAlive}>
+          <TouchableOpacity 
+          	onPress={this.isTokenAlive}
+          	style={styles.jc_alignIem_center}
+          	>
             <Text style={[styles.bottomActionButton, styles.cancelButton]}>
               {t('signIn')}
             </Text>
           </TouchableOpacity>
-        </View>
+
       </View>
     )
   }

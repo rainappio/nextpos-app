@@ -7,7 +7,8 @@ import {
   getOrder,
   getfetchOrderInflights,
   formatDate,
-  getOrdersByDateRange
+  getOrdersByDateRange,
+  isTablet
 } from '../actions'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
@@ -227,21 +228,21 @@ class OrdersSummaryRow extends React.Component {
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View
-          style={{
-            marginTop: 62,
-            marginLeft: 35,
-            marginRight: 35,
-            marginBottom: 30
-          }}
+          // style={{
+          //   marginTop: 62,
+          //   marginLeft: 35,
+          //   marginRight: 35,
+          //   marginBottom: 30
+          // }}
+          style={[styles.container]}
         >
-          <BackBtn />
+          <BackBtn size={isTablet ? 44 : 28}/>
           <Text
             style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold
-            ]}
+            	styles.welcomeText,
+            	styles.orange_color,
+            	styles.textBold
+          	]}
           >
             {t('orderSummaryTitle')}
           </Text>
@@ -265,11 +266,11 @@ class OrdersSummaryRow extends React.Component {
               <View>
                 <FontAwesomeIcon
                   name="user"
-                  size={25}
+                  size={isTablet ? 50 : 25}
                   color="#f18d1a"
                   style={[styles.centerText]}
                 >
-                  <Text style={[styles.textBig, styles.orange_color]}>
+                  <Text style={[styles.defaultfontSize, styles.orange_color]}>
                     &nbsp;
                     {!this.props.navigation.state.params.customerCount
                       ? order.demographicData.male +
@@ -281,13 +282,13 @@ class OrdersSummaryRow extends React.Component {
               </View>
             </View>
 
-            <View style={[styles.fullhalf_width, styles.mgr_20]}>
+            <View style={[styles.fullhalf_width]}>
               <TouchableOpacity>
                 <View>
-                  <Text style={[styles.toRight, styles.mgr_20]}>
+                  <Text style={[styles.toRight, styles.defaultfontSize]}>
                     {t('staff')} - {order.servedBy}
                   </Text>
-                  <Text style={[styles.toRight, styles.mgr_20]}>
+                  <Text style={[styles.toRight, styles.defaultfontSize]}>
                     {formatDate(order.createdDate)}
                   </Text>
                 </View>
@@ -303,12 +304,12 @@ class OrdersSummaryRow extends React.Component {
             styles.shoppingBar,
             styles.paddLeft20,
             styles.paddRight20,
-            styles.top40
+            //styles.top40
           ]}
         >
           <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text style={[styles.paddingTopBtn8, styles.whiteColor]}>
+              <Text style={[styles.paddingTopBtn8, styles.whiteColor, styles.defaultfontSize]}>
                 {t('product')}
               </Text>
             </TouchableOpacity>
@@ -316,7 +317,7 @@ class OrdersSummaryRow extends React.Component {
 
           <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text style={[styles.whiteColor]}>
+              <Text style={[styles.whiteColor, styles.defaultfontSize]}>
                 &nbsp;&nbsp;{t('quantity')}
               </Text>
             </TouchableOpacity>
@@ -324,19 +325,19 @@ class OrdersSummaryRow extends React.Component {
 
           <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text style={styles.whiteColor}>{t('unitPrice')}</Text>
+              <Text style={[styles.whiteColor, styles.defaultfontSize]}>{t('unitPrice')}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text style={styles.whiteColor}>{t('subTotal')}</Text>
+              <Text style={[styles.whiteColor, styles.defaultfontSize]}>{t('subTotal')}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text style={styles.whiteColor}>{t('state')}</Text>
+              <Text style={[styles.whiteColor, styles.defaultfontSize]}>{t('state')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -363,7 +364,7 @@ class OrdersSummaryRow extends React.Component {
                   <View key={rowMap}>
                     <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
                       <View style={[styles.oneFifthWidth]}>
-                        <Text style={{ textAlign: 'left' }}>
+                        <Text style={[{ textAlign: 'left' }, styles.defaultfontSize]}>
                           {data.item.productName}
                         </Text>
                       </View>
@@ -374,7 +375,7 @@ class OrdersSummaryRow extends React.Component {
                           styles.jc_alignIem_center
                         ]}
                       >
-                        <Text>&nbsp;&nbsp;{data.item.quantity}</Text>
+                        <Text style={styles.defaultfontSize}>&nbsp;&nbsp;{data.item.quantity}</Text>
                       </View>
 
                       <View
@@ -383,7 +384,7 @@ class OrdersSummaryRow extends React.Component {
                           styles.jc_alignIem_center
                         ]}
                       >
-                        <Text>${data.item.price}</Text>
+                        <Text style={styles.defaultfontSize}>${data.item.price}</Text>
                       </View>
 
                       <View
@@ -392,7 +393,7 @@ class OrdersSummaryRow extends React.Component {
                           styles.jc_alignIem_center
                         ]}
                       >
-                        <Text>${data.item.subTotal.amountWithTax}</Text>
+                        <Text style={styles.defaultfontSize}>${data.item.subTotal.amountWithTax}</Text>
                       </View>
                       <View
                         style={[
@@ -404,7 +405,7 @@ class OrdersSummaryRow extends React.Component {
                       </View>
                     </View>
                     <View style={[styles.mgrbtn20]}>
-                      <Text style={{ textAlign: 'left', marginLeft: 4 }}>
+                      <Text style={[{ textAlign: 'left', marginLeft: 4 }, styles.defaultfontSize]}>
                         {data.item.options}
                       </Text>
                     </View>
@@ -453,10 +454,10 @@ class OrdersSummaryRow extends React.Component {
             style={[styles.flex_dir_row, styles.grayBg, styles.paddingTopBtn8]}
           >
             <View style={[styles.half_width]}>
-              <Text>{t('serviceCharge')}</Text>
+              <Text style={styles.defaultfontSize}>{t('serviceCharge')}</Text>
             </View>
             <View style={[styles.half_width]}>
-              <Text style={{ textAlign: 'right', marginRight: -26 }}>
+              <Text style={[{ textAlign: 'right', marginRight: -26 }, styles.defaultfontSize]}>
                 ${order.serviceCharge}
               </Text>
             </View>
@@ -466,10 +467,10 @@ class OrdersSummaryRow extends React.Component {
             style={[styles.flex_dir_row, styles.grayBg, styles.paddingTopBtn8]}
           >
             <View style={[styles.half_width]}>
-              <Text>{t('total')}</Text>
+              <Text style={styles.defaultfontSize}>{t('total')}</Text>
             </View>
             <View style={[styles.half_width]}>
-              <Text style={{ textAlign: 'right', marginRight: -26 }}>
+              <Text style={[{ textAlign: 'right', marginRight: -26 }, styles.defaultfontSize]}>
                 ${order.orderTotal}
               </Text>
             </View>
@@ -496,7 +497,7 @@ class OrdersSummaryRow extends React.Component {
                     : this.props.navigation.state.params.onSubmit(order.orderId)
                 }
               >
-                <Text style={[styles.signInText, styles.whiteColor]}>
+                <Text style={[styles.signInText, styles.whiteColor, styles.defaultfontSize]}>
                   {t('submitOrder')}
                 </Text>
               </TouchableOpacity>
@@ -519,7 +520,7 @@ class OrdersSummaryRow extends React.Component {
                 }
                 //onPress={this.props.handleSubmit}
               >
-                <Text style={[styles.signInText, styles.whiteColor]}>
+                <Text style={[styles.signInText, styles.whiteColor, styles.defaultfontSize]}>
                   {t('submitOrder')}
                 </Text>
               </TouchableOpacity>
@@ -542,7 +543,7 @@ class OrdersSummaryRow extends React.Component {
                 }
                 disabled={true}
               >
-                <Text style={[styles.signInText, styles.whiteColor]}>
+                <Text style={[styles.signInText, styles.whiteColor, styles.defaultfontSize]}>
                   {t('submitOrder')}
                 </Text>
               </TouchableOpacity>
@@ -559,7 +560,7 @@ class OrdersSummaryRow extends React.Component {
             }}
           >
             <TouchableOpacity onPress={() => this.handleCancel(order.orderId)}>
-              <Text style={styles.signInText}>{t('backToTables')}</Text>
+              <Text style={[styles.signInText, styles.defaultfontSize]}>{t('backToTables')}</Text>
             </TouchableOpacity>
           </View>
 
@@ -577,7 +578,7 @@ class OrdersSummaryRow extends React.Component {
                 this.props.navigation.state.params.handleDelete(order.orderId)
               }}
             >
-              <Text style={styles.signInText}>{t('deleteOrder')}</Text>
+              <Text style={[styles.signInText, styles.defaultfontSize]}>{t('deleteOrder')}</Text>
             </TouchableOpacity>
           </View>
 
@@ -600,7 +601,7 @@ class OrdersSummaryRow extends React.Component {
                     )
                   }}
                 >
-                  <Text style={styles.signInText}>{t('deliverOrder')}</Text>
+                  <Text style={[styles.signInText, styles.defaultfontSize]}>{t('deliverOrder')}</Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -624,7 +625,7 @@ class OrdersSummaryRow extends React.Component {
                       })
                 }
               >
-                <Text style={styles.signInText}>{t('payOrder')}</Text>
+                <Text style={[styles.signInText, styles.defaultfontSize]}>{t('payOrder')}</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -642,7 +643,7 @@ class OrdersSummaryRow extends React.Component {
               <TouchableOpacity
                 onPress={() => this.handleComplete(order.orderId)}
               >
-                <Text style={styles.signInText}>{t('completeOrder')}</Text>
+                <Text style={[styles.signInText, styles.defaultfontSize]}>{t('completeOrder')}</Text>
               </TouchableOpacity>
             </View>
           )}

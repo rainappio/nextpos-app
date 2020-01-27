@@ -13,7 +13,7 @@ class AddBtn extends React.Component {
         disabled={disabled}
       >
         <View>
-          <Icon name="ios-add" size={35} color="#f18d1a" />
+          <Icon name="ios-add" size={this.props.size} color="#f18d1a" />
         </View>
       </TouchableOpacity>
     )

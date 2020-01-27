@@ -60,11 +60,10 @@ class Sales extends React.Component {
           <BackBtn />
           <Text
             style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold
-            ]}
+            	styles.welcomeText,
+            	styles.orange_color,
+            	styles.textBold
+          	]}
           >
             {t('salesReportTitle')}
           </Text>
@@ -76,7 +75,7 @@ class Sales extends React.Component {
             styles.flex_dir_row,
             styles.shoppingBar,
             styles.paddLeft20,
-            styles.paddRight20
+            styles.paddRight20,
             // styles.top40
           ]}
         >
@@ -84,7 +83,7 @@ class Sales extends React.Component {
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('SalesCharts')}
             >
-              <Text style={[styles.paddingTopBtn8, styles.whiteColor]}>
+              <Text style={[styles.whiteColor, styles.defaultfontSize]}>
                 {t('salesDashboard')}
               </Text>
             </TouchableOpacity>

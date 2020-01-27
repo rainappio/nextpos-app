@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 class BackBtnCustom extends React.Component {
   render() {
-    const { onPress } = this.props
+    const { onPress, size } = this.props
     return (
       <TouchableOpacity
         hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
@@ -13,7 +13,7 @@ class BackBtnCustom extends React.Component {
         style={{ position: 'absolute', top: -4, zIndex: 2 }}
       >
         <View>
-          <Icon name="ios-arrow-back" size={26} color="#f18d1a" />
+          <Icon name="ios-arrow-back" size={size} color="#f18d1a" />
         </View>
       </TouchableOpacity>
     )

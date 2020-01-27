@@ -5,7 +5,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext"
-import {dateToLocaleString, formatDate} from "../actions"
+import {dateToLocaleString, formatDate, isTablet} from "../actions"
 import BackBtn from "../components/BackBtn"
 
 class ClockIn extends React.Component {
@@ -117,61 +117,65 @@ class ClockIn extends React.Component {
     return (
       <DismissKeyboard>
         <View style={styles.container}>
-          <BackBtn />
+          <BackBtn size={isTablet ? 44 : 28}/>
           <View>
             <TouchableHighlight>
-              <Text style={styles.screenTitle}>{t('timeCardTitle')}</Text>
+              <Text style={[
+            			styles.welcomeText,
+            			styles.orange_color,
+            			styles.textBold
+          			]}>{t('timeCardTitle')}</Text>
             </TouchableHighlight>
           </View>
 
           <View style={{ flex: 2, justifyContent: 'center' }}>
             <View style={[styles.fieldContainer]}>
               <View style={{ flex: 1 }}>
-                <Text style={styles.fieldTitle}>{t('username')}</Text>
+                <Text style={[styles.fieldTitle, styles.defaultfontSize]}>{t('username')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end' }}>
+                <Text style={[{ alignSelf: 'flex-end' }, styles.defaultfontSize]}>
                   {authClientUserName}
                 </Text>
               </View>
             </View>
             <View style={styles.fieldContainer}>
-              <View style={{ flex: 1 }}>
-                <Text style={[styles.fieldTitle]}>{t('currentTime')}</Text>
+              <View style={{ width: '40%' }}>
+                <Text style={[styles.fieldTitle, styles.defaultfontSize]}>{t('currentTime')}</Text>
               </View>
-              <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end' }}>{`${dateToLocaleString(
+              <View style={{ width: '60%'}}>
+                <Text style={[{ alignSelf: 'flex-end' }, styles.defaultfontSize]}>{`${dateToLocaleString(
                   new Date()
                 )}`}</Text>
               </View>
             </View>
             <View style={styles.fieldContainer}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.fieldTitle}>{t('timeCardStatus')}:</Text>
+              <View style={{ width: '55%' }}>
+                <Text style={[styles.fieldTitle, styles.defaultfontSize]}>{t('timeCardStatus')}:</Text>
               </View>
-              <View style={{flex: 3}}>
-                <Text style={{alignSelf: 'flex-end'}}>{timecard.timeCardStatus}</Text>
+              <View style={{ width: '45%'}}>
+                <Text style={[{alignSelf: 'flex-end'}, styles.defaultfontSize]}>{timecard.timeCardStatus}</Text>
               </View>
             </View>
             <View style={styles.fieldContainer}>
-              <View style={{flex: 1}}>
-                <Text style={styles.fieldTitle}>
+              <View style={{ width: '40%' }}>
+                <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
                   {t('clockInTime')}:
                 </Text>
               </View>
-              <View style={{flex: 3}}>
-                <Text style={{alignSelf: 'flex-end'}}>{timecard.clockIn != null ? `${formatDate(timecard.clockIn)}` : ''}</Text>
+              <View style={{ width: '60%'}}>
+                <Text style={[{alignSelf: 'flex-end'}, styles.defaultfontSize]}>{timecard.clockIn != null ? `${formatDate(timecard.clockIn)}` : ''}</Text>
               </View>
             </View>
             { timeCardStatus === 'COMPLETE' && (
               <View style={styles.fieldContainer}>
                 <View style={{flex: 1}}>
-                  <Text style={styles.fieldTitle}>
+                  <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
                     {t('clockOutTime')}:
                   </Text>
                 </View>
                 <View style={{flex: 3}}>
-                  <Text style={{alignSelf: 'flex-end'}}>{timecard.clockOut != null ? `${formatDate(timecard.clockOut)}` : ''}</Text>
+                  <Text style={[{alignSelf: 'flex-end'}, styles.defaultfontSize]}>{timecard.clockOut != null ? `${formatDate(timecard.clockOut)}` : ''}</Text>
                 </View>
               </View>
             )}
@@ -189,11 +193,11 @@ class ClockIn extends React.Component {
                 <View>
                   <FontAwesomeIcon
                     name="hand-o-up"
-                    size={40}
+                    size={isTablet ? 80 : 40}
                     color="#fff"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.centerText]}
                   />
-                  <Text style={[styles.centerText, styles.whiteColor]}>
+                  <Text style={[styles.centerText, styles.whiteColor, styles.defaultfontSize]}>
                     {timeCardStatus === 'ACTIVE' ? t('clockOut') : t('clockIn')}
                   </Text>
                 </View>

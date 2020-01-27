@@ -16,7 +16,7 @@ import { Accordion, List, SwipeAction } from '@ant-design/react-native'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import PopUp from '../components/PopUp'
-import { getProducts, clearLabel } from '../actions'
+import { getProducts, clearLabel, isTablet } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
@@ -78,11 +78,11 @@ class ProductRow extends React.Component {
   PanelHeader = (labelName, labelId) => {
     return (
       <View style={styles.listPanel}>
-        <Text style={styles.listPanelText}>{labelName}</Text>
+        <Text style={[styles.listPanelText, styles.defaultfontSize]}>{labelName}</Text>
         {labelId !== '0' && (
           <MaterialIcon
             name="edit"
-            size={22}
+            size={isTablet ? 40 : 22}
             style={styles.listPanelIcon}
             onPress={() => {
               this.props.navigation.navigate('CategoryCustomize', {
@@ -156,8 +156,13 @@ class ProductRow extends React.Component {
         <DismissKeyboard>
           <View>
             <View style={styles.container}>
-              <BackBtn />
-              <Text style={styles.screenTitle}>{t('productListTitle')}</Text>
+              <BackBtn size={isTablet ? 44 : 28}/>
+              <Text style={[
+            		styles.welcomeText,
+            		styles.orange_color,
+            		styles.textBold,
+            		styles.nomgrBottom
+          		]}>{t('productListTitle')}</Text>
               <PopUp
                 navigation={navigation}
                 toRoute1={'Category'}
@@ -189,9 +194,9 @@ class ProductRow extends React.Component {
                       >
                         <List.Item
                           key={prd.id}
-                          style={{
-                            backgroundColor: '#f1f1f1'
-                          }}
+                          style={[{
+                            backgroundColor: '#f1f1f1'                                  
+                          }, styles.defaultfontSize]}
                           onPress={() => {
                             this.props.navigation.navigate('ProductEdit', {
                               productId: prd.id,
@@ -223,9 +228,9 @@ class ProductRow extends React.Component {
                       >
                         <List.Item
                           key={prd.id}
-                          style={{
-                            backgroundColor: '#f1f1f1'
-                          }}
+                          style={[{
+                                  backgroundColor: '#f1f1f1'
+                                }, styles.defaultfontSize]}
                           onPress={() => {
                             this.props.navigation.navigate('ProductEdit', {
                               productId: prd.id,

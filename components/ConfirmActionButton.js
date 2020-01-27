@@ -38,8 +38,9 @@ class ConfirmActionButton extends React.Component {
             ]
           )
         }}
+        style={[styles.jc_alignIem_center]}
       >
-        <Text style={[styles.bottomActionButton, styles.actionButton]}>
+        <Text style={[styles.bottomActionButton, styles.actionButton, styles.defaultfontSize]}>
           {t(buttonTitle)}
         </Text>
       </TouchableOpacity>

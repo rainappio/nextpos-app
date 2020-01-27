@@ -16,14 +16,14 @@ export default class DropDown extends Component {
     return (
       <View>
         <View
-          style={{
-            borderBottomWidth: 1,
-            borderBottomColor: '#f1f1f1',
-            paddingTop: Platform.OS === 'ios' ? 30 : 4,
-            paddingBottom: Platform.OS === 'ios' ? 12 : 4,
-            paddingLeft: 0,
-            marginBottom: 8
-          }}
+        	style={[{
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#f1f1f1',
+                  paddingTop: Platform.OS === 'ios' ? 30 : 4,
+                  paddingBottom: Platform.OS === 'ios' ? 12 : 4,
+                  paddingLeft: 0,
+                  marginBottom: 8
+                }]}
         >
           <RNPickerSelect
             placeholder={placeholder}
@@ -33,7 +33,7 @@ export default class DropDown extends Component {
             {...inputProps}
           />
         </View>
-        {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
+        {!valid && touched && <Text style={[styles.rootError, styles.textMedium]}>{error}</Text>}
       </View>
     )
   }

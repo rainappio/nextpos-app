@@ -110,7 +110,7 @@ class OrderForm extends Component {
             </Text>
 
             <View>
-              <Text>{t('table')}</Text>
+              <Text style={styles.defaultfontSize}>{t('table')}</Text>
               <Field
                 component={DropDown}
                 name="tableId"
@@ -124,12 +124,12 @@ class OrderForm extends Component {
             </View>
 
             <View style={styles.paddingTopBtn20}>
-              <Text>{t('ageGroup')}</Text>
+              <Text style={styles.defaultfontSize}>{t('ageGroup')}</Text>
               <View style={[styles.flex_dir_row]}>
                 <View style={[styles.half_width]}>
                   {ageGroupsA.map((ageGp, ix) => (
                     <View
-                      style={[styles.borderBottomLine, styles.paddingTopBtn8]}
+                      style={[styles.borderBottomLine, styles.commonpaddingTopBtn]}
                       key={ix}
                     >
                       <Field
@@ -146,7 +146,7 @@ class OrderForm extends Component {
                 <View style={[styles.half_width]}>
                   {ageGroupsB.map((ageGp, ix) => (
                     <View
-                      style={[styles.borderBottomLine, styles.paddingTopBtn8]}
+                      style={[styles.borderBottomLine, styles.commonpaddingTopBtn]}
                       key={ix}
                     >
                       <Field
@@ -163,12 +163,12 @@ class OrderForm extends Component {
             </View>
 
             <View style={styles.paddBottom_20}>
-              <Text>{t('visitFrequency')}</Text>
+              <Text style={styles.defaultfontSize}>{t('visitFrequency')}</Text>
               <View style={[styles.flex_dir_row]}>
                 <View style={[styles.half_width]}>
                   {visitedFrequenciesI.map((visitedFreq, ix) => (
                     <View
-                      style={[styles.borderBottomLine, styles.paddingTopBtn8]}
+                      style={[styles.borderBottomLine, styles.commonpaddingTopBtn]}
                       key={ix}
                     >
                       <Field
@@ -185,7 +185,7 @@ class OrderForm extends Component {
                 <View style={[styles.half_width]}>
                   {visitedFrequenciesII.map((visitedFreq, ix) => (
                     <View
-                      style={[styles.borderBottomLine, styles.paddingTopBtn8]}
+                      style={[styles.borderBottomLine, styles.commonpaddingTopBtn]}
                       key={ix}
                     >
                       <Field
@@ -200,11 +200,11 @@ class OrderForm extends Component {
               </View>
             </View>
 
-            <Text>{t('peopleCount')}</Text>
+            <Text style={styles.defaultfontSize}>{t('peopleCount')}</Text>
             <View>
               {people.map((people, ix) => (
                 <View
-                  style={[styles.borderBottomLine, styles.paddingTopBtn8]}
+                  style={[styles.borderBottomLine, styles.commonpaddingTopBtn]}
                   key={ix}
                 >
                   <Field
@@ -239,7 +239,7 @@ class OrderForm extends Component {
                     this.props.handleSubmit()
                   }}
                 >
-                  <Text style={[styles.signInText, styles.whiteColor]}>
+                  <Text style={[styles.signInText, styles.whiteColor, styles.defaultfontSize]}>
                     {t('openOrder')}
                   </Text>
                 </TouchableOpacity>
@@ -259,7 +259,7 @@ class OrderForm extends Component {
                     this.props.navigation.navigate('TablesSrc')
                   }}
                 >
-                  <Text style={styles.signInText}>{t('action.cancel')}</Text>
+                  <Text style={[styles.signInText, styles.defaultfontSize]}>{t('action.cancel')}</Text>
                 </TouchableOpacity>
               </View>
             </View>

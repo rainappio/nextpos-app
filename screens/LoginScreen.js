@@ -13,7 +13,8 @@ import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 import { withNavigation } from 'react-navigation'
-import {LocaleContext} from "../locales/LocaleContext";
+import {LocaleContext} from "../locales/LocaleContext"
+import { isTablet } from '../actions'
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -76,25 +77,27 @@ class LoginScreen extends React.Component {
             />
           </View>
 
-          <View style={[styles.bottom]}>
             <TouchableOpacity
               onPress={() => {
                 Keyboard.dismiss()
                 handleSubmit()
               }}
+              style={styles.jc_alignIem_center}
             >
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
                 {t('login')}
               </Text>
             </TouchableOpacity>
+
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Intro')}
+              style={[styles.jc_alignIem_center, styles.mgrbtn40]}
             >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+              <Text style={[styles.bottomActionButton, styles.cancelButton ]}>
                 {t('cancel')}
               </Text>
             </TouchableOpacity>
-          </View>
+
         </KeyboardAvoidingView>
       </DismissKeyboard>
     )

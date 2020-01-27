@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+
 export default StyleSheet.create({
   mainContainer: {
     flex: 1
@@ -21,11 +22,12 @@ export default StyleSheet.create({
     paddingRight: 0
   },
   rootInput: {
-    height: 44,
-    padding: 10,
+    height: 80,
+    padding: 20,
     marginBottom: 10,
     borderBottomColor: '#f1f1f1',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    fontSize: 22
   },
   rootError: {
     color: 'red',
@@ -38,8 +40,8 @@ export default StyleSheet.create({
     fontStyle: 'italic'
   },
   welcomeImage: {
-    width: 40,
-    height: 40,
+    width: 80,
+    height: 80,
     resizeMode: 'contain'
   },
   welcomeText: {
@@ -47,9 +49,9 @@ export default StyleSheet.create({
     textTransform: 'uppercase',
     fontSize: 20,
     letterSpacing: 2,
-    lineHeight: 32,
+    lineHeight: 55,
     marginBottom: 16,
-    marginTop: -8
+    fontSize: 30
   },
   gsText: {
     padding: 10,
@@ -63,9 +65,7 @@ export default StyleSheet.create({
     marginBottom: 6
   },
   textSmall: {
-    fontSize: 12,
-    marginTop: 10,
-    marginBottom: 10
+    fontSize: 22
   },
   signInText: {
     color: '#F39F86',
@@ -169,8 +169,8 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.6)'
   },
   popUpLayout: {
-    padding: 25,
-    margin: 20
+    padding: 60,
+    margin: 40
   },
   whiteBg: {
     backgroundColor: '#fff'
@@ -259,10 +259,10 @@ export default StyleSheet.create({
     borderRadius: 4
   },
   textBig: {
-    fontSize: 22
+    fontSize: 30
   },
   textMedium: {
-    fontSize: 18
+    fontSize: 24
   },
   textBold: {
     fontWeight: 'bold'
@@ -334,6 +334,10 @@ export default StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 20
   },
+  paddingTopBtn15: {
+    paddingTop: 15,
+    paddingBottom: 15
+  },
   borderBottomLine: {
     borderBottomColor: '#f1f1f1',
     borderBottomWidth: 1
@@ -403,7 +407,7 @@ export default StyleSheet.create({
     bottom: 0,
     left: 0,
     width: '100%',
-    height: 50
+    height: 80
   },
   item: {
     borderTopWidth: 1,
@@ -435,7 +439,7 @@ export default StyleSheet.create({
     top: 160
   },
   fullhalf_width: {
-    width: '60%'
+    width: '50%'
   },
   no_mgrTop: {
     marginTop: 0
@@ -463,8 +467,8 @@ export default StyleSheet.create({
     width: '45%',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 30,
-    paddingBottom: 30,
+    paddingTop: 80,
+    paddingBottom: 80,
     borderRadius: 4
   },
   mainSquareButton: {
@@ -481,7 +485,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f18d1a',
-    paddingVertical: 8
+    paddingVertical: 22
   },
   sectionBarText: {
     color: '#fff',
@@ -493,8 +497,8 @@ export default StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     marginRight: 0,
-    paddingTop: 12,
-    paddingBottom: 12
+    paddingTop: 24,
+    paddingBottom: 24
   },
   listPanelText: {
     flex: 9,
@@ -509,8 +513,8 @@ export default StyleSheet.create({
     // justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    marginTop: 2,
-    marginBottom: 5
+    marginTop: 4,
+    marginBottom: 10
   },
   fieldTitle: {
     fontWeight: 'bold'
@@ -521,19 +525,18 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   bottom: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    alignItems: 'center',
     marginTop: 10,
     marginBottom: 10
   },
   bottomActionButton: {
-    width: '100%',
+    width: '50%',
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 24,
     borderRadius: 4,
     borderWidth: 1,
     borderColor: '#F39F86',
-    padding: 10,
+    padding: 15,
     marginBottom: 10
   },
   actionButton: {
@@ -582,5 +585,53 @@ export default StyleSheet.create({
   textArea: {
     height: 150,
     justifyContent: 'flex-start'
+  },
+  iconMargin: {
+  	margin: 25
+  },
+   defaultfontSize: {
+  	fontSize: 26
+  },
+  customMgr: {
+  	marginTop: 35,
+  	marginBottom: 35
+  },
+  commonMgrBtn: {
+  	marginBottom: 40
+  },
+  customPaddingLarge: {
+		paddingTop: 60,
+  	paddingBottom: 60
+  },
+  commonMgrBtntenPxLarger: {
+		marginBottom: 60
+  },
+  commonMgrTop: {
+  	marginTop: 80
+  },
+  mainlogoImg: {
+  	flex: 1,
+  	width: 40,
+  	height: 80,
+  	resizeMode: 'contain'
+  },
+  percentPadding: {
+		padding: '4%'
+  },
+  commonpaddingTopBtn: {
+  	paddingTop: 20,
+  	paddingBottom: 20
+  },
+  customAvator: {
+  	backgroundColor: '#f1f1f1',
+    width: 88,
+    height: 88,
+    borderRadius: 88,
+    textAlign: 'center',
+    lineHeight: 88
+  },
+  customAvatorUserName: {
+  	marginLeft: 120, 
+  	marginTop: -60 
   }
 })

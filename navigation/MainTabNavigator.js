@@ -1,5 +1,5 @@
 import React from 'react'
-import { Platform, Text, AsyncStorage } from 'react-native'
+import { Platform, Text, AsyncStorage, Dimensions } from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import {
@@ -68,6 +68,8 @@ import OrderDetail from '../screens/OrderDetail'
 import Announcements from '../screens/Announcements'
 import AnnouncementsAdd from '../screens/AnnouncementsAdd'
 import AnnouncementsEdit from '../screens/AnnouncementsEdit'
+import { isTablet } from '../actions'
+import styles from '../styles'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -79,10 +81,16 @@ const Home = createStackNavigator({
 })
 Home.navigationOptions = {
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={'md-home'} />
+    <TabBarIcon focused={focused} name={'md-home'}/>
   ),
   tabBarOptions: {
-    activeTintColor: '#f18d1a'
+    activeTintColor: '#f18d1a',
+    style: {
+    	height: isTablet ? 80 : 44
+    },
+    labelStyle: {
+    	fontSize: isTablet ? 18 : 12,
+  	}
   },
   tabBarOnPress: ({ navigation, defaultHandler }) => {
     navigation.dispatch(
@@ -149,7 +157,13 @@ Settings.navigationOptions = ({ screenProps: { t } }) => ({
     />
   ),
   tabBarOptions: {
-    activeTintColor: '#f18d1a'
+    activeTintColor: '#f18d1a',
+    style: {
+    	height: isTablet ? 80 : 44
+    },
+    labelStyle: {
+    	fontSize: isTablet ? 18 : 12,
+  	}
   },
   tabBarOnPress: ({ navigation, defaultHandler }) => {
     navigation.dispatch(
@@ -185,7 +199,13 @@ Tables.navigationOptions = ({ screenProps: { t } }) => ({
     <TabBarIcon focused={focused} name="md-people" />
   ),
   tabBarOptions: {
-    activeTintColor: '#f18d1a'
+    activeTintColor: '#f18d1a',
+    style: {
+    	height: isTablet ? 80 : 44
+    },
+    labelStyle: {
+    	fontSize: isTablet ? 18 : 12,
+  	}
   },
   tabBarOnPress: ({ navigation, defaultHandler }) => {
     navigation.dispatch(
@@ -214,7 +234,13 @@ Orders.navigationOptions = ({ screenProps: { t } }) => ({
     <TabBarIcon focused={focused} name="md-document" size={32} />
   ),
   tabBarOptions: {
-    activeTintColor: '#f18d1a'
+    activeTintColor: '#f18d1a',
+    style: {
+    	height: isTablet ? 80 : 44
+    },
+    labelStyle: {
+    	fontSize: isTablet ? 18 : 12,
+  	}
   }
 })
 
@@ -227,7 +253,13 @@ Reservation.navigationOptions = ({ screenProps: { t } }) => ({
     <TabBarIcon focused={focused} name="ios-calendar" size={32} />
   ),
   tabBarOptions: {
-    activeTintColor: '#f18d1a'
+    activeTintColor: '#f18d1a',
+    style: {
+    	height: isTablet ? 80 : 44
+    },
+    labelStyle: {
+    	fontSize: isTablet ? 18 : 12,
+  	}
   }
 })
 
@@ -242,12 +274,18 @@ Reports.navigationOptions = ({ screenProps: { t } }) => ({
     <FontAwesomeIcon
       focused={focused}
       name="bar-chart"
-      size={22}
+      size={isTablet ? 44 : 22}
       color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
     />
   ),
   tabBarOptions: {
-    activeTintColor: '#f18d1a'
+    activeTintColor: '#f18d1a',
+    style: {
+    	height: isTablet ? 80 : 44
+    },
+    labelStyle: {
+    	fontSize: isTablet ? 18 : 12,
+  	}
   }
 })
 
