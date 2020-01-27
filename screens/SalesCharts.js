@@ -86,7 +86,8 @@ class SalesCharts extends React.Component {
 
     rangedSalesReport.salesByRange.map(stats => {
       rangedSalesDataObj.data.push({
-        x: stats.formattedDate,
+        //x: stats.formattedDate,
+        x: stats.date,
         y: stats.total
       })
     })

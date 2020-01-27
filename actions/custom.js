@@ -1,3 +1,5 @@
+import { Dimensions } from 'react-native'
+
 export function get_time_diff (datetime) {
   var t = datetime.split(/[- :T]/)
   var date = new Date(
@@ -79,3 +81,5 @@ export const dateToLocaleString = dateObj => {
 export function calculatePercentage (Amount, percent) {
   return (Amount * percent) / 100
 }
+
+export const isTablet = Dimensions.get('window').width >= 900

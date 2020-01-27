@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from '../styles'
-import {doLogout} from '../actions'
+import {doLogout, isTablet} from '../actions'
 import {getToken} from "../constants/Backend";
 
 class IntroAppScreen extends React.Component {
@@ -46,6 +46,7 @@ class IntroAppScreen extends React.Component {
   render() {
     let { t } = this.props.screenProps
 
+    //console.log(isTablet)
     return (
       <View style={styles.container}>
         <View style={{ flex: 3, justifyContent: 'center' }}>
@@ -57,23 +58,24 @@ class IntroAppScreen extends React.Component {
                   : require('../assets/images/logo.png')
               }
               style={styles.welcomeImage}
+              width={isTablet ? 200 : 40}
             />
           </View>
-          <Text style={styles.welcomeText}>Simplify</Text>
-          <Text style={styles.welcomeText}>Your</Text>
-          <Text style={styles.welcomeText}>Selling</Text>
+          <Text style={isTablet ? [styles.welcomeText, styles.tabletTextBig, styles.mgrbtn40] : [styles.welcomeText]}>Simplify</Text>
+          <Text style={isTablet ? [styles.welcomeText, styles.tabletTextBig, styles.mgrbtn40] : [styles.welcomeText]}>Your</Text>
+          <Text style={isTablet ? [styles.welcomeText, styles.tabletTextBig, styles.mgrbtn40] : [styles.welcomeText]}>Selling</Text>
         </View>
 
         <View style={[styles.bottom]}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('CreateAcc')}
           >
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+            <Text style={isTablet ? [styles.bottomActionButton, styles.actionButton, styles.tabletTextMedium, styles.paddingTopBtn15] : [styles.bottomActionButton, styles.actionButton]}>
               {t('createAccount')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={this.isTokenAlive}>
-            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+            <Text style={isTablet ? [styles.bottomActionButton, styles.cancelButton, styles.tabletTextMedium, styles.paddingTopBtn15] : [styles.bottomActionButton, styles.actionButton]}>
               {t('signIn')}
             </Text>
           </TouchableOpacity>

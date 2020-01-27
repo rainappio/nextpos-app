@@ -16,6 +16,7 @@ import { default as MaterialIcon } from 'react-native-vector-icons/MaterialIcons
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtnCustom from '../components/BackBtnCustom'
+import { isTablet } from '../actions'
 import styles from '../styles'
 
 class SettingsScreen extends React.Component {
@@ -29,7 +30,16 @@ class SettingsScreen extends React.Component {
     return (
       <View style={[styles.container, styles.nomgrBottom]}>
         <Text
-          style={[
+          style={isTablet ? [
+            styles.welcomeText,
+            styles.orange_color,
+            styles.tabletTextBig,
+            styles.textBold,
+            styles.nomgrBottom,
+            styles.paddTop_30 
+          ]
+          :
+        	[
             styles.welcomeText,
             styles.orange_color,
             styles.textMedium,
@@ -43,26 +53,33 @@ class SettingsScreen extends React.Component {
           <View>
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+                style={isTablet 
+                	?
+                	[
+                  	{margin: 25},
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center                  	    
+                	]
+                	:
+                	[
+                  	styles.margin_15,
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center
+                	]}
               >
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate('Account')}
                 >
-                  <View>
+                  <View style={[styles.paddTop_30, styles.paddBottom_30]}>
                     <MaterialIcon
                       name="account-box"
-                      size={40}
+                      size={isTablet ? 80 : 40}
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>
+                    <Text style={isTablet ? [styles.centerText, styles.tabletTextMedium] : [styles.centerText]}>
                       {t('settings.account')}
                     </Text>
                   </View>
@@ -70,26 +87,33 @@ class SettingsScreen extends React.Component {
               </View>
 
               <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+                style={isTablet 
+                	?
+                	[
+                  	{margin: 25},
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center     
+                	]
+                	:
+                	[
+                  	styles.margin_15,
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center
+                	]}
               >
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate('Store')}
                 >
-                  <View>
+                  <View style={[styles.paddTop_30, styles.paddBottom_30]}>
                     <Icon
                       name="md-home"
-                      size={40}
+                      size={isTablet ? 80 : 40}
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>
+                    <Text style={isTablet ? [styles.centerText, styles.tabletTextMedium] : [styles.centerText]}>
                       {t('settings.stores')}
                     </Text>
                   </View>
@@ -99,28 +123,35 @@ class SettingsScreen extends React.Component {
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+                style={isTablet 
+                	?
+                	[
+                  	{margin: 25},
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center     
+                	]
+                	:
+                	[
+                  	styles.margin_15,
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center
+                	]}
               >
                 <TouchableOpacity
                   onPress={() =>
                     this.props.navigation.navigate('ProductsOverview')
                   }
                 >
-                  <View>
+                  <View style={[styles.paddTop_30, styles.paddBottom_30]}>
                     <Icon
                       name="ios-beaker"
-                      size={40}
+                      size={isTablet ? 80 : 40}
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>
+                    <Text style={isTablet ? [styles.centerText, styles.tabletTextMedium] : [styles.centerText]}>
                       {t('settings.products')}
                     </Text>
                   </View>
@@ -128,28 +159,35 @@ class SettingsScreen extends React.Component {
               </View>
 
               <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+                style={isTablet 
+                	?
+                	[
+                  	{margin: 25},
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center     
+                	]
+                	:
+                	[
+                  	styles.margin_15,
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center
+                	]}
               >
                 <TouchableOpacity
                   onPress={() =>
                     this.props.navigation.navigate('StaffsOverview')
                   }
                 >
-                  <View>
+                  <View style={[styles.paddTop_30, styles.paddBottom_30]}>
                     <Icon
                       name="ios-people"
-                      size={40}
+                      size={isTablet ? 80 : 40}
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>{t('settings.staff')}</Text>
+                    <Text style={isTablet ? [styles.centerText, styles.tabletTextMedium] : [styles.centerText]}>{t('settings.staff')}</Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -157,26 +195,33 @@ class SettingsScreen extends React.Component {
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+                style={isTablet 
+                	?
+                	[
+                  	{margin: 25},
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center     
+                	]
+                	:
+                	[
+                  	styles.margin_15,
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center
+                	]}
               >
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate('PrinternKDS')}
                 >
-                  <View>
+                  <View style={[styles.paddTop_30, styles.paddBottom_30]}>
                     <Icon
                       name="md-print"
-                      size={40}
+                      size={isTablet ? 80 : 40}
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>
+                    <Text style={isTablet ? [styles.centerText, styles.tabletTextMedium] : [styles.centerText]}>
                       {t('settings.workingArea')}
                     </Text>
                   </View>
@@ -184,24 +229,31 @@ class SettingsScreen extends React.Component {
               </View>
 
               <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+                style={isTablet 
+                	?
+                	[
+                  	{margin: 25},
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center     
+                	]
+                	:
+                	[
+                  	styles.margin_15,
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center
+                	]}
               >
                 <TouchableOpacity onPress={() => changeLanguage()}>
-                  <View>
+                  <View style={[styles.paddTop_30, styles.paddBottom_30]}>
                     <MaterialIcon
                       name="language"
-                      size={40}
+                      size={isTablet ? 80 : 40}
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>
+                    <Text style={isTablet ? [styles.centerText, styles.tabletTextMedium] : [styles.centerText]}>
                       {t('settings.language')}
                     </Text>
                   </View>
@@ -213,26 +265,33 @@ class SettingsScreen extends React.Component {
           <View>
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+                style={isTablet 
+                	?
+                	[
+                  	{margin: 25},
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center     
+                	]
+                	:
+                	[
+                  	styles.margin_15,
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center
+                	]}
               >
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate('TableLayouts')}
                 >
-                  <View>
+                  <View style={[styles.paddTop_30, styles.paddBottom_30]}>
                     <MaterialIcon
                       name="event-seat"
-                      size={40}
+                      size={isTablet ? 80 : 40}
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>
+                    <Text style={isTablet ? [styles.centerText, styles.tabletTextMedium] : [styles.centerText]}>
                       {t('settings.tableLayouts')}
                     </Text>
                   </View>
@@ -240,26 +299,33 @@ class SettingsScreen extends React.Component {
               </View>
 
               <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+                style={isTablet 
+                	?
+                	[
+                  	{margin: 25},
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center     
+                	]
+                	:
+                	[
+                  	styles.margin_15,
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center
+                	]}
               >
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate('ShiftClose')}
                 >
-                  <View>
+                  <View style={[styles.paddTop_30, styles.paddBottom_30]}>
                     <Icon
                       name="md-book"
-                      size={40}
+                      size={isTablet ? 80 : 40}
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>
+                    <Text style={isTablet ? [styles.centerText, styles.tabletTextMedium] : [styles.centerText]}>
                       {t('settings.manageShifts')}
                     </Text>
                   </View>
@@ -269,28 +335,35 @@ class SettingsScreen extends React.Component {
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+                style={isTablet 
+                	?
+                	[
+                  	{margin: 30},
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center     
+                	]
+                	:
+                	[
+                  	styles.margin_15,
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center
+                	]}
               >
                 <TouchableOpacity
                   onPress={() =>
                     this.props.navigation.navigate('Announcements')
                   }
                 >
-                  <View>
+                  <View style={[styles.paddTop_30, styles.paddBottom_30]}>
                     <FontAwesomeIcon
                       name="commenting"
-                      size={40}
+                      size={isTablet ? 80 : 40}
                       color="#f18d1a"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <Text style={styles.centerText}>{t('settings.announcements')}</Text>
+                    <Text style={isTablet ? [styles.centerText, styles.tabletTextMedium] : [styles.centerText]}>{t('settings.announcements')}</Text>
                   </View>
                 </TouchableOpacity>
               </View>

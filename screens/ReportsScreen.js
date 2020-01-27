@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import images from '../assets/images'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import { isTablet } from '../actions'
 
 class ReportsScreen extends React.Component {
   static navigationOptions = {
@@ -35,52 +36,98 @@ class ReportsScreen extends React.Component {
     return (
       <ScrollView>
         <DismissKeyboard>
-          <View style={styles.container}>
+          <View style={[styles.container]}>
             <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
+          		style={isTablet ? [
+            		styles.welcomeText,
+            		styles.orange_color,
+            		styles.tabletTextBig,
+            		styles.textBold,
+            		styles.nomgrBottom,
+            		styles.paddTop_30 
+          		]
+          		:
+        			[
+            		styles.welcomeText,
+            		styles.orange_color,
+            		styles.textMedium,
+            		styles.textBold,
+            		styles.nomgrBottom
+          		]}
+        		>
               {t('menu.reporting')}
             </Text>
 
-            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-              <TouchableOpacity
-                style={styles.mainSquareButton}
-                onPress={() => this.props.navigation.navigate('Sales')}
-              >
-                <View>
-                  <FontAwesomeIcon
-                    name="bar-chart"
-                    size={40}
-                    style={[styles.centerText, styles.margin_15, styles.orange_color]}
-                  />
-                  <Text
-                    style={styles.centerText}
-                  >
-                    {t('salesReport')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+            <View style={[styles.jc_alignIem_center, styles.flex_dir_row, { marginTop: 20 }]}>
+            	<View
+                style={isTablet 
+                	?
+                	[
+                  	{margin: 25},
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center                	    
+                	]
+                	:
+                	[
+                  	styles.margin_15,
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center
+                	]}
+              	>
+              	<TouchableOpacity
+                	// style={styles.mainSquareButton}
+                	onPress={() => this.props.navigation.navigate('Sales')}
+              		>
+                	<View style={[styles.paddTop_30, styles.paddBottom_30]}>
+                  	<FontAwesomeIcon
+                    	name="bar-chart"
+                    	size={isTablet ? 80 : 40}
+                    	style={[styles.centerText, styles.margin_15, styles.orange_color]}
+                  	/>
+                  	<Text
+                    	style={isTablet ? [styles.centerText, styles.tabletTextMedium] : [styles.centerText]}
+                  	>
+                    	{t('salesReport')}
+                  	</Text>
+                	</View>
+              	</TouchableOpacity>
+              </View>
 
-              <TouchableOpacity
-                style={styles.mainSquareButton}
-                //onPress={() => this.props.navigation.navigate('TablesSrc')}
+							<View
+                style={isTablet 
+                	?
+                	[
+                  	{margin: 25},
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center                  	    
+                	]
+                	:
+                	[
+                  	styles.margin_15,
+                  	styles.grayBg,
+                  	styles.half_width,
+                  	styles.jc_alignIem_center
+                	]}
               >
-                <View style={styles.jc_alignIem_center}>
-                  <Icon
-                    name="md-time"
-                    size={40}
-                    style={[styles.centerText, styles.margin_15, styles.orange_color]}
-                  />
-                  <Text style={[styles.centerText]}>
-                    {t('staffTimeCardReport')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+              	<TouchableOpacity
+                	//style={styles.mainSquareButton}
+                	//onPress={() => this.props.navigation.navigate('TablesSrc')}
+              	>
+                	<View style={[styles.paddTop_30, styles.paddBottom_30]}>
+                  	<Icon
+                    	name="md-time"
+                    	size={isTablet ? 80 : 40}
+                    	style={[styles.centerText, styles.orange_color]}
+                  	/>
+                  	<Text style={isTablet ? [styles.centerText, styles.tabletTextMedium] : [styles.centerText]}>
+                    	{t('staffTimeCardReport')}
+                  	</Text>
+                	</View>
+              	</TouchableOpacity>
+              </View>
             </View>
           </View>
         </DismissKeyboard>

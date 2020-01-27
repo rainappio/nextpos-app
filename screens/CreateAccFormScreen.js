@@ -6,6 +6,7 @@ import { isEmail, isvalidPassword } from '../validators'
 import validate from '../validate'
 import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
+import { isTablet } from '../actions'
 import styles from '../styles'
 import { withNavigation } from 'react-navigation'
 import { LocaleContext } from '../locales/LocaleContext'
@@ -43,13 +44,15 @@ class CreateAccFormScreen extends React.Component {
               />
             </View>
 
-            <Text style={styles.welcomeText}>Let's Get Started!</Text>
+            <Text style={isTablet ? [styles.tabletTextBig, styles.centerText] : styles.welcomeText}>Let's Get Started!</Text>
 
             <Field
               name="clientName"
               component={InputText}
               placeholder={t('clientName')}
               secureTextEntry={false}
+              height={isTablet ? 80 : 20}
+              fontSize={isTablet ? 22 : 14}
             />
 
             <Field
@@ -59,6 +62,8 @@ class CreateAccFormScreen extends React.Component {
               placeholder={t('email')}
               secureTextEntry={false}
               autoCapitalize="none"
+              height={isTablet ? 80 : 20}
+              fontSize={isTablet ? 22 : 14}
             />
             <Field
               name="masterPassword"
@@ -66,26 +71,28 @@ class CreateAccFormScreen extends React.Component {
               validate={isvalidPassword}
               placeholder={t('password')}
               secureTextEntry={true}
+              height={isTablet ? 80 : 20}
+              fontSize={isTablet ? 22 : 14}
             />
 
-            <Text style={styles.text}>
+            <Text style={isTablet ? [styles.tabletTextMedium, styles.paddTop_30, styles.mgrbtn20] : styles.text}>
               Accept Seller Agreement and Privacy Policy
             </Text>
-            <Text style={styles.textSmall}>
+            <Text style={isTablet ? styles.textMedium : styles.textSmall}>
               View Seller Agreement and Privacy Policy
             </Text>
           </View>
 
           <View style={[styles.bottom]}>
             <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={isTablet ? [styles.bottomActionButton, styles.actionButton, styles.tabletTextMedium, styles.paddingTopBtn15] : [styles.bottomActionButton, styles.cancelButton]}>
                 {t('signUp')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Intro')}
             >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+              <Text style={isTablet ? [styles.bottomActionButton, styles.actionButton, styles.tabletTextMedium, styles.paddingTopBtn15] : [styles.bottomActionButton, styles.cancelButton]}>
                 {t('cancel')}
               </Text>
             </TouchableOpacity>

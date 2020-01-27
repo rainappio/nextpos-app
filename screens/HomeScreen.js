@@ -10,6 +10,7 @@ import {
   TouchableHighlight
 } from 'react-native'
 import { connect } from 'react-redux'
+import { isTablet } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 
@@ -51,19 +52,20 @@ export default class HomeScreen extends React.Component {
                   ? require('../assets/images/logo.png')
                   : require('../assets/images/logo.png')
               }
-              style={styles.welcomeImage}
+              style={[styles.welcomeImage]}
+              width={isTablet ? 200 : 40}
             />
           </View>
-          <Text style={styles.welcomeText}>Quickly</Text>
-          <Text style={styles.welcomeText}>Easily</Text>
-          <Text style={styles.welcomeText}>Securely</Text>
+          <Text style={isTablet ? [styles.welcomeText, styles.tabletTextBig, styles.mgrbtn40] : [styles.welcomeText]}>Quickly</Text>
+          <Text style={isTablet ? [styles.welcomeText, styles.tabletTextBig, styles.mgrbtn40] : [styles.welcomeText]}>Easily</Text>
+          <Text style={isTablet ? [styles.welcomeText, styles.tabletTextBig, styles.mgrbtn40] : [styles.welcomeText]}>Securely</Text>
         </View>
 
         <View style={styles.bottom}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Intro')}
           >
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+            <Text style={isTablet ? [styles.bottomActionButton, styles.actionButton, styles.tabletTextMedium, styles.paddingTopBtn15] : [styles.bottomActionButton, styles.actionButton]}>
               {t('getStarted')}
             </Text>
           </TouchableOpacity>

@@ -13,7 +13,8 @@ import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 import { withNavigation } from 'react-navigation'
-import {LocaleContext} from "../locales/LocaleContext";
+import {LocaleContext} from "../locales/LocaleContext"
+import { isTablet } from '../actions'
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -65,6 +66,8 @@ class LoginScreen extends React.Component {
               validate={[isRequired, isEmail]}
               placeholder={t('email')}
               autoCapitalize="none"
+              height={isTablet ? 80 : 20}
+              fontSize={isTablet ? 22 : 14}
             />
 
             <Field
@@ -73,6 +76,8 @@ class LoginScreen extends React.Component {
               validate={isRequired}
               placeholder={t('password')}
               secureTextEntry={true}
+              height={isTablet ? 80 : 20}
+              fontSize={isTablet ? 22 : 14}
             />
           </View>
 
@@ -83,14 +88,14 @@ class LoginScreen extends React.Component {
                 handleSubmit()
               }}
             >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={isTablet ? [styles.bottomActionButton, styles.actionButton, styles.tabletTextMedium, styles.paddingTopBtn15] : [styles.bottomActionButton, styles.cancelButton]}>
                 {t('login')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Intro')}
             >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+              <Text style={isTablet ? [styles.bottomActionButton, styles.cancelButton, styles.tabletTextMedium, styles.paddingTopBtn15] : [styles.bottomActionButton, styles.cancelButton]}>
                 {t('cancel')}
               </Text>
             </TouchableOpacity>

@@ -334,6 +334,10 @@ export default StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 20
   },
+  paddingTopBtn15: {
+    paddingTop: 15,
+    paddingBottom: 15
+  },
   borderBottomLine: {
     borderBottomColor: '#f1f1f1',
     borderBottomWidth: 1
@@ -582,5 +586,11 @@ export default StyleSheet.create({
   textArea: {
     height: 150,
     justifyContent: 'flex-start'
+  },
+  tabletTextBig: {
+  	fontSize: 30
+  },
+  tabletTextMedium: {
+  	fontSize: 24
   }
 })

@@ -16,7 +16,8 @@ import {
   formatDateFromMillis,
   formatDateObj,
   getClientUsr,
-  getAnnouncements
+  getAnnouncements,
+  isTablet
 } from '../actions'
 import styles from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
@@ -106,7 +107,7 @@ class LoginSuccessScreen extends React.Component {
       getannouncements
     } = this.props
     const { t } = this.props.screenProps
-    const { username, loggedIn, tokenExpiry } = this.state
+    const { username, loggedIn, tokenExpiry } = this.state		
 
     if (isLoading) {
       return (
@@ -165,7 +166,7 @@ class LoginSuccessScreen extends React.Component {
               <Avatar
                 rounded
                 title={username != null && username.charAt(0)}
-                size="small"
+                size={isTablet ? "large" : "small"}
                 overlayContainerStyle={[styles.orange_bg]}
                 titleStyle={styles.whiteColor}
                 onPress={this._toggleShow}
@@ -174,10 +175,10 @@ class LoginSuccessScreen extends React.Component {
           </View>
 
           <View style={{marginLeft: '3%'}}>
-            <Text style={[styles.text, styles.textBig, styles.orange_color]}>
+            <Text style={isTablet ? [styles.text, styles.tabletTextMedium, styles.orange_color] : [styles.text, styles.textBig, styles.orange_color]}>
               {t('welcome')} {currentUser.displayName}
             </Text>
-            <Text style={[styles.textSmall]}>
+            <Text style={isTablet? [styles.textMedium, styles.mgrbtn20] : [styles.textSmall]}>
               {t('loggedIn')} {formatDateObj(loggedIn)}
             </Text>
           </View>
@@ -200,11 +201,11 @@ class LoginSuccessScreen extends React.Component {
               	<View>
                 	<Icon
                   	name="md-people"
-                  	size={40}
+                  	size={isTablet ? 70 : 40}
                   	color="#f18d1a"
                   	style={[styles.centerText, styles.margin_15]}
                 	/>
-                	<Text style={styles.centerText}>{t('menu.tables')}</Text>
+                	<Text style={isTablet ? [styles.centerText, styles.textBig] : [styles.centerText]}>{t('menu.tables')}</Text>
               	</View>
             	</TouchableOpacity>
           	</View>
@@ -232,11 +233,11 @@ class LoginSuccessScreen extends React.Component {
                 <View>
                   <FontAwesomeIcon
                     name="clock-o"
-                    size={40}
+                    size={isTablet ? 70 : 40}
                     color="#f18d1a"
                     style={[styles.centerText, styles.margin_15]}
                   />
-                  <Text style={[styles.centerText]}>{t('menu.timecard')}</Text>
+                  <Text style={isTablet ? [styles.centerText, styles.textBig] : [styles.centerText]}>{t('menu.timecard')}</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -257,11 +258,11 @@ class LoginSuccessScreen extends React.Component {
                 <View>
                   <Icon
                     name="ios-log-out"
-                    size={40}
+                    size={isTablet ? 70 : 40}
                     color="#f18d1a"
                     style={[styles.centerText, styles.margin_15]}
                   />
-                  <Text style={styles.centerText}>{t('menu.clientUsers')}</Text>
+                  <Text style={isTablet ? [styles.centerText, styles.textBig] : [styles.centerText]}>{t('menu.clientUsers')}</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -288,16 +289,16 @@ class LoginSuccessScreen extends React.Component {
           						<View style={{marginRight: 17}}>
           							<IonIcon
               						name={getannoc.titleIcon}
-              						size={31}
+              						size={isTablet ? 60 : 26}
               						color="#f18d1a"
               						//onPress={() => fields.push()}
             						/>
           						</View>
           						<View>
-												<Text style={[
-                						styles.orange_color,
-                						styles.textMedium,
-              						]}>
+												<Text style={isTablet 
+													? [ styles.orange_color, styles.textBig ]
+              						: [ styles.orange_color, styles.textMedium ]
+              					}>
               						{getannoc.title}
               					</Text>
           						</View>
