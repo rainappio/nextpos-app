@@ -1,6 +1,6 @@
 import React from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
-import { get_time_diff } from '../actions'
+import {getTimeDifference} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import Icon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -18,10 +18,11 @@ class OrderItem extends React.PureComponent {
       handleDelete,
       handleDeliver
     } = this.props
-    var timeDifference = get_time_diff(order.createdTime)
+    const timeDifference = getTimeDifference(order.createdTime)
+    const thirtyMinutes = 30 * 60 * 1000
 
     TimeAgo.addLocale(en)
-    const timeAgo = new TimeAgo('en-US')
+    const timeAgo = new TimeAgo()
 
     return (
       <TouchableOpacity
@@ -61,18 +62,18 @@ class OrderItem extends React.PureComponent {
 
         <View style={{ width: '32%' }}>
           {(order.state === 'OPEN' || order.state === 'IN_PROCESS') &&
-            (timeDifference < 29 ? (
+            (timeDifference < thirtyMinutes ? (
               <FontAwesomeIcon name={'clock-o'} color="#f18d1a" size={20}>
                 <Text style={{ fontSize: 12 }}>
                   &nbsp;&nbsp;
-                  {timeAgo.format(Date.now() - timeDifference * 60 * 1000)}
+                  {timeAgo.format(Date.now() - timeDifference)}
                 </Text>
               </FontAwesomeIcon>
-            ) : timeDifference > 30 ? (
+            ) : timeDifference >= thirtyMinutes ? (
               <FontAwesomeIcon name={'clock-o'} color="red" size={20}>
                 <Text style={{ fontSize: 12 }}>
                   &nbsp;&nbsp;
-                  {timeAgo.format(Date.now() - timeDifference * 60 * 1000)}
+                  {timeAgo.format(Date.now() - timeDifference)}
                 </Text>
               </FontAwesomeIcon>
             ) : null)}
@@ -81,7 +82,7 @@ class OrderItem extends React.PureComponent {
             <FontAwesomeIcon name={'clock-o'} color="#888" size={20}>
               <Text style={{ fontSize: 12 }}>
                 &nbsp;&nbsp;
-                {timeAgo.format(Date.now() - timeDifference * 60 * 1000)}
+                {timeAgo.format(Date.now() - timeDifference)}
               </Text>
             </FontAwesomeIcon>
           )}

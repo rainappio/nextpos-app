@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import {
   doLogout,
@@ -26,6 +27,7 @@ import { LocaleContext } from '../locales/LocaleContext'
 import { Avatar } from 'react-native-elements'
 import Markdown from 'react-native-markdown-renderer'
 import IonIcon from 'react-native-vector-icons/Ionicons'
+import {handleDelete, handleOrderSubmit} from "../helpers/orderActions";
 
 class LoginSuccessScreen extends React.Component {
   static navigationOptions = {
@@ -64,10 +66,12 @@ class LoginSuccessScreen extends React.Component {
       en: {
         welcome: 'Welcome,',
         loggedIn: 'Logged in at',
+        quickOrder: 'Quick Order'
       },
       zh: {
         welcome: '歡迎,',
         loggedIn: '登入時間:',
+        quickOrder: '快速訂單'
       }
     })
     // <NavigationEvent> component in the render function takes care of loading user info.
@@ -105,7 +109,7 @@ class LoginSuccessScreen extends React.Component {
       haveError,
       getannouncements
     } = this.props
-    const { t } = this.props.screenProps
+    const { t } = this.context
     const { username, loggedIn, tokenExpiry } = this.state
 
     if (isLoading) {
@@ -131,7 +135,6 @@ class LoginSuccessScreen extends React.Component {
           <HiddenMenu
             navigation={navigation}
             handleClientUserLogout={this.handleClientUserLogout}
-            screenProps={this.props.screenProps}
           />
         )}
 
@@ -183,31 +186,37 @@ class LoginSuccessScreen extends React.Component {
           </View>
 
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-            <View
-              style={[
-                styles.margin_15,
-                styles.grayBg,
-                styles.jc_alignIem_center,
-                styles.paddTop_30,
-                styles.paddBottom_30,
-                styles.borderRadius4,
-                {width: '96%'}
-              ]}
+            <TouchableOpacity
+              style={{width: '96%'}}
+              onPress={() => {
+                this.props.navigation.navigate('OrderStart', {
+                  handleOrderSubmit: handleOrderSubmit,
+                  handleDelete: handleDelete
+                })
+              }}
             >
-            	<TouchableOpacity
-              	onPress={() => this.props.navigation.navigate('TablesSrc')}
-            		>
-              	<View>
-                	<Icon
-                  	name="md-people"
-                  	size={40}
-                  	color="#f18d1a"
-                  	style={[styles.centerText, styles.margin_15]}
-                	/>
-                	<Text style={styles.centerText}>{t('menu.tables')}</Text>
-              	</View>
-            	</TouchableOpacity>
-          	</View>
+              <View
+                style={[
+                  styles.margin_15,
+                  styles.grayBg,
+                  styles.jc_alignIem_center,
+                  styles.paddTop_30,
+                  styles.paddBottom_30,
+                  styles.borderRadius4,
+                  {width: '96%'}
+                ]}
+              >
+                <View>
+                  <MaterialIcon
+                    name="play-arrow"
+                    size={40}
+                    color="#f18d1a"
+                    style={[styles.centerText, styles.margin_15]}
+                  />
+                  <Text style={styles.centerText}>{t('quickOrder')}</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
           </View>
 
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
@@ -342,8 +351,10 @@ export default connect(
 )(LoginSuccessScreen)
 
 export class HiddenMenu extends React.Component {
+  static contextType = LocaleContext
+
   render() {
-    let { t } = this.props.screenProps
+    let { t } = this.context
 
     return (
       <View

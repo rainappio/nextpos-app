@@ -35,7 +35,7 @@ export const getAnnouncements = () => {
         })
       },
       response => {
-        dispatch(fetchAnnouncementsFailure(error))
+        dispatch(fetchAnnouncementsFailure(response))
       }
     ).then()
   }

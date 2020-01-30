@@ -6,13 +6,13 @@ import { isRequired } from '../validators'
 import InputText from '../components/InputText'
 import PinCodeInput from '../components/PinCodeInput'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import { getClientUsrs } from '../actions'
+import {getClientUsrs, resolveRoles} from '../actions'
 import EditPasswordPopUp from '../components/EditPasswordPopUp'
-import RNSwitch from '../components/RNSwitch'
 import styles from '../styles'
 import DeleteBtn from '../components/DeleteBtn'
 import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
 import { LocaleContext } from '../locales/LocaleContext'
+import SegmentedControl from "../components/SegmentedControl"
 
 class StaffFormScreen extends React.Component {
   static navigationOptions = {
@@ -23,8 +23,10 @@ class StaffFormScreen extends React.Component {
   constructor(props, context) {
     super(props, context)
 
+    const selectedRoleIndex = this.props.initialValues !== undefined ? this.props.initialValues.selectedRole : 0
+
     this.state = {
-      t: context.t
+      selectedRole: selectedRoleIndex
     }
   }
 
@@ -35,6 +37,7 @@ class StaffFormScreen extends React.Component {
         nickName: 'Nick Name',
         username: 'User Name',
         password: 'Password',
+        role: 'Role',
         manager: 'Manager Role',
         passwordTitle: 'Password',
         editPassword: 'Edit Password',
@@ -45,6 +48,7 @@ class StaffFormScreen extends React.Component {
         nickName: '匿稱',
         username: '使用者名稱',
         password: '密碼',
+        role: '權限',
         manager: '主管權限',
         passwordTitle: '設定密碼',
         editPassword: '編輯密碼',
@@ -72,6 +76,10 @@ class StaffFormScreen extends React.Component {
     ).then()
   }
 
+  handleRoleSelection = (index) => {
+    this.setState({ selectedRole: index })
+  }
+
   render() {
     const {
       handleSubmit,
@@ -80,43 +88,20 @@ class StaffFormScreen extends React.Component {
       initialValues,
       onCancel
     } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
           <View>
-            {isEditForm ? (
-              <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold,
-                  styles.mgrbtn80
-                ]}
-              >
-                {t('staffTitle')}
-              </Text>
-            ) : (
-              <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold,
-                  styles.mgrbtn80
-                ]}
-              >
-                {t('staffTitle')}
-              </Text>
-            )}
-
-            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-              <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-                <Text>{t('nickName')}</Text>
+            <Text style={styles.screenTitle}>
+              {t('staffTitle')}
+            </Text>
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.fieldTitle}>{t('nickName')}</Text>
               </View>
-              <View style={[styles.onesixthWidth]}>
+              <View style={{flex: 3}}>
                 <Field
                   name="nickname"
                   component={InputText}
@@ -127,11 +112,11 @@ class StaffFormScreen extends React.Component {
               </View>
             </View>
 
-            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-              <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-                <Text>{t('username')}</Text>
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.fieldTitle}>{t('username')}</Text>
               </View>
-              <View style={[styles.onesixthWidth]}>
+              <View style={{flex: 3}}>
                 <Field
                   name="username"
                   component={InputText}
@@ -144,11 +129,11 @@ class StaffFormScreen extends React.Component {
               </View>
             </View>
 
-            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-              <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-                <Text>{t('password')}</Text>
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.fieldTitle}>{t('password')}</Text>
               </View>
-              <View style={[styles.onesixthWidth, styles.mgrtotop8]}>
+              <View style={{flex: 3}}>
                 <Field
                   name="password"
                   component={PinCodeInput}
@@ -158,32 +143,29 @@ class StaffFormScreen extends React.Component {
                 />
               </View>
             </View>
-
-            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-              {isEditForm && (
-                <EditPasswordPopUp name={initialValues.username} />
-              )}
-            </View>
-
-            {isEditForm ? (
-              <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-                <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-                  <Text>{t('manager')}</Text>
-                </View>
-                <View style={[styles.onesixthWidth, styles.mgrtotop8]}>
-                  <Field name="isManager" component={RNSwitch} />
-                </View>
-              </View>
-            ) : (
-              <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-                <View style={[styles.onethirdWidth, styles.mgrtotop20]}>
-                  <Text>{t('manager')}</Text>
-                </View>
-                <View style={[styles.onesixthWidth, styles.mgrtotop20]}>
-                  <Field name="isManager" component={RNSwitch} />
-                </View>
+            {isEditForm && (
+              <View style={[styles.fieldContainer, {justifyContent: 'center', marginBottom: 15}]}>
+                <EditPasswordPopUp name={initialValues.username}/>
               </View>
             )}
+
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 1}}>
+                <Text style={styles.fieldTitle}>{t('role')}</Text>
+              </View>
+              <View style={{flex: 3}}>
+                <Field
+                  name="selectedRole"
+                  component={SegmentedControl}
+                  values={["USER", "MANAGER", "OWNER"]}
+                  selectedIndex={this.state.selectedRole}
+                  onChange={this.handleRoleSelection}
+                  normalize={value => {
+                    return resolveRoles(value)
+                  }}
+                />
+              </View>
+            </View>
           </View>
 
           <View style={[styles.bottom]}>

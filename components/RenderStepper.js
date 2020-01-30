@@ -26,7 +26,7 @@ export default class RenderStepper extends React.Component {
               clear
               error
               onChange={onChange}
-              max={10}
+              max={20}
               min={0}
               readOnly={false}
               defaultValue={Number.isInteger(customValue) ? customValue : 0}
