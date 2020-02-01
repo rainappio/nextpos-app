@@ -4,7 +4,10 @@ import { ActivityIndicator, AsyncStorage, Text, View } from 'react-native'
 import {
   clearProduct,
   getTablesAvailable,
-  getOrdersByDateRange
+  getOrdersByDateRange,
+  isTablet,
+  getfetchOrderInflights,
+  getTableLayouts
 } from '../actions'
 import OrderForm from './OrderForm'
 import { api, makeFetchRequest } from '../constants/Backend'
@@ -86,6 +89,51 @@ class OrderStart extends React.Component {
     })
   }
 
+  handleOrderSubmit = id => {
+    const formData = new FormData()
+    formData.append('action', 'SUBMIT')
+
+    dispatchFetchRequest(
+      api.order.process(id),
+      {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {},
+        body: formData
+      },
+      response => {
+        response.json().then(data => {
+          if (data.hasOwnProperty('orderId')) {
+            successMessage('Order submitted')
+            this.props.navigation.navigate('TablesSrc')
+            this.props.getfetchOrderInflights()
+          }
+        })
+      }
+    ).then()
+  }
+
+  handleDelete = id => {
+    dispatchFetchRequest(
+      api.order.delete(id),
+      {
+        method: 'DELETE',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      },
+      response => {
+        successMessage('Deleted')
+        this.props.navigation.navigate('TablesSrc')
+        this.props.getfetchOrderInflights()
+        this.props.getTableLayouts()
+      }
+    ).then()
+  }
+
   render() {
     const { navigation, isLoading, haveData, availableTables } = this.props
     const { t } = this.state
@@ -112,7 +160,7 @@ class OrderStart extends React.Component {
     } else if (!availableTablesArr || availableTablesArr.length === 0) {
       return (
         <View style={[styles.container]}>
-          <BackBtn />
+          <BackBtn size={isTablet ? 44 : 28}/>
           <Text>{t('noAvailableTables')}</Text>
         </View>
       )
@@ -138,7 +186,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   clearProduct: () => dispatch(clearProduct()),
   getTablesAvailable: () => dispatch(getTablesAvailable()),
-  getOrdersByDateRange: () => dispatch(getOrdersByDateRange())
+  getOrdersByDateRange: () => dispatch(getOrdersByDateRange()),
+  getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
+  getTableLayouts: () => dispatch(getTableLayouts())
 })
 export default connect(
   mapStateToProps,

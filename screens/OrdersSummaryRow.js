@@ -114,17 +114,17 @@ class OrdersSummaryRow extends React.Component {
 
   renderStateToolTip = (state, t) => {
     const tooltip = (
-      <View>
-        <Text>
+      <View style={styles.defaultfontSize}>
+        <Text style={styles.defaultfontSize}>
           {t('stateTip.open.display')}: {t('stateTip.open.note')}
         </Text>
-        <Text>
+        <Text style={styles.defaultfontSize}>
           {t('stateTip.inProcess.display')}: {t('stateTip.inProcess.note')}
         </Text>
-        <Text>
+        <Text style={styles.defaultfontSize}>
           {t('stateTip.delivered.display')}: {t('stateTip.delivered.note')}
         </Text>
-        <Text>
+        <Text style={styles.defaultfontSize}>
           {t('stateTip.settled.display')}: {t('stateTip.settled.note')}
         </Text>
       </View>
@@ -133,15 +133,15 @@ class OrdersSummaryRow extends React.Component {
     return (
       <Tooltip popover={tooltip} height={120} width={200}>
         <View>
-          {state === 'OPEN' && <Text>{t('stateTip.open.display')}</Text>}
+          {state === 'OPEN' && <Text style={styles.defaultfontSize}>{t('stateTip.open.display')}</Text>}
           {state === 'IN_PROCESS' ||
             (state === 'ALREADY_IN_PROCESS' && (
-              <Text>{t('stateTip.inProcess.display')}</Text>
+              <Text style={styles.defaultfontSize}>{t('stateTip.inProcess.display')}</Text>
             ))}
           {state === 'DELIVERED' && (
-            <Text>{t('stateTip.delivered.display')}</Text>
+            <Text style={styles.defaultfontSize}>{t('stateTip.delivered.display')}</Text>
           )}
-          {state === 'SETTLED' && <Text>{t('stateTip.settled.display')}</Text>}
+          {state === 'SETTLED' && <Text style={styles.defaultfontSize}>{t('stateTip.settled.display')}</Text>}
         </View>
       </Tooltip>
     )
@@ -228,12 +228,6 @@ class OrdersSummaryRow extends React.Component {
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View
-          // style={{
-          //   marginTop: 62,
-          //   marginLeft: 35,
-          //   marginRight: 35,
-          //   marginBottom: 30
-          // }}
           style={[styles.container]}
         >
           <BackBtn size={isTablet ? 44 : 28}/>
@@ -248,7 +242,7 @@ class OrdersSummaryRow extends React.Component {
           </Text>
 
           <View style={[styles.flex_dir_row, { alignItems: 'center' }]}>
-            <View style={[styles.quarter_width]}>
+            <View style={{width: '20%'}}>
               <View>
                 <Text
                   style={[
@@ -262,7 +256,7 @@ class OrdersSummaryRow extends React.Component {
               </View>
             </View>
 
-            <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
+            <View style={[{width: '10%'}, styles.jc_alignIem_center]}>
               <View>
                 <FontAwesomeIcon
                   name="user"
@@ -270,7 +264,7 @@ class OrdersSummaryRow extends React.Component {
                   color="#f18d1a"
                   style={[styles.centerText]}
                 >
-                  <Text style={[styles.defaultfontSize, styles.orange_color]}>
+                  <Text style={[styles.textBig, styles.orange_color]}>
                     &nbsp;
                     {!this.props.navigation.state.params.customerCount
                       ? order.demographicData.male +
@@ -282,7 +276,7 @@ class OrdersSummaryRow extends React.Component {
               </View>
             </View>
 
-            <View style={[styles.fullhalf_width]}>
+            <View style={[{width: '70%'}]}>
               <TouchableOpacity>
                 <View>
                   <Text style={[styles.toRight, styles.defaultfontSize]}>
@@ -301,49 +295,36 @@ class OrdersSummaryRow extends React.Component {
           style={[
             styles.orange_bg,
             styles.flex_dir_row,
-            styles.shoppingBar,
-            styles.paddLeft20,
-            styles.paddRight20,
-            //styles.top40
+            {padding: 20}        
           ]}
         >
           <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
-            <TouchableOpacity>
-              <Text style={[styles.paddingTopBtn8, styles.whiteColor, styles.defaultfontSize]}>
-                {t('product')}
-              </Text>
-            </TouchableOpacity>
+            <Text style={[styles.whiteColor, styles.defaultfontSize]}>
+              {t('product')}
+            </Text>
           </View>
 
           <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
-            <TouchableOpacity>
-              <Text style={[styles.whiteColor, styles.defaultfontSize]}>
-                &nbsp;&nbsp;{t('quantity')}
-              </Text>
-            </TouchableOpacity>
+            <Text style={[styles.whiteColor, styles.defaultfontSize]}>
+              &nbsp;&nbsp;{t('quantity')}
+            </Text>
           </View>
 
           <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
-            <TouchableOpacity>
-              <Text style={[styles.whiteColor, styles.defaultfontSize]}>{t('unitPrice')}</Text>
-            </TouchableOpacity>
+            <Text style={[styles.whiteColor, styles.defaultfontSize]}>{t('unitPrice')}</Text>
           </View>
 
           <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
-            <TouchableOpacity>
-              <Text style={[styles.whiteColor, styles.defaultfontSize]}>{t('subTotal')}</Text>
-            </TouchableOpacity>
+            <Text style={[styles.whiteColor, styles.defaultfontSize]}>{t('subTotal')}</Text>
           </View>
 
           <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
-            <TouchableOpacity>
-              <Text style={[styles.whiteColor, styles.defaultfontSize]}>{t('state')}</Text>
-            </TouchableOpacity>
+            <Text style={[styles.whiteColor, styles.defaultfontSize]}>{t('state')}</Text>
           </View>
         </View>
 
         <View style={[styles.container]}>
-          <Text style={styles.textBold}>{order.orderId}</Text>
+          <Text style={[styles.textBold, styles.defaultfontSize]}>{order.orderId}</Text>
           {order.state !== 'SETTLED' && (
             <AddBtn
               onPress={() =>
@@ -353,6 +334,7 @@ class OrdersSummaryRow extends React.Component {
                   handleDelete: this.props.navigation.state.params.handleDelete
                 })
               }
+              size={isTablet ? 60 : 28}
             />
           )}
 
@@ -395,6 +377,7 @@ class OrdersSummaryRow extends React.Component {
                       >
                         <Text style={styles.defaultfontSize}>${data.item.subTotal.amountWithTax}</Text>
                       </View>
+
                       <View
                         style={[
                           styles.oneFifthWidth,
@@ -418,7 +401,7 @@ class OrdersSummaryRow extends React.Component {
                   <View style={styles.editIcon}>
                     <Icon
                       name="md-create"
-                      size={25}
+                      size={isTablet ? 50 : 25}
                       color="#fff"
                       onPress={() =>
                         this.props.navigation.navigate('LIneItemEdit', {
@@ -451,43 +434,33 @@ class OrdersSummaryRow extends React.Component {
           </View>
 
           <View
-            style={[styles.flex_dir_row, styles.grayBg, styles.paddingTopBtn8]}
+            style={[styles.flex_dir_row, styles.grayBg, styles.paddingTopBtn15]}
           >
-            <View style={[styles.half_width]}>
+            <View style={[styles.fullhalf_width]}>
               <Text style={styles.defaultfontSize}>{t('serviceCharge')}</Text>
             </View>
-            <View style={[styles.half_width]}>
-              <Text style={[{ textAlign: 'right', marginRight: -26 }, styles.defaultfontSize]}>
+            <View style={[styles.fullhalf_width, styles.paddRight20]}>
+              <Text style={[{ textAlign: 'right'}, styles.defaultfontSize]}>
                 ${order.serviceCharge}
               </Text>
             </View>
           </View>
 
           <View
-            style={[styles.flex_dir_row, styles.grayBg, styles.paddingTopBtn8]}
+            style={[styles.flex_dir_row, styles.grayBg, styles.mgrtotop12, styles.mgrbtn40, styles.paddingTopBtn15]}
           >
-            <View style={[styles.half_width]}>
+            <View style={[styles.fullhalf_width]}>
               <Text style={styles.defaultfontSize}>{t('total')}</Text>
             </View>
-            <View style={[styles.half_width]}>
-              <Text style={[{ textAlign: 'right', marginRight: -26 }, styles.defaultfontSize]}>
+            <View style={[styles.fullhalf_width, styles.paddRight20]}>
+              <Text style={[styles.toRight, styles.defaultfontSize]}>
                 ${order.orderTotal}
               </Text>
             </View>
           </View>
 
           {order.state === 'OPEN' ? (
-            <View
-              style={{
-                width: '100%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                backgroundColor: '#F39F86',
-                marginRight: '2%',
-                marginTop: 22
-              }}
-            >
+            <View>
               <TouchableOpacity
                 onPress={() =>
                   order.lineItems.length === 0
@@ -496,126 +469,79 @@ class OrdersSummaryRow extends React.Component {
                       )
                     : this.props.navigation.state.params.onSubmit(order.orderId)
                 }
+                style={styles.jc_alignIem_center}
               >
-                <Text style={[styles.signInText, styles.whiteColor, styles.defaultfontSize]}>
+                <Text style={[styles.bottomActionButton, styles.actionButton, styles.defaultfontSize]}>
                   {t('submitOrder')}
                 </Text>
               </TouchableOpacity>
             </View>
           ) : order.state === 'IN_PROCESS' ? (
-            <View
-              style={{
-                width: '100%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                backgroundColor: '#F39F86',
-                marginRight: '2%',
-                marginTop: 22
-              }}
-            >
+            <View>
               <TouchableOpacity
                 onPress={() =>
                   this.props.navigation.state.params.onSubmit(order.orderId)
                 }
                 //onPress={this.props.handleSubmit}
+                style={styles.jc_alignIem_center}
               >
-                <Text style={[styles.signInText, styles.whiteColor, styles.defaultfontSize]}>
+                <Text style={[styles.bottomActionButton, styles.actionButton, styles.defaultfontSize]}>
                   {t('submitOrder')}
                 </Text>
               </TouchableOpacity>
             </View>
           ) : order.state === 'DELIVERED' ? (
-            <View
-              style={{
-                width: '100%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                backgroundColor: '#F39F86',
-                marginRight: '2%',
-                marginTop: 22
-              }}
-            >
+            <View>
               <TouchableOpacity
                 onPress={() =>
                   this.props.navigation.state.params.onSubmit(order.orderId)
                 }
                 disabled={true}
+                style={styles.jc_alignIem_center}
               >
-                <Text style={[styles.signInText, styles.whiteColor, styles.defaultfontSize]}>
+                <Text style={[styles.bottomActionButton, styles.actionButton, styles.defaultfontSize]}>
                   {t('submitOrder')}
                 </Text>
               </TouchableOpacity>
             </View>
           ) : null}
 
-          <View
-            style={{
-              width: '100%',
-              borderRadius: 4,
-              borderWidth: 1,
-              borderColor: '#F39F86',
-              marginTop: 8
-            }}
-          >
-            <TouchableOpacity onPress={() => this.handleCancel(order.orderId)}>
-              <Text style={[styles.signInText, styles.defaultfontSize]}>{t('backToTables')}</Text>
+          <View>
+            <TouchableOpacity onPress={() => this.handleCancel(order.orderId)} style={styles.jc_alignIem_center}>
+              <Text style={[styles.bottomActionButton, styles.cancelButton, styles.defaultfontSize]}>{t('backToTables')}</Text>
             </TouchableOpacity>
           </View>
 
-          <View
-            style={{
-              width: '100%',
-              borderRadius: 4,
-              borderWidth: 1,
-              borderColor: '#F39F86',
-              marginTop: 8
-            }}
-          >
+          <View>
             <TouchableOpacity
               onPress={() => {
                 this.props.navigation.state.params.handleDelete(order.orderId)
               }}
+              style={styles.jc_alignIem_center}
             >
-              <Text style={[styles.signInText, styles.defaultfontSize]}>{t('deleteOrder')}</Text>
+              <Text style={[styles.bottomActionButton, styles.cancelButton, styles.defaultfontSize]}>{t('deleteOrder')}</Text>
             </TouchableOpacity>
           </View>
 
           {order.state !== 'SETTLED' &&
             order.state !== 'DELIVERED' &&
             order.state !== 'OPEN' && (
-              <View
-                style={{
-                  width: '100%',
-                  borderRadius: 4,
-                  borderWidth: 1,
-                  borderColor: '#F39F86',
-                  marginTop: 8
-                }}
-              >
+              <View>
                 <TouchableOpacity
                   onPress={() => {
                     this.props.navigation.state.params.handleDeliver(
                       order.orderId
                     )
                   }}
+                  style={styles.jc_alignIem_center}
                 >
-                  <Text style={[styles.signInText, styles.defaultfontSize]}>{t('deliverOrder')}</Text>
+                  <Text style={[styles.bottomActionButton, styles.actionButton, styles.defaultfontSize]}>{t('deliverOrder')}</Text>
                 </TouchableOpacity>
               </View>
             )}
 
           {order.state === 'DELIVERED' && (
-            <View
-              style={{
-                width: '100%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                marginTop: 8
-              }}
-            >
+            <View>
               <TouchableOpacity
                 onPress={() =>
                   order.lineItems.length === 0
@@ -624,26 +550,20 @@ class OrdersSummaryRow extends React.Component {
                         order: order
                       })
                 }
+                style={styles.jc_alignIem_center}
               >
-                <Text style={[styles.signInText, styles.defaultfontSize]}>{t('payOrder')}</Text>
+                <Text style={[styles.bottomActionButton, styles.cancelButton, styles.defaultfontSize]}>{t('payOrder')}</Text>
               </TouchableOpacity>
             </View>
           )}
 
           {order.state === 'SETTLED' && (
-            <View
-              style={{
-                width: '100%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                marginTop: 8
-              }}
-            >
+            <View>
               <TouchableOpacity
                 onPress={() => this.handleComplete(order.orderId)}
+                style={styles.jc_alignIem_center}
               >
-                <Text style={[styles.signInText, styles.defaultfontSize]}>{t('completeOrder')}</Text>
+                <Text style={[styles.bottomActionButton, styles.cancelButton, styles.defaultfontSize]}>{t('completeOrder')}</Text>
               </TouchableOpacity>
             </View>
           )}

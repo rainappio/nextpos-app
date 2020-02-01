@@ -34,8 +34,7 @@ class ReservationScreen extends React.Component {
            style={[
             styles.welcomeText,
             styles.orange_color,
-            styles.textBold, 
-            styles.defaultfontSize
+            styles.textBold
           ]}
           >
             Reservation

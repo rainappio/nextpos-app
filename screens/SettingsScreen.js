@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   View,
   TouchableHighlight,
-  TextInput
+  TextInput,
+  ScrollView
 } from 'react-native'
 import { Indicator, Pages } from 'react-native-pages'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -40,7 +41,7 @@ class SettingsScreen extends React.Component {
           {t('menu.settings')}
         </Text>
         <Pages indicatorColor="#FF9100">
-          <View>
+          <ScrollView>
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <View
                 style={[
@@ -58,9 +59,9 @@ class SettingsScreen extends React.Component {
                       name="account-box"
                       size={isTablet ? 70 : 40}
                       color="#f18d1a"
-                      style={[styles.centerText]}
+                      style={[styles.centerText, styles.iconMargin]}
                     />
-                    <Text style={[styles.centerText, styles.textMedium]}>
+                    <Text style={[styles.centerText, styles.defaultfontSize]}>
                       {t('settings.account')}
                     </Text>
                   </View>
@@ -83,9 +84,9 @@ class SettingsScreen extends React.Component {
                       name="md-home"
                       size={isTablet ? 70 : 40}
                       color="#f18d1a"
-                      style={[styles.centerText, styles.margin_10]}
+                      style={[styles.centerText, styles.iconMargin]}
                     />
-                    <Text style={[styles.centerText, styles.textMedium]}>
+                    <Text style={[styles.centerText, styles.defaultfontSize]}>
                       {t('settings.stores')}
                     </Text>
                   </View>
@@ -112,9 +113,9 @@ class SettingsScreen extends React.Component {
                       name="ios-beaker"
                       size={isTablet ? 70 : 40}
                       color="#f18d1a"
-                      style={[styles.centerText]}
+                      style={[styles.centerText, styles.iconMargin]}
                     />
-                    <Text style={[styles.centerText, styles.textMedium]}>
+                    <Text style={[styles.centerText, styles.defaultfontSize]}>
                       {t('settings.products')}
                     </Text>
                   </View>
@@ -139,9 +140,9 @@ class SettingsScreen extends React.Component {
                       name="ios-people"
                       size={isTablet ? 70 : 40}
                       color="#f18d1a"
-                      style={[styles.centerText]}
+                      style={[styles.centerText, styles.iconMargin]}
                     />
-                    <Text style={[styles.centerText, styles.textMedium]}>{t('settings.staff')}</Text>
+                    <Text style={[styles.centerText, styles.defaultfontSize]}>{t('settings.staff')}</Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -164,9 +165,9 @@ class SettingsScreen extends React.Component {
                       name="md-print"
                       size={isTablet ? 70 : 40}
                       color="#f18d1a"
-                      style={[styles.centerText]}
+                      style={[styles.centerText, styles.iconMargin]}
                     />
-                    <Text style={[styles.centerText, styles.textMedium]}>
+                    <Text style={[styles.centerText, styles.defaultfontSize]}>
                       {t('settings.workingArea')}
                     </Text>
                   </View>
@@ -187,16 +188,16 @@ class SettingsScreen extends React.Component {
                       name="language"
                       size={isTablet ? 70 : 40}
                       color="#f18d1a"
-                      style={[styles.centerText]}
+                      style={[styles.centerText, styles.iconMargin]}
                     />
-                    <Text style={[styles.centerText, styles.textMedium]}>
+                    <Text style={[styles.centerText, styles.defaultfontSize]}>
                       {t('settings.language')}
                     </Text>
                   </View>
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </ScrollView>
 
           <View>
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
@@ -216,9 +217,9 @@ class SettingsScreen extends React.Component {
                       name="event-seat"
                       size={isTablet ? 70 : 40}
                       color="#f18d1a"
-                      style={[styles.centerText]}
+                      style={[styles.centerText, styles.iconMargin]}
                     />
-                    <Text style={[styles.centerText, styles.textMedium]}>
+                    <Text style={[styles.centerText, styles.defaultfontSize]}>
                       {t('settings.tableLayouts')}
                     </Text>
                   </View>
@@ -241,9 +242,9 @@ class SettingsScreen extends React.Component {
                       name="md-book"
                       size={isTablet ? 70 : 40}
                       color="#f18d1a"
-                      style={[styles.centerText]}
+                      style={[styles.centerText, styles.iconMargin]}
                     />
-                    <Text style={[styles.centerText, styles.textMedium]}>
+                    <Text style={[styles.centerText, styles.defaultfontSize]}>
                       {t('settings.manageShifts')}
                     </Text>
                   </View>
@@ -270,9 +271,9 @@ class SettingsScreen extends React.Component {
                       name="commenting"
                       size={isTablet ? 70 : 40}
                       color="#f18d1a"
-                      style={[styles.centerText]}
+                      style={[styles.centerText, styles.iconMargin]}
                     />
-                    <Text style={[styles.centerText, styles.textMedium]}>{t('settings.announcements')}</Text>
+                    <Text style={[styles.centerText, styles.defaultfontSize]}>{t('settings.announcements')}</Text>
                   </View>
                 </TouchableOpacity>
               </View>

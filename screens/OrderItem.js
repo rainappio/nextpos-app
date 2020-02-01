@@ -119,7 +119,7 @@ class OrderItem extends React.PureComponent {
           style={[{
                   color: '#000',
                   paddingTop: 6
-                },styles.textMedium]}
+                },styles.defaultfontSize]}
         >
           &nbsp;{order.state}
         </Text>

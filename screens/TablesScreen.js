@@ -240,7 +240,7 @@ class TablesScreen extends React.Component {
           }
         >
           <View style={styles.container}>
-            <Text style={styles.messageBlock}>{t('noTableLayout')}</Text>
+            <Text style={[styles.messageBlock, styles.defaultfontSize]}>{t('noTableLayout')}</Text>
           </View>
         </ScrollView>
       )
@@ -257,7 +257,7 @@ class TablesScreen extends React.Component {
               >
                 <Text
                   style={[
-                    styles.textMedium,
+                    styles.defaultfontSize,
                     styles.orange_color,
                     styles.mgrbtn40,
                     styles.centerText
@@ -359,19 +359,32 @@ class TablesScreen extends React.Component {
 
             {tablelayouts.map((tblLayout, idx) => (
               <View style={[styles.mgrbtn20, styles.paddingTopBtn8]} key={idx}>
-                <View style={[styles.sectionBar]}>
-                  <Text
-                    style={[styles.sectionBarText, styles.defaultfontSize]}
-                  >
-                    {tblLayout.layoutName}
-                  </Text>
-                  <Text style={[styles.sectionBarText, styles.marginLeftRight35, styles.defaultfontSize]}>
-                    {t('seatingCapacity')} {tblLayout.totalCapacity}
-                  </Text>
-                  <Text style={[styles.sectionBarText, styles.defaultfontSize]}>
-                    {t('availableSeats')} {floorCapacity[tblLayout.id]}
-                  </Text>
+                <View style={[styles.flex_dir_row, styles.mgrtotop12, styles.orange_bg, {paddingLeft: 25, paddingRight: 25, paddingTop: 15, paddingBottom: 15}]}>
+                	<View style={{width: '25%', textAlign :'left'}}>
+                  	<Text
+                    	style={[styles.sectionBarText, styles.defaultfontSize]}
+                  	>
+                    	{tblLayout.layoutName}
+                  	</Text>
+                  </View>
+
+									<View style={{width: '75%'}}>
+										<View style={styles.flex_dir_row}>
+											<View style={{width: '70%'}}>
+                  			<Text style={[styles.sectionBarText, styles.toRight, styles.defaultfontSize]}>
+                    			{t('seatingCapacity')} {tblLayout.totalCapacity}
+                  			</Text>
+                  		</View>
+											
+											<View style={{width: '30%'}}>
+                  			<Text style={[styles.sectionBarText, styles.toRight, styles.defaultfontSize]}>
+                    			{t('availableSeats')} {floorCapacity[tblLayout.id]}
+                  			</Text>
+                  		</View>
+                  	</View>
+                  </View>
                 </View>
+
                 {ordersInflight !== undefined && ordersInflight[tblLayout.id] !== undefined ? (
                   <FlatList
                     data={ordersInflight[tblLayout.id]}

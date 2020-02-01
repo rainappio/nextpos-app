@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
-import { getProducts, getLables, getLabel } from '../actions'
+import { getProducts, getLables, getLabel, isTablet } from '../actions'
 import { successMessage } from '../constants/Backend'
 import BackBtn from '../components/BackBtn'
 import InputText from '../components/InputText'
@@ -91,14 +91,13 @@ class PaymentOrderForm extends React.Component {
             marginBottom: 30
           }}
         >
-          <BackBtn />
+          <BackBtn size={isTablet ? 44 : 28}/>
           <Text
             style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold
-            ]}
+            	styles.welcomeText,
+            	styles.orange_color,
+            	styles.textBold
+          	]}
           >
             {t('paymentMethodTitle')}
           </Text>
@@ -119,7 +118,7 @@ class PaymentOrderForm extends React.Component {
             </View>
 
             <View>
-              <Text style={styles.textBold}>split</Text>
+              <Text style={[styles.textBold, styles.defaultfontSize]}>split</Text>
             </View>
           </View>
         </View>
@@ -128,17 +127,11 @@ class PaymentOrderForm extends React.Component {
           style={[
             styles.orange_bg,
             styles.flex_dir_row,
-            styles.shoppingBar,
-            styles.top40,
-            {
-              paddingLeft: 35,
-              paddingRight: 35,
-              paddingTop: 12
-            }
+            {padding: 20}        
           ]}
         >
           <View style={[styles.half_width]}>
-            <Text style={[styles.textMedium, styles.whiteColor]}>
+            <Text style={[styles.defaultfontSize, styles.whiteColor]}>
               {t('totalAmount')}
             </Text>
           </View>
@@ -149,7 +142,7 @@ class PaymentOrderForm extends React.Component {
                 { textAlign: 'right', marginRight: -26 },
                 styles.textBold,
                 styles.whiteColor,
-                styles.textMedium
+                styles.defaultfontSize
               ]}
             >
               $&nbsp;{discountTotal.toFixed(2)}
@@ -160,7 +153,7 @@ class PaymentOrderForm extends React.Component {
         <View style={[styles.container, styles.no_mgrTop]}>
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
             <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-              <Text>{t('cash')}</Text>
+              <Text style={styles.defaultfontSize}>{t('cash')}</Text>
             </View>
             <View style={[styles.onesixthWidth]}>
               <Field
@@ -175,7 +168,9 @@ class PaymentOrderForm extends React.Component {
           <View
             style={{
               flex: 1,
-              flexDirection: 'row'
+              flexDirection: 'row',
+              marginTop: 12,
+              justifyContent: 'flex-end'
             }}
           >
             {moneyAmts.map((moneyAmt, ix) => (
@@ -186,20 +181,14 @@ class PaymentOrderForm extends React.Component {
                 key={moneyAmt.value}
               >
                 <View
-                  style={{
-                    width: 62,
-                    height: 50,
-                    borderWidth: 2,
-                    borderColor: '#f18d1a',
-                    marginRight: 17,
-                    paddingTop: 16
-                  }}
+                  style={[styles.cashBox]}
                 >
                   <Text
                     style={[
                       styles.orange_color,
                       styles.textBold,
-                      styles.centerText
+                      styles.centerText,
+                      styles.defaultfontSize
                     ]}
                   >
                     {moneyAmt.label}
@@ -212,7 +201,7 @@ class PaymentOrderForm extends React.Component {
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
             <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
               {/*<Text>{t('clientName')}</Text>*/}
-              <Text>{t('taxIDNumber')}</Text>
+              <Text style={styles.defaultfontSize}>{t('taxIDNumber')}</Text>
             </View>
             <View style={[styles.onesixthWidth]}>
               <Field
@@ -225,8 +214,8 @@ class PaymentOrderForm extends React.Component {
           </View>
 
           <View style={[styles.mgrtotop20]}>
-            <TouchableOpacity onPress={() => handleSubmit()}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+            <TouchableOpacity onPress={() => handleSubmit()} style={styles.jc_alignIem_center}>
+              <Text style={[styles.bottomActionButton, styles.actionButton, styles.defaultfontSize]}>
                 {t('charge')}
               </Text>
             </TouchableOpacity>
@@ -234,8 +223,9 @@ class PaymentOrderForm extends React.Component {
             <View>
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Payment')}
+                style={styles.jc_alignIem_center}
               >
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                <Text style={[styles.bottomActionButton, styles.cancelButton, styles.defaultfontSize]}>
                   {t('action.cancel')}
                 </Text>
               </TouchableOpacity>

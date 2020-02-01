@@ -105,7 +105,7 @@ class OrderFormIII extends React.Component {
     } else if (haveError) {
       return (
         <View style={[styles.container]}>
-          <Text>Err during loading, check internet conn...</Text>
+          <Text style={styles.defaultfontSize}>Err during loading, check internet conn...</Text>
         </View>
       )
     }

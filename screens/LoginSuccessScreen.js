@@ -27,7 +27,6 @@ import { LocaleContext } from '../locales/LocaleContext'
 import { Avatar } from 'react-native-elements'
 import Markdown from 'react-native-markdown-renderer'
 import IonIcon from 'react-native-vector-icons/Ionicons'
-import Devices from 'react-native-device-detection'
 
 class LoginSuccessScreen extends React.Component {
   static navigationOptions = {
@@ -171,15 +170,15 @@ class LoginSuccessScreen extends React.Component {
           </View>
 
           <View style={[styles.customMgr]}>
-            <Text style={[styles.textBold, styles.orange_color, styles.textMedium]}>
-              {t('welcome')} {currentUser.displayName}
+            <Text style={[styles.textBold, styles.orange_color, styles.defaultfontSize]}>
+             {t('welcome')} {currentUser.displayName}
             </Text>
             <Text style={styles.textSmall}>
               {t('loggedIn')} {formatDateObj(loggedIn)}
             </Text>
           </View>
 
-          <View style={styles.jc_alignIem_center}>
+          <View style={[styles.jc_alignIem_center, styles.commonMgrBtn]}>
             <View
               style={[
                 styles.fullWidth,
@@ -187,21 +186,24 @@ class LoginSuccessScreen extends React.Component {
                 styles.jc_alignIem_center,
                 styles.paddTop_30,
                 styles.paddBottom_30,
-                styles.borderRadius4,
-                styles.commonMgrBtn
+                styles.borderRadius4               
               ]}
             >
             	<TouchableOpacity
-              	onPress={() => this.props.navigation.navigate('TablesSrc')}
+              	onPress={() => this.props.navigation.navigate('OrderStart',{
+              		handleOrderSubmit: this.handleOrderSubmit,
+                  handleDelete: this.handleDelete
+              	})}
+              	//onPress={() => this.props.navigation.navigate('TablesSrc')}
             		>
               	<View>
                 	<Icon
                   	name="md-people"
                   	size={isTablet ? 70 : 40}
                   	color="#f18d1a"
-                  	style={[styles.centerText, styles.margin_15]}
+                  	style={[styles.centerText, styles.iconMargin]}
                 	/>
-                	<Text style={isTablet ? [styles.centerText, styles.textBig] : [styles.centerText]}>{t('menu.tables')}</Text>
+                	<Text style={[styles.centerText, styles.defaultfontSize]}>{t('menu.quickOpen')}</Text>
               	</View>
             	</TouchableOpacity>
           	</View>
@@ -297,7 +299,7 @@ class LoginSuccessScreen extends React.Component {
           						</View>
           					</View>
 
-            				<Markdown style={styles.markDownStyle}>
+            				<Markdown>
               				{getannoc.markdownContent}
               				{'\n'}
               			</Markdown>

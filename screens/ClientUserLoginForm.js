@@ -9,6 +9,7 @@ import styles from '../styles'
 import InputText from '../components/InputText'
 import { isRequired } from '../validators'
 import { api, warningMessage } from '../constants/Backend'
+import { isTablet } from '../actions'
 
 class ClientUserLoginForm extends React.Component {
   static navigationOptions = {
@@ -80,8 +81,8 @@ class ClientUserLoginForm extends React.Component {
             ]}
             onPress={() => this.props.navigation.goBack()}
           >
-            <Icon name="ios-arrow-back" size={26} color="#f18d1a">
-              Back
+            <Icon name="ios-arrow-back" size={isTablet ? 44 : 26} color="#f18d1a">
+              &nbsp;Back
             </Icon>
           </Text>
 
@@ -89,7 +90,7 @@ class ClientUserLoginForm extends React.Component {
             style={[
               styles.welcomeText,
               styles.orange_color,
-              styles.textMedium,
+              styles.defaultfontSize,
               styles.mgrBtm50
             ]}
           >

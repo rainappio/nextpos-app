@@ -12,7 +12,8 @@ const en = {
     reporting: 'Reporting',
     settings: 'Settings',
     clientUsers: 'Client Users',
-    timecard: 'Time Card'
+    timecard: 'Time Card',
+    quickOpen: 'Quick Open'
   },
   settings: {
     account: 'Account',

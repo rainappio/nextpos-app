@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 import { Checkbox } from '@ant-design/react-native'
+import styles from '../styles'
 
 export default class RenderCheckbox extends React.Component {
   render() {
@@ -21,7 +22,7 @@ export default class RenderCheckbox extends React.Component {
         checked={value === customValue}
         style={{ position: 'absolute', right: 0 }}
       >
-        <Text>{optionName}</Text>
+        <Text style={styles.defaultfontSize}>{optionName}</Text>
       </Checkbox>
     )
   }

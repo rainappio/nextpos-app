@@ -11,7 +11,6 @@ import {
 import BackBtnCustom from '../components/BackBtnCustom'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import RenderCheckBox from '../components/rn-elements/CheckBox'
-import RenderPureCheckBox from '../components/rn-elements/PureCheckBox'
 import InputText from '../components/InputText'
 import {
   api,
@@ -20,7 +19,7 @@ import {
   successMessage
 } from '../constants/Backend'
 import { isRequired } from '../validators'
-import { calculatePercentage } from '../actions'
+import { calculatePercentage, isTablet } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 
@@ -94,14 +93,14 @@ class PaymentFormScreen extends React.Component {
           <View style={styles.container_nocenterCnt}>
             <BackBtnCustom
               onPress={() => this.props.navigation.navigate('OrdersSummary')}
+              size={isTablet ? 44 : 28}
             />
             <Text
               style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
+            		styles.welcomeText,
+            		styles.orange_color,
+            		styles.textBold
+          		]}
             >
               {t('paymentTitle')}
             </Text>
@@ -115,14 +114,15 @@ class PaymentFormScreen extends React.Component {
               ]}
             >
               <View style={[styles.half_width, styles.textBold]}>
-                <Text>{t('total')}</Text>
+                <Text style={styles.defaultfontSize}>{t('total')}</Text>
               </View>
 
               <View style={[styles.half_width]}>
                 <Text
                   style={[
                     { textAlign: 'right', marginRight: -26 },
-                    styles.textBold
+                    styles.textBold,
+                    styles.defaultfontSize
                   ]}
                 >
                   $&nbsp;{order.total.amountWithTax.toFixed(2)}
@@ -138,14 +138,15 @@ class PaymentFormScreen extends React.Component {
               ]}
             >
               <View style={[styles.half_width, styles.textBold]}>
-                <Text>{t('serviceCharge')}</Text>
+                <Text style={styles.defaultfontSize}>{t('serviceCharge')}</Text>
               </View>
 
               <View style={[styles.half_width]}>
                 <Text
                   style={[
                     { textAlign: 'right', marginRight: -26 },
-                    styles.textBold
+                    styles.textBold,
+                    styles.defaultfontSize
                   ]}
                 >
                   $&nbsp;{order.serviceCharge}
@@ -155,7 +156,7 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
               <View style={[styles.half_width, styles.textBold]}>
-                <Text>{t('discount')}</Text>
+                <Text style={styles.defaultfontSize}>{t('discount')}</Text>
               </View>
               {discounts.map((discount, ix) => (
                 <View
@@ -190,14 +191,15 @@ class PaymentFormScreen extends React.Component {
               ]}
             >
               <View style={[styles.half_width, styles.textBold]}>
-                <Text>{t('grandTotal')}</Text>
+                <Text style={styles.defaultfontSize}>{t('grandTotal')}</Text>
               </View>
 
               <View style={[styles.half_width]}>
                 <Text
                   style={[
                     { textAlign: 'right', marginRight: -26 },
-                    styles.textBold
+                    styles.textBold,
+                    styles.defaultfontSize
                   ]}
                 >
                   $&nbsp;
@@ -209,26 +211,27 @@ class PaymentFormScreen extends React.Component {
               </View>
             </View>
 
-            <View style={[styles.bottom]}>
-              <TouchableOpacity onPress={() => handleSubmit()}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+          
+              <TouchableOpacity onPress={() => handleSubmit()} style={styles.jc_alignIem_center}>
+                <Text style={[styles.bottomActionButton, styles.actionButton, styles.defaultfontSize]}>
                   {t('payOrder')}
                 </Text>
               </TouchableOpacity>
 
-              <View>
+       
                 <TouchableOpacity
                   onPress={() => navigation.navigate('OrdersSummary')}
+                  style={styles.jc_alignIem_center}
                 >
                   <Text
-                    style={[styles.bottomActionButton, styles.cancelButton]}
+                    style={[styles.bottomActionButton, styles.cancelButton, styles.defaultfontSize]}
                   >
                     {t('action.cancel')}
                   </Text>
                 </TouchableOpacity>
-              </View>
+ 
             </View>
-          </View>
+           
         </DismissKeyboard>
       </ScrollView>
     )

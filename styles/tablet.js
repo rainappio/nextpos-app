@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 export default StyleSheet.create({
   mainContainer: {
     flex: 1
@@ -71,7 +71,7 @@ export default StyleSheet.create({
     color: '#F39F86',
     padding: 10,
     textAlign: 'center',
-    fontSize: 16
+    fontSize: RFPercentage(2.4)	 
   },
   margin_15: {
     margin: 10
@@ -180,7 +180,7 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     position: 'absolute',
-    right: 38,
+    right: 58,
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 12,
@@ -262,7 +262,7 @@ export default StyleSheet.create({
     fontSize: 30
   },
   textMedium: {
-    fontSize: 24
+    fontSize: RFPercentage(2.3)
   },
   textBold: {
     fontWeight: 'bold'
@@ -393,12 +393,11 @@ export default StyleSheet.create({
   itemCount: {
     backgroundColor: 'white',
     color: '#000',
-    width: 25,
-    height: 25,
+    width: 50,
+    height: 50,
     borderRadius: 25,
-    fontSize: 14,
     position: 'absolute',
-    right: -12,
+    right: -40,
     top: 8,
     textAlign: 'center'
   },
@@ -489,7 +488,6 @@ export default StyleSheet.create({
   },
   sectionBarText: {
     color: '#fff',
-    textAlign: 'center',
     fontSize: 18
   },
   listPanel: {
@@ -573,10 +571,6 @@ export default StyleSheet.create({
     right: 0,
     bottom: 0
   },
-  markDownStyle: {
-    backgroundColor: '#f1f1f1',
-    borderWidth: 1
-  },
   textAreaContainer: {
     borderColor: '#ccc',
     borderWidth: 1,
@@ -587,10 +581,10 @@ export default StyleSheet.create({
     justifyContent: 'flex-start'
   },
   iconMargin: {
-  	margin: 25
+  	margin: 20
   },
    defaultfontSize: {
-  	fontSize: 26
+  	fontSize: RFPercentage(2.4)	 
   },
   customMgr: {
   	marginTop: 35,
@@ -633,5 +627,25 @@ export default StyleSheet.create({
   customAvatorUserName: {
   	marginLeft: 120, 
   	marginTop: -60 
+  },
+  cashBox: {
+    width: 100,
+    height: 70,
+    borderWidth: 2,
+    borderColor: '#f18d1a',
+    marginRight: 17,
+    paddingTop: 16
+  },
+  heading: {
+    borderBottomWidth: 1,
+    borderColor: '#000000',
+  },
+  heading1: {
+    fontSize: 32,
+    backgroundColor: '#000000',
+    color: '#FFFFFF',
+  },
+  customLogo: {
+  	fontSize: 70
   }
 })

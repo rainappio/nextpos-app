@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+
 export default StyleSheet.create({
   mainContainer: {
     flex: 1
@@ -69,7 +71,7 @@ export default StyleSheet.create({
     color: '#F39F86',
     padding: 10,
     textAlign: 'center',
-    fontSize: 16
+    fontSize: RFPercentage(2.4)	 
   },
   margin_10: {
     margin: 10
@@ -260,8 +262,7 @@ export default StyleSheet.create({
     fontSize: 22
   },
   textMedium: {
-    //fontSize: 18
-    fontSize: 14
+    fontSize: RFPercentage(2.3)
   },
   textBold: {
     fontWeight: 'bold'
@@ -395,7 +396,6 @@ export default StyleSheet.create({
     width: 25,
     height: 25,
     borderRadius: 25,
-    fontSize: 14,
     position: 'absolute',
     right: -12,
     top: 8,
@@ -488,7 +488,6 @@ export default StyleSheet.create({
   },
   sectionBarText: {
     color: '#fff',
-    textAlign: 'center',
     fontSize: 18
   },
   listPanel: {
@@ -567,10 +566,6 @@ export default StyleSheet.create({
     right: 0,
     bottom: 0
   },
-  markDownStyle: {
-    backgroundColor: '#f1f1f1',
-    borderWidth: 1
-  },
   textAreaContainer: {
     borderColor: '#ccc',
     borderWidth: 1,
@@ -584,7 +579,7 @@ export default StyleSheet.create({
   	margin:10
   },
   defaultfontSize: {
-  	fontSize: 14
+  	fontSize: RFPercentage(2.4)	 
   },
   customMgr: {
   	marginTop: 20,
@@ -621,5 +616,25 @@ export default StyleSheet.create({
   customAvatorUserName: {
   	marginLeft: 60, 
   	marginTop: -30 
+  },
+  cashBox: {
+    width: 62,
+    height: 50,
+    borderWidth: 2,
+    borderColor: '#f18d1a',
+    marginRight: 17,
+    paddingTop: 16
+  },
+  heading: {
+    borderBottomWidth: 1,
+    borderColor: '#000000',
+  },
+  heading1: {
+    fontSize: 32,
+    backgroundColor: '#000000',
+    color: '#FFFFFF',
+  },
+  customLogo: {
+  	fontSize: 40
   }
 })

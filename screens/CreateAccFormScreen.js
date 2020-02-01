@@ -44,7 +44,7 @@ class CreateAccFormScreen extends React.Component {
               />
             </View>
 
-            <Text style={isTablet ? [styles.tabletTextBig, styles.centerText] : styles.welcomeText}>Let's Get Started!</Text>
+            <Text style={isTablet ? [styles.tabletTextBig, styles.centerText] : styles.defaultfontSize}>Let's Get Started!</Text>
 
             <Field
               name="clientName"
@@ -72,7 +72,7 @@ class CreateAccFormScreen extends React.Component {
             <Text style={isTablet ? [styles.tabletTextMedium, styles.paddTop_30, styles.mgrbtn20] : styles.text}>
               Accept Seller Agreement and Privacy Policy
             </Text>
-            <Text style={isTablet ? styles.textMedium : styles.textSmall}>
+            <Text style={isTablet ? styles.textMedium : styles.defaultfontSize}>
               View Seller Agreement and Privacy Policy
             </Text>
           </View>

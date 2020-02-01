@@ -116,7 +116,7 @@ class ClockIn extends React.Component {
 
     return (
       <DismissKeyboard>
-        <View style={styles.container}>
+        <View style={[styles.container,{paddingLeft: 0, paddingRight: 0}]}>
           <BackBtn size={isTablet ? 44 : 28}/>
           <View>
             <TouchableHighlight>
@@ -131,51 +131,51 @@ class ClockIn extends React.Component {
           <View style={{ flex: 2, justifyContent: 'center' }}>
             <View style={[styles.fieldContainer]}>
               <View style={{ flex: 1 }}>
-                <Text style={[styles.fieldTitle, styles.defaultfontSize]}>{t('username')}</Text>
+                <Text style={[styles.fieldTitle, styles.textMedium]}>{t('username')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={[{ alignSelf: 'flex-end' }, styles.defaultfontSize]}>
+                <Text style={[{ alignSelf: 'flex-end' }, styles.textMedium]}>
                   {authClientUserName}
                 </Text>
               </View>
             </View>
             <View style={styles.fieldContainer}>
               <View style={{ width: '40%' }}>
-                <Text style={[styles.fieldTitle, styles.defaultfontSize]}>{t('currentTime')}</Text>
+                <Text style={[styles.fieldTitle, styles.textMedium]}>{t('currentTime')}</Text>
               </View>
               <View style={{ width: '60%'}}>
-                <Text style={[{ alignSelf: 'flex-end' }, styles.defaultfontSize]}>{`${dateToLocaleString(
+                <Text style={[{ alignSelf: 'flex-end' }, styles.textMedium]}>{`${dateToLocaleString(
                   new Date()
                 )}`}</Text>
               </View>
             </View>
             <View style={styles.fieldContainer}>
               <View style={{ width: '55%' }}>
-                <Text style={[styles.fieldTitle, styles.defaultfontSize]}>{t('timeCardStatus')}:</Text>
+                <Text style={[styles.fieldTitle, styles.textMedium]}>{t('timeCardStatus')}:</Text>
               </View>
               <View style={{ width: '45%'}}>
-                <Text style={[{alignSelf: 'flex-end'}, styles.defaultfontSize]}>{timecard.timeCardStatus}</Text>
+                <Text style={[{alignSelf: 'flex-end'}, styles.textMedium]}>{timecard.timeCardStatus}</Text>
               </View>
             </View>
             <View style={styles.fieldContainer}>
               <View style={{ width: '40%' }}>
-                <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
+                <Text style={[styles.fieldTitle, styles.textMedium]}>
                   {t('clockInTime')}:
                 </Text>
               </View>
               <View style={{ width: '60%'}}>
-                <Text style={[{alignSelf: 'flex-end'}, styles.defaultfontSize]}>{timecard.clockIn != null ? `${formatDate(timecard.clockIn)}` : ''}</Text>
+                <Text style={[{alignSelf: 'flex-end'}, styles.textMedium]}>{timecard.clockIn != null ? `${formatDate(timecard.clockIn)}` : ''}</Text>
               </View>
             </View>
             { timeCardStatus === 'COMPLETE' && (
               <View style={styles.fieldContainer}>
                 <View style={{flex: 1}}>
-                  <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
+                  <Text style={[styles.fieldTitle,styles.textMedium]}>
                     {t('clockOutTime')}:
                   </Text>
                 </View>
                 <View style={{flex: 3}}>
-                  <Text style={[{alignSelf: 'flex-end'}, styles.defaultfontSize]}>{timecard.clockOut != null ? `${formatDate(timecard.clockOut)}` : ''}</Text>
+                  <Text style={[{alignSelf: 'flex-end'}, styles.textMedium]}>{timecard.clockOut != null ? `${formatDate(timecard.clockOut)}` : ''}</Text>
                 </View>
               </View>
             )}
@@ -195,7 +195,7 @@ class ClockIn extends React.Component {
                     name="hand-o-up"
                     size={isTablet ? 80 : 40}
                     color="#fff"
-                    style={[styles.centerText]}
+                    style={[styles.centerText, styles.iconMargin]}
                   />
                   <Text style={[styles.centerText, styles.whiteColor, styles.defaultfontSize]}>
                     {timeCardStatus === 'ACTIVE' ? t('clockOut') : t('clockIn')}

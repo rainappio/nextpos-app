@@ -19,7 +19,8 @@ import {
   getfetchOrderInflights,
   getOrder,
   getTablesAvailable,
-  clearOrder
+  clearOrder,
+  isTablet
 } from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
@@ -76,7 +77,7 @@ class OrderFormII extends React.Component {
   PanelHeader = (labelName, labelId) => {
     return (
       <View style={styles.listPanel}>
-        <Text style={styles.listPanelText}>{labelName}</Text>
+        <Text style={[styles.listPanelText, styles.defaultfontSize]}>{labelName}</Text>
       </View>
     )
   }
@@ -155,7 +156,6 @@ class OrderFormII extends React.Component {
               style={[
                 styles.welcomeText,
                 styles.orange_color,
-                styles.textMedium,
                 styles.textBold
               ]}
             >
@@ -192,9 +192,9 @@ class OrderFormII extends React.Component {
                           })
                         }
                       >
-                        <View style={{ flex: 1, flexDirection: 'row' }}>
-                          <Text style={{ flex: 1 }}>{prd.name}</Text>
-                          <Text style={{ flex: 1, justifyContent: 'flex-end' }}>
+                        <View style={[{ flex: 1, flexDirection: 'row' }, styles.commonpaddingTopBtn]}>
+                          <Text style={[{ flex: 1 }, styles.defaultfontSize]}>{prd.name}</Text>
+                          <Text style={[{ flex: 1, justifyContent: 'flex-end' }, styles.defaultfontSize]}>
                             ${prd.price}
                           </Text>
                         </View>
@@ -219,7 +219,8 @@ class OrderFormII extends React.Component {
                   style={[
                     styles.paddingTopBtn8,
                     styles.textBig,
-                    styles.whiteColor
+                    styles.whiteColor,
+                    styles.defaultfontSize
                   ]}
                 >
                   {order.hasOwnProperty('tableInfo')
@@ -237,11 +238,11 @@ class OrderFormII extends React.Component {
               <View>
                 <FontAwesomeIcon
                   name="user"
-                  size={30}
+                  size={isTablet ? 50 : 30}
                   color="#fff"
                   style={[styles.centerText]}
                 >
-                  <Text style={[styles.textBig, styles.whiteColor]}>
+                  <Text style={[styles.textBig, styles.whiteColor, styles.defaultfontSize]}>
                     &nbsp;&nbsp;
                     {// Object.keys(order).length !== 0 //not good
                     order.hasOwnProperty('demographicData')
@@ -273,11 +274,11 @@ class OrderFormII extends React.Component {
               <View>
                 <FontAwesomeIcon
                   name="shopping-cart"
-                  size={30}
+                  size={isTablet ? 50 : 30}
                   color="#fff"
                   style={[styles.toRight, styles.mgrtotop8, styles.mgr_20]}
                 />
-                <Text style={styles.itemCount}>
+                <Text style={[styles.itemCount, styles.defaultfontSize]}>
                   {order.hasOwnProperty('lineItems') && order.lineItems.length}
                 </Text>
               </View>

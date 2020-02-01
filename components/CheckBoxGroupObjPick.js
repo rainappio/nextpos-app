@@ -39,11 +39,11 @@ export default class CheckBoxGroupObjPick extends React.Component {
               arr
               onChange={e => onChange(e.target.checked)}
               //checked={value.length !== 0 && value.includes(ca.id)}
-              style={{ position: 'absolute', right: 0 }}
+              style={[{ position: 'absolute', right: 0 }, styles.defaultfontSize]}
             >
-              <Text>{ca.name === undefined ? ca.optionValue : ca.name}</Text>
+              <Text style={styles.defaultfontSize}>{ca.name === undefined ? ca.optionValue : ca.name}</Text>
             </Checkbox>
-            {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
+            {!valid && touched && <Text style={[styles.rootError, styles.defaultfontSize]}>{error}</Text>}
           </View>
         )
       })
