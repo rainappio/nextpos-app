@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, Text, TouchableOpacity, View} from 'react-native'
 import { fieldValidate, isRequired } from '../validators'
 import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
@@ -22,6 +22,7 @@ class StoreFormScreen extends React.Component {
       en: {
         clientName: 'Client Name',
         clientEmail: 'Client Email',
+        clientStatus: 'Status',
         address: 'Address',
         ubn: 'UBN',
         taxInclusive: 'Tax Inclusive',
@@ -30,20 +31,17 @@ class StoreFormScreen extends React.Component {
       zh: {
         clientName: '商家名稱',
         clientEmail: '用戶 Email',
+        clientStatus: '狀態',
         address: '商家地址',
         ubn: '統一編號',
         taxInclusive: '價格已含稅',
         serviceCharge: '服務費'
       }
     })
-
-    this.state = {
-      t: context.t
-    }
   }
 
   render() {
-    const { t } = this.state
+    const { t } = this.context
     const { handleSubmit } = this.props
 
     return (
@@ -60,16 +58,17 @@ class StoreFormScreen extends React.Component {
                   <Text style={styles.screenTitle}>{t('settings.stores')}</Text>
                 </View>
               </View>
+
               <View style={styles.fieldContainer}>
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.fieldTitle}>{t('clientName')}</Text>
+                  <Text style={styles.fieldTitle}>{t('clientStatus')}</Text>
                 </View>
                 <View style={{ flex: 3 }}>
                   <Field
-                    name="clientName"
+                    name="status"
                     component={InputText}
-                    validate={isRequired}
-                    placeholder="Client Name"
+                    placeholder="User Email Address"
+                    editable={false}
                   />
                 </View>
               </View>
@@ -84,6 +83,20 @@ class StoreFormScreen extends React.Component {
                     component={InputText}
                     placeholder="User Email Address"
                     editable={false}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.fieldContainer}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.fieldTitle}>{t('clientName')}</Text>
+                </View>
+                <View style={{ flex: 3 }}>
+                  <Field
+                    name="clientName"
+                    component={InputText}
+                    validate={isRequired}
+                    placeholder="Client Name"
                   />
                 </View>
               </View>

@@ -40,7 +40,9 @@ class OrderStart extends React.Component {
   }
 
   handleSubmit = values => {
-    var createOrder = {}
+    console.log(values)
+
+    const createOrder = {}
     createOrder.tableId = values.tableId
     createOrder.demographicData = {
       male: values.male,
@@ -87,10 +89,20 @@ class OrderStart extends React.Component {
   }
 
   render() {
-    const { navigation, isLoading, haveData, availableTables } = this.props
+    const { navigation, isLoading, haveData, availableTables, tableLayouts } = this.props
     const { t } = this.state
 
     let tables = []
+    let tablesMap = {}
+
+    tableLayouts && availableTables && tableLayouts.map(layout => {
+      const tables = availableTables[layout.id];
+
+      if (tables !== undefined) {
+        tablesMap[layout.layoutName] = tables
+      }
+    })
+
     const availableTablesArr =
       availableTables !== undefined && Object.keys(availableTables)
     availableTablesArr &&
@@ -123,12 +135,14 @@ class OrderStart extends React.Component {
         onSubmit={this.handleSubmit}
         navigation={navigation}
         tables={tables}
+        tablesMap={tablesMap}
       />
     )
   }
 }
 
 const mapStateToProps = state => ({
+  tableLayouts: state.tablelayouts.data.tableLayouts,
   availableTables: state.tablesavailable.data.availableTables,
   haveData: state.tablesavailable.haveData,
   haveError: state.tablesavailable.haveError,

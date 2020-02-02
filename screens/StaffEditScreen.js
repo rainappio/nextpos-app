@@ -1,21 +1,10 @@
-import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  ScrollView,
-  AsyncStorage,
-  ActivityIndicator
-} from 'react-native'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {ActivityIndicator, View} from 'react-native'
+import {connect} from 'react-redux'
 import StaffFormScreen from './StaffFormScreen'
-import { clearClient, getClientUsr, getClientUsrs } from '../actions'
+import {clearClient, getClientUsr, getClientUsrs, resolveRoles} from '../actions'
 import styles from '../styles'
-import {
-  api,
-  dispatchFetchRequest,
-  errorAlert,
-  successMessage
-} from '../constants/Backend'
+import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 
 class StaffEditScreen extends Component {
   static navigationOptions = {
@@ -37,9 +26,10 @@ class StaffEditScreen extends Component {
   }
 
   handleUpdate = values => {
-    values.isManager === true
-      ? (values.roles = ['MANAGER', 'USER'])
-      : (values.roles = ['USER'])
+    if (!Number.isInteger(values.selectedRole)) {
+      values.roles = values.selectedRole
+    }
+
     const staffname = this.props.navigation.state.params.staffname
 
     dispatchFetchRequest(
@@ -72,9 +62,15 @@ class StaffEditScreen extends Component {
     } = this.props
     const { isEditForm } = this.state
 
-    Array.isArray(clientuser.roles) && clientuser.roles.includes('MANAGER')
-      ? (clientuser.isManager = true)
-      : (clientuser.isManager = false)
+    clientuser.selectedRole = 0
+
+    if (clientuser.roles !== undefined) {
+      if (clientuser.roles.includes('OWNER')) {
+        clientuser.selectedRole = 2
+      } else if (clientuser.roles.includes('MANAGER')) {
+        clientuser.selectedRole = 1
+      }
+    }
 
     if (isLoading) {
       return (

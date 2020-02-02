@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
 import StaffFormScreen from './StaffFormScreen'
-import { getClientUsr, getClientUsrs } from '../actions'
+import {getClientUsr, getClientUsrs, resolveRoles} from '../actions'
 import {
   api,
   dispatchFetchRequest,
@@ -21,9 +21,7 @@ class Staff extends React.Component {
   }
 
   handleSubmit = values => {
-    values.isManager === true
-      ? (values.roles = ['MANAGER', 'USER'])
-      : (values.roles = ['USER'])
+    values.roles = values.selectedRole
 
     dispatchFetchRequest(
       api.clientUser.new,

@@ -39,6 +39,8 @@ import {
   dispatchFetchRequest
 } from '../constants/Backend'
 import { LocaleContext } from '../locales/LocaleContext'
+import {handleDelete, handleOrderSubmit} from '../helpers/orderActions'
+import {NavigationEvents} from "react-navigation";
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -50,7 +52,6 @@ class TablesScreen extends React.Component {
     super(props, context)
 
     this.state = {
-      t: context.t,
       openBalance: 0,
       refreshing: false
     }
@@ -62,6 +63,10 @@ class TablesScreen extends React.Component {
     this.props.getfetchOrderInflights()
     this.props.getAvailableTables()
 
+    this.loadLocalization()
+  }
+
+  loadLocalization = () => {
     this.context.localize({
       en: {
         noTableLayout:
@@ -127,51 +132,6 @@ class TablesScreen extends React.Component {
     })
   }
 
-  handleOrderSubmit = id => {
-    const formData = new FormData()
-    formData.append('action', 'SUBMIT')
-
-    dispatchFetchRequest(
-      api.order.process(id),
-      {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {},
-        body: formData
-      },
-      response => {
-        response.json().then(data => {
-          if (data.hasOwnProperty('orderId')) {
-            successMessage('Order submitted')
-            this.props.navigation.navigate('TablesSrc')
-            this.props.getfetchOrderInflights()
-          }
-        })
-      }
-    ).then()
-  }
-
-  handleDelete = id => {
-    dispatchFetchRequest(
-      api.order.delete(id),
-      {
-        method: 'DELETE',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      },
-      response => {
-        successMessage('Deleted')
-        this.props.navigation.navigate('TablesSrc')
-        this.props.getfetchOrderInflights()
-        this.props.getTableLayouts()
-      }
-    ).then()
-  }
-
   handleDeliver = id => {
     makeFetchRequest(token => {
       fetch(`${api.apiRoot}/orders/${id}/process?action=DELIVER`, {
@@ -205,7 +165,7 @@ class TablesScreen extends React.Component {
       ordersInflight,
       availableTables
     } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     const floorCapacity = {}
 
@@ -332,6 +292,14 @@ class TablesScreen extends React.Component {
           />
         }
       >
+        <NavigationEvents
+          onWillFocus={() => {
+            this.props.getfetchOrderInflights()
+            this.props.getTableLayouts()
+            this.loadLocalization()
+          }}
+        />
+
         <DismissKeyboard>
           <View>
             <View style={[styles.container, styles.nomgrBottom]}>
@@ -342,8 +310,8 @@ class TablesScreen extends React.Component {
               <AddBtn
                 onPress={() =>
                   this.props.navigation.navigate('OrderStart', {
-                    handleOrderSubmit: this.handleOrderSubmit,
-                    handleDelete: this.handleDelete
+                    handleOrderSubmit: handleOrderSubmit,
+                    handleDelete: handleDelete
                   })
                 }
               />
@@ -373,8 +341,8 @@ class TablesScreen extends React.Component {
                         <OrderItem
                           order={item}
                           navigation={navigation}
-                          handleOrderSubmit={this.handleOrderSubmit}
-                          handleDelete={this.handleDelete}
+                          handleOrderSubmit={handleOrderSubmit}
+                          handleDelete={handleDelete}
                           key={item.orderId}
                           handleDeliver={this.handleDeliver}
                         />

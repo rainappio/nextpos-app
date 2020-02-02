@@ -488,6 +488,9 @@ export default StyleSheet.create({
     textAlign: 'center',
     fontSize: 18
   },
+  sectionContent: {
+    marginBottom: 20
+  },
   listPanel: {
     flex: 1,
     flexDirection: 'row',

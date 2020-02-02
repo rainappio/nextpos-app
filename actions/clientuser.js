@@ -46,3 +46,18 @@ export const getClientUsr = name => {
     ).then()
   }
 }
+
+export const resolveRoles = selectedRoleIndex => {
+  let roles = [ 'USER' ]
+
+  switch (selectedRoleIndex) {
+    case 1:
+      roles = [ ...roles, 'MANAGER']
+      break
+    case 2:
+      roles = [ ...roles, 'MANAGER', 'OWNER']
+      break
+  }
+
+  return roles
+}

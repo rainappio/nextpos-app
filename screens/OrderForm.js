@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { Text, View, TouchableOpacity, ScrollView } from 'react-native'
+import {Text, View, TouchableOpacity, ScrollView, Picker} from 'react-native'
 import DropDown from '../components/DropDown'
 import RenderRadioBtn from '../components/RadioItem'
 import RenderStepper from '../components/RenderStepper'
@@ -8,6 +8,8 @@ import { isRequired } from '../validators'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import PickerInput from "../components/PickerInput";
+import SegmentedControl from "../components/SegmentedControl";
 
 class OrderForm extends Component {
   static contextType = LocaleContext
@@ -15,7 +17,26 @@ class OrderForm extends Component {
   constructor(props, context) {
     super(props, context)
 
-    context.localize({
+    this.state = {
+      selectedTableId: null,
+      selectedAgeGroup: null,
+      ageGroups: {
+        0: {label: '20-29', value: 'TWENTIES'},
+        1: {label: '30-39', value: 'THIRTIES'},
+        2: {label: '40-49', value: 'FORTIES'},
+        3: {label: '50-59', value: 'FIFTIES'}
+      },
+      selectedVisitFrequency: null,
+      visitFrequencies: {
+        0: {label: '1', value: 'FIRST_TIME'},
+        1: {label: '2 - 3', value: 'TWO_TO_THREE'},
+        2: {label: '4+', value: 'MORE_THAN_THREE'}
+      }
+    }
+  }
+
+  componentDidMount() {
+    this.context.localize({
       en: {
         newOrderTitle: 'New Order',
         table: 'Table',
@@ -35,54 +56,25 @@ class OrderForm extends Component {
         openOrder: '建立訂單'
       }
     })
+  }
 
-    this.state = {
-      t: context.t
-    }
+  handleAgeGroupSelection = (index) => {
+    const selectedIndex = this.selectedAgeGroup === index ? null : index
+    this.setState({ selectedAgeGroup: selectedIndex })
+  }
+
+  handleVisitFrequencySelection = (index) => {
+    console.log(index)
+    const selectedIndex = this.selectedVisitFrequency === index ? null : index
+    this.setState({ selectedVisitFrequency: selectedIndex })
   }
 
   render() {
-    const { t } = this.state
+    const { tablesMap } = this.props
+    const { t } = this.context
 
-    const ageGroupsA = [
-      {
-        label: '20-29',
-        value: 'TWENTIES'
-      },
-      {
-        label: '40-49',
-        value: 'FORTIES'
-      }
-    ]
-
-    const ageGroupsB = [
-      {
-        label: '30-39',
-        value: 'THIRTIES'
-      },
-      {
-        label: '50-59',
-        value: 'FIFTIES_AND_ABOVE'
-      }
-    ]
-
-    const visitedFrequenciesI = [
-      {
-        label: '1',
-        value: 'FIRST_TIME'
-      },
-      {
-        label: '4 - 5',
-        value: 'MORE_THAN_THREE'
-      }
-    ]
-
-    const visitedFrequenciesII = [
-      {
-        label: '2 - 3',
-        value: 'TWO_TO_THREE'
-      }
-    ]
+    const ageGroups = Object.keys(this.state.ageGroups).map(key => this.state.ageGroups[key].label)
+    const visitFrequencies = Object.keys(this.state.visitFrequencies).map(key => this.state.visitFrequencies[key].label)
 
     const people = [
       {
@@ -100,121 +92,90 @@ class OrderForm extends Component {
     ]
 
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View style={styles.container}>
-            <Text
-              style={[styles.welcomeText, styles.orange_color, styles.mgrbtn20]}
-            >
-              {t('newOrderTitle')}
-            </Text>
-
             <View>
-              <Text>{t('table')}</Text>
+              <Text style={styles.screenTitle}>
+                {t('newOrderTitle')}
+              </Text>
+            </View>
+
+            <View style={styles.sectionContent}>
+              <View style={styles.fieldContainer}>
+                <Text style={styles.fieldTitle}>{t('table')}</Text>
+              </View>
               <Field
-                component={DropDown}
+                component={PickerInput}
                 name="tableId"
-                options={this.props.tables}
-                search
-                selection
-                fluid
-                placeholder={{ value: null, label: t('selectTable') }}
+                values={tablesMap}
+                selectedValue={this.state.selectedTableId}
                 validate={isRequired}
+                onChange={(itemValue, itemIndex) => {
+                  this.setState({selectedTableId: itemValue})
+                }}
               />
             </View>
 
-            <View style={styles.paddingTopBtn20}>
-              <Text>{t('ageGroup')}</Text>
-              <View style={[styles.flex_dir_row]}>
-                <View style={[styles.half_width]}>
-                  {ageGroupsA.map((ageGp, ix) => (
-                    <View
-                      style={[styles.borderBottomLine, styles.paddingTopBtn8]}
-                      key={ix}
-                    >
-                      <Field
-                        name="ageGroup"
-                        component={RenderRadioBtn}
-                        customValue={ageGp.value}
-                        optionName={ageGp.label}
-                        //validate={isRequired}
-                      />
-                    </View>
-                  ))}
-                </View>
-
-                <View style={[styles.half_width]}>
-                  {ageGroupsB.map((ageGp, ix) => (
-                    <View
-                      style={[styles.borderBottomLine, styles.paddingTopBtn8]}
-                      key={ix}
-                    >
-                      <Field
-                        name="ageGroup"
-                        component={RenderRadioBtn}
-                        customValue={ageGp.value}
-                        optionName={ageGp.label}
-                        //validate={isRequired}
-                      />
-                    </View>
-                  ))}
-                </View>
+            <View style={styles.sectionContent}>
+              <View style={styles.fieldContainer}>
+                <Text style={styles.fieldTitle}>{t('ageGroup')}</Text>
               </View>
-            </View>
-
-            <View style={styles.paddBottom_20}>
-              <Text>{t('visitFrequency')}</Text>
-              <View style={[styles.flex_dir_row]}>
-                <View style={[styles.half_width]}>
-                  {visitedFrequenciesI.map((visitedFreq, ix) => (
-                    <View
-                      style={[styles.borderBottomLine, styles.paddingTopBtn8]}
-                      key={ix}
-                    >
-                      <Field
-                        name="visitFrequency"
-                        component={RenderRadioBtn}
-                        customValue={visitedFreq.value}
-                        optionName={visitedFreq.label}
-                        //validate={isRequired}
-                      />
-                    </View>
-                  ))}
-                </View>
-
-                <View style={[styles.half_width]}>
-                  {visitedFrequenciesII.map((visitedFreq, ix) => (
-                    <View
-                      style={[styles.borderBottomLine, styles.paddingTopBtn8]}
-                      key={ix}
-                    >
-                      <Field
-                        name="visitFrequency"
-                        component={RenderRadioBtn}
-                        customValue={visitedFreq.value}
-                        optionName={visitedFreq.label}
-                      />
-                    </View>
-                  ))}
-                </View>
-              </View>
-            </View>
-
-            <Text>{t('peopleCount')}</Text>
-            <View>
-              {people.map((people, ix) => (
-                <View
-                  style={[styles.borderBottomLine, styles.paddingTopBtn8]}
-                  key={ix}
-                >
+              <View style={[styles.fieldContainer, styles.flex_dir_row]}>
+                <View style={{flex: 1}}>
                   <Field
-                    name={people.value}
-                    component={RenderStepper}
-                    customValue={people.value + people.label}
-                    optionName={people.label}
+                    name="ageGroup"
+                    component={SegmentedControl}
+                    selectedIndex={this.state.selectedAgeGroup}
+                    onChange={this.handleAgeGroupSelection}
+                    values={ageGroups}
+                    normalize={value => {
+                      return this.state.ageGroups[value].value
+                    }}
                   />
                 </View>
-              ))}
+              </View>
+            </View>
+
+            <View style={styles.sectionContent}>
+              <View style={styles.fieldContainer}>
+                <Text style={styles.fieldTitle}>{t('visitFrequency')}</Text>
+              </View>
+              <View style={[styles.fieldContainer]}>
+                <View style={{flex: 1}}>
+                  <Field
+                    name="visitFrequency"
+                    component={SegmentedControl}
+                    selectedIndex={this.state.selectedVisitFrequency}
+                    onChange={this.handleVisitFrequencySelection}
+                    values={visitFrequencies}
+                    normalize={value => {
+                      return this.state.visitFrequencies[value].value
+                    }}
+                  />
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.sectionContent}>
+              <View style={styles.fieldContainer}>
+                <Text style={styles.fieldTitle}>{t('peopleCount')}</Text>
+              </View>
+              <View>
+                {people.map((people, ix) => (
+                  <View
+                    style={[styles.borderBottomLine, styles.paddingTopBtn8]}
+                    key={ix}
+                  >
+                    <Field
+                      name={people.value}
+                      component={RenderStepper}
+                      customValue={people.value + people.label}
+                      optionName={people.label}
+                    />
+                  </View>
+                ))}
+              </View>
             </View>
 
             <View

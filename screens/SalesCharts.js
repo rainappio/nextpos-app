@@ -144,6 +144,38 @@ class SalesCharts extends React.Component {
       })
     })
 
+
+    // it appears that pure chart needs series data to have the same length so the following logic
+    // is to handle data length difference when February has an extra day in leap years.
+    const customerStatsSize = customerStatsReport.customerStatsThisMonth.length;
+    const customerStatsSizeLastYear = customerStatsReport.customerStatsThisMonthLastYear.length;
+
+    if (customerStatsSize > customerStatsSizeLastYear) {
+      customerCountLastYearDataObj.data.push({
+        x: ' ',
+        y: 0
+      })
+
+      customerAvgSpendingLastYearDataObj.data.push({
+        x: ' ',
+        y: 0
+      })
+    }
+
+    if (customerStatsSizeLastYear > customerStatsSize) {
+      customerCountDataObj.data.push({
+        x: ' ',
+        y: 0
+      })
+
+      customerAvgSpendingDataObj.data.push({
+        x: ' ',
+        y: 0
+      })
+    }
+
+    console.log(`${customerCountLastYearDataObj.data.length} ${customerCountDataObj.data.length}`)
+
     const customerCountData = [customerCountDataObj, customerCountLastYearDataObj]
     const customerAvgSpendingData = [customerAvgSpendingDataObj, customerCountLastYearDataObj]
 

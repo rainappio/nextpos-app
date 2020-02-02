@@ -24,6 +24,7 @@ import globalEn from './locales/en'
 import globalZh from './locales/zh'
 import FlashMessage from 'react-native-flash-message'
 import { LocaleContext } from './locales/LocaleContext'
+import NavigationService from "./navigation/NavigationService";
 
 const store = createStore(
   rootReducer,
@@ -146,6 +147,9 @@ export default class App extends React.Component {
             />
             <LocaleContext.Provider value={this.state}>
               <AppNavigator
+                ref={navigatorRef => {
+                  NavigationService.setTopLevelNavigator(navigatorRef);
+                }}
                 screenProps={{
                   t: this.t,
                   locale: this.state.locale,
