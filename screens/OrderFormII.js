@@ -19,7 +19,8 @@ import {
   getfetchOrderInflights,
   getOrder,
   getTablesAvailable,
-  clearOrder
+  clearOrder,
+  isTablet
 } from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
@@ -76,7 +77,7 @@ class OrderFormII extends React.Component {
   PanelHeader = (labelName, labelId) => {
     return (
       <View style={styles.listPanel}>
-        <Text style={styles.listPanelText}>{labelName}</Text>
+        <Text style={[styles.listPanelText, styles.defaultfontSize]}>{labelName}</Text>
       </View>
     )
   }
@@ -149,20 +150,15 @@ class OrderFormII extends React.Component {
         <ScrollView
           refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
         >
-          <View style={styles.container}>
+          <View style={[styles.container]}>
             {/*<BackBtnCustom onPress={() => this.handleBack(recentlyAddedOrderId[0])}/>*/}
             <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
+              style={styles.screenTitle}
             >
               {t('newOrderTitle')}
             </Text>
           </View>
-          <View style={styles.childContainer}>
+          <View style={[styles.childContainer, styles.no_mgrTop]}>
             <Accordion
               onChange={this.onChange}
               activeSections={this.state.activeSections}
@@ -192,9 +188,9 @@ class OrderFormII extends React.Component {
                           })
                         }
                       >
-                        <View style={{ flex: 1, flexDirection: 'row' }}>
-                          <Text style={{ flex: 1 }}>{prd.name}</Text>
-                          <Text style={{ flex: 1, justifyContent: 'flex-end' }}>
+                        <View style={[{ flex: 1, flexDirection: 'row' }, styles.commonpaddingTopBtn]}>
+                          <Text style={[{ flex: 1 }, styles.defaultfontSize]}>{prd.name}</Text>
+                          <Text style={[{ flex: 1, justifyContent: 'flex-end' }, styles.defaultfontSize]}>
                             ${prd.price}
                           </Text>
                         </View>
@@ -208,40 +204,19 @@ class OrderFormII extends React.Component {
         </ScrollView>
 
         <View
-          style={[styles.orange_bg, styles.flex_dir_row, styles.shoppingBar]}
-        >
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <TouchableOpacity
-            //onPress={() => this.props.navigation.navigate('Orders')}
-            >
-              <View>
-                <Text
-                  style={[
-                    styles.paddingTopBtn8,
-                    styles.textBig,
-                    styles.whiteColor
-                  ]}
-                >
-                  {order.hasOwnProperty('tableInfo')
-                    ? order.tableInfo.tableName
-                    : 'No Table'}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <TouchableOpacity
-            //onPress={() => this.props.navigation.navigate('Orders')}
-            >
-              <View>
-                <FontAwesomeIcon
+          style={[styles.flex_dir_row, styles.orange_bg, {paddingTop: isTablet ? 20 : 10}, {paddingBottom: isTablet ? 20 : 10}]}
+          >
+            <View style={[{width: '30%', justifyContent: 'center', paddingLeft: '5%'}]}>
+              <Text style={[styles.sectionBarText, styles.whiteColor,]}>{order.hasOwnProperty('tableInfo') && order.tableInfo.tableName}</Text>
+            </View>
+            <View style={{width: '40%', justifyContent: 'center'}}>
+              <FontAwesomeIcon
                   name="user"
-                  size={30}
+                  size={isTablet ? 40 : 25}
                   color="#fff"
                   style={[styles.centerText]}
                 >
-                  <Text style={[styles.textBig, styles.whiteColor]}>
+                  <Text style={[styles.sectionBarText, styles.whiteColor]}>
                     &nbsp;&nbsp;
                     {// Object.keys(order).length !== 0 //not good
                     order.hasOwnProperty('demographicData')
@@ -251,12 +226,9 @@ class OrderFormII extends React.Component {
                       : this.props.navigation.state.params.customerCount}
                   </Text>
                 </FontAwesomeIcon>
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          <View style={[styles.half_width, styles.verticalMiddle]}>
-            <TouchableOpacity
+            </View>
+            <View style={[{width: '30%', justifyContent: 'center', textAlign:'right', paddingRight: '5%'}]}>
+               <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate('OrdersSummary', {
                   orderId:
@@ -273,18 +245,18 @@ class OrderFormII extends React.Component {
               <View>
                 <FontAwesomeIcon
                   name="shopping-cart"
-                  size={30}
+                  size={isTablet ? 40 : 25}
                   color="#fff"
-                  style={[styles.toRight, styles.mgrtotop8, styles.mgr_20]}
+                  style={[styles.toRight, {marginRight: isTablet ? 60 : 35}]}
                 />
-                <Text style={styles.itemCount}>
+                <Text style={[styles.itemCount, styles.sectionBarText]}>
                   {order.hasOwnProperty('lineItems') && order.lineItems.length}
                 </Text>
               </View>
             </TouchableOpacity>
-          </View>
+            </View>
+          </View>        
         </View>
-      </View>
     )
   }
 }

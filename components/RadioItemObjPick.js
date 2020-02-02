@@ -25,9 +25,9 @@ export default class RadioItemObjPick extends React.Component {
           }
           style={{ position: 'absolute', right: 0 }}
         >
-          <Text>{optionName}</Text>
+          <Text style={styles.defaultfontSize}>{optionName}</Text>
         </Radio>
-        {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
+        {!valid && touched && <Text style={[styles.rootError, styles.textSmall]}>{error}</Text>}
       </View>
     )
   }

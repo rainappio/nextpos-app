@@ -1,6 +1,6 @@
 import React from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
-import {getTimeDifference} from '../actions'
+import {getTimeDifference, isTablet} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import Icon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -44,34 +44,34 @@ class OrderItem extends React.PureComponent {
           })
         }
       >
-        <View style={{ marginRight: 15 }}>
+        <View style={{ width: '20%' }}>
           <View>
-            <Text style={{ paddingTop: 3 }}>{order.tableName}</Text>
+            <Text style={{ paddingTop: 3 }}>{order.tableName}&nbsp;</Text>
           </View>
         </View>
 
-        <View style={{ marginRight: 15 }}>
+        <View style={{ width: '15%' }}>
           <View>
-            <FontAwesomeIcon name={'user'} color="#ccc" size={20}>
-              <Text style={{ color: '#000', fontSize: 12 }}>
-                &nbsp;&nbsp;{order.customerCount}
+            <FontAwesomeIcon name={'user'} color="#ccc" size={isTablet ? 40 : 20}>
+              <Text style={[{color: '#000'}, styles.textSmall]}>
+                &nbsp;{order.customerCount}
               </Text>
             </FontAwesomeIcon>
           </View>
         </View>
 
-        <View style={{ width: '32%' }}>
+        <View style={{ width: '40%' }}>
           {(order.state === 'OPEN' || order.state === 'IN_PROCESS') &&
             (timeDifference < thirtyMinutes ? (
-              <FontAwesomeIcon name={'clock-o'} color="#f18d1a" size={20}>
-                <Text style={{ fontSize: 12 }}>
+              <FontAwesomeIcon name={'clock-o'} color="#f18d1a" size={isTablet ? 40 : 20}>
+                 <Text style={styles.textSmall}>
                   &nbsp;&nbsp;
                   {timeAgo.format(Date.now() - timeDifference)}
                 </Text>
               </FontAwesomeIcon>
             ) : timeDifference >= thirtyMinutes ? (
-              <FontAwesomeIcon name={'clock-o'} color="red" size={20}>
-                <Text style={{ fontSize: 12 }}>
+              <FontAwesomeIcon name={'clock-o'} color="red" size={isTablet ? 40 : 20}>
+                 <Text style={styles.textSmall}>
                   &nbsp;&nbsp;
                   {timeAgo.format(Date.now() - timeDifference)}
                 </Text>
@@ -79,8 +79,8 @@ class OrderItem extends React.PureComponent {
             ) : null)}
 
           {(order.state === 'SETTLED' || order.state === 'DELIVERED') && (
-            <FontAwesomeIcon name={'clock-o'} color="#888" size={20}>
-              <Text style={{ fontSize: 12 }}>
+            <FontAwesomeIcon name={'clock-o'} color="#888" size={isTablet ? 40 : 20}>
+               <Text style={styles.textSmall}>
                 &nbsp;&nbsp;
                 {timeAgo.format(Date.now() - timeDifference)}
               </Text>
@@ -90,21 +90,21 @@ class OrderItem extends React.PureComponent {
 
         <View>
           {order.state === 'OPEN' ? (
-            <Image source={images.order} style={{ width: 15, height: 20 }} />
+            <Image source={images.order} style={styles.openImg} />
           ) : order.state === 'IN_PROCESS' ? (
-            <Image source={images.process} style={{ width: 30, height: 20 }} />
+            <Image source={images.process} style={styles.inProcessImg} />
           ) : order.state === 'SETTLED' ? (
             <Icon
               name={'md-checkmark-circle-outline'}
               color="#4cbb17"
-              size={25}
-              style={{ marginLeft: 8, marginRight: 8, fontWeight: 'bold' }}
+              size={isTablet ? 40 : 25}
+              style={{ marginRight: 2, fontWeight: 'bold' }}
             />
           ) : order.state === 'DELIVERED' ? (
             <MCIcon
               name={'truck-delivery'}
-              size={25}
-              style={{ marginLeft: 8, marginRight: 8, fontWeight: 'bold' }}
+              size={isTablet ? 40 : 25}
+              style={{ marginRight: 2, fontWeight: 'bold' }}
               color="#f18d1a"
             />
           ) : (
@@ -117,11 +117,11 @@ class OrderItem extends React.PureComponent {
           )}
         </View>
         <Text
-          style={{
-            color: '#000',
-            fontSize: 12,
-            paddingTop: 6
-          }}
+         style={[{
+              color: '#000',
+              paddingTop: 6,
+              fontSize: 12
+            }]}
         >
           &nbsp;{order.state}
         </Text>

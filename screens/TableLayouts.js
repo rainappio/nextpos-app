@@ -76,7 +76,7 @@ class TableLayouts extends React.Component {
           <View>
             <View style={[styles.container]}>
               <BackBtn />
-              <Text style={styles.screenTitle}>
+              <Text style={[styles.screenTitle]}>
                 {t('settings.tableLayouts')}
               </Text>
               <AddBtn

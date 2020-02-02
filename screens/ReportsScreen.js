@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import images from '../assets/images'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import { isTablet } from '../actions'
 
 class ReportsScreen extends React.Component {
   static navigationOptions = {
@@ -35,52 +36,63 @@ class ReportsScreen extends React.Component {
     return (
       <ScrollView>
         <DismissKeyboard>
-          <View style={styles.container}>
+          <View style={[styles.container, styles.nomgrBottom]}>
             <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
+              style={styles.screenTitle}
             >
               {t('menu.reporting')}
             </Text>
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-              <TouchableOpacity
-                style={styles.mainSquareButton}
-                onPress={() => this.props.navigation.navigate('Sales')}
-              >
-                <View>
+            	<View
+                style={[
+                  styles.iconMargin,
+                  styles.grayBg,
+                  styles.half_width,
+                  styles.jc_alignIem_center
+                ]}
+              	>
+              	<TouchableOpacity
+                 	onPress={() => this.props.navigation.navigate('Sales')}
+              	>
+                <View style={styles.customPaddingLarge}>
                   <FontAwesomeIcon
                     name="bar-chart"
-                    size={40}
-                    style={[styles.centerText, styles.margin_15, styles.orange_color]}
+                    size={isTablet ? 70 : 40}
+                    style={[styles.centerText, styles.iconMargin, styles.orange_color]}
                   />
                   <Text
-                    style={styles.centerText}
+                    style={[styles.centerText, styles.defaultfontSize]}
                   >
                     {t('salesReport')}
                   </Text>
                 </View>
               </TouchableOpacity>
+              </View>
 
+							<View
+                style={[
+                  styles.iconMargin,
+                  styles.grayBg,
+                  styles.half_width,
+                  styles.jc_alignIem_center
+                ]}
+              >
               <TouchableOpacity
-                style={styles.mainSquareButton}
                 //onPress={() => this.props.navigation.navigate('TablesSrc')}
               >
-                <View style={styles.jc_alignIem_center}>
+                <View style={styles.customPaddingLarge}>
                   <Icon
                     name="md-time"
-                    size={40}
-                    style={[styles.centerText, styles.margin_15, styles.orange_color]}
+                    size={isTablet ? 70 : 40}
+                    	style={[styles.centerText, styles.iconMargin, styles.orange_color]}
                   />
-                  <Text style={[styles.centerText]}>
+                  <Text style={[styles.centerText, styles.defaultfontSize]}>
                     {t('staffTimeCardReport')}
                   </Text>
                 </View>
               </TouchableOpacity>
+              </View>
             </View>
           </View>
         </DismissKeyboard>

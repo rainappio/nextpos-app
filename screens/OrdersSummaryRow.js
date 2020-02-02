@@ -7,7 +7,8 @@ import {
   getOrder,
   getfetchOrderInflights,
   formatDate,
-  getOrdersByDateRange
+  getOrdersByDateRange,
+  isTablet
 } from '../actions'
 import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
@@ -132,15 +133,15 @@ class OrdersSummaryRow extends React.Component {
     return (
       <Tooltip popover={tooltip} height={120} width={200}>
         <View>
-          {state === 'OPEN' && <Text>{t('stateTip.open.display')}</Text>}
+          {state === 'OPEN' && <Text style={styles.defaultfontSize}>{t('stateTip.open.display')}</Text>}
           {state === 'IN_PROCESS' ||
             (state === 'ALREADY_IN_PROCESS' && (
-              <Text>{t('stateTip.inProcess.display')}</Text>
+              <Text style={styles.defaultfontSize}>{t('stateTip.inProcess.display')}</Text>
             ))}
           {state === 'DELIVERED' && (
-            <Text>{t('stateTip.delivered.display')}</Text>
+            <Text style={styles.defaultfontSize}>{t('stateTip.delivered.display')}</Text>
           )}
-          {state === 'SETTLED' && <Text>{t('stateTip.settled.display')}</Text>}
+          {state === 'SETTLED' && <Text style={styles.defaultfontSize}>{t('stateTip.settled.display')}</Text>}
         </View>
       </Tooltip>
     )
@@ -225,29 +226,22 @@ class OrdersSummaryRow extends React.Component {
     const { t } = this.state
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
-        <View
-          style={{
-            marginTop: 62,
-            marginLeft: 35,
-            marginRight: 35,
-            marginBottom: 30
-          }}
+       
+      <View
+        style={{flex: 1, marginTop: 44}}
         >
-          <BackBtn />
+        <View
+          style={{ marginLeft: 20, marginRight: 20, marginBottom: 20}}
+        >
+          <BackBtn size={isTablet ? 44 : 28}/>
           <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold
-            ]}
+            style={styles.screenTitle}
           >
             {t('orderSummaryTitle')}
           </Text>
 
           <View style={[styles.flex_dir_row, { alignItems: 'center' }]}>
-            <View style={[styles.quarter_width]}>
+            <View style={{width: '20%'}}>
               <View>
                 <Text
                   style={[
@@ -261,11 +255,11 @@ class OrdersSummaryRow extends React.Component {
               </View>
             </View>
 
-            <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
+            <View style={[{width: '15%'}, styles.jc_alignIem_center]}>
               <View>
                 <FontAwesomeIcon
                   name="user"
-                  size={25}
+                  size={isTablet ? 40 : 25}
                   color="#f18d1a"
                   style={[styles.centerText]}
                 >
@@ -281,13 +275,13 @@ class OrdersSummaryRow extends React.Component {
               </View>
             </View>
 
-            <View style={[styles.fullhalf_width, styles.mgr_20]}>
+            <View style={[{width: '65%'}]}>
               <TouchableOpacity>
                 <View>
-                  <Text style={[styles.toRight, styles.mgr_20]}>
+                  <Text style={[styles.toRight, styles.defaultfontSize]}>
                     {t('staff')} - {order.servedBy}
                   </Text>
-                  <Text style={[styles.toRight, styles.mgr_20]}>
+                  <Text style={[styles.toRight, styles.defaultfontSize]}>
                     {formatDate(order.createdDate)}
                   </Text>
                 </View>
@@ -300,49 +294,40 @@ class OrdersSummaryRow extends React.Component {
           style={[
             styles.orange_bg,
             styles.flex_dir_row,
-            styles.shoppingBar,
-            styles.paddLeft20,
-            styles.paddRight20,
-            styles.top40
+            {padding: 20}        
           ]}
         >
           <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
+            <Text style={[styles.whiteColor, styles.sectionBarText]}>
+              {t('product')}
+            </Text>
+          </View>
+
+          <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
+            <Text style={[styles.whiteColor, styles.sectionBarText]}>
+              &nbsp;&nbsp;{t('quantity')}
+            </Text>           
+          </View>
+
+          <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
+            <Text style={[styles.whiteColor, styles.sectionBarText]}>{t('unitPrice')}</Text>
+          </View>
+
+          <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text style={[styles.paddingTopBtn8, styles.whiteColor]}>
-                {t('product')}
-              </Text>
+              <Text style={[styles.whiteColor, styles.sectionBarText]}>{t('subTotal')}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text style={[styles.whiteColor]}>
-                &nbsp;&nbsp;{t('quantity')}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
-            <TouchableOpacity>
-              <Text style={styles.whiteColor}>{t('unitPrice')}</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
-            <TouchableOpacity>
-              <Text style={styles.whiteColor}>{t('subTotal')}</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={[styles.oneFifthWidth, styles.jc_alignIem_center]}>
-            <TouchableOpacity>
-              <Text style={styles.whiteColor}>{t('state')}</Text>
+              <Text style={[styles.whiteColor, styles.sectionBarText]}>{t('state')}</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <View style={[styles.container]}>
-          <Text style={styles.textBold}>{order.orderId}</Text>
+        <View style={{margin: 20}}>
+          <Text style={[styles.textBold, styles.defaultfontSize]}>{order.orderId}</Text>
           {order.state !== 'SETTLED' && (
             <AddBtn
               onPress={() =>
@@ -352,6 +337,7 @@ class OrdersSummaryRow extends React.Component {
                   handleDelete: this.props.navigation.state.params.handleDelete
                 })
               }
+              size={isTablet ? 60 : 28}
             />
           )}
 
@@ -363,7 +349,7 @@ class OrdersSummaryRow extends React.Component {
                   <View key={rowMap}>
                     <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
                       <View style={[styles.oneFifthWidth]}>
-                        <Text style={{ textAlign: 'left' }}>
+                        <Text style={[{ textAlign: 'left' }, styles.defaultfontSize]}>
                           {data.item.productName}
                         </Text>
                       </View>
@@ -374,7 +360,7 @@ class OrdersSummaryRow extends React.Component {
                           styles.jc_alignIem_center
                         ]}
                       >
-                        <Text>&nbsp;&nbsp;{data.item.quantity}</Text>
+                        <Text style={styles.defaultfontSize}>&nbsp;&nbsp;{data.item.quantity}</Text>
                       </View>
 
                       <View
@@ -383,7 +369,7 @@ class OrdersSummaryRow extends React.Component {
                           styles.jc_alignIem_center
                         ]}
                       >
-                        <Text>${data.item.price}</Text>
+                        <Text style={styles.defaultfontSize}>${data.item.price}</Text>
                       </View>
 
                       <View
@@ -392,7 +378,7 @@ class OrdersSummaryRow extends React.Component {
                           styles.jc_alignIem_center
                         ]}
                       >
-                        <Text>${data.item.subTotal.amountWithTax}</Text>
+                        <Text style={styles.defaultfontSize}>${data.item.subTotal.amountWithTax}</Text>
                       </View>
                       <View
                         style={[
@@ -404,7 +390,7 @@ class OrdersSummaryRow extends React.Component {
                       </View>
                     </View>
                     <View style={[styles.mgrbtn20]}>
-                      <Text style={{ textAlign: 'left', marginLeft: 4 }}>
+                      <Text style={[{ textAlign: 'left', marginLeft: 4 }, styles.defaultfontSize]}>
                         {data.item.options}
                       </Text>
                     </View>
@@ -416,8 +402,8 @@ class OrdersSummaryRow extends React.Component {
                 <View style={[styles.rowBack, styles.standalone]} key={rowMap}>
                   <View style={styles.editIcon}>
                     <Icon
-                      name="md-create"
-                      size={25}
+                    	name="md-create"
+                      size={isTablet ? 50 : 25}
                       color="#fff"
                       onPress={() =>
                         this.props.navigation.navigate('LIneItemEdit', {
@@ -445,209 +431,149 @@ class OrdersSummaryRow extends React.Component {
                 </View>
               )}
               leftOpenValue={0}
-              rightOpenValue={-80}
+              rightOpenValue={isTablet ? -120 : -80}
             />
           </View>
 
           <View
             style={[styles.flex_dir_row, styles.grayBg, styles.paddingTopBtn8]}
-          >
-            <View style={[styles.half_width]}>
-              <Text>{t('serviceCharge')}</Text>
+           >
+            <View style={[styles.fullhalf_width]}>
+              <Text style={styles.defaultfontSize}>{t('serviceCharge')}</Text>
             </View>
-            <View style={[styles.half_width]}>
-              <Text style={{ textAlign: 'right', marginRight: -26 }}>
+            <View style={[styles.fullhalf_width, styles.paddRight20]}>
+              <Text style={[{ textAlign: 'right'}, styles.defaultfontSize]}>
                 ${order.serviceCharge}
               </Text>
             </View>
           </View>
 
           <View
-            style={[styles.flex_dir_row, styles.grayBg, styles.paddingTopBtn8]}
-          >
-            <View style={[styles.half_width]}>
-              <Text>{t('total')}</Text>
+            style={[styles.flex_dir_row, styles.grayBg, styles.paddingTopBtn15,{marginTop: 4}]}
+            >
+            <View style={[styles.fullhalf_width]}>
+              <Text style={styles.defaultfontSize}>{t('total')}</Text>
             </View>
-            <View style={[styles.half_width]}>
-              <Text style={{ textAlign: 'right', marginRight: -26 }}>
+            <View style={[styles.fullhalf_width, styles.paddRight20]}>
+              <Text style={[styles.toRight, styles.defaultfontSize]}>
                 ${order.orderTotal}
               </Text>
             </View>
-          </View>
+          </View>          
+      	</View>
 
-          {order.state === 'OPEN' ? (
-            <View
-              style={{
-                width: '100%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                backgroundColor: '#F39F86',
-                marginRight: '2%',
-                marginTop: 22
-              }}
-            >
-              <TouchableOpacity
-                onPress={() =>
-                  order.lineItems.length === 0
-                    ? warningMessage(
-                        'At Least One Order Item Need To Proceed..'
-                      )
-                    : this.props.navigation.state.params.onSubmit(order.orderId)
-                }
-              >
-                <Text style={[styles.signInText, styles.whiteColor]}>
-                  {t('submitOrder')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          ) : order.state === 'IN_PROCESS' ? (
-            <View
-              style={{
-                width: '100%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                backgroundColor: '#F39F86',
-                marginRight: '2%',
-                marginTop: 22
-              }}
-            >
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.state.params.onSubmit(order.orderId)
-                }
-                //onPress={this.props.handleSubmit}
-              >
-                <Text style={[styles.signInText, styles.whiteColor]}>
-                  {t('submitOrder')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          ) : order.state === 'DELIVERED' ? (
-            <View
-              style={{
-                width: '100%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                backgroundColor: '#F39F86',
-                marginRight: '2%',
-                marginTop: 22
-              }}
-            >
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.state.params.onSubmit(order.orderId)
-                }
-                disabled={true}
-              >
-                <Text style={[styles.signInText, styles.whiteColor]}>
-                  {t('submitOrder')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          ) : null}
+				<View
+          style={[styles.toBottom,{paddingLeft: 20, paddingRight: 20, width: '100%'}]}
+        	>
+          	{order.state === 'OPEN' ? (
+            	<View style={{backgroundColor: 'yellow'}}>
+              	<TouchableOpacity
+                	onPress={() =>
+                  	order.lineItems.length === 0
+                    	? warningMessage(
+                        	'At Least One Order Item Need To Proceed..'
+                      	)
+                    	: this.props.navigation.state.params.onSubmit(order.orderId)
+                	}
+                	style={styles.jc_alignIem_center}
+              	>
+                	<Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  	{t('submitOrder')}
+                	</Text>
+              	</TouchableOpacity>
+            	</View>
+          	) : order.state === 'IN_PROCESS' ? (
+            	<View>
+              	<TouchableOpacity
+                	onPress={() =>
+                  	this.props.navigation.state.params.onSubmit(order.orderId)
+                	}
+                	//onPress={this.props.handleSubmit}
+                	style={styles.jc_alignIem_center}
+              	>
+                	<Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  	{t('submitOrder')}
+                	</Text>
+              	</TouchableOpacity>
+            	</View>
+          	) : order.state === 'DELIVERED' ? (
+            	<View>
+              	<TouchableOpacity
+                	onPress={() =>
+                  	this.props.navigation.state.params.onSubmit(order.orderId)
+                	}
+                	disabled={true}
+                	style={styles.jc_alignIem_center}
+              	>
+                	<Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  	{t('submitOrder')}
+                	</Text>
+              	</TouchableOpacity>
+            	</View>
+          	) : null}
 
-          <View
-            style={{
-              width: '100%',
-              borderRadius: 4,
-              borderWidth: 1,
-              borderColor: '#F39F86',
-              marginTop: 8
-            }}
-          >
-            <TouchableOpacity onPress={() => this.handleCancel(order.orderId)}>
-              <Text style={styles.signInText}>{t('backToTables')}</Text>
-            </TouchableOpacity>
-          </View>
+          	<View>
+            	<TouchableOpacity onPress={() => this.handleCancel(order.orderId)} style={styles.jc_alignIem_center}>
+              	<Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('backToTables')}</Text>
+            	</TouchableOpacity>
+          	</View>
 
-          <View
-            style={{
-              width: '100%',
-              borderRadius: 4,
-              borderWidth: 1,
-              borderColor: '#F39F86',
-              marginTop: 8
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.state.params.handleDelete(order.orderId)
-              }}
-            >
-              <Text style={styles.signInText}>{t('deleteOrder')}</Text>
-            </TouchableOpacity>
-          </View>
+          	<View>
+            	<TouchableOpacity
+              	onPress={() => {
+                	this.props.navigation.state.params.handleDelete(order.orderId)
+              	}}
+              	style={styles.jc_alignIem_center}
+            	>
+              	<Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('deleteOrder')}</Text>
+            	</TouchableOpacity>
+          	</View>
 
-          {order.state !== 'SETTLED' &&
-            order.state !== 'DELIVERED' &&
-            order.state !== 'OPEN' && (
-              <View
-                style={{
-                  width: '100%',
-                  borderRadius: 4,
-                  borderWidth: 1,
-                  borderColor: '#F39F86',
-                  marginTop: 8
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.state.params.handleDeliver(
-                      order.orderId
-                    )
-                  }}
-                >
-                  <Text style={styles.signInText}>{t('deliverOrder')}</Text>
-                </TouchableOpacity>
-              </View>
-            )}
+          	{order.state !== 'SETTLED' &&
+            	order.state !== 'DELIVERED' &&
+            	order.state !== 'OPEN' && (
+              	<View>
+                	<TouchableOpacity
+                  	onPress={() => {
+                    	this.props.navigation.state.params.handleDeliver(
+                      	order.orderId
+                    	)
+                  	}}
+                  	style={styles.jc_alignIem_center}
+                	>
+                  	<Text style={[styles.bottomActionButton, styles.actionButton]}>{t('deliverOrder')}</Text>
+                	</TouchableOpacity>
+              	</View>
+            	)}
 
-          {order.state === 'DELIVERED' && (
-            <View
-              style={{
-                width: '100%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                marginTop: 8
-              }}
-            >
-              <TouchableOpacity
-                onPress={() =>
-                  order.lineItems.length === 0
-                    ? warningMessage('At Least One Order Item Need Proceed..')
-                    : this.props.navigation.navigate('Payment', {
-                        order: order
-                      })
-                }
-              >
-                <Text style={styles.signInText}>{t('payOrder')}</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {order.state === 'SETTLED' && (
-            <View
-              style={{
-                width: '100%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                marginTop: 8
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => this.handleComplete(order.orderId)}
-              >
-                <Text style={styles.signInText}>{t('completeOrder')}</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
-      </ScrollView>
+          	{order.state === 'DELIVERED' && (
+            	<View>
+              	<TouchableOpacity
+                	onPress={() =>
+                  	order.lineItems.length === 0
+                    	? warningMessage('At Least One Order Item Need Proceed..')
+                    	: this.props.navigation.navigate('Payment', {
+                        	order: order
+                      	})
+                	}
+                	style={styles.jc_alignIem_center}
+              	>
+                	<Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('payOrder')}</Text>
+              	</TouchableOpacity>
+            	</View>
+          	)}
+          	{order.state === 'SETTLED' && (
+            	<View>
+              	<TouchableOpacity
+                	onPress={() => this.handleComplete(order.orderId)}
+                	style={styles.jc_alignIem_center}
+              	>
+                	<Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('completeOrder')}</Text>
+              	</TouchableOpacity>
+            	</View>
+          	)}
+					</View>
+			</View>	
     )
   }
 }

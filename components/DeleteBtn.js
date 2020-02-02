@@ -3,6 +3,7 @@ import { Alert, Text, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import { isTablet } from '../actions'
 
 class DeleteBtn extends React.Component {
   static contextType = LocaleContext
@@ -55,7 +56,7 @@ class DeleteBtn extends React.Component {
         {islineItemDelete ? (
           <Icon
             name="md-trash"
-            size={25}
+            size={isTablet ? 50 : 25}
             color="#fff"
             // style={{textAlign: 'right', backgroundColor: 'pink'}}
           />

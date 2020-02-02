@@ -6,7 +6,9 @@ import {
   getProducts,
   getLables,
   getLabel,
-  getfetchglobalOrderOffers
+  getfetchglobalOrderOffers,
+  calculatePercentage,
+  isTablet
 } from '../actions'
 import BackBtnCustom from '../components/BackBtnCustom'
 import { DismissKeyboard } from '../components/DismissKeyboard'
@@ -20,7 +22,6 @@ import {
   successMessage
 } from '../constants/Backend'
 import { isRequired } from '../validators'
-import { calculatePercentage } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 
@@ -89,148 +90,291 @@ class PaymentFormScreen extends React.Component {
         })
       })
     return (
-      <ScrollView>
-        <DismissKeyboard>
-          <View style={styles.container_nocenterCnt}>
-            <BackBtnCustom
-              onPress={() => this.props.navigation.navigate('OrdersSummary')}
-            />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
-              {t('paymentTitle')}
-            </Text>
+    	<View style={{flex:1}}>
+    	{
+    		isTablet 
+    		?
+					<View style={{flex: 1, marginTop: 44}}>
+						<View style={{ marginLeft: 20, marginRight: 20, marginBottom: 20}}>
+          		<BackBtnCustom size={isTablet ? 44 : 28}/>
+          		<Text style={styles.screenTitle}>
+            		{t('paymentTitle')}
+          		</Text>
+          	</View>
 
-            <View
-              style={[
-                styles.flex_dir_row,
-                styles.mgrtotop20,
-                styles.paddingTopBtn20,
-                styles.borderBottomLine
-              ]}
-            >
-              <View style={[styles.half_width, styles.textBold]}>
-                <Text>{t('total')}</Text>
-              </View>
+          	<View
+              		style={[
+                		styles.flex_dir_row,
+                		styles.mgrtotop20,
+                		styles.paddingTopBtn20,
+                		styles.borderBottomLine,
+                		{marginLeft: 20, marginRight: 20}
+              		]}
+            		>
+              		<View style={[styles.fullhalf_width, styles.textBold]}>
+                		<Text style={styles.defaultfontSize}>{t('total')}</Text>
+              		</View>
 
-              <View style={[styles.half_width]}>
-                <Text
-                  style={[
-                    { textAlign: 'right', marginRight: -26 },
-                    styles.textBold
-                  ]}
-                >
-                  $&nbsp;{order.total.amountWithTax.toFixed(2)}
-                </Text>
-              </View>
-            </View>
+              		<View style={[styles.fullhalf_width]}>
+                		<Text
+                  		style={[
+                    		{ textAlign: 'right'},
+                    		styles.textBold,
+                    		styles.defaultfontSize
+                  		]}
+                		>
+                  		$&nbsp;{order.total.amountWithTax.toFixed(2)}
+                		</Text>
+              		</View>
+            		</View>
 
-            <View
-              style={[
-                styles.flex_dir_row,
-                styles.paddingTopBtn20,
-                styles.borderBottomLine
-              ]}
-            >
-              <View style={[styles.half_width, styles.textBold]}>
-                <Text>{t('serviceCharge')}</Text>
-              </View>
+            		<View
+              		style={[
+                		styles.flex_dir_row,
+                		styles.paddingTopBtn20,
+                		styles.borderBottomLine,
+                		{marginLeft: 20, marginRight: 20}
+              		]}
+            		>
+              		<View style={[styles.fullhalf_width, styles.textBold]}>
+                		<Text style={styles.defaultfontSize}>{t('serviceCharge')}</Text>
+              		</View>
 
-              <View style={[styles.half_width]}>
-                <Text
-                  style={[
-                    { textAlign: 'right', marginRight: -26 },
-                    styles.textBold
-                  ]}
-                >
-                  $&nbsp;{order.serviceCharge}
-                </Text>
-              </View>
-            </View>
+              		<View style={[styles.fullhalf_width]}>
+                		<Text
+                  		style={[
+                    		{ textAlign: 'right'},
+                    		styles.textBold,
+                    		styles.defaultfontSize
+                  		]}
+                		>
+                  		$&nbsp;{order.serviceCharge}
+                		</Text>
+              		</View>
+            		</View>
 
-            <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
-              <View style={[styles.half_width, styles.textBold]}>
-                <Text>{t('discount')}</Text>
-              </View>
-              {discounts.map((discount, ix) => (
-                <View
-                  style={[styles.borderBottomLine, styles.paddingTopBtn8]}
-                  key={ix}
-                >
-                  <Field
-                    name="discount"
-                    component={RenderCheckBox}
-                    customValue={discount.value}
-                    optionName={discount.label}
-                    total={order.orderTotal}
-                    getPercent={this.getPercent}
-                    orderTotal={order.total.amountWithTax.toFixed(2)}
-                    grandTotal={(
-                      order.orderTotal -
-                      calculatePercentage(
-                        order.orderTotal,
-                        this.state.getPercent
-                      )
-                    ).toFixed(2)}
-                  />
-                </View>
-              ))}
-            </View>
+            		<View style={[styles.paddingTopBtn20, styles.borderBottomLine, {marginLeft: 20, marginRight: 20}]}>
+              		<View style={[styles.fullhalf_width, styles.textBold]}>
+                		<Text style={styles.defaultfontSize}>{t('discount')}</Text>
+              		</View>
+              		{discounts.map((discount, ix) => (
+                		<View
+                  		style={[styles.borderBottomLine, styles.paddingTopBtn8]}
+                  		key={ix}
+                		>
+                  		<Field
+                    		name="discount"
+                    		component={RenderCheckBox}
+                    		customValue={discount.value}
+                    		optionName={discount.label}
+                    		total={order.orderTotal}
+                    		getPercent={this.getPercent}
+                    		orderTotal={order.total.amountWithTax.toFixed(2)}
+                    		grandTotal={(
+                      		order.orderTotal -
+                      		calculatePercentage(
+                        		order.orderTotal,
+                        		this.state.getPercent
+                      		)
+                    		).toFixed(2)}
+                  		/>
+                		</View>
+              		))}
+            		</View>
 
-            <View
-              style={[
-                styles.flex_dir_row,
-                styles.paddingTopBtn20,
-                styles.borderBottomLine
-              ]}
-            >
-              <View style={[styles.half_width, styles.textBold]}>
-                <Text>{t('grandTotal')}</Text>
-              </View>
+            		<View
+              		style={[
+                		styles.flex_dir_row,
+                		styles.paddingTopBtn20,
+                		styles.borderBottomLine,
+                		{marginLeft: 20, marginRight: 20}
+              		]}
+            		>
+              		<View style={[styles.fullhalf_width, styles.textBold]}>
+                		<Text style={styles.defaultfontSize}>{t('grandTotal')}</Text>
+              		</View>
 
-              <View style={[styles.half_width]}>
-                <Text
-                  style={[
-                    { textAlign: 'right', marginRight: -26 },
-                    styles.textBold
-                  ]}
-                >
-                  $&nbsp;
-                  {(
-                    order.orderTotal -
-                    calculatePercentage(order.orderTotal, this.state.getPercent)
-                  ).toFixed(2)}
-                </Text>
-              </View>
-            </View>
+              		<View style={[styles.fullhalf_width]}>
+                		<Text
+                  		style={[
+                    		{ textAlign: 'right'},
+                    		styles.textBold,
+                    		styles.defaultfontSize
+                  		]}
+                		>
+                  		$&nbsp;
+                  		{(
+                    		order.orderTotal -
+                    		calculatePercentage(order.orderTotal, this.state.getPercent)
+                  		).toFixed(2)}
+                		</Text>
+              		</View>
+            		</View>
 
-            <View style={[styles.bottom]}>
-              <TouchableOpacity onPress={() => handleSubmit()}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                  {t('payOrder')}
-                </Text>
-              </TouchableOpacity>
+          	<View style={[styles.toBottom,{paddingLeft: 20, paddingRight: 20, width: '100%'}]}>
+							<TouchableOpacity onPress={() => handleSubmit()} style={styles.jc_alignIem_center}>
+                		<Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  		{t('payOrder')}
+                		</Text>
+              		</TouchableOpacity>
 
-              <View>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('OrdersSummary')}
-                >
-                  <Text
-                    style={[styles.bottomActionButton, styles.cancelButton]}
-                  >
-                    {t('action.cancel')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </DismissKeyboard>
-      </ScrollView>
+                		<TouchableOpacity
+                  		onPress={() => navigation.navigate('OrdersSummary')}
+                  		style={styles.jc_alignIem_center}
+                		>
+                  		<Text
+                    		style={[styles.bottomActionButton, styles.cancelButton]}
+                  		>
+                    		{t('action.cancel')}
+                  		</Text>
+                		</TouchableOpacity>
+        		</View>
+					</View>
+    		:
+    			<ScrollView>
+        		<DismissKeyboard>
+          		<View style={[styles.container_nocenterCnt]}>
+            		<BackBtnCustom
+              		onPress={() => this.props.navigation.navigate('OrdersSummary')}
+              		size={isTablet ? 44 : 28}
+            		/>
+            		<Text
+              		style={styles.screenTitle}
+            		>
+              		{t('paymentTitle')}
+            		</Text>
+
+            		<View
+              		style={[
+                		styles.flex_dir_row,
+                		styles.mgrtotop20,
+                		styles.paddingTopBtn20,
+                		styles.borderBottomLine
+              		]}
+            		>
+              		<View style={[styles.half_width, styles.textBold]}>
+                		<Text style={styles.defaultfontSize}>{t('total')}</Text>
+              		</View>
+
+              		<View style={[styles.half_width]}>
+                		<Text
+                  		style={[
+                    		{ textAlign: 'right', marginRight: -26 },
+                    		styles.textBold,
+                    		styles.defaultfontSize
+                  		]}
+                		>
+                  		$&nbsp;{order.total.amountWithTax.toFixed(2)}
+                		</Text>
+              		</View>
+            		</View>
+
+            		<View
+              		style={[
+                		styles.flex_dir_row,
+                		styles.paddingTopBtn20,
+                		styles.borderBottomLine
+              		]}
+            		>
+              		<View style={[styles.half_width, styles.textBold]}>
+                		<Text style={styles.defaultfontSize}>{t('serviceCharge')}</Text>
+              		</View>
+
+              		<View style={[styles.half_width]}>
+                		<Text
+                  		style={[
+                    		{ textAlign: 'right', marginRight: -26 },
+                    		styles.textBold,
+                    		styles.defaultfontSize
+                  		]}
+                		>
+                  		$&nbsp;{order.serviceCharge}
+                		</Text>
+              		</View>
+            		</View>
+
+            		<View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
+              		<View style={[styles.half_width, styles.textBold]}>
+                		<Text style={styles.defaultfontSize}>{t('discount')}</Text>
+              		</View>
+              		{discounts.map((discount, ix) => (
+                		<View
+                  		style={[styles.borderBottomLine, styles.paddingTopBtn8]}
+                  		key={ix}
+                		>
+                  		<Field
+                    		name="discount"
+                    		component={RenderCheckBox}
+                    		customValue={discount.value}
+                    		optionName={discount.label}
+                    		total={order.orderTotal}
+                    		getPercent={this.getPercent}
+                    		orderTotal={order.total.amountWithTax.toFixed(2)}
+                    		grandTotal={(
+                      		order.orderTotal -
+                      		calculatePercentage(
+                        		order.orderTotal,
+                        		this.state.getPercent
+                      		)
+                    		).toFixed(2)}
+                  		/>
+                		</View>
+              		))}
+            		</View>
+
+            		<View
+              		style={[
+                		styles.flex_dir_row,
+                		styles.paddingTopBtn20,
+                		styles.borderBottomLine,
+                		{marginLeft: 20, marginRight: 20}
+              		]}
+            		>
+              		<View style={[styles.fullhalf_width, styles.textBold]}>
+                		<Text style={styles.defaultfontSize}>{t('grandTotal')}</Text>
+              		</View>
+
+              		<View style={[styles.fullhalf_width]}>
+                		<Text
+                  		style={[
+                    		{ textAlign: 'right' },
+                    		styles.textBold,
+                    		styles.defaultfontSize
+                  		]}
+                		>
+                  		$&nbsp;
+                  		{(
+                    		order.orderTotal -
+                    		calculatePercentage(order.orderTotal, this.state.getPercent)
+                  		).toFixed(2)}
+                		</Text>
+              		</View>
+            		</View>
+
+            		<View>
+              		<TouchableOpacity onPress={() => handleSubmit()} style={styles.jc_alignIem_center}>
+                		<Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  		{t('payOrder')}
+                		</Text>
+              		</TouchableOpacity>
+
+                		<TouchableOpacity
+                  		onPress={() => navigation.navigate('OrdersSummary')}
+                  		style={styles.jc_alignIem_center}
+                		>
+                  		<Text
+                    		style={[styles.bottomActionButton, styles.cancelButton]}
+                  		>
+                    		{t('action.cancel')}
+                  		</Text>
+                		</TouchableOpacity>
+              		</View>
+            		</View>
+      		
+        		</DismissKeyboard>
+      		</ScrollView>
+    	}
+    	</View>
     )
   }
 }

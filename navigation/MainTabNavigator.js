@@ -68,6 +68,7 @@ import OrderDetail from '../screens/OrderDetail'
 import Announcements from '../screens/Announcements'
 import AnnouncementsAdd from '../screens/AnnouncementsAdd'
 import AnnouncementsEdit from '../screens/AnnouncementsEdit'
+import { isTablet } from '../actions'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -82,7 +83,13 @@ Home.navigationOptions = {
     <TabBarIcon focused={focused} name={'md-home'} />
   ),
   tabBarOptions: {
-    activeTintColor: '#f18d1a'
+    activeTintColor: '#f18d1a',
+    style: {
+    	height: isTablet ? 80 : 44
+    },
+    labelStyle: {
+    	fontSize: isTablet ? 18 : 12,
+  	}
   },
   tabBarOnPress: ({ navigation, defaultHandler }) => {
     navigation.dispatch(
@@ -149,7 +156,13 @@ Settings.navigationOptions = ({ screenProps: { t } }) => ({
     />
   ),
   tabBarOptions: {
-    activeTintColor: '#f18d1a'
+    activeTintColor: '#f18d1a',
+    style: {
+    	height: isTablet ? 80 : 44
+    },
+    labelStyle: {
+    	fontSize: isTablet ? 18 : 12,
+  	}
   },
   tabBarOnPress: ({ navigation, defaultHandler }) => {
     navigation.dispatch(
@@ -185,7 +198,13 @@ Tables.navigationOptions = ({ screenProps: { t } }) => ({
     <TabBarIcon focused={focused} name="md-people" />
   ),
   tabBarOptions: {
-    activeTintColor: '#f18d1a'
+    activeTintColor: '#f18d1a',
+    style: {
+    	height: isTablet ? 80 : 44
+    },
+    labelStyle: {
+    	fontSize: isTablet ? 18 : 12,
+  	}
   },
   tabBarOnPress: ({ navigation, defaultHandler }) => {
     navigation.dispatch(
@@ -211,10 +230,16 @@ const Orders = createStackNavigator({
 Orders.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.orders'),
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name="md-document" size={32} />
+    <TabBarIcon focused={focused} name="md-document"/>
   ),
   tabBarOptions: {
-    activeTintColor: '#f18d1a'
+    activeTintColor: '#f18d1a',
+    style: {
+    	height: isTablet ? 80 : 44
+    },
+    labelStyle: {
+    	fontSize: isTablet ? 18 : 12,
+  	}
   }
 })
 
@@ -224,10 +249,16 @@ const Reservation = createStackNavigator({
 Reservation.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.reservations'),
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name="ios-calendar" size={32} />
+    <TabBarIcon focused={focused} name="ios-calendar"/>
   ),
   tabBarOptions: {
-    activeTintColor: '#f18d1a'
+    activeTintColor: '#f18d1a',
+    style: {
+    	height: isTablet ? 80 : 44
+    },
+    labelStyle: {
+    	fontSize: isTablet ? 18 : 12,
+  	}
   }
 })
 
@@ -242,12 +273,18 @@ Reports.navigationOptions = ({ screenProps: { t } }) => ({
     <FontAwesomeIcon
       focused={focused}
       name="bar-chart"
-      size={22}
+      size={isTablet ? 35 : 22}
       color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
     />
   ),
   tabBarOptions: {
-    activeTintColor: '#f18d1a'
+    activeTintColor: '#f18d1a',
+    style: {
+    	height: isTablet ? 80 : 44
+    },
+    labelStyle: {
+    	fontSize: isTablet ? 18 : 12,
+  	}
   }
 })
 

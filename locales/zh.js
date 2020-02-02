@@ -43,7 +43,10 @@ const zh = {
     yes: '是',
     no: '不是'
   },
-  bar: 'Bar {{someValue}}'
+  bar: 'Bar {{someValue}}',
+  welcome: '歡迎,',
+  loggedIn: '登入時間:',
+  quickOrder: '快速訂單'
 }
 
 export default zh

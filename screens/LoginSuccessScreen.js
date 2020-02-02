@@ -17,7 +17,8 @@ import {
   formatDateFromMillis,
   formatDateObj,
   getClientUsr,
-  getAnnouncements
+  getAnnouncements,
+  isTablet
 } from '../actions'
 import styles from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
@@ -111,7 +112,7 @@ class LoginSuccessScreen extends React.Component {
     } = this.props
     const { t } = this.context
     const { username, loggedIn, tokenExpiry } = this.state
-
+    console.log(t('welcome'))
     if (isLoading) {
       return (
         <View style={[styles.container]}>
@@ -142,12 +143,9 @@ class LoginSuccessScreen extends React.Component {
           style={[styles.container, styles.nomgrBottom]}
           opacity={this.state.mainViewOpacity}
         >
-          <View style={[{ marginLeft: 4, marginRight: 4 },styles.flex_dir_row]}>
+          <View style={styles.flex_dir_row}>
             <View
-              style={[
-                styles.margin_15,
-                styles.half_width,
-              ]}
+              style={{width: '80%'}}
             >
             <Image
               source={
@@ -161,14 +159,12 @@ class LoginSuccessScreen extends React.Component {
 
             <View
             	style={[
-                styles.margin_15,
-                styles.half_width,
-                {alignItems: 'flex-end'}
+                {width: '20%', alignItems: 'flex-end'}
               ]}>
               <Avatar
                 rounded
                 title={username != null && username.charAt(0)}
-                size="small"
+                size={isTablet ? "large" : "small"}
                 overlayContainerStyle={[styles.orange_bg]}
                 titleStyle={styles.whiteColor}
                 onPress={this._toggleShow}
@@ -176,8 +172,8 @@ class LoginSuccessScreen extends React.Component {
             </View>
           </View>
 
-          <View style={{marginLeft: '3%'}}>
-            <Text style={[styles.text, styles.textBig, styles.orange_color]}>
+          <View style={[styles.customMgr]}>
+            <Text style={[styles.textBold, styles.orange_color, styles.textBig]}>
               {t('welcome')} {currentUser.displayName}
             </Text>
             <Text style={[styles.textSmall]}>
@@ -185,9 +181,18 @@ class LoginSuccessScreen extends React.Component {
             </Text>
           </View>
 
-          <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+          <View style={[styles.jc_alignIem_center, styles.commonMgrBtn]}>
+            <View
+              style={[
+                styles.fullWidth,
+                styles.grayBg,
+                styles.jc_alignIem_center,
+                styles.paddTop_30,
+                styles.paddBottom_30,
+                styles.borderRadius4               
+              ]}
+            >
             <TouchableOpacity
-              style={{width: '96%'}}
               onPress={() => {
                 this.props.navigation.navigate('OrderStart', {
                   handleOrderSubmit: handleOrderSubmit,
@@ -195,40 +200,29 @@ class LoginSuccessScreen extends React.Component {
                 })
               }}
             >
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30,
-                  styles.borderRadius4,
-                  {width: '96%'}
-                ]}
-              >
-                <View>
-                  <MaterialIcon
-                    name="play-arrow"
-                    size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
-                  />
-                  <Text style={styles.centerText}>{t('quickOrder')}</Text>
-                </View>
+              <View>
+                <MaterialIcon
+                  name="play-arrow"
+                  size={isTablet ? 70 : 40}
+                  color="#f18d1a"
+                  style={[styles.centerText, styles.iconMargin]}
+                />
+                  <Text style={[styles.centerText, styles.defaultfontSize]}>{t('quickOrder')}</Text>
               </View>
             </TouchableOpacity>
           </View>
+        </View>
 
-          <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+          <View style={[styles.jc_alignIem_center, styles.flex_dir_row, styles.commonMgrBtn]}>
             <View
               style={[
-                styles.margin_15,
                 styles.grayBg,
                 styles.half_width,
                 styles.jc_alignIem_center,
                 styles.paddTop_30,
                 styles.paddBottom_30,
-                styles.borderRadius4
+                styles.borderRadius4,
+                {marginRight: '3%', width: '47%'}
               ]}
             >
               <TouchableOpacity
@@ -241,23 +235,23 @@ class LoginSuccessScreen extends React.Component {
                 <View>
                   <FontAwesomeIcon
                     name="clock-o"
-                    size={40}
+                    size={isTablet ? 70 : 40}
                     color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.centerText, styles.iconMargin]}
                   />
-                  <Text style={[styles.centerText]}>{t('menu.timecard')}</Text>
+                  <Text style={[styles.centerText, styles.defaultfontSize]}>{t('menu.timecard')}</Text>
                 </View>
               </TouchableOpacity>
             </View>
 
             <View
-              style={[
-                styles.margin_15,
-                styles.grayBg,
-                styles.half_width,
+              style={[                
+                styles.grayBg,                
                 styles.jc_alignIem_center,
                 styles.paddTop_30,
-                styles.paddBottom_30
+                styles.paddBottom_30,
+                styles.borderRadius4,
+                {marginLeft: '3%', width: '47%'}
               ]}
             >
               <TouchableOpacity
@@ -266,11 +260,11 @@ class LoginSuccessScreen extends React.Component {
                 <View>
                   <Icon
                     name="ios-log-out"
-                    size={40}
+                    size={isTablet ? 70 : 40}
                     color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.centerText, styles.iconMargin]}
                   />
-                  <Text style={styles.centerText}>{t('menu.clientUsers')}</Text>
+                  <Text style={[styles.centerText, styles.defaultfontSize]}>{t('menu.clientUsers')}</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -279,8 +273,8 @@ class LoginSuccessScreen extends React.Component {
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
             <View
               style={[
-                styles.margin_15,
-                {width: '96%'}
+                styles.fullWidth,
+                styles.borderRadius4
               ]}
             >
              	{
@@ -289,7 +283,7 @@ class LoginSuccessScreen extends React.Component {
 									<View
             				style={[
               				{ backgroundColor: '#f1f1f1', padding: 20 },
-              				styles.mgrbtn20
+              				styles.commonMgrBtn
             				]}
             				key={getannoc.id}
           					>
@@ -297,7 +291,7 @@ class LoginSuccessScreen extends React.Component {
           						<View style={{marginRight: 17}}>
           							<IonIcon
               						name={getannoc.titleIcon}
-              						size={31}
+              						size={isTablet ? 60 : 26}
               						color="#f18d1a"
               						//onPress={() => fields.push()}
             						/>
@@ -305,7 +299,7 @@ class LoginSuccessScreen extends React.Component {
           						<View>
 												<Text style={[
                 						styles.orange_color,
-                						styles.textMedium,
+                						styles.defaultfontSize,
               						]}>
               						{getannoc.title}
               					</Text>
@@ -386,7 +380,7 @@ export class HiddenMenu extends React.Component {
             }}
           >
             <View>
-              <Text style={[styles.whiteColor]}>{t('settings.account')}</Text>
+              <Text style={[styles.whiteColor, styles.textMedium]}>{t('settings.account')}</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -403,7 +397,7 @@ export class HiddenMenu extends React.Component {
             onPress={() =>
               this.props.handleClientUserLogout(this.props.navigation)
             }
-            style={[styles.whiteColor]}
+            style={[styles.whiteColor, styles.textMedium]}
           >
             {t('logout')}
           </Text>

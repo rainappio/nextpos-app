@@ -12,7 +12,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
-import { doLogout, getClientUsr } from '../actions'
+import { doLogout, getClientUsr, isTablet } from '../actions'
 import { connect } from 'react-redux'
 import EditPasswordPopUp from '../components/EditPasswordPopUp'
 import { reduxForm } from 'redux-form'
@@ -87,7 +87,7 @@ class AccountScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <BackBtn />
+        <BackBtn size={isTablet ? 44 : 24}/>
         <Text style={styles.screenTitle}>{t('settings.account')}</Text>
         <View style={{ flex: 3 }}>
           <View style={styles.fieldContainer}>

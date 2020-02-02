@@ -9,6 +9,7 @@ export default class RenderStepper extends React.Component {
       input: { onBlur, onChange, onFocus, value },
       customValue,
       optionName,
+      customHeight,
       meta: { error, touched, valid },
       ...rest
     } = this.props
@@ -17,7 +18,7 @@ export default class RenderStepper extends React.Component {
       <View>
         <View style={[styles.flex_dir_row, { alignItems: 'center' }]}>
           <View style={{ width: '60%' }}>
-            <Text>{optionName}</Text>
+            <Text style={styles.defaultfontSize}>{optionName}</Text>
           </View>
 
           <View style={{ width: '40%' }}>
@@ -30,13 +31,14 @@ export default class RenderStepper extends React.Component {
               min={0}
               readOnly={false}
               defaultValue={Number.isInteger(customValue) ? customValue : 0}
+              inputStyle={[styles.textMedium,{height: customHeight}]}
             />
           </View>
         </View>
         <View style={{ width: '100%', marginTop: 8 }}>
           {!valid &&
             touched &&
-            (error && <Text style={styles.rootError}>{error}</Text>)}
+            (error && <Text style={[styles.rootError, styles.textSmall]}>{error}</Text>)}
         </View>
       </View>
     )

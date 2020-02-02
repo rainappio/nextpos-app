@@ -76,12 +76,13 @@ class LoginScreen extends React.Component {
             />
           </View>
 
-          <View style={[styles.bottom]}>
+           
             <TouchableOpacity
               onPress={() => {
                 Keyboard.dismiss()
                 handleSubmit()
               }}
+              style={styles.jc_alignIem_center}
             >
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
                 {t('login')}
@@ -89,12 +90,13 @@ class LoginScreen extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Intro')}
+              style={styles.jc_alignIem_center}
             >
               <Text style={[styles.bottomActionButton, styles.cancelButton]}>
                 {t('cancel')}
               </Text>
             </TouchableOpacity>
-          </View>
+          
         </KeyboardAvoidingView>
       </DismissKeyboard>
     )

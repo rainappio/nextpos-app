@@ -28,7 +28,7 @@ import OrderItem from './OrderItem'
 import {
   getTableLayouts,
   getShiftStatus,
-  getfetchOrderInflights, getTablesAvailable,
+  getfetchOrderInflights, getTablesAvailable, isTablet
 } from '../actions'
 import styles from '../styles'
 import {
@@ -214,12 +214,7 @@ class TablesScreen extends React.Component {
                 style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}
               >
                 <Text
-                  style={[
-                    styles.textMedium,
-                    styles.orange_color,
-                    styles.mgrbtn40,
-                    styles.centerText
-                  ]}
+                  style={styles.screenTitle}
                 >
                   {t('openShift.title')}
                 </Text>
@@ -305,6 +300,7 @@ class TablesScreen extends React.Component {
             <View style={[styles.container, styles.nomgrBottom]}>
               <BackBtnCustom
                 onPress={() => this.props.navigation.navigate('LoginSuccess')}
+                size={isTablet ? 44 : 24}
               />
               <Text style={styles.screenTitle}>{t('menu.tables')}</Text>
               <AddBtn
@@ -314,25 +310,38 @@ class TablesScreen extends React.Component {
                     handleDelete: handleDelete
                   })
                 }
+                size={isTablet ? 60 : 35}
               />
             </View>
 
             {tablelayouts.map((tblLayout, idx) => (
-              <View style={styles.mgrbtn20} key={idx}>
-                <View style={[styles.sectionBar, {flex: 1}]}>
-                  <Text
-                    style={[styles.sectionBarText, {flex: 4}
-                    ]}
-                  >
-                    {tblLayout.layoutName}
-                  </Text>
-                  <Text style={[styles.sectionBarText, {flex: 1}]}>
-                    {t('seatingCapacity')} {tblLayout.totalCapacity}
-                  </Text>
-                  <Text style={[styles.sectionBarText, {flex: 1}]}>
-                    {t('availableSeats')} {floorCapacity[tblLayout.id]}
-                  </Text>
+              <View style={[styles.mgrbtn20, styles.paddingTopBtn8]} key={idx}>
+                <View style={[styles.flex_dir_row, styles.mgrtotop12, styles.orange_bg, {paddingLeft: 25, paddingRight: 25, paddingTop: 15, paddingBottom: 15}]}>
+                	<View style={{width: '30%', textAlign :'left'}}>
+                  	<Text
+                    	style={[styles.sectionBarText]}
+                  		>
+                    	{tblLayout.layoutName}
+                  	</Text>
+                  </View>
+
+                  	<View style={{width: '70%'}}>
+										<View style={styles.flex_dir_row}>
+											<View style={{width: '60%'}}>
+                  			<Text style={[styles.sectionBarText, styles.toRight]}>
+                    			{t('seatingCapacity')} {tblLayout.totalCapacity}
+                  			</Text>
+                  		</View>
+											
+											<View style={{width: '40%'}}>
+                  			<Text style={[styles.sectionBarText, styles.toRight]}>
+                    			{t('availableSeats')} {floorCapacity[tblLayout.id]}
+                  			</Text>
+                  		</View>
+                  	</View>
+                  </View>
                 </View>
+
                 {ordersInflight !== undefined && ordersInflight[tblLayout.id] !== undefined ? (
                   <FlatList
                     data={ordersInflight[tblLayout.id]}
@@ -352,7 +361,7 @@ class TablesScreen extends React.Component {
                   />
                 ) : (
                   <View>
-                    <Text style={styles.messageBlock}>
+                    <Text style={[styles.messageBlock, styles.textSmall]}>
                       {t('noInflightOrders')}
                     </Text>
                   </View>

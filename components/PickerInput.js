@@ -1,6 +1,7 @@
 import React from 'react'
 import {Picker, Text, View} from 'react-native'
 import styles from "../styles";
+import { isTablet } from '../actions'
 
 const PickerInput = props => {
   const {
@@ -25,12 +26,12 @@ const PickerInput = props => {
       <Picker
         selectedValue={selectedValue}
         onValueChange={onChange}
-        style={{width: '100%'}}
-        itemStyle={{height: 100}}
+        style={[{width: '100%'}, styles.textMedium]}
+        itemStyle={isTablet ? {height: 200} : {height: 100}}
       >
         {pickerItems}
       </Picker>
-      {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
+      {!valid && touched && <Text style={[styles.rootError, styles.textMedium]}>{error}</Text>}
     </View>
   )
 }

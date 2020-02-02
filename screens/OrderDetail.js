@@ -46,22 +46,17 @@ class OrderDetail extends React.Component {
         <View style={[styles.container, { marginLeft: 8, marginRight: 8 }]}>
           <View style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}>
             <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
+              style={styles.screenTitle}
             >
               {formatDate(order.createdDate)}
             </Text>
 
             <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
               <View style={[styles.half_width]}>
-                <Text style={styles.orange_color}>Service Charges</Text>
+                <Text style={[styles.orange_color, styles.defaultfontSize]}>Service Charges</Text>
               </View>
               <View style={[styles.half_width]}>
-                <Text style={{ textAlign: 'right', marginRight: -26 }}>
+                <Text style={[{ textAlign: 'right', marginRight: -26 }, styles.defaultfontSize]}>
                   ${order.serviceCharge}
                 </Text>
               </View>
@@ -69,10 +64,10 @@ class OrderDetail extends React.Component {
 
             <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
               <View style={[styles.half_width]}>
-                <Text style={styles.orange_color}>Discounts</Text>
+                <Text style={[styles.orange_color, styles.defaultfontSize]}>Discounts</Text>
               </View>
               <View style={[styles.half_width]}>
-                <Text style={{ textAlign: 'right', marginRight: -26 }}>
+                <Text style={[{ textAlign: 'right', marginRight: -26 }, styles.defaultfontSize]}>
                   ${0}
                 </Text>
               </View>
@@ -83,7 +78,7 @@ class OrderDetail extends React.Component {
                 <Text style={styles.orange_color}>Total</Text>
               </View>
               <View style={[styles.half_width]}>
-                <Text style={{ textAlign: 'right', marginRight: -26 }}>
+                <Text style={[{ textAlign: 'right', marginRight: -26 }, styles.defaultfontSize]}>
                   {/*${this.props.navigation.state.params.order.total.amount}*/}
                   ${order.total.amount}
                 </Text>
@@ -92,7 +87,7 @@ class OrderDetail extends React.Component {
 
             <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
               <View style={{ width: '90%' }}>
-                <Text style={styles.orange_color}>Payment Terms</Text>
+                <Text style={[styles.orange_color, styles.defaultfontSize]}>Payment Terms</Text>
               </View>
               <View>
                 <FontAwesomeIcon name={'credit-card'} size={25} />
@@ -101,13 +96,13 @@ class OrderDetail extends React.Component {
 
             <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
               <View style={{ width: '90%' }}>
-                <Text style={styles.orange_color}>Order Status</Text>
+                <Text style={[styles.orange_color, styles.defaultfontSize]}>Order Status</Text>
               </View>
               <View>
                 {this.props.navigation.state.params.order.state === 'OPEN' ? (
                   <Image
                     source={images.order}
-                    style={{ width: 15, height: 20 }}
+                    style={{ width: 22, height: 30 }}
                   />
                 ) : this.props.navigation.state.params.order.state ===
                   'IN_PROCESS' ? (

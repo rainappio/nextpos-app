@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import { isTablet } from '../actions'
 
 class Sales extends React.Component {
   static navigationOptions = {
@@ -51,20 +52,11 @@ class Sales extends React.Component {
     return (
       <ScrollView>
         <View
-          style={{
-            marginTop: 62,
-            marginLeft: 35,
-            marginRight: 35
-          }}
+          style={[styles.container, styles.nomgrBottom]}
         >
-          <BackBtn />
+          <BackBtn size={isTablet ? 44 : 24}/>
           <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold
-            ]}
+             style={styles.screenTitle}
           >
             {t('salesReportTitle')}
           </Text>
@@ -84,7 +76,7 @@ class Sales extends React.Component {
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('SalesCharts')}
             >
-              <Text style={[styles.paddingTopBtn8, styles.whiteColor]}>
+              <Text style={[styles.whiteColor, styles.defaultfontSize]}>
                 {t('salesDashboard')}
               </Text>
             </TouchableOpacity>

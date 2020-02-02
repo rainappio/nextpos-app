@@ -11,10 +11,10 @@ class BackBtn extends React.Component {
         onPress={() => {
           this.props.navigation.goBack()
         }}
-        style={{ position: 'absolute', top: -4, zIndex: 2 }}
+        style={{ position: 'absolute', top: 0, zIndex: 2 }}
       >
         <View>
-          <Icon name="ios-arrow-back" size={26} color="#f18d1a" />
+          <Icon name="ios-arrow-back" size={this.props.size} color="#f18d1a" />
         </View>
       </TouchableOpacity>
     )

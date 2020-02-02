@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+
 export default StyleSheet.create({
   mainContainer: {
     flex: 1
@@ -6,10 +8,10 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    marginTop: 53,
-    marginLeft: 35,
-    marginRight: 35,
-    marginBottom: 36
+    marginTop: 44,
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 20
   },
   childContainer: {
     flex: 1,
@@ -45,11 +47,12 @@ export default StyleSheet.create({
   welcomeText: {
     textAlign: 'center',
     textTransform: 'uppercase',
-    fontSize: 20,
     letterSpacing: 2,
     lineHeight: 32,
     marginBottom: 16,
-    marginTop: -8
+    marginTop: -8,
+    //fontSize: RFPercentage(3.5) 
+    fontSize: 20
   },
   gsText: {
     padding: 10,
@@ -62,18 +65,14 @@ export default StyleSheet.create({
     marginTop: 22,
     marginBottom: 6
   },
-  textSmall: {
-    fontSize: 12,
-    marginTop: 10,
-    marginBottom: 10
-  },
   signInText: {
     color: '#F39F86',
     padding: 10,
     textAlign: 'center',
+    //fontSize: RFPercentage(2.2) 
     fontSize: 16
   },
-  margin_15: {
+  margin_10: {
     margin: 10
   },
   grayBg: {
@@ -121,9 +120,9 @@ export default StyleSheet.create({
   },
   container_nocenterCnt: {
     flex: 1,
-    marginTop: 62,
-    marginLeft: 35,
-    marginRight: 35,
+    marginTop: 44,
+    marginLeft: 20,
+    marginRight: 20,
     marginBottom: 20
   },
   mgrbtn40: {
@@ -259,10 +258,23 @@ export default StyleSheet.create({
     borderRadius: 4
   },
   textBig: {
+    //fontSize: RFPercentage(2.6)
     fontSize: 22
-  },
+  },  
   textMedium: {
-    fontSize: 18
+    fontSize: RFPercentage(2.3)
+  },
+  textSmall: {
+    fontSize: RFPercentage(2.1)
+    //fontSize: 12
+  },
+  defaultfontSize: {
+  	fontSize: RFPercentage(2.1)	 
+  },
+  sectionBarText: {
+    color: '#fff',
+    //fontSize: 18
+    fontSize: RFPercentage(2.2)
   },
   textBold: {
     fontWeight: 'bold'
@@ -334,6 +346,10 @@ export default StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 20
   },
+  paddingTopBtn15: {
+    paddingTop: 15,
+    paddingBottom: 15
+  },
   borderBottomLine: {
     borderBottomColor: '#f1f1f1',
     borderBottomWidth: 1
@@ -352,6 +368,9 @@ export default StyleSheet.create({
   },
   nopaddingLeft: {
     paddingLeft: 0
+  },
+  nopaddingRight: {
+    paddingRight: 0
   },
   userIcon: {
     color: '#fff',
@@ -392,10 +411,8 @@ export default StyleSheet.create({
     width: 25,
     height: 25,
     borderRadius: 25,
-    fontSize: 14,
     position: 'absolute',
-    right: -12,
-    top: 8,
+    right: 0,
     textAlign: 'center'
   },
   shoppingBar: {
@@ -435,7 +452,7 @@ export default StyleSheet.create({
     top: 160
   },
   fullhalf_width: {
-    width: '60%'
+    width: '50%'
   },
   no_mgrTop: {
     marginTop: 0
@@ -450,12 +467,11 @@ export default StyleSheet.create({
     textAlign: 'center',
     textTransform: 'uppercase',
     fontSize: 20,
+    //fontSize: RFPercentage(3.2),
     letterSpacing: 2,
-    lineHeight: 32,
-    marginBottom: 16,
-    marginTop: -8,
     color: '#f18d1a',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    paddingBottom: 20
   },
   squareButton: {
     margin: 10,
@@ -481,15 +497,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f18d1a',
-    paddingVertical: 8
-  },
-  sectionBarText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 18
-  },
-  sectionContent: {
-    marginBottom: 20
+    paddingVertical: 16
   },
   listPanel: {
     flex: 1,
@@ -499,10 +507,10 @@ export default StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 12
   },
-  listPanelText: {
-    flex: 9,
-    fontSize: 16
-  },
+  // listPanelText: {
+  //   flex: 9,
+  //   fontSize: 16
+  // },
   listPanelIcon: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -527,11 +535,16 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 0
+  },
+  toBottom : {
+		position: 'absolute', 
+		bottom:0
   },
   bottomActionButton: {
     width: '100%',
     textAlign: 'center',
+    //fontSize: RFPercentage(2.6),
     fontSize: 16,
     borderRadius: 4,
     borderWidth: 1,
@@ -573,10 +586,6 @@ export default StyleSheet.create({
     right: 0,
     bottom: 0
   },
-  markDownStyle: {
-    backgroundColor: '#f1f1f1',
-    borderWidth: 1
-  },
   textAreaContainer: {
     borderColor: '#ccc',
     borderWidth: 1,
@@ -585,5 +594,83 @@ export default StyleSheet.create({
   textArea: {
     height: 150,
     justifyContent: 'flex-start'
+  },
+  iconMargin: {
+  	margin:10
+  },
+  customMgr: {
+  	marginTop: 20,
+  	marginBottom: 20
+  },
+  customPaddingLarge: {
+		paddingTop: 30,
+  	paddingBottom: 30
+  },
+  commonMgrBtn: {
+  	marginBottom: 20
+  },
+  commonMgrBtntenPxLarger: {
+		marginBottom: 30
+  },
+  commonMgrTop: {
+  	marginTop: 40
+  },
+  percentPadding: {
+		padding: '1%'
+  },
+  commonpaddingTopBtn: {
+  	paddingTop: 8,
+  	paddingBottom: 8
+  },
+  customAvator: {
+  	backgroundColor: '#f1f1f1',
+    width: 44,
+    height: 44,
+    borderRadius: 44,
+    textAlign: 'center',
+    lineHeight: 44
+  },
+  customAvatorUserName: {
+  	marginLeft: 60, 
+  	marginTop: -30 
+  },
+  cashBox: {
+    width: 45,
+    height: 50,
+    borderWidth: 2,
+    borderColor: '#f18d1a',
+    marginRight: 8,
+    padding: 3,
+    lineHeight: 45
+  },
+  heading: {
+    borderBottomWidth: 1,
+    borderColor: '#000000',
+  },
+  heading1: {
+    fontSize: 32,
+    backgroundColor: '#000000',
+    color: '#FFFFFF',
+  },
+  customLogo: {
+  	fontSize: 40
+  },
+  openImg: {
+  	width: 15, 
+  	height: 20
+  },
+  inProcessImg: {
+  	width: 30, 
+  	height: 20
+  },
+  completedImg: {
+  	width: 30, 
+  	height: 30, 
+  	resizeMode: 'contain'
+  },
+  cashImg: {
+  	width: 60,
+  	height: 60, 
+  	marginBottom: 40
   }
 })

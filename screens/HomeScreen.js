@@ -54,20 +54,19 @@ export default class HomeScreen extends React.Component {
               style={styles.welcomeImage}
             />
           </View>
-          <Text style={styles.welcomeText}>Quickly</Text>
+          <Text style={[styles.welcomeText]}>Quickly</Text>
           <Text style={styles.welcomeText}>Easily</Text>
           <Text style={styles.welcomeText}>Securely</Text>
         </View>
 
-        <View style={styles.bottom}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Intro')}
-          >
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>
-              {t('getStarted')}
-            </Text>
-          </TouchableOpacity>
-        </View>
+       <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('Intro')}
+          style={[styles.jc_alignIem_center]}
+        >
+          <Text style={[styles.bottomActionButton, styles.actionButton]}>
+            {t('getStarted')}
+          </Text>
+        </TouchableOpacity> 
       </View>
     )
   }

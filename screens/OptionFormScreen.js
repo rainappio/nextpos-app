@@ -122,11 +122,9 @@ class OptionFormScreen extends React.Component {
             <BackBtn />
             <Text
               style={[
-                styles.welcomeText,
+                styles.maintitleText,
                 styles.orange_color,
-                styles.textMedium,
-                styles.textBold,
-                styles.mgrbtn40
+                styles.textBold
               ]}
             >
               {t('productOptionTitle')}

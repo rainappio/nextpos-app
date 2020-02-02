@@ -1,8 +1,8 @@
 import React from 'react'
-import {ActivityIndicator, Text, TextInput, View} from 'react-native'
+import {ActivityIndicator, Text, TextInput, View, TouchableOpacity} from 'react-native'
 import {connect} from 'react-redux'
 import BackBtnCustom from '../components/BackBtnCustom'
-import { formatDate, getShiftStatus } from '../actions'
+import { formatDate, getShiftStatus, isTablet } from '../actions'
 import {
   api,
   dispatchFetchRequest,
@@ -130,32 +130,38 @@ class ShiftClose extends React.Component {
 
     if (mostRecentShift == null) {
       return (
-        <View style={[styles.container]}>
+        <View style={styles.container}>
           <ActivityIndicator size="large" color="#ccc"/>
         </View>
       )
     } else {
       return (
-        <DismissKeyboard>
+  
           <View style={styles.container}>
             <View>
               <BackBtnCustom
                 onPress={() => this.props.navigation.navigate('LoginSuccess')}
+                size={isTablet ? 44 : 24}
               />
-              <Text style={styles.screenTitle}>
+              <Text style={[
+            		styles.welcomeText,
+            		styles.orange_color,
+            		styles.textBold,
+            		styles.nomgrBottom
+          		]}>
                 {t('shiftTitle')}
               </Text>
             </View>
 
             <View style={{flex: 3, justifyContent: 'center'}}>
               <View style={styles.fieldContainer}>
-                <View style={{flex: 1}}>
-                  <Text style={[styles.fieldTitle]}>
+                <View style={{width: '60%'}}>
+                  <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
                     {t('shiftStatus')}
                   </Text>
                 </View>
-                <View style={{flex: 3}}>
-                  <Text style={{alignSelf: 'flex-end'}}>{shift.shiftStatus}</Text>
+                <View style={{width: '40%'}}>
+                  <Text style={[{alignSelf: 'flex-end'}, styles.defaultfontSize]}>{shift.shiftStatus}</Text>
                 </View>
               </View>
 
@@ -163,7 +169,7 @@ class ShiftClose extends React.Component {
                 <View>
                   <View style={styles.fieldContainer}>
                     <View style={{flex: 1}}>
-                      <Text style={[styles.fieldTitle]}>
+                      <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
                         {t('lastShiftStatus')}
                       </Text>
                     </View>
@@ -174,7 +180,7 @@ class ShiftClose extends React.Component {
 
                   <View style={styles.fieldContainer}>
                     <View style={{flex: 1}}>
-                      <Text style={[styles.fieldTitle]}>
+                      <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
                         {t('closedAt')}
                       </Text>
                     </View>
@@ -184,7 +190,7 @@ class ShiftClose extends React.Component {
                   </View>
                   <View style={styles.fieldContainer}>
                     <View style={{flex: 1}}>
-                      <Text style={[styles.fieldTitle]}>
+                      <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
                         {t('closedBalance')}
                       </Text>
                     </View>
@@ -194,7 +200,7 @@ class ShiftClose extends React.Component {
                   </View>
                   <View style={styles.fieldContainer}>
                     <View style={{flex: 1}}>
-                      <Text style={[styles.fieldTitle]}>
+                      <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
                         {t('difference')}
                       </Text>
                     </View>
@@ -204,12 +210,12 @@ class ShiftClose extends React.Component {
                   </View>
                   <View style={styles.fieldContainer}>
                     <View style={{flex: 1}}>
-                      <Text style={[styles.fieldTitle]}>
+                      <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
                         {t('closedBy')}
                       </Text>
                     </View>
                     <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{mostRecentShift.close.who}</Text>
+                      <Text style={[{alignSelf: 'flex-end'}, styles.defaultfontSize]}>{mostRecentShift.close.who}</Text>
                     </View>
                   </View>
                 </View>
@@ -219,41 +225,42 @@ class ShiftClose extends React.Component {
                 <View>
                   <View style={styles.fieldContainer}>
                     <View style={{flex: 1}}>
-                      <Text style={[styles.fieldTitle]}>
+                      <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
                         {t('openAt')}
                       </Text>
                     </View>
                     <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{formatDate(shift.open.timestamp)}</Text>
+                      <Text style={[{alignSelf: 'flex-end'}, styles.defaultfontSize]}>{formatDate(shift.open.timestamp)}</Text>
                     </View>
                   </View>
                   <View style={styles.fieldContainer}>
                     <View style={{flex: 1}}>
-                      <Text style={[styles.fieldTitle]}>
+                      <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
                         {t('openBalance')}
                       </Text>
                     </View>
                     <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{shift.open.balance}</Text>
+                      <Text style={[{alignSelf: 'flex-end'}, styles.defaultfontSize]}>{shift.open.balance}</Text>
                     </View>
                   </View>
                   <View style={styles.fieldContainer}>
                     <View style={{flex: 1}}>
-                      <Text style={[styles.fieldTitle]}>
+                      <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
                         {t('openBy')}
                       </Text>
                     </View>
                     <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{shift.open.who}</Text>
+                      <Text style={[{alignSelf: 'flex-end'}, styles.defaultfontSize]}>{shift.open.who}</Text>
                     </View>
                   </View>
                 </View>
               )}
             </View>
 
+
             <View style={[styles.bottom]}>
               <View style={[styles.fieldContainer]}>
-                <Text style={[styles.fieldTitle, {flex: 2}]}>
+                <Text style={[styles.fieldTitle, {flex: 2}, styles.defaultfontSize]}>
                   {t('cash')}
                 </Text>
                 <TextInput
@@ -265,8 +272,11 @@ class ShiftClose extends React.Component {
                   keyboardType={`numeric`}
                   style={[{flex: 3, height: 44, borderBottomColor: '#f1f1f1', borderBottomWidth: 1}]}
                 />
-              </View>
-              {
+              </View>              
+            </View>
+						
+						 
+            	{
                 shift.shiftStatus === 'ACTIVE' ?
                   (
                     <ConfirmActionButton
@@ -280,10 +290,9 @@ class ShiftClose extends React.Component {
                       buttonTitle="openShiftAction"
                     />
                   )
-              }
-            </View>
+              }             
+            
           </View>
-        </DismissKeyboard>
       )
     }
   }

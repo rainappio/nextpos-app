@@ -9,6 +9,7 @@ import { isRequired, isCountZero } from '../validators'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import BackBtn from '../components/BackBtn'
+import { isTablet } from '../actions'
 
 class OrderFormIV extends React.Component {
   static navigationOptions = {
@@ -42,13 +43,13 @@ class OrderFormIV extends React.Component {
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View style={styles.container}>
-          <BackBtn />
+          <BackBtn size={isTablet ? 44 : 28}/>
           <Text style={styles.screenTitle}>
             {this.props.navigation.state.params.prdName}
           </Text>
           {product.productOptions !== undefined &&
             product.productOptions.length > 0 && (
-              <Text style={[styles.textBold, styles.paddBottom_20]}>
+              <Text style={[styles.textBold, styles.paddBottom_20, styles.defaultfontSize]}>
                 {t('productOptions')}
               </Text>
             )}
@@ -73,10 +74,10 @@ class OrderFormIV extends React.Component {
                   style={{
                     borderBottomColor: '#f1f1f1',
                     borderBottomWidth: 1,
-                    marginBottom: 10
+                    marginBottom: 20
                   }}
                 >
-                  <Text style={[styles.fieldTitle]}>
+                  <Text style={[styles.fieldTitle, styles.defaultfontSize]}>
                     {prdOption.optionName}
                   </Text>
                   {prdOption.multipleChoice === false ? (
@@ -138,7 +139,7 @@ class OrderFormIV extends React.Component {
               )
           })}
 
-          <View style={styles.paddingTopBtn20}>
+          <View style={styles.mgrbtn40}>
             <Field
               name="quantity"
               component={RenderStepper}
@@ -182,7 +183,7 @@ class OrderFormIV extends React.Component {
                   this.props.navigation.navigate('OrderFormII')
                 }}
               >
-                <Text style={styles.signInText}>{t('action.cancel')}</Text>
+                <Text style={[styles.signInText]}>{t('action.cancel')}</Text>
               </TouchableOpacity>
             </View>
           </View>

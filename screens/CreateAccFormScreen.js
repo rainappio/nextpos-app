@@ -43,7 +43,7 @@ class CreateAccFormScreen extends React.Component {
               />
             </View>
 
-            <Text style={styles.welcomeText}>Let's Get Started!</Text>
+            <Text style={[styles.textBig, styles.centerText]}>Let's Get Started!</Text>
 
             <Field
               name="clientName"
@@ -68,28 +68,29 @@ class CreateAccFormScreen extends React.Component {
               secureTextEntry={true}
             />
 
-            <Text style={styles.text}>
+            <Text style={[styles.textMedium, styles.paddTop_30, styles.mgrbtn20]}>
               Accept Seller Agreement and Privacy Policy
             </Text>
-            <Text style={styles.textSmall}>
+            <Text style={[styles.textSmall]}>
               View Seller Agreement and Privacy Policy
             </Text>
           </View>
 
-          <View style={[styles.bottom]}>
-            <TouchableOpacity onPress={handleSubmit}>
+          
+            <TouchableOpacity onPress={handleSubmit} style={styles.jc_alignIem_center}>
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
                 {t('signUp')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Intro')}
+              style={styles.jc_alignIem_center}
             >
               <Text style={[styles.bottomActionButton, styles.cancelButton]}>
                 {t('cancel')}
               </Text>
             </TouchableOpacity>
-          </View>
+         
         </View>
       </DismissKeyboard>
     )

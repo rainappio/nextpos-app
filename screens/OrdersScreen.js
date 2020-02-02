@@ -12,7 +12,7 @@ import BackBtnCustom from '../components/BackBtnCustom'
 import Icon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import images from '../assets/images'
-import { formatDate, getOrdersByDateRange } from '../actions'
+import { formatDate, getOrdersByDateRange, isTablet } from '../actions'
 import { ListItem } from 'react-native-elements'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
@@ -66,11 +66,11 @@ class OrdersScreen extends React.Component {
       subtitle={
         <View style={[styles.flex_dir_row]}>
           <View style={{ width: '55%', marginLeft: -10 }}>
-            <Text>{formatDate(item.createdTime)}</Text>
+            <Text style={styles.defaultfontSize}>{formatDate(item.createdTime)}</Text>
           </View>
 
           <View style={{ width: '22%' }}>
-            <Text>${item.total.amount}</Text>
+            <Text style={styles.defaultfontSize}>${item.total.amount}</Text>
           </View>
 
           <View
@@ -81,17 +81,17 @@ class OrdersScreen extends React.Component {
             }}
           >
             {item.state === 'OPEN' ? (
-              <Image source={images.order} style={{ width: 15, height: 20 }} />
+              <Image source={images.order} style={{ width: 20, height: 25 }} />
             ) : item.state === 'IN_PROCESS' ? (
               <Image
                 source={images.process}
-                style={{ width: 30, height: 20 }}
+                style={styles.inProcessImg} 
               />
             ) : item.state === 'SETTLED' ? (
               <Icon
                 name={'md-checkmark-circle-outline'}
                 color="#4cbb17"
-                size={25}
+                size={isTablet ? 40 : 25}
                 style={{
                   marginLeft: 8,
                   marginRight: 8,
@@ -101,7 +101,7 @@ class OrdersScreen extends React.Component {
             ) : item.state === 'DELIVERED' ? (
               <MCIcon
                 name={'truck-delivery'}
-                size={25}
+                size={isTablet ? 40 : 25}
                 style={{
                   marginLeft: 8,
                   marginRight: 8,
@@ -113,7 +113,7 @@ class OrdersScreen extends React.Component {
               item.state === 'COMPLETED' && (
                 <Image
                   source={images.completed}
-                  style={{ width: 28, height: 20, flex: 1 }}
+                  style={styles.completedImg}
                 />
               )
             )}
@@ -176,21 +176,21 @@ class OrdersScreen extends React.Component {
                 this.props.getOrdersByDateRange()
               }}
             >
-              <Icon name="md-refresh" size={30} color="#f18d1a" />
+              <Icon name="md-refresh" size={isTablet ? 50 : 30} color="#f18d1a" />
             </TouchableOpacity>
           </View>
         </View>
         <View style={[styles.flex_dir_row]}>
           <View style={{ width: '50%' }}>
-            <Text style={styles.orange_color}>{t('date')}</Text>
+            <Text style={[styles.orange_color, styles.defaultfontSize]}>{t('date')}</Text>
           </View>
 
           <View style={{ width: '22%' }}>
-            <Text style={styles.orange_color}>{t('total')}</Text>
+            <Text style={[styles.orange_color, styles.defaultfontSize]}>{t('total')}</Text>
           </View>
 
           <View>
-            <Text style={styles.orange_color}>{t('orderStatus')}</Text>
+            <Text style={[styles.orange_color, styles.defaultfontSize]}>{t('orderStatus')}</Text>
           </View>
         </View>
         {orders.length === 0 && (
@@ -216,7 +216,7 @@ class OrdersScreen extends React.Component {
             <Icon
               name={'md-arrow-round-up'}
               color="#f18d1a"
-              size={25}
+              size={isTablet ? 40 : 25}
               style={{
                 marginLeft: 8,
                 marginRight: 8,

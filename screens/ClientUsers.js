@@ -9,7 +9,7 @@ import {
   TouchableHighlight
 } from 'react-native'
 import { connect } from 'react-redux'
-import { getClientUsrs, doLogout } from '../actions'
+import { getClientUsrs, doLogout, isTablet } from '../actions'
 import styles from '../styles'
 import BackBtn from '../components/BackBtn'
 import { LocaleContext } from '../locales/LocaleContext'
@@ -51,7 +51,7 @@ class ClientUsers extends React.Component {
         style={[styles.container]}
         refreshControl={<RefreshControl refreshing={refreshing} />}
       >
-        <BackBtn />
+        <BackBtn size={isTablet ? 44 : 28}/>
         <View
           style={[
             {
@@ -63,7 +63,7 @@ class ClientUsers extends React.Component {
         >
           <TouchableHighlight>
             <Text
-              style={{ textAlign: 'right', color: '#f18d1a', marginTop: 12 }}
+              style={[{ textAlign: 'right', color: '#f18d1a' }, styles.defaultfontSize]}
               onPress={() => this.handleDefaultUserLogout(navigation)}
             >
               {t('logout')}
@@ -71,27 +71,20 @@ class ClientUsers extends React.Component {
           </TouchableHighlight>
         </View>
 
-        <View style={{ marginTop: 80 }}>
+        <View style={styles.commonMgrTop}>
           <FlatList
             data={clientusers}
             renderItem={({ item }) => (
               <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'column',
-                  margin: 1,
-                  marginBottom: 30
-                }}
+                style={[{
+                    flex: 1,
+                    flexDirection: 'column',
+                    margin: 1
+                  }, styles.commonMgrBtntenPxLarger
+                ]}
               >
                 <Text
-                  style={{
-                    backgroundColor: '#f1f1f1',
-                    width: 44,
-                    height: 44,
-                    borderRadius: 44,
-                    textAlign: 'center',
-                    lineHeight: 44
-                  }}
+                 style={[styles.customAvator, styles.defaultfontSize]}
                   onPress={() =>
                     this.props.navigation.navigate('ClientUserLogin', {
                       clientusersName: item.username,
@@ -101,7 +94,7 @@ class ClientUsers extends React.Component {
                 >
                   {item.username[0].toUpperCase()}
                 </Text>
-                <Text style={{ marginLeft: 60, marginTop: -30 }}>
+                <Text style={[styles.customAvatorUserName, styles.defaultfontSize]}>
                   {item.nickname != null ? item.nickname : item.username}
                 </Text>
               </View>

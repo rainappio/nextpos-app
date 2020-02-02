@@ -23,7 +23,8 @@ import { LineChart } from 'react-native-chart-kit'
 import {
   getRangedSalesReport,
   getCustomerCountReport,
-  getSalesDistributionReport
+  getSalesDistributionReport,
+  isTablet
 } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
@@ -257,21 +258,21 @@ class SalesCharts extends React.Component {
           key={salesByPrdData.id}
         >
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <Text style={[styles.paddingTopBtn8]}>
+            <Text style={[styles.paddingTopBtn8, styles.defaultfontSize]}>
               {salesByPrdData.productName}
             </Text>
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <Text>{salesByPrdData.salesQuantity}</Text>
+            <Text style={styles.defaultfontSize}>{salesByPrdData.salesQuantity}</Text>
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <Text>&nbsp;&nbsp;{salesByPrdData.productSales}</Text>
+            <Text style={styles.defaultfontSize}>&nbsp;&nbsp;{salesByPrdData.productSales}</Text>
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <Text>{salesByPrdData.percentage}&nbsp;%</Text>
+            <Text style={styles.defaultfontSize}>{salesByPrdData.percentage}&nbsp;%</Text>
           </View>
         </View>
       )
@@ -289,14 +290,9 @@ class SalesCharts extends React.Component {
       return (
         <View style={[styles.container, styles.nomgrBottom]}>
           <View style={{ flex: 1 }}>
-            <BackBtn />
+            <BackBtn size={isTablet ? 44 : 28}/>
             <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
+              style={styles.screenTitle}
             >
               {t('salesDashboardTitle')}
             </Text>
@@ -311,14 +307,9 @@ class SalesCharts extends React.Component {
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View style={[styles.container, styles.nomgrBottom]}>
-          <BackBtn />
+          <BackBtn size={isTablet ? 44 : 28}/>
           <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold
-            ]}
+            style={styles.screenTitle}
           >
             {t('salesDashboardTitle')}
           </Text>
@@ -327,11 +318,11 @@ class SalesCharts extends React.Component {
             <View style={{ width: '80%' }}>
               <Text
                 style={[
-                  styles.welcomeText,
+                  styles.textMedium,
                   styles.orange_color,
                   styles.textBold,
                   styles.paddingTopBtn8,
-                  { fontSize: 14 }
+                  styles.centerText
                 ]}
               >
                 {t('todaySales')} - ${getrangedSalesReport.todayTotal}
@@ -342,10 +333,11 @@ class SalesCharts extends React.Component {
                 style={[
                   styles.orange_color,
                   styles.toRight,
+                  styles.textSmall,
                   {
                     borderWidth: 1,
                     borderColor: '#f18d1a',
-                    padding: 6,
+                    padding: 10,
                     marginLeft: 8
                   }
                 ]}
@@ -363,11 +355,11 @@ class SalesCharts extends React.Component {
           <View style={styles.mgrbtn20}>
             <Text
               style={[
-                styles.welcomeText,
+                styles.textMedium,
                 styles.orange_color,
                 styles.textBold,
-                styles.paddingTopBtn8,
-                { fontSize: 14 }
+                styles.paddingTopBtn8,   
+                styles.centerText             
               ]}
             >
               {t('rangedSalesTitle')}
@@ -378,11 +370,11 @@ class SalesCharts extends React.Component {
           <View style={(styles.paddingTopBtn20, { marginLeft: -15 })}>
             <Text
               style={[
-                styles.welcomeText,
+                styles.textMedium,
                 styles.orange_color,
                 styles.textBold,
-                styles.paddingTopBtn8,
-                { fontSize: 14 }
+                styles.paddingTopBtn8,   
+                styles.centerText       
               ]}
             >
               {t('customerCountTitle')}
@@ -394,7 +386,7 @@ class SalesCharts extends React.Component {
                 type="bar"
                 height={120}
                 width={'95%'}
-                style={{ backgroundColor: 'gold' }}
+                style={{ backgroundColor: 'gold', fontSize: 40 }}
               />
             )}
           </View>
@@ -402,11 +394,11 @@ class SalesCharts extends React.Component {
           <View style={styles.paddingTopBtn20}>
             <Text
               style={[
-                styles.welcomeText,
+                styles.textMedium,
                 styles.orange_color,
                 styles.textBold,
-                styles.paddingTopBtn8,
-                { fontSize: 14 }
+                styles.paddingTopBtn8,   
+                styles.centerText       
               ]}
             >
               {t('averageSpendingTitle')}
@@ -424,17 +416,17 @@ class SalesCharts extends React.Component {
           <View style={styles.paddingTopBtn20}>
             <Text
               style={[
-                styles.welcomeText,
+                styles.textMedium,
                 styles.orange_color,
                 styles.textBold,
-                styles.paddingTopBtn8,
-                { fontSize: 14 }
+                styles.paddingTopBtn8,   
+                styles.centerText       
               ]}
             >
               {t('salesDistributionTitle')}
             </Text>
             {haveSDData && (
-              <PureChart data={salesDistributionData} type="bar" width={'100%'} />
+              <PureChart data={salesDistributionData} type="bar" width={'100%'} style={{backgroundColor: 'cyan'}}/>
             )}
           </View>
         </View>
@@ -449,25 +441,25 @@ class SalesCharts extends React.Component {
         >
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text style={[styles.paddingTopBtn8]}>{t('product')}</Text>
+              <Text style={[styles.paddingTopBtn8, styles.sectionBarText]}>{t('product')}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text style={{ marginLeft: -20 }}>{t('quantity')}</Text>
+              <Text style={[{ marginLeft: -20 }, styles.sectionBarText]}>{t('quantity')}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text>{t('amount')}</Text>
+              <Text style={styles.sectionBarText}>{t('amount')}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
             <TouchableOpacity>
-              <Text>{t('percentage')}</Text>
+              <Text style={styles.sectionBarText}>{t('percentage')}</Text>
             </TouchableOpacity>
           </View>
         </View>

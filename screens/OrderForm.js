@@ -10,6 +10,7 @@ import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import PickerInput from "../components/PickerInput";
 import SegmentedControl from "../components/SegmentedControl";
+import { isTablet } from '../actions'
 
 class OrderForm extends Component {
   static contextType = LocaleContext
@@ -101,9 +102,9 @@ class OrderForm extends Component {
               </Text>
             </View>
 
-            <View style={styles.sectionContent}>
+            <View style={styles.mgrbtn20}>
               <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('table')}</Text>
+                <Text style={[styles.fieldTitle, styles.defaultfontSize]}>{t('table')}</Text>
               </View>
               <Field
                 component={PickerInput}
@@ -117,9 +118,9 @@ class OrderForm extends Component {
               />
             </View>
 
-            <View style={styles.sectionContent}>
+            <View style={styles.mgrbtn20}>
               <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('ageGroup')}</Text>
+                <Text style={[styles.fieldTitle, styles.defaultfontSize]}>{t('ageGroup')}</Text>
               </View>
               <View style={[styles.fieldContainer, styles.flex_dir_row]}>
                 <View style={{flex: 1}}>
@@ -132,14 +133,15 @@ class OrderForm extends Component {
                     normalize={value => {
                       return this.state.ageGroups[value].value
                     }}
+                    customHeight={isTablet ? 60 : 40}
                   />
                 </View>
               </View>
             </View>
 
-            <View style={styles.sectionContent}>
+            <View style={styles.mgrbtn20}>
               <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('visitFrequency')}</Text>
+                <Text style={[styles.fieldTitle, styles.defaultfontSize]}>{t('visitFrequency')}</Text>
               </View>
               <View style={[styles.fieldContainer]}>
                 <View style={{flex: 1}}>
@@ -152,14 +154,15 @@ class OrderForm extends Component {
                     normalize={value => {
                       return this.state.visitFrequencies[value].value
                     }}
+                    customHeight={isTablet ? 60 : 40}
                   />
                 </View>
               </View>
             </View>
 
-            <View style={styles.sectionContent}>
+            <View style={styles.mgrbtn20}>
               <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('peopleCount')}</Text>
+                <Text style={[styles.fieldTitle, styles.defaultfontSize]}>{t('peopleCount')}</Text>
               </View>
               <View>
                 {people.map((people, ix) => (
@@ -172,6 +175,7 @@ class OrderForm extends Component {
                       component={RenderStepper}
                       customValue={people.value + people.label}
                       optionName={people.label}
+                      customHeight={isTablet ? 60 : 30}
                     />
                   </View>
                 ))}
@@ -220,7 +224,7 @@ class OrderForm extends Component {
                     this.props.navigation.navigate('TablesSrc')
                   }}
                 >
-                  <Text style={styles.signInText}>{t('action.cancel')}</Text>
+                  <Text style={[styles.signInText]}>{t('action.cancel')}</Text>
                 </TouchableOpacity>
               </View>
             </View>

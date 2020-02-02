@@ -4,6 +4,7 @@ import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { getOrder } from '../actions'
 import OrdersSummaryRowOverView from './OrdersSummaryRowOverView'
+import styles from '../styles'
 
 class OrdersSummary extends React.Component {
   static navigationOptions = {
@@ -26,7 +27,7 @@ class OrdersSummary extends React.Component {
     } = this.props
 
     return (
-      <View>
+      <View style={styles.mainContainer}>
         {Object.keys(order).length !== 0 && (
           <OrdersSummaryRowOverView
             order={order}

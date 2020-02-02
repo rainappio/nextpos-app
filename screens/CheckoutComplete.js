@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { ScrollView, Text, View, Image, TouchableOpacity } from 'react-native'
 import images from '../assets/images'
-import { getfetchOrderInflights, getOrder } from '../actions'
+import { getfetchOrderInflights, getOrder, isTablet } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 
@@ -45,14 +45,7 @@ class CheckoutComplete extends React.Component {
 
     return (
       <View style={styles.container_nocenterCnt}>
-        <Text
-          style={[
-            styles.welcomeText,
-            styles.orange_color,
-            styles.textMedium,
-            styles.textBold
-          ]}
-        >
+        <Text style={styles.screenTitle}>
           {t('checkoutCompletedTitle')}
         </Text>
 
@@ -61,56 +54,39 @@ class CheckoutComplete extends React.Component {
         >
           <Image
             source={images.cash}
-            style={{ width: 60, height: 60, marginBottom: 40 }}
+            style={styles.cashImg}
           />
-          <Text style={styles.centerText}>
+          <Text style={[styles.centerText, styles.defaultfontSize]}>
             {t('totalAmount')}: $&nbsp;
             {transactionResponse.settleAmount}
           </Text>
-          <Text style={styles.centerText}>
+          <Text style={[styles.centerText, styles.defaultfontSize]}>
             {t('change')}: $&nbsp;{transactionResponse.cashChange}
           </Text>
         </View>
 
-        <View
-          style={{
-            width: '100%',
-            borderRadius: 4,
-            backgroundColor: '#00ab66',
-            marginTop: 8
-          }}
-        >
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate('TablesSrc')
               this.props.getfetchOrderInflights()
             }}
+            style={styles.jc_alignIem_center}
           >
-            <Text style={[styles.signInText, styles.whiteColor]}>
+            <Text style={[styles.bottomActionButton, styles.cancelButton, styles.whiteColor, {borderRadius: 4,backgroundColor: '#00ab66', marginTop: 8, borderWidth: 0}]}>
               {t('done')}
             </Text>
           </TouchableOpacity>
-        </View>
 
-        <View
-          style={{
-            width: '100%',
-            borderRadius: 4,
-            borderWidth: 1,
-            borderColor: '#F39F86',
-            marginTop: 8
-          }}
-        >
           <TouchableOpacity
             onPress={() =>
               this.props.navigation.state.params.onSubmit(
                 transactionResponse.orderId
               )
             }
+            style={styles.jc_alignIem_center}
           >
-            <Text style={styles.signInText}>{t('completeOrder')}</Text>
+            <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('completeOrder')}</Text>
           </TouchableOpacity>
-        </View>
       </View>
     )
   }

@@ -38,6 +38,7 @@ class ConfirmActionButton extends React.Component {
             ]
           )
         }}
+        style={styles.jc_alignIem_center}
       >
         <Text style={[styles.bottomActionButton, styles.actionButton]}>
           {t(buttonTitle)}

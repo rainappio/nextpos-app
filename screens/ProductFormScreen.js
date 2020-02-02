@@ -12,6 +12,7 @@ import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
 import DeleteBtn from '../components/DeleteBtn'
 import { LocaleContext } from '../locales/LocaleContext'
+import { isTablet } from '../actions'
 
 class ProductFormScreen extends React.Component {
   static navigationOptions = {
@@ -67,35 +68,21 @@ class ProductFormScreen extends React.Component {
     } = this.props
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
-          <View style={styles.container_nocenterCnt}>
-            <BackBtn />
+          <View style={[styles.container_nocenterCnt, styles.nomgrBottom]}>
+            <BackBtn size={isTablet ? 44 : 24}/>
             {isEditForm ? (
               <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold,
-                  styles.mgrbtn80
-                ]}
+                style={styles.screenTitle}
               >
                 {t('editProduct')}
               </Text>
             ) : (
-              <View>
                 <Text
-                  style={[
-                    styles.welcomeText,
-                    styles.orange_color,
-                    styles.textMedium,
-                    styles.textBold
-                  ]}
+                  style={styles.screenTitle}
                 >
                   {t('newProduct')}
                 </Text>
-              </View>
             )}
 
             <Field
@@ -188,8 +175,8 @@ class ProductFormScreen extends React.Component {
               </View>
             )}
 
-            <View style={[styles.bottom]}>
-              <TouchableOpacity onPress={handleSubmit}>
+          	<View style={[styles.toBottom, {width: isTablet ? '50%' : '100%'}]}>
+              <TouchableOpacity onPress={handleSubmit} style={styles.jc_alignIem_center}>
                 <Text style={[styles.bottomActionButton, styles.actionButton]}>
                   {t('action.save')}
                 </Text>
@@ -221,8 +208,8 @@ class ProductFormScreen extends React.Component {
               )}
             </View>
           </View>
+        
         </DismissKeyboard>
-      </ScrollView>
     )
   }
 }

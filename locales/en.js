@@ -43,7 +43,10 @@ const en = {
     yes: 'Yes',
     no: 'No'
   },
-  bar: 'Bar {{someValue}}'
+  bar: 'Bar {{someValue}}',
+	welcome: 'Welcome,',
+  loggedIn: 'Logged in at',
+  quickOrder: 'Quick Order'
 }
 
 export default en

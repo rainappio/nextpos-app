@@ -13,6 +13,7 @@ import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import { isTablet } from '../actions'
 
 class StaffRow extends React.Component {
   static navigationOptions = {
@@ -66,14 +67,9 @@ class StaffRow extends React.Component {
         <DismissKeyboard>
           <View>
             <View style={styles.container}>
-              <BackBtn />
+              <BackBtn size={isTablet ? 44 : 28}/>
               <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold
-                ]}
+               style={styles.screenTitle}
               >
                 {t('staffListTitle')}
               </Text>

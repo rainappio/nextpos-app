@@ -1,3 +1,4 @@
+import Devices from 'react-native-device-detection'
 /**
  * Format date string.
  */
@@ -53,3 +54,5 @@ export const dateToLocaleString = dateObj => {
 export function calculatePercentage (Amount, percent) {
   return (Amount * percent) / 100
 }
+
+export const isTablet = Devices.isTablet ? true : false

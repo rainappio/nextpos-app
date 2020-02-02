@@ -9,11 +9,11 @@ class AddBtn extends React.Component {
     return (
       <TouchableOpacity
         onPress={onPress}
-        style={{ position: 'absolute', right: 0, top: -8 }}
+        style={{ position: 'absolute', right: 0, top: -6 }}
         disabled={disabled}
       >
         <View>
-          <Icon name="ios-add" size={35} color="#f18d1a" />
+          <Icon name="ios-add" size={this.props.size} color="#f18d1a" />
         </View>
       </TouchableOpacity>
     )

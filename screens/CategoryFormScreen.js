@@ -7,6 +7,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import { isTablet } from '../actions'
 
 class CategoryFormScreen extends React.Component {
   static navigationOptions = {
@@ -44,15 +45,9 @@ class CategoryFormScreen extends React.Component {
       <DismissKeyboard>
         <View style={styles.container}>
           <View style={{ flex: 3 }}>
-            <BackBtn />
+            <BackBtn size={isTablet ? 44 : 24}/>
             <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold,
-                styles.mgrbtn80
-              ]}
+              style={styles.screenTitle}
             >
               {t('newCategoryTitle')}
             </Text>
@@ -65,7 +60,7 @@ class CategoryFormScreen extends React.Component {
               secureTextEntry={false}
             />
           </View>
-          <View stlye={styles.bottom}>
+      
             <TouchableOpacity onPress={handleSubmit}>
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
                 {t('action.save')}
@@ -79,7 +74,7 @@ class CategoryFormScreen extends React.Component {
               </Text>
             </TouchableOpacity>
           </View>
-        </View>
+
       </DismissKeyboard>
     )
   }

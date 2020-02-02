@@ -55,12 +55,7 @@ class AnnouncementsAdd extends React.Component {
           <View style={styles.container}>
             <BackBtn />
             <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
+              style={styles.screenTitle}
             >
               {t('newAnnouncementTitle')}
             </Text>
