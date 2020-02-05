@@ -6,7 +6,9 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Keyboard
+  Keyboard,
+  Modal,
+  AsyncStorage
 } from 'react-native'
 import { isEmail, isRequired } from '../validators'
 import InputText from '../components/InputText'
@@ -25,13 +27,33 @@ class LoginScreen extends React.Component {
     super(props, context)
   }
 
+  state = {
+  	modalVisible: false
+  }
+
+  toggleModal = (visible) => {
+    this.setState({modalVisible: visible});
+  }
+
+  getEmail = (values) => {
+  	console.log(AsyncStorage.getItem('token'))
+  	values.email !== null && this.props.navigation.navigate('PasswordReset') 
+  	this.toggleModal(!this.state.modalVisible) 
+  }
+
   componentDidMount() {
     this.context.localize({
       en: {
-        login: 'Login'
+        login: 'Login',
+        title: 'Forgot Password ?',
+        Next: 'Next',
+        forgotPwd: 'Forgot Password'
       },
       zh: {
-        login: '登入'
+        login: '登入',
+        title: 'FP-Chinese ?',
+        Next: 'Next-Chinese',
+        forgotPwd: 'FP-Chinese'
       }
     })
   }
@@ -94,7 +116,26 @@ class LoginScreen extends React.Component {
                 {t('cancel')}
               </Text>
             </TouchableOpacity>
+
+						<TouchableOpacity onPress={() => {
+							this.toggleModal(true)							
+						}}>
+            	<Text style={[styles.bottomActionButton, styles.cancelButton]}>
+            	{t('forgotPwd')}
+            	</Text>
+          	</TouchableOpacity>
           </View>
+
+          <ResetModal 
+          	onSubmit={this.getEmail}
+          	modalVisible={this.state.modalVisible}
+          	toggleModal={this.toggleModal}
+          	title={t('title')}
+          	email={t('email')}
+          	Next={t('Next')}
+          	props={this.props.navigation}
+          	/>          
+
         </KeyboardAvoidingView>
       </DismissKeyboard>
     )
@@ -106,3 +147,56 @@ LoginScreen = reduxForm({
 })(LoginScreen)
 
 export default withNavigation(LoginScreen)
+
+class ResetModal extends React.Component {
+  static navigationOptions = {
+    header: null
+  }
+
+  render() {
+    const { handleSubmit, toggleModal, modalVisible, title, email, Next, props } = this.props
+    const { t } = this.context
+
+    return (      
+      <Modal
+        animationType="fade"
+        transparent={false}
+        visible={modalVisible}          
+        onRequestClose={() => toggleModal(false)}
+        >
+        <TouchableOpacity
+          activeOpacity={1}            	
+          style={[styles.container, styles.no_mgrTop]}
+          onPressOut={() => {
+            toggleModal(false)
+          }}
+          >
+          <Text>{title}</Text>
+          <Field
+            name="email"
+            component={InputText}
+            validate={[isRequired, isEmail]}
+            placeholder={email}
+            //onSubmitEditing={val => this.clientLogin(val.nativeEvent.text)}
+          />            
+
+          <TouchableOpacity
+          	style={{position:'absolute', bottom: 10, width: '100%'}}
+            onPress={() => {
+              handleSubmit()          
+              // props.navigate('PasswordReset')  
+              // toggleModal(!modalVisible)                
+            }}>
+            <Text style={[styles.bottomActionButton, styles.actionButton]}>{Next}</Text>
+          </TouchableOpacity>  
+
+        </TouchableOpacity>        
+      </Modal>        
+    )
+  }
+}
+
+ResetModal = reduxForm({
+  form: 'pwdResetForm'
+})(ResetModal)
+

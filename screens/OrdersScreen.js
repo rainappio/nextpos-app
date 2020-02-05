@@ -31,7 +31,7 @@ class OrdersScreen extends React.Component {
         ordersTitle: 'Orders',
         date: 'Date',
         total: 'Total',
-        orderStatus: 'Order Status',
+        orderStatus: 'Status',
         noOrder: 'No Order'
       },
       zh: {
@@ -64,20 +64,20 @@ class OrdersScreen extends React.Component {
     <ListItem
       key={item.orderId}
       subtitle={
-        <View style={[styles.flex_dir_row]}>
-          <View style={{ width: '55%', marginLeft: -10 }}>
-            <Text>{formatDate(item.createdTime)}</Text>
+        <View style={[styles.flex_dir_row,styles.paddingTopBtn20, styles.grayBg, {marginTop: -25}]}>
+          <View style={{ width: '55%'}}>
+            <Text style={styles.centerText}>{formatDate(item.createdTime)}</Text>
           </View>
 
-          <View style={{ width: '22%' }}>
-            <Text>${item.total.amount}</Text>
+          <View style={{ width: '20%'}}>
+            <Text style={styles.centerText}>${item.total.amount}</Text>
           </View>
 
           <View
             style={{
               justifyContent: 'center',
               alignItems: 'center',
-              width: '30%'
+              width: '25%'
             }}
           >
             {item.state === 'OPEN' ? (
@@ -120,15 +120,15 @@ class OrdersScreen extends React.Component {
           </View>
         </View>
       }
-      bottomDivider
       onPress={() =>
         this.props.navigation.navigate('OrderDetail', {
           order: item,
           orderId: item.orderId
         })
       }
-      containerStyle={{ paddingBottom: 8 }}
-    />
+      bottomDivider
+      containerStyle={{ paddingLeft: 0, paddingRight: 0, marginBottom: -10, marginTop: -10 }}
+     />
   )
 
   //https://stackoverflow.com/questions/48061234/how-to-keep-scroll-position-using-flatlist-when-navigating-back-in-react-native
@@ -161,8 +161,7 @@ class OrdersScreen extends React.Component {
       <View
         style={[
           styles.container,
-          styles.nomgrBottom,
-          { marginLeft: 20, marginRight: 20 }
+          styles.nomgrBottom
         ]}
       >
         <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
@@ -180,17 +179,18 @@ class OrdersScreen extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={[styles.flex_dir_row]}>
-          <View style={{ width: '50%' }}>
-            <Text style={styles.orange_color}>{t('date')}</Text>
+
+        <View style={[styles.flex_dir_row,{paddingTop: 10, paddingBottom: 10}]}>
+          <View style={{ width: '55%'}}>
+            <Text style={[styles.orange_color, styles.centerText]}>{t('date')}</Text>
           </View>
 
-          <View style={{ width: '22%' }}>
-            <Text style={styles.orange_color}>{t('total')}</Text>
+          <View style={{ width: '20%' }}>
+            <Text style={[styles.orange_color, styles.centerText]}>{t('total')}</Text>
           </View>
 
-          <View>
-            <Text style={styles.orange_color}>{t('orderStatus')}</Text>
+          <View style={{ width: '25%' }}>
+            <Text style={[styles.orange_color, styles.centerText]}>{t('orderStatus')}</Text>
           </View>
         </View>
         {orders.length === 0 && (
@@ -198,6 +198,7 @@ class OrdersScreen extends React.Component {
             <Text style={styles.messageBlock}>{t('noOrder')}</Text>
           </View>
         )}
+
         <FlatList
           keyExtractor={this.keyExtractor}
           data={orders}
@@ -205,8 +206,9 @@ class OrdersScreen extends React.Component {
           ref={ref => {
             this.ListView_Ref = ref
           }}
-          onScroll={this.handleScroll}
+          onScroll={this.handleScroll}          
         />
+
         {this.state.scrollPosition > 0 ? (
           <TouchableOpacity
             activeOpacity={0.5}

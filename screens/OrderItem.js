@@ -44,13 +44,13 @@ class OrderItem extends React.PureComponent {
           })
         }
       >
-        <View style={{ marginRight: 15 }}>
+        <View style={{ width: '20%' }}>
           <View>
             <Text style={{ paddingTop: 3 }}>{order.tableName}</Text>
           </View>
         </View>
 
-        <View style={{ marginRight: 15 }}>
+        <View style={{ width: '15%' }}>
           <View>
             <FontAwesomeIcon name={'user'} color="#ccc" size={20}>
               <Text style={{ color: '#000', fontSize: 12 }}>
@@ -60,19 +60,25 @@ class OrderItem extends React.PureComponent {
           </View>
         </View>
 
-        <View style={{ width: '32%' }}>
+        <View style={{ width: '15%' }}>
+          <Text style={{ color: '#000', fontSize: 12, paddingTop: 3 }}>
+            $&nbsp;{order.total.amount}
+          </Text>
+        </View>
+
+        <View style={{ width: '27%'}}>
           {(order.state === 'OPEN' || order.state === 'IN_PROCESS') &&
             (timeDifference < thirtyMinutes ? (
               <FontAwesomeIcon name={'clock-o'} color="#f18d1a" size={20}>
                 <Text style={{ fontSize: 12 }}>
-                  &nbsp;&nbsp;
+                  &nbsp;
                   {timeAgo.format(Date.now() - timeDifference)}
                 </Text>
               </FontAwesomeIcon>
             ) : timeDifference >= thirtyMinutes ? (
               <FontAwesomeIcon name={'clock-o'} color="red" size={20}>
                 <Text style={{ fontSize: 12 }}>
-                  &nbsp;&nbsp;
+                  &nbsp;
                   {timeAgo.format(Date.now() - timeDifference)}
                 </Text>
               </FontAwesomeIcon>
@@ -81,14 +87,14 @@ class OrderItem extends React.PureComponent {
           {(order.state === 'SETTLED' || order.state === 'DELIVERED') && (
             <FontAwesomeIcon name={'clock-o'} color="#888" size={20}>
               <Text style={{ fontSize: 12 }}>
-                &nbsp;&nbsp;
+                &nbsp;
                 {timeAgo.format(Date.now() - timeDifference)}
               </Text>
             </FontAwesomeIcon>
           )}
         </View>
 
-        <View>
+        <View style={{ width: '8%'}}>
           {order.state === 'OPEN' ? (
             <Image source={images.order} style={{ width: 15, height: 20 }} />
           ) : order.state === 'IN_PROCESS' ? (
@@ -98,13 +104,13 @@ class OrderItem extends React.PureComponent {
               name={'md-checkmark-circle-outline'}
               color="#4cbb17"
               size={25}
-              style={{ marginLeft: 8, marginRight: 8, fontWeight: 'bold' }}
+              style={{ marginRight: 2, fontWeight: 'bold' }}
             />
           ) : order.state === 'DELIVERED' ? (
             <MCIcon
               name={'truck-delivery'}
               size={25}
-              style={{ marginLeft: 8, marginRight: 8, fontWeight: 'bold' }}
+              style={{ marginRight: 2, fontWeight: 'bold' }}
               color="#f18d1a"
             />
           ) : (
@@ -116,15 +122,18 @@ class OrderItem extends React.PureComponent {
             )
           )}
         </View>
-        <Text
-          style={{
-            color: '#000',
-            fontSize: 12,
-            paddingTop: 6
-          }}
-        >
-          &nbsp;{order.state}
-        </Text>
+
+        <View>
+        	<Text
+          	style={{
+            	color: '#000',
+            	fontSize: 12,
+            	paddingTop: 6
+          	}}
+        	>
+          	&nbsp;{order.state}
+        	</Text>
+        </View>
       </TouchableOpacity>
     )
   }

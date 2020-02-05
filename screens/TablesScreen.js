@@ -319,17 +319,17 @@ class TablesScreen extends React.Component {
 
             {tablelayouts.map((tblLayout, idx) => (
               <View style={styles.mgrbtn20} key={idx}>
-                <View style={[styles.sectionBar, {flex: 1}]}>
+                <View style={[styles.sectionBar, {flex: 1, paddingLeft:20, paddingRight: 20}]}>
                   <Text
-                    style={[styles.sectionBarText, {flex: 4}
+                    style={[styles.sectionBarText, {flex: 4, textAlign: 'left'}
                     ]}
                   >
                     {tblLayout.layoutName}
                   </Text>
-                  <Text style={[styles.sectionBarText, {flex: 1}]}>
+                  <Text style={[styles.sectionBarText, {flex: 4.2, textAlign: 'right', marginRight: 4}]}>
                     {t('seatingCapacity')} {tblLayout.totalCapacity}
                   </Text>
-                  <Text style={[styles.sectionBarText, {flex: 1}]}>
+                  <Text style={[styles.sectionBarText, {flex: 2.8, textAlign: 'right'}]}>
                     {t('availableSeats')} {floorCapacity[tblLayout.id]}
                   </Text>
                 </View>
