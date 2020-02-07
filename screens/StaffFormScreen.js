@@ -203,7 +203,7 @@ class StaffFormScreen extends React.Component {
               </View>
             )}
           </View>
-        </View>
+        </View>         
       </DismissKeyboard>
     )
   }

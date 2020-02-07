@@ -7,8 +7,8 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginTop: 53,
-    marginLeft: 35,
-    marginRight: 35,
+    marginLeft: 15,
+    marginRight: 15,
     marginBottom: 36
   },
   childContainer: {

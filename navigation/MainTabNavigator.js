@@ -68,6 +68,7 @@ import OrderDetail from '../screens/OrderDetail'
 import Announcements from '../screens/Announcements'
 import AnnouncementsAdd from '../screens/AnnouncementsAdd'
 import AnnouncementsEdit from '../screens/AnnouncementsEdit'
+import PasswordReset from '../screens/PasswordReset'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -75,7 +76,8 @@ const Home = createStackNavigator({
   LoginScreen: LoginScreen,
   ClientUsers: ClientUsers,
   ClientUserLogin: ClientUserLogin,
-  ClockIn: ClockIn
+  ClockIn: ClockIn,
+  PasswordReset: PasswordReset
 })
 Home.navigationOptions = {
   tabBarIcon: ({ focused }) => (
@@ -260,7 +262,8 @@ var tabBar = createBottomTabNavigator({
           if (
             route.routeName === 'Home' ||
             route.routeName === 'Intro' ||
-            route.routeName === 'Login'
+            route.routeName === 'Login' ||
+            route.routeName === 'PasswordReset'
           ) {
             tabBarVisible = false
           } else {

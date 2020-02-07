@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { AsyncStorage, Image, Text, TouchableOpacity, View } from 'react-native'
+import { AsyncStorage, Image, Text, TouchableOpacity, View, Modal, TouchableHighlight } from 'react-native'
 import { encode as btoa } from 'base-64'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
@@ -9,10 +9,27 @@ import styles from '../styles'
 import InputText from '../components/InputText'
 import { isRequired } from '../validators'
 import { api, warningMessage } from '../constants/Backend'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class ClientUserLoginForm extends React.Component {
   static navigationOptions = {
     header: null
+  }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+  }
+
+  componentDidMount(){
+  	this.context.localize({
+  		en: {
+  			toBack: 'BACK'
+  		},
+  		zh: {  			
+  			toBack: 'BACK-Chinese'
+  		}
+  	})
   }
 
   clientLogin = async passWord => {
@@ -57,9 +74,11 @@ class ClientUserLoginForm extends React.Component {
 
   render() {
     const { clientusersName } = this.props
-
+		const { t } = this.context
+	 
     return (
       <DismissKeyboard>
+      	<View style={{flex: 1}}>
         <View style={styles.container}>
           <View style={[{ position: 'absolute', top: 0 }]}>
             <Image
@@ -81,7 +100,7 @@ class ClientUserLoginForm extends React.Component {
             onPress={() => this.props.navigation.goBack()}
           >
             <Icon name="ios-arrow-back" size={26} color="#f18d1a">
-              Back
+              {t('toBack')}
             </Icon>
           </Text>
 
@@ -112,9 +131,10 @@ class ClientUserLoginForm extends React.Component {
               onChange={val => this.clientLogin(val)}
               customHeight={71}
             />
-          )}
-        </View>
-      </DismissKeyboard>
+          )}         
+        </View>	 
+			</View>
+    </DismissKeyboard>
     )
   }
 }
