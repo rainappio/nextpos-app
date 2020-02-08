@@ -114,7 +114,7 @@ class PaymentOrderForm extends React.Component {
               <Text
                 style={[styles.textBold, styles.textBig, styles.orange_color]}
               >
-                {order.tableInfo.tableName}
+                {order.orderType === 'IN_STORE' ? order.tableDisplayName : 'Take Out'}
               </Text>
             </View>
 

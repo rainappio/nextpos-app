@@ -5,11 +5,13 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 class AddBtn extends React.Component {
   render() {
-    const { onPress, disabled } = this.props
+    const { onPress, disabled, style } = this.props
+    let styleToUse = style !== undefined ? style : { position: 'absolute', right: 0, top: -8 }
+
     return (
       <TouchableOpacity
         onPress={onPress}
-        style={{ position: 'absolute', right: 0, top: -8 }}
+        style={styleToUse}
         disabled={disabled}
       >
         <View>

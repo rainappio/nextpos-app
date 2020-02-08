@@ -25,6 +25,7 @@ export const api = {
     update: name => {
       return `${apiRoot}/clients/me/users/${name}`
     },
+    updateCurrentUserPassword: `${apiRoot}/clients/me/users/currentUser/password`,
     updatePassword: name => {
       return `${apiRoot}/clients/me/users/${name}/password`
     },
@@ -85,6 +86,9 @@ export const api = {
     newLineItem: orderId => {
       return `${apiRoot}/orders/${orderId}/lineitems`
     },
+    deliverLineItems: orderId => {
+      return `${apiRoot}/orders/${orderId}/lineitems/deliver`
+    },
     process: orderId => {
       return `${apiRoot}/orders/${orderId}/process`
     },
@@ -123,7 +127,16 @@ export const api = {
       return `${apiRoot}/tablelayouts/${id}`
     },
     getAll: `${apiRoot}/tablelayouts`,
-    update: `${apiRoot}/tablelayouts/`
+    update: `${apiRoot}/tablelayouts/`,
+    delete: layoutId => {
+      return `${apiRoot}/tablelayouts/${layoutId}`
+    },
+    updateTable: (layoutId, tableId) => {
+      return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}`
+    },
+    deleteTable: (layoutId, tableId) => {
+      return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}`
+    }
   },
   payment: {
     charge: `${apiRoot}/orders/transactions`
@@ -160,6 +173,11 @@ export const getToken = async () => {
   }
 
   return JSON.parse(token)
+}
+
+export const removeToken = async () => {
+  await AsyncStorage.removeItem(storage.clientUserAccessToken)
+  await AsyncStorage.removeItem(storage.clientAccessToken)
 }
 
 export const makeFetchRequest = async fetchRequest => {

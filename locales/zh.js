@@ -43,6 +43,9 @@ const zh = {
     yes: '是',
     no: '不是'
   },
+  errors: {
+    balanceError: '請輸入大於零的數字'
+  },
   bar: 'Bar {{someValue}}'
 }
 

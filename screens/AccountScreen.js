@@ -111,7 +111,7 @@ class AccountScreen extends React.Component {
             </View>
           </View>
           <View style={[styles.fieldContainer, { alignSelf: 'center' }]}>
-            <EditPasswordPopUp name={currentUser.username} />
+            <EditPasswordPopUp defaultUser={currentUser.defaultUser} name={currentUser.username} ownAccount={true} />
           </View>
         </View>
         {currentUser.defaultUser && (

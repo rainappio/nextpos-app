@@ -17,6 +17,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import AddBtn from '../components/AddBtn'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import DeleteBtn from "../components/DeleteBtn";
 
 class TableLayoutForm extends React.Component {
   static navigationOptions = {
@@ -43,10 +44,6 @@ class TableLayoutForm extends React.Component {
         tables: '桌位'
       }
     })
-
-    this.state = {
-      t: context.t
-    }
   }
 
   render() {
@@ -54,10 +51,9 @@ class TableLayoutForm extends React.Component {
       handleSubmit,
       isEdit,
       initialValues,
-      tables = [],
-      handleEditCancel
+      handleDeleteLayout
     } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     Item = ({ table, layoutId }) => {
       return (
@@ -171,6 +167,11 @@ class TableLayoutForm extends React.Component {
               {t('action.cancel')}
             </Text>
           </TouchableOpacity>
+          {isEdit && (
+            <DeleteBtn
+              handleDeleteAction={() => handleDeleteLayout(initialValues.id)}
+            />
+          )}
         </View>
       </ScrollView>
     )

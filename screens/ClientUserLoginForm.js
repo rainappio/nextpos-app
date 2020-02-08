@@ -24,58 +24,20 @@ class ClientUserLoginForm extends React.Component {
   componentDidMount(){
   	this.context.localize({
   		en: {
-  			toBack: 'BACK'
+  		  login: 'Login',
+  			toBack: 'Back'
   		},
-  		zh: {  			
-  			toBack: 'BACK-Chinese'
+  		zh: {
+        login: '登入',
+  			toBack: '返回'
   		}
   	})
   }
 
-  clientLogin = async passWord => {
-    let token = await AsyncStorage.getItem('token')
-    const tokenObj = JSON.parse(token)
-    const username = tokenObj.cli_userName
-    const masterPassword = tokenObj.cli_masterPwd
-
-    const formData = new FormData()
-    formData.append('grant_type', 'password')
-    formData.append('username', this.props.clientusersName)
-    formData.append('password', passWord)
-
-    const auth = 'Basic ' + btoa(username + ':' + masterPassword)
-
-    let response = await fetch(api.getAuthToken, {
-      method: 'POST',
-      withCredentials: true,
-      credentials: 'include',
-      headers: {
-        Authorization: auth
-      },
-      body: formData
-    })
-
-    if (response.status === 400) {
-      this.props.navigation.navigate('ClientUsers')
-      warningMessage('Incorrect password.')
-    } else {
-      const res = await response.json()
-      const loggedIn = new Date()
-      res.loggedIn = loggedIn
-      res.tokenExp = new Date().setSeconds(
-        loggedIn.getSeconds() + parseInt(res.expires_in)
-      )
-      res.username = this.props.clientusersName
-      await AsyncStorage.setItem('clientusrToken', JSON.stringify(res))
-
-      this.props.navigation.navigate('LoginSuccess')
-    }
-  }
-
   render() {
-    const { clientusersName } = this.props
+    const { clientusersName, handleSubmit } = this.props
 		const { t } = this.context
-	 
+
     return (
       <DismissKeyboard>
       	<View style={{flex: 1}}>
@@ -116,33 +78,33 @@ class ClientUserLoginForm extends React.Component {
           </Text>
 
           {this.props.defaultUser ? (
-            <Field
-              name="encryptedPassword"
-              component={InputText}
-              validate={isRequired}
-              placeholder="Password"
-              secureTextEntry={true}
-              onSubmitEditing={val => this.clientLogin(val.nativeEvent.text)}
-            />
+            <View>
+              <Field
+                name="password"
+                component={InputText}
+                placeholder="Password"
+                secureTextEntry={true}
+              />
+              <TouchableOpacity
+                onPress={handleSubmit}
+              >
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('login')}</Text>
+              </TouchableOpacity>
+            </View>
           ) : (
             <Field
-              name="encryptedPassword"
+              name="password"
               component={PinCodeInput}
-              onChange={val => this.clientLogin(val)}
+              onChange={val => this.props.onSubmit({username: clientusersName, password: val})}
               customHeight={71}
             />
-          )}         
-        </View>	 
+          )}
+        </View>
 			</View>
     </DismissKeyboard>
     )
   }
 }
-
-const mapStateToProps = state => ({
-  csState: state,
-  isLoggedIn: state.auth.isLoggedIn
-})
 
 ClientUserLoginForm = reduxForm({
   form: 'ClientUserLoginForm'
