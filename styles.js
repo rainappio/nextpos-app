@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 export default StyleSheet.create({
   mainContainer: {
     flex: 1
@@ -574,8 +574,10 @@ export default StyleSheet.create({
     bottom: 0
   },
   markDownStyle: {
-    backgroundColor: '#f1f1f1',
-    borderWidth: 1
+    backgroundColor: '#f4f4f4',
+    padding: '4%',
+    width: '92%',
+    margin: 4
   },
   textAreaContainer: {
     borderColor: '#ccc',
@@ -585,5 +587,33 @@ export default StyleSheet.create({
   textArea: {
     height: 150,
     justifyContent: 'flex-start'
-  }
+  },
+  row: {
+  	flexDirection: 'column',
+  	backgroundColor: '#f8f8f8',
+  	alignItems: 'center',    
+    width: '100%',
+    marginVertical: 8,
+    borderRadius: 4,
+    marginBottom: 4,
+
+    ...Platform.select({
+      ios: {
+        shadowColor: 'rgba(0,0,0,0.2)',
+        shadowOpacity: 1,
+        shadowOffset: {height: 2, width: 2},
+        shadowRadius: 2,
+      },
+
+      android: {
+        elevation: 0,
+        marginVertical: 24,
+      },
+    })
+  },
+  list: {
+    //height: 210,
+    height: window.height,
+    width: window.width,
+  },
 })

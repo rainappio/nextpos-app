@@ -25,10 +25,16 @@ class AnnouncementsEdit extends React.Component {
     header: null
   }
   static contextType = LocaleContext
+  
+  state={
+		refreshing: false
+  }
 
   handleUpdate = values => {
-    console.log('handleUpdate hit')
     const announcementId = this.props.navigation.state.params.announcementId
+    this.setState({
+    	refreshing: true
+    })
 
     dispatchFetchRequest(
       api.announcements.update(announcementId),
@@ -43,6 +49,9 @@ class AnnouncementsEdit extends React.Component {
       },
       response => {
         successMessage('Saved')
+        this.setState({
+    			refreshing: false
+    		})
         this.props.navigation.navigate('Announcements')
         this.props.getAnnouncements(announcementId)
       }
