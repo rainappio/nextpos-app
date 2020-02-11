@@ -1,4 +1,8 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform, Dimensions } from 'react-native'
+const window = Dimensions.get('window');
+console.log(window)
+console.log(window.width - 60 * 2)
+console.log("style")
 export default StyleSheet.create({
   mainContainer: {
     flex: 1
@@ -9,7 +13,12 @@ export default StyleSheet.create({
     marginTop: 53,
     marginLeft: 15,
     marginRight: 15,
-    marginBottom: 36
+    marginBottom: 36,
+    ...Platform.select({
+      ios: {
+        paddingTop: 20,
+      },
+    })
   },
   childContainer: {
     flex: 1,
@@ -443,7 +452,6 @@ export default StyleSheet.create({
   no_mgrTop: {
     marginTop: 0
   },
-
   // named styles for applying to components
   contentContainer: {
     flex: 1,
@@ -584,8 +592,10 @@ export default StyleSheet.create({
     bottom: 0
   },
   markDownStyle: {
-    backgroundColor: '#f1f1f1',
-    borderWidth: 1
+    backgroundColor: '#f4f4f4',
+    padding: '4%',
+    width: '92%',
+    margin: 4
   },
   textAreaContainer: {
     borderColor: '#ccc',
@@ -595,5 +605,52 @@ export default StyleSheet.create({
   textArea: {
     height: 150,
     justifyContent: 'flex-start'
-  }
+  },
+  stcontainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 56,
+    paddingLeft: 15,
+    paddingRight: 15,   
+
+    ...Platform.select({
+      ios: {
+        marginTop: 53,
+      },
+      android: {
+        marginTop: 53,
+      }
+    }),
+  },
+  row: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    flex: 1,
+    padding: 16,
+    marginTop: 7,
+    marginLeft: 13,
+    marginBottom: 12,
+    borderRadius: 4,    
+
+    ...Platform.select({
+      ios: {
+        width: window.width - 30 * 2,
+        shadowColor: 'rgba(0,0,0,0.2)',
+        shadowOpacity: 1,
+        shadowOffset: {height: 2, width: 2},
+        shadowRadius: 2
+      },
+
+      android: {
+        width: window.width - 30 * 2,
+        elevation: 0,
+        marginVertical: 30,
+      },
+    })
+  },
+  list: {
+    flexDirection: 'row'
+  },
 })
