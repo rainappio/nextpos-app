@@ -19,6 +19,11 @@ class OrderForm extends Component {
 
     this.state = {
       selectedTableId: null,
+      selectedOrderType: null,
+      orderTypes: {
+        0: {label: 'In Store', value: 'IN_STORE'},
+        1: {label: 'Take Out', value: 'TAKE_OUT'}
+      },
       selectedAgeGroup: null,
       ageGroups: {
         0: {label: '20-29', value: 'TWENTIES'},
@@ -36,11 +41,14 @@ class OrderForm extends Component {
   }
 
   componentDidMount() {
+
     this.context.localize({
       en: {
         newOrderTitle: 'New Order',
+        orderType: 'Order Type',
         table: 'Table',
         selectTable: 'Select a table',
+        noAvailableTables: 'There is no available table.',
         ageGroup: 'Age Group',
         visitFrequency: 'Visit Frequency',
         peopleCount: 'People Count',
@@ -48,8 +56,10 @@ class OrderForm extends Component {
       },
       zh: {
         newOrderTitle: '新訂單',
+        orderType: '訂單種類',
         table: '桌位',
         selectTable: '選擇桌位',
+        noAvailableTables: '目前沒有空桌.',
         ageGroup: '來客年齡層',
         visitFrequency: '造訪次數',
         peopleCount: '來客數',
@@ -58,13 +68,17 @@ class OrderForm extends Component {
     })
   }
 
+  handleOrderTypeSelection = (index) => {
+    const selectedIndex = this.selectedOrderType === index ? null : index
+    this.setState({ selectedOrderType: selectedIndex })
+  }
+
   handleAgeGroupSelection = (index) => {
     const selectedIndex = this.selectedAgeGroup === index ? null : index
     this.setState({ selectedAgeGroup: selectedIndex })
   }
 
   handleVisitFrequencySelection = (index) => {
-    console.log(index)
     const selectedIndex = this.selectedVisitFrequency === index ? null : index
     this.setState({ selectedVisitFrequency: selectedIndex })
   }
@@ -73,8 +87,10 @@ class OrderForm extends Component {
     const { tablesMap } = this.props
     const { t } = this.context
 
+    const orderTypes = Object.keys(this.state.orderTypes).map(key => this.state.orderTypes[key].label)
     const ageGroups = Object.keys(this.state.ageGroups).map(key => this.state.ageGroups[key].label)
     const visitFrequencies = Object.keys(this.state.visitFrequencies).map(key => this.state.visitFrequencies[key].label)
+    const noAvailableTables = this.state.selectedOrderType === 0 && Object.keys(tablesMap).length === 0
 
     const people = [
       {
@@ -103,19 +119,48 @@ class OrderForm extends Component {
 
             <View style={styles.sectionContent}>
               <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('table')}</Text>
+                <Text style={styles.fieldTitle}>{t('orderType')}</Text>
               </View>
-              <Field
-                component={PickerInput}
-                name="tableId"
-                values={tablesMap}
-                selectedValue={this.state.selectedTableId}
-                validate={isRequired}
-                onChange={(itemValue, itemIndex) => {
-                  this.setState({selectedTableId: itemValue})
-                }}
-              />
+              <View style={[styles.fieldContainer]}>
+                <View style={{flex: 1}}>
+                  <Field
+                    name="orderType"
+                    component={SegmentedControl}
+                    selectedIndex={this.state.selectedOrderType}
+                    onChange={this.handleOrderTypeSelection}
+                    values={orderTypes}
+                    normalize={value => {
+                      return this.state.orderTypes[value].value
+                    }}
+                  />
+                </View>
+              </View>
             </View>
+
+            {this.state.selectedOrderType === 0 && Object.keys(tablesMap).length > 0 && (
+              <View style={styles.sectionContent}>
+                <View style={styles.fieldContainer}>
+                  <Text style={styles.fieldTitle}>{t('table')}</Text>
+                </View>
+                <Field
+                  component={PickerInput}
+                  name="tableId"
+                  values={tablesMap}
+                  selectedValue={this.state.selectedTableId}
+                  validate={isRequired}
+                  onChange={(itemValue, itemIndex) => {
+                    this.setState({selectedTableId: itemValue})
+                  }}
+                />
+              </View>
+            )}
+
+            {noAvailableTables && (
+              <View style={styles.sectionContent}>
+                <Text>{t('noAvailableTables')}</Text>
+              </View>
+            )}
+
 
             <View style={styles.sectionContent}>
               <View style={styles.fieldContainer}>
@@ -178,52 +223,39 @@ class OrderForm extends Component {
               </View>
             </View>
 
-            <View
-              style={[
-                styles.jc_alignIem_center,
-                styles.flex_dir_row,
-                styles.mgrtotop20
-              ]}
-            >
+            {this.state.selectedOrderType != null && (
               <View
-                style={{
-                  width: '46%',
-                  borderRadius: 4,
-                  borderWidth: 1,
-                  borderColor: '#F39F86',
-                  backgroundColor: '#F39F86',
-                  marginRight: '2%'
-                }}
+                style={[
+                  styles.jc_alignIem_center,
+                  styles.flex_dir_row,
+                  styles.mgrtotop20
+                ]}
               >
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.handleSubmit()
-                  }}
-                >
-                  <Text style={[styles.signInText, styles.whiteColor]}>
-                    {t('openOrder')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+                <View style={{flex: 1, marginHorizontal: 5}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      !noAvailableTables && this.props.handleSubmit()
+                    }}
+                    diabled={noAvailableTables}
+                    activeOpacity={noAvailableTables ? 0.3 : 1}
+                  >
+                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                      {t('openOrder')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
 
-              <View
-                style={{
-                  width: '46%',
-                  borderRadius: 4,
-                  borderWidth: 1,
-                  borderColor: '#F39F86',
-                  marginLeft: '2%'
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('TablesSrc')
-                  }}
-                >
-                  <Text style={styles.signInText}>{t('action.cancel')}</Text>
-                </TouchableOpacity>
+                <View style={{flex: 1, marginHorizontal: 5}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('TablesSrc')
+                    }}
+                  >
+                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
+            )}
           </View>
         </DismissKeyboard>
       </ScrollView>

@@ -17,7 +17,7 @@ import {
   api,
   makeFetchRequest,
   errorAlert,
-  successMessage
+  successMessage, dispatchFetchRequest
 } from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
@@ -30,10 +30,6 @@ class TableLayoutEdit extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   componentDidMount() {
@@ -43,12 +39,6 @@ class TableLayoutEdit extends React.Component {
   handleEditCancel = () => {
     this.props.clearTableLayout(this.props.navigation.state.params.layoutId)
     this.props.navigation.navigate('TableLayouts')
-  }
-
-  onOpenNP = tableId => {
-    this.setState({
-      tableId: tableId
-    })
   }
 
   handleSubmit = values => {
@@ -79,6 +69,18 @@ class TableLayoutEdit extends React.Component {
     })
   }
 
+  handleDeleteLayout = (layoutId) => {
+    dispatchFetchRequest(api.tablelayout.delete(layoutId), {
+      method: 'DELETE',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {},
+    }, response => {
+      successMessage('Table layout deleted')
+      this.props.navigation.navigate('TableLayouts')
+    }).then()
+  }
+
   render() {
     const {
       navigation,
@@ -87,7 +89,7 @@ class TableLayoutEdit extends React.Component {
       haveError,
       isLoading
     } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     if (isLoading) {
       return (
@@ -106,7 +108,7 @@ class TableLayoutEdit extends React.Component {
 
           <TableLayoutForm
             onSubmit={this.handleSubmit}
-            t={t}
+            handleDeleteLayout={this.handleDeleteLayout}
             initialValues={tablelayout}
             isEdit={true}
             navigation={navigation}

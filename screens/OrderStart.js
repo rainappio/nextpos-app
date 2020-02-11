@@ -7,7 +7,7 @@ import {
   getOrdersByDateRange
 } from '../actions'
 import OrderForm from './OrderForm'
-import { api, makeFetchRequest } from '../constants/Backend'
+import {api, dispatchFetchRequest, makeFetchRequest} from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import BackBtn from '../components/BackBtn'
@@ -20,29 +20,16 @@ class OrderStart extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   componentDidMount() {
     this.props.getTablesAvailable()
-
-    this.context.localize({
-      en: {
-        noAvailableTables: 'There is no available table.'
-      },
-      zh: {
-        noAvailableTables: '目前沒有空桌.'
-      }
-    })
   }
 
   handleSubmit = values => {
-    console.log(values)
 
     const createOrder = {}
+    createOrder.orderType = values.orderType
     createOrder.tableId = values.tableId
     createOrder.demographicData = {
       male: values.male,
@@ -57,42 +44,30 @@ class OrderStart extends React.Component {
     var kid = Person.kid !== undefined ? Person.kid : 0
     var customerCount = male + female + kid
 
-    makeFetchRequest(token => {
-      fetch(api.order.new, {
+    dispatchFetchRequest(api.order.new, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token.access_token}`
         },
         body: JSON.stringify(createOrder)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            this.props.getTablesAvailable()
-            this.props.navigation.navigate('OrderFormII', {
-              tableId: createOrder.tableId,
-              onSubmit: this.props.navigation.state.params.handleOrderSubmit,
-              handleDelete: this.props.navigation.state.params.handleDelete,
-              customerCount: customerCount
-            })
-            this.props.getOrdersByDateRange()
-          } else {
-            alert('pls try again')
-          }
+      },
+      response => {
+        response.json().then(data => {
+          this.props.navigation.navigate('OrderFormII', {
+            orderId: data.orderId,
+            onSubmit: this.props.navigation.state.params.handleOrderSubmit,
+            handleDelete: this.props.navigation.state.params.handleDelete,
+            customerCount: customerCount
+          })
         })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+      }).then()
   }
 
   render() {
     const { navigation, isLoading, haveData, availableTables, tableLayouts } = this.props
-    const { t } = this.state
 
-    let tables = []
     let tablesMap = {}
 
     tableLayouts && availableTables && tableLayouts.map(layout => {
@@ -103,29 +78,10 @@ class OrderStart extends React.Component {
       }
     })
 
-    const availableTablesArr =
-      availableTables !== undefined && Object.keys(availableTables)
-    availableTablesArr &&
-      availableTablesArr.map(key => {
-        availableTables[key].map(table => {
-          tables.push({
-            value: table.tableId,
-            label: table.tableName
-          })
-        })
-      })
-
     if (isLoading || !haveData) {
       return (
         <View style={[styles.container]}>
           <ActivityIndicator size="large" color="#ccc" />
-        </View>
-      )
-    } else if (!availableTablesArr || availableTablesArr.length === 0) {
-      return (
-        <View style={[styles.container]}>
-          <BackBtn />
-          <Text>{t('noAvailableTables')}</Text>
         </View>
       )
     }
@@ -134,7 +90,6 @@ class OrderStart extends React.Component {
       <OrderForm
         onSubmit={this.handleSubmit}
         navigation={navigation}
-        tables={tables}
         tablesMap={tablesMap}
       />
     )

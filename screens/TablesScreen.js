@@ -41,6 +41,7 @@ import {
 import { LocaleContext } from '../locales/LocaleContext'
 import {handleDelete, handleOrderSubmit} from '../helpers/orderActions'
 import {NavigationEvents} from "react-navigation";
+import {handleOpenShift} from "../helpers/shiftActions";
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -58,12 +59,15 @@ class TablesScreen extends React.Component {
   }
 
   componentDidMount() {
+    this.loadInfo()
+    this.loadLocalization()
+  }
+
+  loadInfo = () => {
     this.props.getTableLayouts()
     this.props.getShiftStatus()
     this.props.getfetchOrderInflights()
     this.props.getAvailableTables()
-
-    this.loadLocalization()
   }
 
   loadLocalization = () => {
@@ -78,6 +82,7 @@ class TablesScreen extends React.Component {
           open: 'Open',
           cancel: 'Cancel'
         },
+        otherOrders: 'Other Orders',
         seatingCapacity: 'Seats',
         availableSeats: 'Vacant'
       },
@@ -90,6 +95,7 @@ class TablesScreen extends React.Component {
           open: '開帳',
           cancel: '取消'
         },
+        otherOrders: '其他訂單',
         seatingCapacity: '座位',
         availableSeats: '空位'
       }
@@ -99,58 +105,18 @@ class TablesScreen extends React.Component {
   onRefresh = async () => {
     this.setState({ refreshing: true })
 
-    this.props.getfetchOrderInflights()
-    this.props.getTableLayouts()
-    this.props.getShiftStatus()
-    this.props.getAvailableTables()
+    this.loadInfo()
 
     this.setState({ refreshing: false }, () => {
       successMessage('Refreshed')
     })
   }
 
-  handleOpenShift = () => {
-    makeFetchRequest(token => {
-      fetch(api.order.openShift, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token.access_token}`
-        },
-        body: JSON.stringify({
-          balance: this.state.openBalance
-        })
-      }).then(response => {
-        if (response.status === 200) {
-          successMessage('Shift opened')
-          this.props.dispatch(getShiftStatus())
-          this.setState({ openBalance: 0 })
-        }
-      })
-    })
-  }
-
-  handleDeliver = id => {
-    makeFetchRequest(token => {
-      fetch(`${api.apiRoot}/orders/${id}/process?action=DELIVER`, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token.access_token}`
-        }
-      }).then(response => {
-        if (response.status === 200) {
-          this.props.navigation.navigate('TablesSrc')
-          this.props.getfetchOrderInflights()
-          this.props.getTableLayouts()
-        } else {
-          errorAlert(response)
-        }
-      })
+  handleOpenShift = (balance) => {
+    handleOpenShift(balance, (response) => {
+      successMessage('Shift opened')
+      this.loadInfo()
+      this.setState({openBalance: 0})
     })
   }
 
@@ -240,37 +206,20 @@ class TablesScreen extends React.Component {
                   />
                 </View>
                 <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-                  <View
-                    style={{
-                      width: '46%',
-                      borderRadius: 4,
-                      borderWidth: 1,
-                      borderColor: '#F39F86',
-                      backgroundColor: '#F39F86',
-                      marginRight: '2%'
-                    }}
-                  >
-                    <TouchableOpacity onPress={() => this.handleOpenShift()}>
-                      <Text style={[styles.signInText, styles.whiteColor]}>
+                  <View style={{width: '45%', marginHorizontal: 5}}>
+                    <TouchableOpacity onPress={() => this.handleOpenShift(this.state.openBalance)}>
+                      <Text style={[styles.bottomActionButton, styles.actionButton]}>
                         {t('openShift.open')}
                       </Text>
                     </TouchableOpacity>
                   </View>
-                  <View
-                    style={{
-                      width: '46%',
-                      borderRadius: 4,
-                      borderWidth: 1,
-                      borderColor: '#F39F86',
-                      marginLeft: '2%'
-                    }}
-                  >
+                  <View style={{width: '45%', marginHorizontal: 5}}>
                     <TouchableOpacity
                       onPress={() => {
                         this.props.navigation.navigate('LoginSuccess')
                       }}
                     >
-                      <Text style={styles.signInText}>
+                      <Text style={[styles.bottomActionButton, styles.cancelButton]}>
                         {t('openShift.cancel')}
                       </Text>
                     </TouchableOpacity>
@@ -294,8 +243,7 @@ class TablesScreen extends React.Component {
       >
         <NavigationEvents
           onWillFocus={() => {
-            this.props.getfetchOrderInflights()
-            this.props.getTableLayouts()
+            this.loadInfo()
             this.loadLocalization()
           }}
         />
@@ -344,7 +292,6 @@ class TablesScreen extends React.Component {
                           handleOrderSubmit={handleOrderSubmit}
                           handleDelete={handleDelete}
                           key={item.orderId}
-                          handleDeliver={this.handleDeliver}
                         />
                       )
                     }}
@@ -359,6 +306,39 @@ class TablesScreen extends React.Component {
                 )}
               </View>
             ))}
+            <View style={styles.mgrbtn20} key='noLayout'>
+              <View style={[styles.sectionBar, {flex: 1}]}>
+                <Text
+                  style={[styles.sectionBarText, {textAlign: 'center'}
+                  ]}
+                >
+                  {t('otherOrders')}
+                </Text>
+              </View>
+              {ordersInflight !== undefined && ordersInflight['NO_LAYOUT'] !== undefined ? (
+                <FlatList
+                  data={ordersInflight['NO_LAYOUT']}
+                  renderItem={({ item }) => {
+                    return (
+                      <OrderItem
+                        order={item}
+                        navigation={navigation}
+                        handleOrderSubmit={handleOrderSubmit}
+                        handleDelete={handleDelete}
+                        key={item.orderId}
+                      />
+                    )
+                  }}
+                  keyExtractor={(item, idx) => item.orderId}
+                />
+              ) : (
+                <View>
+                  <Text style={styles.messageBlock}>
+                    {t('noInflightOrders')}
+                  </Text>
+                </View>
+              )}
+            </View>
           </View>
         </DismissKeyboard>
       </ScrollView>

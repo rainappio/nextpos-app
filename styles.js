@@ -226,7 +226,6 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomColor: '#f1f1f1',
     borderBottomWidth: 1
-    // paddingLeft: 10
   },
   rowFrontText: {
     padding: 15
@@ -386,24 +385,28 @@ export default StyleSheet.create({
   toRight: {
     textAlign: 'right'
   },
-  itemCount: {
-    backgroundColor: 'white',
-    color: '#000',
-    width: 25,
-    height: 25,
-    borderRadius: 25,
+  itemCountContainer: {
+    backgroundColor: '#f18d1a',
+    borderWidth: 1,
+    borderColor: '#fff',
+    width: 24,
+    height: 24,
+    borderRadius: 24,
     fontSize: 14,
-    position: 'absolute',
-    right: -12,
-    top: 8,
-    textAlign: 'center'
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  itemCountText: {
+    color: '#fff',
+    fontSize: 14
   },
   shoppingBar: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     width: '100%',
-    height: 50
+    height: 45
   },
   item: {
     borderTopWidth: 1,
@@ -535,20 +538,27 @@ export default StyleSheet.create({
     fontSize: 16,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#F39F86',
+    borderColor: '#f18d1a',
     padding: 10,
     marginBottom: 10
   },
   actionButton: {
-    backgroundColor: '#F39F86',
+    backgroundColor: '#f18d1a',
+    color: '#fff'
+  },
+  secondActionButton: {
+    borderColor: '#00ab66',
+    backgroundColor: '#00ab66',
     color: '#fff'
   },
   cancelButton: {
     backgroundColor: '#fff',
-    color: '#F39F86'
+    color: '#f18d1a'
   },
   deleteButton: {
-    backgroundColor: '#ff6d07'
+    borderColor: '#858585',
+    color: '#fff',
+    backgroundColor: '#858585'
   },
   LRmgr_35minus: {
     marginLeft: -30,

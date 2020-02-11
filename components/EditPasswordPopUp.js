@@ -7,13 +7,16 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   ScrollView,
-  Keyboard
+  Keyboard, AsyncStorage, TextInput
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import styles from '../styles'
-import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
+import {api, dispatchFetchRequest, successMessage, warningMessage} from '../constants/Backend'
 import { LocaleContext } from '../locales/LocaleContext'
+import {encode as btoa} from "base-64";
+import InputText from "./InputText";
+import {isvalidPassword} from "../validators";
 
 class EditPasswordPopUp extends Component {
   static contextType = LocaleContext
@@ -22,8 +25,10 @@ class EditPasswordPopUp extends Component {
     super(props, context)
 
     this.state = {
-      t: context.t,
-      isVisible: false
+      isVisible: false,
+      originalPassword: null,
+      newPassword: null,
+      showEnterNewPassword: !this.props.ownAccount
     }
 
     // https://reactjs.org/docs/handling-events.html
@@ -35,11 +40,17 @@ class EditPasswordPopUp extends Component {
       en: {
         passwordTitle: 'Password',
         editPassword: 'Edit Password',
+        enterOldPassword: 'Enter Old Password',
+        originalPassword: 'Original Password',
+        enter: 'Enter',
         enterNewPassword: 'Enter New Password'
       },
       zh: {
         passwordTitle: '設定密碼',
         editPassword: '編輯密碼',
+        enterOldPassword: '輸入原本密碼',
+        originalPassword: '原本密碼',
+        enter: '輸入',
         enterNewPassword: '輸入新密碼'
       }
     })
@@ -47,20 +58,46 @@ class EditPasswordPopUp extends Component {
 
   toggleModal = visible => {
     this.setState({
-      isVisible: visible
+      isVisible: visible,
     })
   }
 
-  handleChangePwd = updatedPassword => {
-    var name = this.props.name
-    var newPwd = {}
-    newPwd['password'] = updatedPassword
+  handleCheckPassword = async password => {
+    let token = await AsyncStorage.getItem('token')
+    const tokenObj = JSON.parse(token)
+    const username = tokenObj.cli_userName
+    const masterPassword = tokenObj.cli_masterPwd
 
+    const formData = new FormData()
+    formData.append('grant_type', 'password')
+    formData.append('username', this.props.name)
+    formData.append('password', password)
+    const auth = 'Basic ' + btoa(username + ':' + masterPassword)
+
+    let response = await fetch(api.getAuthToken, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        Authorization: auth
+      },
+      body: formData
+    })
+
+    if (response.status === 200) {
+      this.setState({ showEnterNewPassword: true })
+    } else {
+      await this.toggleModal(false)
+      warningMessage('Password is incorrect')
+    }
+  }
+
+  handleChangePwd = async updatedPassword => {
     // dismiss keyboard after pin code is fulfilled.
     Keyboard.dismiss()
+    const updatePasswordUrl = this.props.ownAccount? api.clientUser.updateCurrentUserPassword : api.clientUser.updatePassword(this.props.name)
 
-    dispatchFetchRequest(
-      api.clientUser.updatePassword(name),
+    dispatchFetchRequest(updatePasswordUrl,
       {
         method: 'PATCH',
         withCredentials: true,
@@ -68,19 +105,21 @@ class EditPasswordPopUp extends Component {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(newPwd)
+        body: JSON.stringify({password: updatedPassword})
       },
       response => {
         // async/await is to avoid update on unmounted component error in SmoothPinCodeInput.
-        response.json().then(async data => {
+        response.json().then(data => {
           if (data.username) {
             successMessage('Password updated')
           }
-
-          await this.toggleModal(false)
         })
-      }
-    ).then()
+
+
+      }).then()
+
+    await this.setState( { showEnterNewPassword: false })
+    await this.toggleModal(false)
   }
 
   /**
@@ -91,7 +130,7 @@ class EditPasswordPopUp extends Component {
    * https://medium.com/@payalmaniyar/deep-understanding-of-ref-direct-manipulation-in-react-native-e89726ddb78e
    */
   render() {
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <View>
@@ -126,34 +165,88 @@ class EditPasswordPopUp extends Component {
                 <View
                   style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}
                 >
-                  <Text
-                    style={[
-                      styles.welcomeText,
-                      styles.orange_color,
-                      styles.mgrbtn40
-                    ]}
-                  >
+                  <Text style={styles.screenTitle}>
                     {t('editPassword')}
                   </Text>
 
-                  <Text style={{ marginBottom: 10, textAlign: 'center' }}>
-                    {t('enterNewPassword')}
-                  </Text>
-                  <View
-                    style={[
-                      styles.jc_alignIem_center,
-                      styles.flex_dir_row,
-                      styles.paddLeft20,
-                      styles.paddRight20
-                    ]}
-                  >
-                    <Field
-                      name="password"
-                      component={PinCodeInput}
-                      onChange={val => this.handleChangePwd(val)}
-                      customHeight={40}
-                    />
-                  </View>
+                  {this.props.ownAccount && (
+                    <View
+                      style={[
+                        styles.jc_alignIem_center,
+                        styles.paddLeft20,
+                        styles.paddRight20
+                      ]}
+                    >
+                      <Text style={{marginBottom: 10, textAlign: 'center'}}>
+                        {t('enterOldPassword')}
+                      </Text>
+                      {this.props.defaultUser ? (
+                        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                          <TextInput
+                            name="originalPassword"
+                            value={this.state.originalPassword}
+                            onChangeText={(value) => this.setState({originalPassword: value})}
+                            placeholder={t('originalPassword')}
+                            secureTextEntry={true}
+                            style={[styles.rootInput, {width: 200}]}
+                          />
+                          <TouchableOpacity
+                            style={{marginLeft: 10}}
+                            onPress={() => this.handleCheckPassword(this.state.originalPassword)}
+                          >
+                            <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('enter')}</Text>
+                          </TouchableOpacity>
+                        </View>
+                      ) : (
+                        <Field
+                          name="originalPassword"
+                          component={PinCodeInput}
+                          onChange={val => this.handleCheckPassword(val)}
+                          customHeight={40}
+                        />
+                      )}
+                    </View>
+                  )}
+
+                  {this.state.showEnterNewPassword && (
+                    <View
+                      style={[
+                        styles.jc_alignIem_center,
+                        styles.paddLeft20,
+                        styles.paddRight20
+                      ]}
+                    >
+                      <Text style={{marginBottom: 10, textAlign: 'center'}}>
+                        {t('enterNewPassword')}
+                      </Text>
+                      {this.props.defaultUser ? (
+                        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                          <TextInput
+                            name="originalPassword"
+                            value={this.state.newPassword}
+                            onChangeText={(value) => this.setState({newPassword: value})}
+                            placeholder={t('newPassword')}
+                            secureTextEntry={true}
+                            validate={isvalidPassword}
+                            style={[styles.rootInput, {width: 200}]}
+                          />
+                          <TouchableOpacity
+                            style={{marginLeft: 10}}
+                            onPress={() => this.handleChangePwd(this.state.newPassword)}
+                          >
+                            <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('enter')}</Text>
+                          </TouchableOpacity>
+                        </View>
+                      ) : (
+                        <Field
+                          name="password"
+                          component={PinCodeInput}
+                          onChange={val => this.handleChangePwd(val)}
+                          customHeight={40}
+                        />
+                      )}
+                    </View>
+                  )}
                 </View>
               </TouchableWithoutFeedback>
             </ScrollView>

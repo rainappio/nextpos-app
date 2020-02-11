@@ -18,7 +18,7 @@ import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import TableForm from './TableForm'
-import { api, makeFetchRequest, errorAlert } from '../constants/Backend'
+import {api, makeFetchRequest, errorAlert, dispatchFetchRequest, successMessage} from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 
@@ -41,38 +41,35 @@ class TableEdit extends React.Component {
   }
 
   handleSubmit = values => {
-    var updateTbl = {}
-    updateTbl.capacity = values.capacity
-    updateTbl.coordinateX = values.xcoordinate
-    updateTbl.coordinateY = values.ycoordinate
-    updateTbl.tableName = values.tableName
-    var tablelayoutId = this.props.navigation.state.params.layoutId
-    var tableId = this.props.navigation.state.params.tableId
-    makeFetchRequest(token => {
-      fetch(`${api.apiRoot}/tablelayouts/${tablelayoutId}/tables/${tableId}`, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        },
-        body: JSON.stringify(values)
+    const tablelayoutId = this.props.navigation.state.params.layoutId
+    const tableId = this.props.navigation.state.params.tableId
+
+    dispatchFetchRequest(api.tablelayout.updateTable(tablelayoutId, tableId), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values)
+    }, response => {
+      this.props.navigation.navigate('TableLayoutEdit', {
+        layoutId: tablelayoutId
       })
-        .then(response => {
-          if (response.status === 200) {
-            this.props.navigation.navigate('TableLayoutEdit', {
-              layoutId: tablelayoutId
-            })
-            this.props.getTableLayout(tablelayoutId)
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+      this.props.getTableLayout(tablelayoutId)
+    }).then()
+  }
+
+  handleDeleteTable = (layoutId, tableId) => {
+    dispatchFetchRequest(api.tablelayout.deleteTable(layoutId, tableId), {
+      method: 'DELETE',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {},
+    }, response => {
+      successMessage('Table deleted')
+      this.props.navigation.navigate('TableLayouts')
+    }).then()
   }
 
   render() {
@@ -85,34 +82,38 @@ class TableEdit extends React.Component {
     } = this.props
     const { t } = this.state
 
-    if (isLoading || !haveData) {
+    const selectedTable = tablelayout !== undefined && tablelayout.tables !== undefined && tablelayout.tables.find(
+      table => table.tableId === this.props.navigation.state.params.tableId
+    )
+
+    if (isLoading) {
       return (
         <View style={[styles.container]}>
           <ActivityIndicator size="large" color="#ccc" />
         </View>
       )
-    }
-
-    const choosenTbl = tablelayout.tables.find(
-      table => table.tableId === this.props.navigation.state.params.tableId
-    )
-
-    return (
-      <DismissKeyboard>
-        <View style={[styles.container_nocenterCnt]}>
-          <View>
-            <BackBtn />
-            <Text style={styles.screenTitle}>{t('editTableTitle')}</Text>
+    } else if (haveData && selectedTable !== undefined) {
+      return (
+        <DismissKeyboard>
+          <View style={[styles.container_nocenterCnt]}>
+            <View>
+              <BackBtn/>
+              <Text style={styles.screenTitle}>{t('editTableTitle')}</Text>
+            </View>
+            <TableForm
+              onSubmit={this.handleSubmit}
+              handleDeleteTable={this.handleDeleteTable}
+              initialValues={selectedTable}
+              isEdit={true}
+              tableLayout={tablelayout}
+              navigation={navigation}
+            />
           </View>
-          <TableForm
-            onSubmit={this.handleSubmit}
-            initialValues={choosenTbl}
-            isEdit={true}
-            navigation={navigation}
-          />
-        </View>
-      </DismissKeyboard>
-    )
+        </DismissKeyboard>
+      )
+    } else {
+      return null
+    }
   }
 }
 

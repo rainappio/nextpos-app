@@ -43,6 +43,9 @@ const en = {
     yes: 'Yes',
     no: 'No'
   },
+  errors: {
+    balanceError: 'Please enter a positive value'
+  },
   bar: 'Bar {{someValue}}'
 }
 

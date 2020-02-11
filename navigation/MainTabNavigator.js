@@ -72,8 +72,6 @@ import PasswordReset from '../screens/PasswordReset'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
-  Login: Login,
-  LoginScreen: LoginScreen,
   ClientUsers: ClientUsers,
   ClientUserLogin: ClientUserLogin,
   ClockIn: ClockIn,
@@ -295,6 +293,8 @@ export default createSwitchNavigator({
   Home: HomeScreen,
   Intro: IntroAppScreen,
   CreateAcc: CreateAccScreen,
+  Login: Login,
+  LoginScreen: LoginScreen,
   tabBar: {
     screen: tabBar // Calling the tabNavigator, wich contains the other stackNavigators
   }

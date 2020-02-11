@@ -6,6 +6,7 @@ import InputText from '../components/InputText'
 import InputNumber from '../components/InputNumber'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import DeleteBtn from "../components/DeleteBtn";
 
 class TableForm extends React.Component {
   static navigationOptions = {
@@ -37,7 +38,7 @@ class TableForm extends React.Component {
   }
 
   render() {
-    const { navigation, handleSubmit, isEdit, initialValues } = this.props
+    const { navigation, handleSubmit, handleDeleteTable, isEdit, initialValues, tableLayout } = this.props
 
     const { t } = this.state
 
@@ -95,6 +96,11 @@ class TableForm extends React.Component {
               {t('action.cancel')}
             </Text>
           </TouchableOpacity>
+          {isEdit && (
+            <DeleteBtn
+              handleDeleteAction={() => handleDeleteTable(tableLayout.id, initialValues.tableId)}
+            />
+          )}
         </View>
       </ScrollView>
     )

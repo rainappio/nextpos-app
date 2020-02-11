@@ -10,10 +10,6 @@ class DeleteBtn extends React.Component {
   constructor(props, context) {
     super(props)
 
-    this.state = {
-      t: context.t
-    }
-
     // https://www.freecodecamp.org/news/react-changing-state-of-child-component-from-parent-8ab547436271/
     this.deletePopUpReference = React.createRef()
   }
@@ -29,7 +25,7 @@ class DeleteBtn extends React.Component {
       islineItemDelete,
       disabled
     } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <TouchableOpacity

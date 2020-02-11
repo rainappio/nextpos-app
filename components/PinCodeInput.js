@@ -41,7 +41,6 @@ export default class PinCodeInput extends Component {
                 }}
               ></View>
             }
-            password={true}
             autoFocus={true}
             cellStyle={{
               borderWidth: 1,

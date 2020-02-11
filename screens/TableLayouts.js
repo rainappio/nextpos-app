@@ -9,6 +9,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
+import {NavigationEvents} from "react-navigation";
 
 class TableLayouts extends React.Component {
   static navigationOptions = {
@@ -27,10 +28,11 @@ class TableLayouts extends React.Component {
     this.onChange = activeSections => {
       this.setState({ activeSections })
     }
-    this.props.getTableLayouts()
   }
 
   componentDidMount() {
+    this.props.getTableLayouts()
+
     this.context.localize({
       en: {
         noTableLayout: 'No table layout'
@@ -72,6 +74,11 @@ class TableLayouts extends React.Component {
     }
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+        <NavigationEvents
+          onWillFocus={() => {
+            this.props.getTableLayouts()
+          }}
+        />
         <DismissKeyboard>
           <View>
             <View style={[styles.container]}>
