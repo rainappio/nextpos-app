@@ -253,25 +253,23 @@ class SalesCharts extends React.Component {
     const Item = ({ salesByPrdData }) => {
       return (
         <View
-          style={[styles.flex_dir_row, styles.paddingTopBtn8]}
+          style={[styles.tableRowContainer]}
           key={salesByPrdData.id}
         >
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <Text style={[styles.paddingTopBtn8]}>
-              {salesByPrdData.productName}
-            </Text>
+          <View style={[styles.quarter_width, styles.tableCellView]}>
+            <Text>{salesByPrdData.productName}</Text>
           </View>
 
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
+          <View style={[styles.quarter_width, styles.tableCellView]}>
             <Text>{salesByPrdData.salesQuantity}</Text>
           </View>
 
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <Text>&nbsp;&nbsp;{salesByPrdData.productSales}</Text>
+          <View style={[styles.quarter_width, styles.tableCellView]}>
+            <Text>{salesByPrdData.productSales}</Text>
           </View>
 
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <Text>{salesByPrdData.percentage}&nbsp;%</Text>
+          <View style={[styles.quarter_width, styles.tableCellView]}>
+            <Text>{salesByPrdData.percentage}%</Text>
           </View>
         </View>
       )
@@ -439,36 +437,21 @@ class SalesCharts extends React.Component {
           </View>
         </View>
 
-        <View
-          style={[
-            styles.orange_bg,
-            styles.flex_dir_row,
-            styles.mgrtotop20,
-            styles.paddingTopBtn8
-          ]}
-        >
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <TouchableOpacity>
-              <Text style={[styles.paddingTopBtn8]}>{t('product')}</Text>
-            </TouchableOpacity>
+        <View style={styles.sectionBar}>
+          <View style={[styles.quarter_width, styles.tableCellView]}>
+            <Text style={[styles.sectionBarTextSmall]}>{t('product')}</Text>
           </View>
 
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <TouchableOpacity>
-              <Text style={{ marginLeft: -20 }}>{t('quantity')}</Text>
-            </TouchableOpacity>
+          <View style={[styles.quarter_width, styles.tableCellView]}>
+            <Text style={styles.sectionBarTextSmall}>{t('quantity')}</Text>
           </View>
 
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <TouchableOpacity>
-              <Text>{t('amount')}</Text>
-            </TouchableOpacity>
+          <View style={[styles.quarter_width, styles.tableCellView]}>
+            <Text style={styles.sectionBarTextSmall}>{t('amount')}</Text>
           </View>
 
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
-            <TouchableOpacity>
-              <Text>{t('percentage')}</Text>
-            </TouchableOpacity>
+          <View style={[styles.quarter_width, styles.tableCellView]}>
+            <Text style={styles.sectionBarTextSmall}>{t('percentage')}</Text>
           </View>
         </View>
         <FlatList

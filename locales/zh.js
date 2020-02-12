@@ -33,15 +33,23 @@ const zh = {
     workingArea: '工作區'
   },
   action: {
+    ok: '好',
     save: '儲存',
     update: '更新',
     cancel: '取消',
     delete: '刪除',
-    dismiss: '好',
     confirmMessageTitle: '執行確認',
     confirmMessage: '確定執行嗎？',
     yes: '是',
     no: '不是'
+  },
+  orderState: {
+    OPEN: '已開單',
+    IN_PROCESS: '準備中',
+    DELIVERED: '已送餐',
+    SETTLED: '已付款',
+    REFUNDED: '已退款',
+    COMPLETED: '完成'
   },
   errors: {
     balanceError: '請輸入大於零的數字'

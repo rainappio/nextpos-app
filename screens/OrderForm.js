@@ -17,12 +17,41 @@ class OrderForm extends Component {
   constructor(props, context) {
     super(props, context)
 
+    this.context.localize({
+      en: {
+        newOrderTitle: 'New Order',
+        orderType: 'Order Type',
+        inStore: 'In Store',
+        takeOut: 'Take Out',
+        table: 'Table',
+        selectTable: 'Select a table',
+        noAvailableTables: 'There is no available table.',
+        ageGroup: 'Age Group',
+        visitFrequency: 'Visit Frequency',
+        peopleCount: 'People Count',
+        openOrder: 'Open Order'
+      },
+      zh: {
+        newOrderTitle: '新訂單',
+        orderType: '訂單種類',
+        inStore: '內用',
+        takeOut: '外帶',
+        table: '桌位',
+        selectTable: '選擇桌位',
+        noAvailableTables: '目前沒有空桌.',
+        ageGroup: '來客年齡層',
+        visitFrequency: '造訪次數',
+        peopleCount: '來客數',
+        openOrder: '建立訂單'
+      }
+    })
+
     this.state = {
       selectedTableId: null,
       selectedOrderType: null,
       orderTypes: {
-        0: {label: 'In Store', value: 'IN_STORE'},
-        1: {label: 'Take Out', value: 'TAKE_OUT'}
+        0: {label: context.t('inStore'), value: 'IN_STORE'},
+        1: {label: context.t('takeOut'), value: 'TAKE_OUT'}
       },
       selectedAgeGroup: null,
       ageGroups: {
@@ -42,30 +71,7 @@ class OrderForm extends Component {
 
   componentDidMount() {
 
-    this.context.localize({
-      en: {
-        newOrderTitle: 'New Order',
-        orderType: 'Order Type',
-        table: 'Table',
-        selectTable: 'Select a table',
-        noAvailableTables: 'There is no available table.',
-        ageGroup: 'Age Group',
-        visitFrequency: 'Visit Frequency',
-        peopleCount: 'People Count',
-        openOrder: 'Open Order'
-      },
-      zh: {
-        newOrderTitle: '新訂單',
-        orderType: '訂單種類',
-        table: '桌位',
-        selectTable: '選擇桌位',
-        noAvailableTables: '目前沒有空桌.',
-        ageGroup: '來客年齡層',
-        visitFrequency: '造訪次數',
-        peopleCount: '來客數',
-        openOrder: '建立訂單'
-      }
-    })
+
   }
 
   handleOrderTypeSelection = (index) => {

@@ -117,10 +117,6 @@ class PaymentOrderForm extends React.Component {
                 {order.orderType === 'IN_STORE' ? order.tableDisplayName : 'Take Out'}
               </Text>
             </View>
-
-            <View>
-              <Text style={styles.textBold}>split</Text>
-            </View>
           </View>
         </View>
 
@@ -175,7 +171,8 @@ class PaymentOrderForm extends React.Component {
           <View
             style={{
               flex: 1,
-              flexDirection: 'row'
+              flexDirection: 'row',
+              justifyContent: 'space-evenly'
             }}
           >
             {moneyAmts.map((moneyAmt, ix) => (
@@ -191,7 +188,6 @@ class PaymentOrderForm extends React.Component {
                     height: 50,
                     borderWidth: 2,
                     borderColor: '#f18d1a',
-                    marginRight: 17,
                     paddingTop: 16
                   }}
                 >

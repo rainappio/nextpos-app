@@ -33,15 +33,23 @@ const en = {
     workingArea: 'Working Area'
   },
   action: {
+    ok: 'OK',
     save: 'Save',
     update: 'Update',
     cancel: 'Cancel',
     delete: 'Delete',
-    dismiss: 'Dismiss',
     confirmMessageTitle: 'Confirm Action',
     confirmMessage: 'Are you sure?',
     yes: 'Yes',
     no: 'No'
+  },
+  orderState: {
+    OPEN: 'Open',
+    IN_PROCESS: 'In Process',
+    DELIVERED: 'Delivered',
+    SETTLED: 'Settled',
+    REFUNDED: 'Refunded',
+    COMPLETED: 'Completed'
   },
   errors: {
     balanceError: 'Please enter a positive value'
