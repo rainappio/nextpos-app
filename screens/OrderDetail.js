@@ -23,6 +23,7 @@ import images from '../assets/images'
 import { getOrdersByDateRange, getOrder, formatDate } from '../actions'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
+import {renderOrderState} from "../helpers/orderActions";
 
 class OrderDetail extends React.Component {
   static navigationOptions = {
@@ -39,7 +40,7 @@ class OrderDetail extends React.Component {
         discount: 'Discount',
         total: 'Total',
         paymentMethod: 'Payment Method',
-        orderState: 'Order Status'
+        orderStatus: 'Order Status'
 
       },
       zh: {
@@ -47,7 +48,7 @@ class OrderDetail extends React.Component {
         discount: '折扣',
         total: '總金額',
         paymentMethod: '付款方式',
-        orderState: '訂單狀態'
+        orderStatus: '訂單狀態'
       }
     })
   }
@@ -114,53 +115,10 @@ class OrderDetail extends React.Component {
 
             <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
               <View style={{flex: 1, alignItems: 'flex-start'}}>
-                <Text style={styles.orange_color}>{t('orderState')}</Text>
+                <Text style={styles.orange_color}>{t('orderStatus')}</Text>
               </View>
               <View style={{flex: 1, alignItems: 'flex-end'}}>
-                {this.props.navigation.state.params.order.state === 'OPEN' ? (
-                  <Image
-                    source={images.order}
-                    style={{ width: 15, height: 20 }}
-                  />
-                ) : this.props.navigation.state.params.order.state ===
-                  'IN_PROCESS' ? (
-                  <Image
-                    source={images.process}
-                    style={{ width: 30, height: 20 }}
-                  />
-                ) : this.props.navigation.state.params.order.state ===
-                  'SETTLED' ? (
-                  <Icon
-                    name={'md-checkmark-circle-outline'}
-                    color="#4cbb17"
-                    size={25}
-                    style={{
-                      marginLeft: 8,
-                      marginRight: 0,
-                      fontWeight: 'bold'
-                    }}
-                  />
-                ) : this.props.navigation.state.params.order.state ===
-                  'DELIVERED' ? (
-                  <MCIcon
-                    name={'truck-delivery'}
-                    size={25}
-                    style={{
-                      marginLeft: 8,
-                      marginRight: 0,
-                      fontWeight: 'bold'
-                    }}
-                    color="#f18d1a"
-                  />
-                ) : (
-                  this.props.navigation.state.params.order.state ===
-                    'COMPLETED' && (
-                    <Image
-                      source={images.completed}
-                      style={{ width: 28, height: 20, flex: 1 }}
-                    />
-                  )
-                )}
+                {renderOrderState(order.state)}
               </View>
             </View>
 

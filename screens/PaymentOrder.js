@@ -31,21 +31,16 @@ class PaymentOrder extends React.Component {
 
   state = {
     numbersArr: [],
-    dynamicTotal: ''
+    dynamicTotal: 0
   }
 
   addNum = num => {
-    let numbersArr = [...this.state.numbersArr]
-    numbersArr.push(num)
-    this.setState({ numbersArr })
+    const total = this.state.dynamicTotal + Number(num)
+    this.setState({ dynamicTotal: total})
+  }
 
-    new Promise.resolve(numbersArr).then(arr => {
-      let total = 0
-      arr.map(num => (total += num))
-      this.setState({
-        dynamicTotal: total
-      })
-    })
+  resetTotal = () => {
+    this.setState({ dynamicTotal: 0 })
   }
 
   handleComplete = id => {
@@ -125,6 +120,7 @@ class PaymentOrder extends React.Component {
         navigation={this.props.navigation}
         discountTotal={this.props.navigation.state.params.discountTotal}
         addNum={this.addNum}
+        resetTotal={this.resetTotal}
         dynamicTotal={this.state.dynamicTotal}
       />
     )

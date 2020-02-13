@@ -172,7 +172,7 @@ class OrderFormII extends React.Component {
                   {alignSelf: 'flex-start', paddingHorizontal: 10}
                 ]}
               >
-                {order.orderType === 'IN_STORE' ? order.tableDisplayName : 'Take Out'}
+                {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
               </Text>
           </View>
 

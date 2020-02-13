@@ -36,14 +36,7 @@ class ReportsScreen extends React.Component {
       <ScrollView>
         <DismissKeyboard>
           <View style={styles.container}>
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
+            <Text style={styles.screenTitle}>
               {t('menu.reporting')}
             </Text>
 

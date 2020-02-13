@@ -30,6 +30,8 @@ import { LocaleContext } from '../locales/LocaleContext'
 import BackendErrorScreen from './BackendErrorScreen'
 import { Tooltip } from 'react-native-elements'
 import PureChart from 'react-native-pure-chart'
+import Chart from "../components/Chart";
+import moment from "moment";
 
 class SalesCharts extends React.Component {
   static navigationOptions = {
@@ -48,6 +50,7 @@ class SalesCharts extends React.Component {
         customerCountTitle: 'Customer Count',
         averageSpendingTitle: 'Average Customer Spending',
         salesDistributionTitle: 'Sales by Month',
+        salesRankingTitle: 'Sales Ranking By Product',
         product: 'Product',
         quantity: 'Quantity',
         amount: 'Amount',
@@ -61,6 +64,7 @@ class SalesCharts extends React.Component {
         customerCountTitle: '來客數量圖',
         averageSpendingTitle: '客單數圖',
         salesDistributionTitle: '年度銷售圖',
+        salesRankingTitle: '產品銷售排行榜',
         product: '產品',
         quantity: '總數量',
         amount: '金額',
@@ -68,6 +72,10 @@ class SalesCharts extends React.Component {
         noSalesData: '目前沒有銷售資料'
       }
     })
+
+    this.state = {
+      test: {}
+    }
   }
 
   componentDidMount() {
@@ -78,139 +86,70 @@ class SalesCharts extends React.Component {
 
   generateRangedSalesChart = (rangedSalesReport) => {
 
-    let rangedSalesDataObj = {
-      color: 'orange',
-      seriesName: 'rangedSales',
+    let rangedSalesData = {
+      legend: ['This week'],
+      labels: [],
       data: []
     }
-
     rangedSalesReport.salesByRange.map(stats => {
-      rangedSalesDataObj.data.push({
-        x: stats.date,
-        y: stats.total
-      })
+      rangedSalesData.labels.push(stats.date)
+      rangedSalesData.data.push(stats.total)
     })
 
-    return [ rangedSalesDataObj ]
+    return rangedSalesData
   }
 
   generateCustomerStatsChart = (customerStatsReport) => {
 
-    let customerCountDataObj = {
-      color: 'orange',
-      seriesName: 'customerCount',
-      data: []
+    const customerCountData = {
+      legend: ['This year', 'Last year'],
+      labels: [],
+      data: [],
+      data2: []
     }
 
-    let customerAvgSpendingDataObj = {
-      color: 'orange',
-      seriesName: 'averageSpending',
-      data: []
-    }
-
-    let customerCountLastYearDataObj = {
-      color: 'gray',
-      seriesName: 'customerCountLastYr',
-      data: []
-    }
-
-    let customerAvgSpendingLastYearDataObj = {
-      color: 'gray',
-      seriesName: 'averageSpendingLastYr',
-      data: []
+    const customerAverageSpendingData = {
+      legend: ['This year', 'Last year'],
+      labels: [],
+      data: [],
+      data2: []
     }
 
     customerStatsReport.customerStatsThisMonth.map(stats => {
-      customerCountDataObj.data.push({
-        x: stats.date,
-        y: stats.customerCount
-      })
+      customerCountData.labels.push(stats.date)
+      customerCountData.data.push(stats.customerCount)
 
-      customerAvgSpendingDataObj.data.push({
-        x: stats.date,
-        y: stats.averageSpending
-      })
+      customerAverageSpendingData.labels.push(stats.date)
+      customerAverageSpendingData.data.push(stats.averageSpending)
     })
 
     customerStatsReport.customerStatsThisMonthLastYear.map(stats => {
-      customerCountLastYearDataObj.data.push({
-        x: stats.date,
-        y: stats.customerCount
-      })
-
-      customerAvgSpendingLastYearDataObj.data.push({
-        x: stats.date,
-        y: stats.averageSpending
-      })
+      customerCountData.data2.push(stats.customerCount)
+      customerAverageSpendingData.data2.push(stats.averageSpending)
     })
 
-
-    // it appears that pure chart needs series data to have the same length so the following logic
-    // is to handle data length difference when February has an extra day in leap years.
-    const customerStatsSize = customerStatsReport.customerStatsThisMonth.length;
-    const customerStatsSizeLastYear = customerStatsReport.customerStatsThisMonthLastYear.length;
-
-    if (customerStatsSize > customerStatsSizeLastYear) {
-      customerCountLastYearDataObj.data.push({
-        x: ' ',
-        y: 0
-      })
-
-      customerAvgSpendingLastYearDataObj.data.push({
-        x: ' ',
-        y: 0
-      })
-    }
-
-    if (customerStatsSizeLastYear > customerStatsSize) {
-      customerCountDataObj.data.push({
-        x: ' ',
-        y: 0
-      })
-
-      customerAvgSpendingDataObj.data.push({
-        x: ' ',
-        y: 0
-      })
-    }
-
-    console.log(`${customerCountLastYearDataObj.data.length} ${customerCountDataObj.data.length}`)
-
-    const customerCountData = [customerCountDataObj, customerCountLastYearDataObj]
-    const customerAvgSpendingData = [customerAvgSpendingDataObj, customerCountLastYearDataObj]
-
-    return { countData: customerCountData, avgSpendingData: customerAvgSpendingData }
+    return { countData: customerCountData, avgSpendingData: customerAverageSpendingData }
   }
 
   generateSalesDistribution = (salesDistributionReport) => {
 
-    let yearlySalesDataObj = {
-      color: 'orange',
-      seriesName: 'salesByMonth',
-      data: []
-    }
-
-    let yearlySalesLastYearDataObj = {
-      color: 'gray',
-      seriesName: 'salesByMonthLastYr',
-      data: []
+    const yearlySalesData = {
+      legend: ['This year', 'Last year'],
+      labels: [],
+      data: [],
+      data2: []
     }
 
     salesDistributionReport.salesByMonth.map(sales => {
-      yearlySalesDataObj.data.push({
-        x: sales.month,
-        y: sales.total
-      })
+      yearlySalesData.labels.push(sales.date)
+      yearlySalesData.data.push(sales.total)
     })
 
     salesDistributionReport.salesByMonthLastYear.map(sales => {
-      yearlySalesLastYearDataObj.data.push({
-        x: sales.month,
-        y: sales.total
-      })
+      yearlySalesData.data2.push(sales.total)
     })
 
-    return [ yearlySalesDataObj, yearlySalesLastYearDataObj ]
+    return yearlySalesData
   }
 
   render() {
@@ -228,14 +167,14 @@ class SalesCharts extends React.Component {
     const containSalesData = haveData && getrangedSalesReport.salesByRange !== undefined
 
     // ranged sales
-    let rangedSalesData = []
+    let rangedSalesData = {}
 
     if (containSalesData) {
       rangedSalesData = this.generateRangedSalesChart(getrangedSalesReport);
     }
 
     // customer stats
-    let custCountData = [], custAvgSpendingData = []
+    let custCountData = {}, custAvgSpendingData = {}
 
     if (this.props.haveCCData) {
       const { countData, avgSpendingData } = this.generateCustomerStatsChart(customercountReport);
@@ -244,7 +183,7 @@ class SalesCharts extends React.Component {
     }
 
     // sales distribution
-    let salesDistributionData = []
+    let salesDistributionData = {}
 
     if (haveSDData) {
       salesDistributionData = this.generateSalesDistribution(salesdistributionReport)
@@ -310,14 +249,7 @@ class SalesCharts extends React.Component {
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View style={[styles.container, styles.nomgrBottom]}>
           <BackBtn />
-          <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold
-            ]}
-          >
+          <Text style={styles.screenTitle}>
             {t('salesDashboardTitle')}
           </Text>
 
@@ -335,7 +267,7 @@ class SalesCharts extends React.Component {
                 {t('todaySales')} - ${getrangedSalesReport.todayTotal}
               </Text>
             </View>
-            <View>
+            {/*<View>
               <Text
                 style={[
                   styles.orange_color,
@@ -353,33 +285,45 @@ class SalesCharts extends React.Component {
               >
                 Details
               </Text>
-            </View>
+            </View>*/}
           </View>
         </View>
 
-        <View style={{ position: 'relative' }}>
+        <View>
           <View style={styles.mgrbtn20}>
             <Text
               style={[
                 styles.welcomeText,
                 styles.orange_color,
                 styles.textBold,
-                styles.paddingTopBtn8,
                 { fontSize: 14 }
               ]}
             >
               {t('rangedSalesTitle')}
             </Text>
-            <PureChart data={rangedSalesData} type="bar" width={'100%'} />
+            <Chart
+              data={rangedSalesData}
+              width={Dimensions.get('window').width}
+              props={{
+                yAxisLabel: '$',
+                yAxisSuffix: 'k',
+                formatYLabel: (value) => {
+                  return value / 1000
+                },
+                formatXLabel: (value) => {
+                  return moment(value, 'YYYY-MM-DD').format('MM/DD')
+                }
+              }}
+            />
           </View>
 
-          <View style={(styles.paddingTopBtn20, { marginLeft: -15 })}>
+
+          <View style={styles.paddingTopBtn20}>
             <Text
               style={[
                 styles.welcomeText,
                 styles.orange_color,
                 styles.textBold,
-                styles.paddingTopBtn8,
                 { fontSize: 14 }
               ]}
             >
@@ -387,13 +331,16 @@ class SalesCharts extends React.Component {
             </Text>
             {
             	this.props.haveCCData && (
-              <PureChart
-                data={custCountData}
-                type="bar"
-                height={120}
-                width={'95%'}
-                style={{ backgroundColor: 'gold' }}
-              />
+                <Chart
+                  data={custCountData}
+                  width={Dimensions.get('window').width * 3}
+                  props={{
+                    verticalLabelRotation: 45,
+                    formatXLabel: (value) => {
+                      return moment(value, 'YYYY-MM-DD').format('MM/DD')
+                    }
+                  }}
+                />
             )}
           </View>
 
@@ -403,7 +350,6 @@ class SalesCharts extends React.Component {
                 styles.welcomeText,
                 styles.orange_color,
                 styles.textBold,
-                styles.paddingTopBtn8,
                 { fontSize: 14 }
               ]}
             >
@@ -411,11 +357,21 @@ class SalesCharts extends React.Component {
             </Text>
             {
             	this.props.haveCCData && (
-            		<PureChart
-            			data={custAvgSpendingData}
-            			type='bar'
-            			width={'100%'}
-                	/>
+                <Chart
+                  data={custAvgSpendingData}
+                  width={Dimensions.get('window').width * 3}
+                  props={{
+                    yAxisLabel: '$',
+                    yAxisSuffix: 'k',
+                    verticalLabelRotation: 45,
+                    formatYLabel: (value) => {
+                      return value / 1000
+                    },
+                    formatXLabel: (value) => {
+                      return moment(value, 'YYYY-MM-DD').format('MM/DD')
+                    }
+                  }}
+                />
               )}
           </View>
 
@@ -425,16 +381,42 @@ class SalesCharts extends React.Component {
                 styles.welcomeText,
                 styles.orange_color,
                 styles.textBold,
-                styles.paddingTopBtn8,
                 { fontSize: 14 }
               ]}
             >
               {t('salesDistributionTitle')}
             </Text>
             {haveSDData && (
-              <PureChart data={salesDistributionData} type="bar" width={'100%'} />
+              <Chart
+                data={salesDistributionData}
+                width={Dimensions.get('window').width * 2}
+                props={{
+                  yAxisLabel: '$',
+                  yAxisSuffix: 'k',
+                  verticalLabelRotation: 45,
+                  formatYLabel: (value) => {
+                    return value / 1000
+                  },
+                  formatXLabel: (value) => {
+                    return moment(value, 'YYYY-MM-DD').format('MMM')
+                  }
+                }}
+              />
             )}
           </View>
+        </View>
+
+        <View style={styles.paddingTopBtn20}>
+          <Text
+            style={[
+              styles.welcomeText,
+              styles.orange_color,
+              styles.textBold,
+              { fontSize: 14 }
+            ]}
+          >
+            {t('salesRankingTitle')}
+          </Text>
         </View>
 
         <View style={styles.sectionBar}>

@@ -272,7 +272,7 @@ class OrdersSummaryRow extends React.Component {
                       styles.orange_color
                     ]}
                   >
-                    {order.orderType === 'IN_STORE' ? order.tableDisplayName : 'Take Out'}
+                    {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
                   </Text>
                 </View>
               </View>
@@ -313,7 +313,7 @@ class OrdersSummaryRow extends React.Component {
 
             <View style={{flexDirection: 'row', paddingTop: 8}}>
               <Text style={styles.textBold}>Order ID: </Text>
-              <Text>{order.orderId}</Text>
+              <Text>{order.serialId}</Text>
             </View>
           </View>
 

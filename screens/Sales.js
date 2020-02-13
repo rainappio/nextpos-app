@@ -51,46 +51,29 @@ class Sales extends React.Component {
     return (
       <ScrollView>
         <View
-          style={{
-            marginTop: 62,
-            marginLeft: 35,
-            marginRight: 35
-          }}
+          style={styles.container}
         >
           <BackBtn />
           <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold
-            ]}
+            style={styles.screenTitle}
           >
             {t('salesReportTitle')}
           </Text>
         </View>
 
-        <View
-          style={[
-            styles.orange_bg,
-            styles.flex_dir_row,
-            styles.shoppingBar,
-            styles.paddLeft20,
-            styles.paddRight20
-            // styles.top40
-          ]}
-        >
-          <View style={[styles.jc_alignIem_center]}>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('SalesCharts')}
-            >
-              <Text style={[styles.paddingTopBtn8, styles.whiteColor]}>
-                {t('salesDashboard')}
-              </Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.sectionBar}>
+
+          <TouchableOpacity
+            style={[styles.jc_alignIem_center, {flex: 1}]}
+            onPress={() => this.props.navigation.navigate('SalesCharts')}
+          >
+            <Text style={[styles.paddingTopBtn8, styles.whiteColor]}>
+              {t('salesDashboard')}
+            </Text>
+          </TouchableOpacity>
+
         </View>
-        <View style={[styles.container]}></View>
+
       </ScrollView>
     )
   }

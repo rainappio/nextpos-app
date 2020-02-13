@@ -43,6 +43,10 @@ const zh = {
     yes: '是',
     no: '不是'
   },
+  order: {
+    inStore: '內用',
+    takeOut: '外帶',
+  },
   orderState: {
     OPEN: '已開單',
     IN_PROCESS: '準備中',
