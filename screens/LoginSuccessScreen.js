@@ -6,7 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   AsyncStorage,
-  ActivityIndicator
+  ActivityIndicator, Modal, TouchableWithoutFeedback
 } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -28,6 +28,7 @@ import { Avatar } from 'react-native-elements'
 import Markdown from 'react-native-markdown-renderer'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import {handleDelete, handleOrderSubmit} from "../helpers/orderActions";
+import Constants from "expo-constants/src/Constants";
 
 class LoginSuccessScreen extends React.Component {
   static navigationOptions = {
@@ -38,13 +39,13 @@ class LoginSuccessScreen extends React.Component {
   constructor(props, context) {
     super(props, context)
 
+    this.hiddenMenu = React.createRef()
+
     this.state = {
-      showHiddenMenu: false,
       token: null,
       username: ' ',
       loggedIn: null,
       tokenExpiry: null,
-      mainViewOpacity: 1
     }
   }
 
@@ -62,6 +63,9 @@ class LoginSuccessScreen extends React.Component {
    * https://reactnavigation.org/docs/en/navigation-lifecycle.html
    */
   componentDidMount() {
+    console.log(Constants.nativeAppVersion)
+    console.log(Constants.nativeBuildVersion)
+
     this.context.localize({
       en: {
         welcome: 'Welcome,',
@@ -86,17 +90,7 @@ class LoginSuccessScreen extends React.Component {
       token: token,
       username: token.username,
       loggedIn: token.loggedIn,
-      tokenExpiry: token.tokenExp,
-      showHiddenMenu: false,
-      mainViewOpacity: 1
-    })
-  }
-
-  _toggleShow = () => {
-    const opacity = !this.state.showHiddenMenu ? 0.3 : 1
-    this.setState({
-      showHiddenMenu: !this.state.showHiddenMenu,
-      mainViewOpacity: opacity
+      tokenExpiry: token.tokenExp
     })
   }
 
@@ -126,22 +120,16 @@ class LoginSuccessScreen extends React.Component {
       <ScrollView>
         <NavigationEvents
           onWillFocus={() => {
-            console.log('reloading user info')
             this.loadUserInfo().then()
           }}
         />
+        <HiddenMenu
+          ref={this.hiddenMenu}
+          navigation={navigation}
+          handleClientUserLogout={this.handleClientUserLogout}
+        />
 
-        {this.state.showHiddenMenu && (
-          <HiddenMenu
-            navigation={navigation}
-            handleClientUserLogout={this.handleClientUserLogout}
-          />
-        )}
-
-        <View
-          style={[styles.container, styles.nomgrBottom]}
-          opacity={this.state.mainViewOpacity}
-        >
+        <View style={[styles.container, styles.nomgrBottom]}>
           <View style={[{ marginLeft: 4, marginRight: 4 },styles.flex_dir_row]}>
             <View
               style={[
@@ -171,7 +159,7 @@ class LoginSuccessScreen extends React.Component {
                 size="small"
                 overlayContainerStyle={[styles.orange_bg]}
                 titleStyle={styles.whiteColor}
-                onPress={this._toggleShow}
+                onPress={() => this.hiddenMenu.current.toggleMenu()}
               />
             </View>
           </View>
@@ -353,62 +341,82 @@ export default connect(
 export class HiddenMenu extends React.Component {
   static contextType = LocaleContext
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isVisible: false
+    }
+  }
+
+  toggleMenu = () => {
+    this.setState({
+      isVisible: !this.state.isVisible,
+    })
+  }
+
   render() {
     let { t } = this.context
 
     return (
-      <View
-        style={[
-          styles.jc_alignIem_center,
-          styles.flex_dir_row,
-          styles.mgrtotop8,
-          {
-            position: 'absolute',
-            top: 100,
-            width: '100%',
-            backgroundColor: '#858585',
-            opacity: 1,
-            zIndex: 10
-          }
-        ]}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={this.state.isVisible}
       >
-        <View
-          style={[
-            styles.half_width,
-            styles.jc_alignIem_center,
-            styles.paddingTopBtn20,
-            { marginLeft: 7.5, marginRight: 7.5 }
-          ]}
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.modalContainer}
+          onPressOut={() => {
+            this.toggleMenu()
+          }}
         >
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('Account')
-            }}
+          <View
+            style={[
+              styles.jc_alignIem_center,
+              styles.flex_dir_row,
+              {
+                position: 'absolute',
+                top: 100,
+                width: '100%',
+                backgroundColor: '#858585',
+                opacity: 1,
+                zIndex: 10
+              }
+            ]}
           >
-            <View>
+            <TouchableOpacity
+              style={[
+                styles.jc_alignIem_center,
+                styles.paddingTopBtn20,
+                {flex: 1}
+              ]}
+              onPress={() => {
+                this.toggleMenu()
+                this.props.navigation.navigate('Account')
+              }}
+            >
               <Text style={[styles.whiteColor]}>{t('settings.account')}</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
 
-        <View
-          style={[
-            styles.half_width,
-            styles.jc_alignIem_center,
-            styles.paddingTopBtn20,
-            { marginLeft: 7.5, marginRight: 7.5 }
-          ]}
-        >
-          <Text
-            onPress={() =>
-              this.props.handleClientUserLogout(this.props.navigation)
-            }
-            style={[styles.whiteColor]}
-          >
-            {t('logout')}
-          </Text>
-        </View>
-      </View>
+            <TouchableOpacity
+              style={[
+                styles.jc_alignIem_center,
+                styles.paddingTopBtn20,
+                {flex: 1}
+              ]}
+              onPress={() => {
+                this.toggleMenu()
+                this.props.handleClientUserLogout(this.props.navigation)
+              }}
+            >
+              <Text style={[styles.whiteColor]}>
+                {t('logout')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     )
   }
 }

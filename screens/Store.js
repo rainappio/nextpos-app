@@ -5,7 +5,6 @@ import { getCurrentClient } from '../actions/client'
 import StoreFormScreen from './StoreFormScreen'
 import { ActivityIndicator, View } from 'react-native'
 import styles from '../styles'
-import FetchErrorPopUp from '../components/FetchErrorPopUp'
 
 class Store extends React.Component {
   static navigationOptions = {

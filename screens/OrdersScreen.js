@@ -206,7 +206,7 @@ class OrdersScreen extends React.Component {
           ref={ref => {
             this.ListView_Ref = ref
           }}
-          onScroll={this.handleScroll}          
+          onScroll={this.handleScroll}
         />
 
         {this.state.scrollPosition > 0 ? (

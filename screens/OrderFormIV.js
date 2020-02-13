@@ -148,41 +148,23 @@ class OrderFormIV extends React.Component {
           </View>
 
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-            <View
-              style={{
-                width: '46%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                backgroundColor: '#F39F86',
-                marginRight: '2%'
-              }}
-            >
+            <View style={{flex: 1, marginHorizontal: 5}}>
               <TouchableOpacity
-                //onPress={this.props.navigation.state.params.onSubmit}
                 onPress={this.props.handleSubmit}
               >
-                <Text style={[styles.signInText, styles.whiteColor]}>
+                <Text style={[[styles.bottomActionButton, styles.actionButton]]}>
                   {t('action.save')}
                 </Text>
               </TouchableOpacity>
             </View>
 
-            <View
-              style={{
-                width: '46%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                marginLeft: '2%'
-              }}
-            >
+            <View style={{flex: 1, marginHorizontal: 5}}>
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('OrderFormII')
                 }}
               >
-                <Text style={styles.signInText}>{t('action.cancel')}</Text>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
               </TouchableOpacity>
             </View>
           </View>

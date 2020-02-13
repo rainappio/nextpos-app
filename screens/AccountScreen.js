@@ -17,6 +17,7 @@ import { connect } from 'react-redux'
 import EditPasswordPopUp from '../components/EditPasswordPopUp'
 import { reduxForm } from 'redux-form'
 import { getToken } from '../constants/Backend'
+import Constants from "expo-constants/src/Constants";
 
 class AccountScreen extends React.Component {
   static navigationOptions = {
@@ -110,10 +111,21 @@ class AccountScreen extends React.Component {
               </Text>
             </View>
           </View>
+          <View style={styles.fieldContainer}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.fieldTitle}>App Version</Text>
+            </View>
+            <View style={{ flex: 3 }}>
+              <Text style={{ alignSelf: 'flex-end' }}>
+                {Constants.nativeAppVersion} | {Constants.nativeBuildVersion}
+              </Text>
+            </View>
+          </View>
           <View style={[styles.fieldContainer, { alignSelf: 'center' }]}>
             <EditPasswordPopUp defaultUser={currentUser.defaultUser} name={currentUser.username} ownAccount={true} />
           </View>
         </View>
+
         {currentUser.defaultUser && (
           <View style={{ flex: 2, justifyContent: 'flex-end' }}>
             <View style={[styles.fieldContainer]}>

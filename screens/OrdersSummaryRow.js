@@ -21,7 +21,7 @@ import {
   successMessage,
   warningMessage, dispatchFetchRequest
 } from '../constants/Backend'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import {CheckBox, Tooltip} from 'react-native-elements'
 
@@ -82,7 +82,7 @@ class OrdersSummaryRow extends React.Component {
             note: '開啟了訂單'
           },
           inProcess: {
-            display: '已送單',
+            display: '準備中',
             note: '訂單已送出準備中'
           },
           delivered: {
@@ -142,7 +142,7 @@ class OrdersSummaryRow extends React.Component {
     )
 
     return (
-      <Tooltip popover={tooltip} height={120} width={200}>
+      <Tooltip popover={tooltip} height={120} width={200} backgroundColor={mainThemeColor}>
         <View>
           {state === 'OPEN' && <Text>{t('stateTip.open.display')}</Text>}
           {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(state) && (
@@ -320,42 +320,42 @@ class OrdersSummaryRow extends React.Component {
           <View style={styles.sectionBar}>
             <View style={[{flex: 1}, styles.jc_alignIem_center]}>
               <TouchableOpacity>
-                <Text style={[styles.paddingTopBtn8, styles.whiteColor]}>
+                <Text style={styles.sectionBarTextSmall}>
                   &nbsp;
                 </Text>
               </TouchableOpacity>
             </View>
-            <View style={[{flex: 4}, styles.jc_alignIem_center]}>
+            <View style={[styles.tableCellView, {flex: 4}]}>
               <TouchableOpacity>
-                <Text style={[styles.paddingTopBtn8, styles.whiteColor]}>
+                <Text style={styles.sectionBarTextSmall}>
                   {t('product')}
                 </Text>
               </TouchableOpacity>
             </View>
 
-            <View style={[{flex: 2}, styles.jc_alignIem_center]}>
+            <View style={[styles.tableCellView, {flex: 2}]}>
               <TouchableOpacity>
-                <Text style={[styles.whiteColor]}>
-                  &nbsp;&nbsp;{t('quantity')}
+                <Text style={styles.sectionBarTextSmall}>
+                  {t('quantity')}
                 </Text>
               </TouchableOpacity>
             </View>
 
-            <View style={[{flex: 3}, styles.jc_alignIem_center]}>
+            <View style={[styles.tableCellView, {flex: 3}]}>
               <TouchableOpacity>
-                <Text style={styles.whiteColor}>{t('unitPrice')}</Text>
+                <Text style={styles.sectionBarTextSmall}>{t('unitPrice')}</Text>
               </TouchableOpacity>
             </View>
 
-            <View style={[{flex: 3}, styles.jc_alignIem_center]}>
+            <View style={[styles.tableCellView, {flex: 3}]}>
               <TouchableOpacity>
-                <Text style={styles.whiteColor}>{t('subTotal')}</Text>
+                <Text style={styles.sectionBarTextSmall}>{t('subTotal')}</Text>
               </TouchableOpacity>
             </View>
 
-            <View style={[{flex: 2}, styles.jc_alignIem_center]}>
+            <View style={[styles.tableCellView, {flex: 2}]}>
               <TouchableOpacity>
-                <Text style={styles.whiteColor}>{t('state')}</Text>
+                <Text style={styles.sectionBarTextSmall}>{t('state')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -381,55 +381,39 @@ class OrdersSummaryRow extends React.Component {
               renderItem={(data, rowMap) => (
                 <View style={styles.rowFront}>
                   <View key={rowMap} style={{marginBottom: 20}}>
-                    <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
+                    <View style={styles.tableRowContainer}>
                       <View style={[{flex: 1}]}>
-                        <CheckBox
-                          center={true}
-                          checkedIcon='dot-circle-o'
-                          uncheckedIcon='circle-o'
-                          checked={this.state.orderLineItems[data.item.lineItemId] !== undefined && this.state.orderLineItems[data.item.lineItemId].checked}
-                          onIconPress={() => this.toggleOrderLineItem(data.item.lineItemId)}
-                        />
+                        {data.item.state === 'IN_PROCESS' && (
+                          <CheckBox
+                            checkedIcon='dot-circle-o'
+                            uncheckedIcon='circle-o'
+                            center={true}
+                            size={22}
+                            containerStyle={{borderWidth: 0, position: 'relative', right: 7}}
+                            checked={this.state.orderLineItems[data.item.lineItemId] !== undefined && this.state.orderLineItems[data.item.lineItemId].checked}
+                            onIconPress={() => this.toggleOrderLineItem(data.item.lineItemId)}
+                          />
+                        )}
                       </View>
 
-                      <View style={[styles.jc_alignIem_center, {flex: 4}]}>
+                      <View style={[styles.tableCellView, {flex: 4}]}>
                         <Text style={{textAlign: 'left'}}>
                           {data.item.productName}
                         </Text>
                       </View>
 
-                      <View
-                        style={[
-                          {flex: 2},
-                          styles.jc_alignIem_center
-                        ]}
-                      >
-                        <Text>&nbsp;&nbsp;{data.item.quantity}</Text>
+                      <View style={[styles.tableCellView, {flex: 2}]}>
+                        <Text>{data.item.quantity}</Text>
                       </View>
 
-                      <View
-                        style={[
-                          {flex: 3},
-                          styles.jc_alignIem_center
-                        ]}
-                      >
+                      <View style={[styles.tableCellView, {flex: 3}]}>
                         <Text>${data.item.price}</Text>
                       </View>
 
-                      <View
-                        style={[
-                          {flex: 3},
-                          styles.jc_alignIem_center
-                        ]}
-                      >
+                      <View style={[styles.tableCellView, {flex: 3}]}>
                         <Text>${data.item.subTotal.amountWithTax}</Text>
                       </View>
-                      <View
-                        style={[
-                          {flex: 2, paddingRight: 10},
-                          styles.jc_alignIem_center
-                        ]}
-                      >
+                      <View style={[styles.tableCellView, {flex: 2}]}>
                         {this.renderStateToolTip(data.item.state, t)}
                       </View>
                     </View>

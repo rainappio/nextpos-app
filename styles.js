@@ -1,4 +1,6 @@
 import { StyleSheet } from 'react-native'
+export const mainThemeColor = '#f18d1a'
+
 export default StyleSheet.create({
   mainContainer: {
     flex: 1
@@ -457,7 +459,7 @@ export default StyleSheet.create({
     lineHeight: 32,
     marginBottom: 16,
     marginTop: -8,
-    color: '#f18d1a',
+    color: mainThemeColor,
     fontWeight: 'bold'
   },
   squareButton: {
@@ -484,12 +486,17 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f18d1a',
-    paddingVertical: 8
+    paddingVertical: 8,
+    paddingHorizontal: 5
   },
   sectionBarText: {
     color: '#fff',
     textAlign: 'center',
     fontSize: 18
+  },
+  sectionBarTextSmall: {
+    color: '#fff',
+    textAlign: 'left',
   },
   sectionContent: {
     marginBottom: 20
@@ -520,6 +527,17 @@ export default StyleSheet.create({
   },
   fieldTitle: {
     fontWeight: 'bold'
+  },
+  tableRowContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingVertical: 8,
+    paddingHorizontal: 5
+  },
+  tableCellView: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
   },
   messageBlock: {
     padding: 10,

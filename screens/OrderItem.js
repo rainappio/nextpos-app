@@ -4,13 +4,16 @@ import {getTimeDifference} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import Icon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import images from '../assets/images'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import {Tooltip} from "react-native-elements";
+import {LocaleContext} from "../locales/LocaleContext";
 
 class OrderItem extends React.PureComponent {
+  static contextType = LocaleContext
+
   render() {
     const {
       order,
@@ -30,14 +33,9 @@ class OrderItem extends React.PureComponent {
     }
 
     return (
-      <View style={{flexDirection: 'row', width: '80%', justifyContent: 'space-between'}}>
+      <View style={styles.tableRowContainer}>
         <TouchableOpacity
-          style={[
-            styles.flex_dir_row,
-            styles.paddingTopBtn8,
-            //styles.borderBottomLine,
-            {marginHorizontal: 10}
-          ]}
+          style={[{flexDirection: 'row', flex: 9}]}
           key={order.orderId}
           onPress={() =>
             navigation.navigate('OrdersSummary', {
@@ -48,37 +46,35 @@ class OrderItem extends React.PureComponent {
             })
           }
         >
-          <View style={{width: '40%'}}>
-            <View>
-              <Text style={{paddingTop: 3}}>{order.orderType === 'IN_STORE' ? order.tableName : 'Take Out'}</Text>
-            </View>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text>{order.orderType === 'IN_STORE' ? order.tableName : 'Take Out'}</Text>
           </View>
 
-          <View style={{width: '15%'}}>
-            <View style={[styles.flex_dir_row, styles.jc_alignIem_center]}>
-              <FontAwesomeIcon name={'user'} color="#ccc" size={20}/>
-              <Text style={{color: '#000', fontSize: 12, marginLeft: 5}}>
-                {order.customerCount}
-              </Text>
-            </View>
+          <View style={[styles.tableCellView, {flex: 1}]}>
+            <FontAwesomeIcon name={'user'} color="#ccc" size={20}/>
+            <Text style={{marginLeft: 5}}>
+              {order.customerCount}
+            </Text>
           </View>
 
-          <View style={{width: '15%'}}>
-            <Text style={{color: '#000', fontSize: 12, paddingTop: 3}}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text>
               ${order.total.amount}
             </Text>
           </View>
 
-          <View style={{width: '30%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+          <View style={[styles.tableCellView, {flex: 3}]}>
             <FontAwesomeIcon name={'clock-o'} color={timeDisplayColor} size={20}/>
-            <Text style={{fontSize: 11, marginLeft: 2}}>
+            <Text style={{marginLeft: 2}}>
               {timeAgo.format(Date.now() - timeDifference, 'time')}
             </Text>
           </View>
         </TouchableOpacity>
 
-        <View style={{width: '20%', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          <Tooltip popover={<Text>{order.state}</Text>}>
+        <View style={[styles.tableCellView, {flex: 1}]}>
+          <Tooltip popover={<Text>{this.context.t(`orderState.${order.state}`)}</Text>}
+                   backgroundColor={mainThemeColor}
+          >
             {order.state === 'OPEN' ? (
               <Image source={images.order} style={{width: 15, height: 20}}/>
             ) : order.state === 'IN_PROCESS' ? (
@@ -88,13 +84,13 @@ class OrderItem extends React.PureComponent {
                 name={'md-checkmark-circle-outline'}
                 color="#4cbb17"
                 size={25}
-                style={{marginRight: 2, fontWeight: 'bold'}}
+                style={{fontWeight: 'bold'}}
               />
             ) : order.state === 'DELIVERED' ? (
               <MCIcon
                 name={'truck-delivery'}
                 size={25}
-                style={{marginRight: 2, fontWeight: 'bold'}}
+                style={{fontWeight: 'bold'}}
                 color="#f18d1a"
               />
             ) : (
