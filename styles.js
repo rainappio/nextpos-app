@@ -1,4 +1,5 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform, Dimensions } from 'react-native'
+const window = Dimensions.get('window')
 export const mainThemeColor = '#f18d1a'
 
 export default StyleSheet.create({
@@ -603,8 +604,10 @@ export default StyleSheet.create({
     bottom: 0
   },
   markDownStyle: {
-    backgroundColor: '#f1f1f1',
-    borderWidth: 1
+    backgroundColor: '#f4f4f4',
+    padding: '4%',
+    width: '92%',
+    margin: 4
   },
   textAreaContainer: {
     borderColor: '#ccc',
@@ -614,5 +617,44 @@ export default StyleSheet.create({
   textArea: {
     height: 150,
     justifyContent: 'flex-start'
+  },
+  stcontainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 36,
+    paddingLeft: 15,
+    paddingRight: 15,   
+    marginTop: 71
+  },
+  row: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    flex: 1,
+    padding: 16,
+    marginTop: 7,
+    marginLeft: 13,
+    marginBottom: 12,
+    borderRadius: 4,    
+
+    ...Platform.select({
+      ios: {
+        width: window.width - 30 * 2,
+        shadowColor: 'rgba(0,0,0,0.2)',
+        shadowOpacity: 1,
+        shadowOffset: {height: 2, width: 2},
+        shadowRadius: 2
+      },
+
+      android: {
+        width: window.width - 30 * 2,
+        elevation: 0,
+        marginVertical: 30,
+      },
+    })
+  },
+  list: {
+    flexDirection: 'row'
   }
 })

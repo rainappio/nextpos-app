@@ -15,7 +15,7 @@ import {
 } from 'react-native'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import Icon from 'react-native-vector-icons/Ionicons'
-import SortableList from 'react-native-sortable-list'
+import SortableList from '../components/SortableList'
 import { getAnnouncements, getAnnouncement } from '../actions'
 import {
   api,
@@ -37,6 +37,10 @@ class Announcements extends React.Component {
   }
   static contextType = LocaleContext
 
+  state = {
+		scrollEnabled: true,
+		refreshing: false
+	}
 
   componentDidMount() {
     this.props.getAnnouncements()
@@ -48,6 +52,12 @@ class Announcements extends React.Component {
       zh: {
 
       }
+    })
+  }
+
+   _adjuxtAutoScroll(bool) {
+    this.setState({
+    	scrollEnabled: bool
     })
   }
 
@@ -95,8 +105,8 @@ class Announcements extends React.Component {
      const { t } = this.context
 
     return (
-      <View style={styles.container_nocenterCnt}>
-      	<View>
+      <View style={styles.stcontainer}>
+      	<View style={styles.fullWidth}>
         	<BackBtn />
         	<Text style={styles.screenTitle}>
             {t('settings.announcements')}
@@ -111,17 +121,19 @@ class Announcements extends React.Component {
 
         	{Object.keys(getannouncements).length !== 0 && (
           	<SortableList
+          		style={styles.list}
              	data={getannouncements.results}
             	vertical={true}
             	renderRow={this._renderRow}
-            	scrollEnabled={false}
-            	onReleaseRow={(key, currentOrder) =>
+            	scrollEnabled={this.state.scrollEnabled}
+            	onReleaseRow={(key, currentOrder, dataArr) =>
               	this.handleItemOrderUpdate(
                 	key,
                 	currentOrder,
                 	getannouncements.results
               	)
             	}
+            	onChangeOrder={() => this._adjuxtAutoScroll(true)}
           	/>
         	)}
     	</View>
@@ -202,7 +214,10 @@ class Row extends React.Component {
     const { data } = this.props
 
     return (
-      <Animated.View>
+      <Animated.View style={[
+        styles.row,
+        this._style,
+      ]}>
         <View key={data.id}>
           <View
             style={[styles.flex_dir_row, { paddingTop: 4, marginBottom: 17 }]}
@@ -227,7 +242,7 @@ class Row extends React.Component {
                     initialValues: data
                   })
                 }
-                style={{ textAlign: 'right', marginRight: 30 }}
+                style={{ textAlign: 'right' }}
               />
             </View>
           </View>
