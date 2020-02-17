@@ -77,29 +77,12 @@ const Home = createStackNavigator({
   ClockIn: ClockIn,
   PasswordReset: PasswordReset
 })
-Home.navigationOptions = {
+Home.navigationOptions = ({ screenProps: { t } }) => ({
+  title: t('menu.home'),
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={'md-home'} />
-  ),
-  tabBarOptions: {
-    activeTintColor: '#f18d1a'
-  },
-  tabBarOnPress: ({ navigation, defaultHandler }) => {
-    navigation.dispatch(
-      StackActions.reset({
-        index: 0,
-        key: navigation.state.routes[0].key,
-        actions: [
-          NavigationActions.navigate({
-            routeName: navigation.state.routes[0].routeName
-          })
-        ]
-      })
-    )
-    navigation.navigate('LoginSuccess')
-    defaultHandler()
-  }
-}
+  )
+})
 
 const Settings = createStackNavigator({
   SettingScr: SettingsScreen,
@@ -147,26 +130,7 @@ Settings.navigationOptions = ({ screenProps: { t } }) => ({
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'}
     />
-  ),
-  tabBarOptions: {
-    activeTintColor: '#f18d1a'
-  },
-  tabBarOnPress: ({ navigation, defaultHandler }) => {
-    navigation.dispatch(
-      StackActions.reset({
-        index: 0,
-        key: navigation.state.routes[0].key,
-        actions: [
-          NavigationActions.navigate({
-            routeName: navigation.state.routes[0].routeName
-          })
-        ]
-      })
-    )
-    navigation.navigate('SettingScr')
-    //navigation.dispatch(StackActions.popToTop())
-    defaultHandler()
-  }
+  )
 })
 
 const Tables = createStackNavigator({
@@ -183,25 +147,7 @@ Tables.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.tables'),
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name="md-people" />
-  ),
-  tabBarOptions: {
-    activeTintColor: '#f18d1a'
-  },
-  tabBarOnPress: ({ navigation, defaultHandler }) => {
-    navigation.dispatch(
-      StackActions.reset({
-        index: 0,
-        key: navigation.state.routes[0].key,
-        actions: [
-          NavigationActions.navigate({
-            routeName: navigation.state.routes[0].routeName
-          })
-        ]
-      })
-    )
-    //navigation.navigate('TablesSrc')
-    defaultHandler()
-  }
+  )
 })
 
 const Orders = createStackNavigator({
@@ -211,11 +157,8 @@ const Orders = createStackNavigator({
 Orders.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.orders'),
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name="md-document" size={32} />
-  ),
-  tabBarOptions: {
-    activeTintColor: '#f18d1a'
-  }
+    <TabBarIcon focused={focused} name="md-document" />
+  )
 })
 
 const Reservation = createStackNavigator({
@@ -224,11 +167,8 @@ const Reservation = createStackNavigator({
 Reservation.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.reservations'),
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name="ios-calendar" size={32} />
-  ),
-  tabBarOptions: {
-    activeTintColor: '#f18d1a'
-  }
+    <TabBarIcon focused={focused} name="ios-calendar" />
+  )
 })
 
 const Reports = createStackNavigator({
@@ -242,19 +182,16 @@ Reports.navigationOptions = ({ screenProps: { t } }) => ({
     <FontAwesomeIcon
       focused={focused}
       name="bar-chart"
-      size={22}
+      size={32}
       color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
     />
-  ),
-  tabBarOptions: {
-    activeTintColor: '#f18d1a'
-  }
+  )
 })
 
-var tabBar = createBottomTabNavigator({
+const tabBar = createBottomTabNavigator({
   Home: {
     screen: Home,
-    navigationOptions: ({ navigation, screenProps: { t } }) => {
+    /*navigationOptions: ({ navigation, screenProps: { t } }) => {
       if (navigation.state.routes.length > 0) {
         navigation.state.routes.map(route => {
           if (
@@ -268,9 +205,9 @@ var tabBar = createBottomTabNavigator({
             tabBarVisible = true
           }
         })
-        return { title: t('menu.home'), tabBarVisible }
+        return { title: '', tabBarVisible }
       }
-    }
+    }*/
   },
   Tables: {
     screen: Tables
@@ -286,6 +223,31 @@ var tabBar = createBottomTabNavigator({
   },
   Settings: {
     screen: Settings
+  }
+}, {
+  defaultNavigationOptions: {
+    tabBarOnPress: ({navigation, defaultHandler}) => {
+      navigation.dispatch(StackActions.popToTop())
+
+      /*navigation.dispatch(
+        StackActions.reset({
+          index: 0,
+          key: navigation.state.routes[0].key,
+          actions: [
+            NavigationActions.navigate({
+              routeName: navigation.state.routes[0].routeName
+            })
+          ]
+        })
+      )*/
+      defaultHandler()
+    }
+  },
+  tabBarOptions: {
+    showLabel: false,
+    tabStyle: {
+      backgroundColor: '#f5f5f5'
+    }
   }
 })
 

@@ -63,7 +63,7 @@ class PasswordResetForm extends React.Component {
                 style={styles.welcomeImage}
               />
             </View>
-						
+
 						<Text>{t('title')}</Text>
               <Field
               	name="newpassword"
@@ -72,7 +72,7 @@ class PasswordResetForm extends React.Component {
               	placeholder={t('newPwd')}
               	secureTextEntry={true}
               	//onSubmitEditing={val => this.clientLogin(val.nativeEvent.text)}
-            	/>                       
+            	/>
           </View>
 
           <View style={[styles.bottom]}>
@@ -93,7 +93,7 @@ class PasswordResetForm extends React.Component {
                 {t('cancel')}
               </Text>
             </TouchableOpacity>
-          </View>          
+          </View>
         </KeyboardAvoidingView>
       </DismissKeyboard>
     )

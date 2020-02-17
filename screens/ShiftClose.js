@@ -23,6 +23,7 @@ import { LocaleContext } from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import {handleCloseShift, handleOpenShift} from "../helpers/shiftActions";
+import BackBtn from "../components/BackBtn";
 
 class ShiftClose extends React.Component {
   static navigationOptions = {
@@ -122,9 +123,7 @@ class ShiftClose extends React.Component {
         <DismissKeyboard>
           <View style={styles.container}>
             <View>
-              <BackBtnCustom
-                onPress={() => this.props.navigation.navigate('LoginSuccess')}
-              />
+              <BackBtn/>
               <Text style={styles.screenTitle}>
                 {t('shiftTitle')}
               </Text>

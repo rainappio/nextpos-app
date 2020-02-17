@@ -37,8 +37,8 @@ class LoginScreen extends React.Component {
 
   getEmail = (values) => {
   	console.log(AsyncStorage.getItem('token'))
-  	values.email !== null && this.props.navigation.navigate('PasswordReset') 
-  	this.toggleModal(!this.state.modalVisible) 
+  	values.email !== null && this.props.navigation.navigate('PasswordReset')
+  	this.toggleModal(!this.state.modalVisible)
   }
 
   componentDidMount() {
@@ -118,7 +118,7 @@ class LoginScreen extends React.Component {
             </TouchableOpacity>
 
 						<TouchableOpacity onPress={() => {
-							this.toggleModal(true)							
+							this.toggleModal(true)
 						}}>
             	<Text style={[styles.bottomActionButton, styles.cancelButton]}>
             	{t('forgotPwd')}
@@ -126,7 +126,7 @@ class LoginScreen extends React.Component {
           	</TouchableOpacity>
           </View>
 
-          <ResetModal 
+          <ResetModal
           	onSubmit={this.getEmail}
           	modalVisible={this.state.modalVisible}
           	toggleModal={this.toggleModal}
@@ -134,7 +134,7 @@ class LoginScreen extends React.Component {
           	email={t('email')}
           	Next={t('Next')}
           	props={this.props.navigation}
-          	/>          
+          	/>
 
         </KeyboardAvoidingView>
       </DismissKeyboard>
@@ -157,15 +157,15 @@ class ResetModal extends React.Component {
     const { handleSubmit, toggleModal, modalVisible, title, email, Next, props } = this.props
     const { t } = this.context
 
-    return (      
+    return (
       <Modal
         animationType="fade"
         transparent={false}
-        visible={modalVisible}          
+        visible={modalVisible}
         onRequestClose={() => toggleModal(false)}
         >
         <TouchableOpacity
-          activeOpacity={1}            	
+          activeOpacity={1}
           style={[styles.container, styles.no_mgrTop]}
           onPressOut={() => {
             toggleModal(false)
@@ -178,20 +178,20 @@ class ResetModal extends React.Component {
             validate={[isRequired, isEmail]}
             placeholder={email}
             //onSubmitEditing={val => this.clientLogin(val.nativeEvent.text)}
-          />            
+          />
 
           <TouchableOpacity
           	style={{position:'absolute', bottom: 10, width: '100%'}}
             onPress={() => {
-              handleSubmit()          
-              // props.navigate('PasswordReset')  
-              // toggleModal(!modalVisible)                
+              handleSubmit()
+              // props.navigate('PasswordReset')
+              // toggleModal(!modalVisible)
             }}>
             <Text style={[styles.bottomActionButton, styles.actionButton]}>{Next}</Text>
-          </TouchableOpacity>  
+          </TouchableOpacity>
 
-        </TouchableOpacity>        
-      </Modal>        
+        </TouchableOpacity>
+      </Modal>
     )
   }
 }

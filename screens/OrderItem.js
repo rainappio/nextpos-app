@@ -10,6 +10,7 @@ import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import {Tooltip} from "react-native-elements";
 import {LocaleContext} from "../locales/LocaleContext";
+import {renderOrderState} from "../helpers/orderActions";
 
 class OrderItem extends React.PureComponent {
   static contextType = LocaleContext
@@ -21,6 +22,8 @@ class OrderItem extends React.PureComponent {
       handleOrderSubmit,
       handleDelete
     } = this.props
+    const { t } = this.context
+
     const timeDifference = getTimeDifference(order.createdTime)
     const thirtyMinutes = 30 * 60 * 1000
 
@@ -35,7 +38,7 @@ class OrderItem extends React.PureComponent {
     return (
       <View style={styles.tableRowContainer}>
         <TouchableOpacity
-          style={[{flexDirection: 'row', flex: 9}]}
+          style={[{flexDirection: 'row', flex: 9, marginLeft: 3}]}
           key={order.orderId}
           onPress={() =>
             navigation.navigate('OrdersSummary', {
@@ -47,7 +50,7 @@ class OrderItem extends React.PureComponent {
           }
         >
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <Text>{order.orderType === 'IN_STORE' ? order.tableName : 'Take Out'}</Text>
+            <Text>{order.orderType === 'IN_STORE' ? order.tableName : t('order.takeOut')}</Text>
           </View>
 
           <View style={[styles.tableCellView, {flex: 1}]}>
@@ -71,36 +74,11 @@ class OrderItem extends React.PureComponent {
           </View>
         </TouchableOpacity>
 
-        <View style={[styles.tableCellView, {flex: 1}]}>
+        <View style={[styles.tableCellView, {justifyContent: 'center', flex: 1}]}>
           <Tooltip popover={<Text>{this.context.t(`orderState.${order.state}`)}</Text>}
                    backgroundColor={mainThemeColor}
           >
-            {order.state === 'OPEN' ? (
-              <Image source={images.order} style={{width: 15, height: 20}}/>
-            ) : order.state === 'IN_PROCESS' ? (
-              <Image source={images.process} style={{width: 30, height: 20}}/>
-            ) : order.state === 'SETTLED' ? (
-              <Icon
-                name={'md-checkmark-circle-outline'}
-                color="#4cbb17"
-                size={25}
-                style={{fontWeight: 'bold'}}
-              />
-            ) : order.state === 'DELIVERED' ? (
-              <MCIcon
-                name={'truck-delivery'}
-                size={25}
-                style={{fontWeight: 'bold'}}
-                color="#f18d1a"
-              />
-            ) : (
-              order.state === 'COMPLETED' && (
-                <Image
-                  source={images.completed}
-                  style={{width: 28, height: 20}}
-                />
-              )
-            )}
+            {renderOrderState(order.state)}
           </Tooltip>
         </View>
       </View>

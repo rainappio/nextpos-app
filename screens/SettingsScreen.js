@@ -28,272 +28,175 @@ class SettingsScreen extends React.Component {
 
     return (
       <View style={[styles.container, styles.nomgrBottom]}>
-        <Text
-          style={[
-            styles.welcomeText,
-            styles.orange_color,
-            styles.textMedium,
-            styles.textBold,
-            styles.nomgrBottom
-          ]}
-        >
+        <Text style={styles.screenTitle}>
           {t('menu.settings')}
         </Text>
-        <Pages indicatorColor="#FF9100" style={{ marginTop: 20 }}>
+        <Pages indicatorColor="#FF9100">
           <View>
-            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+            <View style={[styles.flex_dir_row]}>
+              <TouchableOpacity
+                style={styles.mainSquareButton}
+                onPress={() => this.props.navigation.navigate('Account')}
               >
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Account')}
-                >
-                  <View>
-                    <MaterialIcon
-                      name="account-box"
-                      size={40}
-                      color="#f18d1a"
-                      style={[styles.centerText, styles.margin_15]}
-                    />
-                    <Text style={styles.centerText}>
-                      {t('settings.account')}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+                <View>
+                  <MaterialIcon
+                    name="account-box"
+                    size={40}
+                    color="#f18d1a"
+                    style={[styles.centerText, styles.margin_15]}
+                  />
+                  <Text style={styles.centerText}>
+                    {t('settings.account')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
 
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+              <TouchableOpacity
+                style={styles.mainSquareButton}
+                onPress={() => this.props.navigation.navigate('Store')}
               >
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Store')}
-                >
-                  <View>
-                    <Icon
-                      name="md-home"
-                      size={40}
-                      color="#f18d1a"
-                      style={[styles.centerText, styles.margin_15]}
-                    />
-                    <Text style={styles.centerText}>
-                      {t('settings.stores')}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+                <View>
+                  <Icon
+                    name="md-home"
+                    size={40}
+                    color="#f18d1a"
+                    style={[styles.centerText, styles.margin_15]}
+                  />
+                  <Text style={styles.centerText}>
+                    {t('settings.stores')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
 
-            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+            <View style={[styles.flex_dir_row]}>
+              <TouchableOpacity
+                style={styles.mainSquareButton}
+                onPress={() =>
+                  this.props.navigation.navigate('ProductsOverview')
+                }
               >
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate('ProductsOverview')
-                  }
-                >
-                  <View>
-                    <Icon
-                      name="ios-beaker"
-                      size={40}
-                      color="#f18d1a"
-                      style={[styles.centerText, styles.margin_15]}
-                    />
-                    <Text style={styles.centerText}>
-                      {t('settings.products')}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+                <View>
+                  <Icon
+                    name="ios-beaker"
+                    size={40}
+                    color="#f18d1a"
+                    style={[styles.centerText, styles.margin_15]}
+                  />
+                  <Text style={styles.centerText}>
+                    {t('settings.products')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
 
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+              <TouchableOpacity
+                style={styles.mainSquareButton}
+                onPress={() =>
+                  this.props.navigation.navigate('StaffsOverview')
+                }
               >
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate('StaffsOverview')
-                  }
-                >
-                  <View>
-                    <Icon
-                      name="ios-people"
-                      size={40}
-                      color="#f18d1a"
-                      style={[styles.centerText, styles.margin_15]}
-                    />
-                    <Text style={styles.centerText}>{t('settings.staff')}</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+                <View>
+                  <Icon
+                    name="ios-people"
+                    size={40}
+                    color="#f18d1a"
+                    style={[styles.centerText, styles.margin_15]}
+                  />
+                  <Text style={styles.centerText}>{t('settings.staff')}</Text>
+                </View>
+              </TouchableOpacity>
             </View>
 
-            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+            <View style={[styles.flex_dir_row]}>
+              <TouchableOpacity
+                style={styles.mainSquareButton}
+                onPress={() => this.props.navigation.navigate('PrinternKDS')}
               >
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('PrinternKDS')}
-                >
-                  <View>
-                    <Icon
-                      name="md-print"
-                      size={40}
-                      color="#f18d1a"
-                      style={[styles.centerText, styles.margin_15]}
-                    />
-                    <Text style={styles.centerText}>
-                      {t('settings.workingArea')}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+                <View>
+                  <Icon
+                    name="md-print"
+                    size={40}
+                    color="#f18d1a"
+                    style={[styles.centerText, styles.margin_15]}
+                  />
+                  <Text style={styles.centerText}>
+                    {t('settings.workingArea')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
 
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
-              >
-                <TouchableOpacity onPress={() => changeLanguage()}>
-                  <View>
-                    <MaterialIcon
-                      name="language"
-                      size={40}
-                      color="#f18d1a"
-                      style={[styles.centerText, styles.margin_15]}
-                    />
-                    <Text style={styles.centerText}>
-                      {t('settings.language')}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                style={styles.mainSquareButton}
+                onPress={() => changeLanguage()}>
+                <View>
+                  <MaterialIcon
+                    name="language"
+                    size={40}
+                    color="#f18d1a"
+                    style={[styles.centerText, styles.margin_15]}
+                  />
+                  <Text style={styles.centerText}>
+                    {t('settings.language')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
 
           <View>
-            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+            <View style={[styles.flex_dir_row]}>
+              <TouchableOpacity
+                style={styles.mainSquareButton}
+                onPress={() => this.props.navigation.navigate('TableLayouts')}
               >
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('TableLayouts')}
-                >
-                  <View>
-                    <MaterialIcon
-                      name="event-seat"
-                      size={40}
-                      color="#f18d1a"
-                      style={[styles.centerText, styles.margin_15]}
-                    />
-                    <Text style={styles.centerText}>
-                      {t('settings.tableLayouts')}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+                <View>
+                  <MaterialIcon
+                    name="event-seat"
+                    size={40}
+                    color="#f18d1a"
+                    style={[styles.centerText, styles.margin_15]}
+                  />
+                  <Text style={styles.centerText}>
+                    {t('settings.tableLayouts')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
 
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+              <TouchableOpacity
+                style={styles.mainSquareButton}
+                onPress={() => this.props.navigation.navigate('ShiftClose')}
               >
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('ShiftClose')}
-                >
-                  <View>
-                    <Icon
-                      name="md-book"
-                      size={40}
-                      color="#f18d1a"
-                      style={[styles.centerText, styles.margin_15]}
-                    />
-                    <Text style={styles.centerText}>
-                      {t('settings.manageShifts')}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+                <View>
+                  <Icon
+                    name="md-book"
+                    size={40}
+                    color="#f18d1a"
+                    style={[styles.centerText, styles.margin_15]}
+                  />
+                  <Text style={styles.centerText}>
+                    {t('settings.manageShifts')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
 
-            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.half_width,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30
-                ]}
+            <View style={[styles.flex_dir_row, { width: '50%'}]}>
+              <TouchableOpacity
+                style={styles.mainSquareButton}
+                onPress={() =>
+                  this.props.navigation.navigate('Announcements')
+                }
               >
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate('Announcements')
-                  }
-                >
-                  <View>
-                    <FontAwesomeIcon
-                      name="commenting"
-                      size={40}
-                      color="#f18d1a"
-                      style={[styles.centerText, styles.margin_15]}
-                    />
-                    <Text style={styles.centerText}>{t('settings.announcements')}</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+                <View>
+                  <FontAwesomeIcon
+                    name="commenting"
+                    size={40}
+                    color="#f18d1a"
+                    style={[styles.centerText, styles.margin_15]}
+                  />
+                  <Text style={styles.centerText}>{t('settings.announcements')}</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
         </Pages>

@@ -72,44 +72,31 @@ class CheckoutComplete extends React.Component {
           </Text>
         </View>
 
-        <View
-          style={{
-            width: '100%',
-            borderRadius: 4,
-            backgroundColor: '#00ab66',
-            marginTop: 8
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate('TablesSrc')
-              this.props.getfetchOrderInflights()
-            }}
-          >
-            <Text style={[styles.signInText, styles.whiteColor]}>
-              {t('done')}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <View style={styles.bottom}>
+          <View>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('TablesSrc')
+                this.props.getfetchOrderInflights()
+              }}
+            >
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                {t('done')}
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-        <View
-          style={{
-            width: '100%',
-            borderRadius: 4,
-            borderWidth: 1,
-            borderColor: '#F39F86',
-            marginTop: 8
-          }}
-        >
-          <TouchableOpacity
-            onPress={() =>
-              this.props.navigation.state.params.onSubmit(
-                transactionResponse.orderId
-              )
-            }
-          >
-            <Text style={styles.signInText}>{t('completeOrder')}</Text>
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.state.params.onSubmit(
+                  transactionResponse.orderId
+                )
+              }
+            >
+              <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('completeOrder')}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     )

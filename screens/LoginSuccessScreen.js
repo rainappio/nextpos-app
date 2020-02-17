@@ -130,28 +130,21 @@ class LoginSuccessScreen extends React.Component {
         />
 
         <View style={[styles.container, styles.nomgrBottom]}>
-          <View style={[{ marginLeft: 4, marginRight: 4 },styles.flex_dir_row]}>
-            <View
-              style={[
-                styles.margin_15,
-                styles.half_width,
-              ]}
-            >
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/logo.png')
-                  : require('../assets/images/logo.png')
-              }
-              style={styles.welcomeImage}
-            />
+          <View style={[{flexDirection: 'row', flex: 1}]}>
+            <View style={{flex: 1}}>
+              <Image
+                source={
+                  __DEV__
+                    ? require('../assets/images/logo.png')
+                    : require('../assets/images/logo.png')
+                }
+                style={[styles.welcomeImage]}
+              />
             </View>
 
             <View
             	style={[
-                styles.margin_15,
-                styles.half_width,
-                {alignItems: 'flex-end'}
+                {flex: 1, marginTop: 5, alignItems: 'flex-end'}
               ]}>
               <Avatar
                 rounded
@@ -173,53 +166,31 @@ class LoginSuccessScreen extends React.Component {
             </Text>
           </View>
 
-          <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-            <TouchableOpacity
-              style={{width: '96%'}}
-              onPress={() => {
-                this.props.navigation.navigate('OrderStart', {
-                  handleOrderSubmit: handleOrderSubmit,
-                  handleDelete: handleDelete
-                })
-              }}
-            >
-              <View
-                style={[
-                  styles.margin_15,
-                  styles.grayBg,
-                  styles.jc_alignIem_center,
-                  styles.paddTop_30,
-                  styles.paddBottom_30,
-                  styles.borderRadius4,
-                  {width: '96%'}
-                ]}
-              >
-                <View>
-                  <MaterialIcon
-                    name="play-arrow"
-                    size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
-                  />
-                  <Text style={styles.centerText}>{t('quickOrder')}</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={[styles.mainSquareButton]}
+            onPress={() => {
+              this.props.navigation.navigate('OrderStart', {
+                handleOrderSubmit: handleOrderSubmit,
+                handleDelete: handleDelete
+              })
+            }}
+          >
+            <View>
+              <MaterialIcon
+                name="play-arrow"
+                size={40}
+                color="#f18d1a"
+                style={[styles.centerText, styles.margin_15]}
+              />
+              <Text style={styles.centerText}>{t('quickOrder')}</Text>
+            </View>
+          </TouchableOpacity>
 
-          <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-            <View
-              style={[
-                styles.margin_15,
-                styles.grayBg,
-                styles.half_width,
-                styles.jc_alignIem_center,
-                styles.paddTop_30,
-                styles.paddBottom_30,
-                styles.borderRadius4
-              ]}
-            >
+          <View style={[styles.flex_dir_row, {flex: 1}]}>
+            <View style={{flex: 1}}>
               <TouchableOpacity
+                style={[styles.mainSquareButton
+                ]}
                 onPress={() =>
                   this.props.navigation.navigate('ClockIn', {
                     authClientUserName: username
@@ -238,17 +209,10 @@ class LoginSuccessScreen extends React.Component {
               </TouchableOpacity>
             </View>
 
-            <View
-              style={[
-                styles.margin_15,
-                styles.grayBg,
-                styles.half_width,
-                styles.jc_alignIem_center,
-                styles.paddTop_30,
-                styles.paddBottom_30
-              ]}
-            >
+            <View style={{flex: 1}}>
               <TouchableOpacity
+                style={[styles.mainSquareButton
+                ]}
                 onPress={() => this.props.navigation.navigate('ClientUsers')}
               >
                 <View>
@@ -264,50 +228,42 @@ class LoginSuccessScreen extends React.Component {
             </View>
           </View>
 
-          <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-            <View
-              style={[
-                styles.margin_15,
-                {width: '96%'}
-              ]}
-            >
-             	{
-            		getannouncements.results !== undefined &&
-            		getannouncements.results.map(getannoc =>
-									<View
-            				style={[
-              				{ backgroundColor: '#f1f1f1', padding: 20 },
-              				styles.mgrbtn20
-            				]}
-            				key={getannoc.id}
-          					>
-          					<View style={styles.flex_dir_row}>
-          						<View style={{marginRight: 17}}>
-          							<IonIcon
-              						name={getannoc.titleIcon}
-              						size={31}
-              						color="#f18d1a"
-              						//onPress={() => fields.push()}
-            						/>
-          						</View>
-          						<View>
-												<Text style={[
-                						styles.orange_color,
-                						styles.textMedium,
-              						]}>
-              						{getannoc.title}
-              					</Text>
-          						</View>
-          					</View>
+          <View style={[{flex: 1, margin: 10}]}>
+            {
+              getannouncements.results !== undefined &&
+              getannouncements.results.map(getannoc =>
+                <View
+                  style={[
+                    {backgroundColor: '#f1f1f1', padding: 20},
+                    styles.mgrbtn20
+                  ]}
+                  key={getannoc.id}
+                >
+                  <View style={styles.flex_dir_row}>
+                    <View style={{marginRight: 17}}>
+                      <IonIcon
+                        name={getannoc.titleIcon}
+                        size={31}
+                        color="#f18d1a"
+                      />
+                    </View>
+                    <View>
+                      <Text style={[
+                        styles.orange_color,
+                        styles.textMedium,
+                      ]}>
+                        {getannoc.title}
+                      </Text>
+                    </View>
+                  </View>
 
-            				<Markdown style={styles.markDownStyle}>
-              				{getannoc.markdownContent}
-              				{'\n'}
-              			</Markdown>
-          				</View>
-            		)
-            	}
-            </View>
+                  <Markdown style={styles.markDownStyle}>
+                    {getannoc.markdownContent}
+                    {'\n'}
+                  </Markdown>
+                </View>
+              )
+            }
           </View>
 
         </View>

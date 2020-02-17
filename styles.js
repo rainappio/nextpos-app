@@ -40,7 +40,7 @@ export default StyleSheet.create({
     fontStyle: 'italic'
   },
   welcomeImage: {
-    width: 40,
+    width: 60,
     height: 40,
     resizeMode: 'contain'
   },
@@ -470,11 +470,12 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingTop: 30,
     paddingBottom: 30,
-    borderRadius: 4
+    borderRadius: 8
   },
   mainSquareButton: {
     margin: 10,
-    width: '45%',
+    flex: 1,
+    height: 140,
     backgroundColor: '#f5f5f5',
     justifyContent: 'center',
     alignItems: 'center',

@@ -1,6 +1,7 @@
 const images = {
   logo: require('./logo.png'),
   process: require('./process.png'),
+  settled: require('./settled.png'),
   completed: require('./completed.png'),
   order: require('./order.png'),
   checkicon: require('./ic_check_box.png'),

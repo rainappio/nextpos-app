@@ -43,6 +43,10 @@ const en = {
     yes: 'Yes',
     no: 'No'
   },
+  order: {
+    inStore: 'In Store',
+    takeOut: 'Take Out'
+  },
   orderState: {
     OPEN: 'Open',
     IN_PROCESS: 'In Process',

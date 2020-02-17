@@ -21,8 +21,6 @@ class OrderForm extends Component {
       en: {
         newOrderTitle: 'New Order',
         orderType: 'Order Type',
-        inStore: 'In Store',
-        takeOut: 'Take Out',
         table: 'Table',
         selectTable: 'Select a table',
         noAvailableTables: 'There is no available table.',
@@ -34,8 +32,6 @@ class OrderForm extends Component {
       zh: {
         newOrderTitle: '新訂單',
         orderType: '訂單種類',
-        inStore: '內用',
-        takeOut: '外帶',
         table: '桌位',
         selectTable: '選擇桌位',
         noAvailableTables: '目前沒有空桌.',
@@ -50,8 +46,8 @@ class OrderForm extends Component {
       selectedTableId: null,
       selectedOrderType: null,
       orderTypes: {
-        0: {label: context.t('inStore'), value: 'IN_STORE'},
-        1: {label: context.t('takeOut'), value: 'TAKE_OUT'}
+        0: {label: context.t('order.inStore'), value: 'IN_STORE'},
+        1: {label: context.t('order.takeOut'), value: 'TAKE_OUT'}
       },
       selectedAgeGroup: null,
       ageGroups: {

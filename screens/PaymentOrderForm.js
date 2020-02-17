@@ -40,10 +40,6 @@ class PaymentOrderForm extends React.Component {
         charge: '結帳'
       }
     })
-
-    this.state = {
-      t: context.t
-    }
   }
 
   render() {
@@ -67,19 +63,14 @@ class PaymentOrderForm extends React.Component {
     ]
 
     const {
-      reset,
       handleSubmit,
       order,
-      navigation,
       discountTotal,
-      clearOrder,
-      getOrder,
-      initialize,
       addNum,
-      dynamicTotal
+      resetTotal
     } = this.props
 
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <ScrollView>
@@ -114,7 +105,7 @@ class PaymentOrderForm extends React.Component {
               <Text
                 style={[styles.textBold, styles.textBig, styles.orange_color]}
               >
-                {order.orderType === 'IN_STORE' ? order.tableDisplayName : 'Take Out'}
+                {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
               </Text>
             </View>
           </View>
@@ -164,6 +155,7 @@ class PaymentOrderForm extends React.Component {
                 component={InputText}
                 placeholder={t('enterCash')}
                 keyboardType={'numeric'}
+                onFocus={() => resetTotal()}
               />
             </View>
           </View>
