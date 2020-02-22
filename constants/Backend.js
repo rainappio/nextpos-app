@@ -37,7 +37,20 @@ export const api = {
     getActive: `${apiRoot}/timecards/active`,
     clockin: `${apiRoot}/timecards/clockin`,
     clockout: `${apiRoot}/timecards/clockout`,
-    mostRecent: `${apiRoot}/timecards/mostRecent`
+    mostRecent: `${apiRoot}/timecards/mostRecent`,
+    timeCards: `${apiRoot}/reporting/timeCardReport`,
+    get: clientusername => {
+      return `${apiRoot}/timecards?username=${clientusername}`
+    },
+    getById: id => {
+      return `${apiRoot}/timecards/${id}`
+    },
+    getByMonthYr: (year, month) => {
+    	return `${apiRoot}/reporting/timeCardReport?year=${year}&month=${month}`
+    },
+    getByMonthYrUsr: (year, month, username) => {
+    	return `${apiRoot}/timecards?year=${year}&month=${month}&username=${username}`
+    }
   },
   product: {
     new: `${apiRoot}/products`,

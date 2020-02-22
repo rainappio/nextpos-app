@@ -61,7 +61,7 @@ class ReportsScreen extends React.Component {
 
               <TouchableOpacity
                 style={styles.mainSquareButton}
-                //onPress={() => this.props.navigation.navigate('TablesSrc')}
+                onPress={() => this.props.navigation.navigate('StaffTimeCard')}
               >
                 <View style={styles.jc_alignIem_center}>
                   <Icon

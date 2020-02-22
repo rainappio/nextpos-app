@@ -256,14 +256,14 @@ class OrdersSummaryRow extends React.Component {
     return (
       <ScrollView scrollIndicatorInsets={{right: 1}} contentContainerStyle={{flexGrow: 1}}>
         <View style={{flex: 2}}>
-          <View style={styles.container_nocenterCnt}>
+          <View style={[styles.container, styles.mgrbtn20]}>
             <BackBtn/>
             <Text style={styles.screenTitle}>
               {t('orderSummaryTitle')}
             </Text>
 
             <View style={[styles.flex_dir_row, {alignItems: 'center'}]}>
-              <View style={[styles.quarter_width]}>
+              <View style={{width: '35%'}}>
                 <View>
                   <Text
                     style={[
@@ -277,7 +277,7 @@ class OrdersSummaryRow extends React.Component {
                 </View>
               </View>
 
-              <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
+              <View style={[{width: '15%'}, styles.jc_alignIem_center]}>
                 <View>
                   <FontAwesomeIcon
                     name="user"
@@ -297,7 +297,7 @@ class OrdersSummaryRow extends React.Component {
                 </View>
               </View>
 
-              <View style={[styles.fullhalf_width, styles.mgr_20]}>
+              <View style={[styles.fullhalf_width, {paddingRight: 20}]}>
                 <TouchableOpacity>
                   <View>
                     <Text style={[styles.toRight, styles.mgr_20]}>
