@@ -6,7 +6,8 @@ import {
   Image,
   FlatList,
   RefreshControl,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity
 } from 'react-native'
 import { connect } from 'react-redux'
 import { getClientUsrs, doLogout } from '../actions'
@@ -47,41 +48,39 @@ class ClientUsers extends React.Component {
     const { t } = this.state
 
     return (
-      <View
-        style={[styles.container]}
-        refreshControl={<RefreshControl refreshing={refreshing} />}
-      >
-        <BackBtn />
-        <View
-          style={[
-            {
-              width: '100%',
-              position: 'absolute',
-              top: 0
-            }
-          ]}
-        >
-          <TouchableHighlight>
-            <Text
-              style={{ textAlign: 'right', color: '#f18d1a', marginTop: 12 }}
-              onPress={() => this.handleDefaultUserLogout(navigation)}
-            >
-              {t('logout')}
-            </Text>
-          </TouchableHighlight>
+      <View style={[styles.container, {justifyContent: 'flex-start'}]}>
+        <View>
+          <View>
+            <BackBtn/>
+            <TouchableOpacity>
+              <Text
+                style={{textAlign: 'right', color: '#f18d1a'}}
+                onPress={() => this.handleDefaultUserLogout(navigation)}
+              >
+                {t('logout')}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={{ marginTop: 80 }}>
           <FlatList
             data={clientusers}
             renderItem={({ item }) => (
-              <View
+              <TouchableOpacity
                 style={{
                   flex: 1,
                   flexDirection: 'column',
                   margin: 1,
                   marginBottom: 30
                 }}
+                onPress={() =>
+                  this.props.navigation.navigate('ClientUserLogin', {
+                    clientusersName: item.username,
+                    displayName: item.displayName,
+                    defaultUser: item.defaultUser
+                  })
+                }
               >
                 <Text
                   style={{
@@ -92,19 +91,13 @@ class ClientUsers extends React.Component {
                     textAlign: 'center',
                     lineHeight: 44
                   }}
-                  onPress={() =>
-                    this.props.navigation.navigate('ClientUserLogin', {
-                      clientusersName: item.username,
-                      defaultUser: item.defaultUser
-                    })
-                  }
                 >
                   {item.username[0].toUpperCase()}
                 </Text>
                 <Text style={{ marginLeft: 60, marginTop: -30 }}>
                   {item.nickname != null ? item.nickname : item.username}
                 </Text>
-              </View>
+              </TouchableOpacity>
             )}
             numColumns={2}
             keyExtractor={(item, index) => index.toString()}

@@ -26,7 +26,13 @@ class ClockIn extends React.Component {
         clockInTime: 'Clock In Time',
         clockOutTime: 'Clock Out Time',
         clockIn: 'Clock In',
-        clockOut: 'Clock Out'
+        clockOut: 'Clock Out',
+        workingHours: 'Working Hours',
+        status: {
+          INACTIVE: 'Inactive',
+          ACTIVE: 'At Work',
+          COMPLETE: 'Off Work'
+        }
       },
       zh: {
         timeCardTitle: '員工打卡',
@@ -36,7 +42,13 @@ class ClockIn extends React.Component {
         clockInTime: '上班時間',
         clockOutTime: '下班時間',
         clockIn: '上班',
-        clockOut: '下班'
+        clockOut: '下班',
+        workingHours: '上班時數',
+        status: {
+          INACTIVE: '未曾打卡',
+          ACTIVE: '上班中',
+          COMPLETE: '下班'
+        }
       }
     })
 
@@ -47,6 +59,14 @@ class ClockIn extends React.Component {
 
   componentDidMount() {
     this.getUserTimeCard()
+  }
+
+  renderTimeCardStatus = timeCardStatus => {
+    return this.context.t(`status.${timeCardStatus}`)
+  }
+
+  renderWorkingHours = timecard => {
+    return `${timecard.hours} ${this.context.t('timecard.hours')} ${timecard.minutes} ${this.context.t('timecard.minutes')}`
   }
 
   getUserTimeCard = () => {
@@ -116,7 +136,7 @@ class ClockIn extends React.Component {
 
     return (
       <DismissKeyboard>
-        <View style={styles.container}>
+        <View style={[styles.container]}>
           <BackBtn />
           <View>
             <TouchableHighlight>
@@ -124,9 +144,9 @@ class ClockIn extends React.Component {
             </TouchableHighlight>
           </View>
 
-          <View style={{ flex: 2, justifyContent: 'center' }}>
+          <View style={{ flex: 3, justifyContent: 'center' }}>
             <View style={[styles.fieldContainer]}>
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 2 }}>
                 <Text style={styles.fieldTitle}>{t('username')}</Text>
               </View>
               <View style={{ flex: 3 }}>
@@ -136,7 +156,7 @@ class ClockIn extends React.Component {
               </View>
             </View>
             <View style={styles.fieldContainer}>
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 2 }}>
                 <Text style={[styles.fieldTitle]}>{t('currentTime')}</Text>
               </View>
               <View style={{ flex: 3 }}>
@@ -145,16 +165,19 @@ class ClockIn extends React.Component {
                 )}`}</Text>
               </View>
             </View>
+            <View style={styles.sectionTitleContainer}>
+              <Text style={styles.sectionTitleText}>{t('timeCardStatus')}</Text>
+            </View>
             <View style={styles.fieldContainer}>
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 2 }}>
                 <Text style={styles.fieldTitle}>{t('timeCardStatus')}:</Text>
               </View>
               <View style={{flex: 3}}>
-                <Text style={{alignSelf: 'flex-end'}}>{timecard.timeCardStatus}</Text>
+                <Text style={{alignSelf: 'flex-end'}}>{this.renderTimeCardStatus(timecard.timeCardStatus)}</Text>
               </View>
             </View>
             <View style={styles.fieldContainer}>
-              <View style={{flex: 1}}>
+              <View style={{flex: 2}}>
                 <Text style={styles.fieldTitle}>
                   {t('clockInTime')}:
                 </Text>
@@ -164,41 +187,52 @@ class ClockIn extends React.Component {
               </View>
             </View>
             { timeCardStatus === 'COMPLETE' && (
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 1}}>
-                  <Text style={styles.fieldTitle}>
-                    {t('clockOutTime')}:
-                  </Text>
+              <View>
+                <View style={styles.fieldContainer}>
+                  <View style={{flex: 2}}>
+                    <Text style={styles.fieldTitle}>
+                      {t('clockOutTime')}:
+                    </Text>
+                  </View>
+                  <View style={{flex: 3}}>
+                    <Text style={{alignSelf: 'flex-end'}}>{timecard.clockOut != null ? `${formatDate(timecard.clockOut)}` : ''}</Text>
+                  </View>
                 </View>
-                <View style={{flex: 3}}>
-                  <Text style={{alignSelf: 'flex-end'}}>{timecard.clockOut != null ? `${formatDate(timecard.clockOut)}` : ''}</Text>
+                <View style={styles.fieldContainer}>
+                  <View style={{flex: 1}}>
+                    <Text style={styles.fieldTitle}>
+                      {t('workingHours')}
+                    </Text>
+                  </View>
+                  <View style={{flex: 3}}>
+                    <Text style={{alignSelf: 'flex-end'}}>{this.renderWorkingHours(timecard)}</Text>
+                  </View>
                 </View>
               </View>
             )}
           </View>
 
-          <View style={[{ flex: 3, alignItems: 'center' }]}>
-            <View style={styles.squareButton}>
-              <TouchableOpacity
-                onPress={
-                  timeCardStatus === 'ACTIVE'
-                    ? () => this.handleClockOut()
-                    : () => this.handleClockIn()
-                }
-              >
-                <View>
-                  <FontAwesomeIcon
-                    name="hand-o-up"
-                    size={40}
-                    color="#fff"
-                    style={[styles.centerText, styles.margin_15]}
-                  />
-                  <Text style={[styles.centerText, styles.whiteColor]}>
-                    {timeCardStatus === 'ACTIVE' ? t('clockOut') : t('clockIn')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+          <View style={[{flex: 2, alignItems: 'center'}]}>
+            <TouchableOpacity
+              style={styles.squareButton}
+              onPress={
+                timeCardStatus === 'ACTIVE'
+                  ? () => this.handleClockOut()
+                  : () => this.handleClockIn()
+              }
+            >
+              <View>
+                <FontAwesomeIcon
+                  name="hand-o-up"
+                  size={40}
+                  color="#fff"
+                  style={[styles.centerText, styles.margin_15]}
+                />
+                <Text style={[styles.centerText, styles.whiteColor]}>
+                  {timeCardStatus === 'ACTIVE' ? t('clockOut') : t('clockIn')}
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </DismissKeyboard>

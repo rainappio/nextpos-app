@@ -17,6 +17,7 @@ import { ListItem } from 'react-native-elements'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import {renderOrderState} from "../helpers/orderActions";
+import {NavigationEvents} from "react-navigation";
 
 class OrdersScreen extends React.Component {
   static navigationOptions = {
@@ -128,6 +129,11 @@ class OrdersScreen extends React.Component {
             styles.nomgrBottom
           ]}
         >
+          <NavigationEvents
+            onWillFocus={() => {
+              this.props.getOrdersByDateRange()
+            }}
+          />
           <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
             <View style={{justifyContent: 'space-between'}}>
               <Text style={styles.screenTitle}>{t('ordersTitle')}</Text>

@@ -17,7 +17,7 @@ import {
   formatDateFromMillis,
   formatDateObj,
   getClientUsr,
-  getAnnouncements
+  getAnnouncements, getShiftStatus
 } from '../actions'
 import styles from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
@@ -63,19 +63,18 @@ class LoginSuccessScreen extends React.Component {
    * https://reactnavigation.org/docs/en/navigation-lifecycle.html
    */
   componentDidMount() {
-    console.log(Constants.nativeAppVersion)
-    console.log(Constants.nativeBuildVersion)
-
     this.context.localize({
       en: {
         welcome: 'Welcome,',
         loggedIn: 'Logged in at',
-        quickOrder: 'Quick Order'
+        quickOrder: 'Quick Order',
+        ownerRemark: '\'s Owner'
       },
       zh: {
         welcome: '歡迎,',
         loggedIn: '登入時間:',
-        quickOrder: '快速訂單'
+        quickOrder: '快速訂單',
+        ownerRemark: '老闆'
       }
     })
     // <NavigationEvent> component in the render function takes care of loading user info.
@@ -85,6 +84,7 @@ class LoginSuccessScreen extends React.Component {
     let token = await getToken()
     this.props.getCurrentUser(token.username)
     this.props.getAnnouncements()
+    this.props.getShiftStatus()
 
     this.setState({
       token: token,
@@ -101,7 +101,8 @@ class LoginSuccessScreen extends React.Component {
       currentUser,
       isLoading,
       haveError,
-      getannouncements
+      getannouncements,
+      shiftStatus
     } = this.props
     const { t } = this.context
     const { username, loggedIn, tokenExpiry } = this.state
@@ -130,7 +131,7 @@ class LoginSuccessScreen extends React.Component {
         />
 
         <View style={[styles.container, styles.nomgrBottom]}>
-          <View style={[{flexDirection: 'row', flex: 1}]}>
+          <View style={[{flexDirection: 'row', flex: 1, marginHorizontal: 10 }]}>
             <View style={{flex: 1}}>
               <Image
                 source={
@@ -144,11 +145,11 @@ class LoginSuccessScreen extends React.Component {
 
             <View
             	style={[
-                {flex: 1, marginTop: 5, alignItems: 'flex-end'}
+                {flex: 1, marginTop: 6, alignItems: 'flex-end'}
               ]}>
               <Avatar
                 rounded
-                title={username != null && username.charAt(0)}
+                title={username != null && username.charAt(0).toUpperCase()}
                 size="small"
                 overlayContainerStyle={[styles.orange_bg]}
                 titleStyle={styles.whiteColor}
@@ -157,34 +158,35 @@ class LoginSuccessScreen extends React.Component {
             </View>
           </View>
 
-          <View style={{marginLeft: '3%'}}>
+          <View style={{marginLeft: 10}}>
             <Text style={[styles.text, styles.textBig, styles.orange_color]}>
-              {t('welcome')} {currentUser.displayName}
+              {t('welcome')} {currentUser.displayName}{currentUser.defaultUser && t('ownerRemark')}
             </Text>
             <Text style={[styles.textSmall]}>
               {t('loggedIn')} {formatDateObj(loggedIn)}
             </Text>
           </View>
 
-          <TouchableOpacity
-            style={[styles.mainSquareButton]}
-            onPress={() => {
-              this.props.navigation.navigate('OrderStart', {
-                handleOrderSubmit: handleOrderSubmit,
-                handleDelete: handleDelete
-              })
-            }}
-          >
-            <View>
-              <MaterialIcon
-                name="play-arrow"
-                size={40}
-                color="#f18d1a"
-                style={[styles.centerText, styles.margin_15]}
-              />
-              <Text style={styles.centerText}>{t('quickOrder')}</Text>
-            </View>
-          </TouchableOpacity>
+          {shiftStatus === 'ACTIVE' && (
+            <TouchableOpacity
+              style={[styles.mainSquareButton]}
+              onPress={() => {
+                this.props.navigation.navigate('OrderStart', {
+                  handleOrderSubmit: handleOrderSubmit,
+                  handleDelete: handleDelete
+                })
+              }}>
+              <View>
+                <MaterialIcon
+                  name="play-arrow"
+                  size={40}
+                  color="#f18d1a"
+                  style={[styles.centerText, styles.margin_15]}
+                />
+                <Text style={styles.centerText}>{t('quickOrder')}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
 
           <View style={[styles.flex_dir_row, {flex: 1}]}>
             <View style={{flex: 1}}>
@@ -278,6 +280,7 @@ const mapStateToProps = state => ({
   haveError: state.clientuser.haveError,
   isLoading: state.clientuser.loading,
 	getannouncements: state.announcements.data,
+  shiftStatus: state.shift.data.shiftStatus
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -286,7 +289,8 @@ const mapDispatchToProps = dispatch => ({
   doLogout: () => {
     dispatch(doLogout())
   },
-  getAnnouncements: () => dispatch(getAnnouncements())
+  getAnnouncements: () => dispatch(getAnnouncements()),
+  getShiftStatus: () => dispatch(getShiftStatus())
 })
 
 export default connect(

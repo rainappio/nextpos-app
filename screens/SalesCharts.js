@@ -224,17 +224,10 @@ class SalesCharts extends React.Component {
       return <BackendErrorScreen />
     } else if (!containSalesData) {
       return (
-        <View style={[styles.container, styles.nomgrBottom]}>
+        <View style={[styles.container]}>
           <View style={{ flex: 1 }}>
             <BackBtn />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
+            <Text style={styles.screenTitle}>
               {t('salesDashboardTitle')}
             </Text>
           </View>
@@ -247,7 +240,7 @@ class SalesCharts extends React.Component {
 
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
-        <View style={[styles.container, styles.nomgrBottom]}>
+        <View style={[styles.container]}>
           <BackBtn />
           <Text style={styles.screenTitle}>
             {t('salesDashboardTitle')}
@@ -419,30 +412,32 @@ class SalesCharts extends React.Component {
           </Text>
         </View>
 
-        <View style={styles.sectionBar}>
-          <View style={[styles.quarter_width, styles.tableCellView]}>
-            <Text style={[styles.sectionBarTextSmall]}>{t('product')}</Text>
-          </View>
+        <View style={{marginBottom: 20}}>
+          <View style={styles.sectionBar}>
+            <View style={[styles.quarter_width, styles.tableCellView]}>
+              <Text style={[styles.sectionBarTextSmall]}>{t('product')}</Text>
+            </View>
 
-          <View style={[styles.quarter_width, styles.tableCellView]}>
-            <Text style={styles.sectionBarTextSmall}>{t('quantity')}</Text>
-          </View>
+            <View style={[styles.quarter_width, styles.tableCellView]}>
+              <Text style={styles.sectionBarTextSmall}>{t('quantity')}</Text>
+            </View>
 
-          <View style={[styles.quarter_width, styles.tableCellView]}>
-            <Text style={styles.sectionBarTextSmall}>{t('amount')}</Text>
-          </View>
+            <View style={[styles.quarter_width, styles.tableCellView]}>
+              <Text style={styles.sectionBarTextSmall}>{t('amount')}</Text>
+            </View>
 
-          <View style={[styles.quarter_width, styles.tableCellView]}>
-            <Text style={styles.sectionBarTextSmall}>{t('percentage')}</Text>
+            <View style={[styles.quarter_width, styles.tableCellView]}>
+              <Text style={styles.sectionBarTextSmall}>{t('percentage')}</Text>
+            </View>
           </View>
+          <FlatList
+            data={getrangedSalesReport.salesByProducts}
+            renderItem={({item}) => {
+              return <Item salesByPrdData={item}/>
+            }}
+            keyExtractor={item => item.id}
+          />
         </View>
-        <FlatList
-          data={getrangedSalesReport.salesByProducts}
-          renderItem={({ item }) => {
-            return <Item salesByPrdData={item} />
-          }}
-          keyExtractor={item => item.id}
-        />
       </ScrollView>
     )
   }

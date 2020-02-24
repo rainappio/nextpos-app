@@ -35,7 +35,7 @@ export const getWorkingAreas = () => {
         })
       },
       response => {
-        dispatch(fetchWorkingAreasFailure(error))
+        dispatch(fetchWorkingAreasFailure(response))
       }
     ).then()
   }

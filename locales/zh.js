@@ -47,6 +47,7 @@ const zh = {
     inStore: '內用',
     takeOut: '外帶',
   },
+  orderStatus: '訂單狀態',
   orderState: {
     OPEN: '已開單',
     IN_PROCESS: '準備中',
@@ -54,6 +55,10 @@ const zh = {
     SETTLED: '已付款',
     REFUNDED: '已退款',
     COMPLETED: '完成'
+  },
+  timecard: {
+    hours: '小時',
+    minutes: '分鐘'
   },
   errors: {
     balanceError: '請輸入大於零的數字'

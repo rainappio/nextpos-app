@@ -190,7 +190,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   getProductOptions: () => {
     const labelId = props.navigation.state.params.labelId
 
-    if (labelId !== undefined && labelId !== '0') {
+    if (labelId !== undefined && labelId != null && labelId !== '0') {
       dispatch(getProductOptions(props.navigation.state.params.labelId))
     }
   },

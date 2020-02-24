@@ -43,7 +43,7 @@ class ReportsScreen extends React.Component {
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <TouchableOpacity
                 style={styles.mainSquareButton}
-                onPress={() => this.props.navigation.navigate('Sales')}
+                onPress={() => this.props.navigation.navigate('SalesCharts')}
               >
                 <View>
                   <FontAwesomeIcon

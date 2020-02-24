@@ -24,6 +24,7 @@ import {
 import styles, {mainThemeColor} from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import {CheckBox, Tooltip} from 'react-native-elements'
+import BackBtnCustom from "../components/BackBtnCustom";
 
 class OrdersSummaryRow extends React.Component {
   static contextType = LocaleContext
@@ -256,8 +257,8 @@ class OrdersSummaryRow extends React.Component {
     return (
       <ScrollView scrollIndicatorInsets={{right: 1}} contentContainerStyle={{flexGrow: 1}}>
         <View style={{flex: 2}}>
-          <View style={[styles.container, styles.mgrbtn20]}>
-            <BackBtn/>
+          <View style={styles.container}>
+            <BackBtnCustom onPress={() => this.handleCancel(order.orderId)} />
             <Text style={styles.screenTitle}>
               {t('orderSummaryTitle')}
             </Text>
@@ -297,23 +298,25 @@ class OrdersSummaryRow extends React.Component {
                 </View>
               </View>
 
-              <View style={[styles.fullhalf_width, {paddingRight: 20}]}>
-                <TouchableOpacity>
-                  <View>
-                    <Text style={[styles.toRight, styles.mgr_20]}>
-                      {t('staff')} - {order.servedBy}
-                    </Text>
-                    <Text style={[styles.toRight, styles.mgr_20]}>
-                      {formatDate(order.createdDate)}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+              <View style={[{width: '50%'}]}>
+                <View>
+                  <Text style={[styles.toRight]}>
+                    {t('staff')} - {order.servedBy}
+                  </Text>
+                  <Text style={[styles.toRight]}>
+                    {formatDate(order.createdDate)}
+                  </Text>
+                </View>
               </View>
             </View>
 
             <View style={{flexDirection: 'row', paddingTop: 8}}>
               <Text style={styles.textBold}>Order ID: </Text>
               <Text>{order.serialId}</Text>
+            </View>
+            <View style={{flexDirection: 'row', paddingTop: 8}}>
+              <Text style={styles.textBold}>{t('orderStatus')}: </Text>
+              <Text>{t(`orderState.${order.state}`)}</Text>
             </View>
           </View>
 
@@ -383,7 +386,7 @@ class OrdersSummaryRow extends React.Component {
                   <View key={rowMap} style={{marginBottom: 20}}>
                     <View style={styles.tableRowContainer}>
                       <View style={[{flex: 1}]}>
-                        {data.item.state === 'IN_PROCESS' && (
+                        {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(data.item.state) && (
                           <CheckBox
                             checkedIcon='dot-circle-o'
                             uncheckedIcon='circle-o'
@@ -500,13 +503,11 @@ class OrdersSummaryRow extends React.Component {
             </TouchableOpacity>
           )}
 
-          <TouchableOpacity onPress={() => this.handleCancel(order.orderId)}>
-            <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('backToTables')}</Text>
-          </TouchableOpacity>
-
-          <DeleteBtn
-            handleDeleteAction={() => this.props.navigation.state.params.handleDelete(order.orderId)}
-          />
+          {!['SETTLED', 'REFUNDED'].includes(order.state) && (
+            <DeleteBtn
+              handleDeleteAction={() => this.props.navigation.state.params.handleDelete(order.orderId)}
+            />
+          )}
 
           {["IN_PROCESS"].includes(order.state) && (
             <TouchableOpacity

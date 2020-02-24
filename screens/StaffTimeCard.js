@@ -21,20 +21,20 @@ class StaffTimeCard extends React.Component {
   state = {
   	filteredTimeCard: []
   }
- 
+
   componentDidMount() {
   	this.props.getTimeCards()
   }
 
   handleFilter = (values) => {
-  	var month = values.month;
-  	var year = values.year;
+  	const month = values.month;
+  	const year = values.year;
 
   	if (!month || !year) {
       warningMessage('Please Choose Both Year and Month')
       return
     }
-		
+
     dispatchFetchRequest(api.timecard.getByMonthYr(year, month), {
       method: 'GET',
       withCredentials: true,
@@ -54,18 +54,21 @@ class StaffTimeCard extends React.Component {
     const { filteredTimeCard } = this.state
 
     Item = ({ timecard, layoutId, index }) => {
+      const displayName = timecard.nickname != null ? timecard.nickname : timecard.id
+
       return (
       	<TouchableOpacity
 					onPress={() => {
           	this.props.navigation.navigate('UserTimeCards', {
-            	name: timecard.id
+            	name: timecard.id,
+              displayName: displayName
           	})
         	}}
-      		>     
-        <View style={[{paddingHorizontal: 8, marginBottom: 10}]}>
+      		>
+        <View style={[{marginBottom: 10}]}>
           <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
             <View style={{flex: 5}}>
-              <Text>{timecard.id}</Text>
+              <Text>{displayName}</Text>
             </View>
 
             <View style={{flex: 2}}>
@@ -76,8 +79,8 @@ class StaffTimeCard extends React.Component {
               <Text style={{textAlign: 'right'}}>{timecard.totalHours.toFixed(2)}</Text>
             </View>
           </View>
-        </View>  
-      </TouchableOpacity>       
+        </View>
+      </TouchableOpacity>
       )
     }
 
@@ -101,8 +104,8 @@ class StaffTimeCard extends React.Component {
           	<StaffTimeCardFilterForm
 							onSubmit={this.handleFilter}
           	/>
-						
-						<View style={[{paddingHorizontal: 8}, styles.mgrtotop20]}>
+
+						<View style={[styles.mgrtotop20]}>
             	<View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
               	<View style={{flex: 5}}>
                 	<Text style={[styles.orange_color, styles.textBold]}>{t('firstColTitle')}</Text>

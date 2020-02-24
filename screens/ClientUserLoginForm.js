@@ -35,7 +35,7 @@ class ClientUserLoginForm extends React.Component {
   }
 
   render() {
-    const { clientusersName, handleSubmit } = this.props
+    const { clientusersName, displayName, handleSubmit } = this.props
 		const { t } = this.context
 
     return (
@@ -74,7 +74,7 @@ class ClientUserLoginForm extends React.Component {
               styles.mgrBtm50
             ]}
           >
-            {clientusersName}
+            {displayName}
           </Text>
 
           {this.props.defaultUser ? (

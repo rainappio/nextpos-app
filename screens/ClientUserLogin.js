@@ -51,11 +51,13 @@ class ClientUserLogin extends React.Component {
 
   render() {
     const { navigation } = this.props
+    const { clientusersName, displayName, defaultUser } = this.props.navigation.state.params
     return (
       <ClientUserLoginForm
-        initialValues={{username: this.props.navigation.state.params.clientusersName}}
-        clientusersName={this.props.navigation.state.params.clientusersName}
-        defaultUser={this.props.navigation.state.params.defaultUser}
+        initialValues={{username: clientusersName}}
+        clientusersName={clientusersName}
+        displayName={displayName}
+        defaultUser={defaultUser}
         navigation={navigation}
         onSubmit={this.clientLogin}
       />

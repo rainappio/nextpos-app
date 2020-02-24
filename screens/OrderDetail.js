@@ -39,16 +39,13 @@ class OrderDetail extends React.Component {
         serviceCharge: 'Service Charge',
         discount: 'Discount',
         total: 'Total',
-        paymentMethod: 'Payment Method',
-        orderStatus: 'Order Status'
-
+        paymentMethod: 'Payment Method'
       },
       zh: {
         serviceCharge: '服務費',
         discount: '折扣',
         total: '總金額',
-        paymentMethod: '付款方式',
-        orderStatus: '訂單狀態'
+        paymentMethod: '付款方式'
       }
     })
   }

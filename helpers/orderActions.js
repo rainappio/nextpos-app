@@ -20,8 +20,8 @@ export const renderOrderState = state => {
       />
     case 'DELIVERED':
       return <MCIcon
-        name={'truck-delivery'}
-        size={25}
+        name={'silverware-fork-knife'}
+        size={23}
         style={{
           fontWeight: 'bold'
         }}
@@ -35,11 +35,20 @@ export const renderOrderState = state => {
     case 'COMPLETED':
       return <Icon
         name={'md-checkmark-circle-outline'}
-        color="#4cbb17"
+        color="#f18d1a"
         size={25}
         style={{
           fontWeight: 'bold'
         }}
+      />
+    case 'DELETED':
+      return <MCIcon
+        name={'delete'}
+        size={25}
+        style={{
+          fontWeight: 'bold'
+        }}
+        color="#f18d1a"
       />
   }
 }

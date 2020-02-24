@@ -47,6 +47,7 @@ const en = {
     inStore: 'In Store',
     takeOut: 'Take Out'
   },
+  orderStatus: 'Order Status',
   orderState: {
     OPEN: 'Open',
     IN_PROCESS: 'In Process',
@@ -54,6 +55,10 @@ const en = {
     SETTLED: 'Settled',
     REFUNDED: 'Refunded',
     COMPLETED: 'Completed'
+  },
+  timecard: {
+    hours: 'Hour(s)',
+    minutes: 'Minute(s)'
   },
   errors: {
     balanceError: 'Please enter a positive value'

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
-import {Text, View, TouchableOpacity, ScrollView, Picker} from 'react-native'
+import {Text, View, TouchableOpacity, ScrollView, Picker, Alert} from 'react-native'
 import DropDown from '../components/DropDown'
 import RenderRadioBtn from '../components/RadioItem'
 import RenderStepper from '../components/RenderStepper'
@@ -236,10 +236,19 @@ class OrderForm extends Component {
                 <View style={{flex: 1, marginHorizontal: 5}}>
                   <TouchableOpacity
                     onPress={() => {
-                      !noAvailableTables && this.props.handleSubmit()
+                      if (!noAvailableTables) {
+                        this.props.handleSubmit()
+                      } else {
+                        Alert.alert(
+                          '',
+                          `${t('noAvailableTables')}`,
+                          [
+                            {
+                              text: `${t('action.ok')}`,
+                            }
+                            ])
+                      }
                     }}
-                    diabled={noAvailableTables}
-                    activeOpacity={noAvailableTables ? 0.3 : 1}
                   >
                     <Text style={[styles.bottomActionButton, styles.actionButton]}>
                       {t('openOrder')}

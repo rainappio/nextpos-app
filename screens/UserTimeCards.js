@@ -21,20 +21,20 @@ class UserTimeCards extends React.Component {
   static contextType = LocaleContext
 
   state = {
-  	timecardId: null,  	
+  	timecardId: null,
   	filteredUsrTimeCards: []
   }
 
   handleFilter = (values) => {
-  	var month = values.month;
-  	var year = values.year;
-  	var username = this.props.navigation.state.params.name;
+  	const month = values.month;
+  	const year = values.year;
+  	const username = this.props.navigation.state.params.name;
 
   	if (!month || !year) {
       warningMessage('Please Choose Both Year and Month')
       return
     }
-		
+
      dispatchFetchRequest(api.timecard.getByMonthYrUsr(year, month, username), {
         method: 'GET',
         withCredentials: true,
@@ -64,30 +64,32 @@ class UserTimeCards extends React.Component {
     const { filteredUsrTimeCards } = this.state
 
     Item = ({ timecard }) => {
-      return ( 	
+      const active = timecard.timeCardStatus === 'ACTIVE'
+
+      return (
       	<TouchableOpacity
 					onPress={() => {
           	this.props.navigation.navigate('UserTimeCardDetail',{
           		timecardId: timecard.id
           	})
           }}
-      		>  
-        	<View style={[{paddingHorizontal: 8, marginBottom: 10}]}>
+      		>
+        	<View style={[{marginBottom: 10}]}>
           	<View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-            	<View style={{flex: 5.5}}>
-              	<Text>
+            	<View style={{flex: 1}}>
+              	<Text style={{fontWeight: active ? 'bold' : 'normal'}}>
               		{formatDate(timecard.clockIn)}
               	</Text>
             	</View>
 
-            	<View style={{flex: 4.5}}>
+            	<View style={{flex: 1}}>
               	<Text style={{textAlign: 'right'}}>
-              	 {timecard.hours}&nbsp;{t('hours')}&nbsp;{timecard.minutes}&nbsp;{t('minutes')}
+              	 {timecard.hours}&nbsp;{t('timecard.hours')}&nbsp;{timecard.minutes}&nbsp;{t('timecard.minutes')}
               	</Text>
             	</View>
           	</View>
         	</View>
-        </TouchableOpacity>        
+        </TouchableOpacity>
       )
     }
 
@@ -104,15 +106,15 @@ class UserTimeCards extends React.Component {
           <View style={styles.container}>
           	<BackBtn />
             <Text style={styles.screenTitle}>
-             {t('title')}
+             {t('userTimeCardTitle')}
 						</Text>
 
             <UserTimeCardsFilterForm
 							onSubmit={this.handleFilter}
-							username={this.props.navigation.state.params.name}
+							displayName={this.props.navigation.state.params.displayName}
             />
-						
-						<View style={[{paddingHorizontal: 8}, styles.mgrtotop20]}>
+
+						<View style={[styles.mgrtotop20]}>
             	<View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
               	<View style={{flex: 5}}>
                 	<Text style={[styles.orange_color, styles.textBold]}>{t('Day')}</Text>
@@ -127,8 +129,8 @@ class UserTimeCards extends React.Component {
 						<FlatList
               data={filteredUsrTimeCards}
               renderItem={({item, index}) => (
-                <Item 
-                	timecard={item} 
+                <Item
+                	timecard={item}
                 	/>
               )}
               keyExtractor={(item, index) => index.toString()}

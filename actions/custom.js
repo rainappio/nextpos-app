@@ -36,6 +36,24 @@ export const formatDate = date => {
   })
 }
 
+export const formatDateOnly = date => {
+  const dateMillis = Date.parse(date.slice(0, date.length - 5))
+  const dateObj = new Date(dateMillis)
+  return dateObj.toLocaleDateString('en-TW', {
+    dateStyle: 'long',
+    timeZone: 'Asia/Taipei'
+  })
+}
+
+export const formatTime = date => {
+  const dateMillis = Date.parse(date.slice(0, date.length - 5))
+  const dateObj = new Date(dateMillis)
+  return dateObj.toLocaleTimeString('en-TW', {
+    dateStyle: 'long',
+    timeZone: 'Asia/Taipei'
+  })
+}
+
 export const getTimeDifference = date => {
   const dateMillis = Date.parse(date.slice(0, date.length - 5))
   const dateObj = new Date(dateMillis)
@@ -60,25 +78,25 @@ export function getMonthName(monthCount){
 				return "JANUARY";
 			case 2:
 				return "FEBRUARY";
-			case 3:			
+			case 3:
 				return "MARCH";
 			case 4:
 				return "APRIL";
 			case 5:
 				return "MAY";
-			case 6:			
+			case 6:
 				return "JUNE";
 			case 7:
 				return "JULY";
 			case 8:
 				return "AUGUST";
-			case 9:			
+			case 9:
 				return "SEPTEMBER";
 			case 10:
 				return "OCTOBER";
 			case 11:
 				return "NOVEMBER";
-			case 12:			
+			case 12:
 				return "DECEMBER";
 			default:
 				return "pls check ur dateCount";
