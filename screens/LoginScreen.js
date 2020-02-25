@@ -8,7 +8,7 @@ import {
   View,
   Keyboard,
   Modal,
-  AsyncStorage
+  Dimensions, TouchableWithoutFeedback
 } from 'react-native'
 import { isEmail, isRequired } from '../validators'
 import InputText from '../components/InputText'
@@ -36,7 +36,6 @@ class LoginScreen extends React.Component {
   }
 
   getEmail = (values) => {
-  	console.log(AsyncStorage.getItem('token'))
   	values.email !== null && this.props.navigation.navigate('PasswordReset')
   	this.toggleModal(!this.state.modalVisible)
   }
@@ -45,15 +44,15 @@ class LoginScreen extends React.Component {
     this.context.localize({
       en: {
         login: 'Login',
-        title: 'Forgot Password ?',
-        Next: 'Next',
+        title: 'Please enter your account email',
+        next: 'Send',
         forgotPwd: 'Forgot Password'
       },
       zh: {
         login: '登入',
-        title: 'FP-Chinese ?',
-        Next: 'Next-Chinese',
-        forgotPwd: 'FP-Chinese'
+        title: '請輸入你的帳號email',
+        next: '送出',
+        forgotPwd: '忘記密碼'
       }
     })
   }
@@ -130,10 +129,7 @@ class LoginScreen extends React.Component {
           	onSubmit={this.getEmail}
           	modalVisible={this.state.modalVisible}
           	toggleModal={this.toggleModal}
-          	title={t('title')}
-          	email={t('email')}
-          	Next={t('Next')}
-          	props={this.props.navigation}
+          	navigation={this.props.navigation}
           	/>
 
         </KeyboardAvoidingView>
@@ -152,44 +148,52 @@ class ResetModal extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
   render() {
-    const { handleSubmit, toggleModal, modalVisible, title, email, Next, props } = this.props
+    const { handleSubmit, toggleModal, modalVisible, title, email, next, props } = this.props
     const { t } = this.context
 
     return (
       <Modal
         animationType="fade"
-        transparent={false}
+        transparent={true}
         visible={modalVisible}
-        onRequestClose={() => toggleModal(false)}
-        >
+      >
         <TouchableOpacity
           activeOpacity={1}
-          style={[styles.container, styles.no_mgrTop]}
+          style={[styles.modalContainer]}
           onPressOut={() => {
             toggleModal(false)
           }}
-          >
-          <Text>{title}</Text>
-          <Field
-            name="email"
-            component={InputText}
-            validate={[isRequired, isEmail]}
-            placeholder={email}
-            //onSubmitEditing={val => this.clientLogin(val.nativeEvent.text)}
-          />
+        >
+          <TouchableWithoutFeedback>
+            <View
+              style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout, {width: '90%', height: Dimensions.get('window').height / 2}]}>
+              <Text>{t('title')}</Text>
+              <Field
+                name="email"
+                component={InputText}
+                validate={[isRequired, isEmail]}
+                autoCapitalize="none"
+                placeholder={t('email')}
+              />
 
-          <TouchableOpacity
-          	style={{position:'absolute', bottom: 10, width: '100%'}}
-            onPress={() => {
-              handleSubmit()
-              // props.navigate('PasswordReset')
-              // toggleModal(!modalVisible)
-            }}>
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>{Next}</Text>
-          </TouchableOpacity>
-
+              <View style={styles.bottom}>
+                <TouchableOpacity
+                  onPress={() => handleSubmit()}>
+                  <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('next')}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => toggleModal(false)}
+                >
+                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                    {t('cancel')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
         </TouchableOpacity>
       </Modal>
     )

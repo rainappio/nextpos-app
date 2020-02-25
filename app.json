@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "rain.0.02.20",
+    "version": "rain.0.20.02",
     "icon": "./assets/images/icon.png",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -23,7 +23,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "rain.0.02.20"
+      "buildNumber": "rain.0.20.02.w4"
     },
     "description": "NextPos is the best POS software you will ever need."
   }

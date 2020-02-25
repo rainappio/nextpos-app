@@ -1,9 +1,9 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import {api, dispatchFetchRequest, makeFetchRequest, successMessage} from '../constants/Backend'
-import { getCurrentClient } from '../actions/client'
+import {connect} from 'react-redux'
+import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
+import {getCurrentClient} from '../actions/client'
 import StoreFormScreen from './StoreFormScreen'
-import { ActivityIndicator, View } from 'react-native'
+import {ActivityIndicator, View} from 'react-native'
 import styles from '../styles'
 
 class Store extends React.Component {
@@ -20,8 +20,9 @@ class Store extends React.Component {
   }
 
   handleSubmit = values => {
-    const enabled = values.clientSettings.TAX_INCLUSIVE.enabled
-    values.clientSettings.TAX_INCLUSIVE.value = enabled
+    if (values.clientSettings.TAX_INCLUSIVE !== undefined) {
+      values.clientSettings.TAX_INCLUSIVE.value = values.clientSettings.TAX_INCLUSIVE.enabled
+    }
 
     dispatchFetchRequest(api.client.update, {
         method: 'POST',

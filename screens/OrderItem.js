@@ -36,7 +36,7 @@ class OrderItem extends React.PureComponent {
     }
 
     return (
-      <View style={styles.tableRowContainer}>
+      <View style={[styles.tableRowContainer]}>
         <TouchableOpacity
           style={[{flexDirection: 'row', flex: 9, marginLeft: 3}]}
           key={order.orderId}

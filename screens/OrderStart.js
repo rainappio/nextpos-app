@@ -7,10 +7,11 @@ import {
   getOrdersByDateRange
 } from '../actions'
 import OrderForm from './OrderForm'
-import {api, dispatchFetchRequest, makeFetchRequest} from '../constants/Backend'
+import {api, dispatchFetchRequest, makeFetchRequest, warningMessage} from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import BackBtn from '../components/BackBtn'
+import LoadingScreen from "./LoadingScreen";
 
 class OrderStart extends React.Component {
   static navigationOptions = {
@@ -78,21 +79,19 @@ class OrderStart extends React.Component {
       }
     })
 
-    if (isLoading || !haveData) {
+    if (isLoading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen/>
       )
-    }
-
-    return (
-      <OrderForm
-        onSubmit={this.handleSubmit}
-        navigation={navigation}
-        tablesMap={tablesMap}
-      />
-    )
+    } else {
+        return (
+          <OrderForm
+            onSubmit={this.handleSubmit}
+            navigation={navigation}
+            tablesMap={tablesMap}
+          />
+        )
+      }
   }
 }
 

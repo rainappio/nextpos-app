@@ -22,36 +22,30 @@ class UserTimeCardsFilterForm extends React.Component {
 
     context.localize({
       en: {
-        title: 'User Time Cards',
-        dayLabel: 'Day',
-        monthLabel: 'Month',
-        Day: 'Day',
-        totalHr: 'Total(Hrs)',
-        hours: 'hours',
-        minutes: 'minutes'
+        userTimeCardTitle: 'User Time Cards',
+        monthLabel: '月',
+        Day: 'Shift',
+        totalHr: 'Total Hours'
       },
       zh: {
-        title: '銷售報表',
-        dayLabel: 'Day-CH',
-        monthLabel: 'Month-CH',
-        Day: 'Day-CH',
-        totalHr: 'Total(Hrs)-CH',
-        hours: 'hours-CH',
-        minutes: 'minutes-CH'
+        userTimeCardTitle: '職員打卡',
+        monthLabel: '月',
+        Day: '值班',
+        totalHr: '總時數'
       }
     })
   }
 
   render() {
     const { t } = this.context
-    const { handleSubmit, username } = this.props
+    const { handleSubmit, displayName } = this.props
 
     return (
     	<View>
-    		<Text style={styles.centerText}>User - {username}</Text>
-      	<TimeCardFilterForm 
+    		<Text style={styles.screenSubTitle}>{displayName}</Text>
+      	<TimeCardFilterForm
       		handleSubmit={handleSubmit}/>
-      </View>        
+      </View>
     )
   }
 }

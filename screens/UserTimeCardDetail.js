@@ -19,7 +19,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import images from '../assets/images'
-import { getTimeCard, formatDate, formatDateObj } from '../actions'
+import {getTimeCard, formatDate, formatDateObj, formatTime, formatDateOnly} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 
@@ -36,16 +36,12 @@ class UserTimeCardDetail extends React.Component {
       en: {
         clkIn: 'Clock In',
         clkOut: 'Clock Out',
-        totalhrs: 'Total',
-        hours: 'hours',
-        minutes: 'minutes'
+        totalhrs: 'Total Hours',
       },
       zh: {
-        clkIn: 'CH',
-        clkOut: 'CH',
-        totalhrs: '總金額 hrs',
-        hours: 'hours-CH',
-        minutes: 'minutes-CH'
+        clkIn: '上班時間',
+        clkOut: '下班時間',
+        totalhrs: '總時數',
       }
     })
   }
@@ -65,7 +61,7 @@ class UserTimeCardDetail extends React.Component {
         <View style={[styles.container, { marginLeft: 8, marginRight: 8 }]}>
           <View style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}>
            <Text style={styles.screenTitle}>
-              {formatDate(timecardDetail.clockIn)}
+              {formatDateOnly(timecardDetail.clockIn)}
             </Text>
 
              <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
@@ -74,32 +70,36 @@ class UserTimeCardDetail extends React.Component {
               </View>
               <View style={{flex: 6}}>
                 <Text style={{ textAlign: 'right' }}>
-                  {formatDate(timecardDetail.clockIn)}
+                  {formatTime(timecardDetail.clockIn)}
                 </Text>
               </View>
             </View>
 
-            <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              <View style={{flex: 4}}>
-                <Text style={styles.orange_color}>{t('clkOut')}</Text>
-              </View>
-              <View style={{flex: 6}}>
-                <Text style={{ textAlign: 'right' }}>
-                  {formatDate(timecardDetail.clockOut)}
-                </Text>
-              </View>
-            </View>
+            {timecardDetail.timeCardStatus === 'COMPLETE' && (
+              <View>
+                <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
+                  <View style={{flex: 4}}>
+                    <Text style={styles.orange_color}>{t('clkOut')}</Text>
+                  </View>
+                  <View style={{flex: 6}}>
+                    <Text style={{textAlign: 'right'}}>
+                      {formatTime(timecardDetail.clockOut)}
+                    </Text>
+                  </View>
+                </View>
 
-            <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              <View style={{flex: 4}}>
-                <Text style={styles.orange_color}>{t('totalhrs')}</Text>
+                <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
+                  <View style={{flex: 4}}>
+                    <Text style={styles.orange_color}>{t('totalhrs')}</Text>
+                  </View>
+                  <View style={{flex: 6}}>
+                    <Text style={{textAlign: 'right'}}>
+                      {timecardDetail.hours}&nbsp;{t('timecard.hours')}&nbsp;{timecardDetail.minutes}&nbsp;{t('timecard.minutes')}
+                    </Text>
+                  </View>
+                </View>
               </View>
-              <View style={{flex: 6}}>
-                <Text style={{ textAlign: 'right' }}>
-                  {timecardDetail.hours}&nbsp;{t('hours')}&nbsp;{timecardDetail.minutes}&nbsp;{t('minutes')}
-                </Text>
-              </View>
-            </View>        
+            )}
 
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('UserTimeCards')}

@@ -42,6 +42,8 @@ import { LocaleContext } from '../locales/LocaleContext'
 import {handleDelete, handleOrderSubmit} from '../helpers/orderActions'
 import {NavigationEvents} from "react-navigation";
 import {handleOpenShift} from "../helpers/shiftActions";
+import {getCurrentClient} from "../actions/client";
+import LoadingScreen from "./LoadingScreen";
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -68,6 +70,7 @@ class TablesScreen extends React.Component {
     this.props.getShiftStatus()
     this.props.getfetchOrderInflights()
     this.props.getAvailableTables()
+    this.props.getCurrentClient()
   }
 
   loadLocalization = () => {
@@ -84,7 +87,9 @@ class TablesScreen extends React.Component {
         },
         otherOrders: 'Other Orders',
         seatingCapacity: 'Seats',
-        availableSeats: 'Vacant'
+        tableCapacity: 'Tables',
+        availableSeats: 'Vacant',
+        availableTables: 'Vacant',
       },
       zh: {
         noTableLayout: '需要創建至少一個桌面跟一個桌位.',
@@ -96,8 +101,10 @@ class TablesScreen extends React.Component {
           cancel: '取消'
         },
         otherOrders: '其他訂單',
-        seatingCapacity: '座位',
-        availableSeats: '空位'
+        seatingCapacity: '總座位',
+        tableCapacity: '總桌數',
+        availableSeats: '空位',
+        availableTables: '空桌'
       }
     })
   }
@@ -124,7 +131,7 @@ class TablesScreen extends React.Component {
     const {
       navigation,
       haveData,
-      haveError,
+      client,
       isLoading,
       tablelayouts,
       shiftStatus,
@@ -133,24 +140,9 @@ class TablesScreen extends React.Component {
     } = this.props
     const { t } = this.context
 
-    const floorCapacity = {}
-
-    availableTables && tablelayouts && tablelayouts.forEach((layout, idx) => {
-      let capacityCount = 0
-      const availableTablesOfLayout = availableTables[layout.id]
-
-      availableTablesOfLayout !== undefined && availableTablesOfLayout.forEach((table, idx2) => {
-        capacityCount += table.capacity
-      })
-
-      floorCapacity[layout.id] = capacityCount
-    })
-
     if (isLoading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen/>
       )
     } else if (tablelayouts === undefined || tablelayouts.length === 0) {
       return (
@@ -230,61 +222,122 @@ class TablesScreen extends React.Component {
           </ScrollView>
         </View>
       )
-    }
+    } else {
+      let tableDisplay = 'SHOW_SEAT'
 
-    return (
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={this.state.refreshing}
-            onRefresh={this.onRefresh}
+      if (client.attributes !== undefined && client.attributes.tableAvailabilityDisplay !== undefined) {
+        tableDisplay = client.attributes.tableAvailabilityDisplay
+      }
+
+      const floorCapacity = {}
+
+      availableTables && tablelayouts && tablelayouts.forEach((layout, idx) => {
+
+        let seatCount = 0
+        let tableCount = 0
+        const availableTablesOfLayout = availableTables[layout.id]
+
+        availableTablesOfLayout !== undefined && availableTablesOfLayout.forEach((table, idx2) => {
+          seatCount += table.capacity
+          tableCount += 1
+        })
+
+        floorCapacity[layout.id] = {}
+        floorCapacity[layout.id].seatCount = seatCount
+        floorCapacity[layout.id].tableCount = tableCount
+      })
+
+      return (
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh}
+            />
+          }
+        >
+          <NavigationEvents
+            onWillFocus={() => {
+              this.loadInfo()
+              this.loadLocalization()
+            }}
           />
-        }
-      >
-        <NavigationEvents
-          onWillFocus={() => {
-            this.loadInfo()
-            this.loadLocalization()
-          }}
-        />
 
-        <DismissKeyboard>
-          <View>
-            <View style={[styles.container, styles.nomgrBottom]}>
-              <BackBtnCustom
-                onPress={() => this.props.navigation.navigate('LoginSuccess')}
-              />
-              <Text style={styles.screenTitle}>{t('menu.tables')}</Text>
-              <AddBtn
-                onPress={() =>
-                  this.props.navigation.navigate('OrderStart', {
-                    handleOrderSubmit: handleOrderSubmit,
-                    handleDelete: handleDelete
-                  })
-                }
-              />
-            </View>
+          <DismissKeyboard>
+            <View>
+              <View style={[styles.container, styles.nomgrBottom]}>
+                <BackBtnCustom
+                  onPress={() => this.props.navigation.navigate('LoginSuccess')}
+                />
+                <Text style={styles.screenTitle}>{t('menu.tables')}</Text>
+                <AddBtn
+                  onPress={() =>
+                    this.props.navigation.navigate('OrderStart', {
+                      handleOrderSubmit: handleOrderSubmit,
+                      handleDelete: handleDelete
+                    })
+                  }
+                />
+              </View>
 
-            {tablelayouts.map((tblLayout, idx) => (
-              <View style={styles.mgrbtn20} key={idx}>
-                <View style={[styles.sectionBar, {flex: 1, paddingLeft:20, paddingRight: 20}]}>
+              {tablelayouts.map((tblLayout, idx) => (
+                <View style={{}} key={idx}>
+                  <View style={[styles.sectionBar, {flex: 1, paddingLeft: 8}]}>
+                    <Text
+                      style={[styles.sectionBarText, {flex: 4, textAlign: 'left'}
+                      ]}
+                    >
+                      {tblLayout.layoutName}
+                    </Text>
+                    {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_SEAT' && (
+                      <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'right', marginRight: 4}]}>
+                        {t('seatingCapacity')} {tblLayout.totalCapacity} {t('availableSeats')} {floorCapacity[tblLayout.id].seatCount}
+                      </Text>
+                    )}
+                    {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_TABLE' && (
+                      <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'right', marginRight: 4}]}>
+                        {t('tableCapacity')} {tblLayout.totalTables} {t('availableTables')} {floorCapacity[tblLayout.id].tableCount}
+                      </Text>
+                    )}
+                  </View>
+                  {ordersInflight !== undefined && ordersInflight[tblLayout.id] !== undefined ? (
+                    <FlatList
+                      data={ordersInflight[tblLayout.id]}
+                      renderItem={({item}) => {
+                        return (
+                          <OrderItem
+                            order={item}
+                            navigation={navigation}
+                            handleOrderSubmit={handleOrderSubmit}
+                            handleDelete={handleDelete}
+                            key={item.orderId}
+                          />
+                        )
+                      }}
+                      keyExtractor={(item, idx) => item.orderId}
+                    />
+                  ) : (
+                    <View>
+                      <Text style={styles.messageBlock}>
+                        {t('noInflightOrders')}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              ))}
+              <View style={styles.mgrbtn20} key='noLayout'>
+                <View style={[styles.sectionBar, {flex: 1}]}>
                   <Text
-                    style={[styles.sectionBarText, {flex: 4, textAlign: 'left'}
+                    style={[styles.sectionBarText, {textAlign: 'center'}
                     ]}
                   >
-                    {tblLayout.layoutName}
-                  </Text>
-                  <Text style={[styles.sectionBarText, {flex: 4.2, textAlign: 'right', marginRight: 4}]}>
-                    {t('seatingCapacity')} {tblLayout.totalCapacity}
-                  </Text>
-                  <Text style={[styles.sectionBarText, {flex: 2.8, textAlign: 'right'}]}>
-                    {t('availableSeats')} {floorCapacity[tblLayout.id]}
+                    {t('otherOrders')}
                   </Text>
                 </View>
-                {ordersInflight !== undefined && ordersInflight[tblLayout.id] !== undefined ? (
+                {ordersInflight !== undefined && ordersInflight['NO_LAYOUT'] !== undefined ? (
                   <FlatList
-                    data={ordersInflight[tblLayout.id]}
-                    renderItem={({ item }) => {
+                    data={ordersInflight['NO_LAYOUT']}
+                    renderItem={({item}) => {
                       return (
                         <OrderItem
                           order={item}
@@ -305,44 +358,11 @@ class TablesScreen extends React.Component {
                   </View>
                 )}
               </View>
-            ))}
-            <View style={styles.mgrbtn20} key='noLayout'>
-              <View style={[styles.sectionBar, {flex: 1}]}>
-                <Text
-                  style={[styles.sectionBarText, {textAlign: 'center'}
-                  ]}
-                >
-                  {t('otherOrders')}
-                </Text>
-              </View>
-              {ordersInflight !== undefined && ordersInflight['NO_LAYOUT'] !== undefined ? (
-                <FlatList
-                  data={ordersInflight['NO_LAYOUT']}
-                  renderItem={({ item }) => {
-                    return (
-                      <OrderItem
-                        order={item}
-                        navigation={navigation}
-                        handleOrderSubmit={handleOrderSubmit}
-                        handleDelete={handleDelete}
-                        key={item.orderId}
-                      />
-                    )
-                  }}
-                  keyExtractor={(item, idx) => item.orderId}
-                />
-              ) : (
-                <View>
-                  <Text style={styles.messageBlock}>
-                    {t('noInflightOrders')}
-                  </Text>
-                </View>
-              )}
             </View>
-          </View>
-        </DismissKeyboard>
-      </ScrollView>
-    )
+          </DismissKeyboard>
+        </ScrollView>
+      )
+    }
   }
 }
 
@@ -354,7 +374,8 @@ const mapStateToProps = state => ({
   haveError: state.ordersinflight.haveError,
   isLoading: state.ordersinflight.loading,
   shiftStatus: state.shift.data.shiftStatus,
-  availableTables: state.tablesavailable.data.availableTables
+  availableTables: state.tablesavailable.data.availableTables,
+  client: state.client.data
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -362,7 +383,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
   getTableLayouts: () => dispatch(getTableLayouts()),
   getShiftStatus: () => dispatch(getShiftStatus()),
-  getAvailableTables: () => dispatch(getTablesAvailable())
+  getAvailableTables: () => dispatch(getTablesAvailable()),
+  getCurrentClient: () => dispatch(getCurrentClient())
 })
 export default connect(
   mapStateToProps,

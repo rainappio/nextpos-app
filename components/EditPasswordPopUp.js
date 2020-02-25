@@ -150,7 +150,6 @@ class EditPasswordPopUp extends Component {
           visible={this.state.isVisible}
         >
           <TouchableOpacity
-            ref={component => (this._touchable = component)}
             activeOpacity={1}
             style={styles.modalContainer}
             onPressOut={() => {

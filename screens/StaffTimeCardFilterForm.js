@@ -20,22 +20,22 @@ class StaffTimeCardFilterForm extends React.Component {
 
     context.localize({
       en: {
-      	title: 'Staff Time Card',
+      	title: 'Staff Time Cards',
         yearLabel: 'Year',
-        monthLabel: 'Month',        
+        monthLabel: 'Month',
         searchButton: 'Search',
         firstColTitle: 'Staff',
-        secColTitle: 'Total(days)',
-        thirdColTitle: 'Total(Hrs)'
+        secColTitle: 'Total Shifts',
+        thirdColTitle: 'Total Hours'
       },
       zh: {
-      	title: 'Staff Time Card-CH',
-        yearLabel: 'Year-CH',
-        monthLabel: 'Month-CH',
-        searchButton: 'Search - CH',
-        firstColTitle: 'Staff - CH',
-        secColTitle: 'Total(days) - CH',
-        thirdColTitle: 'Total(Hrs) - CH'
+      	title: '職員打卡表',
+        yearLabel: '年',
+        monthLabel: '月',
+        searchButton: '搜尋',
+        firstColTitle: '員工',
+        secColTitle: '總班數',
+        thirdColTitle: '總時數'
       }
     })
   }
@@ -43,7 +43,7 @@ class StaffTimeCardFilterForm extends React.Component {
   render() {
     const { t } = this.context
     const { handleSubmit } = this.props
-    
+
     return (
      <TimeCardFilterForm handleSubmit={handleSubmit}/>
     )

@@ -440,9 +440,6 @@ export default StyleSheet.create({
     position: 'absolute',
     top: 160
   },
-  fullhalf_width: {
-    width: '60%'
-  },
   no_mgrTop: {
     marginTop: 0
   },
@@ -460,6 +457,14 @@ export default StyleSheet.create({
     lineHeight: 32,
     marginBottom: 16,
     marginTop: -8,
+    color: mainThemeColor,
+    fontWeight: 'bold'
+  },
+  screenSubTitle: {
+    textAlign: 'center',
+    fontSize: 16,
+    lineHeight: 32,
+    marginHorizontal: 10,
     color: mainThemeColor,
     fontWeight: 'bold'
   },
@@ -482,6 +487,14 @@ export default StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 30,
     borderRadius: 4
+  },
+  sectionTitleContainer: {
+    alignItems: 'center',
+    marginVertical: 15,
+  },
+  sectionTitleText: {
+    fontSize: 16,
+    fontWeight: 'bold'
   },
   sectionBar: {
     flexDirection: 'row',
@@ -568,18 +581,17 @@ export default StyleSheet.create({
     color: '#fff'
   },
   secondActionButton: {
-    borderColor: '#00ab66',
-    backgroundColor: '#00ab66',
-    color: '#fff'
+    backgroundColor: '#fff',
+    color: '#f18d1a'
   },
   cancelButton: {
     backgroundColor: '#fff',
     color: '#f18d1a'
   },
   deleteButton: {
-    borderColor: '#858585',
+    borderColor: '#f75336',
     color: '#fff',
-    backgroundColor: '#858585'
+    backgroundColor: '#f75336'
   },
   LRmgr_35minus: {
     marginLeft: -30,
@@ -625,7 +637,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     marginBottom: 36,
     paddingLeft: 15,
-    paddingRight: 15,   
+    paddingRight: 15,
     marginTop: 71
   },
   row: {
@@ -637,7 +649,7 @@ export default StyleSheet.create({
     marginTop: 7,
     marginLeft: 13,
     marginBottom: 12,
-    borderRadius: 4,    
+    borderRadius: 4,
 
     ...Platform.select({
       ios: {

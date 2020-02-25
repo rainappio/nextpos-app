@@ -29,14 +29,14 @@ class PasswordResetForm extends React.Component {
   componentDidMount() {
     this.context.localize({
       en: {
-      	title: 'Reset Password ?',
-      	newPwd: 'Enter New Password',
+      	title: 'Please enter temporary password from your account email',
+      	newPwd: 'Enter Password',
         resetPwd: 'Reset Password'
       },
       zh: {
-      	title: 'Reset Password-CH ?',
-      	newPwd: 'Enter New Password-CH',
-        resetPwd: 'Reset Password-CH'
+      	title: '請輸入在您的帳號信箱收到的一組臨時密碼',
+      	newPwd: '輸入密碼',
+        resetPwd: '重置密碼'
       }
     })
   }
@@ -87,7 +87,7 @@ class PasswordResetForm extends React.Component {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => this.props.navigation.goBack()}
+              onPress={() => this.props.navigation.navigate('Login')}
             >
               <Text style={[styles.bottomActionButton, styles.cancelButton]}>
                 {t('cancel')}

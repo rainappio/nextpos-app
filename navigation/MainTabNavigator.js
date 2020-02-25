@@ -221,9 +221,6 @@ const tabBar = createBottomTabNavigator({
   Orders: {
     screen: Orders
   },
-  Reservation: {
-    screen: Reservation
-  },
   Reports: {
     screen: Reports
   },
