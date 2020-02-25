@@ -69,6 +69,9 @@ import Announcements from '../screens/Announcements'
 import AnnouncementsAdd from '../screens/AnnouncementsAdd'
 import AnnouncementsEdit from '../screens/AnnouncementsEdit'
 import PasswordReset from '../screens/PasswordReset'
+import StaffTimeCard from '../screens/StaffTimeCard'
+import UserTimeCards from '../screens/UserTimeCards'
+import UserTimeCardDetail from '../screens/UserTimeCardDetail'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -174,7 +177,10 @@ Reservation.navigationOptions = ({ screenProps: { t } }) => ({
 const Reports = createStackNavigator({
   Reports: ReportsScreen,
   Sales: Sales,
-  SalesCharts: SalesCharts
+  SalesCharts: SalesCharts,
+  StaffTimeCard: StaffTimeCard,
+  UserTimeCards: UserTimeCards,
+  UserTimeCardDetail: UserTimeCardDetail
 })
 Reports.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.reporting'),

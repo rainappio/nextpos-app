@@ -27,6 +27,9 @@ import { reducer as salesDistributionReportReducer } from './salesdistributionre
 import { reducer as customerCountRepoertReducer } from './customercountreport'
 import { reducer as announcementsReducer } from './announcements'
 import { reducer as announcementReducer } from './announcement'
+import { reducer as timecardsReducer } from './timecards'
+import { reducer as usertimeCardsReducer } from './usertimecards'
+import { reducer as timecardReducer } from './timecard'
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -56,6 +59,9 @@ const rootReducer = combineReducers({
   salesdistributionreport: salesDistributionReportReducer,
   customercountreport: customerCountRepoertReducer,
   announcements: announcementsReducer,
-  announcement: announcementReducer
+  announcement: announcementReducer,
+  timecards: timecardsReducer,
+	usertimecards: usertimeCardsReducer,
+	timecard: timecardReducer
 })
 export default rootReducer

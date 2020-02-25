@@ -10,7 +10,8 @@ export default class DropDown extends Component {
       children,
       meta: { error, touched, valid },
       options,
-      placeholder
+      placeholder,
+      forFilter
     } = this.props
 
     return (
@@ -18,11 +19,12 @@ export default class DropDown extends Component {
         <View
           style={{
             borderBottomWidth: 1,
-            borderBottomColor: '#f1f1f1',
+            borderBottomColor: forFilter? '#ffffff' : '#f1f1f1',
             paddingTop: Platform.OS === 'ios' ? 30 : 4,
             paddingBottom: Platform.OS === 'ios' ? 12 : 4,
             paddingLeft: 0,
-            marginBottom: 8
+            marginBottom: forFilter ? 0 : 8,
+            marginTop: forFilter ? -7.5 : 0
           }}
         >
           <RNPickerSelect

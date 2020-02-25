@@ -55,7 +55,7 @@ class Announcements extends React.Component {
     })
   }
 
-   _adjuxtAutoScroll(bool) {
+  _adjuxtAutoScroll(bool) {
     this.setState({
     	scrollEnabled: bool
     })

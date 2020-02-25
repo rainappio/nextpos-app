@@ -560,7 +560,8 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: '#f18d1a',
     padding: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    overflow: 'hidden'
   },
   actionButton: {
     backgroundColor: '#f18d1a',

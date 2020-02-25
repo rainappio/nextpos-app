@@ -69,7 +69,7 @@ class AnnouncementsForm extends React.Component {
             validate={isRequired}
             numberOfLines={10}
             multiline={true}
-            height={80}
+            height={160}
             underlineColorAndroid="transparent"
           />
         </View>
