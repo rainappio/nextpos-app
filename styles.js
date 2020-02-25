@@ -488,6 +488,13 @@ export default StyleSheet.create({
     paddingVertical: 30,
     borderRadius: 4
   },
+  sectionContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    marginTop: 5,
+    marginHorizontal: 15,
+    marginBottom: 20
+  },
   sectionTitleContainer: {
     alignItems: 'center',
     marginVertical: 15,

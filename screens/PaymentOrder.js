@@ -15,7 +15,7 @@ import {
   successMessage,
   api,
   makeFetchRequest,
-  errorAlert
+  errorAlert, dispatchFetchRequest
 } from '../constants/Backend'
 import BackBtn from '../components/BackBtn'
 import InputText from '../components/InputText'
@@ -41,7 +41,7 @@ class PaymentOrder extends React.Component {
     	},
     	zh: {
       	cashPayment: '現金',
-      	cardPayment: 'Credit Card-CH'
+      	cardPayment: '信用卡'
     	}
   	})
 
@@ -52,7 +52,6 @@ class PaymentOrder extends React.Component {
   			0: {label: context.t('cashPayment'), value: 'CASH'},
   			1: {label: context.t('cardPayment'), value: 'CARD'}
   			},
-				//paymentsTypes: ['CASH','CARD'],
     	selectedPaymentType: null
   	}
   }
@@ -72,48 +71,34 @@ class PaymentOrder extends React.Component {
   }
 
   handleComplete = id => {
-    makeFetchRequest(token => {
-      const formData = new FormData()
-      formData.append('action', 'COMPLETED')
-      fetch(`${api.apiRoot}/orders/${id}/process?action=COMPLETE`, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          Authorization: 'Bearer ' + token.access_token
-        },
-        body: formData
-      })
-        .then(response => response.json())
-        .then(res => {
-          if (res) {
-            this.props.navigation.navigate('TablesSrc')
-            this.props.getfetchOrderInflights()
-            this.props.clearOrder(id)
-            this.props.getOrdersByDateRange()
-          } else {
-            alert(res.message === undefined ? 'pls try again' : res.message)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+    const formData = new FormData()
+    formData.append('action', 'COMPLETE')
+
+    dispatchFetchRequest(api.order.process(id), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {},
+      body: formData
+    }, response => {
+      this.props.navigation.navigate('TablesSrc')
+    }).then()
   }
 
   handleSubmit = values => {
-    var cashObj = {
+    const transactionObj = {
       orderId: this.props.navigation.state.params.order.orderId,
       paymentMethod: values.paymentMethod,
-      billType: 'SINGLE'      
+      billType: 'SINGLE',
+      paymentDetails: {}
     }
-    if(values.paymentMethod == 'CASH'){
-    	cashObj.cash = values.cash 
+    if (values.paymentMethod === 'CASH') {
+      transactionObj.paymentDetails['CASH'] = values.cash
     }
-		if(values.paymentMethod == 'CARD'){
-			cashObj.cardType = values.cardType
-			cashObj.cardNumber = values.cardNumber
-		}
+    if (values.paymentMethod === 'CARD') {
+      transactionObj.paymentDetails['CARD_TYPE'] = values.cardType
+      transactionObj.paymentDetails['LAST_FOUR_DIGITS'] = values.cardNumber
+    }
 
     makeFetchRequest(token => {
       fetch(api.payment.charge, {
@@ -124,7 +109,7 @@ class PaymentOrder extends React.Component {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + token.access_token
         },
-        body: JSON.stringify(cashObj)
+        body: JSON.stringify(transactionObj)
       })
         .then(response => {
           if (response.status === 200) {

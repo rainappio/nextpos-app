@@ -34,6 +34,7 @@ const en = {
   },
   action: {
     ok: 'OK',
+    done: 'Done',
     save: 'Save',
     update: 'Update',
     cancel: 'Cancel',

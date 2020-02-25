@@ -40,31 +40,32 @@ class AccountClosureForm extends React.Component {
 
     context.localize({
       en: {
-        Title: 'Account Closure',
+        accountCloseTitle: 'Closing Account',
         staff: 'Staff',
-        cash: 'Cash',
-        card: 'Credit Card',
-      	next: 'Next',
+        cashSection: 'Cash',
+        cardSection: 'Credit Card',
+      	nextAction: 'Next',
       	status: 'Status',
       	startingCash: 'Starting Cash',
-      	totalCashInRegister: 'Total Cash In Register',
-      	remark: 'Remark',
-      	totalCardInRegister: 'Total Card In Register',
-      	totalCashTransitionAmt: 'Total Cash Transactions Amount',
-      	totalCardTransitionAmt: 'Total Card Transactions Amount'   	
+      	totalCashTransitionAmt: 'Total Cash Transactions',
+      	totalCashInRegister: 'Actual Cash Amount',
+      	remark: 'Unbalance Reason',
+      	totalCardTransitionAmt: 'Total Card Transactions',
+      	totalCardInRegister: 'Actual Card Amount'
       },
       zh: {
-        Title: 'Account Closure-CH',
+        accountCloseTitle: '開始關帳',
         staff: '員工',
-        cash: 'Cash-CH',
-        card: 'Credit Card-CH',
-        next: 'Next-CH',
-        status: 'Status-CH',
-        startingCash: 'Starting Cash-CH',
-        totalCashInRegister: 'Total Cash In Register-CH',
-        remark: 'Remark-CH',
-        totalCardInRegister: 'Total Card In Register-CH',
-        totalCardTransitionAmt: 'Total Card Transactions Amount-CH'
+        cashSection: '現金',
+        cardSection: '信用卡',
+        nextAction: '下一步',
+        status: '關帳狀態',
+        startingCash: '開帳現金',
+        totalCashTransitionAmt: '現金營業額',
+        totalCashInRegister: '實際現金總額',
+        remark: '理由',
+        totalCardTransitionAmt: '刷卡營業額',
+        totalCardInRegister: '實際刷卡營業額'
       }
     })
   }
@@ -73,27 +74,25 @@ class AccountClosureForm extends React.Component {
     const { t } = this.context
     const { mostrecentShift, handleSubmit } = this.props
 
-    const closingShiftReport = {}	
-		if (mostrecentShift.close.closingShiftReport !== null && mostrecentShift.close.closingShiftReport.totalByPaymentMethod !== null ) {
-			closingShiftReport.totalByPaymentMethod = mostrecentShift.close.closingShiftReport.totalByPaymentMethod
-		}
-		
+    const closingShiftReport = {}
+    if (mostrecentShift.close.closingShiftReport !== null && mostrecentShift.close.closingShiftReport.totalByPaymentMethod !== null) {
+      closingShiftReport.totalByPaymentMethod = mostrecentShift.close.closingShiftReport.totalByPaymentMethod
+    }
+
     return (
       <DismissKeyboard>
-      	<ScrollView>          
+      	<ScrollView>
 
 					{/* Cash */}
-          	<View style={styles.sectionBar}>             
-            	<View style={[styles.tableCellView, {flex: 4}]}>
-              	<TouchableOpacity>
-                	<Text style={styles.sectionBarTextSmall}>
-                  	{t('cash')}
-                	</Text>
-              	</TouchableOpacity>
-            	</View>
+          	<View style={styles.sectionBar}>
+              <View>
+                <Text style={styles.sectionBarTextSmall}>
+                  {t('cashSection')}
+                </Text>
+              </View>
           	</View>
 
-          	<View style={[styles.container, styles.no_mgrTop, {marginBottom: 8}]}>
+          	<View style={[styles.sectionContainer]}>
             	<View style={{flex: 3, justifyContent: 'center'}}>
               	<View style={[styles.fieldContainer]}>
                 	<View style={{flex: 3}}>
@@ -102,9 +101,9 @@ class AccountClosureForm extends React.Component {
                   	</Text>
                 	</View>
                 	<View style={{flex: 1}}>
-                  	<Text>$&nbsp;{mostrecentShift.open.balance}</Text>
+                  	<Text>${mostrecentShift.open.balance}</Text>
                 	</View>
-              	</View>     	   
+              	</View>
 
               	<View style={[styles.fieldContainer]}>
                 	<View style={{flex: 3}}>
@@ -113,19 +112,10 @@ class AccountClosureForm extends React.Component {
                   	</Text>
                 	</View>
                 	<View style={{flex: 1}}>
-                  	<Text>$&nbsp;
-                  		{
-                  			Object.keys(closingShiftReport.totalByPaymentMethod).length === 0
-                  			?
-                  				0
-                  				:
-														closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') 
-														&&
-                  						closingShiftReport.totalByPaymentMethod.CASH.orderTotal
-                  		}
+                  	<Text>${closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.orderTotal : 0}
                   	</Text>
                 	</View>
-              	</View>           
+              	</View>
 
               	<View style={styles.fieldContainer}>
                 	<View style={{flex: 3}}>
@@ -137,8 +127,8 @@ class AccountClosureForm extends React.Component {
                   	<Field
               				name="cashclosingBalance"
               				component={InputText}
+                      keyboardType={`numeric`}
               				validate={isRequired}
-              				placeholder={"0"}
               				secureTextEntry={false}
               				height={35}
             				/>
@@ -150,7 +140,6 @@ class AccountClosureForm extends React.Component {
                   	<Field
               				name="cashunbalanceReason"
               				component={InputText}
-              				//validate={isRequired}
               				placeholder={t('remark')}
               				secureTextEntry={false}
               				height={35}
@@ -158,24 +147,22 @@ class AccountClosureForm extends React.Component {
                 	</View>
               	</View>
 
-            	</View>             		
+            	</View>
           	</View>
         	{/* #Cash */}
 
 
         	{/* Credit Card */}
-          	<View style={styles.sectionBar}>             
-            	<View style={[styles.tableCellView, {flex: 4}]}>
-              	<TouchableOpacity>
-                	<Text style={styles.sectionBarTextSmall}>
-                  	{t('card')}
-                	</Text>
-              	</TouchableOpacity>
-            	</View>
-          	</View>      	
+          <View style={styles.sectionBar}>
+            <View>
+              <Text style={styles.sectionBarTextSmall}>
+                {t('cardSection')}
+              </Text>
+            </View>
+          </View>
 
-          	<View style={[styles.container, styles.no_mgrTop]}>
-            	<View style={{flex: 3, justifyContent: 'center'}}> 
+          	<View style={[styles.sectionContainer]}>
+            	<View style={{flex: 3, justifyContent: 'center'}}>
             	 <View style={styles.fieldContainer}>
                 	<View style={{flex: 3}}>
                   	<Text style={[styles.fieldTitle]}>
@@ -183,16 +170,8 @@ class AccountClosureForm extends React.Component {
                   	</Text>
                 	</View>
                 	<View style={{flex: 1}}>
-                  	<Text>$&nbsp;
-											{
-												Object.keys(closingShiftReport.totalByPaymentMethod).length === 0
-                  			?
-                  				0
-                  				:
-														closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') 
-														&&
-                  						closingShiftReport.totalByPaymentMethod.CARD.orderTotal 
-											}
+                  	<Text>$
+                      {closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.orderTotal : 0}
                   	</Text>
                 	</View>
               	</View>
@@ -208,7 +187,7 @@ class AccountClosureForm extends React.Component {
               				name="cardclosingBalance"
               				component={InputText}
               				validate={isRequired}
-              				placeholder={"0"}
+                      keyboardType={`numeric`}
               				secureTextEntry={false}
               				height={35}
             				/>
@@ -220,21 +199,20 @@ class AccountClosureForm extends React.Component {
                   	<Field
               				name="cardunbalanceReason"
               				component={InputText}
-              				//validate={isRequired}
               				placeholder={t('remark')}
               				secureTextEntry={false}
             				/>
                 	</View>
               	</View>
             	</View>
-               		
+
     					<TouchableOpacity
       					onPress={handleSubmit}
     						>
       					<Text style={[styles.bottomActionButton, styles.actionButton]}>
-        					{t('next')}
+        					{t('nextAction')}
       					</Text>
-    					</TouchableOpacity>    
+    					</TouchableOpacity>
 
     					<TouchableOpacity
                 onPress={() => this.props.navigation.goBack()}
@@ -242,7 +220,7 @@ class AccountClosureForm extends React.Component {
                 <Text style={[styles.bottomActionButton, styles.cancelButton]}>
                   {t('cancel')}
                 </Text>
-              </TouchableOpacity>          
+              </TouchableOpacity>
           	</View>
         	{/* #Credit Card */}
 
