@@ -22,6 +22,7 @@ import InputText from '../components/InputText'
 import { isRequired } from '../validators'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import PaymentOrderForm from './PaymentOrderForm'
+import { LocaleContext } from '../locales/LocaleContext'
 import styles from '../styles'
 
 class PaymentOrder extends React.Component {
@@ -29,9 +30,36 @@ class PaymentOrder extends React.Component {
     header: null
   }
 
-  state = {
-    numbersArr: [],
-    dynamicTotal: 0
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+    context.localize({
+    	en:{
+      	cashPayment: 'Cash',
+      	cardPayment: 'Credit Card'
+    	},
+    	zh: {
+      	cashPayment: '現金',
+      	cardPayment: 'Credit Card-CH'
+    	}
+  	})
+
+    this.state = {
+    	numbersArr: [],
+    	dynamicTotal: 0,
+			paymentsTypes: {
+  			0: {label: context.t('cashPayment'), value: 'CASH'},
+  			1: {label: context.t('cardPayment'), value: 'CARD'}
+  			},
+				//paymentsTypes: ['CASH','CARD'],
+    	selectedPaymentType: null
+  	}
+  }
+
+  handlePaymentTypeSelection = (index) => {
+    const selectedIndex = this.selectedPaymentType === index ? null : index
+    this.setState({ selectedPaymentType: selectedIndex })
   }
 
   addNum = num => {
@@ -76,10 +104,17 @@ class PaymentOrder extends React.Component {
   handleSubmit = values => {
     var cashObj = {
       orderId: this.props.navigation.state.params.order.orderId,
-      paymentMethod: 'CASH',
-      billType: 'SINGLE',
-      cash: values.cash
+      paymentMethod: values.paymentMethod,
+      billType: 'SINGLE'      
     }
+    if(values.paymentMethod == 'CASH'){
+    	cashObj.cash = values.cash 
+    }
+		if(values.paymentMethod == 'CARD'){
+			cashObj.cardType = values.cardType
+			cashObj.cardNumber = values.cardNumber
+		}
+
     makeFetchRequest(token => {
       fetch(api.payment.charge, {
         method: 'POST',
@@ -113,6 +148,9 @@ class PaymentOrder extends React.Component {
   }
 
   render() {
+  	const { paymentsTypes, selectedPaymentType } = this.state
+		const paymentsTypeslbl = Object.keys(paymentsTypes).map(key => paymentsTypes[key].label)
+
     return (
       <PaymentOrderForm
         onSubmit={this.handleSubmit}
@@ -122,6 +160,10 @@ class PaymentOrder extends React.Component {
         addNum={this.addNum}
         resetTotal={this.resetTotal}
         dynamicTotal={this.state.dynamicTotal}
+        paymentsTypeslbl={paymentsTypeslbl}
+        selectedPaymentType={selectedPaymentType}
+        paymentsTypes={paymentsTypes}
+        handlePaymentTypeSelection={this.handlePaymentTypeSelection}
       />
     )
   }

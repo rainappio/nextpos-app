@@ -91,7 +91,7 @@ class PaymentFormScreen extends React.Component {
     return (
       <ScrollView>
         <DismissKeyboard>
-          <View style={styles.container_nocenterCnt}>
+          <View style={styles.container}>
             <BackBtnCustom
               onPress={() => this.props.navigation.navigate('OrdersSummary')}
             />
