@@ -67,7 +67,6 @@ class OrderForm extends Component {
 
   componentDidMount() {
 
-
   }
 
   handleOrderTypeSelection = (index) => {

@@ -28,7 +28,6 @@ class OrderStart extends React.Component {
   }
 
   handleSubmit = values => {
-
     const createOrder = {}
     createOrder.orderType = values.orderType
     createOrder.tableId = values.tableId
