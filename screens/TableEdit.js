@@ -94,8 +94,10 @@ class TableEdit extends React.Component {
       )
     } else if (haveData && selectedTable !== undefined) {
       return (
+      	<ScrollView>
         <DismissKeyboard>
-          <View style={[styles.container_nocenterCnt]}>
+        
+          <View style={[styles.container]}>
             <View>
               <BackBtn/>
               <Text style={styles.screenTitle}>{t('editTableTitle')}</Text>
@@ -109,7 +111,9 @@ class TableEdit extends React.Component {
               navigation={navigation}
             />
           </View>
+          
         </DismissKeyboard>
+        </ScrollView>
       )
     } else {
       return null

@@ -30,6 +30,7 @@ import { reducer as announcementReducer } from './announcement'
 import { reducer as timecardsReducer } from './timecards'
 import { reducer as usertimeCardsReducer } from './usertimecards'
 import { reducer as timecardReducer } from './timecard'
+import { reducer as shiftMostRecentReducer } from './shiftMostRecent'
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -62,6 +63,7 @@ const rootReducer = combineReducers({
   announcement: announcementReducer,
   timecards: timecardsReducer,
 	usertimecards: usertimeCardsReducer,
-	timecard: timecardReducer
+	timecard: timecardReducer,
+	mostRecentShift: shiftMostRecentReducer
 })
 export default rootReducer

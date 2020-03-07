@@ -82,69 +82,67 @@ class TableLayoutForm extends React.Component {
     }
 
     return (
-      <ScrollView contentContainerStyle={[styles.contentContainer]}>
-        <View>
-          <View style={styles.fieldContainer}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.fieldTitle}>{t('layoutName')}</Text>
+      <View>
+        <View style={styles.fieldContainer}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.fieldTitle}>{t('layoutName')}</Text>
+          </View>
+          <View style={{ flex: 3 }}>
+            <Field
+              name="layoutName"
+              component={InputText}
+              validate={isRequired}
+              placeholder={t('layoutName')}
+              autoCapitalize="none"
+            />
+          </View>
+        </View>
+
+        {isEdit ? (
+          <View>
+            <View style={styles.fieldContainer}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.fieldTitle}>{t('totalCapacity')}</Text>
+              </View>
+              <View style={{ flex: 3 }}>
+                <Text
+                  style={{
+                    borderWidth: 1,
+                    borderColor: '#ddd',
+                    width: 125,
+                    fontSize: 19,
+                    color: '#888',
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    paddingLeft: 25
+                  }}
+                >
+                  {isEdit && initialValues.totalCapacity}
+                </Text>
+              </View>
             </View>
-            <View style={{ flex: 3 }}>
-              <Field
-                name="layoutName"
-                component={InputText}
-                validate={isRequired}
-                placeholder={t('layoutName')}
-                autoCapitalize="none"
+
+            <View style={styles.mgrtotop12}>
+              <View style={styles.fieldContainer}>
+                <Text style={styles.fieldTitle}>{t('tables')}</Text>
+                <AddBtn
+                  onPress={() =>
+                    this.props.navigation.navigate('TableAdd', {
+                      layoutId: initialValues.id
+                    })
+                  }
+                />
+              </View>
+              <FlatList
+                data={initialValues.tables}
+                renderItem={({ item }) => (
+                  <Item table={item} layoutId={initialValues.id} />
+                )}
+                keyExtractor={item => item.tableId}
               />
             </View>
           </View>
-
-          {isEdit ? (
-            <View>
-              <View style={styles.fieldContainer}>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.fieldTitle}>{t('totalCapacity')}</Text>
-                </View>
-                <View style={{ flex: 3 }}>
-                  <Text
-                    style={{
-                      borderWidth: 1,
-                      borderColor: '#ddd',
-                      width: 125,
-                      fontSize: 19,
-                      color: '#888',
-                      paddingTop: 10,
-                      paddingBottom: 10,
-                      paddingLeft: 25
-                    }}
-                  >
-                    {isEdit && initialValues.totalCapacity}
-                  </Text>
-                </View>
-              </View>
-
-              <View style={styles.mgrtotop12}>
-                <View style={styles.fieldContainer}>
-                  <Text style={styles.fieldTitle}>{t('tables')}</Text>
-                  <AddBtn
-                    onPress={() =>
-                      this.props.navigation.navigate('TableAdd', {
-                        layoutId: initialValues.id
-                      })
-                    }
-                  />
-                </View>
-                <FlatList
-                  data={initialValues.tables}
-                  renderItem={({ item }) => (
-                    <Item table={item} layoutId={initialValues.id} />
-                  )}
-                  keyExtractor={item => item.tableId}
-                />
-              </View>
-            </View>
-          ) : null}
-        </View>
+        ) : null}      
 
         <View style={styles.bottom}>
           {isEdit ? (
@@ -173,7 +171,7 @@ class TableLayoutForm extends React.Component {
             />
           )}
         </View>
-      </ScrollView>
+			</View>
     )
   }
 }

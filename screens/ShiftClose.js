@@ -12,7 +12,7 @@ import {
 } from 'react-native'
 import {connect} from 'react-redux'
 import BackBtnCustom from '../components/BackBtnCustom'
-import { formatDate, getShiftStatus } from '../actions'
+import { formatDate, getShiftStatus, getMostRecentShiftStatus } from '../actions'
 import {
   api,
   dispatchFetchRequest,
@@ -22,8 +22,9 @@ import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import {handleCloseShift, handleOpenShift} from "../helpers/shiftActions";
+import {handleCloseShift, handleOpenShift, checkBalanceInput} from "../helpers/shiftActions";
 import BackBtn from "../components/BackBtn";
+import AccountCloseConfirm from './AccountCloseConfirm'
 
 class ShiftClose extends React.Component {
   static navigationOptions = {
@@ -48,7 +49,7 @@ class ShiftClose extends React.Component {
         closedBy: 'Closed by',
         cash: 'Open/Close Cash',
         openShiftAction: 'Open Shift',
-        closeShiftAction: 'Close Shift'
+        closeShiftAction: 'Close Shift Init'
       },
       zh: {
         shiftTitle: '開關帳',
@@ -68,51 +69,47 @@ class ShiftClose extends React.Component {
     })
 
     this.state = {
-      balance: 0,
-      mostRecentShift: null
+      balance: 0
     }
   }
 
   componentDidMount() {
     this.props.getShiftStatus()
-    this.getMostRecentShift()
-  }
-
-  getMostRecentShift = () => {
-    dispatchFetchRequest(api.shift.mostRecent, {
-        method: 'GET',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {}
-      },
-      response => {
-        response.json().then(data => {
-          this.setState({mostRecentShift: data})
-        })
-      }).then()
+    this.props.getMostRecentShiftStatus()
   }
 
   handleOpenShift = (balance) => {
     handleOpenShift(balance, (response) => {
       successMessage('Shift opened')
       this.props.dispatch(getShiftStatus())
+      this.props.getMostRecentShiftStatus()
     })
   }
 
-  handleCloseShift = (balance) => {
-    handleCloseShift(balance, (response) => {
-      successMessage('Shift closed')
-      this.props.dispatch(getShiftStatus())
-      this.getMostRecentShift()
-    })
-  }
+  handleinitiateCloseShift = () => {
+  	dispatchFetchRequest(
+    	api.shift.initiate,
+    	{
+      	method: 'POST',
+      	withCredentials: true,
+      	credentials: 'include',
+      	headers: {
+        	'Content-Type': 'application/json'
+      	},
+      	body: ''
+    	},
+    	response => {   	
+      	this.props.getShiftStatus()
+      	this.props.getMostRecentShiftStatus()
+      	this.props.navigation.navigate('AccountClose')
+    	}).then()
+	}
 
   render() {
-    const {loading, shift} = this.props
+    const {loading, shift, haveData, mostRecentShift} = this.props
     const { t } = this.context
-    const { mostRecentShift } = this.state
 
-    if (loading == null) {
+    if (loading) {
       return (
         <View style={[styles.container]}>
           <ActivityIndicator size="large" color="#ccc"/>
@@ -121,7 +118,7 @@ class ShiftClose extends React.Component {
     } else {
       return (
         <DismissKeyboard>
-          <View style={styles.container}>
+  				<View style={styles.container}>
             <View>
               <BackBtn/>
               <Text style={styles.screenTitle}>
@@ -141,7 +138,7 @@ class ShiftClose extends React.Component {
                 </View>
               </View>
 
-              {shift.shiftStatus === 'INACTIVE' && mostRecentShift != null && mostRecentShift.shiftStatus !== 'ACTIVE' && (
+              {shift.shiftStatus === 'INACTIVE' && mostRecentShift != null && mostRecentShift.close !== undefined && mostRecentShift.shiftStatus !== 'ACTIVE' && (
                 <View>
                   <View style={styles.fieldContainer}>
                     <View style={{flex: 1}}>
@@ -161,7 +158,7 @@ class ShiftClose extends React.Component {
                       </Text>
                     </View>
                     <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{formatDate(mostRecentShift.close.timestamp)}</Text>
+                      <Text style={{alignSelf: 'flex-end'}}>{mostRecentShift.close.timestamp !== null && formatDate(mostRecentShift.close.timestamp)}</Text>
                     </View>
                   </View>
                   <View style={styles.fieldContainer}>
@@ -206,7 +203,7 @@ class ShiftClose extends React.Component {
                       </Text>
                     </View>
                     <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{formatDate(shift.open.timestamp)}</Text>
+                      <Text style={{alignSelf: 'flex-end'}}>{shift.open.timestamp !== null && formatDate(shift.open.timestamp)}</Text>
                     </View>
                   </View>
                   <View style={styles.fieldContainer}>
@@ -233,58 +230,64 @@ class ShiftClose extends React.Component {
               )}
             </View>
 
-            <KeyboardAvoidingView style={styles.bottom} behavior="padding" enabled>
-              <View style={[styles.fieldContainer]}>
-                <Text style={[styles.fieldTitle, {flex: 2}]}>
-                  {t('cash')}
-                </Text>
-                <TextInput
-                  name="balance"
-                  value={String(this.state.balance)}
-                  type='text'
-                  onChangeText={(value) => this.setState({balance: value})}
-                  placeholder={t('cash')}
-                  keyboardType={`numeric`}
-                  style={[{flex: 3, height: 44, borderBottomColor: '#f1f1f1', borderBottomWidth: 1}]}
-                  inputAccessoryViewID="shiftBalance"
-                />
-                {Platform.OS === 'ios' && (
-                  <InputAccessoryView nativeID="shiftBalance">
-                    <TouchableOpacity
-                      onPress={() => Keyboard.dismiss()}
-                      style={[{ flex: 1, flexDirection: 'row-reverse' }, styles.grayBg]}
-                    >
-                      <Text
-                        style={[
-                          styles.margin_15,
-                          { fontSize: 16, fontWeight: 'bold', color: '#F39F86' }
-                        ]}
-                      >
-                        Done
-                      </Text>
-                    </TouchableOpacity>
-                  </InputAccessoryView>
-                )}
-              </View>
+            <KeyboardAvoidingView style={styles.bottom} behavior="padding" enabled>              
               {
-                shift.shiftStatus === 'ACTIVE' ?
+                ['ACTIVE', 'CLOSING', 'CONFIRM_CLOSE'].includes(mostRecentShift.shiftStatus) 
+                ?
                   (
-                    <ConfirmActionButton
-                      handleConfirmAction={this.handleCloseShift}
-                      params={this.state.balance}
-                      buttonTitle="closeShiftAction"
-                    />
-                  ) :
-                  (
-                    <ConfirmActionButton
-                      handleConfirmAction={this.handleOpenShift}
-                      params={this.state.balance}
-                      buttonTitle="openShiftAction"
-                    />
-                  )
+     								<TouchableOpacity
+       								onPress={this.handleinitiateCloseShift}
+     									>
+     									<Text style={[styles.bottomActionButton, styles.actionButton]}>
+        								{t('closeShiftAction')}
+      								</Text>
+    								</TouchableOpacity>
+    							) 
+                  :
+                  	(
+                  		<View>
+                  			<View style={[styles.fieldContainer]}>
+                					<Text style={[styles.fieldTitle, {flex: 2}]}>
+                  					{t('cash')}
+                					</Text>
+                					<TextInput
+                  					name="balance"
+                  					value={String(this.state.balance)}
+                  					type='text'
+                  					onChangeText={(value) => this.setState({balance: value})}
+                  					placeholder={t('cash')}
+                  					keyboardType={`numeric`}
+                  					style={[{flex: 3, height: 44, borderBottomColor: '#f1f1f1', borderBottomWidth: 1}]}
+                  					inputAccessoryViewID="shiftBalance"
+                					/>
+                					{Platform.OS === 'ios' && (
+                  					<InputAccessoryView nativeID="shiftBalance">
+                    					<TouchableOpacity
+                      					onPress={() => Keyboard.dismiss()}
+                      					style={[{ flex: 1, flexDirection: 'row-reverse' }, styles.grayBg]}
+                    						>
+                      					<Text
+                        					style={[
+                          					styles.margin_15,
+                          					{ fontSize: 16, fontWeight: 'bold', color: '#F39F86' }
+                        					]}
+                      						>
+                        					Done
+                      					</Text>
+                    					</TouchableOpacity>
+                  					</InputAccessoryView>
+                					)}
+              					</View>
+                				<ConfirmActionButton
+                  				handleConfirmAction={this.handleOpenShift}
+                  				params={this.state.balance}
+                  				buttonTitle="openShiftAction"
+                				/>
+              				</View>
+            				)
               }
             </KeyboardAvoidingView>
-          </View>
+          </View>      
         </DismissKeyboard>
       )
     }
@@ -292,14 +295,16 @@ class ShiftClose extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  shift: state.shift.data,
-  loading: state.shift.loading,
-  haveData: state.shift.haveData
+	shift: state.shift.data,
+	mostRecentShift: state.mostRecentShift.data,
+  loading: state.mostRecentShift.loading,
+  haveData: state.mostRecentShift.haveData
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getShiftStatus: () => dispatch(getShiftStatus())
+  getShiftStatus: () => dispatch(getShiftStatus()),
+  getMostRecentShiftStatus: () => dispatch(getMostRecentShiftStatus())
 })
 export default connect(
   mapStateToProps,

@@ -66,6 +66,7 @@ class TableLayoutAdd extends React.Component {
     const { t } = this.state
 
     return (
+    	
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
           <View>
@@ -78,6 +79,7 @@ class TableLayoutAdd extends React.Component {
           />
         </View>
       </DismissKeyboard>
+      
     )
   }
 }
