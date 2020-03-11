@@ -24,12 +24,12 @@ const InputText = ({
     keyboardType,
     editable,
     onPress,
-    autoCapitalize,
-    height
+    autoCapitalize
   },
   meta: { error, touched, valid },
   isgrayBg,
   iscustomizeCate,
+  height,
   ...rest
 }) => (
   <View>

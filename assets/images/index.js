@@ -8,7 +8,8 @@ const images = {
   checkiconOutline: require('./ic_check_box_outline_blank.png'),
   cash: require('./cash.png'),
   beenclock: require('./beenclock.png'),
-  handholdbox: require('./hand-hold-box.png')
+  handholdbox: require('./hand-hold-box.png'),
+  end: require('./end.png')
 }
 
 module.exports = images

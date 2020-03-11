@@ -132,7 +132,10 @@ export const api = {
     open: `${apiRoot}/shifts/open`,
     close: `${apiRoot}/shifts/close`,
     active: `${apiRoot}/shifts/active`,
-    mostRecent: `${apiRoot}/shifts/mostRecent`
+    mostRecent: `${apiRoot}/shifts/mostRecent`,
+    initiate: `${apiRoot}/shifts/initiateClose`,
+    confirm: `${apiRoot}/shifts/confirmClose`,
+    abort: `${apiRoot}/shifts/abortClose`
   },
   tablelayout: {
     create: `${apiRoot}/tablelayouts`,

@@ -72,6 +72,9 @@ import PasswordReset from '../screens/PasswordReset'
 import StaffTimeCard from '../screens/StaffTimeCard'
 import UserTimeCards from '../screens/UserTimeCards'
 import UserTimeCardDetail from '../screens/UserTimeCardDetail'
+import CloseComplete from '../screens/CloseComplete'
+import AccountClose from '../screens/AccountClose'
+import AccountCloseConfirm from '../screens/AccountCloseConfirm'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -124,7 +127,10 @@ const Settings = createStackNavigator({
   CheckoutComplete: CheckoutComplete,
   Announcements: Announcements,
   AnnouncementsAdd: AnnouncementsAdd,
-  AnnouncementsEdit: AnnouncementsEdit
+  AnnouncementsEdit: AnnouncementsEdit,
+  CloseComplete: CloseComplete,
+  AccountClose: AccountClose,
+  AccountCloseConfirm: AccountCloseConfirm
 })
 Settings.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.settings'),

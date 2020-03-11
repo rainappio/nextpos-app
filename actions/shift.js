@@ -1,5 +1,5 @@
 import { api, dispatchFetchRequest } from '../constants/Backend'
-export const FETCH_SHIFT = 'FETCH_PRODUCT'
+export const FETCH_SHIFT = 'FETCH_SHIFT'
 export const FETCH_SHIFT_SUCCESS = 'FETCH_SHIFT_SUCCESS'
 export const FETCH_SHIFT_FAILURE = 'FETCH_SHIFT_FAILURE'
 

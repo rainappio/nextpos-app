@@ -99,23 +99,25 @@ class TableLayoutEdit extends React.Component {
       )
     }
     return (
-      <DismissKeyboard>
-        <View style={[styles.container_nocenterCnt]}>
-          <View>
-            <BackBtn />
-            <Text style={styles.screenTitle}>{t('editTableLayoutTitle')}</Text>
-          </View>
+    	<ScrollView>
+      	<DismissKeyboard>
+        	<View style={[styles.container]}>
+          	<View>
+            	<BackBtn />
+            	<Text style={styles.screenTitle}>{t('editTableLayoutTitle')}</Text>
+          	</View>
 
-          <TableLayoutForm
-            onSubmit={this.handleSubmit}
-            handleDeleteLayout={this.handleDeleteLayout}
-            initialValues={tablelayout}
-            isEdit={true}
-            navigation={navigation}
-            handleEditCancel={this.handleEditCancel}
-          />
-        </View>
-      </DismissKeyboard>
+          	<TableLayoutForm
+            	onSubmit={this.handleSubmit}
+            	handleDeleteLayout={this.handleDeleteLayout}
+            	initialValues={tablelayout}
+            	isEdit={true}
+            	navigation={navigation}
+            	handleEditCancel={this.handleEditCancel}
+          	/>
+        	</View>
+      	</DismissKeyboard>
+      </ScrollView>
     )
   }
 }

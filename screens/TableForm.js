@@ -43,37 +43,35 @@ class TableForm extends React.Component {
     const { t } = this.state
 
     return (
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <View>
-          <View style={[styles.fieldContainer]}>
-            <View style={[{ flex: 1 }]}>
-              <Text style={styles.fieldTitle}>{t('tableName')}</Text>
-            </View>
-            <View style={[{ flex: 3 }]}>
-              <Field
-                name="tableName"
-                component={InputText}
-                validate={isRequired}
-                placeholder={t('tableName')}
-                autoCapitalize="none"
-              />
-            </View>
+      <View>       
+        <View style={[styles.fieldContainer]}>
+          <View style={[{ flex: 1 }]}>
+            <Text style={styles.fieldTitle}>{t('tableName')}</Text>
           </View>
+          <View style={[{ flex: 3 }]}>
+            <Field
+              name="tableName"
+              component={InputText}
+              validate={isRequired}
+              placeholder={t('tableName')}
+              autoCapitalize="none"
+            />
+          </View>
+        </View>
 
-          <View style={[styles.fieldContainer]}>
-            <View style={[{ flex: 1 }]}>
-              <Text style={styles.fieldTitle}>{t('tableCapacity')}</Text>
-            </View>
-            <View style={[{ flex: 3 }]}>
-              <Field
-                name="capacity"
-                component={InputNumber}
-                type="up-down"
-                placeholder={t('tableCapacity')}
-                minValue={1}
-                customVal={isEdit && initialValues.capacity}
-              />
-            </View>
+        <View style={[styles.fieldContainer]}>
+          <View style={[{ flex: 1 }]}>
+            <Text style={styles.fieldTitle}>{t('tableCapacity')}</Text>
+          </View>
+          <View style={[{ flex: 3 }]}>
+            <Field
+              name="capacity"
+              component={InputNumber}
+              type="up-down"
+              placeholder={t('tableCapacity')}
+              minValue={1}
+              customVal={isEdit && initialValues.capacity}
+            />
           </View>
         </View>
 
@@ -102,7 +100,7 @@ class TableForm extends React.Component {
             />
           )}
         </View>
-      </ScrollView>
+      </View>
     )
   }
 }
