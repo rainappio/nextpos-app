@@ -37,33 +37,6 @@ class AccountClose extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    context.localize({
-      en: {
-        Title: 'Account Closure',
-        staff: 'Staff',
-        cash: 'Cash',
-        card: 'Credit Card',
-      	next: 'Next',
-      	status: 'Status',
-      	startingCash: 'Starting Cash',
-      	totalCashInRegister: 'Total Cash In Register',
-      	remark: 'Remark',
-      	totalCardTransactions: 'Total Credit Card Transactions'
-      },
-      zh: {
-        Title: 'Account Closure-CH',
-        staff: '員工',
-        cash: 'Cash-CH',
-        card: 'Credit Card-CH',
-        next: 'Next-CH',
-        status: 'Status-CH',
-        startingCash: 'Starting Cash-CH',
-        totalCashInRegister: 'Total Cash In Register-CH',
-        remark: 'Remark-CH',
-        totalCardTransactions: 'Total Credit Card Transactions-CH'
-      }
-    })
   }
 
   componentDidMount() {
@@ -71,7 +44,7 @@ class AccountClose extends React.Component {
   }
 
   handleCloseShift = (values) => {
-  	var shiftObjToClose = {
+  	const shiftObjToClose = {
   		"cash": {
 				"closingBalance": values.cashclosingBalance,
 				"unbalanceReason": values.cashunbalanceReason
@@ -91,7 +64,6 @@ class AccountClose extends React.Component {
     },
     response => {
       response.json().then(data => {
-      	successMessage('Shift closed')
         this.props.getMostRecentShiftStatus()
       	this.props.navigation.navigate('AccountCloseConfirm')
       })
@@ -116,7 +88,7 @@ class AccountClose extends React.Component {
           <View style={[styles.container,{marginBottom: 10}]}>
             <BackBtn/>
             <Text style={styles.screenTitle}>
-              {t('Title')}
+              {t('accountCloseTitle')}
             </Text>
 
             <View style={[{width: '100%'}]}>
@@ -133,12 +105,12 @@ class AccountClose extends React.Component {
               </View>
             </View>
 
-            <AccountClosureForm 
+            <AccountClosureForm
             	mostrecentShift = {mostRecentShift}
             	onSubmit={this.handleCloseShift}
             	navigation={this.props.navigation}
             />
-          </View> 
+          </View>
 				</ScrollView>
       </DismissKeyboard>
     )

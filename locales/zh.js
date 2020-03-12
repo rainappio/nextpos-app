@@ -34,6 +34,7 @@ const zh = {
   },
   action: {
     ok: '好',
+    done: '結束',
     save: '儲存',
     update: '更新',
     cancel: '取消',

@@ -39,54 +39,36 @@ class AccountCloseConfirmForm extends React.Component {
 
     context.localize({
       en: {
-        Title: 'Closing Confirm',
+        confirmCloseTitle: 'Confirm Closing Account Details',
         staff: 'Staff',
-        cash: 'Cash',
-        card: 'Credit Card',
-      	confirm: 'Confirm',
-      	postClosingEntries: 'Post-Closing Entries',
-      	invoice: 'Invoice',
-      	others: 'Others',
-      	cancel: 'Cancel',
-      	remark: 'Closing Remark',
+        postClosingEntries: 'Closing Account Summaries',
       	totalCashIncome: 'Total Cash Income',
-      	totalCreditCardIncome: 'Total credit card Income',
+      	totalCreditCardIncome: 'Total Card Income',
       	totalClosingAmount: 'Total Closing Amount',
-      	startingCash: 'Starting Cash',
-      	expectedCashRegister: 'Expected Cash Amount In Register',
-      	actualCashInRegister: 'Actual Cash Amount In Register',
-      	expectedCardAmtInRegister: 'Expected Card Amount In Register',
-      	actualCardAmtInRegister: 'Actual Card Amount In Register',
-      	totalInvoices: 'Total Number Of Invoices',
-      	deletedOrder: 'Total Number Of Orders Deleted',
-      	discounts: 'Total Amount Of Discount',
-      	serviceCharge: 'Total Service Charge',
-      	abort: 'Abort'
+        invoicesTitle: 'Invoices',
+      	totalInvoices: 'Total Number of Orders',
+      	deletedOrders: 'Total Number Of Orders Deleted',
+      	totalDiscounts: 'Total Amount Of Discount',
+      	totalServiceCharge: 'Total Service Charge',
+      	closingRemark: 'Closing Remark',
+        confirmAction: 'Confirm Close',
+      	abortAction: 'Abort Close'
       },
       zh: {
-        Title: 'Closing Confirm-CH',
+        confirmCloseTitle: '關帳確認',
         staff: '員工',
-        cash: 'Cash-CH',
-        card: 'Credit Card-CH',
-        confirm: 'Confirm-CH',
-        postClosingEntries: 'Post-Closing Entries-CH',
-        invoice: 'Invoice-CH',
-        others: 'Others-CH',
-        cancel: 'Cancel-CH',
-        remark:'Closing Remark-CH',
-        totalCashIncome: 'Total Cash Income-CH',
-        totalCreditCardIncome: 'Total credit card Income-CH',
-        totalClosingAmount: 'Total Closing Amount-CH',
-        startingCash: 'Starting Cash-CH',
-        expectedCashRegister: 'Expected Cash Amount In Register-CH',
-        actualCashInRegister: 'Actual Cash In Register-CH',
-        expectedCardAmtInRegister: 'Expected Card Amount In Register-CH',
-        actualCardAmtInRegister: 'Actual Card Amount In Register-CH',
-        totalInvoices: 'Total Number Of Invoices-CH',
-        deletedOrder: 'Total Number Of Orders Deleted-CH',
-        discounts: 'Total Amount Of Discount-CH',
-        serviceCharge: 'Total Service Charge-CH',
-        abort: 'Abort-CH'
+        postClosingEntries: '關帳總覽',
+        totalCashIncome: '現金營業額',
+        totalCreditCardIncome: '刷卡營業額',
+        totalClosingAmount: '總營業額',
+        invoicesTitle: '訂單總覽',
+        totalInvoices: '訂單數',
+        deletedOrders: '刪單數',
+        totalDiscounts: '折扣',
+        totalServiceCharge: '服務費',
+        closingRemark:'關帳備註',
+        confirmAction: '確定關帳',
+        abortAction: '取消關帳'
       }
     })
   }
@@ -95,29 +77,39 @@ class AccountCloseConfirmForm extends React.Component {
     const { t } = this.context
 		const { handleSubmit, mostrecentShift, handleAbortCloseShift } = this.props
 
-		const closingShiftReport = {}	
+		const closingShiftReport = {
+
+
+    }
+
 		if (mostrecentShift.close.closingShiftReport !== null && mostrecentShift.close.closingShiftReport.totalByPaymentMethod !== null) {
 			closingShiftReport.totalByPaymentMethod = mostrecentShift.close.closingShiftReport.totalByPaymentMethod
 		}
 
 		if(mostrecentShift.close.closingShiftReport !== null && mostrecentShift.close.closingShiftReport.orderCountByState !== null) {
 			closingShiftReport.orderCountByState = mostrecentShift.close.closingShiftReport.orderCountByState
-		} 
-											
+		}
+
+    const cashTotal = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.orderTotal : 0
+    const cardTotal = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.orderTotal : 0
+    const cashDiscount = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.discount : 0
+    const cardDiscount = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.discount : 0
+    const cashServiceCharge = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.serviceCharge : 0
+    const cardServiceCharge = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.serviceCharge : 0
+
+
     return (
 			<View>
         {/* Post-Closing Entries */}
-          <View style={styles.sectionBar}>             
-            <View style={[styles.tableCellView, {flex: 4}]}>
-              <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>
-                  {t('postClosingEntries')}
-                </Text>
-              </TouchableOpacity>
+          <View style={styles.sectionBar}>
+            <View>
+              <Text style={styles.sectionBarTextSmall}>
+                {t('postClosingEntries')}
+              </Text>
             </View>
           </View>
 
-          <View style={[styles.container, styles.no_mgrTop]}>
+          <View style={[styles.sectionContainer]}>
             <View style={{flex: 3, justifyContent: 'center'}}>
               <View style={styles.fieldContainer}>
                	<View style={{flex: 3}}>
@@ -126,8 +118,8 @@ class AccountCloseConfirmForm extends React.Component {
                   </Text>
                 </View>
                 <View style={{flex: 1}}>
-              		<Text>$&nbsp;{closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.orderTotal : 0}</Text>
-              	</View>     
+              		<Text>${cashTotal}</Text>
+              	</View>
               </View>
 
               <View style={styles.fieldContainer}>
@@ -136,10 +128,10 @@ class AccountCloseConfirmForm extends React.Component {
                   {t('totalCreditCardIncome')}
                   </Text>
                 </View>
-                <View style={{flex: 1}}>   
-									<Text>$&nbsp;{closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.orderTotal: 0}</Text>
-            		</View> 	
-              </View>      
+                <View style={{flex: 1}}>
+									<Text>${cardTotal}</Text>
+            		</View>
+              </View>
 
               <View style={styles.fieldContainer}>
                 <View style={{flex: 3}}>
@@ -148,42 +140,25 @@ class AccountCloseConfirmForm extends React.Component {
                   </Text>
                 </View>
                 <View style={{flex: 1}}>
-                	<Text>$&nbsp;
-                	{
-                		Object.keys(closingShiftReport.totalByPaymentMethod).length === 0
-                  	?
-                  		0
-                  		:
-											!closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') 
-											?										
-                  			closingShiftReport.totalByPaymentMethod.CARD.orderTotal
-											:
-												!closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD')
-												?
-													closingShiftReport.totalByPaymentMethod.CASH.orderTotal     			
-												:
-													closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') && closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD')
-														&& closingShiftReport.totalByPaymentMethod.CASH.orderTotal + closingShiftReport.totalByPaymentMethod.CARD.orderTotal
-                	}    
-                	</Text>    
-                </View>      	
-              </View>       
-            </View>             		
+                	<Text>
+                	${cashTotal + cardTotal}
+                	</Text>
+                </View>
+              </View>
+            </View>
           </View>
         {/* #Post-Closing Entries */}
 
 				{/* Cash */}
-          <View style={styles.sectionBar}>             
-            <View style={[styles.tableCellView, {flex: 4}]}>
-              <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>
-                  {t('cash')}
-                </Text>
-              </TouchableOpacity>
+          <View style={styles.sectionBar}>
+            <View>
+              <Text style={styles.sectionBarTextSmall}>
+                {t('cashSection')}
+              </Text>
             </View>
           </View>
 
-          <View style={[styles.container, styles.no_mgrTop]}>
+          <View style={styles.sectionContainer}>
             <View style={{flex: 3, justifyContent: 'center'}}>
               <View style={styles.fieldContainer}>
                 <View style={{flex: 3}}>
@@ -192,91 +167,86 @@ class AccountCloseConfirmForm extends React.Component {
                   </Text>
                 </View>
                 <View style={{flex: 1}}>
-                  <Text>$&nbsp;{mostrecentShift.open.balance}</Text>
-                </View>
-              </View>                           
-
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('expectedCashRegister')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                	<Text>$&nbsp;{closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.orderTotal: 0}</Text>
+                  <Text>${mostrecentShift.open.balance}</Text>
                 </View>
               </View>
 
               <View style={styles.fieldContainer}>
                 <View style={{flex: 3}}>
                   <Text style={[styles.fieldTitle]}>
-                    {t('actualCashInRegister')}
+                    {t('totalCashTransitionAmt')}
                   </Text>
                 </View>
                 <View style={{flex: 1}}>
-                  {
-                  	mostrecentShift.close.closingBalances.hasOwnProperty('CASH') 
-										&&
-											<Text>$&nbsp;{mostrecentShift.close.closingBalances.CASH.closingBalance}</Text>
-                  }
+                	<Text>${cashTotal}</Text>
                 </View>
               </View>
-            </View>             		
+
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 3}}>
+                  <Text style={[styles.fieldTitle]}>
+                    {t('totalCashInRegister')}
+                  </Text>
+                </View>
+                <View style={{flex: 1}}>
+                  <Text>${mostrecentShift.close.closingBalances.hasOwnProperty('CASH') ? mostrecentShift.close.closingBalances.CASH.closingBalance : 0}</Text>
+                </View>
+              </View>
+            </View>
           </View>
         {/* #Cash */}
 
         {/* Credit Card */}
-          <View style={styles.sectionBar}>             
-            <View style={[styles.tableCellView, {flex: 4}]}>
+          <View style={styles.sectionBar}>
+            <View>
               <TouchableOpacity>
                 <Text style={styles.sectionBarTextSmall}>
-                  {t('card')}
+                  {t('cardSection')}
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
 
-          <View style={[styles.container, styles.no_mgrTop]}>
-            <View style={{flex: 3, justifyContent: 'center'}}>             	        	              
+          <View style={styles.sectionContainer}>
+            <View style={{flex: 3, justifyContent: 'center'}}>
               <View style={styles.fieldContainer}>
                 <View style={{flex: 3}}>
                   <Text style={[styles.fieldTitle]}>
-                    {t('expectedCardAmtInRegister')}
+                    {t('totalCardTransitionAmt')}
                   </Text>
                 </View>
                 <View style={{flex: 1}}>
-									<Text>$&nbsp;{closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.orderTotal: 0}</Text>
+									<Text>${cardTotal}</Text>
                 </View>
               </View>
 
               <View style={styles.fieldContainer}>
                 <View style={{flex: 3}}>
                   <Text style={[styles.fieldTitle]}>
-                    {t('actualCardAmtInRegister')}
+                    {t('totalCardInRegister')}
                   </Text>
                 </View>
                 <View style={{flex: 1}}>
-                	<Text>$&nbsp;
-                  { mostrecentShift.close.closingBalances.hasOwnProperty('CARD') && mostrecentShift.close.closingBalances.CARD.closingBalance }    
+                  <Text>${mostrecentShift.close.closingBalances.hasOwnProperty('CARD') && mostrecentShift.close.closingBalances.CARD.closingBalance}
 									</Text>
                 </View>
               </View>
-            </View>         		
+            </View>
           </View>
         {/* #Credit Card */}
 
 				{/* Invoice */}
-          <View style={styles.sectionBar}>             
+          <View style={styles.sectionBar}>
             <View style={[styles.tableCellView, {flex: 4}]}>
               <TouchableOpacity>
                 <Text style={styles.sectionBarTextSmall}>
-                  {t('invoice')}
+                  {t('invoicesTitle')}
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
 
-          <View style={[styles.container, styles.no_mgrTop]}>
+          <View style={[styles.sectionContainer]}>
             <View style={{flex: 3, justifyContent: 'center'}}>
               <View style={styles.fieldContainer}>
                 <View style={{flex: 3}}>
@@ -285,129 +255,75 @@ class AccountCloseConfirmForm extends React.Component {
                   </Text>
                 </View>
                 <View style={{flex: 1}}>
-                  <Text>&nbsp;{mostrecentShift.close.closingShiftReport.totalOrderCount}</Text>
+                  <Text>{mostrecentShift.close.closingShiftReport.totalOrderCount}</Text>
                 </View>
-              </View>                
-            </View>             		
+              </View>
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 3}}>
+                  <Text style={[styles.fieldTitle]}>
+                    {t('deletedOrders')}
+                  </Text>
+                </View>
+                <View style={{flex: 1}}>
+                  <Text>
+                    {closingShiftReport.orderCountByState.hasOwnProperty('DELETED') ? closingShiftReport.orderCountByState.DELETED.orderCount : 0}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 3}}>
+                  <Text style={[styles.fieldTitle]}>
+                    {t('totalDiscounts')}
+                  </Text>
+                </View>
+                <View style={{flex: 1}}>
+                  <Text>${cashDiscount + cardDiscount}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 3}}>
+                  <Text style={[styles.fieldTitle]}>
+                    {t('totalServiceCharge')}
+                  </Text>
+                </View>
+                <View style={{flex: 1}}>
+                  <Text>${cashServiceCharge + cardServiceCharge}
+                  </Text>
+                </View>
+              </View>
+            </View>
           </View>
         {/* #Invoice */}
 
 				{/* Others */}
-          <View style={styles.sectionBar}>             
-            <View style={[styles.tableCellView, {flex: 4}]}>
-              <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>
-                  {t('others')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={[styles.container, styles.no_mgrTop]}>
-            <View style={{flex: 3, justifyContent: 'center'}}>              	              
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('deletedOrder')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                	<Text>
-                  {
-										closingShiftReport.orderCountByState.hasOwnProperty('DELETED') 
-										?  												 
-                  	closingShiftReport.orderCountByState.DELETED.orderCount
-										:
-											0
-            			}    
-            			</Text>
-                </View>
-              </View>
-
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('discounts')} 
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                	<Text>$&nbsp;
-                  {
-                  	Object.keys(closingShiftReport.totalByPaymentMethod).length === 0
-                  	?
-                  	0
-                  	:
-                			!closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') 
-											?
-                  			closingShiftReport.totalByPaymentMethod.CARD.discount
-											:
-												!closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') 
-												?
-													closingShiftReport.totalByPaymentMethod.CASH.discount
-												:
-													closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') && closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD')
-													&&
-														closingShiftReport.totalByPaymentMethod.CASH.discount + closingShiftReport.totalByPaymentMethod.CARD.discount  
-														
-                	}        
-                	</Text>       
-                </View>
-              </View>
-
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('serviceCharge')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                	<Text>$&nbsp;
-                  {
-                  	Object.keys(closingShiftReport.totalByPaymentMethod).length === 0
-										? 
-											0 
-											:
-												!closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') 
-												?		 
-													closingShiftReport.totalByPaymentMethod.CARD.serviceCharge
-													:
-														!closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') 
-														?
-															closingShiftReport.totalByPaymentMethod.CASH.serviceCharge
-															:
-															closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') && closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD')
-															&&
-																closingShiftReport.totalByPaymentMethod.CASH.serviceCharge + closingShiftReport.totalByPaymentMethod.CARD.serviceCharge
-                  }
-                  </Text>
-                </View>
-              </View> 
-
+          <View style={[styles.sectionContainer]}>
+            <View style={{flex: 3, justifyContent: 'center'}}>
               <View style={styles.fieldContainer}>
                 <View style={{flex: 1}}>
                   <Field
               			name="closingRemark"
               			component={InputText}
-              			placeholder={t('remark')}
+              			placeholder={t('closingRemark')}
               			secureTextEntry={false}
               			height={35}
             			/>
                 </View>
               </View>
             </View>
-               	
+
     				<TouchableOpacity
       				onPress={handleSubmit}
     					>
       				<Text style={[styles.bottomActionButton, styles.actionButton]}>
-        				{t('confirm')}
+        				{t('confirmAction')}
       				</Text>
-    				</TouchableOpacity>    
+    				</TouchableOpacity>
 
     				<ConfirmActionButton
               handleConfirmAction={handleAbortCloseShift}
               params={90}
-              buttonTitle="abort"
+              buttonTitle='abortAction'
             />
           </View>
         {/* #Others */}

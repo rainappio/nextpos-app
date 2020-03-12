@@ -54,7 +54,7 @@ class OrderForm extends Component {
         0: {label: '20-29', value: 'TWENTIES'},
         1: {label: '30-39', value: 'THIRTIES'},
         2: {label: '40-49', value: 'FORTIES'},
-        3: {label: '50-59', value: 'FIFTIES'}
+        3: {label: '50-59', value: 'FIFTIES_AND_ABOVE'}
       },
       selectedVisitFrequency: null,
       visitFrequencies: {

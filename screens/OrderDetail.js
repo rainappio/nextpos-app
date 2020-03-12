@@ -24,6 +24,7 @@ import { getOrdersByDateRange, getOrder, formatDate, formatTime } from '../actio
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import {renderOrderState} from "../helpers/orderActions";
+import filterSupportedProps from "react-native-web/dist/exports/View/filterSupportedProps";
 
 class OrderDetail extends React.Component {
   static navigationOptions = {
@@ -36,7 +37,7 @@ class OrderDetail extends React.Component {
 				{label: '20-29', value: 'TWENTIES'},
 				{label: '30-39', value: 'THIRTIES'},
 				{label: '40-49', value: 'FORTIES'},
-				{label: '50-59', value: 'FIFTIES'}
+				{label: '50-59', value: 'FIFTIES_AND_ABOVE'}
     	],
     	visitFrequencies: [
         {label: '1', value: 'FIRST_TIME'},
@@ -55,15 +56,16 @@ class OrderDetail extends React.Component {
         total: 'Total',
         paymentMethod: 'Payment Method',
         staff: 'Staff',
-        ageGroup: 'Age Group', 
-        visitedFrequency: 'Visited Frequency', 
-        startDate: 'Start Date', 
+        ageGroup: 'Age Group',
+        visitedFrequency: 'Visited Frequency',
+        notFilledIn: 'Not Filled',
+        orderStartDate: 'Start Date',
+        lineItemCreatedDate: 'Start Date',
         endDate: 'End Date',
         duration: 'Total Duration',
         product: 'Product',
         quantity: 'Qty',
         subTotal: 'Subtotal',
-        startDate: 'Start Date',
         serveBy: 'Serve By'
       },
       zh: {
@@ -72,31 +74,32 @@ class OrderDetail extends React.Component {
         total: '總金額',
         paymentMethod: '付款方式',
         staff: '員工',
-        ageGroup: 'Age Group-CH', 
-        visitedFrequency: 'Visited Frequency-CH', 
-        startDate: 'Start Date-CH', 
-        endDate: 'End Date-CH',
-        duration: 'Total Duration-CH',
+        ageGroup: '來客年齡層',
+        visitedFrequency: '造訪次數',
+        notFilledIn: '未填',
+        orderStartDate: '開單日期',
+        lineItemCreatedDate: '開單日期',
+        endDate: '結帳日期',
+        duration: '共計',
         product: '產品',
         quantity: '數量',
         subTotal: '小計',
-        startDate: 'Start Date CH',
-        serveBy: 'Serve By CH'
+        serveBy: '結帳人員'
       }
-    })  
+    })
   }
 
   render() {
     const { order, isLoading, haveData } = this.props
     const { t } = this.context
 
-    Item = ({ orderDetail, createdDate }) => {
+    Item = ({ orderDetail, lineItemDate }) => {
       return (
        	<View style={[{marginBottom: 10}]}>
           <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
             <View style={{flex: 2.5}}>
               <Text>
-              	{formatTime(createdDate)}
+              	{formatTime(lineItemDate)}
               </Text>
             </View>
 
@@ -110,7 +113,7 @@ class OrderDetail extends React.Component {
               <Text>
               	{orderDetail.quantity}
               </Text>
-            </View>            
+            </View>
 
             <View style={{flex: 1.2}}>
               <Text style={{textAlign: 'right'}}>
@@ -129,23 +132,23 @@ class OrderDetail extends React.Component {
         </View>
       )
     } else if (haveData) {
-    	var filteredageGroup = this.state.ageGroups.filter( ageGroup => {
-				return ageGroup.value == order.demographicData.ageGroup && ageGroup.label
+    	const filteredageGroup = this.state.ageGroups.find( ageGroup => {
+				return ageGroup.value === order.demographicData.ageGroup
 			})
 
-			var filteredvisitFrequency = this.state.visitFrequencies.filter( visitFreq => {
-				return visitFreq.value == order.demographicData.visitFrequency && visitFreq.label
+			const filteredvisitFrequency = this.state.visitFrequencies.find( visitFreq => {
+				return visitFreq.value === order.demographicData.visitFrequency
 			})
+
+      const orderDuration = order.orderDuration !== null ? order.orderDuration : {}
 
       return (
-      	<ScrollView>
+      	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View style={[styles.container, styles.nomgrBottom]}>
-        	
-          {/*<View style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout,{paddingLeft: 4, paddingRight: 4, paddingTop: 20, paddingBottom: 10}]}>*/}
             <Text style={[styles.screenTitle]}>
               Order Id - {order.serialId}
             </Text>
- 
+
             <View style={[styles.flex_dir_row, {alignItems: 'center'}]}>
               <View style={{width: '35%'}}>
                 <View>
@@ -199,7 +202,7 @@ class OrderDetail extends React.Component {
               </View>
               <View style={{flex: 5}}>
                 <Text style={{ textAlign: 'right'}}>
-									{filteredageGroup[0] !== undefined && filteredageGroup[0].label}
+									{filteredageGroup !== undefined ? filteredageGroup.label : t('notFilledIn')}
                 </Text>
               </View>
             </View>
@@ -210,14 +213,14 @@ class OrderDetail extends React.Component {
               </View>
               <View style={{flex: 5}}>
                 <Text style={{ textAlign: 'right' }}>
-                  {filteredvisitFrequency[0] !== undefined && filteredvisitFrequency[0].label}
+                  {filteredvisitFrequency !== undefined ? filteredvisitFrequency.label : t('notFilledIn')}
                 </Text>
               </View>
             </View>
 
             <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
               <View style={{flex: 5}}>
-                <Text style={styles.orange_color}>{t('startDate')}</Text>
+                <Text style={styles.orange_color}>{t('orderStartDate')}</Text>
               </View>
               <View style={{flex: 5}}>
                 <Text style={{ textAlign: 'right'}}>
@@ -232,7 +235,7 @@ class OrderDetail extends React.Component {
               </View>
               <View style={{flex: 5}}>
                 <Text style={{ textAlign: 'right'}}>
-                  {formatTime(order.modifiedDate)}
+                  {formatTime(orderDuration.orderSettledDate)}
                 </Text>
               </View>
             </View>
@@ -243,24 +246,15 @@ class OrderDetail extends React.Component {
               </View>
               <View style={{flex: 5}}>
                 <Text style={{ textAlign: 'right'}}>
-                  {0}
+                  {orderDuration.durationHours} {t('timecard.hours')} {orderDuration.durationMinutes} {t('timecard.minutes')}
                 </Text>
               </View>
             </View>
 
-            <Text
-              style={[
-                styles.paddingTopBtn8,
-                styles.orange_color,
-                styles.textBold
-              ]}
-            >
-            Line Items
-            </Text>
             <View style={styles.sectionBar}>
             	<View style={{flex: 2.5}}>
                 	<Text style={styles.sectionBarTextSmall}>
-                  	{t('startDate')}
+                  	{t('lineItemCreatedDate')}
                 	</Text>
             	</View>
 
@@ -286,11 +280,12 @@ class OrderDetail extends React.Component {
           	</View>
 
           	<FlatList
+              style={{marginBottom: 20}}
               data={order.lineItems}
               renderItem={({item, index}) => (
                 <Item
                 	orderDetail={item}
-                	createdDate={order.createdDate}                	
+                  lineItemDate={item.modifiedDate}
                 	/>
               )}
               keyExtractor={(item, index) => index.toString()}
@@ -328,16 +323,16 @@ class OrderDetail extends React.Component {
                 </Text>
               </View>
             </View>
-            
+
             <FlatList
               data={order.transactions}
               renderItem={({item, index}) => (
                 <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              		<View style={{ flex: 9 }}>
+              		<View style={{flex: 1, alignItems: 'flex-start'}}>
                 		<Text style={styles.orange_color}>{t('paymentMethod')}</Text>
               		</View>
-              		<View>           		
-                		<Text>{item.paymentMethod}</Text>   
+              		<View style={{flex: 1, alignItems: 'flex-end'}}>
+                		<Text>{item.paymentMethod}</Text>
               		</View>
             		</View>
               )}
@@ -345,13 +340,15 @@ class OrderDetail extends React.Component {
             />
 
              <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              <View style={{ width: '90%' }}>
+              <View style={{flex: 1, alignItems: 'flex-start'}}>
                 <Text style={styles.orange_color}>{t('serveBy')}</Text>
               </View>
-              <Text>
-                {order.servedBy}
-              </Text>
-            </View>
+               <View style={{flex: 1, alignItems: 'flex-end'}}>
+                 <Text>
+                   {order.servedBy}
+                 </Text>
+               </View>
+             </View>
 
             <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
               <View style={{flex: 1, alignItems: 'flex-start'}}>
@@ -376,8 +373,6 @@ class OrderDetail extends React.Component {
                 {t('action.ok')}
               </Text>
             </TouchableOpacity>
-        {/*  </View>*/}
-        
         </View>
         </ScrollView>
       )

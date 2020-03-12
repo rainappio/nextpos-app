@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "nextpos-app",
-    "slug": "nextpos-app",
+    "name": "rain-app",
+    "slug": "rain-app",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android"
     ],
-    "version": "rain.0.20.02",
+    "version": "0.20.02",
     "icon": "./assets/images/icon.png",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -23,7 +23,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "rain.0.20.02.w4"
+      "buildNumber": "0.20.02.4",
+      "bundleIdentifier": "io.rain.app"
     },
     "description": "NextPos is the best POS software you will ever need."
   }

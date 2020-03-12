@@ -28,6 +28,11 @@ export const formatDateFromMillis = dateMillis => {
  * Format date from backend date string.
  */
 export const formatDate = date => {
+
+  if (date === undefined || date === null) {
+    return undefined
+  }
+
   const dateMillis = Date.parse(date.slice(0, date.length - 5))
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleString('en-TW', {
@@ -37,6 +42,11 @@ export const formatDate = date => {
 }
 
 export const formatDateOnly = date => {
+
+  if (date === undefined || date === null) {
+    return undefined
+  }
+
   const dateMillis = Date.parse(date.slice(0, date.length - 5))
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleDateString('en-TW', {
@@ -46,6 +56,11 @@ export const formatDateOnly = date => {
 }
 
 export const formatTime = date => {
+
+  if (date === undefined || date === null) {
+    return undefined
+  }
+
   const dateMillis = Date.parse(date.slice(0, date.length - 5))
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleTimeString('en-TW', {

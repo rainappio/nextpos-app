@@ -30,12 +30,12 @@ class PaymentOrderForm extends React.Component {
         taxIDNumber: 'Tax ID Number',
         enterTaxIDNumber: 'Enter Tax ID Number',
         charge: 'Charge',
-        paymentTitle: 'Payment Type',
+        paymentMethod: 'Payment Method',
         cashPayment: 'Cash',
         cardPayment: 'Credit Card',
-        chooseMethod: 'Choose Payment Method',
-        CardNo: 'Card Number',
-        enterCardNo: 'Enter Card Number'
+        chooseCardType: 'Choose Card Type',
+        CardNo: 'Last 4 Digits',
+        enterCardNo: 'Last 4 Digits'
       },
       zh: {
         paymentMethodTitle: '付費方式',
@@ -44,12 +44,12 @@ class PaymentOrderForm extends React.Component {
         taxIDNumber: '統一編號',
         enterTaxIDNumber: '輸入統一編號',
         charge: '結帳',
-        paymentTitle: 'Payment Type-CH',
+        paymentMethod: '付費方式',
         cashPayment: '現金',
-        cardPayment: 'Credit Card-CH',
-        chooseMethod: 'Choose Payment Method-CH',
-        CardNo: 'Card Number',
-        enterCardNo: 'Enter Card Number-CH'
+        cardPayment: '信用卡',
+        chooseCardType: '選擇信用卡種類',
+        CardNo: '卡號末四碼',
+        enterCardNo: '卡號末四碼'
       }
     })
   }
@@ -88,13 +88,13 @@ class PaymentOrderForm extends React.Component {
 		const TaxInputAndBottomBtns = (props) => {
 			return(
 				<View>
-					<View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-            <View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-              <Text>{t('taxIDNumber')}</Text>
+					<View style={styles.fieldContainer}>
+            <View style={{flex: 2}}>
+              <Text style={styles.fieldTitle}>{t('taxIDNumber')}</Text>
             </View>
-            <View style={[styles.onesixthWidth]}>
+            <View style={{flex: 3}}>
               <Field
-                name="idnumber"
+                name="taxIdNumber"
                 component={InputText}
                 placeholder={t('enterTaxIDNumber')}
                 keyboardType={'numeric'}
@@ -102,7 +102,7 @@ class PaymentOrderForm extends React.Component {
             </View>
           </View>
 
-          <View style={[styles.mgrtotop20]}>
+          <View style={styles.bottom}>
             <TouchableOpacity onPress={() => props.handleSubmit()}>
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
                 {t('charge')}
@@ -127,25 +127,12 @@ class PaymentOrderForm extends React.Component {
       <ScrollView>
         <View style={styles.container}>
           <BackBtn />
-          <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold
-            ]}
-          >
+          <Text style={styles.screenTitle}>
             {t('paymentMethodTitle')}
           </Text>
 
-          <View
-            style={[
-              styles.flex_dir_row,
-              styles.paddingTopBtn20,
-              styles.borderBottomLine
-            ]}
-          >
-            <View style={{ width: '90%' }}>
+          <View>
+            <View>
               <Text
                 style={[styles.textBold, styles.textBig, styles.orange_color]}
               >
@@ -155,19 +142,7 @@ class PaymentOrderForm extends React.Component {
           </View>
         </View>
 
-        <View
-          style={[
-            styles.orange_bg,
-            styles.flex_dir_row,
-            styles.shoppingBar,
-            styles.top40,
-            {
-              paddingLeft: 35,
-              paddingRight: 35,
-              paddingTop: 12
-            }
-          ]}
-        >
+        <View style={styles.sectionBar}>
           <View style={[styles.half_width]}>
             <Text style={[styles.textMedium, styles.whiteColor]}>
               {t('totalAmount')}
@@ -177,24 +152,23 @@ class PaymentOrderForm extends React.Component {
           <View style={[styles.half_width, styles.orange_color]}>
             <Text
               style={[
-                { textAlign: 'right', marginRight: -26 },
+                { textAlign: 'right' },
                 styles.textBold,
                 styles.whiteColor,
                 styles.textMedium
               ]}
             >
-              $&nbsp;{discountTotal.toFixed(2)}
+              ${order.orderTotal.toFixed(2)}
             </Text>
           </View>
         </View>
 
-        <View style={[styles.container, styles.no_mgrTop]}>
-
-        	<View style={[styles.sectionContent, styles.mgrtotop12, styles.nomgrBottom]}>
-          	<View style={styles.fieldContainer}>
-            	<Text style={styles.fieldTitle}>{t('paymentTitle')}</Text>
+        <View style={[styles.sectionContainer]}>
+        	<View style={[styles.sectionContent]}>
+          	<View style={styles.sectionTitleContainer}>
+            	<Text style={styles.sectionTitleText}>{t('paymentMethod')}</Text>
           	</View>
-          	<View style={[styles.fieldContainer]}>
+          	<View>
             	<View style={{flex: 1}}>
               	<Field
                 	name="paymentMethod"
@@ -211,13 +185,13 @@ class PaymentOrderForm extends React.Component {
         	</View>
 
 					{
-						selectedPaymentType == 0 &&
+						selectedPaymentType === 0 &&
 						<View>
-          		<View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-            		<View style={[styles.onethirdWidth]}>
-              		<Text>{t('cashPayment')}</Text>
+          		<View style={[styles.fieldContainer]}>
+            		<View style={{flex: 2}}>
+              		<Text style={styles.fieldTitle}>{t('cashPayment')}</Text>
             		</View>
-            		<View style={[styles.onesixthWidth]}>
+            		<View style={{flex: 3}}>
               		<Field
                 		name="cash"
                 		component={InputText}
@@ -268,13 +242,13 @@ class PaymentOrderForm extends React.Component {
 					}
 
 					{
-						selectedPaymentType == 1 &&
+						selectedPaymentType === 1 &&
 						<View>
-          		<View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-            		<View style={[styles.onethirdWidth, styles.mgrtotop8]}>
-              		<Text>{t('CardNo')}</Text>
+          		<View style={styles.fieldContainer}>
+            		<View style={{flex: 2}}>
+              		<Text style={styles.fieldTitle}>{t('CardNo')}</Text>
             		</View>
-            		<View style={[styles.onesixthWidth]}>
+            		<View style={{flex: 3}}>
               		<Field
                 		name="cardNumber"
                 		component={InputText}
@@ -283,28 +257,29 @@ class PaymentOrderForm extends React.Component {
                 		onFocus={() => resetTotal()}
               		/>
             		</View>
-          		</View>         
+          		</View>
 
           		<Field
             		name="cardType"
             		component={DropDown}
-            		placeholder={{value: null, label: t('chooseMethod')}}
+            		placeholder={{value: null, label: t('chooseCardType')}}
             		options={[
-              		{label: 'visa', value: 'VISA'},
-              		{label: 'master', value: 'MASTER'}
+              		{label: 'Visa', value: 'VISA'},
+              		{label: 'MasterCard', value: 'MASTER'},
+              		{label: 'Other', value: 'OTHER'}
             		]}
             		forFilter={true}
-          		/>          		   
+          		/>
           	</View>
-					}				
+					}
 
-					{						
+					{
 						<TaxInputAndBottomBtns
 							handleSubmit={handleSubmit}
 							navigation={this.props.navigation}
 							/>
-					}						
-					
+					}
+
         </View>
       </ScrollView>
     )
@@ -312,9 +287,9 @@ class PaymentOrderForm extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  initialValues: { 
+  initialValues: {
   	cash: '' + props.dynamicTotal,
-  	paymentMethod: props.selectedPaymentType == 0 ? 'CASH' : 'CARD'
+  	paymentMethod: props.selectedPaymentType === 0 ? 'CASH' : 'CARD'
   }
 })
 

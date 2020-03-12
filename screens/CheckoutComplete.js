@@ -21,7 +21,6 @@ class CheckoutComplete extends React.Component {
         totalAmount: 'Total Amount',
         serviceCharge: 'Service Charge',
         change: 'Change',
-        done: 'Done',
         completeOrder: 'Complete Order'
       },
       zh: {
@@ -29,30 +28,18 @@ class CheckoutComplete extends React.Component {
         totalAmount: '總金額',
         serviceCharge: '服務費',
         change: '找錢',
-        done: '結束',
         completeOrder: '結束訂單'
       }
     })
-
-    this.state = {
-      t: context.t
-    }
   }
 
   render() {
-    const { t } = this.state
+    const { t } = this.context
     const { transactionResponse } = this.props.navigation.state.params
 
     return (
       <View style={styles.container_nocenterCnt}>
-        <Text
-          style={[
-            styles.welcomeText,
-            styles.orange_color,
-            styles.textMedium,
-            styles.textBold
-          ]}
-        >
+        <Text style={styles.screenTitle}>
           {t('checkoutCompletedTitle')}
         </Text>
 
@@ -64,12 +51,14 @@ class CheckoutComplete extends React.Component {
             style={{ width: 60, height: 60, marginBottom: 40 }}
           />
           <Text style={styles.centerText}>
-            {t('totalAmount')}: $&nbsp;
-            {transactionResponse.settleAmount}
+            {t('totalAmount')}: $ {transactionResponse.settleAmount}
           </Text>
-          <Text style={styles.centerText}>
-            {t('change')}: $&nbsp;{transactionResponse.cashChange}
-          </Text>
+          {transactionResponse.paymentMethod === 'CASH' && (
+            <Text style={styles.centerText}>
+              {t('change')}: ${transactionResponse.paymentDetails.values['CASH_CHANGE']}
+            </Text>
+          )}
+
         </View>
 
         <View style={styles.bottom}>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Field, reduxForm, FieldArray } from 'redux-form'
+import {Field, reduxForm, FieldArray, formValueSelector} from 'redux-form'
 import {
   Image,
   KeyboardAvoidingView,
@@ -15,6 +15,9 @@ import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import RenderRadioBtn from '../components/RadioItem'
+import {testPrinter} from "../helpers/printerActions";
+import {connect} from "react-redux";
+import {successMessage, warningMessage} from "../constants/Backend";
 
 class PrinterForm extends React.Component {
   static navigationOptions = {
@@ -35,7 +38,8 @@ class PrinterForm extends React.Component {
           title: 'Service Type',
           workingArea: 'Working Area',
           checkout: 'Checkout'
-        }
+        },
+        testPrint: 'Test Printer'
       },
       zh: {
         editPrinterTitle: '編輯出單機',
@@ -46,18 +50,25 @@ class PrinterForm extends React.Component {
           title: '綁定區域',
           workingArea: '工作區',
           checkout: '結帳區'
-        }
+        },
+        testPrint: '測試出單機'
       }
     })
+  }
 
-    this.state = {
-      t: context.t
-    }
+  handleTestPrint = (ipAddress) => {
+    testPrinter(ipAddress, () => {
+        successMessage('Test printer succeeded')
+
+      }, () => {
+        warningMessage("Test printer failed. Please check printer's IP address")
+      }
+    )
   }
 
   render() {
-    const { handleSubmit, isEdit, handleEditCancel } = this.props
-    const { t } = this.state
+    const { handleSubmit, isEdit, handleEditCancel, ipAddress } = this.props
+    const { t } = this.context
 
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -88,6 +99,7 @@ class PrinterForm extends React.Component {
                 validate={isRequired}
                 placeholder={t('ipAddress')}
                 keyboardType="numeric"
+                onChange={(value) => this.setState({ ipAddress: value })}
               />
             </View>
           </View>
@@ -121,6 +133,11 @@ class PrinterForm extends React.Component {
               {isEdit ? t('action.update') : t('action.save')}
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => { this.handleTestPrint(ipAddress) }}>
+            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              {t('testPrint')}
+            </Text>
+          </TouchableOpacity>
           {isEdit ? (
             <TouchableOpacity onPress={handleEditCancel}>
               <Text style={[styles.bottomActionButton, styles.cancelButton]}>
@@ -145,5 +162,17 @@ class PrinterForm extends React.Component {
 PrinterForm = reduxForm({
   form: 'printerForm'
 })(PrinterForm)
+
+/**
+ * Reference: https://redux-form.com/8.3.0/examples/selectingformvalues/
+ */
+const selector = formValueSelector('printerForm')
+PrinterForm = connect(state => {
+  const ipAddress = selector(state, 'ipAddress')
+
+  return {
+    ipAddress
+  }
+})(PrinterForm);
 
 export default PrinterForm

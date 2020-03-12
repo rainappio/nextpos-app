@@ -39,7 +39,6 @@ class ShiftClose extends React.Component {
       en: {
         shiftTitle: 'Manage Shift',
         shiftStatus: 'Current Shift Status',
-        lastShiftStatus: 'Last Shift Status',
         openAt: 'Open at',
         openBalance: 'Open Balance',
         openBy: 'Open by',
@@ -54,7 +53,6 @@ class ShiftClose extends React.Component {
       zh: {
         shiftTitle: '開關帳',
         shiftStatus: '目前帳狀態',
-        lastShiftStatus: '上次帳狀態',
         openAt: '開帳時間',
         openBalance: '開帳現金',
         openBy: '開帳員工',
@@ -98,7 +96,7 @@ class ShiftClose extends React.Component {
       	},
       	body: ''
     	},
-    	response => {   	
+    	response => {
       	this.props.getShiftStatus()
       	this.props.getMostRecentShiftStatus()
       	this.props.navigation.navigate('AccountClose')
@@ -134,23 +132,12 @@ class ShiftClose extends React.Component {
                   </Text>
                 </View>
                 <View style={{flex: 3}}>
-                  <Text style={{alignSelf: 'flex-end'}}>{shift.shiftStatus}</Text>
+                  <Text style={{alignSelf: 'flex-end'}}>{mostRecentShift.shiftStatus}</Text>
                 </View>
               </View>
 
-              {shift.shiftStatus === 'INACTIVE' && mostRecentShift != null && mostRecentShift.close !== undefined && mostRecentShift.shiftStatus !== 'ACTIVE' && (
+              {mostRecentShift.close !== undefined && mostRecentShift.shiftStatus !== 'ACTIVE' && (
                 <View>
-                  <View style={styles.fieldContainer}>
-                    <View style={{flex: 1}}>
-                      <Text style={[styles.fieldTitle]}>
-                        {t('lastShiftStatus')}
-                      </Text>
-                    </View>
-                    <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{mostRecentShift.shiftStatus}</Text>
-                    </View>
-                  </View>
-
                   <View style={styles.fieldContainer}>
                     <View style={{flex: 1}}>
                       <Text style={[styles.fieldTitle]}>
@@ -159,26 +146,6 @@ class ShiftClose extends React.Component {
                     </View>
                     <View style={{flex: 3}}>
                       <Text style={{alignSelf: 'flex-end'}}>{mostRecentShift.close.timestamp !== null && formatDate(mostRecentShift.close.timestamp)}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.fieldContainer}>
-                    <View style={{flex: 1}}>
-                      <Text style={[styles.fieldTitle]}>
-                        {t('closedBalance')}
-                      </Text>
-                    </View>
-                    <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{mostRecentShift.close.balance}</Text>
-                    </View>
-                  </View>
-                  <View style={styles.fieldContainer}>
-                    <View style={{flex: 1}}>
-                      <Text style={[styles.fieldTitle]}>
-                        {t('difference')}
-                      </Text>
-                    </View>
-                    <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{mostRecentShift.difference}</Text>
                     </View>
                   </View>
                   <View style={styles.fieldContainer}>
@@ -230,9 +197,9 @@ class ShiftClose extends React.Component {
               )}
             </View>
 
-            <KeyboardAvoidingView style={styles.bottom} behavior="padding" enabled>              
+            <KeyboardAvoidingView style={styles.bottom} behavior="padding" enabled>
               {
-                ['ACTIVE', 'CLOSING', 'CONFIRM_CLOSE'].includes(mostRecentShift.shiftStatus) 
+                ['ACTIVE', 'CLOSING', 'CONFIRM_CLOSE'].includes(mostRecentShift.shiftStatus)
                 ?
                   (
      								<TouchableOpacity
@@ -242,7 +209,7 @@ class ShiftClose extends React.Component {
         								{t('closeShiftAction')}
       								</Text>
     								</TouchableOpacity>
-    							) 
+    							)
                   :
                   	(
                   		<View>
@@ -287,7 +254,7 @@ class ShiftClose extends React.Component {
             				)
               }
             </KeyboardAvoidingView>
-          </View>      
+          </View>
         </DismissKeyboard>
       )
     }

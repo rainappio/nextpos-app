@@ -17,33 +17,20 @@ class CloseComplete extends React.Component {
 
     context.localize({
       en: {
-        closeCompletedTitle: 'Closing is Completed',
-        end: 'End'
+        closeCompletedTitle: 'Closing Account Complete'
       },
       zh: {
-        closeCompletedTitle: 'Closing is Completed-CH',
-        end: 'End-CH'
+        closeCompletedTitle: '關帳完成'
       }
     })
-
-    this.state = {
-      t: context.t
-    }
   }
 
   render() {
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <View style={styles.container}>
-        <Text
-          style={[
-            styles.welcomeText,
-            styles.orange_color,
-            styles.textMedium,
-            styles.textBold
-          ]}
-        >
+        <Text style={styles.screenTitle}>
           {t('closeCompletedTitle')}
         </Text>
 
@@ -60,7 +47,7 @@ class CloseComplete extends React.Component {
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('LoginSuccess')}
             >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('end')}</Text>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.done')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -68,11 +55,6 @@ class CloseComplete extends React.Component {
     )
   }
 }
-
-// const mapDispatchToProps = (dispatch, props) => ({
-//   clearOrder: () => dispatch(clearOrder(props.order.orderId)),
-//   getfetchOrderInflights: () => dispatch(getfetchOrderInflights())
-// })
 
 export default connect(
   null,

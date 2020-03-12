@@ -108,6 +108,9 @@ export const api = {
     delete: orderId => {
       return `${apiRoot}/orders/${orderId}`
     },
+    applyDiscount: orderId => {
+      return `${apiRoot}/orders/${orderId}/applyDiscount`
+    },
     inflightOrders: `${apiRoot}/orders/inflight`,
     getGlobalOrderOffers: `${apiRoot}/offers/globalOrderOffers`,
     getordersByDateRange: `${apiRoot}/orders`
