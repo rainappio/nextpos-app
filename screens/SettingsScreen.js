@@ -17,6 +17,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtnCustom from '../components/BackBtnCustom'
 import styles from '../styles'
+import ScreenHeader from "../components/ScreenHeader";
 
 class SettingsScreen extends React.Component {
   static navigationOptions = {
@@ -28,9 +29,9 @@ class SettingsScreen extends React.Component {
 
     return (
       <View style={[styles.container, styles.nomgrBottom]}>
-        <Text style={styles.screenTitle}>
-          {t('menu.settings')}
-        </Text>
+        <ScreenHeader backNavigation={false}
+                      title={t('menu.settings')}/>
+
         <Pages indicatorColor="#FF9100">
           <View>
             <View style={[styles.flex_dir_row]}>

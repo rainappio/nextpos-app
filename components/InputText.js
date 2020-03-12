@@ -74,7 +74,7 @@ const InputText = ({
           <Text
             style={[
               styles.margin_15,
-              { fontSize: 16, fontWeight: 'bold', color: '#F39F86' }
+              { fontSize: 16, fontWeight: 'bold', color: '#f18d1a' }
             ]}
           >
             Done

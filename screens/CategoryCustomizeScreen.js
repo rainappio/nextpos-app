@@ -9,6 +9,9 @@ import RenderRadioBtn from '../components/RadioItem'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
+import {DismissKeyboard} from "../components/DismissKeyboard";
+import {NavigationEvents} from "react-navigation";
 
 class CategoryCustomizeScreen extends React.Component {
   static navigationOptions = {
@@ -54,19 +57,9 @@ class CategoryCustomizeScreen extends React.Component {
 
     return (
       // scroll bar in the center issue: https://github.com/facebook/react-native/issues/26610
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      <ScrollView scrollIndicatorInsets={{right: 1}} contentContainerStyle={{flex: 1}}>
         <View style={[styles.container_nocenterCnt]}>
-          <BackBtn />
-          <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textMedium,
-              styles.textBold
-            ]}
-          >
-            {t('categoryTitle')}
-          </Text>
+          <ScreenHeader title={t('categoryTitle')}/>
 
           <View>
             <View style={styles.paddBottom_20}>
@@ -113,7 +106,7 @@ class CategoryCustomizeScreen extends React.Component {
               <View>
                 <Text style={styles.textBold}>{t('applyToProducts')}</Text>
               </View>
-              <View style={[styles.onesixthWidth, { alignItems: 'flex-end' }]}>
+              <View style={[styles.onesixthWidth, {alignItems: 'flex-end'}]}>
                 <Field
                   name="appliesToProducts"
                   component={RNSwitch}
@@ -127,33 +120,33 @@ class CategoryCustomizeScreen extends React.Component {
                 <Text style={styles.textBold}>{t('workingArea')}</Text>
               </View>
               {workingareas !== undefined &&
-                workingareas.map(workarea => (
-                  <View
-                    style={[styles.borderBottomLine, styles.paddingTopBtn20]}
-                    key={workarea.id}
-                  >
-                    <Field
-                      name="workingAreaId"
-                      component={RenderRadioBtn}
-                      customValue={workarea.id}
-                      optionName={workarea.name}
-                    />
-                  </View>
-                ))}
+              workingareas.map(workarea => (
+                <View
+                  style={[styles.borderBottomLine, styles.paddingTopBtn20]}
+                  key={workarea.id}
+                >
+                  <Field
+                    name="workingAreaId"
+                    component={RenderRadioBtn}
+                    customValue={workarea.id}
+                    optionName={workarea.name}
+                  />
+                </View>
+              ))}
             </View>
+          </View>
 
-            <View style={styles.bottom}>
-              <TouchableOpacity onPress={handleSubmit}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                  {t('action.save')}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => onCancel()}>
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                  {t('action.cancel')}
-                </Text>
-              </TouchableOpacity>
-            </View>
+          <View style={styles.bottom}>
+            <TouchableOpacity onPress={handleSubmit}>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                {t('action.save')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => onCancel()}>
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                {t('action.cancel')}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>

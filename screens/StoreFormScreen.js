@@ -9,6 +9,7 @@ import styles from '../styles'
 import RNSwitch from '../components/RNSwitch'
 import { LocaleContext } from '../locales/LocaleContext'
 import SegmentedControl from "../components/SegmentedControl";
+import ScreenHeader from "../components/ScreenHeader";
 
 class StoreFormScreen extends React.Component {
   static navigationOptions = {
@@ -93,12 +94,7 @@ class StoreFormScreen extends React.Component {
           <DismissKeyboard>
             <View style={styles.container}>
               <View>
-                <View>
-                  <BackBtn/>
-                  <View>
-                    <Text style={styles.screenTitle}>{t('settings.stores')}</Text>
-                  </View>
-                </View>
+                <ScreenHeader title={t('settings.stores')}/>
 
                 <View style={styles.fieldContainer}>
                   <View style={{flex: 2}}>
@@ -236,7 +232,7 @@ class StoreFormScreen extends React.Component {
                 </View>
               </View>
 
-              <View style={styles.bottom}>
+              <View style={[styles.bottom, {marginTop: 30}]}>
                 <TouchableOpacity onPress={handleSubmit}>
                   <Text style={[styles.bottomActionButton, styles.actionButton]}>
                     {t('action.save')}

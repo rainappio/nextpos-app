@@ -13,6 +13,7 @@ import DeleteBtn from '../components/DeleteBtn'
 import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
 import { LocaleContext } from '../locales/LocaleContext'
 import SegmentedControl from "../components/SegmentedControl"
+import ScreenHeader from "../components/ScreenHeader";
 
 class StaffFormScreen extends React.Component {
   static navigationOptions = {
@@ -94,9 +95,8 @@ class StaffFormScreen extends React.Component {
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
           <View>
-            <Text style={styles.screenTitle}>
-              {t('staffTitle')}
-            </Text>
+            <ScreenHeader title={t('staffTitle')}/>
+
             <View style={styles.fieldContainer}>
               <View style={{flex: 1}}>
                 <Text style={styles.fieldTitle}>{t('nickName')}</Text>
@@ -203,7 +203,7 @@ class StaffFormScreen extends React.Component {
               </View>
             )}
           </View>
-        </View>         
+        </View>
       </DismissKeyboard>
     )
   }

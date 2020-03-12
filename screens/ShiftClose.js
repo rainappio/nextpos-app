@@ -25,6 +25,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import {handleCloseShift, handleOpenShift, checkBalanceInput} from "../helpers/shiftActions";
 import BackBtn from "../components/BackBtn";
 import AccountCloseConfirm from './AccountCloseConfirm'
+import ScreenHeader from "../components/ScreenHeader";
 
 class ShiftClose extends React.Component {
   static navigationOptions = {
@@ -117,12 +118,7 @@ class ShiftClose extends React.Component {
       return (
         <DismissKeyboard>
   				<View style={styles.container}>
-            <View>
-              <BackBtn/>
-              <Text style={styles.screenTitle}>
-                {t('shiftTitle')}
-              </Text>
-            </View>
+            <ScreenHeader title={t('shiftTitle')}/>
 
             <View style={{flex: 3, justifyContent: 'center'}}>
               <View style={styles.fieldContainer}>

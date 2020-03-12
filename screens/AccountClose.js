@@ -28,6 +28,7 @@ import {handleCloseShift, handleOpenShift} from "../helpers/shiftActions";
 import BackBtn from "../components/BackBtn";
 import InputText from '../components/InputText'
 import AccountClosureForm from './AccountClosureForm'
+import ScreenHeader from "../components/ScreenHeader";
 
 class AccountClose extends React.Component {
   static navigationOptions = {
@@ -84,33 +85,28 @@ class AccountClose extends React.Component {
 
     return (
       <DismissKeyboard>
-      	<ScrollView>
-          <View style={[styles.container,{marginBottom: 10}]}>
-            <BackBtn/>
-            <Text style={styles.screenTitle}>
-              {t('accountCloseTitle')}
-            </Text>
+      	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
+          <View style={[styles.container]}>
+            <ScreenHeader title={t('accountCloseTitle')}/>
 
-            <View style={[{width: '100%'}]}>
-              <View>
-                <Text style={[styles.toRight]}>
-                  {t('staff')} - {mostRecentShift.open.who}
-                </Text>
-                <Text style={[styles.toRight]}>
-                  {formatDate(mostRecentShift.open.timestamp)}
-                </Text>
-                <Text style={[styles.toRight]}>
-                  {t('status')} - {mostRecentShift.shiftStatus}
-                </Text>
-              </View>
+            <View>
+              <Text style={[styles.toRight]}>
+                {t('staff')} - {mostRecentShift.open.who}
+              </Text>
+              <Text style={[styles.toRight]}>
+                {formatDate(mostRecentShift.open.timestamp)}
+              </Text>
+              <Text style={[styles.toRight]}>
+                {t('status')} - {mostRecentShift.shiftStatus}
+              </Text>
             </View>
-
-            <AccountClosureForm
-            	mostrecentShift = {mostRecentShift}
-            	onSubmit={this.handleCloseShift}
-            	navigation={this.props.navigation}
-            />
           </View>
+
+          <AccountClosureForm
+            mostrecentShift={mostRecentShift}
+            onSubmit={this.handleCloseShift}
+            navigation={this.props.navigation}
+          />
 				</ScrollView>
       </DismissKeyboard>
     )

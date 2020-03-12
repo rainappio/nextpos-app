@@ -21,6 +21,7 @@ import TableForm from './TableForm'
 import {api, makeFetchRequest, errorAlert, dispatchFetchRequest, successMessage} from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class TableEdit extends React.Component {
   static navigationOptions = {
@@ -94,14 +95,10 @@ class TableEdit extends React.Component {
       )
     } else if (haveData && selectedTable !== undefined) {
       return (
-      	<ScrollView>
         <DismissKeyboard>
-        
-          <View style={[styles.container]}>
-            <View>
-              <BackBtn/>
-              <Text style={styles.screenTitle}>{t('editTableTitle')}</Text>
-            </View>
+          <View style={[styles.container_nocenterCnt]}>
+            <ScreenHeader title={t('editTableTitle')}/>
+
             <TableForm
               onSubmit={this.handleSubmit}
               handleDeleteTable={this.handleDeleteTable}
@@ -111,9 +108,8 @@ class TableEdit extends React.Component {
               navigation={navigation}
             />
           </View>
-          
+
         </DismissKeyboard>
-        </ScrollView>
       )
     } else {
       return null

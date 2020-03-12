@@ -12,6 +12,7 @@ import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
 import DeleteBtn from '../components/DeleteBtn'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class ProductFormScreen extends React.Component {
   static navigationOptions = {
@@ -67,36 +68,10 @@ class ProductFormScreen extends React.Component {
     } = this.props
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={{flex: 1}}>
         <DismissKeyboard>
-          <View style={styles.container_nocenterCnt}>
-            <BackBtn />
-            {isEditForm ? (
-              <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold,
-                  styles.mgrbtn80
-                ]}
-              >
-                {t('editProduct')}
-              </Text>
-            ) : (
-              <View>
-                <Text
-                  style={[
-                    styles.welcomeText,
-                    styles.orange_color,
-                    styles.textMedium,
-                    styles.textBold
-                  ]}
-                >
-                  {t('newProduct')}
-                </Text>
-              </View>
-            )}
+          <View style={[styles.container_nocenterCnt]}>
+            <ScreenHeader title={isEditForm ? t('editProduct') : t('newProduct')}/>
 
             <Field
               name="name"

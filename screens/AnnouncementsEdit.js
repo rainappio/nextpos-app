@@ -19,6 +19,7 @@ import {
 import AnnouncementsForm from './AnnouncementsForm'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
+import ScreenHeader from "../components/ScreenHeader";
 
 class AnnouncementsEdit extends React.Component {
   static navigationOptions = {
@@ -90,20 +91,11 @@ class AnnouncementsEdit extends React.Component {
     const { t } = this.context
 
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View style={styles.container}>
-            <BackBtn />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
-              {t('editAnnouncementTitle')}
-            </Text>
+            <ScreenHeader title={t('editAnnouncementTitle')}/>
+
             <AnnouncementsForm
               isEdit={true}
               initialValues={this.props.navigation.state.params.initialValues}

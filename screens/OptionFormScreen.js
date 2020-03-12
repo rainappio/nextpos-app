@@ -16,6 +16,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import { isRequired } from '../validators'
 import DeleteBtn from '../components/DeleteBtn'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class OptionFormScreen extends React.Component {
   static navigationOptions = {
@@ -25,10 +26,6 @@ class OptionFormScreen extends React.Component {
 
   constructor(props, context) {
     super(props)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   componentDidMount() {
@@ -55,7 +52,7 @@ class OptionFormScreen extends React.Component {
   }
 
   render() {
-    const { t } = this.state
+    const { t } = this.context
     const { handleSubmit, handleDeleteOption, initialValues } = this.props
 
     const renderOptionValPopup = (name, index, fields) => (
@@ -116,22 +113,12 @@ class OptionFormScreen extends React.Component {
     }
 
     return (
-      <KeyboardAvoidingView behavior="padding" enabled>
+      <KeyboardAvoidingView behavior="padding" enabled style={{flex: 1}}>
         <ScrollView scrollIndicatorInsets={{ right: 1 }}>
           <View style={[styles.container_nocenterCnt]}>
-            <BackBtn />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold,
-                styles.mgrbtn40
-              ]}
-            >
-              {t('productOptionTitle')}
-            </Text>
+            <ScreenHeader title={t('productOptionTitle')}/>
 
+            <View>
             <Field
               name="optionName"
               component={InputText}
@@ -174,6 +161,7 @@ class OptionFormScreen extends React.Component {
               component={renderOptionsValues}
               label={t('values')}
             />
+            </View>
 
             <View style={styles.bottom}>
               <TouchableOpacity onPress={handleSubmit}>

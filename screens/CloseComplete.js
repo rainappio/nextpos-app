@@ -5,6 +5,7 @@ import images from '../assets/images'
 import { getfetchOrderInflights, getOrder } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class CloseComplete extends React.Component {
   static navigationOptions = {
@@ -30,9 +31,8 @@ class CloseComplete extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.screenTitle}>
-          {t('closeCompletedTitle')}
-        </Text>
+        <ScreenHeader backNavigation={false}
+                      title={t('closeCompletedTitle')}/>
 
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}

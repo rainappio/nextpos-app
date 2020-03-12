@@ -10,6 +10,7 @@ import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import {NavigationEvents} from "react-navigation";
+import ScreenHeader from "../components/ScreenHeader";
 
 class TableLayouts extends React.Component {
   static navigationOptions = {
@@ -82,12 +83,13 @@ class TableLayouts extends React.Component {
         <DismissKeyboard>
           <View>
             <View style={[styles.container]}>
-              <BackBtn />
-              <Text style={styles.screenTitle}>
-                {t('settings.tableLayouts')}
-              </Text>
-              <AddBtn
-                onPress={() => this.props.navigation.navigate('TableLayoutAdd')}
+              <ScreenHeader backNavigation={true}
+                            title={t('settings.tableLayouts')}
+                            rightComponent={
+                              <AddBtn
+                                onPress={() => this.props.navigation.navigate('TableLayoutAdd')}
+                              />
+                            }
               />
             </View>
 

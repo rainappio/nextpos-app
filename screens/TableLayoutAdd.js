@@ -15,6 +15,7 @@ import {
 import { getTableLayouts } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class TableLayoutAdd extends React.Component {
   static navigationOptions = {
@@ -66,20 +67,16 @@ class TableLayoutAdd extends React.Component {
     const { t } = this.state
 
     return (
-    	
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
-          <View>
-            <BackBtn />
-            <Text style={styles.screenTitle}>{t('addTableLayoutTitle')}</Text>
-          </View>
+          <ScreenHeader title={t('addTableLayoutTitle')}/>
+
           <TableLayoutForm
             onSubmit={this.handleSubmit}
             navigation={navigation}
           />
         </View>
       </DismissKeyboard>
-      
     )
   }
 }

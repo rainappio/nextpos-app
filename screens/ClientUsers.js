@@ -14,6 +14,7 @@ import { getClientUsrs, doLogout } from '../actions'
 import styles from '../styles'
 import BackBtn from '../components/BackBtn'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class ClientUsers extends React.Component {
   static navigationOptions = {
@@ -24,9 +25,15 @@ class ClientUsers extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    this.state = {
-      t: context.t
-    }
+    context.localize({
+      en: {
+        clientUsersTitle: 'Client Users'
+      },
+      zh: {
+        clientUsersTitle: '選擇使用者'
+      }
+    })
+
   }
 
   componentDidMount() {
@@ -45,23 +52,21 @@ class ClientUsers extends React.Component {
 
   render() {
     const { clientusers, refreshing, navigation } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
-      <View style={[styles.container, {justifyContent: 'flex-start'}]}>
-        <View>
-          <View>
-            <BackBtn/>
-            <TouchableOpacity>
-              <Text
-                style={{textAlign: 'right', color: '#f18d1a'}}
-                onPress={() => this.handleDefaultUserLogout(navigation)}
-              >
-                {t('logout')}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+      <View style={[styles.container_nocenterCnt]}>
+
+        <ScreenHeader backNavigation={true}
+                      title={t('clientUsersTitle')}
+                      rightComponent={
+                        <TouchableOpacity onPress={() => this.handleDefaultUserLogout(navigation)}>
+                          <Text style={{textAlign: 'right', color: '#f18d1a'}}>
+                            {t('logout')}
+                          </Text>
+                        </TouchableOpacity>
+                      }
+        />
 
         <View style={{ marginTop: 80 }}>
           <FlatList

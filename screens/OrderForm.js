@@ -10,6 +10,7 @@ import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import PickerInput from "../components/PickerInput";
 import SegmentedControl from "../components/SegmentedControl";
+import ScreenHeader from "../components/ScreenHeader";
 
 class OrderForm extends Component {
   static contextType = LocaleContext
@@ -112,11 +113,9 @@ class OrderForm extends Component {
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View style={styles.container}>
-            <View>
-              <Text style={styles.screenTitle}>
-                {t('newOrderTitle')}
-              </Text>
-            </View>
+            <ScreenHeader backNavigation={true}
+                          title={t('newOrderTitle')}
+            />
 
             <View style={styles.sectionContent}>
               <View style={styles.fieldContainer}>

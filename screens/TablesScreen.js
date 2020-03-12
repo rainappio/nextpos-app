@@ -28,7 +28,7 @@ import OrderItem from './OrderItem'
 import {
   getTableLayouts,
   getShiftStatus,
-  getfetchOrderInflights, getTablesAvailable,
+  getfetchOrderInflights, getTablesAvailable, getMostRecentShiftStatus,
 } from '../actions'
 import styles from '../styles'
 import {
@@ -44,6 +44,7 @@ import {NavigationEvents} from "react-navigation";
 import {handleOpenShift} from "../helpers/shiftActions";
 import {getCurrentClient} from "../actions/client";
 import LoadingScreen from "./LoadingScreen";
+import ScreenHeader from "../components/ScreenHeader";
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -68,6 +69,7 @@ class TablesScreen extends React.Component {
   loadInfo = () => {
     this.props.getTableLayouts()
     this.props.getShiftStatus()
+    this.props.getMostRecentShiftStatus()
     this.props.getfetchOrderInflights()
     this.props.getAvailableTables()
     this.props.getCurrentClient()
@@ -79,6 +81,7 @@ class TablesScreen extends React.Component {
         noTableLayout:
           'You need to define at least one table layout and one table.',
         noInflightOrders: 'No order on this table layout',
+        shiftClosing: 'Please close shift first',
         openShift: {
           title: 'Open shift to start sales.',
           openBalance: 'Open Balance',
@@ -94,6 +97,7 @@ class TablesScreen extends React.Component {
       zh: {
         noTableLayout: '需要創建至少一個桌面跟一個桌位.',
         noInflightOrders: '此樓面沒有訂單',
+        shiftClosing: '請先完成關帳',
         openShift: {
           title: '請開帳來開始銷售',
           openBalance: '開帳現金',
@@ -135,6 +139,7 @@ class TablesScreen extends React.Component {
       isLoading,
       tablelayouts,
       shiftStatus,
+      recentShift,
       ordersInflight,
       availableTables
     } = this.props
@@ -160,6 +165,13 @@ class TablesScreen extends React.Component {
           </View>
         </ScrollView>
       )
+    } else if(recentShift !== undefined && ['CLOSING', 'CONFIRM_CLOSE'].includes(recentShift.data.shiftStatus)) {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.messageBlock}>{t('shiftClosing')}</Text>
+        </View>
+      )
+
     } else if (shiftStatus === 'INACTIVE') {
       return (
         <View style={styles.container}>
@@ -171,14 +183,7 @@ class TablesScreen extends React.Component {
               <View
                 style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}
               >
-                <Text
-                  style={[
-                    styles.textMedium,
-                    styles.orange_color,
-                    styles.mgrbtn40,
-                    styles.centerText
-                  ]}
-                >
+                <Text style={styles.screenTitle}>
                   {t('openShift.title')}
                 </Text>
                 <View style={styles.fieldContainer}>
@@ -264,21 +269,21 @@ class TablesScreen extends React.Component {
           />
 
           <DismissKeyboard>
-            <View>
-              <View style={[styles.container, styles.nomgrBottom]}>
-                <BackBtnCustom
-                  onPress={() => this.props.navigation.navigate('LoginSuccess')}
-                />
-                <Text style={styles.screenTitle}>{t('menu.tables')}</Text>
-                <AddBtn
-                  onPress={() =>
-                    this.props.navigation.navigate('OrderStart', {
-                      handleOrderSubmit: handleOrderSubmit,
-                      handleDelete: handleDelete
-                    })
-                  }
-                />
-              </View>
+            <View style={styles.fullWidthScreen}>
+              <ScreenHeader backNavigation={false}
+                            title={t('menu.tables')}
+                            parentFullScreen={true}
+                            rightComponent={
+                              <AddBtn
+                                onPress={() =>
+                                  this.props.navigation.navigate('OrderStart', {
+                                    handleOrderSubmit: handleOrderSubmit,
+                                    handleDelete: handleDelete
+                                  })
+                                }
+                              />
+                            }
+              />
 
               {tablelayouts.map((tblLayout, idx) => (
                 <View style={{}} key={idx}>
@@ -375,7 +380,12 @@ const mapStateToProps = state => ({
   isLoading: state.ordersinflight.loading,
   shiftStatus: state.shift.data.shiftStatus,
   availableTables: state.tablesavailable.data.availableTables,
-  client: state.client.data
+  client: state.client.data,
+  recentShift: {
+    loading: state.mostRecentShift.loading,
+    haveData: state.mostRecentShift.haveData,
+    data: state.mostRecentShift.data,
+  }
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -383,6 +393,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
   getTableLayouts: () => dispatch(getTableLayouts()),
   getShiftStatus: () => dispatch(getShiftStatus()),
+  getMostRecentShiftStatus: () => dispatch(getMostRecentShiftStatus()),
   getAvailableTables: () => dispatch(getTablesAvailable()),
   getCurrentClient: () => dispatch(getCurrentClient())
 })

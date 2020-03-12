@@ -14,6 +14,7 @@ import {
 } from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class PrinterAdd extends React.Component {
   static navigationOptions = {
@@ -64,8 +65,8 @@ class PrinterAdd extends React.Component {
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
-          <BackBtn />
-          <Text style={styles.screenTitle}>{t('addPrinterTitle')}</Text>
+          <ScreenHeader title={t('addPrinterTitle')}/>
+
           <PrinterForm navigation={navigation} onSubmit={this.handleSubmit} />
         </View>
       </DismissKeyboard>

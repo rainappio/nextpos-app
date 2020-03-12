@@ -25,6 +25,7 @@ import styles, {mainThemeColor} from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import {CheckBox, Tooltip} from 'react-native-elements'
 import BackBtnCustom from "../components/BackBtnCustom";
+import ScreenHeader from "../components/ScreenHeader";
 
 class OrdersSummaryRow extends React.Component {
   static contextType = LocaleContext
@@ -47,15 +48,15 @@ class OrdersSummaryRow extends React.Component {
             note: 'Order is open'
           },
           inProcess: {
-            display: 'PREP',
+            display: 'Prep',
             note: 'Preparing order'
           },
           delivered: {
-            display: 'SENT',
+            display: 'Deliver',
             note: 'Order is delivered'
           },
           settled: {
-            display: 'PAID',
+            display: 'Paid',
             note: 'Order is paid'
           }
         },
@@ -65,6 +66,7 @@ class OrdersSummaryRow extends React.Component {
         submitOrder: 'Submit',
         backToTables: 'Back to Tables',
         deleteOrder: 'Delete',
+        selectItemToDeliver: 'Please select a line item to deliver',
         deliverOrder: 'Deliver',
         payOrder: 'Payment',
         completeOrder: 'Complete'
@@ -101,6 +103,7 @@ class OrdersSummaryRow extends React.Component {
         submitOrder: '送單',
         backToTables: '回到座位區',
         deleteOrder: '刪除',
+        selectItemToDeliver: '請選擇品項送餐',
         deliverOrder: '送餐完畢',
         payOrder: '付款',
         completeOrder: '結束訂單'
@@ -201,7 +204,7 @@ class OrdersSummaryRow extends React.Component {
     })
 
     if (lineItemIds.length === 0) {
-      warningMessage('Please select line item')
+      warningMessage(this.context.t('selectItemToDeliver'))
       return
     }
 
@@ -258,10 +261,10 @@ class OrdersSummaryRow extends React.Component {
       <ScrollView scrollIndicatorInsets={{right: 1}} contentContainerStyle={{flexGrow: 1}}>
         <View style={{flex: 2}}>
           <View style={styles.container}>
-            <BackBtnCustom onPress={() => this.handleCancel(order.orderId)} />
-            <Text style={styles.screenTitle}>
-              {t('orderSummaryTitle')}
-            </Text>
+            <ScreenHeader backNavigation={true}
+                          backAction={() => this.handleCancel(order.orderId)}
+                          title={t('orderSummaryTitle')}
+            />
 
             <View style={[styles.flex_dir_row, {alignItems: 'center'}]}>
               <View style={{width: '35%'}}>

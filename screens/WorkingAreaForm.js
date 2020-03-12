@@ -40,15 +40,11 @@ class WorkingAreaForm extends React.Component {
         linkedPrinters: '連結出單機設定'
       }
     })
-
-    this.state = {
-      t: context.t
-    }
   }
 
   render() {
     const { handleSubmit, isEdit, handleEditCancel, navigation } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>

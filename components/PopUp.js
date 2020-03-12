@@ -41,13 +41,13 @@ export default class PopUp extends Component {
     const { t } = this.state
 
     return (
-      <View style={{ position: 'absolute', right: 0, top: -8 }}>
+      <View>
         <TouchableOpacity
           onPress={() => {
             this.toggleModal(true)
           }}
         >
-          <Icon name="ios-add" size={35} color="#f18d1a" />
+          <Icon name="ios-add" size={32} color="#f18d1a" />
         </TouchableOpacity>
 
         <Modal
@@ -65,7 +65,7 @@ export default class PopUp extends Component {
           >
             <ScrollView
               directionalLockEnabled={true}
-              contentContainerStyle={styles.modalContainer}
+              contentContainerStyle={[styles.modalContainer, {width: '100%'}]}
             >
               <TouchableWithoutFeedback>
                 <View
@@ -81,17 +81,10 @@ export default class PopUp extends Component {
                     {t('newItem.new')}
                   </Text>
                   <View
-                    style={[styles.jc_alignIem_center, styles.flex_dir_row]}
+                    style={[styles.jc_alignIem_center, styles.flex_dir_row, {width: '100%'}]}
                   >
                     <View
-                      style={{
-                        width: '46%',
-                        borderRadius: 4,
-                        borderWidth: 1,
-                        borderColor: '#F39F86',
-                        backgroundColor: '#F39F86',
-                        marginRight: '2%'
-                      }}
+                      style={{flex: 1, marginHorizontal: 5}}
                     >
                       <TouchableOpacity
                         onPress={() => {
@@ -99,20 +92,14 @@ export default class PopUp extends Component {
                           this.toggleModal(false)
                         }}
                       >
-                        <Text style={[styles.signInText, styles.whiteColor]}>
+                        <Text style={[styles.bottomActionButton, styles.actionButton]}>
                           {textForRoute1}
                         </Text>
                       </TouchableOpacity>
                     </View>
 
                     <View
-                      style={{
-                        width: '46%',
-                        borderRadius: 4,
-                        borderWidth: 1,
-                        borderColor: '#F39F86',
-                        marginLeft: '2%'
-                      }}
+                      style={{flex: 1, marginHorizontal: 5}}
                     >
                       <TouchableOpacity
                         onPress={() => {
@@ -122,7 +109,7 @@ export default class PopUp extends Component {
                           this.toggleModal(false)
                         }}
                       >
-                        <Text style={styles.signInText}>{textForRoute2}</Text>
+                        <Text style={[styles.bottomActionButton, styles.actionButton]}>{textForRoute2}</Text>
                       </TouchableOpacity>
                     </View>
                   </View>

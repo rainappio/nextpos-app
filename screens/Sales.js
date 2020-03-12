@@ -49,7 +49,7 @@ class Sales extends React.Component {
     const { t } = this.state
 
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View
           style={styles.container}
         >

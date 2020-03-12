@@ -236,15 +236,13 @@ class AccountCloseConfirmForm extends React.Component {
         {/* #Credit Card */}
 
 				{/* Invoice */}
-          <View style={styles.sectionBar}>
-            <View style={[styles.tableCellView, {flex: 4}]}>
-              <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>
-                  {t('invoicesTitle')}
-                </Text>
-              </TouchableOpacity>
-            </View>
+        <View style={styles.sectionBar}>
+          <View>
+            <Text style={styles.sectionBarTextSmall}>
+              {t('invoicesTitle')}
+            </Text>
           </View>
+        </View>
 
           <View style={[styles.sectionContainer]}>
             <View style={{flex: 3, justifyContent: 'center'}}>

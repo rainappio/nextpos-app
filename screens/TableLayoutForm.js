@@ -82,7 +82,7 @@ class TableLayoutForm extends React.Component {
     }
 
     return (
-      <View>
+      <View style={styles.contentContainer}>
         <View style={styles.fieldContainer}>
           <View style={{ flex: 1 }}>
             <Text style={styles.fieldTitle}>{t('layoutName')}</Text>
@@ -98,7 +98,7 @@ class TableLayoutForm extends React.Component {
           </View>
         </View>
 
-        {isEdit ? (
+        {isEdit && (
           <View>
             <View style={styles.fieldContainer}>
               <View style={{ flex: 1 }}>
@@ -142,9 +142,9 @@ class TableLayoutForm extends React.Component {
               />
             </View>
           </View>
-        ) : null}      
+        )}
 
-        <View style={styles.bottom}>
+        <View style={[styles.bottom]}>
           {isEdit ? (
             <TouchableOpacity onPress={handleSubmit}>
               <Text style={[styles.bottomActionButton, styles.actionButton]}>

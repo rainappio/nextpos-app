@@ -6,9 +6,22 @@ export default StyleSheet.create({
   mainContainer: {
     flex: 1
   },
+  fullWidthScreen: {
+    flex: 1,
+    justifyContent: 'center',
+    marginTop: 53,
+    marginBottom: 36
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
+    marginTop: 53,
+    marginLeft: 15,
+    marginRight: 15,
+    marginBottom: 36
+  },
+  container_nocenterCnt: {
+    flex: 1,
     marginTop: 53,
     marginLeft: 15,
     marginRight: 15,
@@ -121,13 +134,6 @@ export default StyleSheet.create({
   },
   mgr_20: {
     marginRight: 20
-  },
-  container_nocenterCnt: {
-    flex: 1,
-    marginTop: 62,
-    marginLeft: 35,
-    marginRight: 35,
-    marginBottom: 20
   },
   mgrbtn40: {
     marginBottom: 40
@@ -445,6 +451,12 @@ export default StyleSheet.create({
   },
 
   // named styles for applying to components
+  screenTopContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 15
+  },
   contentContainer: {
     flex: 1,
     justifyContent: 'space-between'
@@ -452,11 +464,8 @@ export default StyleSheet.create({
   screenTitle: {
     textAlign: 'center',
     textTransform: 'uppercase',
-    fontSize: 20,
+    fontSize: 22,
     letterSpacing: 2,
-    lineHeight: 32,
-    marginBottom: 16,
-    marginTop: -8,
     color: mainThemeColor,
     fontWeight: 'bold'
   },
