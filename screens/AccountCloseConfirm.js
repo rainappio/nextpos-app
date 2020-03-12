@@ -40,7 +40,6 @@ class AccountCloseConfirm extends React.Component {
 
   handleConfirmCloseShift = (values) => {
   	const confirmRemark = values.hasOwnProperty('closingRemark') ? values.closingRemark : ' '
-   console.log(confirmRemark)
   	dispatchFetchRequest(
     	api.shift.confirm,
     	{
