@@ -21,22 +21,20 @@ class CategoryCustomizeScreen extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   componentDidMount() {
     this.context.localize({
       en: {
         categoryTitle: 'Customize Category',
+        categoryName: 'Category Name',
         options: 'Options',
         applyToProducts: 'Apply to Products',
         workingArea: 'Working Area'
       },
       zh: {
         categoryTitle: '修改產品分類',
+        categoryName: '類別名稱',
         options: '產品選項',
         applyToProducts: '套用設定到產品',
         workingArea: '工作區'
@@ -53,76 +51,61 @@ class CategoryCustomizeScreen extends React.Component {
       onCancel
     } = this.props
 
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       // scroll bar in the center issue: https://github.com/facebook/react-native/issues/26610
-      <ScrollView scrollIndicatorInsets={{right: 1}} contentContainerStyle={{flex: 1}}>
-        <View style={[styles.container_nocenterCnt]}>
-          <ScreenHeader title={t('categoryTitle')}/>
+      <ScrollView scrollIndicatorInsets={{right: 1}} contentContainerStyle={{flexGrow: 1}}>
+        <View style={[styles.fullWidthScreen]}>
+          <ScreenHeader parentFullScreen={true}
+                        title={t('categoryTitle')}
+                        rightComponent={
+                          <AddBtn
+                            onPress={() =>
+                              this.props.navigation.navigate('Option', {
+                                customRoute: this.props.navigation.state.routeName
+                              })
+                            }
+                          />
+                        }
+          />
 
           <View>
-            <View style={styles.paddBottom_20}>
-              <Field
-                name="label"
-                component={InputText}
-                iscustomizeCate={true}
-              />
-            </View>
-
-            <View
-              style={[
-                styles.borderBottomLine,
-                styles.paddBottom_20,
-                styles.minustopMargin10
-              ]}
-            >
-              <Text style={styles.textBold}>{t('options')}</Text>
-              <AddBtn
-                onPress={() =>
-                  this.props.navigation.navigate('Option', {
-                    customRoute: this.props.navigation.state.routeName
-                  })
-                }
-              />
-            </View>
-
-            <Field
-              name="productOptionIds"
-              component={RenderCheckboxGroup}
-              customarr={prodctoptions}
-              navigation={this.props.navigation}
-              customRoute={'OptionEdit'}
-            />
-
-            <View
-              style={[
-                styles.jc_alignIem_center,
-                styles.flex_dir_row,
-                styles.paddingTopBtn20,
-                styles.borderBottomLine
-              ]}
-            >
-              <View>
-                <Text style={styles.textBold}>{t('applyToProducts')}</Text>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                  <Text style={styles.fieldTitle}>{t('categoryName')}</Text>
               </View>
-              <View style={[styles.onesixthWidth, {alignItems: 'flex-end'}]}>
+              <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
                 <Field
-                  name="appliesToProducts"
-                  component={RNSwitch}
-                  checked={true}
+                  name="label"
+                  component={InputText}
                 />
               </View>
             </View>
 
-            <View>
-              <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
-                <Text style={styles.textBold}>{t('workingArea')}</Text>
+            <View style={styles.sectionContainer}>
+              <View style={styles.sectionTitleContainer}>
+                <Text style={styles.sectionTitleText}>{t('options')}</Text>
               </View>
+
+              <Field
+                name="productOptionIds"
+                component={RenderCheckboxGroup}
+                customarr={prodctoptions}
+                navigation={this.props.navigation}
+                customRoute={'OptionEdit'}
+              />
+            </View>
+
+            <View style={styles.sectionContainer}>
+              <View style={[styles.sectionTitleContainer]}>
+                <Text style={styles.sectionTitleText}>{t('workingArea')}</Text>
+              </View>
+
               {workingareas !== undefined &&
               workingareas.map(workarea => (
                 <View
-                  style={[styles.borderBottomLine, styles.paddingTopBtn20]}
+                  style={[styles.optionsContainer]}
                   key={workarea.id}
                 >
                   <Field
@@ -136,7 +119,20 @@ class CategoryCustomizeScreen extends React.Component {
             </View>
           </View>
 
-          <View style={styles.bottom}>
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <Text style={styles.fieldTitle}>{t('applyToProducts')}</Text>
+            </View>
+            <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+              <Field
+                name="appliesToProducts"
+                component={RNSwitch}
+                checked={true}
+              />
+            </View>
+          </View>
+
+          <View style={[styles.bottom, styles.horizontalMargin]}>
             <TouchableOpacity onPress={handleSubmit}>
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
                 {t('action.save')}

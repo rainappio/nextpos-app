@@ -33,32 +33,34 @@ export default class RenderCheckboxGroup extends React.Component {
         }
 
         return (
-          <View
-            style={[styles.borderBottomLine, styles.paddingTopBtn20]}
-            key={ca.id}
-          >
-            <Checkbox
-              clear
-              arr
-              onChange={e => onChange(e.target.checked)}
-              checked={value.length !== 0 && value.includes(ca.id)}
-              style={{ position: 'absolute', right: 45 }}
-            >
-              <Text>{ca.name}</Text>
-            </Checkbox>
-            <AntDesignIcon
-              name="ellipsis1"
-              size={25}
-              color="black"
-              style={{ position: 'absolute', right: 0, top: 15 }}
-              onPress={() => {
-                this.props.navigation.navigate(customRoute, {
-                  //productOptionId: ca.id,
-                  customId: ca.id,
-                  customRoute: this.props.navigation.state.routeName
-                })
-              }}
-            />
+          <View key={ca.id}>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{ca.name}</Text>
+              </View>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Checkbox
+                  clear
+                  arr
+                  onChange={e => onChange(e.target.checked)}
+                  checked={value.length !== 0 && value.includes(ca.id)}
+                  style={{marginRight: 8}}
+                >
+                </Checkbox>
+                <AntDesignIcon
+                  name="ellipsis1"
+                  size={25}
+                  color="black"
+                  onPress={() => {
+                    this.props.navigation.navigate(customRoute, {
+                      //productOptionId: ca.id,
+                      customId: ca.id,
+                      customRoute: this.props.navigation.state.routeName
+                    })
+                  }}
+                />
+              </View>
+            </View>
           </View>
         )
       })

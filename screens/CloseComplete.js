@@ -39,6 +39,7 @@ class CloseComplete extends React.Component {
         >
           <Image
             source={images.end}
+            style={[{width: 175, height: 150}]}
           />
         </View>
 

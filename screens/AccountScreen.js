@@ -88,46 +88,51 @@ class AccountScreen extends React.Component {
     const { t } = this.state
 
     return (
-      <View style={styles.container}>
+      <View style={styles.fullWidthScreen}>
         <ScreenHeader backNavigation={true}
+                      parentFullScreen={true}
                       title={t('settings.account')}
         />
 
-        <View style={{ flex: 3 }}>
-          <View style={styles.fieldContainer}>
-            <View style={{ flex: 1 }}>
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, { flex: 1 }]}>
               <Text style={styles.fieldTitle}>{t('username')}</Text>
             </View>
-            <View style={{ flex: 3 }}>
-              <Text style={{ alignSelf: 'flex-end' }}>
+            <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
+              <Text>
                 {currentUser.username}
               </Text>
             </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <View style={{ flex: 1 }}>
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, { flex: 1 }]}>
               <Text style={styles.fieldTitle}>{t('nickname')}</Text>
             </View>
-            <View style={{ flex: 3 }}>
-              <Text style={{ alignSelf: 'flex-end' }}>
+            <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
+              <Text>
                 {currentUser.nickname}
               </Text>
             </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <View style={{ flex: 1 }}>
+          <View style={[styles.tableRowContainerWithBorder]}>
+            <View style={[styles.tableCellView, { flex: 1 }]}>
+              <Text style={styles.fieldTitle}>{t('password')}</Text>
+            </View>
+            <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
+              <EditPasswordPopUp defaultUser={currentUser.defaultUser} name={currentUser.username} ownAccount={true}/>
+            </View>
+          </View>
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, { flex: 1 }]}>
               <Text style={styles.fieldTitle}>App Version</Text>
             </View>
-            <View style={{ flex: 3 }}>
-              <Text style={{ alignSelf: 'flex-end' }}>
+            <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
+              <Text>
                 {Constants.nativeAppVersion} | {Constants.nativeBuildVersion}
               </Text>
             </View>
           </View>
-          <View style={[styles.fieldContainer, { alignSelf: 'center' }]}>
-            <EditPasswordPopUp defaultUser={currentUser.defaultUser} name={currentUser.username} ownAccount={true} />
-          </View>
-        </View>
+
 
         {/*{currentUser.defaultUser && (
           <View style={{ flex: 2, justifyContent: 'flex-end' }}>

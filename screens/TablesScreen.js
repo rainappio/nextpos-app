@@ -85,6 +85,7 @@ class TablesScreen extends React.Component {
         openShift: {
           title: 'Open shift to start sales.',
           openBalance: 'Open Balance',
+          enterAmount: 'Enter Amount',
           open: 'Open',
           cancel: 'Cancel'
         },
@@ -101,6 +102,7 @@ class TablesScreen extends React.Component {
         openShift: {
           title: '請開帳來開始銷售',
           openBalance: '開帳現金',
+          enterAmount: '請輸入金額',
           open: '開帳',
           cancel: '取消'
         },
@@ -186,21 +188,24 @@ class TablesScreen extends React.Component {
                 <Text style={styles.screenTitle}>
                   {t('openShift.title')}
                 </Text>
-                <View style={styles.fieldContainer}>
-                  <Text style={[styles.fieldTitle, { flex: 1 }]}>
-                    {t('openShift.openBalance')}
-                  </Text>
-                  <TextInput
-                    name="balance"
-                    value={String(this.state.openBalance)}
-                    type="text"
-                    onChangeText={value =>
-                      this.setState({ openBalance: value })
-                    }
-                    placeholder={t('openShift.openBalance')}
-                    keyboardType={`numeric`}
-                    style={[styles.rootInput, { flex: 2 }]}
-                  />
+                <View style={styles.tableRowContainerWithBorder}>
+                  <View style={[styles.tableCellView, {flex: 1}]}>
+                    <Text style={[styles.fieldTitle]}>
+                      {t('openShift.openBalance')}
+                    </Text>
+                  </View>
+                  <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                    <TextInput
+                      name="balance"
+                      type="text"
+                      onChangeText={value =>
+                        this.setState({openBalance: value})
+                      }
+                      placeholder={t('openShift.enterAmount')}
+                      keyboardType={`numeric`}
+                      style={[styles.rootInput]}
+                    />
+                  </View>
                 </View>
                 <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
                   <View style={{width: '45%', marginHorizontal: 5}}>
@@ -287,9 +292,9 @@ class TablesScreen extends React.Component {
 
               {tablelayouts.map((tblLayout, idx) => (
                 <View style={{}} key={idx}>
-                  <View style={[styles.sectionBar, {flex: 1, paddingLeft: 8}]}>
+                  <View style={[styles.sectionBar, {flex: 1}]}>
                     <Text
-                      style={[styles.sectionBarText, {flex: 4, textAlign: 'left'}
+                      style={[styles.sectionBarText, {flex: 4}
                       ]}
                     >
                       {tblLayout.layoutName}
@@ -331,11 +336,8 @@ class TablesScreen extends React.Component {
                 </View>
               ))}
               <View style={styles.mgrbtn20} key='noLayout'>
-                <View style={[styles.sectionBar, {flex: 1}]}>
-                  <Text
-                    style={[styles.sectionBarText, {textAlign: 'center'}
-                    ]}
-                  >
+                <View style={[styles.sectionBar, {flex: 1, justifyContent: 'flex-start'}]}>
+                  <Text style={[styles.sectionBarText]}>
                     {t('otherOrders')}
                   </Text>
                 </View>

@@ -8,7 +8,7 @@ import BackBtn from '../components/BackBtn'
 import InputText from '../components/InputText'
 import { isRequired } from '../validators'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import SegmentedControl from '../components/SegmentedControl'
 import DropDown from '../components/DropDown'
@@ -99,6 +99,7 @@ class PaymentOrderForm extends React.Component {
                 component={InputText}
                 placeholder={t('enterTaxIDNumber')}
                 keyboardType={'numeric'}
+                extraStyle={{ textAlign: 'left' }}
               />
             </View>
           </View>
@@ -133,28 +134,18 @@ class PaymentOrderForm extends React.Component {
 
         </View>
 
-        <View style={styles.sectionContainer}>
-          <Text
-            style={[styles.textBold, styles.textBig, styles.orange_color]}
-          >
-            {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
-          </Text>
-        </View>
-
         <View style={styles.sectionBar}>
-          <View style={[styles.half_width]}>
-            <Text style={[styles.textMedium, styles.whiteColor]}>
+          <View style={[{flex: 1}]}>
+            <Text style={[styles.sectionBarText]}>
               {t('totalAmount')}
             </Text>
           </View>
 
-          <View style={[styles.half_width, styles.orange_color]}>
+          <View style={[{flex: 1}]}>
             <Text
               style={[
-                { textAlign: 'right' },
-                styles.textBold,
-                styles.whiteColor,
-                styles.textMedium
+                styles.sectionBarText,
+                { textAlign: 'right' }
               ]}
             >
               ${order.orderTotal.toFixed(2)}
@@ -162,7 +153,7 @@ class PaymentOrderForm extends React.Component {
           </View>
         </View>
 
-        <View style={[styles.sectionContainer]}>
+        <View style={[styles.sectionContainer, styles.horizontalMargin]}>
         	<View style={[styles.sectionContent]}>
           	<View style={styles.sectionTitleContainer}>
             	<Text style={styles.sectionTitleText}>{t('paymentMethod')}</Text>
@@ -197,6 +188,7 @@ class PaymentOrderForm extends React.Component {
                 		placeholder={t('enterCash')}
                 		keyboardType={'numeric'}
                 		onFocus={() => resetTotal()}
+                    extraStyle={{ textAlign: 'left' }}
               		/>
             		</View>
           		</View>
@@ -220,7 +212,7 @@ class PaymentOrderForm extends React.Component {
                     		width: 62,
                     		height: 50,
                     		borderWidth: 2,
-                    		borderColor: '#f18d1a',
+                    		borderColor: mainThemeColor,
                     		paddingTop: 16
                   		}}
                 		>
@@ -253,7 +245,7 @@ class PaymentOrderForm extends React.Component {
                 		component={InputText}
                 		placeholder={t('enterCardNo')}
                 		keyboardType={'numeric'}
-                		onFocus={() => resetTotal()}
+                    extraStyle={{ textAlign: 'left' }}
               		/>
             		</View>
           		</View>

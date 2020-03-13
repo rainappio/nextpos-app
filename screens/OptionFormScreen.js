@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/AntDesign'
 import BackBtn from '../components/BackBtn'
 import InputText from '../components/InputText'
 import RNSwitch from '../components/RNSwitch'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { isRequired } from '../validators'
 import DeleteBtn from '../components/DeleteBtn'
@@ -57,52 +57,50 @@ class OptionFormScreen extends React.Component {
 
     const renderOptionValPopup = (name, index, fields) => (
       <View
-        style={[styles.paddingTopBtn20, styles.borderBottomLine]}
+        style={[styles.tableRowContainerWithBorder]}
         key={index}
       >
-        <View style={{ marginRight: 12 }}>
-          <Icon
-            name="minuscircleo"
-            size={35}
-            color="#f18d1a"
-            onPress={() => fields.remove(index)}
-          />
-        </View>
-        <View style={styles.grayBg}>
+        <View style={[{ flex: 4 }]}>
           <Field
             component={InputText}
             name={`${name}.value`}
             placeholder={t('value')}
+            alignLeft={true}
           />
           <Field
             component={InputText}
             name={`${name}.price`}
             placeholder={t('price')}
             keyboardType={`numeric`}
+            alignLeft={true}
             format={(value, name) => {
               return value !== undefined && value !== null ? String(value) : ''
             }}
           />
         </View>
+        <View style={[{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }]}>
+          <Icon
+            name="minuscircleo"
+            size={32}
+            color={mainThemeColor}
+            onPress={() => fields.remove(index)}
+          />
+        </View>
+
       </View>
     )
 
     const renderOptionsValues = ({ label, fields }) => {
       return (
         <View>
-          <View
-            style={[
-              styles.flex_dir_row,
-              styles.paddingTopBtn20,
-              styles.borderBottomLine
-            ]}
-          >
-            <Text>{label}</Text>
-            <View style={{ position: 'absolute', right: 0, top: 8 }}>
+          <View style={styles.sectionContainer}>
+            <View style={styles.sectionTitleContainer}>
+              <Text style={styles.sectionTitleText}>{label}</Text>
+
               <IonIcon
-                name="ios-add"
-                size={35}
-                color="#f18d1a"
+                name="md-add"
+                size={32}
+                color={mainThemeColor}
                 onPress={() => fields.push()}
               />
             </View>
@@ -114,56 +112,49 @@ class OptionFormScreen extends React.Component {
 
     return (
       <KeyboardAvoidingView behavior="padding" enabled style={{flex: 1}}>
-        <ScrollView scrollIndicatorInsets={{ right: 1 }}>
-          <View style={[styles.container_nocenterCnt]}>
-            <ScreenHeader title={t('productOptionTitle')}/>
+        <ScrollView scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={{ flexGrow: 1}}>
+          <View style={[styles.fullWidthScreen]}>
+            <ScreenHeader parentFullScreen={true}
+                          title={t('productOptionTitle')}/>
 
             <View>
-            <Field
-              name="optionName"
-              component={InputText}
-              placeholder={t('optionName')}
-              validate={isRequired}
-            />
+              <View style={styles.tableRowContainerWithBorder}>
+                <View style={[styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                  <Field
+                    name="optionName"
+                    component={InputText}
+                    placeholder={t('optionName')}
+                    validate={isRequired}
+                  />
+                </View>
+              </View>
 
-            <View
-              style={[
-                styles.flex_dir_row,
-                styles.paddingTopBtn20,
-                styles.borderBottomLine
-              ]}
-            >
-              <View style={[styles.onethirdWidth]}>
-                <Text>{t('required')}</Text>
+              <View style={styles.tableRowContainerWithBorder}>
+                <View style={[styles.tableCellView]}>
+                  <Text style={styles.fieldTitle}>{t('required')}</Text>
+                </View>
+                <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+                  <Field name="required" component={RNSwitch}/>
+                </View>
               </View>
-              <View style={[styles.onesixthWidth]}>
-                <Field name="required" component={RNSwitch} />
+
+              <View style={styles.tableRowContainerWithBorder}>
+                <View style={[styles.tableCellView]}>
+                  <Text style={styles.fieldTitle}>{t('multiple')}</Text>
+                </View>
+                <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+                  <Field name="multipleChoice" component={RNSwitch} />
+                </View>
               </View>
+
+              <FieldArray
+                name="optionValues"
+                component={renderOptionsValues}
+                label={t('values')}
+              />
             </View>
 
-            <View
-              style={[
-                styles.flex_dir_row,
-                styles.paddingTopBtn20,
-                styles.borderBottomLine
-              ]}
-            >
-              <View style={[styles.onethirdWidth]}>
-                <Text>{t('multiple')}</Text>
-              </View>
-              <View style={[styles.onesixthWidth]}>
-                <Field name="multipleChoice" component={RNSwitch} />
-              </View>
-            </View>
-
-            <FieldArray
-              name="optionValues"
-              component={renderOptionsValues}
-              label={t('values')}
-            />
-            </View>
-
-            <View style={styles.bottom}>
+            <View style={[styles.bottom, styles.horizontalMargin]}>
               <TouchableOpacity onPress={handleSubmit}>
                 <Text style={[styles.bottomActionButton, styles.actionButton]}>
                   {t('action.save')}

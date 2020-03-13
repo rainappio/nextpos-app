@@ -9,6 +9,7 @@ import RenderPureCheckBox from '../components/rn-elements/PureCheckBox'
 import { isRequired } from '../validators'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
+import SegmentedControl from "../components/SegmentedControl";
 
 class AnnouncementsForm extends React.Component {
   static navigationOptions = {
@@ -44,13 +45,14 @@ class AnnouncementsForm extends React.Component {
 
     const { t } = this.context
 
-    var iconsArr = [
+    const iconsArr = [
       { label: 'ios-attach', value: 'ios-attach' },
       { label: 'ios-paper', value: 'ios-paper' },
       { label: 'ios-notifications', value: 'ios-notifications' },
       { label: 'md-text', value: 'md-text' },
       { label: 'md-today', value: 'md-today' }
     ]
+
     return (
       <View>
         <Field
@@ -58,11 +60,12 @@ class AnnouncementsForm extends React.Component {
           name="title"
           placeholder={t('announcementTitle')}
           validate={isRequired}
+          extraStyle={{ textAlign: 'left' }}
         />
 
         <View style={styles.textAreaContainer}>
           <Field
-            style={[styles.textArea, styles.grayBg]}
+            style={[styles.textArea]}
             component={InputText}
             name="markdownContent"
             placeholder={t('markdownContent')}
@@ -70,13 +73,15 @@ class AnnouncementsForm extends React.Component {
             numberOfLines={10}
             multiline={true}
             height={160}
+            extraStyle={{ textAlign: 'left' }}
             underlineColorAndroid="transparent"
           />
         </View>
 
+        <View>
         {iconsArr.map((icon, ix) => (
           <View
-            style={[styles.borderBottomLine, styles.paddingTopBtn8]}
+            style={[styles.verticalPadding]}
             key={ix}
           >
             <Field
@@ -88,6 +93,7 @@ class AnnouncementsForm extends React.Component {
             />
           </View>
         ))}
+        </View>
 
         <View style={styles.bottom}>
           <TouchableOpacity onPress={handleSubmit}>

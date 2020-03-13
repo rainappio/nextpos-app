@@ -19,7 +19,7 @@ class TimeCardFilterForm extends React.Component {
     const { handleSubmit } = this.props
 
     return (
-      <View style={[styles.flex_dir_row]}>
+      <View style={[styles.tableRowContainer]}>
         <View style={{flex: 3}}>
           <Field
             name="year"

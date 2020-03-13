@@ -6,6 +6,7 @@ import { getfetchOrderInflights, getOrder } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
+import Icon from "react-native-vector-icons/Ionicons";
 
 class CheckoutComplete extends React.Component {
   static navigationOptions = {
@@ -48,15 +49,16 @@ class CheckoutComplete extends React.Component {
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
-          <Image
-            source={images.cash}
-            style={{ width: 60, height: 60, marginBottom: 40 }}
+          <Icon
+            name='md-checkmark-circle-outline'
+            size={42}
+            style={styles.buttonIconStyle}
           />
-          <Text style={styles.centerText}>
+          <Text style={styles.messageBlock}>
             {t('totalAmount')}: ${transactionResponse.settleAmount}
           </Text>
           {transactionResponse.paymentMethod === 'CASH' && (
-            <Text style={styles.centerText}>
+            <Text style={styles.messageBlock}>
               {t('change')}: ${transactionResponse.paymentDetails.values['CASH_CHANGE']}
             </Text>
           )}

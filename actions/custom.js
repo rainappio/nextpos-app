@@ -27,7 +27,7 @@ export const formatDateFromMillis = dateMillis => {
 /**
  * Format date from backend date string.
  */
-export const formatDate = date => {
+export const formatDate = (date) => {
 
   if (date === undefined || date === null) {
     return undefined
@@ -37,7 +37,8 @@ export const formatDate = date => {
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleString('en-TW', {
     dateStyle: 'long',
-    timeZone: 'Asia/Taipei'
+    timeZone: 'Asia/Taipei',
+    hour12: false
   })
 }
 

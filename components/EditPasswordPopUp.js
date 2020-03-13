@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import {api, dispatchFetchRequest, successMessage, warningMessage} from '../constants/Backend'
 import { LocaleContext } from '../locales/LocaleContext'
 import {encode as btoa} from "base-64";
@@ -140,9 +140,7 @@ class EditPasswordPopUp extends Component {
             this.toggleModal(true)
           }}
         >
-          <Icon name="md-create" size={22} color="#f18d1a">
-            &nbsp;<Text style={{ fontSize: 15 }}>{t('passwordTitle')}</Text>
-          </Icon>
+          <Icon name="md-create" size={24} color={mainThemeColor} />
         </TouchableOpacity>
 
         <Modal

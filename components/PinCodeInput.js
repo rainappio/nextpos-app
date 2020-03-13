@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Text, Picker, Platform } from 'react-native'
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 
 /**
  * Reference: https://www.npmjs.com/package/react-native-smooth-pincode-input
@@ -31,24 +31,13 @@ export default class PinCodeInput extends Component {
         <View style={[styles.jc_alignIem_center]}>
           <SmoothPinCodeInput
             placeholder=""
-            mask={
-              <View
-                style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: 25,
-                  backgroundColor: '#ddd'
-                }}
-              ></View>
-            }
             autoFocus={true}
             cellStyle={{
               borderWidth: 1,
               borderRadius: 2,
-              borderColor: 'orange',
-              // backgroundColor: 'transparent',
+              borderColor: mainThemeColor,
               height: customHeight,
-              marginRight: 8
+              marginHorizontal: 4
             }}
             cellStyleFocused={null}
             editable={editable}
