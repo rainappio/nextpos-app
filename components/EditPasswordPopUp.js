@@ -17,6 +17,7 @@ import { LocaleContext } from '../locales/LocaleContext'
 import {encode as btoa} from "base-64";
 import InputText from "./InputText";
 import {isvalidPassword} from "../validators";
+import ScreenHeader from "./ScreenHeader";
 
 class EditPasswordPopUp extends Component {
   static contextType = LocaleContext
@@ -164,9 +165,8 @@ class EditPasswordPopUp extends Component {
                 <View
                   style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}
                 >
-                  <Text style={styles.screenTitle}>
-                    {t('editPassword')}
-                  </Text>
+                  <ScreenHeader backNavigation={false}
+                                title={t('editPassword')}/>
 
                   {this.props.ownAccount && (
                     <View

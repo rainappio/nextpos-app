@@ -19,6 +19,7 @@ import {
 } from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class WorkingAreaEdit extends React.Component {
   static navigationOptions = {
@@ -96,8 +97,10 @@ class WorkingAreaEdit extends React.Component {
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
-          <BackBtnCustom onPress={() => this.handleEditCancel()} />
-          <Text style={styles.screenTitle}>{t('editWorkingAreaTitle')}</Text>
+          <ScreenHeader backNavigation={true}
+                        backAction={() => this.handleEditCancel()}
+                        title={t('editWorkingAreaTitle')}/>
+
           <WorkingAreaForm
             onSubmit={this.handleUpdate}
             navigation={navigation}

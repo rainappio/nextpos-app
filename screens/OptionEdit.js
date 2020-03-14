@@ -11,7 +11,7 @@ import {
   successMessage
 } from '../constants/Backend'
 
-class Option extends React.Component {
+class OptionEdit extends React.Component {
   static navigationOptions = {
     header: null
   }
@@ -103,15 +103,12 @@ class Option extends React.Component {
       )
     } else if (haveData) {
       return (
-        <View>
-          <OptionFormScreen
-            initialValues={mappedOption}
-            onSubmit={this.handleSubmit}
-            handleDeleteOption={this.handleDeleteOption}
-            navigation={navigation}
-            screenProps={this.props.screenProps}
-          />
-        </View>
+        <OptionFormScreen
+          initialValues={mappedOption}
+          onSubmit={this.handleSubmit}
+          handleDeleteOption={this.handleDeleteOption}
+          navigation={navigation}
+        />
       )
     } else {
       return null
@@ -133,4 +130,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Option)
+)(OptionEdit)

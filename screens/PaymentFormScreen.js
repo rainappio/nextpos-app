@@ -23,6 +23,7 @@ import { isRequired } from '../validators'
 import { calculatePercentage } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class PaymentFormScreen extends React.Component {
   static navigationOptions = {
@@ -89,22 +90,12 @@ class PaymentFormScreen extends React.Component {
         })
       })
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View style={styles.container}>
-            <BackBtnCustom
-              onPress={() => this.props.navigation.navigate('OrdersSummary')}
+            <ScreenHeader backNavigation={true}
+                          title={t('paymentTitle')}
             />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
-              {t('paymentTitle')}
-            </Text>
 
             <View
               style={[

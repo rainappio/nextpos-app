@@ -13,6 +13,7 @@ import InputText from './InputText'
 import { isRequired } from '../validators'
 import styles from '../styles'
 
+// todo: delete
 export default class OptionPopUp extends Component {
   state = {
     isVisible: false

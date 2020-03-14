@@ -11,6 +11,7 @@ import images from '../assets/images'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import StaffTimeCardFilterForm from './StaffTimeCardFilterForm'
+import ScreenHeader from "../components/ScreenHeader";
 
 class StaffTimeCard extends React.Component {
   static navigationOptions = {
@@ -93,13 +94,12 @@ class StaffTimeCard extends React.Component {
     }
 
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View style={styles.container}>
-          	<BackBtn />
-            <Text style={styles.screenTitle}>
-             {t('title')}
-            </Text>
+          	<ScreenHeader backNavigation={true}
+                          title={t('title')}
+            />
 
           	<StaffTimeCardFilterForm
 							onSubmit={this.handleFilter}

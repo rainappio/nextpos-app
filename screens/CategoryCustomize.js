@@ -18,6 +18,7 @@ import {
   successMessage
 } from '../constants/Backend'
 import { NavigationEvents } from 'react-navigation'
+import ScreenHeader from "../components/ScreenHeader";
 
 class CategoryCustomize extends React.Component {
   static navigationOptions = {
@@ -112,12 +113,9 @@ class CategoryCustomize extends React.Component {
       )
     }
     return (
-      <View>
+      <View style={{flex: 1}}>
         <NavigationEvents
           onWillFocus={() => {
-            console.log(
-              'React to navigation event: get the latest product options list'
-            )
             this.props.getProductOptions()
           }}
         />

@@ -17,6 +17,7 @@ import { getPrinters, getWorkingAreas } from '../actions'
 import PopUp from '../components/PopUp'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class PrinternKDS extends React.Component {
   static navigationOptions = {
@@ -43,8 +44,7 @@ class PrinternKDS extends React.Component {
     })
 
     this.state = {
-      activeSections: [],
-      t: context.t
+      activeSections: []
     }
 
     this.onChange = activeSections => {
@@ -66,7 +66,7 @@ class PrinternKDS extends React.Component {
       haveError,
       haveData
     } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     if (loading) {
       return (
@@ -82,45 +82,31 @@ class PrinternKDS extends React.Component {
       )
     }
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View>
-            <View style={[styles.container, styles.nomgrBottom]}>
-              <BackBtn />
-              <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textMedium,
-                  styles.textBold
-                ]}
-              >
-                {t('settings.workingArea')}
-              </Text>
-
-              <PopUp
-                navigation={navigation}
-                toRoute1={'PrinterAdd'}
-                toRoute2={'WorkingAreaAdd'}
-                textForRoute1={t('newItem.printer')}
-                textForRoute2={t('newItem.workingArea')}
-                dataArr={printers}
+            <View style={[styles.container]}>
+              <ScreenHeader title={t('settings.workingArea')}
+                            rightComponent={
+                              <PopUp
+                                navigation={navigation}
+                                toRoute1={'PrinterAdd'}
+                                toRoute2={'WorkingAreaAdd'}
+                                textForRoute1={t('newItem.printer')}
+                                textForRoute2={t('newItem.workingArea')}
+                                dataArr={printers}
+                              />
+                            }
               />
             </View>
 
             <View>
-              <Text
-                style={[
-                  styles.orange_bg,
-                  styles.whiteColor,
-                  styles.paddingTopBtn8,
-                  styles.centerText,
-                  styles.textMedium,
-                  styles.mgrtotop20
-                ]}
-              >
+              <View style={styles.sectionBar}>
+                <Text style={styles.sectionBarText}>
                 {t('printerTitle')}
               </Text>
+
+              </View>
               <View style={[styles.no_mgrTop, styles.mgrbtn20]}>
                 {printers.length === 0 && (
                   <View>
@@ -151,17 +137,11 @@ class PrinternKDS extends React.Component {
                 />
               </View>
 
-              <Text
-                style={[
-                  styles.orange_bg,
-                  styles.whiteColor,
-                  styles.paddingTopBtn8,
-                  styles.centerText,
-                  styles.textMedium
-                ]}
-              >
-                {t('workingAreaTitle')}
-              </Text>
+              <View style={styles.sectionBar}>
+                <Text style={styles.sectionBarText}>
+                  {t('workingAreaTitle')}
+                </Text>
+              </View>
 
               <View style={[styles.no_mgrTop, styles.mgrbtn20]}>
                 {workingareas.length === 0 && (

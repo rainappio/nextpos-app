@@ -42,7 +42,7 @@ class CategoryListScreen extends React.Component {
         )
       })
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View style={[styles.container]}>
           <BackBtn />
           <Text

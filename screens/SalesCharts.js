@@ -32,6 +32,7 @@ import { Tooltip } from 'react-native-elements'
 import PureChart from 'react-native-pure-chart'
 import Chart from "../components/Chart";
 import moment from "moment";
+import ScreenHeader from "../components/ScreenHeader";
 
 class SalesCharts extends React.Component {
   static navigationOptions = {
@@ -222,14 +223,14 @@ class SalesCharts extends React.Component {
       )
     } else if (haveError) {
       return <BackendErrorScreen />
+
     } else if (!containSalesData) {
       return (
         <View style={[styles.container]}>
           <View style={{ flex: 1 }}>
-            <BackBtn />
-            <Text style={styles.screenTitle}>
-              {t('salesDashboardTitle')}
-            </Text>
+            <ScreenHeader backNavigation={true}
+                          title={t('salesDashboardTitle')}
+            />
           </View>
           <Text style={{ flex: 3, alignSelf: 'center' }}>
             {t('noSalesData')}
@@ -241,10 +242,9 @@ class SalesCharts extends React.Component {
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View style={[styles.container]}>
-          <BackBtn />
-          <Text style={styles.screenTitle}>
-            {t('salesDashboardTitle')}
-          </Text>
+          <ScreenHeader backNavigation={true}
+                        title={t('salesDashboardTitle')}
+          />
 
           <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
             <View style={{ width: '80%' }}>

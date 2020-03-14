@@ -18,6 +18,7 @@ import {
 import AnnouncementsForm from './AnnouncementsForm'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
+import ScreenHeader from "../components/ScreenHeader";
 
 class AnnouncementsAdd extends React.Component {
   static navigationOptions = {
@@ -50,20 +51,11 @@ class AnnouncementsAdd extends React.Component {
     const { t } = this.context
 
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View style={styles.container}>
-            <BackBtn />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold
-              ]}
-            >
-              {t('newAnnouncementTitle')}
-            </Text>
+            <ScreenHeader title={t('newAnnouncementTitle')}/>
+
             <AnnouncementsForm
               onSubmit={this.handleSubmit}
               navigation={navigation}

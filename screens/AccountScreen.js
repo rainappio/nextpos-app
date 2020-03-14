@@ -18,6 +18,7 @@ import EditPasswordPopUp from '../components/EditPasswordPopUp'
 import { reduxForm } from 'redux-form'
 import { getToken } from '../constants/Backend'
 import Constants from "expo-constants/src/Constants";
+import ScreenHeader from "../components/ScreenHeader";
 
 class AccountScreen extends React.Component {
   static navigationOptions = {
@@ -88,8 +89,10 @@ class AccountScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <BackBtn />
-        <Text style={styles.screenTitle}>{t('settings.account')}</Text>
+        <ScreenHeader backNavigation={true}
+                      title={t('settings.account')}
+        />
+
         <View style={{ flex: 3 }}>
           <View style={styles.fieldContainer}>
             <View style={{ flex: 1 }}>
@@ -126,14 +129,14 @@ class AccountScreen extends React.Component {
           </View>
         </View>
 
-        {currentUser.defaultUser && (
+        {/*{currentUser.defaultUser && (
           <View style={{ flex: 2, justifyContent: 'flex-end' }}>
             <View style={[styles.fieldContainer]}>
               <Text style={styles.fieldTitle}>Developer Section</Text>
             </View>
             <View>{storageItems}</View>
           </View>
-        )}
+        )}*/}
       </View>
     )
   }

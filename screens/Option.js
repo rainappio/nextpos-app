@@ -45,7 +45,6 @@ class Option extends React.Component {
       <OptionFormScreen
         onSubmit={this.handleSubmit}
         navigation={navigation}
-        screenProps={this.props.screenProps}
       />
     )
   }

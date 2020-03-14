@@ -18,6 +18,7 @@ import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import {renderOrderState} from "../helpers/orderActions";
 import {NavigationEvents} from "react-navigation";
+import ScreenHeader from "../components/ScreenHeader";
 
 class OrdersScreen extends React.Component {
   static navigationOptions = {
@@ -134,21 +135,18 @@ class OrdersScreen extends React.Component {
               this.props.getOrdersByDateRange()
             }}
           />
-          <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-            <View style={{justifyContent: 'space-between'}}>
-              <Text style={styles.screenTitle}>{t('ordersTitle')}</Text>
-            </View>
-            <View style={{position: 'absolute', right: 0}}>
-              <TouchableOpacity
-                onPress={() => {
-                  console.log('reloading orders')
-                  this.props.getOrdersByDateRange()
-                }}
-              >
-                <Icon name="md-refresh" size={30} color="#f18d1a"/>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <ScreenHeader backNavigation={false}
+                        title={t('ordersTitle')}
+                        rightComponent={
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.props.getOrdersByDateRange()
+                            }}
+                          >
+                            <Icon name="md-refresh" size={30} color="#f18d1a"/>
+                          </TouchableOpacity>
+                        }
+          />
 
           <View>
             <View style={styles.fieldContainer}>

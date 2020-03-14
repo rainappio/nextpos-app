@@ -7,6 +7,7 @@ import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext"
 import {dateToLocaleString, formatDate} from "../actions"
 import BackBtn from "../components/BackBtn"
+import ScreenHeader from "../components/ScreenHeader";
 
 class ClockIn extends React.Component {
   static navigationOptions = {
@@ -136,13 +137,8 @@ class ClockIn extends React.Component {
 
     return (
       <DismissKeyboard>
-        <View style={[styles.container]}>
-          <BackBtn />
-          <View>
-            <TouchableHighlight>
-              <Text style={styles.screenTitle}>{t('timeCardTitle')}</Text>
-            </TouchableHighlight>
-          </View>
+        <View style={[styles.container_nocenterCnt]}>
+          <ScreenHeader backNavigation={true} title={t('timeCardTitle')} />
 
           <View style={{ flex: 3, justifyContent: 'center' }}>
             <View style={[styles.fieldContainer]}>

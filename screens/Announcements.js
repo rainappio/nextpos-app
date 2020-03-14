@@ -30,6 +30,7 @@ import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
+import ScreenHeader from "../components/ScreenHeader";
 
 class Announcements extends React.Component {
   static navigationOptions = {
@@ -106,18 +107,15 @@ class Announcements extends React.Component {
 
     return (
       <View style={styles.stcontainer}>
-      	<View style={styles.fullWidth}>
-        	<BackBtn />
-        	<Text style={styles.screenTitle}>
-            {t('settings.announcements')}
-        	</Text>
-
-        	<AddBtn
-          	onPress={() =>
-            	this.props.navigation.navigate('AnnouncementsAdd')
-          	}
-        	/>
-      	</View>
+      	<ScreenHeader title={t('settings.announcements')}
+                      rightComponent={
+                        <AddBtn
+                          onPress={() =>
+                            this.props.navigation.navigate('AnnouncementsAdd')
+                          }
+                        />
+                      }
+        />
 
         	{Object.keys(getannouncements).length !== 0 && (
           	<SortableList

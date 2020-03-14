@@ -25,6 +25,7 @@ import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import {renderOrderState} from "../helpers/orderActions";
 import filterSupportedProps from "react-native-web/dist/exports/View/filterSupportedProps";
+import ScreenHeader from "../components/ScreenHeader";
 
 class OrderDetail extends React.Component {
   static navigationOptions = {
@@ -144,10 +145,10 @@ class OrderDetail extends React.Component {
 
       return (
       	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
-        <View style={[styles.container, styles.nomgrBottom]}>
-            <Text style={[styles.screenTitle]}>
-              Order Id - {order.serialId}
-            </Text>
+          <View style={[styles.container, styles.nomgrBottom]}>
+            <ScreenHeader backNavigation={false}
+                          title={`Order Id - ${order.serialId}`}
+            />
 
             <View style={[styles.flex_dir_row, {alignItems: 'center'}]}>
               <View style={{width: '35%'}}>
@@ -373,7 +374,7 @@ class OrderDetail extends React.Component {
                 {t('action.ok')}
               </Text>
             </TouchableOpacity>
-        </View>
+          </View>
         </ScrollView>
       )
     } else {

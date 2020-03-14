@@ -118,7 +118,7 @@ class LoginSuccessScreen extends React.Component {
     }
 
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <NavigationEvents
           onWillFocus={() => {
             this.loadUserInfo().then()
@@ -130,7 +130,7 @@ class LoginSuccessScreen extends React.Component {
           handleClientUserLogout={this.handleClientUserLogout}
         />
 
-        <View style={[styles.container, styles.nomgrBottom]}>
+        <View style={[styles.container]}>
           <View style={[{flexDirection: 'row', flex: 1, marginHorizontal: 10 }]}>
             <View style={{flex: 1}}>
               <Image

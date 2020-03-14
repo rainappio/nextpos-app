@@ -14,6 +14,7 @@ import {
 import { getWorkingAreas, getPrinters } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class WorkingAreaAdd extends React.Component {
   static navigationOptions = {
@@ -63,8 +64,8 @@ class WorkingAreaAdd extends React.Component {
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
-          <BackBtn />
-          <Text style={styles.screenTitle}>{t('addWorkingAreaTitle')}</Text>
+          <ScreenHeader title={t('addWorkingAreaTitle')}/>
+
           <WorkingAreaForm
             onSubmit={this.handleSubmit}
             navigation={navigation}

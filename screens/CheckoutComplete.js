@@ -5,6 +5,7 @@ import images from '../assets/images'
 import { getfetchOrderInflights, getOrder } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class CheckoutComplete extends React.Component {
   static navigationOptions = {
@@ -21,6 +22,7 @@ class CheckoutComplete extends React.Component {
         totalAmount: 'Total Amount',
         serviceCharge: 'Service Charge',
         change: 'Change',
+        backToTables: 'Back to Tables',
         completeOrder: 'Complete Order'
       },
       zh: {
@@ -28,6 +30,7 @@ class CheckoutComplete extends React.Component {
         totalAmount: '總金額',
         serviceCharge: '服務費',
         change: '找錢',
+        backToTables: '回到桌位頁面',
         completeOrder: '結束訂單'
       }
     })
@@ -39,9 +42,8 @@ class CheckoutComplete extends React.Component {
 
     return (
       <View style={styles.container_nocenterCnt}>
-        <Text style={styles.screenTitle}>
-          {t('checkoutCompletedTitle')}
-        </Text>
+        <ScreenHeader backNavigation={false}
+                      title={t('checkoutCompletedTitle')}/>
 
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
@@ -51,7 +53,7 @@ class CheckoutComplete extends React.Component {
             style={{ width: 60, height: 60, marginBottom: 40 }}
           />
           <Text style={styles.centerText}>
-            {t('totalAmount')}: $ {transactionResponse.settleAmount}
+            {t('totalAmount')}: ${transactionResponse.settleAmount}
           </Text>
           {transactionResponse.paymentMethod === 'CASH' && (
             <Text style={styles.centerText}>
@@ -70,7 +72,7 @@ class CheckoutComplete extends React.Component {
               }}
             >
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {t('done')}
+                {t('backToTables')}
               </Text>
             </TouchableOpacity>
           </View>

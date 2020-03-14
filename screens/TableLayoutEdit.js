@@ -21,6 +21,7 @@ import {
 } from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class TableLayoutEdit extends React.Component {
   static navigationOptions = {
@@ -99,13 +100,10 @@ class TableLayoutEdit extends React.Component {
       )
     }
     return (
-    	<ScrollView>
+    	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
       	<DismissKeyboard>
-        	<View style={[styles.container]}>
-          	<View>
-            	<BackBtn />
-            	<Text style={styles.screenTitle}>{t('editTableLayoutTitle')}</Text>
-          	</View>
+        	<View style={[styles.container_nocenterCnt]}>
+            <ScreenHeader title={t('editTableLayoutTitle')}/>
 
           	<TableLayoutForm
             	onSubmit={this.handleSubmit}

@@ -9,6 +9,7 @@ import { isRequired, isCountZero } from '../validators'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import BackBtn from '../components/BackBtn'
+import ScreenHeader from "../components/ScreenHeader";
 
 class OrderFormIV extends React.Component {
   static navigationOptions = {
@@ -42,10 +43,10 @@ class OrderFormIV extends React.Component {
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View style={styles.container}>
-          <BackBtn />
-          <Text style={styles.screenTitle}>
-            {this.props.navigation.state.params.prdName}
-          </Text>
+          <ScreenHeader backNavigation={true}
+                        title={this.props.navigation.state.params.prdName}
+          />
+
           {product.productOptions !== undefined &&
             product.productOptions.length > 0 && (
               <Text style={[styles.textBold, styles.paddBottom_20]}>

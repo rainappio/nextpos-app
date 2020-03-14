@@ -43,7 +43,7 @@ class TableForm extends React.Component {
     const { t } = this.state
 
     return (
-      <View>       
+      <View style={styles.contentContainer}>
         <View style={[styles.fieldContainer]}>
           <View style={[{ flex: 1 }]}>
             <Text style={styles.fieldTitle}>{t('tableName')}</Text>

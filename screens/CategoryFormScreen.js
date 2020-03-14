@@ -7,6 +7,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class CategoryFormScreen extends React.Component {
   static navigationOptions = {
@@ -44,18 +45,7 @@ class CategoryFormScreen extends React.Component {
       <DismissKeyboard>
         <View style={styles.container}>
           <View style={{ flex: 3 }}>
-            <BackBtn />
-            <Text
-              style={[
-                styles.welcomeText,
-                styles.orange_color,
-                styles.textMedium,
-                styles.textBold,
-                styles.mgrbtn80
-              ]}
-            >
-              {t('newCategoryTitle')}
-            </Text>
+            <ScreenHeader title={t('newCategoryTitle')}/>
 
             <Field
               name="label"

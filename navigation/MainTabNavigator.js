@@ -122,9 +122,6 @@ const Settings = createStackNavigator({
   TableLayoutEdit: TableLayoutEdit,
   TableAdd: TableAdd,
   TableEdit: TableEdit,
-  Payment: Payment,
-  PaymentOrder: PaymentOrder,
-  CheckoutComplete: CheckoutComplete,
   Announcements: Announcements,
   AnnouncementsAdd: AnnouncementsAdd,
   AnnouncementsEdit: AnnouncementsEdit,
@@ -150,7 +147,10 @@ const Tables = createStackNavigator({
   OrderFormIII: OrderFormIII,
   OrderFormIV: OrderFormIV,
   OrdersSummary: OrdersSummary,
-  LIneItemEdit: LIneItemEdit
+  LIneItemEdit: LIneItemEdit,
+  Payment: Payment,
+  PaymentOrder: PaymentOrder,
+  CheckoutComplete: CheckoutComplete
 })
 Tables.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.tables'),

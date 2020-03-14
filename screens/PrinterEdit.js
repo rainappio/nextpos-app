@@ -19,6 +19,7 @@ import {
 } from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class PrinterEdit extends React.Component {
   static navigationOptions = {
@@ -36,7 +37,7 @@ class PrinterEdit extends React.Component {
 
   componentDidMount() {
     this.props.getPrinter(
-      this.props.navigation.state.params.customId == undefined
+      this.props.navigation.state.params.customId === undefined
         ? this.props.navigation.state.params.id
         : this.props.navigation.state.params.customId
     )
@@ -98,8 +99,8 @@ class PrinterEdit extends React.Component {
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
-          <BackBtn />
-          <Text style={styles.screenTitle}>{t('editPrinterTitle')}</Text>
+          <ScreenHeader title={t('editPrinterTitle')}/>
+
           <PrinterForm
             navigation={navigation}
             onSubmit={this.handleUpdate}

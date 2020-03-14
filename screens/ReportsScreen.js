@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import images from '../assets/images'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class ReportsScreen extends React.Component {
   static navigationOptions = {
@@ -33,12 +34,12 @@ class ReportsScreen extends React.Component {
     const { t } = this.context
 
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View style={styles.container}>
-            <Text style={styles.screenTitle}>
-              {t('menu.reporting')}
-            </Text>
+            <ScreenHeader backNavigation={false}
+                          title={t('menu.reporting')}
+            />
 
             <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
               <TouchableOpacity

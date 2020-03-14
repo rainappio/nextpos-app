@@ -17,6 +17,7 @@ import TableForm from './TableForm'
 import { api, makeFetchRequest, errorAlert } from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import ScreenHeader from "../components/ScreenHeader";
 
 class TableAdd extends React.Component {
   static navigationOptions = {
@@ -67,10 +68,8 @@ class TableAdd extends React.Component {
     return (
       <DismissKeyboard>
         <View style={styles.container_nocenterCnt}>
-          <View>
-            <BackBtn />
-            <Text style={styles.screenTitle}>{t('addTableTitle')}</Text>
-          </View>
+          <ScreenHeader title={t('addTableTitle')}/>
+
           <TableForm onSubmit={this.handleSubmit} navigation={navigation} />
         </View>
       </DismissKeyboard>

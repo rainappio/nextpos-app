@@ -54,46 +54,33 @@ class LIneItemForm extends Component {
             style={[
               styles.jc_alignIem_center,
               styles.flex_dir_row,
-              styles.mgrtotop20
+              styles.mgrtotop20,
+              {width: '100%'}
             ]}
           >
             <View
-              style={{
-                width: '46%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                backgroundColor: '#F39F86',
-                marginRight: '2%'
-              }}
+              style={{flex: 1, marginHorizontal: 5}}
             >
               <TouchableOpacity
                 onPress={() => {
-                  //this.props.navigation.navigate('OrderFormII')
                   this.props.handleSubmit()
                 }}
               >
-                <Text style={[styles.signInText, styles.whiteColor]}>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
                   {t('action.update')}
                 </Text>
               </TouchableOpacity>
             </View>
 
             <View
-              style={{
-                width: '46%',
-                borderRadius: 4,
-                borderWidth: 1,
-                borderColor: '#F39F86',
-                marginLeft: '2%'
-              }}
+              style={{flex: 1, marginHorizontal: 5}}
             >
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate('OrdersSummary')
                 }}
               >
-                <Text style={styles.signInText}>{t('action.cancel')}</Text>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
               </TouchableOpacity>
             </View>
           </View>

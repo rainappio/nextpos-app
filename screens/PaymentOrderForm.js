@@ -12,6 +12,7 @@ import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import SegmentedControl from '../components/SegmentedControl'
 import DropDown from '../components/DropDown'
+import ScreenHeader from "../components/ScreenHeader";
 
 class PaymentOrderForm extends React.Component {
   static navigationOptions = {
@@ -124,22 +125,20 @@ class PaymentOrderForm extends React.Component {
 		}
 
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View style={styles.container}>
-          <BackBtn />
-          <Text style={styles.screenTitle}>
-            {t('paymentMethodTitle')}
-          </Text>
+          <ScreenHeader backNavigation={true}
+                        title={t('paymentMethodTitle')}
+          />
 
-          <View>
-            <View>
-              <Text
-                style={[styles.textBold, styles.textBig, styles.orange_color]}
-              >
-                {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
-              </Text>
-            </View>
-          </View>
+        </View>
+
+        <View style={styles.sectionContainer}>
+          <Text
+            style={[styles.textBold, styles.textBig, styles.orange_color]}
+          >
+            {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
+          </Text>
         </View>
 
         <View style={styles.sectionBar}>

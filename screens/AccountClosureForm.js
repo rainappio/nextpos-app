@@ -81,7 +81,7 @@ class AccountClosureForm extends React.Component {
 
     return (
       <DismissKeyboard>
-      	<ScrollView>
+      	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
 
 					{/* Cash */}
           	<View style={styles.sectionBar}>

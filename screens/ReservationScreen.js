@@ -26,7 +26,7 @@ class ReservationScreen extends React.Component {
 
   render() {
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View style={styles.container}>
           <BackBtn />
           <Text

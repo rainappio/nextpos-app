@@ -20,6 +20,7 @@ import { getProducts, clearLabel } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
+import ScreenHeader from "../components/ScreenHeader";
 
 class ProductRow extends React.Component {
   static navigationOptions = {
@@ -154,18 +155,19 @@ class ProductRow extends React.Component {
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
-          <View>
-            <View style={styles.container}>
-              <BackBtn />
-              <Text style={styles.screenTitle}>{t('productListTitle')}</Text>
-              <PopUp
-                navigation={navigation}
-                toRoute1={'Category'}
-                toRoute2={'Product'}
-                textForRoute1={t('newItem.category')}
-                textForRoute2={t('newItem.product')}
-              />
-            </View>
+          <View style={styles.fullWidthScreen}>
+            <ScreenHeader backNavigation={true}
+                          title={t('productListTitle')}
+                          parentFullScreen={true}
+                          rightComponent={
+                            <PopUp
+                              navigation={navigation}
+                              toRoute1={'Category'}
+                              toRoute2={'Product'}
+                              textForRoute1={t('newItem.category')}
+                              textForRoute2={t('newItem.product')}
+                            />}
+            />
 
             <Accordion
               onChange={this.onChange}

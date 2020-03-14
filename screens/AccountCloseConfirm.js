@@ -27,6 +27,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import {handleCloseShift, handleOpenShift, handleAbortCloseShift} from "../helpers/shiftActions";
 import InputText from '../components/InputText'
 import AccountCloseConfirmForm from './AccountCloseConfirmForm'
+import ScreenHeader from "../components/ScreenHeader";
 
 class AccountCloseConfirm extends React.Component {
   static navigationOptions = {
@@ -90,24 +91,19 @@ class AccountCloseConfirm extends React.Component {
     return (
       <DismissKeyboard>
       	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
-          <View style={[styles.container,{marginBottom: 10}]}>
-           <BackBtn/>
-            <Text style={styles.screenTitle}>
-              {t('confirmCloseTitle')}
-            </Text>
+          <View style={[styles.container]}>
+            <ScreenHeader title={t('confirmCloseTitle')}/>
 
-            <View style={[{width: '100%'}]}>
-              <View>
-                <Text style={[styles.toRight]}>
-                  {t('staff')} - {mostRecentShift.open.who}
-                </Text>
-                <Text style={[styles.toRight]}>
-                  {formatDate(mostRecentShift.open.timestamp)}
-                </Text>
-                <Text style={[styles.toRight]}>
-                  {t('status')} - {mostRecentShift.shiftStatus}
-                </Text>
-              </View>
+            <View>
+              <Text style={[styles.toRight]}>
+                {t('staff')} - {mostRecentShift.open.who}
+              </Text>
+              <Text style={[styles.toRight]}>
+                {formatDate(mostRecentShift.open.timestamp)}
+              </Text>
+              <Text style={[styles.toRight]}>
+                {t('status')} - {mostRecentShift.shiftStatus}
+              </Text>
             </View>
           </View>
 

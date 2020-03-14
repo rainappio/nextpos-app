@@ -13,6 +13,7 @@ import { LocaleContext } from '../locales/LocaleContext'
 import DropDown from '../components/DropDown'
 import UserTimeCardsFilterForm from './UserTimeCardsFilterForm'
 import { api, dispatchFetchRequest, errorAlert, warningMessage } from '../constants/Backend'
+import ScreenHeader from "../components/ScreenHeader";
 
 class UserTimeCards extends React.Component {
   static navigationOptions = {
@@ -101,15 +102,14 @@ class UserTimeCards extends React.Component {
       )
     }
     return (
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View style={styles.container}>
-          	<BackBtn />
-            <Text style={styles.screenTitle}>
-             {t('userTimeCardTitle')}
-						</Text>
+            <ScreenHeader backNavigation={true}
+                          title={t('userTimeCardTitle')}
+            />
 
-            <UserTimeCardsFilterForm
+          	<UserTimeCardsFilterForm
 							onSubmit={this.handleFilter}
 							displayName={this.props.navigation.state.params.displayName}
             />
