@@ -640,12 +640,10 @@ export default StyleSheet.create({
   },
   stcontainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 36,
-    paddingLeft: 15,
-    paddingRight: 15,
-    marginTop: 71
+    marginTop: 53,
+    marginLeft: 15,
+    marginRight: 15,
+    marginBottom: 36
   },
   row: {
     flexDirection: 'column',
