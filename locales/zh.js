@@ -72,7 +72,8 @@ const zh = {
     product: '產品',
     quantity: '數量',
     subTotal: '小計',
-    serveBy: '結帳人員'
+    serveBy: '結帳人員',
+    dateRange: 'RANGE-CH'
   },
   orderStatus: '訂單狀態',
   orderState: {

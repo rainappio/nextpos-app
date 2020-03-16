@@ -28,7 +28,7 @@ class OrderFilterForm extends React.Component {
               name="fromDate"
               component={XGFEDatePicker}
               onChange={handlegetDate}
-              placeholder={t('selectDate')}
+              placeholder={t('order.fromDate')}
             />
           </View>
 
@@ -37,7 +37,7 @@ class OrderFilterForm extends React.Component {
               name="toDate"
               component={XGFEDatePicker}
               onChange={date => this.handlegetDate(date)}
-              placeholder={t('selectDate')}
+              placeholder={t('order.toDate')}
             />
           </View>
         </View>
@@ -47,7 +47,7 @@ class OrderFilterForm extends React.Component {
             <Field
               name="dateRange"
               component={DropDown}
-              placeholder={{ value: null, label: t('dateRange') }}
+              placeholder={{ value: null, label: t('order.dateRange') }}
               options={[
                 { label: 'SHIFT', value: 'SHIFT' },
                 { label: 'TODAY', value: 'TODAY' },
@@ -67,7 +67,7 @@ class OrderFilterForm extends React.Component {
                   { padding: 6 }
                 ]}
               >
-                {t('searchButton')}
+               Search
               </Text>
             </TouchableOpacity>
           </View>

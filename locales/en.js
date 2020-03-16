@@ -72,7 +72,8 @@ const en = {
     product: 'Product',
     quantity: 'Qty',
     subTotal: 'Subtotal',
-    serveBy: 'Serve By'
+    serveBy: 'Serve By',
+    dateRange: 'RANGE'
   },
   orderStatus: 'Order Status',
   orderState: {

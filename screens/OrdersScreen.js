@@ -2,6 +2,7 @@ import React from 'react'
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   Text,
   TouchableOpacity,
   View
@@ -10,11 +11,12 @@ import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { formatDate, formatDateObj, getOrdersByDateRange } from '../actions'
 import { ListItem } from 'react-native-elements'
-import styles from '../styles'
+import styles, { mainThemeColor } from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import { renderOrderState } from '../helpers/orderActions'
 import { NavigationEvents } from 'react-navigation'
 import ScreenHeader from '../components/ScreenHeader'
+import buttonLikeRoles from 'react-native-web/dist/modules/AccessibilityUtil/buttonLikeRoles'
 import OrderFilterForm from './OrderFilterForm'
 import {
   api,
@@ -32,33 +34,7 @@ class OrdersScreen extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    context.localize({
-      en: {
-        ordersTitle: 'Orders',
-        fromDate: 'From: ',
-        toDate: 'To: ',
-        date: 'Date',
-        total: 'Total',
-        orderStatus: 'Status',
-        noOrder: 'No Order',
-        dateRange: 'RANGE',
-        searchButton: 'Search',
-      },
-      zh: {
-        ordersTitle: '訂單歷史',
-        fromDate: '開始日期: ',
-        toDate: '結束日期: ',
-        date: '日期',
-        total: '總金額',
-        orderStatus: '狀態',
-        noOrder: '沒有資料',
-        dateRange: 'RANGE-CH',
-        searchButton: '搜尋'
-      }
-    })
-
     this.state = {
-      t: context.t,
       scrollPosition: '',
       filteredOrders: []
     }
@@ -78,31 +54,22 @@ class OrdersScreen extends React.Component {
   renderItem = ({ item }) => (
     <ListItem
       key={item.orderId}
-      subtitle={
-        <View
-          style={[
-            styles.flex_dir_row,
-            styles.paddingTopBtn10,
-            styles.grayBg,
-            { marginTop: -35 }
-          ]}
-        >
-          <View style={{ width: '65%' }}>
-            <Text style={styles.tableCellView}>
-              {formatDate(item.createdTime)}
-            </Text>
+      title={
+        <View style={[styles.tableRowContainer]}>
+          <View style={[styles.tableCellView, { flex: 2 }]}>
+            <Text>{item.serialId}</Text>
           </View>
-
-          <View style={{ width: '20%' }}>
-            <Text style={styles.tableCellView}>${item.total.amount}</Text>
+          <View style={[styles.tableCellView, { flex: 3 }]}>
+            <Text>{formatDate(item.createdTime)}</Text>
           </View>
-
+          <View style={[styles.tableCellView, { flex: 1 }]}>
+            <Text>${item.orderTotal}</Text>
+          </View>
           <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '15%'
-            }}
+            style={[
+              styles.tableCellView,
+              { flex: 1, justifyContent: 'center' }
+            ]}
           >
             {renderOrderState(item.state)}
           </View>
@@ -115,12 +82,7 @@ class OrdersScreen extends React.Component {
         })
       }
       bottomDivider
-      containerStyle={{
-        paddingLeft: 0,
-        paddingRight: 0,
-        marginBottom: -10,
-        marginTop: -10
-      }}
+      containerStyle={[styles.dynamicVerticalPadding(12), { padding: 0 }]}
     />
   )
 
@@ -134,7 +96,7 @@ class OrdersScreen extends React.Component {
     const toDate = values.toDate
     const dateRange = values.dateRange
 
-    if (fromDate && toDate) {
+    if (fromDate && toDate && !dateRange) {
       dispatchFetchRequest(
         api.order.getOrdersByRangeDate(fromDate, toDate),
         {
@@ -174,7 +136,8 @@ class OrdersScreen extends React.Component {
       isLoading,
       haveData
     } = this.props
-    const { t, filteredOrders } = this.state
+    const { t } = this.context
+    const { filteredOrders } = this.state
 
     const orders = []
     getordersByDateRange !== undefined &&
@@ -190,7 +153,7 @@ class OrdersScreen extends React.Component {
       )
     } else if (haveData) {
       return (
-        <View style={[styles.stcontainer, styles.nomgrBottom]}>
+        <View style={[styles.fullWidthScreen]}>
           <NavigationEvents
             onWillFocus={() => {
               this.props.getOrdersByDateRange()
@@ -198,82 +161,109 @@ class OrdersScreen extends React.Component {
           />
           <ScreenHeader
             backNavigation={false}
-            title={t('ordersTitle')}
+            parentFullScreen={true}
+            title={t('order.ordersTitle')}
             rightComponent={
               <TouchableOpacity
                 onPress={() => {
                   this.props.getOrdersByDateRange()
                 }}
               >
-                <Icon name="md-refresh" size={30} color="#f18d1a" />
+                <Icon name="md-refresh" size={32} color={mainThemeColor} />
               </TouchableOpacity>
             }
           />
 
-          <View>
-            <View style={styles.fieldContainer}>
-              <Text style={styles.fieldTitle}>{t('fromDate')}</Text>
-              <Text>{formatDateObj(reportParameter.fromDate)}</Text>
+          <View style={{ flex: 1 }}>
+            <View style={[styles.tableRowContainer]}>
+              <View style={styles.tableCellView}>
+                <Text style={styles.fieldTitle}>{t('order.fromDate')}</Text>
+              </View>
+              <View
+                style={[
+                  styles.tableCellView,
+                  { flex: 2, justifyContent: 'flex-end' }
+                ]}
+              >
+                <Text>{formatDateObj(reportParameter.fromDate)}</Text>
+              </View>
             </View>
-            <View style={styles.fieldContainer}>
-              <Text style={styles.fieldTitle}>{t('toDate')}</Text>
-              <Text>{formatDateObj(reportParameter.toDate)}</Text>
+
+            <View style={styles.tableRowContainer}>
+              <View style={styles.tableCellView}>
+                <Text style={styles.fieldTitle}>{t('order.toDate')}</Text>
+              </View>
+              <View
+                style={[
+                  styles.tableCellView,
+                  { flex: 2, justifyContent: 'flex-end' }
+                ]}
+              >
+                <Text>{formatDateObj(reportParameter.toDate)}</Text>
+              </View>
             </View>
           </View>
 
-          <OrderFilterForm onSubmit={this.handleOrderFilter} />
-
-          <View style={[styles.flex_dir_row, { marginBottom: 8 }]}>
-            <View style={{ width: '55%' }}>
-              <Text style={[styles.orange_color, styles.centerText]}>
-                {t('date')}
-              </Text>
-            </View>
-
-            <View style={{ width: '20%' }}>
-              <Text style={[styles.orange_color]}>{t('total')}</Text>
-            </View>
-
-            <View style={{ width: '25%' }}>
-              <Text style={[styles.orange_color, styles.centerText]}>
-                {t('orderStatus')}
-              </Text>
-            </View>
+          <View style={[styles.container]}>
+            <OrderFilterForm onSubmit={this.handleOrderFilter} />
           </View>
-          {orders.length === 0 && (
-            <View>
-              <Text style={styles.messageBlock}>{t('noOrder')}</Text>
+
+          <View style={{ flex: 5 }}>
+            <View style={[styles.sectionBar]}>
+              <View style={{ flex: 2 }}>
+                <Text style={styles.sectionBarTextSmall}>
+                  {t('order.orderId')}
+                </Text>
+              </View>
+
+              <View style={{ flex: 3 }}>
+                <Text style={styles.sectionBarTextSmall}>
+                  {t('order.date')}
+                </Text>
+              </View>
+
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.sectionBarTextSmall]}>
+                  {t('order.total')}
+                </Text>
+              </View>
+
+              <View style={{ flex: 1, alignItems: 'center' }}>
+                <Text style={[styles.sectionBarTextSmall]}>
+                  {t('order.orderStatus')}
+                </Text>
+              </View>
             </View>
-          )}
+            {orders.length === 0 && (
+              <View>
+                <Text style={styles.messageBlock}>{t('order.noOrder')}</Text>
+              </View>
+            )}
 
-          <FlatList
-            keyExtractor={this.keyExtractor}
-            data={filteredOrders}
-            renderItem={this.renderItem}
-            ref={ref => {
-              this.ListView_Ref = ref
-            }}
-            onScroll={this.handleScroll}
-          />
+            <FlatList
+              keyExtractor={this.keyExtractor}
+              data={filteredOrders}
+              renderItem={this.renderItem}
+              ref={ref => {
+                this.ListView_Ref = ref
+              }}
+              onScroll={this.handleScroll}
+            />
 
-          {this.state.scrollPosition > 0 ? (
-            <TouchableOpacity
-              activeOpacity={0.5}
-              onPress={this.upButtonHandler}
-              style={styles.upButton}
-            >
-              <Icon
-                name={'md-arrow-round-up'}
-                color="#f18d1a"
-                size={25}
-                style={{
-                  marginLeft: 8,
-                  marginRight: 8,
-                  fontWeight: 'bold'
-                }}
-              />
-            </TouchableOpacity>
-          ) : null}
+            {this.state.scrollPosition > 0 ? (
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={this.upButtonHandler}
+                style={styles.upButton}
+              >
+                <Icon
+                  name={'md-arrow-round-up'}
+                  size={32}
+                  style={[styles.buttonIconStyle, { marginRight: 10 }]}
+                />
+              </TouchableOpacity>
+            ) : null}
+          </View>
         </View>
       )
     } else {
