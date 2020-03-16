@@ -1,4 +1,6 @@
-const tintColor = '#f18d1a'
+import {mainThemeColor} from "../styles";
+
+const tintColor = mainThemeColor
 
 export default {
   tintColor,

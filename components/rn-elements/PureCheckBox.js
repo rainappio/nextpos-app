@@ -14,6 +14,7 @@ import {
 import { CheckBox } from 'react-native-elements'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import images from '../../assets/images'
+import {mainThemeColor} from "../../styles";
 
 class RenderPureCheckBox extends React.Component {
   state = {
@@ -37,8 +38,7 @@ class RenderPureCheckBox extends React.Component {
             <IonIcon
               name={customValue}
               size={26}
-              color="#f18d1a"
-              //onPress={() => fields.push()}
+              color={mainThemeColor}
               style={{ marginLeft: 22 }}
             />
           }

@@ -46,7 +46,33 @@ const en = {
   },
   order: {
     inStore: 'In Store',
-    takeOut: 'Take Out'
+    takeOut: 'Take Out',
+
+    ordersTitle: 'Orders',
+    fromDate: 'From ',
+    toDate: 'To ',
+    orderId: 'Order Id',
+    date: 'Date',
+    orderStatus: 'Status',
+    noOrder: 'No Order',
+
+    orderDetailsTitle: 'Order Details',
+    serviceCharge: 'Service Charge',
+    discount: 'Discount',
+    total: 'Total',
+    paymentMethod: 'Payment Method',
+    staff: 'Staff',
+    ageGroup: 'Age Group',
+    visitedFrequency: 'Visited Frequency',
+    notFilledIn: 'Not Filled',
+    orderStartDate: 'Start Date',
+    lineItemCreatedDate: 'Start Date',
+    endDate: 'End Date',
+    duration: 'Total Duration',
+    product: 'Product',
+    quantity: 'Qty',
+    subTotal: 'Subtotal',
+    serveBy: 'Serve By'
   },
   orderStatus: 'Order Status',
   orderState: {
@@ -55,7 +81,8 @@ const en = {
     DELIVERED: 'Delivered',
     SETTLED: 'Settled',
     REFUNDED: 'Refunded',
-    COMPLETED: 'Completed'
+    COMPLETED: 'Completed',
+    DELETED: 'Deleted'
   },
   timecard: {
     hours: 'Hour(s)',

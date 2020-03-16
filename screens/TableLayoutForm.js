@@ -125,13 +125,6 @@ class TableLayoutForm extends React.Component {
             <View style={styles.mgrtotop12}>
               <View style={styles.fieldContainer}>
                 <Text style={styles.fieldTitle}>{t('tables')}</Text>
-                <AddBtn
-                  onPress={() =>
-                    this.props.navigation.navigate('TableAdd', {
-                      layoutId: initialValues.id
-                    })
-                  }
-                />
               </View>
               <FlatList
                 data={initialValues.tables}

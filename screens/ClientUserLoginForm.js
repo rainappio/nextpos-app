@@ -10,6 +10,7 @@ import InputText from '../components/InputText'
 import { isRequired } from '../validators'
 import { api, warningMessage } from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext";
+import ScreenHeader from "../components/ScreenHeader";
 
 class ClientUserLoginForm extends React.Component {
   static navigationOptions = {
@@ -24,10 +25,12 @@ class ClientUserLoginForm extends React.Component {
   componentDidMount(){
   	this.context.localize({
   		en: {
+  		  userLoginTitle: 'User Login',
   		  login: 'Login',
   			toBack: 'Back'
   		},
   		zh: {
+        userLoginTitle: '使用者登入',
         login: '登入',
   			toBack: '返回'
   		}
@@ -39,33 +42,10 @@ class ClientUserLoginForm extends React.Component {
 		const { t } = this.context
 
     return (
-      <DismissKeyboard>
-      	<View style={{flex: 1}}>
-        <View style={styles.container}>
-          <View style={[{ position: 'absolute', top: 0 }]}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/logo.png')
-                  : require('../assets/images/logo.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
+      <View style={styles.fullWidthScreen}>
+        <ScreenHeader parentFullScreen={true} title={t('userLoginTitle')}/>
 
-          <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.marginTop40
-            ]}
-            onPress={() => this.props.navigation.goBack()}
-          >
-            <Icon name="ios-arrow-back" size={26} color="#f18d1a">
-              {t('toBack')}
-            </Icon>
-          </Text>
-
+        <View style={{flex: 1, justifyContent: 'center'}}>
           <Text
             style={[
               styles.welcomeText,
@@ -78,12 +58,13 @@ class ClientUserLoginForm extends React.Component {
           </Text>
 
           {this.props.defaultUser ? (
-            <View>
+            <View style={styles.horizontalMargin}>
               <Field
                 name="password"
                 component={InputText}
-                placeholder="Password"
+                placeholder={t('password')}
                 secureTextEntry={true}
+                extraStyle={{ textAlign: 'left' }}
               />
               <TouchableOpacity
                 onPress={handleSubmit}
@@ -100,8 +81,7 @@ class ClientUserLoginForm extends React.Component {
             />
           )}
         </View>
-			</View>
-    </DismissKeyboard>
+      </View>
     )
   }
 }

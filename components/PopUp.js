@@ -8,7 +8,7 @@ import {
   ScrollView
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 
 export default class PopUp extends Component {
@@ -47,7 +47,7 @@ export default class PopUp extends Component {
             this.toggleModal(true)
           }}
         >
-          <Icon name="ios-add" size={32} color="#f18d1a" />
+          <Icon name="md-add" size={32} color={mainThemeColor} />
         </TouchableOpacity>
 
         <Modal

@@ -92,65 +92,60 @@ class PaymentFormScreen extends React.Component {
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
-          <View style={styles.container}>
+          <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
+                          parentFullScreen={true}
                           title={t('paymentTitle')}
             />
 
-            <View
-              style={[
-                styles.flex_dir_row,
-                styles.mgrtotop20,
-                styles.paddingTopBtn20,
-                styles.borderBottomLine
-              ]}
-            >
-              <View style={[styles.half_width, styles.textBold]}>
+            <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
                 <Text>{t('total')}</Text>
               </View>
 
-              <View style={[styles.half_width]}>
-                <Text
-                  style={[
-                    { textAlign: 'right', marginRight: -26 },
-                    styles.textBold
-                  ]}
-                >
-                  $&nbsp;{order.total.amountWithTax.toFixed(2)}
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Text style={styles.tableCellText}>
+                  ${order.total.amountWithTax.toFixed(2)}
                 </Text>
               </View>
             </View>
 
-            <View
-              style={[
-                styles.flex_dir_row,
-                styles.paddingTopBtn20,
-                styles.borderBottomLine
-              ]}
-            >
-              <View style={[styles.half_width, styles.textBold]}>
+            <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
                 <Text>{t('serviceCharge')}</Text>
               </View>
 
-              <View style={[styles.half_width]}>
-                <Text
-                  style={[
-                    { textAlign: 'right', marginRight: -26 },
-                    styles.textBold
-                  ]}
-                >
-                  $&nbsp;{order.serviceCharge}
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Text style={styles.tableCellText}>
+                  ${order.serviceCharge}
                 </Text>
               </View>
             </View>
 
-            <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
-              <View style={[styles.half_width, styles.textBold]}>
-                <Text>{t('discount')}</Text>
+            <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{t('grandTotal')}</Text>
               </View>
+
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Text style={styles.tableCellText}>
+                  $
+                  {(
+                    order.orderTotal -
+                    calculatePercentage(order.orderTotal, this.state.getPercent)
+                  ).toFixed(2)}
+                </Text>
+              </View>
+            </View>
+
+            <View style={[styles.sectionContainer]}>
+              <View style={[styles.sectionTitleContainer]}>
+                <Text style={styles.sectionTitleText}>{t('discount')}</Text>
+              </View>
+
               {discounts.map((discount, ix) => (
                 <View
-                  style={[styles.borderBottomLine, styles.paddingTopBtn8]}
+                  style={[]}
                   key={ix}
                 >
                   <Field
@@ -173,34 +168,7 @@ class PaymentFormScreen extends React.Component {
               ))}
             </View>
 
-            <View
-              style={[
-                styles.flex_dir_row,
-                styles.paddingTopBtn20,
-                styles.borderBottomLine
-              ]}
-            >
-              <View style={[styles.half_width, styles.textBold]}>
-                <Text>{t('grandTotal')}</Text>
-              </View>
-
-              <View style={[styles.half_width]}>
-                <Text
-                  style={[
-                    { textAlign: 'right', marginRight: -26 },
-                    styles.textBold
-                  ]}
-                >
-                  $&nbsp;
-                  {(
-                    order.orderTotal -
-                    calculatePercentage(order.orderTotal, this.state.getPercent)
-                  ).toFixed(2)}
-                </Text>
-              </View>
-            </View>
-
-            <View style={[styles.bottom]}>
+            <View style={[styles.bottom, styles.horizontalMargin]}>
               <TouchableOpacity onPress={() => handleSubmit()}>
                 <Text style={[styles.bottomActionButton, styles.actionButton]}>
                   {t('payOrder')}

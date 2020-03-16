@@ -25,21 +25,21 @@ class ScreenHeader extends Component {
     const backActionToUse = backAction !== undefined ? backAction : () => this.props.navigation.goBack()
 
     return (
-      <View style={[styles.screenTopContainer, (parentFullScreen && {marginHorizontal: 15}), style]}>
-        <View style={{borderWidth: 0}}>
+      <View style={[styles.screenTopContainer, (parentFullScreen && {marginHorizontal: 15}), style, {borderWidth: 0}]}>
+        <View style={{width: '20%', alignItems: 'flex-start', borderWidth: 0}}>
           {displayBackButton && (
             <TouchableOpacity
               hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
               onPress={backActionToUse}
             >
               <View>
-                <Icon name="ios-arrow-back" size={24} color="#f18d1a"/>
+                <Icon name="ios-arrow-back" size={32} style={styles.buttonIconStyle}/>
               </View>
             </TouchableOpacity>
           )}
         </View>
-        <Text style={[styles.screenTitle, {borderWidth: 0}]}>{title}</Text>
-        <View style={{borderWidth: 0}}>
+        <Text style={[styles.screenTitle, {width: '60%', borderWidth: 0}]}>{title}</Text>
+        <View style={{width: '20%', alignItems: 'flex-end', borderWidth: 0}}>
           {rightComponent}
         </View>
       </View>

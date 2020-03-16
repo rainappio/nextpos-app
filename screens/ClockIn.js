@@ -166,7 +166,7 @@ class ClockIn extends React.Component {
             </View>
             <View style={styles.fieldContainer}>
               <View style={{ flex: 2 }}>
-                <Text style={styles.fieldTitle}>{t('timeCardStatus')}:</Text>
+                <Text style={styles.fieldTitle}>{t('timeCardStatus')}</Text>
               </View>
               <View style={{flex: 3}}>
                 <Text style={{alignSelf: 'flex-end'}}>{this.renderTimeCardStatus(timecard.timeCardStatus)}</Text>
@@ -175,7 +175,7 @@ class ClockIn extends React.Component {
             <View style={styles.fieldContainer}>
               <View style={{flex: 2}}>
                 <Text style={styles.fieldTitle}>
-                  {t('clockInTime')}:
+                  {t('clockInTime')}
                 </Text>
               </View>
               <View style={{flex: 3}}>
@@ -187,7 +187,7 @@ class ClockIn extends React.Component {
                 <View style={styles.fieldContainer}>
                   <View style={{flex: 2}}>
                     <Text style={styles.fieldTitle}>
-                      {t('clockOutTime')}:
+                      {t('clockOutTime')}
                     </Text>
                   </View>
                   <View style={{flex: 3}}>

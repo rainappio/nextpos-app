@@ -17,8 +17,10 @@ class ReportsScreen extends React.Component {
 
   constructor(props, context) {
     super(props, context)
+  }
 
-    context.localize({
+  componentDidMount() {
+    this.context.localize({
       en: {
         salesReport: 'Sales Reports',
         staffTimeCardReport: 'Staff Time Card'

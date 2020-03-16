@@ -78,8 +78,14 @@ class AccountCloseConfirmForm extends React.Component {
 		const { handleSubmit, mostrecentShift, handleAbortCloseShift } = this.props
 
 		const closingShiftReport = {
+      totalOrderCount: 0,
+      totalByPaymentMethod: {},
+      orderCountByState: {}
 
+    }
 
+    if (mostrecentShift.close.closingShiftReport !== null) {
+      closingShiftReport.totalOrderCount = mostrecentShift.close.closingShiftReport.totalOrderCount
     }
 
 		if (mostrecentShift.close.closingShiftReport !== null && mostrecentShift.close.closingShiftReport.totalByPaymentMethod !== null) {
@@ -99,233 +105,215 @@ class AccountCloseConfirmForm extends React.Component {
 
 
     return (
-			<View>
+      <View>
         {/* Post-Closing Entries */}
-          <View style={styles.sectionBar}>
-            <View>
-              <Text style={styles.sectionBarTextSmall}>
-                {t('postClosingEntries')}
-              </Text>
-            </View>
+        <View style={styles.sectionBar}>
+          <View>
+            <Text style={styles.sectionBarText}>
+              {t('postClosingEntries')}
+            </Text>
           </View>
+        </View>
 
-          <View style={[styles.sectionContainer]}>
-            <View style={{flex: 3, justifyContent: 'center'}}>
-              <View style={styles.fieldContainer}>
-               	<View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('totalCashIncome')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-              		<Text>${cashTotal}</Text>
-              	</View>
-              </View>
-
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                  {t('totalCreditCardIncome')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-									<Text>${cardTotal}</Text>
-            		</View>
-              </View>
-
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                  {t('totalClosingAmount')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                	<Text>
-                	${cashTotal + cardTotal}
-                	</Text>
-                </View>
-              </View>
-            </View>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={{flex: 3}}>
+            <Text style={[styles.fieldTitle]}>
+              {t('totalCashIncome')}
+            </Text>
           </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>${cashTotal}</Text>
+          </View>
+        </View>
+
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={{flex: 3}}>
+            <Text style={[styles.fieldTitle]}>
+              {t('totalCreditCardIncome')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>${cardTotal}</Text>
+          </View>
+        </View>
+
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={{flex: 3}}>
+            <Text style={[styles.fieldTitle]}>
+              {t('totalClosingAmount')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>
+              ${cashTotal + cardTotal}
+            </Text>
+          </View>
+        </View>
         {/* #Post-Closing Entries */}
 
-				{/* Cash */}
-          <View style={styles.sectionBar}>
-            <View>
-              <Text style={styles.sectionBarTextSmall}>
-                {t('cashSection')}
-              </Text>
-            </View>
+        {/* Cash */}
+        <View style={styles.sectionBar}>
+          <View>
+            <Text style={styles.sectionBarText}>
+              {t('cashSection')}
+            </Text>
           </View>
+        </View>
 
-          <View style={styles.sectionContainer}>
-            <View style={{flex: 3, justifyContent: 'center'}}>
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('startingCash')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text>${mostrecentShift.open.balance}</Text>
-                </View>
-              </View>
-
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('totalCashTransitionAmt')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                	<Text>${cashTotal}</Text>
-                </View>
-              </View>
-
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('totalCashInRegister')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text>${mostrecentShift.close.closingBalances.hasOwnProperty('CASH') ? mostrecentShift.close.closingBalances.CASH.closingBalance : 0}</Text>
-                </View>
-              </View>
-            </View>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('startingCash')}
+            </Text>
           </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>${mostrecentShift.open.balance}</Text>
+          </View>
+        </View>
+
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('totalCashTransitionAmt')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>${cashTotal}</Text>
+          </View>
+        </View>
+
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('totalCashInRegister')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>${mostrecentShift.close.closingBalances.hasOwnProperty('CASH') ? mostrecentShift.close.closingBalances.CASH.closingBalance : 0}</Text>
+          </View>
+        </View>
         {/* #Cash */}
 
         {/* Credit Card */}
-          <View style={styles.sectionBar}>
-            <View>
-              <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>
-                  {t('cardSection')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={styles.sectionContainer}>
-            <View style={{flex: 3, justifyContent: 'center'}}>
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('totalCardTransitionAmt')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-									<Text>${cardTotal}</Text>
-                </View>
-              </View>
-
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('totalCardInRegister')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text>${mostrecentShift.close.closingBalances.hasOwnProperty('CARD') && mostrecentShift.close.closingBalances.CARD.closingBalance}
-									</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        {/* #Credit Card */}
-
-				{/* Invoice */}
         <View style={styles.sectionBar}>
           <View>
-            <Text style={styles.sectionBarTextSmall}>
+            <TouchableOpacity>
+              <Text style={styles.sectionBarText}>
+                {t('cardSection')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('totalCardTransitionAmt')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>${cardTotal}</Text>
+          </View>
+        </View>
+
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('totalCardInRegister')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>${mostrecentShift.close.closingBalances.hasOwnProperty('CARD') && mostrecentShift.close.closingBalances.CARD.closingBalance}
+            </Text>
+          </View>
+        </View>
+        {/* #Credit Card */}
+
+        {/* Invoice */}
+        <View style={styles.sectionBar}>
+          <View>
+            <Text style={styles.sectionBarText}>
               {t('invoicesTitle')}
             </Text>
           </View>
         </View>
 
-          <View style={[styles.sectionContainer]}>
-            <View style={{flex: 3, justifyContent: 'center'}}>
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('totalInvoices')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text>{mostrecentShift.close.closingShiftReport.totalOrderCount}</Text>
-                </View>
-              </View>
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('deletedOrders')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text>
-                    {closingShiftReport.orderCountByState.hasOwnProperty('DELETED') ? closingShiftReport.orderCountByState.DELETED.orderCount : 0}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('totalDiscounts')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text>${cashDiscount + cardDiscount}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 3}}>
-                  <Text style={[styles.fieldTitle]}>
-                    {t('totalServiceCharge')}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text>${cashServiceCharge + cardServiceCharge}
-                  </Text>
-                </View>
-              </View>
-            </View>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('totalInvoices')}
+            </Text>
           </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>{closingShiftReport.totalOrderCount}</Text>
+          </View>
+        </View>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('deletedOrders')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>
+              {closingShiftReport.orderCountByState.hasOwnProperty('DELETED') ? closingShiftReport.orderCountByState.DELETED.orderCount : 0}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={{flex: 3}}>
+            <Text style={[styles.tableCellView, {flex: 2}]}>
+              {t('totalDiscounts')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>${cashDiscount + cardDiscount}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={{flex: 3}}>
+            <Text style={[styles.tableCellView, {flex: 2}]}>
+              {t('totalServiceCharge')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>${cashServiceCharge + cardServiceCharge}
+            </Text>
+          </View>
+        </View>
         {/* #Invoice */}
 
-				{/* Others */}
-          <View style={[styles.sectionContainer]}>
-            <View style={{flex: 3, justifyContent: 'center'}}>
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 1}}>
-                  <Field
-              			name="closingRemark"
-              			component={InputText}
-              			placeholder={t('closingRemark')}
-              			secureTextEntry={false}
-              			height={35}
-            			/>
-                </View>
-              </View>
-            </View>
-
-    				<TouchableOpacity
-      				onPress={handleSubmit}
-    					>
-      				<Text style={[styles.bottomActionButton, styles.actionButton]}>
-        				{t('confirmAction')}
-      				</Text>
-    				</TouchableOpacity>
-
-    				<ConfirmActionButton
-              handleConfirmAction={handleAbortCloseShift}
-              params={90}
-              buttonTitle='abortAction'
+        {/* Others */}
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={{flex: 1}}>
+            <Field
+              name="closingRemark"
+              component={InputText}
+              placeholder={t('closingRemark')}
+              secureTextEntry={false}
+              height={35}
             />
           </View>
+        </View>
+
+        <View style={[styles.bottom, styles.horizontalMargin]}>
+
+          <TouchableOpacity
+            onPress={handleSubmit}
+          >
+            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              {t('confirmAction')}
+            </Text>
+          </TouchableOpacity>
+
+          <ConfirmActionButton
+            handleConfirmAction={handleAbortCloseShift}
+            buttonTitle='abortAction'
+          />
+        </View>
         {/* #Others */}
-			</View>
+      </View>
     )
   }
 }

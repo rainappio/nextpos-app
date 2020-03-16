@@ -61,7 +61,7 @@ class ClientUsers extends React.Component {
                       title={t('clientUsersTitle')}
                       rightComponent={
                         <TouchableOpacity onPress={() => this.handleDefaultUserLogout(navigation)}>
-                          <Text style={{textAlign: 'right', color: '#f18d1a'}}>
+                          <Text style={styles.sectionBarText}>
                             {t('logout')}
                           </Text>
                         </TouchableOpacity>

@@ -97,10 +97,10 @@ class StoreFormScreen extends React.Component {
                 <ScreenHeader title={t('settings.stores')}/>
 
                 <View style={styles.fieldContainer}>
-                  <View style={{flex: 2}}>
+                  <View style={[styles.tableCellView, {flex: 2}]}>
                     <Text style={styles.fieldTitle}>{t('clientStatus')}</Text>
                   </View>
-                  <View style={{flex: 3}}>
+                  <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
                     <Field
                       name="status"
                       component={InputText}
@@ -133,7 +133,7 @@ class StoreFormScreen extends React.Component {
                       name="clientName"
                       component={InputText}
                       validate={isRequired}
-                      placeholder="Client Name"
+                      placeholder={t('clientName')}
                     />
                   </View>
                 </View>
@@ -146,7 +146,7 @@ class StoreFormScreen extends React.Component {
                     <Field
                       name="attributes.address"
                       component={InputText}
-                      placeholder="Address"
+                      placeholder={t('address')}
                     />
                   </View>
                 </View>
@@ -159,7 +159,7 @@ class StoreFormScreen extends React.Component {
                     <Field
                       name="attributes.UBN"
                       component={InputText}
-                      placeholder="UBN"
+                      placeholder={t('ubn')}
                     />
                   </View>
                 </View>

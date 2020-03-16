@@ -59,6 +59,7 @@ class StaffTimeCard extends React.Component {
 
       return (
       	<TouchableOpacity
+          style={styles.tableRowContainerWithBorder}
 					onPress={() => {
           	this.props.navigation.navigate('UserTimeCards', {
             	name: timecard.id,
@@ -66,22 +67,18 @@ class StaffTimeCard extends React.Component {
           	})
         	}}
       		>
-        <View style={[{marginBottom: 10}]}>
-          <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-            <View style={{flex: 5}}>
-              <Text>{displayName}</Text>
-            </View>
-
-            <View style={{flex: 2}}>
-              <Text style={{textAlign: 'center'}}>{timecard.totalShifts}</Text>
-            </View>
-
-            <View style={{flex: 3}}>
-              <Text style={{textAlign: 'right'}}>{timecard.totalHours.toFixed(2)}</Text>
-            </View>
+          <View style={[styles.tableCellView, {flex: 5}]}>
+            <Text>{displayName}</Text>
           </View>
-        </View>
-      </TouchableOpacity>
+
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text>{timecard.totalShifts}</Text>
+          </View>
+
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text >{timecard.totalHours.toFixed(2)}</Text>
+          </View>
+        </TouchableOpacity>
       )
     }
 
@@ -96,8 +93,9 @@ class StaffTimeCard extends React.Component {
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
-          <View style={styles.container}>
+          <View style={styles.fullWidthScreen}>
           	<ScreenHeader backNavigation={true}
+                          parentFullScreen={true}
                           title={t('title')}
             />
 
@@ -105,20 +103,18 @@ class StaffTimeCard extends React.Component {
 							onSubmit={this.handleFilter}
           	/>
 
-						<View style={[styles.mgrtotop20]}>
-            	<View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              	<View style={{flex: 5}}>
-                	<Text style={[styles.orange_color, styles.textBold]}>{t('firstColTitle')}</Text>
-              	</View>
+            <View style={[styles.sectionBar]}>
+              <View style={[styles.tableCellView, {flex: 5}]}>
+                <Text style={[styles.sectionBarText]}>{t('firstColTitle')}</Text>
+              </View>
 
-              	<View style={{flex: 2.5, textAlign: 'center'}}>
-                	<Text style={[styles.orange_color, styles.textBold]}>{t('secColTitle')}</Text>
-              	</View>
+              <View style={[styles.tableCellView, {flex: 2}]}>
+                <Text style={[styles.sectionBarText]}>{t('secColTitle')}</Text>
+              </View>
 
-              	<View style={{flex: 2.5}}>
-                	<Text style={[{textAlign: 'right'}, styles.orange_color, styles.textBold]}>{t('thirdColTitle')}</Text>
-              	</View>
-            	</View>
+              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                <Text style={[styles.sectionBarText, {textAlign: 'right'}]}>{t('thirdColTitle')}</Text>
+              </View>
             </View>
 
 						<FlatList
@@ -127,7 +123,6 @@ class StaffTimeCard extends React.Component {
                 <Item timecard={item} layoutId={item.id} index={index}/>
               )}
               keyExtractor={item => item.id}
-              //keyExtractor={(item, index) => index.toString()}
             />
           </View>
         </DismissKeyboard>

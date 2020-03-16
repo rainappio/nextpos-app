@@ -69,27 +69,24 @@ class UserTimeCards extends React.Component {
 
       return (
       	<TouchableOpacity
+          style={styles.tableRowContainerWithBorder}
 					onPress={() => {
           	this.props.navigation.navigate('UserTimeCardDetail',{
           		timecardId: timecard.id
           	})
           }}
-      		>
-        	<View style={[{marginBottom: 10}]}>
-          	<View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-            	<View style={{flex: 1}}>
-              	<Text style={{fontWeight: active ? 'bold' : 'normal'}}>
-              		{formatDate(timecard.clockIn)}
-              	</Text>
-            	</View>
+        >
+          <View style={[styles.tableCellView, {flex: 1}]}>
+            <Text style={{fontWeight: active ? 'bold' : 'normal'}}>
+              {formatDate(timecard.clockIn)}
+            </Text>
+          </View>
 
-            	<View style={{flex: 1}}>
-              	<Text style={{textAlign: 'right'}}>
-              	 {timecard.hours}&nbsp;{t('timecard.hours')}&nbsp;{timecard.minutes}&nbsp;{t('timecard.minutes')}
-              	</Text>
-            	</View>
-          	</View>
-        	</View>
+          <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+            <Text>
+              {timecard.hours}&nbsp;{t('timecard.hours')}&nbsp;{timecard.minutes}&nbsp;{t('timecard.minutes')}
+            </Text>
+          </View>
         </TouchableOpacity>
       )
     }
@@ -104,8 +101,9 @@ class UserTimeCards extends React.Component {
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
-          <View style={styles.container}>
+          <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
+                          parentFullScreen={true}
                           title={t('userTimeCardTitle')}
             />
 
@@ -114,16 +112,14 @@ class UserTimeCards extends React.Component {
 							displayName={this.props.navigation.state.params.displayName}
             />
 
-						<View style={[styles.mgrtotop20]}>
-            	<View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              	<View style={{flex: 5}}>
-                	<Text style={[styles.orange_color, styles.textBold]}>{t('Day')}</Text>
+						<View style={[styles.sectionBar]}>
+              	<View style={[styles.tableCellView, {flex: 1}]}>
+                	<Text style={styles.tableCellText}>{t('Day')}</Text>
               	</View>
 
-              	<View style={{flex: 5}}>
-                	<Text style={[{textAlign: 'right'}, styles.orange_color, styles.textBold]}>{t('totalHr')}</Text>
+              	<View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                	<Text style={[styles.tableCellText]}>{t('totalHr')}</Text>
               	</View>
-            	</View>
             </View>
 
 						<FlatList

@@ -10,7 +10,7 @@ import {
   Platform
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 
 const InputText = ({
   input: {
@@ -27,22 +27,10 @@ const InputText = ({
     autoCapitalize
   },
   meta: { error, touched, valid },
-  isgrayBg,
-  iscustomizeCate,
-  height,
+  height, alignLeft, extraStyle,
   ...rest
 }) => (
   <View>
-    {isgrayBg ? (
-      <Icon
-        name="md-search"
-        size={30}
-        color="#f18d1a"
-        style={{ position: 'absolute', zIndex: 2, left: 8, top: 8 }}
-      />
-    ) : (
-      <Text>{''}</Text>
-    )}
     <TextInput
       onBlur={onBlur}
       onChangeText={onChange}
@@ -58,11 +46,9 @@ const InputText = ({
       style={[
         styles.rootInput,
         { borderColor: !valid && touched ? 'red' : 'gray' },
-        isgrayBg ? styles.grayBg : '',
-        isgrayBg ? styles.leftpadd32 : styles.nopaddingLeft,
-        iscustomizeCate ? styles.centerText : '',
-        iscustomizeCate ? styles.textBig : '',
-        { height: height }
+        { height: height },
+        (alignLeft && {textAlign: 'left'}),
+        extraStyle
       ]}
     />
     {Platform.OS === 'ios' && (
@@ -74,7 +60,7 @@ const InputText = ({
           <Text
             style={[
               styles.margin_15,
-              { fontSize: 16, fontWeight: 'bold', color: '#f18d1a' }
+              { fontSize: 16, fontWeight: 'bold', color: mainThemeColor }
             ]}
           >
             Done

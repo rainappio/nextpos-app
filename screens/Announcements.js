@@ -218,52 +218,39 @@ class Row extends React.Component {
       ]}>
         <View key={data.id}>
           <View
-            style={[styles.flex_dir_row, { paddingTop: 4, marginBottom: 17 }]}
+            style={[styles.tableRowContainerWithBorder]}
           >
-            <View style={{ width: '45%' }}>
+            <View style={[styles.tableCellView, { width: '10%' }]}>
               <IonIcon
                 name={data.titleIcon}
-                size={28}
-                color="#f18d1a"
+                size={32}
+                style={styles.buttonIconStyle}
               />
+            </View>
+
+            <View style={[styles.tableCellView, { width: '75%'}]}>
               <Text style={{ fontSize: 15 }}>{data.title}</Text>
             </View>
 
-            <View style={[{ width: '55%' }]}>
+            <View style={[styles.tableCellView, { justifyContent: 'flex-end', width: '15%' }]}>
               <Icon
                 name="md-create"
-                size={25}
-                color="#f18d1a"
+                size={24}
+                style={styles.buttonIconStyle}
                 onPress={() =>
                   this.props.navigation.navigate('AnnouncementsEdit', {
                     announcementId: data.id,
                     initialValues: data
                   })
                 }
-                style={{ textAlign: 'right' }}
               />
             </View>
           </View>
 
-          <View
-            style={[
-              { backgroundColor: '#f1f1f1', padding: 20 },
-              styles.mgrbtn20
-            ]}
-          >
-            <Markdown style={styles.markDownStyle}>
+          <View style={[{ padding: 10 }]}>
+            <Markdown>
               {data.markdownContent}
             </Markdown>
-            <Text
-              style={{
-                textAlign: 'center',
-                marginTop: 20,
-                fontSize: 15,
-                marginBottom: -10
-              }}
-            >
-              Order&nbsp;{data.order}
-            </Text>
           </View>
         </View>
       </Animated.View>

@@ -26,6 +26,7 @@ import {handleCloseShift, handleOpenShift, checkBalanceInput} from "../helpers/s
 import BackBtn from "../components/BackBtn";
 import AccountCloseConfirm from './AccountCloseConfirm'
 import ScreenHeader from "../components/ScreenHeader";
+import {NavigationEvents} from "react-navigation";
 
 class ShiftClose extends React.Component {
   static navigationOptions = {
@@ -49,7 +50,7 @@ class ShiftClose extends React.Component {
         closedBy: 'Closed by',
         cash: 'Open/Close Cash',
         openShiftAction: 'Open Shift',
-        closeShiftAction: 'Close Shift Init'
+        closeShiftAction: 'Close Shift'
       },
       zh: {
         shiftTitle: '開關帳',
@@ -117,41 +118,48 @@ class ShiftClose extends React.Component {
     } else {
       return (
         <DismissKeyboard>
-  				<View style={styles.container}>
-            <ScreenHeader title={t('shiftTitle')}/>
+          <View style={styles.fullWidthScreen}>
+            <NavigationEvents
+              onWillFocus={() => {
+                this.props.getShiftStatus()
+                this.props.getMostRecentShiftStatus()
+              }}
+            />
+            <ScreenHeader parentFullScreen={true}
+                          title={t('shiftTitle')}/>
 
             <View style={{flex: 3, justifyContent: 'center'}}>
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 1}}>
+              <View style={styles.tableRowContainerWithBorder}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
                   <Text style={[styles.fieldTitle]}>
                     {t('shiftStatus')}
                   </Text>
                 </View>
-                <View style={{flex: 3}}>
-                  <Text style={{alignSelf: 'flex-end'}}>{mostRecentShift.shiftStatus}</Text>
+                <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                  <Text>{mostRecentShift.shiftStatus}</Text>
                 </View>
               </View>
 
               {mostRecentShift.close !== undefined && mostRecentShift.shiftStatus !== 'ACTIVE' && (
                 <View>
-                  <View style={styles.fieldContainer}>
-                    <View style={{flex: 1}}>
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[styles.tableCellView, {flex: 1}]}>
                       <Text style={[styles.fieldTitle]}>
                         {t('closedAt')}
                       </Text>
                     </View>
-                    <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{mostRecentShift.close.timestamp !== null && formatDate(mostRecentShift.close.timestamp)}</Text>
+                    <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                      <Text>{formatDate(mostRecentShift.close.timestamp)}</Text>
                     </View>
                   </View>
-                  <View style={styles.fieldContainer}>
-                    <View style={{flex: 1}}>
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[styles.tableCellView, {flex: 1}]}>
                       <Text style={[styles.fieldTitle]}>
                         {t('closedBy')}
                       </Text>
                     </View>
-                    <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{mostRecentShift.close.who}</Text>
+                    <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                      <Text>{mostRecentShift.close.who}</Text>
                     </View>
                   </View>
                 </View>
@@ -159,41 +167,41 @@ class ShiftClose extends React.Component {
 
               {shift.shiftStatus === 'ACTIVE' && (
                 <View>
-                  <View style={styles.fieldContainer}>
-                    <View style={{flex: 1}}>
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[styles.tableCellView, {flex: 1}]}>
                       <Text style={[styles.fieldTitle]}>
                         {t('openAt')}
                       </Text>
                     </View>
-                    <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{shift.open.timestamp !== null && formatDate(shift.open.timestamp)}</Text>
+                    <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                      <Text>{formatDate(shift.open.timestamp)}</Text>
                     </View>
                   </View>
-                  <View style={styles.fieldContainer}>
-                    <View style={{flex: 1}}>
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[styles.tableCellView, {flex: 1}]}>
                       <Text style={[styles.fieldTitle]}>
                         {t('openBalance')}
                       </Text>
                     </View>
-                    <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{shift.open.balance}</Text>
+                    <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                      <Text>{shift.open.balance}</Text>
                     </View>
                   </View>
-                  <View style={styles.fieldContainer}>
-                    <View style={{flex: 1}}>
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[styles.tableCellView, {flex: 1}]}>
                       <Text style={[styles.fieldTitle]}>
                         {t('openBy')}
                       </Text>
                     </View>
-                    <View style={{flex: 3}}>
-                      <Text style={{alignSelf: 'flex-end'}}>{shift.open.who}</Text>
+                    <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                      <Text>{shift.open.who}</Text>
                     </View>
                   </View>
                 </View>
               )}
             </View>
 
-            <KeyboardAvoidingView style={styles.bottom} behavior="padding" enabled>
+            <KeyboardAvoidingView style={[styles.bottom, styles.horizontalMargin]} behavior="padding" enabled>
               {
                 ['ACTIVE', 'CLOSING', 'CONFIRM_CLOSE'].includes(mostRecentShift.shiftStatus)
                 ?
