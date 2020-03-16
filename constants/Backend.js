@@ -46,10 +46,10 @@ export const api = {
       return `${apiRoot}/timecards/${id}`
     },
     getByMonthYr: (year, month) => {
-    	return `${apiRoot}/reporting/timeCardReport?year=${year}&month=${month}`
+      return `${apiRoot}/reporting/timeCardReport?year=${year}&month=${month}`
     },
     getByMonthYrUsr: (year, month, username) => {
-    	return `${apiRoot}/timecards?year=${year}&month=${month}&username=${username}`
+      return `${apiRoot}/timecards?year=${year}&month=${month}&username=${username}`
     }
   },
   product: {
@@ -113,7 +113,13 @@ export const api = {
     },
     inflightOrders: `${apiRoot}/orders/inflight`,
     getGlobalOrderOffers: `${apiRoot}/offers/globalOrderOffers`,
-    getordersByDateRange: `${apiRoot}/orders`
+    getordersByDateRange: `${apiRoot}/orders`,
+    getOrdersByRangeDate: (fromDate, toDate) => {
+      return `${apiRoot}/orders?dateRange=${'RANGE'}&fromDate=${fromDate}&toDate=${toDate}`
+    },
+    getOrdersByRange: dateRange => {
+      return `${apiRoot}/orders?dateRange=${dateRange}`
+    }
   },
   printer: {
     create: `${apiRoot}/printers`,

@@ -2,23 +2,26 @@ import React from 'react'
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   Text,
   TouchableOpacity,
   View
 } from 'react-native'
 import { connect } from 'react-redux'
-import BackBtnCustom from '../components/BackBtnCustom'
 import Icon from 'react-native-vector-icons/Ionicons'
-import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import images from '../assets/images'
-import {formatDate, formatDateObj, getOrdersByDateRange} from '../actions'
+import { formatDate, formatDateObj, getOrdersByDateRange } from '../actions'
 import { ListItem } from 'react-native-elements'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
-import {renderOrderState} from "../helpers/orderActions";
-import {NavigationEvents} from "react-navigation";
-import ScreenHeader from "../components/ScreenHeader";
+import { renderOrderState } from '../helpers/orderActions'
+import { NavigationEvents } from 'react-navigation'
+import ScreenHeader from '../components/ScreenHeader'
+import OrderFilterForm from './OrderFilterForm'
+import {
+  api,
+  dispatchFetchRequest,
+  errorAlert,
+  warningMessage
+} from '../constants/Backend'
 
 class OrdersScreen extends React.Component {
   static navigationOptions = {
@@ -37,7 +40,10 @@ class OrdersScreen extends React.Component {
         date: 'Date',
         total: 'Total',
         orderStatus: 'Status',
-        noOrder: 'No Order'
+        noOrder: 'No Order',
+        dateRange: 'RANGE',
+        searchButton: 'Search',
+        selectDate: 'Select Date'
       },
       zh: {
         ordersTitle: '訂單歷史',
@@ -46,13 +52,17 @@ class OrdersScreen extends React.Component {
         date: '日期',
         total: '總金額',
         orderStatus: '狀態',
-        noOrder: '沒有資料'
+        noOrder: '沒有資料',
+        dateRange: 'RANGE-CH',
+        searchButton: '搜尋',
+        selectDate: 'Select Date-CH'
       }
     })
 
     this.state = {
       t: context.t,
-      scrollPosition: ''
+      scrollPosition: '',
+      filteredOrders: []
     }
   }
 
@@ -71,12 +81,21 @@ class OrdersScreen extends React.Component {
     <ListItem
       key={item.orderId}
       subtitle={
-        <View style={[styles.flex_dir_row,styles.paddingTopBtn20, styles.grayBg, {marginTop: -25}]}>
-          <View style={{ width: '55%'}}>
-            <Text style={styles.tableCellView}>{formatDate(item.createdTime)}</Text>
+        <View
+          style={[
+            styles.flex_dir_row,
+            styles.paddingTopBtn10,
+            styles.grayBg,
+            { marginTop: -35 }
+          ]}
+        >
+          <View style={{ width: '65%' }}>
+            <Text style={styles.tableCellView}>
+              {formatDate(item.createdTime)}
+            </Text>
           </View>
 
-          <View style={{ width: '20%'}}>
+          <View style={{ width: '20%' }}>
             <Text style={styles.tableCellView}>${item.total.amount}</Text>
           </View>
 
@@ -84,7 +103,7 @@ class OrdersScreen extends React.Component {
             style={{
               justifyContent: 'center',
               alignItems: 'center',
-              width: '25%'
+              width: '15%'
             }}
           >
             {renderOrderState(item.state)}
@@ -98,8 +117,13 @@ class OrdersScreen extends React.Component {
         })
       }
       bottomDivider
-      containerStyle={{ paddingLeft: 0, paddingRight: 0, marginBottom: -10, marginTop: -10 }}
-     />
+      containerStyle={{
+        paddingLeft: 0,
+        paddingRight: 0,
+        marginBottom: -10,
+        marginTop: -10
+      }}
+    />
   )
 
   //https://stackoverflow.com/questions/48061234/how-to-keep-scroll-position-using-flatlist-when-navigating-back-in-react-native
@@ -107,45 +131,85 @@ class OrdersScreen extends React.Component {
     this.setState({ scrollPosition: event.nativeEvent.contentOffset.y })
   }
 
+  handleOrderFilter = values => {
+    const fromDate = values.fromDate
+    const toDate = values.toDate
+    const dateRange = values.dateRange
+
+    if (fromDate && toDate) {
+      dispatchFetchRequest(
+        api.order.getOrdersByRangeDate(fromDate, toDate),
+        {
+          method: 'GET',
+          withCredentials: true,
+          credentials: 'include',
+          headers: {}
+        },
+        response => {
+          response.json().then(data => {
+            this.setState({ filteredOrders: data.orders })
+          })
+        }
+      ).then()
+    } else if (dateRange) {
+      dispatchFetchRequest(
+        api.order.getOrdersByRange(dateRange),
+        {
+          method: 'GET',
+          withCredentials: true,
+          credentials: 'include',
+          headers: {}
+        },
+        response => {
+          response.json().then(data => {
+            this.setState({ filteredOrders: data.orders })
+          })
+        }
+      ).then()
+    }
+  }
+
   render() {
-    const {getordersByDateRange, reportParameter, isLoading, haveData} = this.props
-    const {t} = this.state
+    const {
+      getordersByDateRange,
+      reportParameter,
+      isLoading,
+      haveData
+    } = this.props
+    const { t, filteredOrders } = this.state
 
     const orders = []
-    getordersByDateRange !== undefined && getordersByDateRange.map(order => {
-      orders.push(order)
-    })
+    getordersByDateRange !== undefined &&
+      getordersByDateRange.map(order => {
+        orders.push(order)
+      })
 
     if (isLoading) {
       return (
         <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc"/>
+          <ActivityIndicator size="large" color="#ccc" />
         </View>
       )
     } else if (haveData) {
       return (
-        <View
-          style={[
-            styles.container,
-            styles.nomgrBottom
-          ]}
-        >
+        <View style={[styles.stcontainer, styles.nomgrBottom]}>
           <NavigationEvents
             onWillFocus={() => {
               this.props.getOrdersByDateRange()
             }}
           />
-          <ScreenHeader backNavigation={false}
-                        title={t('ordersTitle')}
-                        rightComponent={
-                          <TouchableOpacity
-                            onPress={() => {
-                              this.props.getOrdersByDateRange()
-                            }}
-                          >
-                            <Icon name="md-refresh" size={30} color="#f18d1a"/>
-                          </TouchableOpacity>
-                        }
+          <ScreenHeader
+            backNavigation={false}
+            title={t('ordersTitle')}
+            rightComponent={
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.getOrdersByDateRange()
+                }}
+              >
+                <Icon name="md-refresh" size={30} color="#f18d1a" />
+              </TouchableOpacity>
+            }
           />
 
           <View>
@@ -159,17 +223,23 @@ class OrdersScreen extends React.Component {
             </View>
           </View>
 
-          <View style={[styles.flex_dir_row, {paddingTop: 10, paddingBottom: 10}]}>
-            <View style={{width: '55%'}}>
-              <Text style={[styles.orange_color, styles.centerText]}>{t('date')}</Text>
+          <OrderFilterForm onSubmit={this.handleOrderFilter} />
+
+          <View style={[styles.flex_dir_row, { marginBottom: 8 }]}>
+            <View style={{ width: '55%' }}>
+              <Text style={[styles.orange_color, styles.centerText]}>
+                {t('date')}
+              </Text>
             </View>
 
-            <View style={{width: '20%'}}>
+            <View style={{ width: '20%' }}>
               <Text style={[styles.orange_color]}>{t('total')}</Text>
             </View>
 
-            <View style={{width: '25%'}}>
-              <Text style={[styles.orange_color, styles.centerText]}>{t('orderStatus')}</Text>
+            <View style={{ width: '25%' }}>
+              <Text style={[styles.orange_color, styles.centerText]}>
+                {t('orderStatus')}
+              </Text>
             </View>
           </View>
           {orders.length === 0 && (
@@ -180,7 +250,7 @@ class OrdersScreen extends React.Component {
 
           <FlatList
             keyExtractor={this.keyExtractor}
-            data={orders}
+            data={filteredOrders}
             renderItem={this.renderItem}
             ref={ref => {
               this.ListView_Ref = ref

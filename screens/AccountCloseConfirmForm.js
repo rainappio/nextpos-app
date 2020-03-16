@@ -1,31 +1,13 @@
 import React from 'react'
-import { Field, reduxForm, FieldArray } from 'redux-form'
+import { Field, reduxForm } from 'redux-form'
 import {
-  ActivityIndicator,
-  InputAccessoryView,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
   Text,
-  TextInput,
   TouchableOpacity,
-  View,
-  ScrollView
+  View
 } from 'react-native'
-import {connect} from 'react-redux'
-import BackBtnCustom from '../components/BackBtnCustom'
-import { formatDate, getShiftStatus } from '../actions'
-import {
-  api,
-  dispatchFetchRequest,
-  successMessage, warningMessage
-} from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import {handleCloseShift, handleOpenShift, handleAbortCloseShift} from "../helpers/shiftActions";
-import BackBtn from "../components/BackBtn";
 import InputText from '../components/InputText'
 
 class AccountCloseConfirmForm extends React.Component {

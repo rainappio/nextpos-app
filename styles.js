@@ -342,6 +342,10 @@ export default StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 20
   },
+  paddingTopBtn10: {
+    paddingTop: 10,
+    paddingBottom: 10
+  },
   borderBottomLine: {
     borderBottomColor: '#f1f1f1',
     borderBottomWidth: 1
