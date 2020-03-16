@@ -23,9 +23,6 @@ class ProductFormScreen extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    this.state = {
-      t: context.t
-    }
   }
 
   componentDidMount() {
@@ -54,9 +51,10 @@ class ProductFormScreen extends React.Component {
   }
 
   render() {
-    const { t } = this.state
+    const { t } = this.context
 
     const {
+      initialValues,
       handleSubmit,
       labels,
       isEditForm,
@@ -68,87 +66,110 @@ class ProductFormScreen extends React.Component {
     } = this.props
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={{flex: 1}}>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={{flexGrow: 1}}>
         <DismissKeyboard>
-          <View style={[styles.container_nocenterCnt]}>
-            <ScreenHeader title={isEditForm ? t('editProduct') : t('newProduct')}/>
-
-            <Field
-              name="name"
-              component={InputText}
-              validate={isRequired}
-              placeholder={t('productName')}
-              secureTextEntry={false}
+          <View style={[styles.fullWidthScreen]}>
+            <ScreenHeader parentFullScreen={true}
+                          title={isEditForm ? t('editProduct') : t('newProduct')}
+                          rightComponent={
+                            <AddBtn
+                              onPress={() =>
+                                this.props.navigation.navigate('Option', {
+                                  customRoute: this.props.navigation.state.routeName
+                                })
+                              }
+                            />
+                          }
             />
 
-            <Field
-              name="price"
-              component={InputText}
-              validate={isRequired}
-              placeholder={t('price')}
-              secureTextEntry={false}
-              keyboardType={'numeric'}
-            />
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text style={styles.fieldTitle}>{t('productName')}</Text>
+              </View>
+              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                <Field
+                  name="name"
+                  component={InputText}
+                  validate={isRequired}
+                  placeholder={t('productName')}
+                  secureTextEntry={false}
+                />
+              </View>
+            </View>
 
-            <Field
-              component={DropDown}
-              name="productLabelId"
-              options={labels}
-              search
-              selection
-              fluid
-              placeholder={{ value: null, label: t('productLabel') }}
-            />
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text style={styles.fieldTitle}>{t('price')}</Text>
+              </View>
+              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                <Field
+                  name="price"
+                  component={InputText}
+                  validate={isRequired}
+                  placeholder={t('price')}
+                  secureTextEntry={false}
+                  keyboardType={'numeric'}
+                />
+              </View>
+            </View>
 
-            <View style={{ marginBottom: 20 }}>
-              <Field
-                name="description"
-                component={InputText}
-                placeholder={t('description')}
-                secureTextEntry={false}
-              />
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 1 }]}>
+                <Text style={styles.fieldTitle}>{t('productLabel')}</Text>
+              </View>
+              <View style={[styles.tableCellView, {flex: 3,justifyContent: 'flex-end'}]}>
+                <Field
+                  component={DropDown}
+                  name="productLabelId"
+                  options={labels}
+                  search
+                  selection
+                  fluid
+                  placeholder={{ value: null, label: t('productLabel') }}
+                />
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text style={styles.fieldTitle}>{t('description')}</Text>
+              </View>
+              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                <Field
+                  name="description"
+                  component={InputText}
+                  placeholder={t('description')}
+                  secureTextEntry={false}
+                />
+              </View>
             </View>
 
             {isEditForm && (
               <View>
-                <View
-                  style={[
-                    styles.borderBottomLine,
-                    styles.paddBottom_20,
-                    styles.minustopMargin10
-                  ]}
-                >
-                  <Text style={styles.textBold}>{t('options')}</Text>
-                  <AddBtn
-                    onPress={() =>
-                      this.props.navigation.navigate('Option', {
-                        customRoute: this.props.navigation.state.routeName
-                      })
-                    }
-                  />
+                <View style={styles.sectionContainer}>
+                  <View style={styles.sectionTitleContainer}>
+                    <Text style={styles.sectionTitleText}>{t('options')}</Text>
+                  </View>
+
+                  <View>
+                    <Field
+                      name="productOptionIds"
+                      component={RenderCheckboxGroup}
+                      customarr={prodctoptions}
+                      navigation={navigation}
+                      customRoute={'OptionEdit'}
+                    />
+                  </View>
                 </View>
 
-                <Field
-                  name="productOptionIds"
-                  component={RenderCheckboxGroup}
-                  customarr={prodctoptions}
-                  navigation={navigation}
-                  customRoute={'OptionEdit'}
-                />
-
-                <View>
-                  <View
-                    style={[styles.paddingTopBtn20, styles.borderBottomLine]}
-                  >
-                    <Text style={styles.textBold}>{t('workingArea')}</Text>
+                <View style={[styles.sectionContainer]}>
+                  <View style={styles.sectionTitleContainer}>
+                    <Text style={styles.sectionTitleText}>{t('workingArea')}</Text>
                   </View>
                   {workingareas !== undefined &&
                     workingareas.map(workarea => (
                       <View
-                        style={[
-                          styles.borderBottomLine,
-                          styles.paddingTopBtn20
-                        ]}
+                        style={styles.optionsContainer}
                         key={workarea.id}
                       >
                         <Field
@@ -163,7 +184,7 @@ class ProductFormScreen extends React.Component {
               </View>
             )}
 
-            <View style={[styles.bottom]}>
+            <View style={[styles.bottom, styles.horizontalMargin]}>
               <TouchableOpacity onPress={handleSubmit}>
                 <Text style={[styles.bottomActionButton, styles.actionButton]}>
                   {t('action.save')}

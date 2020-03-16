@@ -16,8 +16,9 @@ import { default as MaterialIcon } from 'react-native-vector-icons/MaterialIcons
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtnCustom from '../components/BackBtnCustom'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import ScreenHeader from "../components/ScreenHeader";
+import MenuButton from "../components/MenuButton";
 
 class SettingsScreen extends React.Component {
   static navigationOptions = {
@@ -32,172 +33,128 @@ class SettingsScreen extends React.Component {
         <ScreenHeader backNavigation={false}
                       title={t('menu.settings')}/>
 
-        <Pages indicatorColor="#FF9100">
+        <Pages indicatorColor={mainThemeColor}>
           <View>
             <View style={[styles.flex_dir_row]}>
-              <TouchableOpacity
-                style={styles.mainSquareButton}
+              <MenuButton
                 onPress={() => this.props.navigation.navigate('Account')}
-              >
-                <View>
+                title={t('settings.account')}
+                icon={
                   <MaterialIcon
                     name="account-box"
                     size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.buttonIconStyle]}
                   />
-                  <Text style={styles.centerText}>
-                    {t('settings.account')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                }/>
 
-              <TouchableOpacity
-                style={styles.mainSquareButton}
+              <MenuButton
                 onPress={() => this.props.navigation.navigate('Store')}
-              >
-                <View>
+                title={t('settings.stores')}
+                icon={
                   <Icon
                     name="md-home"
                     size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.buttonIconStyle]}
                   />
-                  <Text style={styles.centerText}>
-                    {t('settings.stores')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                }/>
             </View>
 
             <View style={[styles.flex_dir_row]}>
-              <TouchableOpacity
-                style={styles.mainSquareButton}
+              <MenuButton
                 onPress={() =>
                   this.props.navigation.navigate('ProductsOverview')
                 }
-              >
-                <View>
+                title={t('settings.products')}
+                icon={
                   <Icon
                     name="ios-beaker"
                     size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.buttonIconStyle]}
                   />
-                  <Text style={styles.centerText}>
-                    {t('settings.products')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                }
+              />
 
-              <TouchableOpacity
-                style={styles.mainSquareButton}
+              <MenuButton
                 onPress={() =>
                   this.props.navigation.navigate('StaffsOverview')
                 }
-              >
-                <View>
+                title={t('settings.staff')}
+                icon={
                   <Icon
                     name="ios-people"
                     size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.buttonIconStyle]}
                   />
-                  <Text style={styles.centerText}>{t('settings.staff')}</Text>
-                </View>
-              </TouchableOpacity>
+                }
+              />
             </View>
 
             <View style={[styles.flex_dir_row]}>
-              <TouchableOpacity
-                style={styles.mainSquareButton}
+              <MenuButton
                 onPress={() => this.props.navigation.navigate('PrinternKDS')}
-              >
-                <View>
+                title={t('settings.workingArea')}
+                icon={
                   <Icon
                     name="md-print"
                     size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.buttonIconStyle]}
                   />
-                  <Text style={styles.centerText}>
-                    {t('settings.workingArea')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                }
+              />
 
-              <TouchableOpacity
-                style={styles.mainSquareButton}
-                onPress={() => changeLanguage()}>
-                <View>
+              <MenuButton
+                onPress={() => changeLanguage()}
+                title={t('settings.language')}
+                icon={
                   <MaterialIcon
                     name="language"
                     size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.buttonIconStyle]}
                   />
-                  <Text style={styles.centerText}>
-                    {t('settings.language')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                }
+              />
             </View>
           </View>
 
           <View>
             <View style={[styles.flex_dir_row]}>
-              <TouchableOpacity
-                style={styles.mainSquareButton}
+              <MenuButton
                 onPress={() => this.props.navigation.navigate('TableLayouts')}
-              >
-                <View>
+                title={t('settings.tableLayouts')}
+                icon={
                   <MaterialIcon
                     name="event-seat"
                     size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.buttonIconStyle]}
                   />
-                  <Text style={styles.centerText}>
-                    {t('settings.tableLayouts')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                }
+              />
 
-              <TouchableOpacity
-                style={styles.mainSquareButton}
+              <MenuButton
                 onPress={() => this.props.navigation.navigate('ShiftClose')}
-              >
-                <View>
+                title={t('settings.manageShifts')}
+                icon={
                   <Icon
                     name="md-book"
                     size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.buttonIconStyle]}
                   />
-                  <Text style={styles.centerText}>
-                    {t('settings.manageShifts')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                }
+              />
             </View>
 
             <View style={[styles.flex_dir_row, { width: '50%'}]}>
-              <TouchableOpacity
-                style={styles.mainSquareButton}
-                onPress={() =>
-                  this.props.navigation.navigate('Announcements')
-                }
-              >
-                <View>
+              <MenuButton
+                onPress={() => this.props.navigation.navigate('Announcements')}
+                title={t('settings.announcements')}
+                icon={
                   <FontAwesomeIcon
                     name="commenting"
                     size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.buttonIconStyle]}
                   />
-                  <Text style={styles.centerText}>{t('settings.announcements')}</Text>
-                </View>
-              </TouchableOpacity>
+                }
+              />
             </View>
           </View>
         </Pages>

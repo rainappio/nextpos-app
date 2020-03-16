@@ -260,25 +260,6 @@ class SalesCharts extends React.Component {
                 {t('todaySales')} - ${getrangedSalesReport.todayTotal}
               </Text>
             </View>
-            {/*<View>
-              <Text
-                style={[
-                  styles.orange_color,
-                  styles.toRight,
-                  {
-                    borderWidth: 1,
-                    borderColor: '#f18d1a',
-                    padding: 6,
-                    marginLeft: 8
-                  }
-                ]}
-                onPress={() => {
-                  this.props.navigation.navigate('Orders')
-                }}
-              >
-                Details
-              </Text>
-            </View>*/}
           </View>
         </View>
 

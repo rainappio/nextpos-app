@@ -43,7 +43,6 @@ class OrdersScreen extends React.Component {
         noOrder: 'No Order',
         dateRange: 'RANGE',
         searchButton: 'Search',
-        selectDate: 'Select Date'
       },
       zh: {
         ordersTitle: '訂單歷史',
@@ -54,8 +53,7 @@ class OrdersScreen extends React.Component {
         orderStatus: '狀態',
         noOrder: '沒有資料',
         dateRange: 'RANGE-CH',
-        searchButton: '搜尋',
-        selectDate: 'Select Date-CH'
+        searchButton: '搜尋'
       }
     })
 

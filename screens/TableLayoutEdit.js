@@ -22,6 +22,7 @@ import {
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
+import AddBtn from "../components/AddBtn";
 
 class TableLayoutEdit extends React.Component {
   static navigationOptions = {
@@ -103,7 +104,17 @@ class TableLayoutEdit extends React.Component {
     	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
       	<DismissKeyboard>
         	<View style={[styles.container_nocenterCnt]}>
-            <ScreenHeader title={t('editTableLayoutTitle')}/>
+            <ScreenHeader title={t('editTableLayoutTitle')}
+                          rightComponent={
+                            <AddBtn
+                              onPress={() =>
+                                this.props.navigation.navigate('TableAdd', {
+                                  layoutId: tablelayout.id
+                                })
+                              }
+                            />
+                          }
+            />
 
           	<TableLayoutForm
             	onSubmit={this.handleSubmit}

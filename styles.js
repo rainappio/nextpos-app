@@ -1,6 +1,8 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native'
 const window = Dimensions.get('window')
 export const mainThemeColor = '#f18d1a'
+//export const mainThemeColor = '#f18dee'
+//export const mainThemeColor = '#3e3d47'
 
 export default StyleSheet.create({
   mainContainer: {
@@ -8,7 +10,6 @@ export default StyleSheet.create({
   },
   fullWidthScreen: {
     flex: 1,
-    justifyContent: 'center',
     marginTop: 53,
     marginBottom: 36
   },
@@ -37,11 +38,9 @@ export default StyleSheet.create({
     paddingRight: 0
   },
   rootInput: {
-    height: 44,
-    padding: 10,
-    marginBottom: 10,
-    borderBottomColor: '#f1f1f1',
-    borderBottomWidth: 1
+    paddingVertical: 10,
+    paddingLeft: 10,
+    textAlign: 'right'
   },
   rootError: {
     color: 'red',
@@ -115,7 +114,7 @@ export default StyleSheet.create({
     flexDirection: 'row'
   },
   orange_color: {
-    color: '#f18d1a'
+    color: mainThemeColor
   },
   half_width: {
     width: '45%'
@@ -178,14 +177,14 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.6)'
   },
   popUpLayout: {
-    padding: 25,
+    //padding: 25,
     margin: 20
   },
   whiteBg: {
     backgroundColor: '#fff'
   },
   editIcon: {
-    backgroundColor: '#f18d1a',
+    backgroundColor: mainThemeColor,
     flex: 1,
     alignItems: 'center',
     position: 'absolute',
@@ -198,7 +197,7 @@ export default StyleSheet.create({
     bottom: 4
   },
   delIcon: {
-    backgroundColor: '#f18d1a',
+    backgroundColor: mainThemeColor,
     flex: 1,
     alignItems: 'center',
     position: 'absolute',
@@ -288,10 +287,10 @@ export default StyleSheet.create({
     paddingTop: 2
   },
   orange_bg: {
-    backgroundColor: '#f18d1a'
+    backgroundColor: mainThemeColor
   },
   editIconII: {
-    backgroundColor: '#f18d1a',
+    backgroundColor: mainThemeColor,
     flex: 1,
     alignItems: 'center',
     position: 'absolute',
@@ -399,7 +398,7 @@ export default StyleSheet.create({
     textAlign: 'right'
   },
   itemCountContainer: {
-    backgroundColor: '#f18d1a',
+    backgroundColor: mainThemeColor,
     borderWidth: 1,
     borderColor: '#fff',
     width: 24,
@@ -424,9 +423,6 @@ export default StyleSheet.create({
   item: {
     borderTopWidth: 1,
     borderColor: '#ddd'
-  },
-  verticalMiddle: {
-    justifyContent: 'center'
   },
   marginLeftRight35: {
     marginLeft: 25,
@@ -458,7 +454,7 @@ export default StyleSheet.create({
   screenTopContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: 15
   },
   contentContainer: {
@@ -483,7 +479,7 @@ export default StyleSheet.create({
   },
   squareButton: {
     margin: 10,
-    backgroundColor: '#f18d1a',
+    backgroundColor: mainThemeColor,
     width: '45%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -501,11 +497,20 @@ export default StyleSheet.create({
     paddingVertical: 30,
     borderRadius: 4
   },
+  buttonIconStyle: {
+    color: mainThemeColor,
+    alignSelf: 'center'
+  },
+  buttonText: {
+    textAlign: 'center',
+    marginTop: 10
+  },
+  stateIconStyle: {
+    color: mainThemeColor
+  },
   sectionContainer: {
-    flex: 1,
     justifyContent: 'center',
     marginTop: 5,
-    marginHorizontal: 15,
     marginBottom: 20
   },
   sectionTitleContainer: {
@@ -518,19 +523,22 @@ export default StyleSheet.create({
   },
   sectionBar: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#f18d1a',
+    backgroundColor: '#fff',
+    borderColor: '#f1f1f1',
+    borderBottomWidth: 1,
     paddingVertical: 8,
-    paddingHorizontal: 5
+    paddingHorizontal: 10,
   },
   sectionBarText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 18
+    color: mainThemeColor,
+    textAlign: 'left',
+    fontWeight: 'bold',
+    fontSize: 17
   },
   sectionBarTextSmall: {
-    color: '#fff',
+    color: mainThemeColor,
     textAlign: 'left',
   },
   sectionContent: {
@@ -551,28 +559,55 @@ export default StyleSheet.create({
   listPanelIcon: {
     flex: 1,
     justifyContent: 'flex-end',
-    color: '#f18d1a'
+    color: mainThemeColor
   },
   fieldContainer: {
-    // justifyContent: 'center',
-    alignItems: 'center',
     flexDirection: 'row',
+    alignItems: 'center',
     marginTop: 2,
     marginBottom: 5
   },
   fieldTitle: {
     fontWeight: 'bold'
   },
+  horizontalMargin: {
+    marginHorizontal: 15
+  } ,
+  verticalPadding: {
+    paddingVertical: 20
+  },
+  dynamicVerticalPadding: val => {
+    return {paddingVertical: val}
+  },
+  withBottomBorder: {
+    borderBottomWidth: 1,
+    borderColor: '#f1f1f1'
+  },
+  tableRowContainerWithBorder: {
+    flexDirection: 'row',
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderColor: '#f1f1f1',
+    borderBottomWidth: 1,
+  },
   tableRowContainer: {
-    flex: 1,
     flexDirection: 'row',
     paddingVertical: 8,
-    paddingHorizontal: 5
+    paddingHorizontal: 10
   },
   tableCellView: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center'
+  },
+  tableCellText: {
+    fontWeight: 'bold'
+  },
+  optionsContainer: {
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderColor: '#f1f1f1',
+    borderBottomWidth: 1,
   },
   messageBlock: {
     padding: 10,
@@ -591,22 +626,22 @@ export default StyleSheet.create({
     fontSize: 16,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#f18d1a',
+    borderColor: mainThemeColor,
     padding: 10,
     marginBottom: 10,
     overflow: 'hidden'
   },
   actionButton: {
-    backgroundColor: '#f18d1a',
+    backgroundColor: mainThemeColor,
     color: '#fff'
   },
   secondActionButton: {
     backgroundColor: '#fff',
-    color: '#f18d1a'
+    color: mainThemeColor
   },
   cancelButton: {
     backgroundColor: '#fff',
-    color: '#f18d1a'
+    color: mainThemeColor
   },
   deleteButton: {
     borderColor: '#f75336',
@@ -636,12 +671,6 @@ export default StyleSheet.create({
     right: 0,
     bottom: 0
   },
-  markDownStyle: {
-    backgroundColor: '#f4f4f4',
-    padding: '4%',
-    width: '92%',
-    margin: 4
-  },
   textAreaContainer: {
     borderColor: '#ccc',
     borderWidth: 1,
@@ -662,10 +691,9 @@ export default StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     backgroundColor: '#fff',
+    borderColor: '#f1f1f1',
+    borderWidth: 1,
     flex: 1,
-    padding: 16,
-    marginTop: 7,
-    marginLeft: 13,
     marginBottom: 12,
     borderRadius: 4,
 

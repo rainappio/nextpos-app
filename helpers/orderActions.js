@@ -5,50 +5,44 @@ import images from "../assets/images";
 import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon from "react-native-vector-icons/Ionicons";
 import React from "react";
+import styles from "../styles"
 
 export const renderOrderState = state => {
   switch (state) {
     case 'OPEN':
-      return <Image
-        source={images.order}
-        style={{width: 15, height: 20}}
-      />
+      return (
+        <Icon
+          name={'md-list'}
+          size={25}
+          style={styles.stateIconStyle}/>
+        )
     case 'IN_PROCESS':
       return <Image
         source={images.process}
-        style={{width: 30, height: 20}}
+        style={[{width: 30, height: 20}]}
       />
     case 'DELIVERED':
       return <MCIcon
         name={'silverware-fork-knife'}
         size={23}
-        style={{
-          fontWeight: 'bold'
-        }}
-        color="#f18d1a"
+        style={styles.stateIconStyle}
       />
     case 'SETTLED':
       return <Image
         source={images.settled}
-        style={{width: 28, height: 20, flex: 1}}
+        style={[{width: 28, height: 20}]}
       />
     case 'COMPLETED':
       return <Icon
         name={'md-checkmark-circle-outline'}
-        color="#f18d1a"
         size={25}
-        style={{
-          fontWeight: 'bold'
-        }}
+        style={styles.stateIconStyle}
       />
     case 'DELETED':
       return <MCIcon
         name={'delete'}
         size={25}
-        style={{
-          fontWeight: 'bold'
-        }}
-        color="#f18d1a"
+        style={styles.stateIconStyle}
       />
   }
 }

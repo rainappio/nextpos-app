@@ -84,7 +84,7 @@ class AccountClose extends React.Component {
                 {formatDate(mostRecentShift.open.timestamp)}
               </Text>
               <Text style={[styles.toRight]}>
-                {t('status')} - {mostRecentShift.shiftStatus}
+                {t('closingStatus')} - {mostRecentShift.shiftStatus}
               </Text>
             </View>
           </View>

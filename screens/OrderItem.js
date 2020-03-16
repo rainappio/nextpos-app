@@ -32,11 +32,11 @@ class OrderItem extends React.PureComponent {
     let timeDisplayColor = '#888'
 
     if (['OPEN', 'IN_PROCESS'].includes(order.state)) {
-      timeDisplayColor = timeDifference < thirtyMinutes ? '#f18d1a' : 'red'
+      timeDisplayColor = timeDifference < thirtyMinutes ? mainThemeColor : 'red'
     }
 
     return (
-      <View style={[styles.tableRowContainer]}>
+      <View style={[styles.tableRowContainerWithBorder]}>
         <TouchableOpacity
           style={[{flexDirection: 'row', flex: 9, marginLeft: 3}]}
           key={order.orderId}

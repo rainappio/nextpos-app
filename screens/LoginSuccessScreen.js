@@ -19,7 +19,7 @@ import {
   getClientUsr,
   getAnnouncements, getShiftStatus
 } from '../actions'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
 import { NavigationEvents } from 'react-navigation'
 import { getToken } from '../constants/Backend'
@@ -29,6 +29,7 @@ import Markdown from 'react-native-markdown-renderer'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import {handleDelete, handleOrderSubmit} from "../helpers/orderActions";
 import Constants from "expo-constants/src/Constants";
+import MenuButton from "../components/MenuButton";
 
 class LoginSuccessScreen extends React.Component {
   static navigationOptions = {
@@ -168,65 +169,52 @@ class LoginSuccessScreen extends React.Component {
           </View>
 
           {shiftStatus === 'ACTIVE' && (
-            <TouchableOpacity
-              style={[styles.mainSquareButton]}
+
+            <MenuButton
               onPress={() => {
                 this.props.navigation.navigate('OrderStart', {
                   handleOrderSubmit: handleOrderSubmit,
                   handleDelete: handleDelete
                 })
-              }}>
-              <View>
+              }}
+              title={t('quickOrder')}
+              icon={
                 <MaterialIcon
                   name="play-arrow"
                   size={40}
-                  color="#f18d1a"
-                  style={[styles.centerText, styles.margin_15]}
+                  style={[styles.buttonIconStyle]}
                 />
-                <Text style={styles.centerText}>{t('quickOrder')}</Text>
-              </View>
-            </TouchableOpacity>
+              }/>
           )}
 
           <View style={[styles.flex_dir_row, {flex: 1}]}>
             <View style={{flex: 1}}>
-              <TouchableOpacity
-                style={[styles.mainSquareButton
-                ]}
+              <MenuButton
                 onPress={() =>
                   this.props.navigation.navigate('ClockIn', {
                     authClientUserName: username
-                  })
-                }
-              >
-                <View>
+                  })}
+                title={t('menu.timecard')}
+                icon={
                   <FontAwesomeIcon
                     name="clock-o"
                     size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.buttonIconStyle]}
                   />
-                  <Text style={[styles.centerText]}>{t('menu.timecard')}</Text>
-                </View>
-              </TouchableOpacity>
+                }/>
             </View>
 
             <View style={{flex: 1}}>
-              <TouchableOpacity
-                style={[styles.mainSquareButton
-                ]}
+              <MenuButton
                 onPress={() => this.props.navigation.navigate('ClientUsers')}
-              >
-                <View>
+                title={t('menu.clientUsers')}
+                icon={
                   <Icon
                     name="ios-log-out"
                     size={40}
-                    color="#f18d1a"
-                    style={[styles.centerText, styles.margin_15]}
+                    style={[styles.buttonIconStyle]}
                   />
-                  <Text style={styles.centerText}>{t('menu.clientUsers')}</Text>
-                </View>
-              </TouchableOpacity>
+                }/>
             </View>
           </View>
 
@@ -235,31 +223,23 @@ class LoginSuccessScreen extends React.Component {
               getannouncements.results !== undefined &&
               getannouncements.results.map(getannoc =>
                 <View
-                  style={[
-                    {backgroundColor: '#f1f1f1', padding: 20},
-                    styles.mgrbtn20
-                  ]}
+                  style={[styles.sectionContainer, styles.withBottomBorder]}
                   key={getannoc.id}
                 >
                   <View style={styles.flex_dir_row}>
-                    <View style={{marginRight: 17}}>
+                    <View style={[styles.tableCellView]}>
                       <IonIcon
                         name={getannoc.titleIcon}
-                        size={31}
-                        color="#f18d1a"
+                        size={32}
+                        color={mainThemeColor}
                       />
-                    </View>
-                    <View>
-                      <Text style={[
-                        styles.orange_color,
-                        styles.textMedium,
-                      ]}>
+                      <Text style={[styles.sectionBarText, {marginLeft: 10}]}>
                         {getannoc.title}
                       </Text>
                     </View>
                   </View>
 
-                  <Markdown style={styles.markDownStyle}>
+                  <Markdown>
                     {getannoc.markdownContent}
                     {'\n'}
                   </Markdown>

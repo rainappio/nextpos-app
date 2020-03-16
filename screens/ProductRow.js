@@ -17,7 +17,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import PopUp from '../components/PopUp'
 import { getProducts, clearLabel } from '../actions'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
 import ScreenHeader from "../components/ScreenHeader";
@@ -130,7 +130,7 @@ class ProductRow extends React.Component {
 
     const right = [
       {
-        text: <Icon name="md-close" size={25} color="#fff" />,
+        text: <Icon name="md-close" size={24} color="#fff" />,
         onPress: () => {
           Alert.alert(
             `${t('action.confirmMessageTitle')}`,
@@ -148,7 +148,7 @@ class ProductRow extends React.Component {
             ]
           )
         },
-        style: { backgroundColor: '#f18d1a90' }
+        style: { backgroundColor: mainThemeColor }
       }
     ]
 

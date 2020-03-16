@@ -47,6 +47,32 @@ const zh = {
   order: {
     inStore: '內用',
     takeOut: '外帶',
+
+    ordersTitle: '訂單歷史',
+    fromDate: '開始日期',
+    toDate: '結束日期',
+    orderId: '訂單號碼',
+    date: '日期',
+    orderStatus: '狀態',
+    noOrder: '沒有資料',
+
+    orderDetailsTitle: '訂單內容',
+    serviceCharge: '服務費',
+    discount: '折扣',
+    total: '總金額',
+    paymentMethod: '付款方式',
+    staff: '員工',
+    ageGroup: '來客年齡層',
+    visitedFrequency: '造訪次數',
+    notFilledIn: '未填',
+    orderStartDate: '開單日期',
+    lineItemCreatedDate: '開單日期',
+    endDate: '結帳日期',
+    duration: '共計',
+    product: '產品',
+    quantity: '數量',
+    subTotal: '小計',
+    serveBy: '結帳人員'
   },
   orderStatus: '訂單狀態',
   orderState: {
@@ -55,7 +81,8 @@ const zh = {
     DELIVERED: '已送餐',
     SETTLED: '已付款',
     REFUNDED: '已退款',
-    COMPLETED: '完成'
+    COMPLETED: '完成',
+    DELETED: '刪單'
   },
   timecard: {
     hours: '小時',

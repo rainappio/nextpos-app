@@ -20,7 +20,6 @@ import ProductFormScreen from '../screens/ProductFormScreen'
 import Product from '../screens/Product'
 import ProductEditScreen from '../screens/ProductEditScreen'
 import Category from '../screens/Category'
-import CategoryListScreen from '../screens/CategoryListScreen'
 import ProductsOverview from '../screens/ProductsOverview'
 import ClientUsers from '../screens/ClientUsers'
 import ClientUserLogin from '../screens/ClientUserLogin'
@@ -106,7 +105,6 @@ const Settings = createStackNavigator({
   Option: Option,
   OptionEdit: OptionEdit,
   Category: Category,
-  CategoryList: CategoryListScreen,
   CategoryCustomize: CategoryCustomize,
   ClientUsers: ClientUsers,
   ClientUserLoginS: ClientUserLogin,

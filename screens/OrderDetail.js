@@ -26,6 +26,7 @@ import {LocaleContext} from "../locales/LocaleContext";
 import {renderOrderState} from "../helpers/orderActions";
 import filterSupportedProps from "react-native-web/dist/exports/View/filterSupportedProps";
 import ScreenHeader from "../components/ScreenHeader";
+import OrderTopInfo from "./OrderTopInfo";
 
 class OrderDetail extends React.Component {
   static navigationOptions = {
@@ -49,45 +50,6 @@ class OrderDetail extends React.Component {
 
   componentDidMount() {
     this.props.getOrder(this.props.navigation.state.params.orderId)
-
-    this.context.localize({
-      en: {
-        serviceCharge: 'Service Charge',
-        discount: 'Discount',
-        total: 'Total',
-        paymentMethod: 'Payment Method',
-        staff: 'Staff',
-        ageGroup: 'Age Group',
-        visitedFrequency: 'Visited Frequency',
-        notFilledIn: 'Not Filled',
-        orderStartDate: 'Start Date',
-        lineItemCreatedDate: 'Start Date',
-        endDate: 'End Date',
-        duration: 'Total Duration',
-        product: 'Product',
-        quantity: 'Qty',
-        subTotal: 'Subtotal',
-        serveBy: 'Serve By'
-      },
-      zh: {
-        serviceCharge: '服務費',
-        discount: '折扣',
-        total: '總金額',
-        paymentMethod: '付款方式',
-        staff: '員工',
-        ageGroup: '來客年齡層',
-        visitedFrequency: '造訪次數',
-        notFilledIn: '未填',
-        orderStartDate: '開單日期',
-        lineItemCreatedDate: '開單日期',
-        endDate: '結帳日期',
-        duration: '共計',
-        product: '產品',
-        quantity: '數量',
-        subTotal: '小計',
-        serveBy: '結帳人員'
-      }
-    })
   }
 
   render() {
@@ -96,8 +58,7 @@ class OrderDetail extends React.Component {
 
     Item = ({ orderDetail, lineItemDate }) => {
       return (
-       	<View style={[{marginBottom: 10}]}>
-          <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
+       	<View style={[styles.tableRowContainer]}>
             <View style={{flex: 2.5}}>
               <Text>
               	{formatTime(lineItemDate)}
@@ -121,7 +82,6 @@ class OrderDetail extends React.Component {
               	{orderDetail.subTotal.amount}
               </Text>
             </View>
-          </View>
         </View>
       )
     }
@@ -145,108 +105,62 @@ class OrderDetail extends React.Component {
 
       return (
       	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
-          <View style={[styles.container, styles.nomgrBottom]}>
-            <ScreenHeader backNavigation={false}
-                          title={`Order Id - ${order.serialId}`}
-            />
+          <View style={[styles.fullWidthScreen]}>
+            <ScreenHeader parentFullScreen={true}
+                          title={t('order.orderDetailsTitle')}/>
 
-            <View style={[styles.flex_dir_row, {alignItems: 'center'}]}>
-              <View style={{width: '35%'}}>
-                <View>
-                  <Text
-                    style={[
-                      styles.paddingTopBtn8,
-                      styles.textBig,
-                      styles.orange_color
-                    ]}
-                  >
-                    {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
-                  </Text>
-                </View>
-              </View>
+            <OrderTopInfo order={order}/>
 
-              <View style={[{width: '15%'}, styles.jc_alignIem_center]}>
-                <View>
-                  <FontAwesomeIcon
-                    name="user"
-                    size={25}
-                    color="#f18d1a"
-                    style={[styles.centerText]}
-                  >
-                    <Text style={[styles.textBig, styles.orange_color]}>
-                      &nbsp;
-                      {!this.props.navigation.state.params.customerCount
-                        ? order.demographicData.male +
-                        order.demographicData.female +
-                        order.demographicData.kid
-                        : this.props.navigation.state.params.customerCount}
-                    </Text>
-                  </FontAwesomeIcon>
-                </View>
+            <View style={[styles.tableRowContainerWithBorder]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{t('order.ageGroup')}</Text>
               </View>
-
-              <View style={[{width: '50%'}]}>
-                <View>
-                  <Text style={[styles.toRight]}>
-                    {t('staff')} - {order.servedBy}
-                  </Text>
-                  <Text style={[styles.toRight]}>
-                    {formatDate(order.createdDate)}
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-            <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              <View style={{flex: 5}}>
-                <Text style={styles.orange_color}>{t('ageGroup')}</Text>
-              </View>
-              <View style={{flex: 5}}>
-                <Text style={{ textAlign: 'right'}}>
-									{filteredageGroup !== undefined ? filteredageGroup.label : t('notFilledIn')}
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Text>
+									{filteredageGroup !== undefined ? filteredageGroup.label : t('order.notFilledIn')}
                 </Text>
               </View>
             </View>
 
-            <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              <View style={{flex: 5}}>
-                <Text style={styles.orange_color}>{t('visitedFrequency')}</Text>
+            <View style={[styles.tableRowContainerWithBorder]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{t('order.visitedFrequency')}</Text>
               </View>
-              <View style={{flex: 5}}>
-                <Text style={{ textAlign: 'right' }}>
-                  {filteredvisitFrequency !== undefined ? filteredvisitFrequency.label : t('notFilledIn')}
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Text>
+                  {filteredvisitFrequency !== undefined ? filteredvisitFrequency.label : t('order.notFilledIn')}
                 </Text>
               </View>
             </View>
 
-            <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              <View style={{flex: 5}}>
-                <Text style={styles.orange_color}>{t('orderStartDate')}</Text>
+            <View style={[styles.tableRowContainerWithBorder]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{t('order.orderStartDate')}</Text>
               </View>
-              <View style={{flex: 5}}>
-                <Text style={{ textAlign: 'right'}}>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Text>
                   {formatTime(order.createdDate)}
                 </Text>
               </View>
             </View>
 
-            <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              <View style={{flex: 5}}>
-                <Text style={styles.orange_color}>{t('endDate')}</Text>
+            <View style={[styles.tableRowContainerWithBorder]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{t('order.endDate')}</Text>
               </View>
-              <View style={{flex: 5}}>
-                <Text style={{ textAlign: 'right'}}>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Text>
                   {formatTime(orderDuration.orderSettledDate)}
                 </Text>
               </View>
             </View>
 
-            <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              <View style={{flex: 5}}>
-                <Text style={styles.orange_color}>{t('duration')}</Text>
+            <View style={[styles.tableRowContainerWithBorder]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{t('order.duration')}</Text>
               </View>
-              <View style={{flex: 5}}>
-                <Text style={{ textAlign: 'right'}}>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Text>
                   {orderDuration.durationHours} {t('timecard.hours')} {orderDuration.durationMinutes} {t('timecard.minutes')}
                 </Text>
               </View>
@@ -255,14 +169,14 @@ class OrderDetail extends React.Component {
             <View style={styles.sectionBar}>
             	<View style={{flex: 2.5}}>
                 	<Text style={styles.sectionBarTextSmall}>
-                  	{t('lineItemCreatedDate')}
+                  	{t('order.lineItemCreatedDate')}
                 	</Text>
             	</View>
 
             	<View style={{flex: 1.7}}>
               	<TouchableOpacity>
                 	<Text style={styles.sectionBarTextSmall}>
-                  	{t('product')}
+                  	{t('order.product')}
                 	</Text>
               	</TouchableOpacity>
             	</View>
@@ -270,13 +184,13 @@ class OrderDetail extends React.Component {
             	<View style={{flex: 0.8}}>
               	<TouchableOpacity>
                 	<Text style={styles.sectionBarTextSmall}>
-                  	{t('quantity')}
+                  	{t('order.quantity')}
                 	</Text>
               	</TouchableOpacity>
             	</View>
 
             	<View style={{flex: 1.3}}>
-               	<Text style={[styles.sectionBarTextSmall,{textAlign: 'right'}]}>{t('subTotal')}</Text>
+               	<Text style={[styles.sectionBarTextSmall,{textAlign: 'right'}]}>{t('order.subTotal')}</Text>
             	</View>
           	</View>
 
@@ -292,34 +206,34 @@ class OrderDetail extends React.Component {
               keyExtractor={(item, index) => index.toString()}
             />
 
-            <View style={[styles.flex_dir_row, styles.paddingTopBtn8, styles.grayBg]}>
-              <View style={{flex: 1}}>
-                <Text style={styles.orange_color}>{t('serviceCharge')}</Text>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{t('order.serviceCharge')}</Text>
               </View>
-              <View style={{flex: 1}}>
-                <Text style={{ textAlign: 'right' }}>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Text>
                   ${order.serviceCharge}
                 </Text>
               </View>
             </View>
 
-            <View style={[styles.flex_dir_row, styles.paddingTopBtn8, styles.grayBg]}>
-              <View style={{flex: 1}}>
-                <Text style={styles.orange_color}>{t('discount')}</Text>
+            <View style={[styles.tableRowContainerWithBorder]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{t('order.discount')}</Text>
               </View>
-              <View style={{flex: 1}}>
-                <Text style={{ textAlign: 'right' }}>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Text>
                   ${order.discount}
                 </Text>
               </View>
             </View>
 
-            <View style={[styles.flex_dir_row, styles.paddingTopBtn8, styles.grayBg]}>
-              <View style={{flex: 1}}>
-                <Text style={styles.orange_color}>{t('total')}</Text>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{t('order.total')}</Text>
               </View>
-              <View style={{flex: 1}}>
-                <Text style={{ textAlign: 'right' }}>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Text>
                   ${order.total.amount}
                 </Text>
               </View>
@@ -328,11 +242,11 @@ class OrderDetail extends React.Component {
             <FlatList
               data={order.transactions}
               renderItem={({item, index}) => (
-                <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              		<View style={{flex: 1, alignItems: 'flex-start'}}>
-                		<Text style={styles.orange_color}>{t('paymentMethod')}</Text>
+                <View style={styles.tableRowContainerWithBorder}>
+              		<View style={[styles.tableCellView, {flex: 1}]}>
+                		<Text>{t('order.paymentMethod')}</Text>
               		</View>
-              		<View style={{flex: 1, alignItems: 'flex-end'}}>
+              		<View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                 		<Text>{item.paymentMethod}</Text>
               		</View>
             		</View>
@@ -340,40 +254,25 @@ class OrderDetail extends React.Component {
               keyExtractor={(item, index) => index.toString()}
             />
 
-             <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              <View style={{flex: 1, alignItems: 'flex-start'}}>
-                <Text style={styles.orange_color}>{t('serveBy')}</Text>
+             <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{t('order.serveBy')}</Text>
               </View>
-               <View style={{flex: 1, alignItems: 'flex-end'}}>
+               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                  <Text>
                    {order.servedBy}
                  </Text>
                </View>
              </View>
 
-            <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              <View style={{flex: 1, alignItems: 'flex-start'}}>
-                <Text style={styles.orange_color}>{t('orderStatus')}</Text>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{t('order.orderStatus')}</Text>
               </View>
-              <View style={{flex: 1, alignItems: 'flex-end'}}>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                 {renderOrderState(order.state)}
               </View>
             </View>
-
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Orders')}
-            >
-              <Text
-                style={[
-                  styles.bottomActionButton,
-                  styles.cancelButton,
-                  styles.mgrtotop20,
-                  { alignSelf: 'center', justifyContent: 'center', width: 120 }
-                ]}
-              >
-                {t('action.ok')}
-              </Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
       )

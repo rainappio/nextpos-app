@@ -26,6 +26,7 @@ import { LocaleContext } from '../locales/LocaleContext'
 import {CheckBox, Tooltip} from 'react-native-elements'
 import BackBtnCustom from "../components/BackBtnCustom";
 import ScreenHeader from "../components/ScreenHeader";
+import OrderTopInfo from "./OrderTopInfo";
 
 class OrdersSummaryRow extends React.Component {
   static contextType = LocaleContext
@@ -259,292 +260,229 @@ class OrdersSummaryRow extends React.Component {
 
     return (
       <ScrollView scrollIndicatorInsets={{right: 1}} contentContainerStyle={{flexGrow: 1}}>
-        <View style={{flex: 2}}>
-          <View style={styles.container}>
+        <View style={styles.fullWidthScreen}>
+          <View style={{flex: 2}}>
             <ScreenHeader backNavigation={true}
+                          parentFullScreen={true}
                           backAction={() => this.handleCancel(order.orderId)}
                           title={t('orderSummaryTitle')}
+                          rightComponent={
+                            order.state !== 'SETTLED' && (
+                              <AddBtn
+                                onPress={() =>
+                                  this.props.navigation.navigate('OrderFormII', {
+                                    orderId: order.orderId,
+                                    onSubmit: this.props.navigation.state.params.onSubmit,
+                                    handleDelete: this.props.navigation.state.params.handleDelete
+                                  })
+                                }
+                              />
+                            )
+                          }
             />
 
-            <View style={[styles.flex_dir_row, {alignItems: 'center'}]}>
-              <View style={{width: '35%'}}>
-                <View>
-                  <Text
-                    style={[
-                      styles.paddingTopBtn8,
-                      styles.textBig,
-                      styles.orange_color
-                    ]}
-                  >
-                    {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
+            <OrderTopInfo order={order}/>
+
+            <View style={[styles.sectionBar]}>
+              <View style={[styles.tableCellView, {flex: 6}]}>
+                <TouchableOpacity>
+                  <Text style={styles.sectionBarTextSmall}>
+                    {t('product')}
                   </Text>
-                </View>
+                </TouchableOpacity>
               </View>
 
-              <View style={[{width: '15%'}, styles.jc_alignIem_center]}>
-                <View>
-                  <FontAwesomeIcon
-                    name="user"
-                    size={25}
-                    color="#f18d1a"
-                    style={[styles.centerText]}
-                  >
-                    <Text style={[styles.textBig, styles.orange_color]}>
-                      &nbsp;
-                      {!this.props.navigation.state.params.customerCount
-                        ? order.demographicData.male +
-                        order.demographicData.female +
-                        order.demographicData.kid
-                        : this.props.navigation.state.params.customerCount}
-                    </Text>
-                  </FontAwesomeIcon>
-                </View>
+              <View style={[styles.tableCellView, {flex: 2}]}>
+                <TouchableOpacity>
+                  <Text style={styles.sectionBarTextSmall}>
+                    {t('quantity')}
+                  </Text>
+                </TouchableOpacity>
               </View>
 
-              <View style={[{width: '50%'}]}>
-                <View>
-                  <Text style={[styles.toRight]}>
-                    {t('staff')} - {order.servedBy}
-                  </Text>
-                  <Text style={[styles.toRight]}>
-                    {formatDate(order.createdDate)}
-                  </Text>
-                </View>
+              <View style={[styles.tableCellView, {flex: 3}]}>
+                <TouchableOpacity>
+                  <Text style={styles.sectionBarTextSmall}>{t('unitPrice')}</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={[styles.tableCellView, {flex: 3}]}>
+                <TouchableOpacity>
+                  <Text style={styles.sectionBarTextSmall}>{t('subTotal')}</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+                <TouchableOpacity>
+                  <Text style={styles.sectionBarTextSmall}>{t('state')}</Text>
+                </TouchableOpacity>
               </View>
             </View>
 
-            <View style={{flexDirection: 'row', paddingTop: 8}}>
-              <Text style={styles.textBold}>Order ID: </Text>
-              <Text>{order.serialId}</Text>
-            </View>
-            <View style={{flexDirection: 'row', paddingTop: 8}}>
-              <Text style={styles.textBold}>{t('orderStatus')}: </Text>
-              <Text>{t(`orderState.${order.state}`)}</Text>
-            </View>
-          </View>
+            <View>
+              <SwipeListView
+                data={order.lineItems}
+                renderItem={(data, rowMap) => (
+                  <View style={styles.rowFront}>
+                    <View key={rowMap} style={{marginBottom: 20}}>
+                      <View style={styles.tableRowContainer}>
+                        <View style={[styles.tableCellView, {flex: 6}]}>
+                          {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(data.item.state) && (
+                            <CheckBox
+                              checkedIcon='dot-circle-o'
+                              uncheckedIcon='circle-o'
+                              center={true}
+                              size={20}
+                              containerStyle={{borderWidth: 0, flex: 1, padding: 0, margin: 0}}
+                              checked={this.state.orderLineItems[data.item.lineItemId] !== undefined && this.state.orderLineItems[data.item.lineItemId].checked}
+                              onIconPress={() => this.toggleOrderLineItem(data.item.lineItemId)}
+                            />
+                          )}
+                          <View style={{flex: 5}}>
+                            <Text style={{textAlign: 'left'}}>
+                              {data.item.productName}
+                            </Text>
+                          </View>
+                        </View>
 
-          <View style={styles.sectionBar}>
-            <View style={[{flex: 1}, styles.jc_alignIem_center]}>
-              <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>
-                  &nbsp;
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={[styles.tableCellView, {flex: 4}]}>
-              <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>
-                  {t('product')}
-                </Text>
-              </TouchableOpacity>
-            </View>
+                        <View style={[styles.tableCellView, {flex: 2}]}>
+                          <Text>{data.item.quantity}</Text>
+                        </View>
 
-            <View style={[styles.tableCellView, {flex: 2}]}>
-              <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>
-                  {t('quantity')}
-                </Text>
-              </TouchableOpacity>
-            </View>
+                        <View style={[styles.tableCellView, {flex: 3}]}>
+                          <Text>${data.item.price}</Text>
+                        </View>
 
-            <View style={[styles.tableCellView, {flex: 3}]}>
-              <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>{t('unitPrice')}</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={[styles.tableCellView, {flex: 3}]}>
-              <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>{t('subTotal')}</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={[styles.tableCellView, {flex: 2}]}>
-              <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>{t('state')}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={{alignItems: 'flex-end', marginRight: 20}}>
-            {order.state !== 'SETTLED' && (
-              <AddBtn
-                style={{}}
-                onPress={() =>
-                  this.props.navigation.navigate('OrderFormII', {
-                    orderId: order.orderId,
-                    onSubmit: this.props.navigation.state.params.onSubmit,
-                    handleDelete: this.props.navigation.state.params.handleDelete
-                  })
-                }
-              />
-            )}
-          </View>
-
-          <View>
-            <SwipeListView
-              data={order.lineItems}
-              renderItem={(data, rowMap) => (
-                <View style={styles.rowFront}>
-                  <View key={rowMap} style={{marginBottom: 20}}>
-                    <View style={styles.tableRowContainer}>
-                      <View style={[{flex: 1}]}>
-                        {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(data.item.state) && (
-                          <CheckBox
-                            checkedIcon='dot-circle-o'
-                            uncheckedIcon='circle-o'
-                            center={true}
-                            size={22}
-                            containerStyle={{borderWidth: 0, position: 'relative', right: 7}}
-                            checked={this.state.orderLineItems[data.item.lineItemId] !== undefined && this.state.orderLineItems[data.item.lineItemId].checked}
-                            onIconPress={() => this.toggleOrderLineItem(data.item.lineItemId)}
-                          />
-                        )}
+                        <View style={[styles.tableCellView, {flex: 3}]}>
+                          <Text>${data.item.subTotal.amountWithTax}</Text>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+                          {this.renderStateToolTip(data.item.state, t)}
+                        </View>
                       </View>
-
-                      <View style={[styles.tableCellView, {flex: 4}]}>
-                        <Text style={{textAlign: 'left'}}>
-                          {data.item.productName}
+                      <View>
+                        <Text style={{textAlign: 'left', marginLeft: 15}}>
+                          {data.item.options}
                         </Text>
                       </View>
-
-                      <View style={[styles.tableCellView, {flex: 2}]}>
-                        <Text>{data.item.quantity}</Text>
-                      </View>
-
-                      <View style={[styles.tableCellView, {flex: 3}]}>
-                        <Text>${data.item.price}</Text>
-                      </View>
-
-                      <View style={[styles.tableCellView, {flex: 3}]}>
-                        <Text>${data.item.subTotal.amountWithTax}</Text>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 2}]}>
-                        {this.renderStateToolTip(data.item.state, t)}
-                      </View>
-                    </View>
-                    <View>
-                      <Text style={{textAlign: 'left', marginLeft: 15}}>
-                        {data.item.options}
-                      </Text>
                     </View>
                   </View>
-                </View>
-              )}
-              keyExtractor={(data, rowMap) => rowMap.toString()}
-              renderHiddenItem={(data, rowMap) => (
-                <View style={[styles.rowBack, styles.standalone]} key={rowMap}>
-                  <View style={styles.editIcon}>
-                    <Icon
-                      name="md-create"
-                      size={25}
-                      color="#fff"
-                      onPress={() =>
-                        this.props.navigation.navigate('LIneItemEdit', {
-                          lineItemId: data.item.lineItemId,
-                          orderId: order.orderId,
-                          initialValues: data.item
-                        })
-                      }
-                    />
+                )}
+                keyExtractor={(data, rowMap) => rowMap.toString()}
+                renderHiddenItem={(data, rowMap) => (
+                  <View style={[styles.rowBack, styles.standalone]} key={rowMap}>
+                    <View style={styles.editIcon}>
+                      <Icon
+                        name="md-create"
+                        size={25}
+                        color="#fff"
+                        onPress={() =>
+                          this.props.navigation.navigate('LIneItemEdit', {
+                            lineItemId: data.item.lineItemId,
+                            orderId: order.orderId,
+                            initialValues: data.item
+                          })
+                        }
+                      />
+                    </View>
+                    <View style={styles.delIcon}>
+                      <DeleteBtn
+                        handleDeleteAction={(orderId, lineItemId) =>
+                          this.handleDeleteLineItem(
+                            order.orderId,
+                            data.item.lineItemId
+                          )
+                        }
+                        islineItemDelete={true}
+                      />
+                    </View>
                   </View>
-                  <View style={styles.delIcon}>
-                    <DeleteBtn
-                      handleDeleteAction={(orderId, lineItemId) =>
-                        this.handleDeleteLineItem(
-                          order.orderId,
-                          data.item.lineItemId
-                        )
-                      }
-                      islineItemDelete={true}
-                    />
-                  </View>
-                </View>
-              )}
-              leftOpenValue={0}
-              rightOpenValue={-80}
-            />
-          </View>
-
-          <View style={[styles.grayBg, {paddingHorizontal: 8, marginBottom: 10}]}>
-            <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              <View style={[styles.half_width]}>
-                <Text>{t('serviceCharge')}</Text>
-              </View>
-              <View style={[styles.half_width]}>
-                <Text style={{textAlign: 'right', marginRight: -26}}>
-                  ${order.serviceCharge}
-                </Text>
-              </View>
+                )}
+                leftOpenValue={0}
+                rightOpenValue={-80}
+              />
             </View>
 
-            <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-              <View style={[styles.half_width]}>
-                <Text>{t('total')}</Text>
+            <View>
+              <View style={[styles.tableRowContainerWithBorder]}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <Text>{t('serviceCharge')}</Text>
+                </View>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  <Text style={{}}>
+                    ${order.serviceCharge}
+                  </Text>
+                </View>
               </View>
-              <View style={[styles.half_width]}>
-                <Text style={{textAlign: 'right', marginRight: -26}}>
-                  ${order.orderTotal}
-                </Text>
+
+              <View style={[styles.tableRowContainerWithBorder]}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <Text>{t('total')}</Text>
+                </View>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  <Text>
+                    ${order.orderTotal}
+                  </Text>
+                </View>
               </View>
             </View>
           </View>
-        </View>
 
-        <View style={[styles.bottom, {marginHorizontal: 40}]}>
-          {['OPEN', 'IN_PROCESS', 'DELIVERED'].includes(order.state) && (
-            <TouchableOpacity
-              onPress={() =>
-                order.lineItems.length === 0
-                  ? warningMessage(t('lineItemCountCheck'))
-                  : this.props.navigation.state.params.onSubmit(order.orderId)
-              }
-            >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {t('submitOrder')}
-              </Text>
-            </TouchableOpacity>
-          )}
+          <View style={[styles.bottom, styles.horizontalMargin]}>
+            {['OPEN', 'IN_PROCESS', 'DELIVERED'].includes(order.state) && (
+              <TouchableOpacity
+                onPress={() =>
+                  order.lineItems.length === 0
+                    ? warningMessage(t('lineItemCountCheck'))
+                    : this.props.navigation.state.params.onSubmit(order.orderId)
+                }
+              >
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  {t('submitOrder')}
+                </Text>
+              </TouchableOpacity>
+            )}
 
-          {!['SETTLED', 'REFUNDED'].includes(order.state) && (
-            <DeleteBtn
-              handleDeleteAction={() => this.props.navigation.state.params.handleDelete(order.orderId)}
-            />
-          )}
+            {!['SETTLED', 'REFUNDED'].includes(order.state) && (
+              <DeleteBtn
+                handleDeleteAction={() => this.props.navigation.state.params.handleDelete(order.orderId)}
+              />
+            )}
 
-          {["IN_PROCESS"].includes(order.state) && (
-            <TouchableOpacity
-              onPress={() => {
-                this.handleDeliver(order.orderId)
-              }}
-            >
-              <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('deliverOrder')}</Text>
-            </TouchableOpacity>
+            {["IN_PROCESS"].includes(order.state) && (
+              <TouchableOpacity
+                onPress={() => {
+                  this.handleDeliver(order.orderId)
+                }}
+              >
+                <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('deliverOrder')}</Text>
+              </TouchableOpacity>
 
-          )}
+            )}
 
-          {order.state === 'DELIVERED' && (
-            <TouchableOpacity
-              onPress={() =>
-                order.lineItems.length === 0
-                  ? warningMessage(t('lineItemCountCheck'))
-                  : this.props.navigation.navigate('Payment', {
-                    order: order
-                  })
-              }
-            >
-              <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('payOrder')}</Text>
-            </TouchableOpacity>
+            {order.state === 'DELIVERED' && (
+              <TouchableOpacity
+                onPress={() =>
+                  order.lineItems.length === 0
+                    ? warningMessage(t('lineItemCountCheck'))
+                    : this.props.navigation.navigate('Payment', {
+                      order: order
+                    })
+                }
+              >
+                <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('payOrder')}</Text>
+              </TouchableOpacity>
 
-          )}
+            )}
 
-          {order.state === 'SETTLED' && (
-            <TouchableOpacity
-              onPress={() => this.handleComplete(order.orderId)}
-            >
-              <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('completeOrder')}</Text>
-            </TouchableOpacity>
-          )}
+            {order.state === 'SETTLED' && (
+              <TouchableOpacity
+                onPress={() => this.handleComplete(order.orderId)}
+              >
+                <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('completeOrder')}</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       </ScrollView>
     )

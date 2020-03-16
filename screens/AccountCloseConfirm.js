@@ -60,7 +60,6 @@ class AccountCloseConfirm extends React.Component {
     	},
     	response => {
       	this.props.navigation.navigate('ShiftClose')
-      	this.props.getMostRecentShiftStatus()
     	}).then()
 	}
 
@@ -90,7 +89,7 @@ class AccountCloseConfirm extends React.Component {
                 {formatDate(mostRecentShift.open.timestamp)}
               </Text>
               <Text style={[styles.toRight]}>
-                {t('status')} - {mostRecentShift.shiftStatus}
+                {t('closingStatus')} - {mostRecentShift.shiftStatus}
               </Text>
             </View>
           </View>

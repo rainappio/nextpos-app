@@ -86,6 +86,7 @@ class LoginScreen extends React.Component {
               validate={[isRequired, isEmail]}
               placeholder={t('email')}
               autoCapitalize="none"
+              extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
             />
 
             <Field
@@ -94,6 +95,7 @@ class LoginScreen extends React.Component {
               validate={isRequired}
               placeholder={t('password')}
               secureTextEntry={true}
+              extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
             />
           </View>
 

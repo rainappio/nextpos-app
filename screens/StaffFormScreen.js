@@ -24,7 +24,7 @@ class StaffFormScreen extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    const selectedRoleIndex = this.props.initialValues !== undefined ? this.props.initialValues.selectedRole : 0
+    const selectedRoleIndex = this.props.initialValues !== undefined ? this.props.initialValues.selectedRole : null
 
     this.state = {
       selectedRole: selectedRoleIndex
@@ -105,7 +105,7 @@ class StaffFormScreen extends React.Component {
                 <Field
                   name="nickname"
                   component={InputText}
-                  placeholder="Nick Name"
+                  placeholder={t('nickName')}
                   secureTextEntry={false}
                   autoFocus={!isEditForm}
                 />
@@ -121,7 +121,7 @@ class StaffFormScreen extends React.Component {
                   name="username"
                   component={InputText}
                   validate={isRequired}
-                  placeholder="User Name"
+                  placeholder={t('username')}
                   secureTextEntry={false}
                   editable={!isEditForm}
                   autoCapitalize="none"
@@ -133,21 +133,21 @@ class StaffFormScreen extends React.Component {
               <View style={{flex: 1}}>
                 <Text style={styles.fieldTitle}>{t('password')}</Text>
               </View>
-              <View style={{flex: 3}}>
-                <Field
-                  name="password"
-                  component={PinCodeInput}
-                  onChange={val => Keyboard.dismiss()}
-                  customHeight={40}
-                  editable={!isEditForm}
-                />
+              <View style={{flex: 3, alignItems: 'flex-end'}}>
+                {isEditForm ? (
+                  <EditPasswordPopUp name={initialValues.username}/>
+                ) : (
+                  <Field
+                    name="password"
+                    component={PinCodeInput}
+                    onChange={val => Keyboard.dismiss()}
+                    customHeight={40}
+                    editable={!isEditForm}
+                  />
+                )}
+
               </View>
             </View>
-            {isEditForm && (
-              <View style={[styles.fieldContainer, {justifyContent: 'center', marginBottom: 15}]}>
-                <EditPasswordPopUp name={initialValues.username}/>
-              </View>
-            )}
 
             <View style={styles.fieldContainer}>
               <View style={{flex: 1}}>
