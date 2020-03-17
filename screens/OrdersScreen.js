@@ -20,6 +20,13 @@ import {renderOrderState} from "../helpers/orderActions";
 import {NavigationEvents} from "react-navigation";
 import ScreenHeader from "../components/ScreenHeader";
 import buttonLikeRoles from "react-native-web/dist/modules/AccessibilityUtil/buttonLikeRoles";
+import OrderFilterForm from './OrderFilterForm'
+import {
+  api,
+  dispatchFetchRequest,
+  errorAlert,
+  warningMessage
+} from '../constants/Backend'
 
 class OrdersScreen extends React.Component {
   static navigationOptions = {
@@ -31,12 +38,31 @@ class OrdersScreen extends React.Component {
     super(props, context)
 
     this.state = {
-      scrollPosition: ''
+      scrollPosition: '',
+      filteredOrders: [],
+      filteredreportParameter: ''
     }
   }
 
   componentDidMount() {
     this.props.getOrdersByDateRange()
+    dispatchFetchRequest(
+      api.order.getOrdersByRange('SHIFT'),
+      {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {}
+      },
+      response => {
+        response.json().then(data => {
+          this.setState({ 
+          	filteredOrders: data.orders,
+          	filteredreportParameter: data.reportParameter
+          })
+        })
+      }
+    ).then()
   }
 
   upButtonHandler = () => {
@@ -45,6 +71,50 @@ class OrdersScreen extends React.Component {
   }
 
   keyExtractor = (order, index) => index.toString()
+
+  handleOrderFilter = values => {
+    const fromDate = values.fromDate
+    const toDate = values.toDate
+    const dateRange = values.dateRange
+
+    if (fromDate && toDate && dateRange == 'RANGE') {
+      dispatchFetchRequest(
+        api.order.getOrdersByDate(fromDate, toDate),
+        {
+          method: 'GET',
+          withCredentials: true,
+          credentials: 'include',
+          headers: {}
+        },
+        response => {
+          response.json().then(data => {          	
+            this.setState({ 
+            	filteredOrders: data.orders,
+            	filteredreportParameter: data.reportParameter
+            })
+          })
+        }
+      ).then()
+    } else if (dateRange) {
+      dispatchFetchRequest(
+        api.order.getOrdersByRange(dateRange),
+        {
+          method: 'GET',
+          withCredentials: true,
+          credentials: 'include',
+          headers: {}
+        },
+        response => {
+          response.json().then(data => {
+            this.setState({ 
+            	filteredOrders: data.orders,
+            	filteredreportParameter: data.reportParameter
+            })
+          })
+        }
+      ).then()
+    }
+  }
 
   renderItem = ({ item }) => (
     <ListItem
@@ -84,6 +154,7 @@ class OrdersScreen extends React.Component {
   render() {
     const {getordersByDateRange, reportParameter, isLoading, haveData} = this.props
     const {t} = this.context
+    const {filteredOrders, filteredreportParameter} = this.state
 
     const orders = []
     getordersByDateRange !== undefined && getordersByDateRange.map(order => {
@@ -124,7 +195,7 @@ class OrdersScreen extends React.Component {
                 <Text style={styles.fieldTitle}>{t('order.fromDate')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                <Text>{formatDateObj(reportParameter.fromDate)}</Text>
+                <Text>{formatDateObj(filteredreportParameter.fromDate)}</Text>                
               </View>
             </View>
 
@@ -133,9 +204,13 @@ class OrdersScreen extends React.Component {
                 <Text style={styles.fieldTitle}>{t('order.toDate')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                <Text>{formatDateObj(reportParameter.toDate)}</Text>
+                <Text>{formatDateObj(filteredreportParameter.toDate)}</Text>                
               </View>
             </View>
+          </View>
+
+          <View style={[styles.container, styles.no_mgrTop]}>
+            <OrderFilterForm onSubmit={this.handleOrderFilter} />
           </View>
 
           <View style={{flex: 5}}>
@@ -164,7 +239,7 @@ class OrdersScreen extends React.Component {
 
             <FlatList
               keyExtractor={this.keyExtractor}
-              data={orders}
+              data={filteredOrders}
               renderItem={this.renderItem}
               ref={ref => {
                 this.ListView_Ref = ref

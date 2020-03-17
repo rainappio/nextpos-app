@@ -24,7 +24,11 @@
     "ios": {
       "supportsTablet": true,
       "buildNumber": "0.20.02.4",
-      "bundleIdentifier": "io.rain.app"
+      "bundleIdentifier": "io.rain.app",
+      "infoPlist": {
+      	//https://stackoverflow.com/questions/48157185/info-plist-file-for-react-native-ios-app-using-expo-sdk
+  			"NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets."
+			},
     },
     "description": "NextPos is the best POS software you will ever need."
   }
