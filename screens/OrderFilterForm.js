@@ -57,7 +57,7 @@ class OrderFilterForm extends React.Component {
         		null
       	}        
         <View style={[styles.flex_dir_row]}>
-          <View style={{ flex: 2 }}>
+          <View style={{ flex: 2, marginRight: 10}}>
             <Field
               name="dateRange"
               component={DropDown}
@@ -73,13 +73,13 @@ class OrderFilterForm extends React.Component {
             />
           </View>
 
-          <View style={{ flex: 1, paddingTop: 10 }}>
+          <View style={{ flex: 1 }}>
             <TouchableOpacity onPress={() => handleSubmit()}>
               <Text
                 style={[
                   styles.bottomActionButton,
                   styles.actionButton,
-                  { padding: 6 }
+                  { padding: 12 }
                 ]}
               >
                Search

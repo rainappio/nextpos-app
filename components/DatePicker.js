@@ -29,7 +29,7 @@ export default class RenderDatePicker extends Component {
           datePicker: {
           	alignItems: 'stretch'
           },
-          datePickerCon: { backgroundColor: 'black', }
+          //datePickerCon: { backgroundColor: 'black', }
           // ... You can check the source to find the other keys.
         }}
         onDateChange={onChange}

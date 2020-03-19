@@ -176,7 +176,10 @@ export const api = {
     getrangedSalesReport: `${apiRoot}/reporting/rangedSalesReport`,
     getsalesDistributionReport: `${apiRoot}/reporting/salesDistribution?`,
     // getcustomerCountReport: `${apiRoot}/reporting/customerCount?`
-    getcustomerCountReport: `${apiRoot}/reporting/customerStats`
+    getcustomerCountReport: `${apiRoot}/reporting/customerStats`,
+    getrangedSalesReportBydate: (date) => {
+    	return `${apiRoot}/reporting/rangedSalesReport?date=${date}`
+    }
   },
   announcements: {
     create: `${apiRoot}/announcements`,

@@ -113,11 +113,11 @@ class ProductFormScreen extends React.Component {
               </View>
             </View>
 
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 1 }]}>
-                <Text style={styles.fieldTitle}>{t('productLabel')}</Text>
+          	<View style={[styles.tableRowContainerWithBorder]}>
+              <View style={[styles.tableCellView, {flex: 3}]}>
+                <Text style={[styles.fieldTitle]}>{t('productLabel')}</Text>
               </View>
-              <View style={[styles.tableCellView, {flex: 3,justifyContent: 'flex-end'}]}>
+              <View style={{flex: 1, justifyContent: 'flex-end'}}>
                 <Field
                   component={DropDown}
                   name="productLabelId"
@@ -126,8 +126,8 @@ class ProductFormScreen extends React.Component {
                   selection
                   fluid
                   placeholder={{ value: null, label: t('productLabel') }}
-                />
-              </View>
+                />              
+             </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>

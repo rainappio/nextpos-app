@@ -20,7 +20,7 @@ class TimeCardFilterForm extends React.Component {
 
     return (
       <View style={[styles.tableRowContainer]}>
-        <View style={{flex: 3}}>
+        <View style={{flex: 3, marginRight: 10}}>
           <Field
             name="year"
             component={DropDown}

@@ -711,5 +711,15 @@ export default StyleSheet.create({
   },
   list: {
     flexDirection: 'row'
-  }
+  },
+  tblContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    marginLeft: 15,
+    marginRight: 15
+  },
+  tblhead: { height: 40, backgroundColor: mainThemeColor, width: 62 },
+  tbltextHeader: { margin: 4, textAlign: 'center', color: '#fff' },
+  tbltext: { margin: 4, textAlign: 'center' },
+  tblrow: { flexDirection: 'row', backgroundColor: '#f5f5f5' }
 })

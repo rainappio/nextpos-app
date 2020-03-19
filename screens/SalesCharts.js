@@ -28,11 +28,12 @@ import {
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import BackendErrorScreen from './BackendErrorScreen'
-import { Tooltip } from 'react-native-elements'
-import PureChart from 'react-native-pure-chart'
-import Chart from "../components/Chart";
-import moment from "moment";
-import ScreenHeader from "../components/ScreenHeader";
+import Chart from '../components/Chart'
+import moment from 'moment'
+import ScreenHeader from '../components/ScreenHeader'
+import SalesChartsFilterForm from './SalesChartsFilterForm'
+import { api, dispatchFetchRequest, errorAlert, warningMessage } from '../constants/Backend'
+import SimpleTable from './SimpleTable'
 
 class SalesCharts extends React.Component {
   static navigationOptions = {
@@ -75,7 +76,8 @@ class SalesCharts extends React.Component {
     })
 
     this.state = {
-      test: {}
+      test: {},
+      filteredWeeklySalesReport: []
     }
   }
 
@@ -85,10 +87,9 @@ class SalesCharts extends React.Component {
     this.props.getCustomerCountReport()
   }
 
-  generateRangedSalesChart = (rangedSalesReport) => {
-
+  generateRangedSalesChart = rangedSalesReport => {
     let rangedSalesData = {
-      legend: ['This week'],
+      legend: [`Week Of ${rangedSalesReport.searchDate}`],
       labels: [],
       data: []
     }
@@ -100,8 +101,7 @@ class SalesCharts extends React.Component {
     return rangedSalesData
   }
 
-  generateCustomerStatsChart = (customerStatsReport) => {
-
+  generateCustomerStatsChart = customerStatsReport => {
     const customerCountData = {
       legend: ['This year', 'Last year'],
       labels: [],
@@ -129,11 +129,13 @@ class SalesCharts extends React.Component {
       customerAverageSpendingData.data2.push(stats.averageSpending)
     })
 
-    return { countData: customerCountData, avgSpendingData: customerAverageSpendingData }
+    return {
+      countData: customerCountData,
+      avgSpendingData: customerAverageSpendingData
+    }
   }
 
-  generateSalesDistribution = (salesDistributionReport) => {
-
+  generateSalesDistribution = salesDistributionReport => {
     const yearlySalesData = {
       legend: ['This year', 'Last year'],
       labels: [],
@@ -153,6 +155,29 @@ class SalesCharts extends React.Component {
     return yearlySalesData
   }
 
+  handleFilterSalesChart = values => {
+  	if (!values.date) {
+      warningMessage('Please Choose Date')
+      return
+    }
+    dispatchFetchRequest(
+      api.report.getrangedSalesReportBydate(values.date),
+      {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {}
+      },
+      response => {
+        response.json().then(data => {
+          this.setState({
+          	filteredWeeklySalesReport: data
+          })
+        })
+      }
+    ).then()
+  }
+
   render() {
     const {
       getrangedSalesReport,
@@ -164,21 +189,36 @@ class SalesCharts extends React.Component {
       haveSDData
     } = this.props
     const { t } = this.context
+    const { filteredWeeklySalesReport } = this.state
 
-    const containSalesData = haveData && getrangedSalesReport.salesByRange !== undefined
+    const containSalesData =
+      haveData && getrangedSalesReport.salesByRange !== undefined
 
     // ranged sales
     let rangedSalesData = {}
 
     if (containSalesData) {
-      rangedSalesData = this.generateRangedSalesChart(getrangedSalesReport);
+      rangedSalesData = this.generateRangedSalesChart(getrangedSalesReport)
     }
 
+    const filteredcontainSalesData =
+       filteredWeeklySalesReport.length !== 0 && filteredWeeklySalesReport.salesByRange !== undefined
+
+    // filtered ranged sales
+    let filteredRangedSalesData = {}
+
+    if (filteredcontainSalesData) {
+      filteredRangedSalesData = this.generateRangedSalesChart(filteredWeeklySalesReport)
+    }
+    
     // customer stats
-    let custCountData = {}, custAvgSpendingData = {}
+    let custCountData = {},
+      custAvgSpendingData = {}
 
     if (this.props.haveCCData) {
-      const { countData, avgSpendingData } = this.generateCustomerStatsChart(customercountReport);
+      const { countData, avgSpendingData } = this.generateCustomerStatsChart(
+        customercountReport
+      )
       custCountData = countData
       custAvgSpendingData = avgSpendingData
     }
@@ -187,15 +227,14 @@ class SalesCharts extends React.Component {
     let salesDistributionData = {}
 
     if (haveSDData) {
-      salesDistributionData = this.generateSalesDistribution(salesdistributionReport)
+      salesDistributionData = this.generateSalesDistribution(
+        salesdistributionReport
+      )
     }
 
     const Item = ({ salesByPrdData }) => {
       return (
-        <View
-          style={[styles.tableRowContainer]}
-          key={salesByPrdData.id}
-        >
+        <View style={[styles.tableRowContainer]} key={salesByPrdData.id}>
           <View style={[styles.quarter_width, styles.tableCellView]}>
             <Text>{salesByPrdData.productName}</Text>
           </View>
@@ -223,13 +262,13 @@ class SalesCharts extends React.Component {
       )
     } else if (haveError) {
       return <BackendErrorScreen />
-
     } else if (!containSalesData) {
       return (
         <View style={[styles.container]}>
           <View style={{ flex: 1 }}>
-            <ScreenHeader backNavigation={true}
-                          title={t('salesDashboardTitle')}
+            <ScreenHeader
+              backNavigation={true}
+              title={t('salesDashboardTitle')}
             />
           </View>
           <Text style={{ flex: 3, alignSelf: 'center' }}>
@@ -242,8 +281,9 @@ class SalesCharts extends React.Component {
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <View style={[styles.container]}>
-          <ScreenHeader backNavigation={true}
-                        title={t('salesDashboardTitle')}
+          <ScreenHeader
+            backNavigation={true}
+            title={t('salesDashboardTitle')}
           />
 
           <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
@@ -275,22 +315,26 @@ class SalesCharts extends React.Component {
             >
               {t('rangedSalesTitle')}
             </Text>
+            <SalesChartsFilterForm onSubmit={this.handleFilterSalesChart} searchDate={filteredWeeklySalesReport.searchDate !== undefined ? filteredWeeklySalesReport.searchDate :  getrangedSalesReport.searchDate}/>
             <Chart
-              data={rangedSalesData}
+              data={ Object.keys(filteredRangedSalesData).length !== 0 ? filteredRangedSalesData : rangedSalesData }
               width={Dimensions.get('window').width}
               props={{
                 yAxisLabel: '$',
                 yAxisSuffix: 'k',
-                formatYLabel: (value) => {
+                formatYLabel: value => {
                   return value / 1000
                 },
-                formatXLabel: (value) => {
+                formatXLabel: value => {
                   return moment(value, 'YYYY-MM-DD').format('MM/DD')
                 }
               }}
             />
-          </View>
 
+            {/*weekly table*/}
+						<SimpleTable reportData={Object.keys(filteredRangedSalesData).length !== 0 ? filteredRangedSalesData : rangedSalesData}/>
+            {/*#weekly table*/}
+          </View>
 
           <View style={styles.paddingTopBtn20}>
             <Text
@@ -303,19 +347,23 @@ class SalesCharts extends React.Component {
             >
               {t('customerCountTitle')}
             </Text>
-            {
-            	this.props.haveCCData && (
-                <Chart
-                  data={custCountData}
-                  width={Dimensions.get('window').width * 3}
-                  props={{
-                    verticalLabelRotation: 45,
-                    formatXLabel: (value) => {
-                      return moment(value, 'YYYY-MM-DD').format('MM/DD')
-                    }
-                  }}
-                />
-            )}
+            {this.props.haveCCData && (
+            	<View>
+            		<View style={styles.mgrbtn20}>
+              		<Chart
+                		data={custCountData}
+                		width={Dimensions.get('window').width * 3}
+                		props={{
+                  		verticalLabelRotation: 45,
+                  		formatXLabel: value => {
+                    		return moment(value, 'YYYY-MM-DD').format('MM/DD')
+                  		}
+                		}}
+              		/>
+              	</View>
+              	<SimpleTable reportData={custCountData}/>
+            	</View>
+            )}            
           </View>
 
           <View style={styles.paddingTopBtn20}>
@@ -329,24 +377,28 @@ class SalesCharts extends React.Component {
             >
               {t('averageSpendingTitle')}
             </Text>
-            {
-            	this.props.haveCCData && (
-                <Chart
-                  data={custAvgSpendingData}
-                  width={Dimensions.get('window').width * 3}
-                  props={{
-                    yAxisLabel: '$',
-                    yAxisSuffix: 'k',
-                    verticalLabelRotation: 45,
-                    formatYLabel: (value) => {
-                      return value / 1000
-                    },
-                    formatXLabel: (value) => {
-                      return moment(value, 'YYYY-MM-DD').format('MM/DD')
-                    }
-                  }}
-                />
-              )}
+            {this.props.haveCCData && (
+            	<View>
+            		<View style={styles.mgrbtn20}>
+              		<Chart
+                		data={custAvgSpendingData}
+                		width={Dimensions.get('window').width * 3}
+                		props={{
+                  		yAxisLabel: '$',
+                  		yAxisSuffix: 'k',
+                  		verticalLabelRotation: 45,
+                  		formatYLabel: value => {
+                    		return value / 1000
+                  		},
+                  		formatXLabel: value => {
+                    		return moment(value, 'YYYY-MM-DD').format('MM/DD')
+                  		}
+                		}}
+              		/>
+              	</View>
+              	<SimpleTable reportData={custAvgSpendingData}/>
+              </View>
+            )}
           </View>
 
           <View style={styles.paddingTopBtn20}>
@@ -361,21 +413,26 @@ class SalesCharts extends React.Component {
               {t('salesDistributionTitle')}
             </Text>
             {haveSDData && (
-              <Chart
-                data={salesDistributionData}
-                width={Dimensions.get('window').width * 2}
-                props={{
-                  yAxisLabel: '$',
-                  yAxisSuffix: 'k',
-                  verticalLabelRotation: 45,
-                  formatYLabel: (value) => {
-                    return value / 1000
-                  },
-                  formatXLabel: (value) => {
-                    return moment(value, 'YYYY-MM-DD').format('MMM')
-                  }
-                }}
-              />
+            	<View>
+            		<View style={styles.mgrbtn20}>
+              		<Chart
+                		data={salesDistributionData}
+                		width={Dimensions.get('window').width * 2}
+                		props={{
+                  		yAxisLabel: '$',
+                  		yAxisSuffix: 'k',
+                  		verticalLabelRotation: 45,
+                  		formatYLabel: value => {
+                    		return value / 1000
+                  		},
+                  		formatXLabel: value => {
+                    		return moment(value, 'YYYY-MM-DD').format('MMM')
+                  		}
+                		}}
+              		/>
+              	</View>
+              	<SimpleTable reportData={salesDistributionData}/>
+              </View>
             )}
           </View>
         </View>
@@ -393,7 +450,7 @@ class SalesCharts extends React.Component {
           </Text>
         </View>
 
-        <View style={{marginBottom: 20}}>
+        <View style={{ marginBottom: 20 }}>
           <View style={styles.sectionBar}>
             <View style={[styles.quarter_width, styles.tableCellView]}>
               <Text style={[styles.sectionBarTextSmall]}>{t('product')}</Text>
@@ -413,8 +470,8 @@ class SalesCharts extends React.Component {
           </View>
           <FlatList
             data={getrangedSalesReport.salesByProducts}
-            renderItem={({item}) => {
-              return <Item salesByPrdData={item}/>
+            renderItem={({ item }) => {
+              return <Item salesByPrdData={item} />
             }}
             keyExtractor={item => item.id}
           />
