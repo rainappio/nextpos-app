@@ -113,7 +113,16 @@ export const api = {
     },
     inflightOrders: `${apiRoot}/orders/inflight`,
     getGlobalOrderOffers: `${apiRoot}/offers/globalOrderOffers`,
-    getordersByDateRange: `${apiRoot}/orders`
+    getordersByDateRange: `${apiRoot}/orders`,
+    getOrdersByDateAndRange: (dateRange,fromDate, toDate) => {
+      return `${apiRoot}/orders?dateRange=${dateRange}&fromDate=${fromDate}&toDate=${toDate}`
+    },
+    getOrdersByDate: (fromDate, toDate) => {
+      return `${apiRoot}/orders?dateRange=${'RANGE'}&fromDate=${fromDate}&toDate=${toDate}`
+    },
+    getOrdersByRange: dateRange => {
+      return `${apiRoot}/orders?dateRange=${dateRange}`
+    }
   },
   printer: {
     create: `${apiRoot}/printers`,
