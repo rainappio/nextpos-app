@@ -108,8 +108,14 @@ export const api = {
     delete: orderId => {
       return `${apiRoot}/orders/${orderId}`
     },
+    waiveServiceCharge: orderId => {
+      return `${apiRoot}/orders/${orderId}/waiveServiceCharge`
+    },
     applyDiscount: orderId => {
       return `${apiRoot}/orders/${orderId}/applyDiscount`
+    },
+    resetOrderOffers: orderId => {
+      return `${apiRoot}/orders/${orderId}/resetOrderOffers`
     },
     inflightOrders: `${apiRoot}/orders/inflight`,
     getGlobalOrderOffers: `${apiRoot}/offers/globalOrderOffers`,

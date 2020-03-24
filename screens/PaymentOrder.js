@@ -24,6 +24,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import PaymentOrderForm from './PaymentOrderForm'
 import { LocaleContext } from '../locales/LocaleContext'
 import styles from '../styles'
+import LoadingScreen from "./LoadingScreen";
 
 class PaymentOrder extends React.Component {
   static navigationOptions = {
@@ -54,6 +55,10 @@ class PaymentOrder extends React.Component {
   			},
     	selectedPaymentType: null
   	}
+  }
+
+  componentDidMount() {
+    this.props.getOrder()
   }
 
   handlePaymentTypeSelection = (index) => {
@@ -87,7 +92,7 @@ class PaymentOrder extends React.Component {
 
   handleSubmit = values => {
     const transactionObj = {
-      orderId: this.props.navigation.state.params.order.orderId,
+      orderId: this.props.navigation.state.params.orderId,
       paymentMethod: values.paymentMethod,
       billType: 'SINGLE',
       paymentDetails: {}
@@ -121,7 +126,6 @@ class PaymentOrder extends React.Component {
                 onSubmit: this.handleComplete
               })
             })
-            this.props.getOrdersByDateRange()
           } else {
             errorAlert(response)
           }
@@ -133,33 +137,45 @@ class PaymentOrder extends React.Component {
   }
 
   render() {
+    const { isLoading, order } = this.props
   	const { paymentsTypes, selectedPaymentType } = this.state
 		const paymentsTypeslbl = Object.keys(paymentsTypes).map(key => paymentsTypes[key].label)
 
-    return (
-      <PaymentOrderForm
-        onSubmit={this.handleSubmit}
-        order={this.props.navigation.state.params.order}
-        navigation={this.props.navigation}
-        discountTotal={this.props.navigation.state.params.discountTotal}
-        addNum={this.addNum}
-        resetTotal={this.resetTotal}
-        dynamicTotal={this.state.dynamicTotal}
-        paymentsTypeslbl={paymentsTypeslbl}
-        selectedPaymentType={selectedPaymentType}
-        paymentsTypes={paymentsTypes}
-        handlePaymentTypeSelection={this.handlePaymentTypeSelection}
-      />
-    )
+    if (isLoading) {
+      return (
+        <LoadingScreen />
+      )
+    } else {
+
+      return (
+        <PaymentOrderForm
+          onSubmit={this.handleSubmit}
+          order={order}
+          navigation={this.props.navigation}
+          addNum={this.addNum}
+          resetTotal={this.resetTotal}
+          dynamicTotal={this.state.dynamicTotal}
+          paymentsTypeslbl={paymentsTypeslbl}
+          selectedPaymentType={selectedPaymentType}
+          paymentsTypes={paymentsTypes}
+          handlePaymentTypeSelection={this.handlePaymentTypeSelection}
+        />
+      )
+    }
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
-  clearOrder: id => dispatch(clearOrder(id)),
-  getOrdersByDateRange: () => dispatch(getOrdersByDateRange())
+const mapStateToProps = state => ({
+  order: state.order.data,
+  haveData: state.order.haveData,
+  haveError: state.order.haveError,
+  isLoading: state.order.loading,
+})
+
+const mapDispatchToProps = (dispatch, props) => ({
+  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
 })
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(PaymentOrder)

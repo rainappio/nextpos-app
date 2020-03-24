@@ -25,7 +25,7 @@ import {
   successMessage
 } from '../constants/Backend'
 import IonIcon from 'react-native-vector-icons/Ionicons'
-import Markdown from 'react-native-markdown-renderer'
+import Markdown from 'react-native-markdown-display'
 import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
@@ -198,7 +198,7 @@ class Row extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.active !== nextProps.active) {
       Animated.timing(this._active, {
         duration: 300,

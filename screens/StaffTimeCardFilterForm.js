@@ -23,7 +23,6 @@ class StaffTimeCardFilterForm extends React.Component {
       	title: 'Staff Time Cards',
         yearLabel: 'Year',
         monthLabel: 'Month',
-        searchButton: 'Search',
         firstColTitle: 'Staff',
         secColTitle: 'Total Shifts',
         thirdColTitle: 'Total Hours'
@@ -32,7 +31,6 @@ class StaffTimeCardFilterForm extends React.Component {
       	title: '職員打卡表',
         yearLabel: '年',
         monthLabel: '月',
-        searchButton: '搜尋',
         firstColTitle: '員工',
         secColTitle: '總班數',
         thirdColTitle: '總時數'

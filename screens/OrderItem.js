@@ -62,7 +62,7 @@ class OrderItem extends React.PureComponent {
 
           <View style={[styles.tableCellView, {flex: 2}]}>
             <Text>
-              ${order.total.amount}
+              ${order.orderTotal}
             </Text>
           </View>
 

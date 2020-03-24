@@ -78,7 +78,8 @@ export default class SortableList extends Component {
     scrollEnabled: this.props.scrollEnabled
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount()
+  {
     this.state.order.forEach((key) => {
       this._rowsLayouts[key] = new Promise((resolve) => {
         this._resolveRowLayout[key] = resolve;
@@ -101,7 +102,7 @@ export default class SortableList extends Component {
     this._onUpdateLayouts();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const {data, order} = this.state;
     let {data: nextData, order: nextOrder} = nextProps;
 
@@ -116,7 +117,7 @@ export default class SortableList extends Component {
       });
 
 			//https://github.com/gitim/react-native-sortable-list/issues/47
-      if (Object.keys(nextData).length > Object.keys(data).length) {      
+      if (Object.keys(nextData).length > Object.keys(data).length) {
         this.setState({
           animated: false,
           data: nextData,

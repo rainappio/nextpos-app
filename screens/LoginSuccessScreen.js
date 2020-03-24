@@ -25,7 +25,7 @@ import { NavigationEvents } from 'react-navigation'
 import { getToken } from '../constants/Backend'
 import { LocaleContext } from '../locales/LocaleContext'
 import { Avatar } from 'react-native-elements'
-import Markdown from 'react-native-markdown-renderer'
+import Markdown from 'react-native-markdown-display'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import {handleDelete, handleOrderSubmit} from "../helpers/orderActions";
 import Constants from "expo-constants/src/Constants";
@@ -241,7 +241,6 @@ class LoginSuccessScreen extends React.Component {
 
                   <Markdown>
                     {getannoc.markdownContent}
-                    {'\n'}
                   </Markdown>
                 </View>
               )

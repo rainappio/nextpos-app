@@ -3,7 +3,6 @@
     "name": "rain-app",
     "slug": "rain-app",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android"

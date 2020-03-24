@@ -36,6 +36,7 @@ const zh = {
     ok: '好',
     done: '結束',
     save: '儲存',
+    search: '搜尋',
     update: '更新',
     cancel: '取消',
     delete: '刪除',
@@ -57,6 +58,7 @@ const zh = {
     noOrder: '沒有資料',
 
     orderDetailsTitle: '訂單內容',
+    subtotal: '總計',
     serviceCharge: '服務費',
     discount: '折扣',
     total: '總金額',
