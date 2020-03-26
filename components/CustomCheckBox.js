@@ -9,6 +9,7 @@ export default class CustomCheckBox extends React.Component {
       input: {onChange, value},
       customValue,
       optionName,
+      checkboxType,
       ...rest
     } = this.props
 
@@ -27,9 +28,16 @@ export default class CustomCheckBox extends React.Component {
             style={{width: 35, height: 35}}
           />
         }
-        checked={value === customValue}
+        checked={ value === customValue }
         onPress={() => {
-          onChange(customValue)
+          if (checkboxType === 'checkbox') {
+            onChange(!value)
+          } else {
+            // imply radio option
+            onChange(customValue)
+          }
+
+
         }}
       />
     )

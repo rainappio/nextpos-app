@@ -3,6 +3,7 @@ import { api, dispatchFetchRequest } from '../constants/Backend'
 export const FETCH_CLIENT = 'FETCH_CLIENT'
 export const FETCH_CLIENT_SUCCESS = 'FETCH_CLIENT_SUCCESS'
 export const FETCH_CLIENT_FAILURE = 'FETCH_CLIENT_FAILURE'
+export const CLEAR_CLIENT = 'CLEAR_CLIENT'
 
 export const fetchClient = () => ({
   type: FETCH_CLIENT

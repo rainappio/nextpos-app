@@ -235,8 +235,8 @@ class TablesScreen extends React.Component {
     } else {
       let tableDisplay = 'SHOW_SEAT'
 
-      if (client.attributes !== undefined && client.attributes.tableAvailabilityDisplay !== undefined) {
-        tableDisplay = client.attributes.tableAvailabilityDisplay
+      if (client.attributes !== undefined && client.attributes.TABLE_AVAILABILITY_DISPLAY !== undefined) {
+        tableDisplay = client.attributes.TABLE_AVAILABILITY_DISPLAY
       }
 
       const floorCapacity = {}

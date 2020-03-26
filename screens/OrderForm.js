@@ -215,7 +215,6 @@ class OrderForm extends Component {
                     <Field
                       name={people.value}
                       component={RenderStepper}
-                      customValue={people.value + people.label}
                       optionName={people.label}
                     />
                   </View>
@@ -252,7 +251,7 @@ class OrderForm extends Component {
                       {t('openOrder')}
                     </Text>
                   </TouchableOpacity>
-                </View>
+                </ View>
 
                 <View style={{flex: 1, marginHorizontal: 5}}>
                   <TouchableOpacity

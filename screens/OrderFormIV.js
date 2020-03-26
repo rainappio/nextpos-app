@@ -30,15 +30,11 @@ class OrderFormIV extends React.Component {
         quantity: '數量'
       }
     })
-
-    this.state = {
-      t: context.t
-    }
   }
 
   render() {
     const { product } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>

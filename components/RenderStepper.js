@@ -29,7 +29,8 @@ export default class RenderStepper extends React.Component {
               max={20}
               min={0}
               readOnly={false}
-              defaultValue={Number.isInteger(customValue) ? customValue : 0}
+              value={value}
+              showNumber
             />
           </View>
         </View>

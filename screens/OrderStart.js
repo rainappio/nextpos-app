@@ -68,6 +68,12 @@ class OrderStart extends React.Component {
   render() {
     const { navigation, isLoading, haveData, availableTables, tableLayouts } = this.props
 
+    const initialValues = {
+      male: 0,
+      female: 0,
+      kid: 0
+    }
+
     let tablesMap = {}
 
     tableLayouts && availableTables && tableLayouts.map(layout => {
@@ -88,6 +94,7 @@ class OrderStart extends React.Component {
             onSubmit={this.handleSubmit}
             navigation={navigation}
             tablesMap={tablesMap}
+            initialValues={initialValues}
           />
         )
       }

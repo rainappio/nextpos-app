@@ -26,12 +26,50 @@ import globalZh from './locales/zh'
 import FlashMessage from 'react-native-flash-message'
 import { LocaleContext } from './locales/LocaleContext'
 import NavigationService from "./navigation/NavigationService";
+import * as Sentry from 'sentry-expo';
+import Constants from "expo-constants/src/Constants";
+import * as TaskManager from "expo-task-manager";
+import * as Location from "expo-location";
+
+YellowBox.ignoreWarnings([
+  'VirtualizedLists should never be nested', // TODO: Remove when fixed
+  'Warning: componentWillReceiveProps',
+  'Warning: componentWillMount'
+])
+
+Sentry.init({
+  dsn: 'https://b5c10cbde6414c0292495c58e7b699d3@sentry.io/5174447',
+  enableInExpoDevelopment: true,
+  debug: true
+});
+
+Sentry.setRelease(Constants.manifest.revisionId);
 
 const store = createStore(
   rootReducer,
   {},
   composeWithDevTools(applyMiddleware(thunk))
 )
+
+TaskManager.defineTask('geoFencingTask', async ({ data: { eventType, region }, error }) => {
+  if (error) {
+    console.error(error)
+    // check `error.message` for more details.
+    return;
+  }
+
+  let canClockIn = "false"
+
+  if (eventType === Location.GeofencingEventType.Enter) {
+    console.log("GeoFencing - enter region:", region);
+    canClockIn = "true"
+  } else if (eventType === Location.GeofencingEventType.Exit) {
+    console.log("GeoFencing - left region:", region);
+    canClockIn = "false"
+  }
+
+  await AsyncStorage.setItem('canClockIn', canClockIn)
+});
 
 function restoreAuth(dispatch) {
   try {
@@ -129,12 +167,6 @@ export default class App extends React.Component {
   }
 
   render() {
-    YellowBox.ignoreWarnings([
-      'VirtualizedLists should never be nested', // TODO: Remove when fixed
-      'Warning: componentWillReceiveProps',
-      'Warning: componentWillMount'
-    ])
-
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading

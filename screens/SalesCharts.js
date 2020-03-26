@@ -51,7 +51,7 @@ class SalesCharts extends React.Component {
     context.localize({
       en: {
         salesDashboardTitle: 'Sales Dashboard',
-        todaySales: "Today's Sales",
+        todaySales: "Current Week Sales",
         rangedSalesTitle: 'Weekly Sales',
         customerCountTitle: 'Customer Count',
         averageSpendingTitle: 'Average Customer Spending',
@@ -65,7 +65,7 @@ class SalesCharts extends React.Component {
       },
       zh: {
         salesDashboardTitle: '銷售總覽',
-        todaySales: '今日營業額',
+        todaySales: '本週營業額',
         rangedSalesTitle: '一週銷售圖',
         customerCountTitle: '來客數量圖',
         averageSpendingTitle: '客單數圖',
@@ -95,7 +95,7 @@ class SalesCharts extends React.Component {
   generateRangedSalesChart = (rangedSalesReport) => {
 
     let rangedSalesData = {
-      legend: [`Week Of ${rangedSalesReport.searchDate}`],
+      legend: [`${rangedSalesReport.searchDate}`],
       labels: [],
       data: []
     }
@@ -185,11 +185,11 @@ class SalesCharts extends React.Component {
       }
     ).then()
   }
-  
+
   handleFilterCCChart = values => {
   	const month = values.month;
   	const year = values.year;
-	
+
   	if (!month || !year) {
       warningMessage('Please Choose Both Year and Month')
       return
@@ -250,7 +250,7 @@ class SalesCharts extends React.Component {
     if (this.props.haveCCData) {
       const { countData, avgSpendingData } = this.generateCustomerStatsChart(customercountReport);
       custCountData = countData
-      custAvgSpendingData = avgSpendingData      
+      custAvgSpendingData = avgSpendingData
     }
 
      const filteredCustomerCountData =
@@ -353,8 +353,8 @@ class SalesCharts extends React.Component {
           >
             {t('rangedSalesTitle')}
           </Text>
-          <SalesChartsFilterForm 
-          	onSubmit={this.handleFilterSalesChart} 
+          <SalesChartsFilterForm
+          	onSubmit={this.handleFilterSalesChart}
           	searchDate={filteredWeeklySalesReport.searchDate !== undefined ? filteredWeeklySalesReport.searchDate :  getrangedSalesReport.searchDate}
           	/>
           <Chart
@@ -371,7 +371,7 @@ class SalesCharts extends React.Component {
               }
             }}
           />
-          
+
           {/*weekly table*/}
 					<RenderTable reportData={Object.keys(filteredRangedSalesData).length !== 0 ? filteredRangedSalesData : rangedSalesData}/>
           {/*#weekly table*/}
@@ -475,7 +475,7 @@ class SalesCharts extends React.Component {
             </View>
           )}
         </View>
-    
+
 
         <View style={styles.paddingTopBtn20}>
           <Text

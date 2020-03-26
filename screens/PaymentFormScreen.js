@@ -64,20 +64,18 @@ class PaymentFormScreen extends React.Component {
   }
 
   getPercent = percent => {
-    this.setState({
-      getPercent: percent
-    })
+    if (percent >= 0) {
+      this.setState({
+        getPercent: percent
+      })
+    }
   }
 
   render() {
     const { order, navigation, handleSubmit, globalorderoffers } = this.props
     const { t } = this.state
 
-    var discounts = []
-    discounts.push({
-      label: 'No Discount',
-      value: { discount: null, orderDiscount: 'NO_DISCOUNT' }
-    })
+    const discounts = []
 
     globalorderoffers !== undefined &&
       globalorderoffers.map(globalorderoffer => {
@@ -156,20 +154,21 @@ class PaymentFormScreen extends React.Component {
               </View>
               <View>
                 <Field
-                  name="orderOption"
+                  name="waiveServiceCharge"
                   component={CustomCheckBox}
-                  customValue="waiveServiceCharge"
+                  customValue={true}
+                  checkboxType='checkbox'
                   optionName={t('waiveServiceCharge')}
                 />
               </View>
-              <View>
+              {/*<View>
                 <Field
                   name="orderOption"
                   component={CustomCheckBox}
                   customValue="resetAllOffers"
                   optionName={t('resetAllOffers')}
                 />
-              </View>
+              </View>*/}
             </View>
 
             <View style={[styles.sectionContainer]}>
@@ -229,10 +228,7 @@ class PaymentFormScreen extends React.Component {
 }
 
 const mapStateToProps = (state, props) => ({
-  globalorderoffers: state.globalorderoffers.data.results,
-  initialValues: {
-    orderTotal: props.order.orderTotal
-  }
+  globalorderoffers: state.globalorderoffers.data.results
 })
 
 const mapDispatchToProps = dispatch => ({
