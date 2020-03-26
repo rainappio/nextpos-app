@@ -61,8 +61,6 @@ class OrdersSummaryRow extends React.Component {
             note: 'Order is paid'
           }
         },
-        total: 'Total',
-        serviceCharge: 'Service Charge',
         lineItemCountCheck: 'At least one item is needed to submit an order.',
         submitOrder: 'Submit',
         backToTables: 'Back to Tables',
@@ -98,8 +96,6 @@ class OrdersSummaryRow extends React.Component {
             note: '訂單已付款完畢'
           }
         },
-        total: '總計',
-        serviceCharge: '服務費',
         lineItemCountCheck: '請加一個以上的產品到訂單裡.',
         submitOrder: '送單',
         backToTables: '回到座位區',
@@ -406,7 +402,18 @@ class OrdersSummaryRow extends React.Component {
             <View>
               <View style={[styles.tableRowContainerWithBorder]}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
-                  <Text>{t('serviceCharge')}</Text>
+                  <Text>{t('order.discount')}</Text>
+                </View>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  <Text style={{}}>
+                    ${order.discount}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={[styles.tableRowContainerWithBorder]}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <Text>{t('order.serviceCharge')}</Text>
                 </View>
                 <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                   <Text style={{}}>
@@ -417,7 +424,7 @@ class OrdersSummaryRow extends React.Component {
 
               <View style={[styles.tableRowContainerWithBorder]}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
-                  <Text>{t('total')}</Text>
+                  <Text>{t('order.total')}</Text>
                 </View>
                 <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                   <Text>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Text, Picker, Platform } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 
 export default class DropDown extends Component {
   render() {
@@ -15,12 +15,14 @@ export default class DropDown extends Component {
     } = this.props
 
     return (
-      <View>
+      <View style={{flex: 1}}>
         <View
           style={{
+            borderWidth: 1,
+            borderColor: mainThemeColor,
             paddingTop: Platform.OS === 'ios' ? 12 : 4,
             paddingBottom: Platform.OS === 'ios' ? 12 : 4,
-            paddingLeft: 0
+            paddingHorizontal: 8,
           }}
         >
           <RNPickerSelect

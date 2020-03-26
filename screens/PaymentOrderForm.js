@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
-import { getProducts, getLables, getLabel } from '../actions'
+import {getProducts, getLables, getLabel, calculatePercentage} from '../actions'
 import { successMessage } from '../constants/Backend'
 import BackBtn from '../components/BackBtn'
 import InputText from '../components/InputText'
@@ -26,7 +26,6 @@ class PaymentOrderForm extends React.Component {
     context.localize({
       en: {
         paymentMethodTitle: 'Payment Method',
-        totalAmount: 'Total Amount',
         enterCash: 'Enter Cash',
         taxIDNumber: 'Tax ID Number',
         enterTaxIDNumber: 'Enter Tax ID Number',
@@ -40,7 +39,6 @@ class PaymentOrderForm extends React.Component {
       },
       zh: {
         paymentMethodTitle: '付費方式',
-        totalAmount: '總金額',
         enterCash: '輸入現金',
         taxIDNumber: '統一編號',
         enterTaxIDNumber: '輸入統一編號',
@@ -78,7 +76,6 @@ class PaymentOrderForm extends React.Component {
     const {
       handleSubmit,
       order,
-      discountTotal,
       addNum,
       resetTotal
     } = this.props
@@ -113,7 +110,7 @@ class PaymentOrderForm extends React.Component {
 
             <View>
               <TouchableOpacity
-                onPress={() => props.navigation.navigate('Payment')}
+                onPress={() => props.navigation.navigate('OrdersSummary')}
               >
                 <Text style={[styles.bottomActionButton, styles.cancelButton]}>
                   {t('action.cancel')}
@@ -126,151 +123,178 @@ class PaymentOrderForm extends React.Component {
 		}
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
-        <View style={styles.container}>
+      <ScrollView scrollIndicatorInsets={{right: 1}}>
+        <View style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={true}
+                        parentFullScreen={true}
                         title={t('paymentMethodTitle')}
           />
 
-        </View>
+          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <Text>{t('order.subtotal')}</Text>
+            </View>
 
-        <View style={styles.sectionBar}>
-          <View style={[{flex: 1}]}>
-            <Text style={[styles.sectionBarText]}>
-              {t('totalAmount')}
-            </Text>
+            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+              <Text style={styles.tableCellText}>
+                ${order.total.amountWithTax.toFixed(2)}
+              </Text>
+            </View>
           </View>
 
-          <View style={[{flex: 1}]}>
-            <Text
-              style={[
-                styles.sectionBarText,
-                { textAlign: 'right' }
-              ]}
-            >
-              ${order.orderTotal.toFixed(2)}
-            </Text>
-          </View>
-        </View>
+          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <Text>{t('order.discount')}</Text>
+            </View>
 
-        <View style={[styles.sectionContainer, styles.horizontalMargin]}>
-        	<View style={[styles.sectionContent]}>
-          	<View style={styles.sectionTitleContainer}>
-            	<Text style={styles.sectionTitleText}>{t('paymentMethod')}</Text>
-          	</View>
-          	<View>
-            	<View style={{flex: 1}}>
-              	<Field
-                	name="paymentMethod"
-                	component={SegmentedControl}
-                	selectedIndex={selectedPaymentType}
-                	values={paymentsTypeslbl}
-                	onChange={handlePaymentTypeSelection}
-                	normalize={value => {
-                    return paymentsTypes[value].value
+            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+              <Text style={styles.tableCellText}>
+                ${order.discount}
+              </Text>
+            </View>
+          </View>
+
+          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <Text>{t('order.serviceCharge')}</Text>
+            </View>
+
+            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+              <Text style={styles.tableCellText}>
+                ${order.serviceCharge}
+              </Text>
+            </View>
+          </View>
+
+          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <Text>{t('order.total')}</Text>
+            </View>
+
+            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+              <Text style={styles.tableCellText}>
+                ${order.orderTotal}
+              </Text>
+            </View>
+          </View>
+
+          <View style={[styles.sectionContainer, styles.horizontalMargin]}>
+            <View style={[styles.sectionContent]}>
+              <View style={styles.sectionTitleContainer}>
+                <Text style={styles.sectionTitleText}>{t('paymentMethod')}</Text>
+              </View>
+              <View>
+                <View>
+                  <Field
+                    name="paymentMethod"
+                    component={SegmentedControl}
+                    selectedIndex={selectedPaymentType}
+                    values={paymentsTypeslbl}
+                    onChange={handlePaymentTypeSelection}
+                    normalize={value => {
+                      return paymentsTypes[value].value
+                    }}
+                  />
+                </View>
+              </View>
+            </View>
+
+            {
+              selectedPaymentType === 0 &&
+              <View>
+                <View style={[styles.fieldContainer]}>
+                  <View style={{flex: 2}}>
+                    <Text style={styles.fieldTitle}>{t('cashPayment')}</Text>
+                  </View>
+                  <View style={{flex: 3}}>
+                    <Field
+                      name="cash"
+                      component={InputText}
+                      placeholder={t('enterCash')}
+                      keyboardType={'numeric'}
+                      onFocus={() => resetTotal()}
+                      extraStyle={{textAlign: 'left'}}
+                    />
+                  </View>
+                </View>
+
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly'
                   }}
-              	/>
-            	</View>
-          	</View>
-        	</View>
+                >
+                  {moneyAmts.map((moneyAmt, ix) => (
+                    <TouchableOpacity
+                      onPress={() => {
+                        addNum(moneyAmt.value)
+                      }}
+                      key={moneyAmt.value}
+                    >
+                      <View
+                        style={{
+                          width: 62,
+                          height: 50,
+                          borderWidth: 2,
+                          borderColor: mainThemeColor,
+                          paddingTop: 16
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.orange_color,
+                            styles.textBold,
+                            styles.centerText
+                          ]}
+                        >
+                          {moneyAmt.label}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            }
 
-					{
-						selectedPaymentType === 0 &&
-						<View>
-          		<View style={[styles.fieldContainer]}>
-            		<View style={{flex: 2}}>
-              		<Text style={styles.fieldTitle}>{t('cashPayment')}</Text>
-            		</View>
-            		<View style={{flex: 3}}>
-              		<Field
-                		name="cash"
-                		component={InputText}
-                		placeholder={t('enterCash')}
-                		keyboardType={'numeric'}
-                		onFocus={() => resetTotal()}
-                    extraStyle={{ textAlign: 'left' }}
-              		/>
-            		</View>
-          		</View>
+            {
+              selectedPaymentType === 1 &&
+              <View>
+                <View style={styles.fieldContainer}>
+                  <View style={{flex: 2}}>
+                    <Text style={styles.fieldTitle}>{t('CardNo')}</Text>
+                  </View>
+                  <View style={{flex: 3}}>
+                    <Field
+                      name="cardNumber"
+                      component={InputText}
+                      placeholder={t('enterCardNo')}
+                      keyboardType={'numeric'}
+                      extraStyle={{textAlign: 'left'}}
+                    />
+                  </View>
+                </View>
 
-          		<View
-            		style={{
-              		flex: 1,
-              		flexDirection: 'row',
-              		justifyContent: 'space-evenly'
-            		}}
-          		>
-            		{moneyAmts.map((moneyAmt, ix) => (
-              		<TouchableOpacity
-                		onPress={() => {
-                  		addNum(moneyAmt.value)
-                		}}
-                		key={moneyAmt.value}
-              		>
-                		<View
-                  		style={{
-                    		width: 62,
-                    		height: 50,
-                    		borderWidth: 2,
-                    		borderColor: mainThemeColor,
-                    		paddingTop: 16
-                  		}}
-                		>
-                  		<Text
-                    		style={[
-                      		styles.orange_color,
-                      		styles.textBold,
-                      		styles.centerText
-                    		]}
-                  		>
-                    		{moneyAmt.label}
-                  		</Text>
-                		</View>
-              		</TouchableOpacity>
-            		))}
-          		</View>
-          	</View>
-					}
+                <Field
+                  name="cardType"
+                  component={DropDown}
+                  placeholder={{value: null, label: t('chooseCardType')}}
+                  options={[
+                    {label: 'Visa', value: 'VISA'},
+                    {label: 'MasterCard', value: 'MASTER'},
+                    {label: 'Other', value: 'OTHER'}
+                  ]}
+                  forFilter={true}
+                />
+              </View>
+            }
 
-					{
-						selectedPaymentType === 1 &&
-						<View>
-          		<View style={styles.fieldContainer}>
-            		<View style={{flex: 2}}>
-              		<Text style={styles.fieldTitle}>{t('CardNo')}</Text>
-            		</View>
-            		<View style={{flex: 3}}>
-              		<Field
-                		name="cardNumber"
-                		component={InputText}
-                		placeholder={t('enterCardNo')}
-                		keyboardType={'numeric'}
-                    extraStyle={{ textAlign: 'left' }}
-              		/>
-            		</View>
-          		</View>
+            <TaxInputAndBottomBtns
+              handleSubmit={handleSubmit}
+              navigation={this.props.navigation}
+            />
 
-          		<Field
-            		name="cardType"
-            		component={DropDown}
-            		placeholder={{value: null, label: t('chooseCardType')}}
-            		options={[
-              		{label: 'Visa', value: 'VISA'},
-              		{label: 'MasterCard', value: 'MASTER'},
-              		{label: 'Other', value: 'OTHER'}
-            		]}
-            		forFilter={true}
-          		/>
-          	</View>
-					}
-
-					{
-						<TaxInputAndBottomBtns
-							handleSubmit={handleSubmit}
-							navigation={this.props.navigation}
-							/>
-					}
-
+          </View>
         </View>
       </ScrollView>
     )

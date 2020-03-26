@@ -56,7 +56,7 @@ class OrdersScreen extends React.Component {
       },
       response => {
         response.json().then(data => {
-          this.setState({ 
+          this.setState({
           	filteredOrders: data.orders,
           	filteredreportParameter: data.reportParameter
           })
@@ -87,8 +87,8 @@ class OrdersScreen extends React.Component {
           headers: {}
         },
         response => {
-          response.json().then(data => {          	
-            this.setState({ 
+          response.json().then(data => {
+            this.setState({
             	filteredOrders: data.orders,
             	filteredreportParameter: data.reportParameter
             })
@@ -106,7 +106,7 @@ class OrdersScreen extends React.Component {
         },
         response => {
           response.json().then(data => {
-            this.setState({ 
+            this.setState({
             	filteredOrders: data.orders,
             	filteredreportParameter: data.reportParameter
             })
@@ -189,13 +189,17 @@ class OrdersScreen extends React.Component {
                         }
           />
 
+          <View>
+            <OrderFilterForm onSubmit={this.handleOrderFilter} />
+          </View>
+
           <View style={{flex: 1}}>
             <View style={[styles.tableRowContainer]}>
               <View style={styles.tableCellView}>
                 <Text style={styles.fieldTitle}>{t('order.fromDate')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                <Text>{formatDateObj(filteredreportParameter.fromDate)}</Text>                
+                <Text>{formatDateObj(filteredreportParameter.fromDate)}</Text>
               </View>
             </View>
 
@@ -204,13 +208,9 @@ class OrdersScreen extends React.Component {
                 <Text style={styles.fieldTitle}>{t('order.toDate')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                <Text>{formatDateObj(filteredreportParameter.toDate)}</Text>                
+                <Text>{formatDateObj(filteredreportParameter.toDate)}</Text>
               </View>
             </View>
-          </View>
-
-          <View style={[styles.container, styles.no_mgrTop]}>
-            <OrderFilterForm onSubmit={this.handleOrderFilter} />
           </View>
 
           <View style={{flex: 5}}>

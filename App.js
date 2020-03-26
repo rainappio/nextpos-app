@@ -4,7 +4,8 @@ import {
   StatusBar,
   StyleSheet,
   View,
-  AsyncStorage
+  AsyncStorage,
+  YellowBox
 } from 'react-native'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
@@ -128,6 +129,12 @@ export default class App extends React.Component {
   }
 
   render() {
+    YellowBox.ignoreWarnings([
+      'VirtualizedLists should never be nested', // TODO: Remove when fixed
+      'Warning: componentWillReceiveProps',
+      'Warning: componentWillMount'
+    ])
+
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading

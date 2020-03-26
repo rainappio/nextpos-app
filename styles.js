@@ -610,6 +610,18 @@ export default StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center'
   },
+  searchButton: {
+    width: '100%',
+    textAlign: 'center',
+    fontSize: 16,
+    borderRadius: 4,
+    borderWidth: 1,
+    padding: 10,
+    borderColor: mainThemeColor,
+    backgroundColor: mainThemeColor,
+    color: '#fff',
+    overflow: 'hidden'
+  },
   bottom: {
     flex: 1,
     justifyContent: 'flex-end',

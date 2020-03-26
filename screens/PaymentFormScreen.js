@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
+import {ScrollView, Text, View, TouchableOpacity, TextInput, Image} from 'react-native'
 import {
   getProducts,
   getLables,
@@ -24,6 +24,8 @@ import { calculatePercentage } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
+import images from "../assets/images";
+import CustomCheckBox from "../components/CustomCheckBox";
 
 class PaymentFormScreen extends React.Component {
   static navigationOptions = {
@@ -37,18 +39,16 @@ class PaymentFormScreen extends React.Component {
     context.localize({
       en: {
         paymentTitle: 'Payment',
-        total: 'Total',
-        serviceCharge: 'Service Charge',
-        discount: 'Discount',
-        grandTotal: 'Grand Total',
+        orderOptions: 'Order Options',
+        waiveServiceCharge: 'Waive Service Charge',
+        resetAllOffers: 'Reset All Offers',
         payOrder: 'Pay'
       },
       zh: {
         paymentTitle: '付款',
-        total: '總計',
-        serviceCharge: '服務費',
-        discount: '折扣',
-        grandTotal: '總金額',
+        orderOptions: '訂單選項',
+        waiveServiceCharge: '折抵服務費',
+        resetAllOffers: '取消訂單優惠',
         payOrder: '付帳'
       }
     })
@@ -100,7 +100,7 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('total')}</Text>
+                <Text>{t('order.subtotal')}</Text>
               </View>
 
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
@@ -112,7 +112,19 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('serviceCharge')}</Text>
+                <Text>{t('order.discount')}</Text>
+              </View>
+
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Text style={styles.tableCellText}>
+                  ${order.discount}
+                </Text>
+              </View>
+            </View>
+
+            <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{t('order.serviceCharge')}</Text>
               </View>
 
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
@@ -124,7 +136,7 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('grandTotal')}</Text>
+                <Text>{t('order.total')}</Text>
               </View>
 
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
@@ -140,7 +152,29 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.sectionContainer]}>
               <View style={[styles.sectionTitleContainer]}>
-                <Text style={styles.sectionTitleText}>{t('discount')}</Text>
+                <Text style={styles.sectionTitleText}>{t('orderOptions')}</Text>
+              </View>
+              <View>
+                <Field
+                  name="orderOption"
+                  component={CustomCheckBox}
+                  customValue="waiveServiceCharge"
+                  optionName={t('waiveServiceCharge')}
+                />
+              </View>
+              <View>
+                <Field
+                  name="orderOption"
+                  component={CustomCheckBox}
+                  customValue="resetAllOffers"
+                  optionName={t('resetAllOffers')}
+                />
+              </View>
+            </View>
+
+            <View style={[styles.sectionContainer]}>
+              <View style={[styles.sectionTitleContainer]}>
+                <Text style={styles.sectionTitleText}>{t('order.discount')}</Text>
               </View>
 
               {discounts.map((discount, ix) => (

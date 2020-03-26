@@ -146,7 +146,7 @@ export default class Row extends Component {
     },
   });
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!this._active && !shallowEqual(this._location, nextProps.location)) {
       const animated = !this._active && nextProps.animated;
       this._relocate(nextProps.location, animated);
