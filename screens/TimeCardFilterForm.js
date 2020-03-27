@@ -19,8 +19,8 @@ class TimeCardFilterForm extends React.Component {
     const { handleSubmit } = this.props
 
     return (
-      <View style={[styles.tableRowContainer, { flex: 1 }]}>
-        <View style={[styles.tableCellView, {flex: 1}]}>
+      <View style={[styles.tableRowContainer]}>
+        <View style={{flex: 2.5, marginRight: 5, marginLeft: 4}}>
           <Field
             name="year"
             component={DropDown}
@@ -29,12 +29,15 @@ class TimeCardFilterForm extends React.Component {
               {label: '2020', value: '2020'},
               {label: '2021', value: '2021'},
               {label: '2022', value: '2022'},
+              {label: '2023', value: '2023'},
+              {label: '2024', value: '2024'},
+              {label: '2025', value: '2025'},
             ]}
             forFilter={true}
           />
         </View>
 
-        <View style={{flex: 2, marginLeft: 5}}>
+        <View style={{flex: 3.5}}>
           <Field
             name="month"
             component={DropDown}
@@ -57,9 +60,9 @@ class TimeCardFilterForm extends React.Component {
           />
         </View>
 
-        <View style={[styles.tableCellView, { flex: 1, justifyContent: 'flex-end'}]}>
+        <View style={{flex: 3}}>
           <TouchableOpacity
-            style={{flex: 1, marginLeft: 5}}
+            style={{flex: 1, marginLeft: 5, marginRight: 4}}
             onPress={() => handleSubmit()}
           >
             <Text style={[styles.searchButton]}>

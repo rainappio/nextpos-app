@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import DatePicker from 'react-native-datepicker'
+import moment from 'moment'
 
 export default class RenderDatePicker extends Component {
   render(){
@@ -29,7 +30,10 @@ export default class RenderDatePicker extends Component {
           datePicker: {
           	alignItems: 'stretch'
           },
-          datePickerCon: { backgroundColor: 'black', }
+          dateInput: {
+            paddingLeft: 26
+          }
+          //datePickerCon: { backgroundColor: 'black', }
           // ... You can check the source to find the other keys.
         }}
         onDateChange={onChange}

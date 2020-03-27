@@ -616,7 +616,7 @@ export default StyleSheet.create({
     fontSize: 16,
     borderRadius: 4,
     borderWidth: 1,
-    padding: 10,
+    padding: Platform.OS === 'ios' ? 12 : 11,
     borderColor: mainThemeColor,
     backgroundColor: mainThemeColor,
     color: '#fff',
@@ -723,5 +723,37 @@ export default StyleSheet.create({
   },
   list: {
     flexDirection: 'row'
-  }
+  },
+  tblContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    marginLeft: 15,
+    marginRight: 15
+  },
+  tblhead: { height: 40, backgroundColor: mainThemeColor, width: 62 },
+  tbltextHeader: { margin: 4, textAlign: 'center', color: '#fff' },
+  tbltext: { margin: 4, textAlign: 'center' },
+  tblrow: { flexDirection: 'row', backgroundColor: '#f5f5f5' },
+  grayPrevBtn: {
+  	position: 'absolute', 
+  	left: 45, 
+  	top: 2, 
+  	bottom: 2, 
+  	right: 2, 
+  	paddingTop: 3, 
+  	backgroundColor: '#f1f1f1', 
+  	borderRadius: 4,
+  	paddingLeft:12, 
+  },
+  grayNextBtn:{
+  	position: 'absolute', 
+  	right: 45, 
+  	top: 2, 
+  	bottom: 2, 
+  	left: 2, 
+  	paddingTop: 3, 
+  	backgroundColor:'#f1f1f1', 
+  	paddingLeft:12, 
+  	borderRadius: 4
+  }  
 })

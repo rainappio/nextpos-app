@@ -83,7 +83,7 @@ class ProductFormScreen extends React.Component {
             />
 
             <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
+              <View style={[styles.tableCellView, {flex: 3}]}>
                 <Text style={styles.fieldTitle}>{t('productName')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -114,10 +114,10 @@ class ProductFormScreen extends React.Component {
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 1 }]}>
+              <View style={[styles.tableCellView, {flex: 3}]}>
                 <Text style={styles.fieldTitle}>{t('productLabel')}</Text>
               </View>
-              <View style={[styles.tableCellView, {flex: 3,justifyContent: 'flex-end'}]}>
+               <View style={{flex: 1.5, justifyContent: 'flex-end'}}>
                 <Field
                   component={DropDown}
                   name="productLabelId"

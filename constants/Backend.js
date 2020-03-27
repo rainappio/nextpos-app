@@ -120,7 +120,7 @@ export const api = {
     inflightOrders: `${apiRoot}/orders/inflight`,
     getGlobalOrderOffers: `${apiRoot}/offers/globalOrderOffers`,
     getordersByDateRange: `${apiRoot}/orders`,
-    getOrdersByDateAndRange: (dateRange,fromDate, toDate) => {
+    getOrdersByDateAndRange: (dateRange, fromDate, toDate) => {
       return `${apiRoot}/orders?dateRange=${dateRange}&fromDate=${fromDate}&toDate=${toDate}`
     },
     getOrdersByDate: (fromDate, toDate) => {
@@ -182,7 +182,13 @@ export const api = {
     getrangedSalesReport: `${apiRoot}/reporting/rangedSalesReport`,
     getsalesDistributionReport: `${apiRoot}/reporting/salesDistribution?`,
     // getcustomerCountReport: `${apiRoot}/reporting/customerCount?`
-    getcustomerCountReport: `${apiRoot}/reporting/customerStats`
+    getcustomerCountReport: `${apiRoot}/reporting/customerStats`,
+    getrangedSalesReportByDate: (date) => {
+    	return `${apiRoot}/reporting/rangedSalesReport?date=${date}`
+    },
+    getcustomerStatsReportByDateMonth: (year, month) => {
+    	return `${apiRoot}/reporting/customerStats?year=${year}&month=${month}`
+    }
   },
   announcements: {
     create: `${apiRoot}/announcements`,
