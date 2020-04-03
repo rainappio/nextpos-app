@@ -56,7 +56,7 @@ class OrderFilterForm extends React.Component {
     return (
       <View>
         <View style={[styles.tableRowContainer]}>
-          <View style={[styles.tableCellView, { flex: 3 }]}>
+          <View style={{ flex: 3.5, marginRight: 5}}>
             <Field
               name="dateRange"
               component={DropDown}
@@ -71,7 +71,7 @@ class OrderFilterForm extends React.Component {
               forFilter={true}
             />
           </View>
-          <View style={[styles.tableCellView, { flex: 1, justifyContent: 'flex-end' }]}>
+          <View style={{ flex: 1.5, justifyContent: 'flex-end' }}>
             <TouchableOpacity
               //style={{flex: 1}}
               onPress={() => handleSubmit()}>
@@ -89,7 +89,7 @@ class OrderFilterForm extends React.Component {
         {this.state.pickdateRange === 'RANGE' && (
           <View style={styles.tableRowContainer}>
             <View style={[styles.tableCellView, {flex: 3}]}>
-              <View style={{flex: 1}}>
+              <View style={{flex: .9, marginRight: 5}}>
                 <Field
                   name="fromDate"
                   component={RenderDatePicker}
@@ -98,7 +98,7 @@ class OrderFilterForm extends React.Component {
                 />
               </View>
 
-              <View style={{flex: 1}}>
+              <View style={{flex: .8}}>
                 <Field
                   name="toDate"
                   component={RenderDatePicker}
