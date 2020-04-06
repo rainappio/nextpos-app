@@ -1,8 +1,8 @@
 import {
-  FETCH_CLIENT,
-  FETCH_CLIENT_SUCCESS,
-  FETCH_CLIENT_FAILURE,
-  CLEAR_CLIENT
+  FETCH_CLIENT_USER,
+  FETCH_CLIENT_USER_SUCCESS,
+  FETCH_CLIENT_USER_FAILURE,
+  CLEAR_CLIENT_USER
 } from '../actions'
 
 const initialState = {
@@ -15,7 +15,7 @@ const initialState = {
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_CLIENT:
+    case FETCH_CLIENT_USER:
       return {
         ...state,
         loading: true,
@@ -23,7 +23,7 @@ export const reducer = (state = initialState, action) => {
         haveError: false,
         error: null
       }
-    case FETCH_CLIENT_SUCCESS:
+    case FETCH_CLIENT_USER_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -31,7 +31,7 @@ export const reducer = (state = initialState, action) => {
         haveError: false,
         data: action.data
       }
-    case FETCH_CLIENT_FAILURE:
+    case FETCH_CLIENT_USER_FAILURE:
       return {
         ...state,
         loading: false,
@@ -40,7 +40,7 @@ export const reducer = (state = initialState, action) => {
         error: action.error,
         data: {}
       }
-    case CLEAR_CLIENT:
+    case CLEAR_CLIENT_USER:
       return initialState
     default:
       return state

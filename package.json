@@ -24,6 +24,10 @@
     "expo-constants": "~8.0.0",
     "expo-font": "~8.0.0",
     "expo-localization": "~8.0.0",
+    "expo-location": "~8.0.0",
+    "expo-permissions": "~8.0.0",
+    "expo-task-manager": "~8.0.0",
+    "geolib": "^3.2.1",
     "i18n-js": "^3.3.0",
     "immutable": "^4.0.0-rc.12",
     "install-peers": "^1.0.3",
@@ -68,6 +72,7 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-form": "^8.3.1",
     "redux-thunk": "^2.3.0",
+    "sentry-expo": "^2.0.3",
     "validator": "^11.1.0"
   },
   "devDependencies": {

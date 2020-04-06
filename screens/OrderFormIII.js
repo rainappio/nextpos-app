@@ -114,6 +114,7 @@ class OrderFormIII extends React.Component {
         onSubmit={this.handleSubmit}
         product={this.props.product}
         navigation={navigation}
+        initialValues={{quantity: 1}}
       />
     )
   }

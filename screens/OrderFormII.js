@@ -46,7 +46,6 @@ class OrderFormII extends React.Component {
     this.state = {
       activeSections: [],
       selectedProducts: [],
-      refreshing: false,
       status: '',
       labelId: null,
       cc: null,
@@ -112,9 +111,7 @@ class OrderFormII extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <ScrollView
-          refreshControl={<RefreshControl refreshing={this.state.refreshing} />}
-        >
+        <ScrollView>
           <View style={styles.container}>
             <Text style={styles.screenTitle}>
               {t('newOrderTitle')}

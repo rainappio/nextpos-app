@@ -20,26 +20,17 @@ class CustomerCountFilterForm extends React.Component {
 
     context.localize({
       en: {
-      	title: 'Staff Time Cards',
         yearLabel: 'Year',
         monthLabel: 'Month',
-        firstColTitle: 'Staff',
-        secColTitle: 'Total Shifts',
-        thirdColTitle: 'Total Hours'
       },
       zh: {
-      	title: '職員打卡表',
         yearLabel: '年',
-        monthLabel: '月',
-        firstColTitle: '員工',
-        secColTitle: '總班數',
-        thirdColTitle: '總時數'
+        monthLabel: '月'
       }
     })
   }
 
   render() {
-    const { t } = this.context
     const { handleSubmit } = this.props
 
     return (

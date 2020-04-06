@@ -1,31 +1,31 @@
 import { api, dispatchFetchRequest } from '../constants/Backend'
-export const FETCH_CLIENT = 'FETCH_CLIENT'
-export const FETCH_CLIENT_SUCCESS = 'FETCH_CLIENT_SUCCESS'
-export const FETCH_CLIENT_FAILURE = 'FETCH_CLIENT_FAILURE'
-export const CLEAR_CLIENT = 'CLEAR_CLIENT'
+export const FETCH_CLIENT_USER = 'FETCH_CLIENT_USER'
+export const FETCH_CLIENT_USER_SUCCESS = 'FETCH_CLIENT_USER_SUCCESS'
+export const FETCH_CLIENT_USER_FAILURE = 'FETCH_CLIENT_USER_FAILURE'
+export const CLEAR_CLIENT_USER = 'CLEAR_CLIENT_USER'
 
-export const fetchClient = name => ({
-  type: FETCH_CLIENT,
+export const fetchClientUser = name => ({
+  type: FETCH_CLIENT_USER,
   name
 })
 
-export const fetchClientSuccess = data => ({
-  type: FETCH_CLIENT_SUCCESS,
+export const fetchClientUserSuccess = data => ({
+  type: FETCH_CLIENT_USER_SUCCESS,
   data
 })
 
-export const fetchClientFailure = error => ({
-  type: FETCH_CLIENT_FAILURE,
+export const fetchClientUserFailure = error => ({
+  type: FETCH_CLIENT_USER_FAILURE,
   error
 })
 
-export const clearClient = () => ({
-  type: CLEAR_CLIENT
+export const clearClientUser = () => ({
+  type: CLEAR_CLIENT_USER
 })
 
 export const getClientUsr = name => {
   return dispatch => {
-    dispatch(fetchClient(name))
+    dispatch(fetchClientUser(name))
 
     dispatchFetchRequest(
       api.clientUser.get(name),
@@ -37,11 +37,11 @@ export const getClientUsr = name => {
       },
       response => {
         response.json().then(data => {
-          dispatch(fetchClientSuccess(data))
+          dispatch(fetchClientUserSuccess(data))
         })
       },
       response => {
-        dispatch(fetchClientFailure(response))
+        dispatch(fetchClientUserFailure(response))
       }
     ).then()
   }

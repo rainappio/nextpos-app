@@ -1,5 +1,6 @@
 import { AsyncStorage } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
+import * as Sentry from 'sentry-expo';
 
 const storage = {
   clientAccessToken: 'token',
@@ -108,8 +109,8 @@ export const api = {
     delete: orderId => {
       return `${apiRoot}/orders/${orderId}`
     },
-    waiveServiceCharge: orderId => {
-      return `${apiRoot}/orders/${orderId}/waiveServiceCharge`
+    waiveServiceCharge: (orderId, waive) => {
+      return `${apiRoot}/orders/${orderId}/waiveServiceCharge?apply=${waive}`
     },
     applyDiscount: orderId => {
       return `${apiRoot}/orders/${orderId}/applyDiscount`
@@ -290,6 +291,8 @@ export const dispatchFetchRequest = async (
     }
   } catch (error) {
     console.error(error)
+    Sentry.getCurrentHub().captureException(new Error(error))
+
   }
 }
 

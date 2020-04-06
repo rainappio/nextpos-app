@@ -66,7 +66,7 @@ class StoreFormScreen extends React.Component {
     const client = this.props.initialValues
 
     if (client.attributes !== undefined) {
-      switch (client.attributes.tableAvailabilityDisplay) {
+      switch (client.attributes.TABLE_AVAILABILITY_DISPLAY) {
         case 'SHOW_SEAT':
           this.handleTableDisplaySelection(0)
           break
@@ -144,7 +144,7 @@ class StoreFormScreen extends React.Component {
                   </View>
                   <View style={{flex: 3}}>
                     <Field
-                      name="attributes.address"
+                      name="attributes.ADDRESS"
                       component={InputText}
                       placeholder={t('address')}
                     />
@@ -220,7 +220,7 @@ class StoreFormScreen extends React.Component {
                 </View>
                 <View style={{flex: 3}}>
                   <Field
-                    name="attributes.tableAvailabilityDisplay"
+                    name="attributes.TABLE_AVAILABILITY_DISPLAY"
                     component={SegmentedControl}
                     selectedIndex={this.state.selectedTableDisplayType}
                     onChange={this.handleTableDisplaySelection}

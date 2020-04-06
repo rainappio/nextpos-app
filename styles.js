@@ -32,10 +32,7 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginTop: 8,
-    marginBottom: 20,
-    marginLeft: 0,
-    marginRight: 0,
-    paddingRight: 0
+    marginBottom: 50
   },
   rootInput: {
     paddingVertical: 10,

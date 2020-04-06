@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {ActivityIndicator, View} from 'react-native'
 import {connect} from 'react-redux'
 import StaffFormScreen from './StaffFormScreen'
-import {clearClient, getClientUsr, getClientUsrs, resolveRoles} from '../actions'
+import {clearClientUser, getClientUsr, getClientUsrs, resolveRoles} from '../actions'
 import styles from '../styles'
 import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 
@@ -105,7 +105,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getClientUsr: () =>
     dispatch(getClientUsr(props.navigation.state.params.staffname)),
-  clearClient: () => dispatch(clearClient()),
+  clearClient: () => dispatch(clearClientUser()),
   getClientUsrs: () => dispatch(getClientUsrs())
 })
 

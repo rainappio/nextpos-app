@@ -29,43 +29,42 @@ export default class RenderDatePicker extends Component {
   		}
 		})
 
-		promise. 
-    then((result) => { 
+		promise.
+    then((result) => {
       if(typeof(result) === 'string'){
 				currentDate = new Date(result).toISOString()
 			}else if(typeof(result) === 'object'){
 				var date = result.hasOwnProperty('nativeEvent') && moment(result.nativeEvent.timestamp).format('YYYY-MM-DD')
 				currentDate = new Date(date).toISOString()
 			}
-    }). 
-    catch((err) => { 
-      console.log(err); 
+    }).
+    catch((err) => {
+      console.log(err);
     });
-	
+
     return (
-    	<View>
-    		<View style={styles.flex_dir_row}>
-    			<View style={{flex: 1}}>
-						<Text onPress={() => onChange(moment(currentDate).isoWeekday(-6).format('YYYY-MM-DD'))} style={styles.grayPrevBtn}>
-    					<Icon name="ios-arrow-back" size={32} color="#f18d1a"/>    	    					
+    	<View style={{flex: 1}}>
+    		<View style={[styles.flex_dir_row, styles.jc_alignIem_center]}>
+    			<View style={{flex: 1, marginRight: 10, alignItems: 'flex-end'}}>
+						<Text onPress={() => onChange(moment(currentDate).isoWeekday(-6).format('YYYY-MM-DD'))}>
+    					<Icon name="ios-arrow-back" size={32} color="#f18d1a"/>
     				</Text>
-    			</View>
-    			 
-      		<View style={{flex: 1.6, borderWidth: 1, borderColor: '#ddd', width: '100%', padding: 12}}> 
-      			<FontAwesomeIcon
+          </View>
+
+          <View style={{flex: 3, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#ddd', padding: 12}}>
+            <FontAwesomeIcon
               name="calendar"
               size={26}
-              style={[styles.orange_color,{position:'absolute', top: 8, left: 8}]}
+              style={[styles.orange_color]}
             />
-        		<Text onPress={showDatepicker} style={{textAlign: 'center'}}>
-        			{value.hasOwnProperty('nativeEvent') ? moment(value.nativeEvent.timestamp).format('YYYY-MM-DD'): value}
-        		</Text>
+            <Text onPress={showDatepicker} style={{padding: 5}}>
+              {value.hasOwnProperty('nativeEvent') ? moment(value.nativeEvent.timestamp).format('YYYY-MM-DD') : value}
+            </Text>
+          </View>
 
-       	</View>
-
-        	<View style={{flex: 1}}>
-						<Text onPress={() => onChange(moment(currentDate).isoWeekday(+8).format('YYYY-MM-DD'))} style={styles.grayNextBtn}>
-    					<Icon name="ios-arrow-forward" size={32} color="#f18d1a"/>     		
+        	<View style={{flex: 1, marginLeft: 10}}>
+						<Text onPress={() => onChange(moment(currentDate).isoWeekday(+8).format('YYYY-MM-DD'))}>
+    					<Icon name="ios-arrow-forward" size={32} color="#f18d1a"/>
     				</Text>
     			</View>
     		</View>

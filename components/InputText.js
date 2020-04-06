@@ -14,6 +14,7 @@ import styles, {mainThemeColor} from '../styles'
 
 const InputText = ({
   input: {
+    name,
     onBlur,
     onChange,
     onSubmitEditing,
@@ -41,7 +42,7 @@ const InputText = ({
       value={value}
       editable={editable}
       autoCapitalize={autoCapitalize}
-      inputAccessoryViewID="stateless"
+      inputAccessoryViewID={name}
       {...rest}
       style={[
         styles.rootInput,
@@ -52,7 +53,7 @@ const InputText = ({
       ]}
     />
     {Platform.OS === 'ios' && (
-      <InputAccessoryView nativeID="stateless">
+      <InputAccessoryView nativeID={name}>
         <TouchableOpacity
           onPress={() => Keyboard.dismiss()}
           style={[{ flex: 1, flexDirection: 'row-reverse' }, styles.grayBg]}

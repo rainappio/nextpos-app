@@ -19,11 +19,11 @@ export default RenderTable = (props) => {
 
   return (
     <View style={styles.tblContainer}>
-      <ScrollView horizontal={true}>        
+      <ScrollView horizontal={true}>
         {
-        	dataArrLastYr[0] !== undefined 
+        	dataArrLastYr[0] !== undefined
         	?
-        	<Table borderStyle={{borderColor: 'transparent'}}>          
+        	<Table borderStyle={{borderColor: 'transparent'}}>
           	{
           		headerArr.map((rowData, index) => (
               	<TableWrapper key={index} style={[styles.tblrow]}>
@@ -36,7 +36,7 @@ export default RenderTable = (props) => {
               	</TableWrapper>
             	))
           	}
-						{ 
+						{
             	dataArr.map((rowData, index) => (
               	<TableWrapper key={index} style={[styles.tblrow]}>
               	<Col data={["Total"]} style={styles.tbltitle} heightArr={[40,40]} widthArr={[80,80]} textStyle={styles.tbltext}/>
@@ -48,21 +48,21 @@ export default RenderTable = (props) => {
               	</TableWrapper>
             	))
           	}
-          	{ 
+          	{
             	dataArrLastYr.map((rowData, index) => (
               	<TableWrapper key={index} style={[styles.tblrow]}>
-              	<Col data={["Total(lastYr)"]} style={styles.tbltitle} heightArr={[40,40]} widthArr={[80,80]} textStyle={styles.tbltext}/>
+              	<Col data={["Last Year"]} style={styles.tbltitle} heightArr={[40,40]} widthArr={[80,80]} textStyle={styles.tbltext}/>
                 	{
                   	rowData.map((cellData, cellIndex) => (
                     	<Cell key={cellIndex} data={(cellData % 1 != 0) ? '$' + cellData.toFixed(2) : '$'+ cellData} textStyle={styles.tbltext} style={{height: 40, width: 62}}/>
                   	))
                 	}
               	</TableWrapper>
-            	))            	 
-          	}          	
+            	))
+          	}
         	</Table>
         	:
-        	<Table borderStyle={{borderColor: 'transparent'}}>          
+        	<Table borderStyle={{borderColor: 'transparent'}}>
           		{
           			headerArr.map((rowData, index) => (
               		<TableWrapper key={index} style={[styles.tblrow]}>
@@ -75,7 +75,7 @@ export default RenderTable = (props) => {
               		</TableWrapper>
             		))
           		}
-							{ 
+							{
             		dataArr.map((rowData, index) => (
               		<TableWrapper key={index} style={[styles.tblrow]}>
               		<Col data={["Total"]} style={styles.tbltitle} heightArr={[40,40]} widthArr={[80,80]} textStyle={styles.tbltext}/>
@@ -86,10 +86,10 @@ export default RenderTable = (props) => {
                 		}
               		</TableWrapper>
             		))
-          		}       	
+          		}
         	</Table>
         }
         </ScrollView>
-      </View>    
+      </View>
   )
 }

@@ -24,8 +24,28 @@
     "ios": {
       "supportsTablet": true,
       "buildNumber": "0.20.02.4",
-      "bundleIdentifier": "io.rain.app"
+      "bundleIdentifier": "io.rain.app",
+      "infoPlist": {
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Geofencing for staff clock in",
+        "NSLocationWhenInUseUsageDescription": "Geofencing for staff clock in",
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
+      }
     },
-    "description": "NextPos is the best POS software you will ever need."
+    "description": "Rain Solution",
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "rain-solution",
+            "project": "rain-solution",
+            "authToken": "ade0fd2a92e441708f7d44899c1033507056807656f24e2a8e04efc00b198c31"
+          }
+        }
+      ]
+    }
   }
 }

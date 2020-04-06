@@ -48,7 +48,6 @@ class ProductRow extends React.Component {
       selectedProducts: [],
       labelId: null,
       productId: null,
-      t: context.t
     }
     this.onChange = activeSections => {
       this.setState({ activeSections })
@@ -124,7 +123,7 @@ class ProductRow extends React.Component {
       isLoading,
       label
     } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     var map = new Map(Object.entries(products))
 
