@@ -8,6 +8,7 @@ import images from '../assets/images'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
+import MenuButton from "../components/MenuButton";
 
 class ReportsScreen extends React.Component {
   static navigationOptions = {
@@ -23,11 +24,15 @@ class ReportsScreen extends React.Component {
     this.context.localize({
       en: {
         salesReport: 'Sales Reports',
-        staffTimeCardReport: 'Staff Time Card'
+        staffTimeCardReport: 'Staff Time Card',
+        customerStatsReport: 'Customer Statistics',
+        shiftHistory: 'Shift History'
       },
       zh: {
         salesReport: '銷售報表',
-        staffTimeCardReport: '職員打卡表'
+        staffTimeCardReport: '職員打卡表',
+        customerStatsReport: '來客總覽',
+        shiftHistory: '營收紀錄'
       }
     })
   }
@@ -77,6 +82,33 @@ class ReportsScreen extends React.Component {
                   </Text>
                 </View>
               </TouchableOpacity>
+            </View>
+
+            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+              <View style={{flex: 1}}>
+                <MenuButton
+                  onPress={() => this.props.navigation.navigate('CustomerStats')}
+                  title={t('customerStatsReport')}
+                  icon={
+                    <Icon
+                      name="md-trending-up"
+                      size={40}
+                      style={[styles.buttonIconStyle]}
+                    />
+                  }/>
+              </View>
+              <View style={{flex: 1}}>
+                <MenuButton
+                  onPress={() => this.props.navigation.navigate('ShiftHistory')}
+                  title={t('shiftHistory')}
+                  icon={
+                    <Icon
+                      name="md-today"
+                      size={40}
+                      style={[styles.buttonIconStyle]}
+                    />
+                  }/>
+              </View>
             </View>
           </View>
         </DismissKeyboard>

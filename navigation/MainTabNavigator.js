@@ -74,6 +74,11 @@ import UserTimeCardDetail from '../screens/UserTimeCardDetail'
 import CloseComplete from '../screens/CloseComplete'
 import AccountClose from '../screens/AccountClose'
 import AccountCloseConfirm from '../screens/AccountCloseConfirm'
+import CustomerStats from "../screens/CustomerStats";
+import ShiftHistory from "../screens/ShiftHistory";
+import ShiftDetails from "../screens/ShiftDetails";
+import {getToken} from "../constants/Backend";
+import {doLogout} from "../actions";
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -158,7 +163,7 @@ Tables.navigationOptions = ({ screenProps: { t } }) => ({
 })
 
 const Orders = createStackNavigator({
-  Orders: OrdersScreen,
+  OrdersScr: OrdersScreen,
   OrderDetail: OrderDetail
 })
 Orders.navigationOptions = ({ screenProps: { t } }) => ({
@@ -184,7 +189,10 @@ const Reports = createStackNavigator({
   SalesCharts: SalesCharts,
   StaffTimeCard: StaffTimeCard,
   UserTimeCards: UserTimeCards,
-  UserTimeCardDetail: UserTimeCardDetail
+  UserTimeCardDetail: UserTimeCardDetail,
+  CustomerStats: CustomerStats,
+  ShiftHistory: ShiftHistory,
+  ShiftDetails: ShiftDetails
 })
 Reports.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.reporting'),
@@ -233,8 +241,16 @@ const tabBar = createBottomTabNavigator({
   }
 }, {
   defaultNavigationOptions: {
-    tabBarOnPress: ({navigation, defaultHandler}) => {
-      navigation.dispatch(StackActions.popToTop())
+    tabBarOnPress: async ({navigation, defaultHandler}) => {
+      const tokenObj = await getToken()
+
+      if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {
+        navigation.dispatch(StackActions.popToTop())
+      } else {
+        navigation.navigate('Login')
+      }
+
+      //navigation.dispatch(StackActions.popToTop())
 
       /*navigation.dispatch(
         StackActions.reset({

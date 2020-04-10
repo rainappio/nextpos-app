@@ -30,6 +30,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import {handleDelete, handleOrderSubmit} from "../helpers/orderActions";
 import Constants from "expo-constants/src/Constants";
 import MenuButton from "../components/MenuButton";
+import LoadingScreen from "./LoadingScreen";
 
 class LoginSuccessScreen extends React.Component {
   static navigationOptions = {
@@ -110,9 +111,7 @@ class LoginSuccessScreen extends React.Component {
 
     if (isLoading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen/>
       )
     } else if (haveError) {
       return <BackendErrorScreen />

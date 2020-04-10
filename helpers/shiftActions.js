@@ -108,3 +108,7 @@ export const handleAbortCloseShift = () => {
       successCallback(response)
     }).then()
 }
+
+export const renderShiftStatus = (status) => {
+  return i18n.t(`shift.status.${status}`)
+}

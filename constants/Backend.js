@@ -1,6 +1,7 @@
 import { AsyncStorage } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import * as Sentry from 'sentry-expo';
+import NavigationService from "../navigation/NavigationService";
 
 const storage = {
   clientAccessToken: 'token',
@@ -120,15 +121,21 @@ export const api = {
     },
     inflightOrders: `${apiRoot}/orders/inflight`,
     getGlobalOrderOffers: `${apiRoot}/offers/globalOrderOffers`,
-    getordersByDateRange: `${apiRoot}/orders`,
-    getOrdersByDateAndRange: (dateRange, fromDate, toDate) => {
-      return `${apiRoot}/orders?dateRange=${dateRange}&fromDate=${fromDate}&toDate=${toDate}`
-    },
-    getOrdersByDate: (fromDate, toDate) => {
-      return `${apiRoot}/orders?dateRange=${'RANGE'}&fromDate=${fromDate}&toDate=${toDate}`
-    },
-    getOrdersByRange: dateRange => {
-      return `${apiRoot}/orders?dateRange=${dateRange}`
+    getOrdersByDateAndRange: (dateRange, shiftId, fromDate, toDate) => {
+      let params = ''
+
+      if (dateRange !== undefined) {
+        params += `dateRange=${dateRange}`
+      }
+      if (shiftId !== undefined) {
+        params += `&shiftId=${shiftId}`
+      }
+
+      if (fromDate !== undefined && fromDate !== null && toDate !== undefined && toDate !== null) {
+        params += `&fromDate=${fromDate}&toDate=${toDate}`
+      }
+
+      return `${apiRoot}/orders?${params}`
     }
   },
   printer: {
@@ -152,6 +159,7 @@ export const api = {
     close: `${apiRoot}/shifts/close`,
     active: `${apiRoot}/shifts/active`,
     mostRecent: `${apiRoot}/shifts/mostRecent`,
+    getAll: `${apiRoot}/shifts`,
     initiate: `${apiRoot}/shifts/initiateClose`,
     confirm: `${apiRoot}/shifts/confirmClose`,
     abort: `${apiRoot}/shifts/abortClose`
@@ -182,8 +190,14 @@ export const api = {
   report: {
     getrangedSalesReport: `${apiRoot}/reporting/rangedSalesReport`,
     getsalesDistributionReport: `${apiRoot}/reporting/salesDistribution?`,
-    // getcustomerCountReport: `${apiRoot}/reporting/customerCount?`
     getcustomerCountReport: `${apiRoot}/reporting/customerStats`,
+    getCustomerTrafficReport: (year, month) => {
+      if (year !== undefined && month !== undefined) {
+        return `${apiRoot}/reporting/customerTraffic?year=${year}&month=${month}`
+      }
+
+      return `${apiRoot}/reporting/customerTraffic`
+    },
     getrangedSalesReportByDate: (date) => {
     	return `${apiRoot}/reporting/rangedSalesReport?date=${date}`
     },
@@ -325,6 +339,10 @@ export const errorAlert = response => {
         break
       default:
         errorMessage = `Encountered an error with your request. (${content.message})`
+    }
+
+    if (response.status === 401) {
+      NavigationService.navigate('Login')
     }
 
     showMessage({

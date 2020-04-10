@@ -22,7 +22,7 @@ import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import {handleCloseShift, handleOpenShift, checkBalanceInput} from "../helpers/shiftActions";
+import {handleCloseShift, handleOpenShift, checkBalanceInput, renderShiftStatus} from "../helpers/shiftActions";
 import BackBtn from "../components/BackBtn";
 import AccountCloseConfirm from './AccountCloseConfirm'
 import ScreenHeader from "../components/ScreenHeader";
@@ -136,7 +136,7 @@ class ShiftClose extends React.Component {
                   </Text>
                 </View>
                 <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                  <Text>{mostRecentShift.shiftStatus}</Text>
+                  <Text>{renderShiftStatus(mostRecentShift.shiftStatus)}</Text>
                 </View>
               </View>
 

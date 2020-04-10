@@ -19,12 +19,12 @@ export const fetchOrdersByDateRangeFailure = error => ({
   error
 })
 
-export const getOrdersByDateRange = () => {
+export const getOrdersByDateRange = (dateRange, shiftId, fromDate, toDate) => {
   return dispatch => {
     dispatch(fetchOrdersByDateRange())
 
     dispatchFetchRequest(
-      api.order.getordersByDateRange,
+      api.order.getOrdersByDateAndRange(dateRange, shiftId, fromDate, toDate),
       {
         method: 'GET',
         withCredentials: true,

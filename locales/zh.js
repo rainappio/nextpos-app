@@ -1,4 +1,5 @@
 const zh = {
+  login: '登入',
   cancel: '取消',
   clientName: '商業名稱',
   email: '電子郵件',
@@ -47,6 +48,8 @@ const zh = {
   },
   order: {
     inStore: '內用',
+    IN_STORE: '內用',
+    TAKE_OUT: '外帶',
     takeOut: '外帶',
 
     ordersTitle: '訂單歷史',
@@ -54,6 +57,7 @@ const zh = {
     toDate: '結束日期',
     orderId: '訂單號碼',
     date: '日期',
+    orderStatusLong: '訂單狀態',
     orderStatus: '狀態',
     noOrder: '沒有資料',
 
@@ -68,15 +72,15 @@ const zh = {
     visitedFrequency: '造訪次數',
     notFilledIn: '未填',
     orderStartDate: '開單日期',
-    lineItemCreatedDate: '開單日期',
-    endDate: '結帳日期',
+    lineItemCreatedDate: '日期',
+    preparationDuration: '備餐時間',
+    endDate: '結束日期',
     duration: '共計',
     product: '產品',
     quantity: '數量',
     subTotal: '小計',
     serveBy: '結帳人員'
   },
-  orderStatus: '訂單狀態',
   orderState: {
     OPEN: '已開單',
     IN_PROCESS: '準備中',
@@ -89,6 +93,42 @@ const zh = {
   timecard: {
     hours: '小時',
     minutes: '分鐘'
+  },
+  shift: {
+    status: {
+      INACTIVE: '未開帳',
+      ACTIVE: '開帳中',
+      CLOSING: '關帳中',
+      CONFIRM_CLOSE: '關帳確認',
+      BALANCED: '已關帳',
+      UNBALANCED: '已關帳(帳不平)'
+    },
+    shiftDetailsTitle: '帳內容',
+    staff: '員工',
+    shiftSummary: '關帳總覽',
+    totalCashIncome: '現金營業額',
+    totalCreditCardIncome: '刷卡營業額',
+    totalClosingAmount: '總營業額',
+    invoicesTitle: '訂單總覽',
+    totalInvoices: '訂單數',
+    deletedOrders: '刪單數',
+    totalDiscounts: '折扣',
+    totalServiceCharge: '服務費',
+    closingRemark: '關帳備註',
+    confirmAction: '確定關帳',
+    abortAction: '取消關帳',
+    accountCloseTitle: '開始關帳',
+    cashSection: '現金',
+    cardSection: '信用卡',
+    nextAction: '下一步',
+    closingStatus: '關帳狀態',
+    startingCash: '開帳現金',
+    totalCashTransitionAmt: '現金營業額',
+    totalCashInRegister: '實際現金總額',
+    enterAmount: '請輸入金額',
+    remark: '理由',
+    totalCardTransitionAmt: '刷卡營業額',
+    totalCardInRegister: '實際刷卡營業額'
   },
   errors: {
     balanceError: '請輸入大於零的數字'
