@@ -44,7 +44,6 @@ class StaffEditScreen extends Component {
         body: JSON.stringify(values)
       },
       response => {
-        successMessage('Saved')
         this.props.navigation.navigate('StaffsOverview')
         this.props.getClientUsrs()
       }

@@ -15,14 +15,14 @@ import BackBtnCustom from '../components/BackBtnCustom'
 import { formatDate, getShiftStatus, getMostRecentShiftStatus } from '../actions'
 import {
   api,
-  dispatchFetchRequest,
+  dispatchFetchRequest, dispatchFetchRequestWithOption,
   successMessage, warningMessage
 } from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import {handleCloseShift, handleOpenShift, checkBalanceInput} from "../helpers/shiftActions";
+import {handleCloseShift, handleOpenShift, checkBalanceInput, renderShiftStatus} from "../helpers/shiftActions";
 import BackBtn from "../components/BackBtn";
 import AccountCloseConfirm from './AccountCloseConfirm'
 import ScreenHeader from "../components/ScreenHeader";
@@ -80,29 +80,27 @@ class ShiftClose extends React.Component {
 
   handleOpenShift = (balance) => {
     handleOpenShift(balance, (response) => {
-      successMessage('Shift opened')
       this.props.dispatch(getShiftStatus())
       this.props.getMostRecentShiftStatus()
     })
   }
 
   handleinitiateCloseShift = () => {
-  	dispatchFetchRequest(
-    	api.shift.initiate,
-    	{
-      	method: 'POST',
-      	withCredentials: true,
-      	credentials: 'include',
-      	headers: {
-        	'Content-Type': 'application/json'
-      	},
-      	body: ''
-    	},
-    	response => {
-      	this.props.getShiftStatus()
-      	this.props.getMostRecentShiftStatus()
-      	this.props.navigation.navigate('AccountClose')
-    	}).then()
+    dispatchFetchRequestWithOption(api.shift.initiate, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: ''
+    }, {
+      defaultMessage: false
+    }, response => {
+      this.props.getShiftStatus()
+      this.props.getMostRecentShiftStatus()
+      this.props.navigation.navigate('AccountClose')
+    }).then()
 	}
 
   render() {
@@ -136,7 +134,7 @@ class ShiftClose extends React.Component {
                   </Text>
                 </View>
                 <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                  <Text>{mostRecentShift.shiftStatus}</Text>
+                  <Text>{renderShiftStatus(mostRecentShift.shiftStatus)}</Text>
                 </View>
               </View>
 

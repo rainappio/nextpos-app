@@ -51,9 +51,8 @@ class DeleteBtn extends React.Component {
         {islineItemDelete ? (
           <Icon
             name="md-trash"
-            size={25}
+            size={30}
             color="#fff"
-            // style={{textAlign: 'right', backgroundColor: 'pink'}}
           />
         ) : (
           <Text style={[styles.bottomActionButton, styles.deleteButton]}>

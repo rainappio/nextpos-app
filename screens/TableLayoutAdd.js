@@ -10,7 +10,7 @@ import {
   api,
   makeFetchRequest,
   errorAlert,
-  successMessage
+  successMessage, dispatchFetchRequest
 } from '../constants/Backend'
 import { getTableLayouts } from '../actions'
 import styles from '../styles'
@@ -28,43 +28,26 @@ class TableLayoutAdd extends React.Component {
 
     // localization of this screen is put in TableLayoutForm to avoid overriding localeResource at the same time
     // and lose some translation.
-    this.state = {
-      t: context.t
-    }
   }
 
   handleSubmit = values => {
-    console.log(JSON.stringify(values))
-
-    makeFetchRequest(token => {
-      fetch(api.tablelayout.create, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        },
-        body: JSON.stringify(values)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            successMessage('Saved')
-            this.props.navigation.navigate('TableLayouts')
-            this.props.getTableLayouts()
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+    dispatchFetchRequest(api.tablelayout.create, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    }, response => {
+      this.props.navigation.navigate('TableLayouts')
+      this.props.getTableLayouts()
+    }).then()
   }
 
   render() {
     const { navigation } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <DismissKeyboard>

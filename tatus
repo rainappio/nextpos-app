@@ -1,0 +1,1292 @@
+[33mcommit 0e2aadcb6fa139714126629da0e0595b772a47d1[m[33m ([m[1;36mHEAD -> [m[1;32mdevelop[m[33m)[m
+Merge: 96a23b0 bb774fc
+Author: ShinPhooWin <shinphoo@gmail.com>
+Date:   Thu Apr 23 13:29:41 2020 +0630
+
+    conflict fixed
+
+[33mcommit bb774fc140f6b8d699a3220259f2c93a29bb1c18[m[33m ([m[1;31morigin/AddingManageVisualPinDatePicker[m[33m)[m
+Merge: d709428 6e3ea25
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Thu Apr 23 10:22:19 2020 +0800
+
+    Merge pull request #75 from tingjan1982/table-position-fix
+    
+    Fixed the table position issue.
+
+[33mcommit 96a23b0951ab0121ffaa0f141e78492e46bcdd82[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: f434dd9 b219f82
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Thu Apr 23 10:22:05 2020 +0800
+
+    Merge pull request #76 from tingjan1982/order-enhancement
+    
+    Deliver all line items at once
+
+[33mcommit b219f8208ae03871c899da1866749635e0e3f3a5[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Mon Apr 20 23:56:43 2020 +0800
+
+    Deliver all line items at once
+    > update line item product options and note
+    > localize all flash messages
+    > removed obsolete code
+    > removed unused styles
+    > removed usage of makeFetchRequest in favor of dispatchFetchRequest.
+    > updated closing shift flow with additional details
+    > fixed customer stats screen with default values for age group and visit frequency.
+    > added KeyboardAwareScrollView
+
+[33mcommit 6e3ea2581ad5d8eb81e64574ee572d1ae17c8d37[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Fri Apr 17 14:41:14 2020 +0800
+
+    Fixed the table position issue.
+
+[33mcommit f434dd92e648d0be6e8f5d40c9879cc0b57b8468[m
+Merge: 71af242 424f98d
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Thu Apr 16 12:29:33 2020 +0800
+
+    Merge pull request #72 from tingjan1982/customer-traffic-report
+    
+    Implemented customer traffic screen.
+
+[33mcommit 424f98d9cf1646faa8b3641eb409adb3ad4b1176[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Fri Apr 10 16:42:55 2020 +0800
+
+    Implemented customer traffic screen.
+    > Implemented shift history screen and shift details screen.
+    > navigate to order history within shift details.
+    > Attempt to fix a re-login issue after the token has expired.
+
+[33mcommit d709428067f79589d4e9d67df12939835353aed6[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Wed Apr 15 06:35:44 2020 +0630
+
+    Adding#ManageVisual#Pin#OrderHistoryDatePicker
+
+[33mcommit 71af242e945a941b24faa3cb4f5f3183e94cd2e8[m
+Merge: 66553ee 679f932
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Mon Apr 6 11:38:23 2020 +0800
+
+    Merge pull request #70 from tingjan1982/install-sentry
+    
+    Integated Sentry.
+
+[33mcommit 679f932da508fce96ee88715616ab9572969d4fb[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Thu Mar 26 18:27:11 2020 +0800
+
+    Integated Sentry.
+    > Make ordering quantity default to 1.
+    > Updated payment form to simplify service charge and order discount application.
+    > Fixed input accessory view.
+    > Added geo location and geo fencing capability to enable or disable clock in.
+    > localized sales chart enhancement.
+
+[33mcommit 66553eefcab2a6ad3103b4522f73b28fa53a1b46[m
+Merge: 812de93 0e8eb4a
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Fri Apr 3 12:19:22 2020 +0800
+
+    Merge pull request #71 from tingjan1982/ModifySalesReport
+    
+    Add TableView and Filter to SalesChart
+
+[33mcommit 0e8eb4a02deef089aebaebf41b552bba51dd0462[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Mar 27 17:15:44 2020 +0630
+
+    Add TableView and Filter to SalesChart
+
+[33mcommit 812de931b8b3cb8a7aeddde14df28a3c789d95d6[m
+Merge: 8d52495 3fba3eb
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Thu Mar 26 12:26:04 2020 +0800
+
+    Merge pull request #69 from tingjan1982/pilot-run-feedback
+    
+    upgrade to expo 36
+
+[33mcommit 3fba3eb09548fa99c1246e54b96d478db940f4b2[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Tue Mar 24 19:08:31 2020 +0800
+
+    upgrade to expo 36
+    > waive service charge
+    > reset order offers
+    > fixed deprecated component lifecycle functions
+    > replaced markdown with react-native-markdown-display
+    > updated order history UI
+    > styled drop down.
+
+[33mcommit 8d5249557aaccaf59cbd7cf649db82b0b9afa04a[m
+Merge: ceaad73 c51afc0
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Thu Mar 19 13:30:17 2020 +0800
+
+    Merge pull request #67 from tingjan1982/ordersFilterUpdate
+    
+    Orders Filtering
+
+[33mcommit c51afc05d4e18cabf24234e308b55c77ae2c552b[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Wed Mar 18 01:44:38 2020 +0630
+
+    Orders Filtering
+
+[33mcommit ceaad73ed89fba9d727ac68d6790223aa39b8562[m
+Merge: c4fa624 61c1ea5
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Mon Mar 16 18:51:47 2020 +0800
+
+    Merge pull request #66 from tingjan1982/ui-review-part7
+    
+    UI enhancement with new styling and consistency
+
+[33mcommit 61c1ea5a3af3bc5c7edbdaed723938f2acd721ed[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Fri Mar 13 17:59:21 2020 +0800
+
+    UI enhancement with new styling and consistency
+
+[33mcommit c4fa62475d7e7b79f647ce9771246b3a79d7f0ca[m
+Merge: dcbb918 55ecc97
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Sat Mar 14 13:09:52 2020 +0800
+
+    Merge pull request #64 from tingjan1982/ui-review-part6
+    
+    Consolidated every screen's header using a new ScreenHeader component.
+
+[33mcommit 55ecc974ae0319ee2b16aab8b9ccd729926e72ce[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Thu Mar 12 23:00:00 2020 +0800
+
+    Consolidated every screen's header using a new ScreenHeader component.
+    > fixed button not showing in table layout and table screens.
+    > fixed tables screen showing open shift popup when account is in closing states.
+    > fixed all ScrollView bars by adding correct properties.
+
+[33mcommit dcbb9186731f96ef769ee00e6a343cc8c50cb6d6[m
+Merge: e86e6e5 5a0436e
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Thu Mar 12 22:27:22 2020 +0800
+
+    Merge pull request #63 from tingjan1982/uiFixes
+    
+    announcements UI Alignment changed
+
+[33mcommit 5a0436ec695416fbf14a4eea47d806db66260db4[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Sun Mar 15 16:40:49 2020 +0630
+
+    announcements UI Alignment changed
+
+[33mcommit e86e6e519b89e0ee36afea48240818946a57d2f6[m
+Merge: 4270a48 fc83e30
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Thu Mar 12 15:08:10 2020 +0800
+
+    Merge pull request #62 from tingjan1982/ui-review-part5
+    
+    Updated order details and payment method screen.
+
+[33mcommit fc83e30d621d0cdeb189122998e9f6704d9a40eb[m[33m ([m[1;31morigin/ui-review-part5[m[33m)[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Tue Feb 25 16:45:22 2020 +0800
+
+    Updated order details and payment method screen.
+    > Updated icon.png and version numbers.
+    > Added test printer in printer form screen.
+    > Localized and refactored closing account workflow.
+
+[33mcommit 4270a481af486d29b0d69cdec89b508f8b449a09[m
+Merge: 846f4eb c63717c
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Wed Mar 11 10:35:30 2020 +0800
+
+    Merge pull request #61 from tingjan1982/shiftnewFeature
+    
+    shift close feature Adding
+
+[33mcommit c63717cbe314360b4871b8989561eda10765a1ce[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Sun Mar 8 00:55:50 2020 +0630
+
+    shift close feature Adding
+
+[33mcommit 846f4eb9c811e05088bf7938afc3230f997e3515[m
+Merge: aa6226f c7d8457
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Mon Mar 2 11:10:21 2020 +0800
+
+    Merge pull request #60 from tingjan1982/paymentImplement
+    
+    cardPayment and OrderDetail Implementation
+
+[33mcommit c7d84570b1936321caa66d264d8aa23c9947e805[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Feb 28 12:47:13 2020 +0630
+
+    cardPayment and OrderDetail Implementation
+
+[33mcommit aa6226f45a3e32217ef26af40da5dc695b2922b2[m
+Merge: 4cff84f 7a60255
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Tue Feb 25 13:47:17 2020 +0800
+
+    Merge pull request #59 from tingjan1982/ui-review-part4
+    
+    Post review UI enhancement part 4
+
+[33mcommit 7a6025596a532bdc945fbfca997da2917493ae56[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Mon Feb 24 17:19:42 2020 +0800
+
+    Post review UI enhancement part 4
+    > fixed create two order issue and missing radio button.
+    > restyled store screen and added table display option to allow different capacity display in tables screen.
+    > added deleted state instead of actually deleting the order.
+    > updated order status icon.png.
+    > updated default client user's name display.
+    > enhanced time card screen.
+    > provided localization to staff timecard report.
+
+[33mcommit 4cff84ffed596fbc9361e267e198955cb941756d[m
+Merge: fec5081 e1f4bd6
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Tue Feb 25 10:08:32 2020 +0800
+
+    Merge pull request #58 from tingjan1982/timecardfilter
+    
+    time cards filter
+
+[33mcommit e1f4bd6d052af8a183cb79eaea75570e9c1f8065[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Sat Feb 22 22:15:31 2020 +0630
+
+    time cards filter
+
+[33mcommit fec508123f7d90a67f9fec8ad8ef9568550ead2e[m
+Merge: 07d2acb 07f51e5
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Mon Feb 17 18:29:32 2020 +0800
+
+    Merge pull request #57 from tingjan1982/announcementsUIEdited
+    
+    announcement UI Edited
+
+[33mcommit 07f51e5bfcf9bb54bda282933b9097c2051ce600[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Mon Feb 17 15:43:57 2020 +0630
+
+    announcement UI Edited
+
+[33mcommit 07d2acbba5479047d2880c5c4c55c406e0c1afa8[m
+Merge: 765d1d1 e9720aa
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Mon Feb 17 15:27:17 2020 +0800
+
+    Merge pull request #56 from tingjan1982/ui-review-part3
+    
+    UI alignment part 3
+
+[33mcommit e9720aa22b7482214310181f799ccb4745e41585[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Fri Feb 14 00:28:05 2020 +0800
+
+    UI alignment part 3
+    > refactored sales dashboard.
+    > created Chart component to render chart with dot content.
+    > simplified MainTabNavigator.
+    > updated images for order state.
+    > updated app logo
+    > refactored order state rendering.
+    > fixed cash accumulation issue in payment order form.
+
+[33mcommit 765d1d1b59cbacfe7db030e34320fe82a0415d08[m
+Merge: feb5f71 379ca22
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Thu Feb 13 15:17:04 2020 +0800
+
+    Merge pull request #55 from tingjan1982/ui-review-part2
+    
+    Updated UI styles and alignment per feedback part 2
+
+[33mcommit 379ca2219d32d7f919c8474b77c5143fed364208[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Wed Feb 12 16:22:10 2020 +0800
+
+    Updated UI styles and alignment per feedback part 2
+
+[33mcommit feb5f7166dfb83cab088a4a1f89de8735d72bcd3[m
+Merge: 25e55d1 e4da848
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Tue Feb 11 15:46:34 2020 +0800
+
+    Merge pull request #52 from tingjan1982/review-fix
+    
+    feature fix and ui update after review.
+
+[33mcommit e4da8481a14e5cc3525b405d1426bb514c55b185[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Sat Feb 8 23:59:21 2020 +0800
+
+    feature fix and ui update after review.
+    > Add delete table and delete table layout.
+    > fixed an issue related to closing shift.
+
+[33mcommit 25e55d13f68e70cfb68c8bca992423b8bc9d28dc[m
+Merge: f8e3957 4bcb6d1
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Fri Feb 7 10:02:46 2020 +0800
+
+    Merge pull request #51 from tingjan1982/feedbackFix
+    
+    OrdersHistory&&Tables Alignment Adjust
+
+[33mcommit 4bcb6d1a345285999ac3708d46c9dd1986b62445[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Wed Feb 5 13:46:45 2020 +0630
+
+    OrdersHistory&&Tables Alignment Adjust
+
+[33mcommit f8e39578f05ab7171c7d06f78b6518cec4dc0812[m
+Merge: cd04c32 663a2c9
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Sun Feb 2 20:18:04 2020 +1000
+
+    Merge pull request #49 from tingjan1982/general-ui-enhancement
+    
+    Updated New Order screen, Staff screen and Store screen.
+
+[33mcommit 663a2c9e086172999a72653164b2309054d3a7c7[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Thu Jan 30 22:53:24 2020 +1000
+
+    Updated New Order screen, Staff screen and Store screen.
+    > add quick order in home screen.
+    > fixed some language bug issues.
+    > fixed a report chart display issue.
+
+[33mcommit cd04c322ee65309a967db4a8466f0a1342fa9d72[m
+Merge: 3c05fb8 f50ba2b
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Fri Jan 24 15:53:27 2020 +0800
+
+    Merge pull request #46 from tingjan1982/general-ui-enhancement
+    
+    General UI enhancement after partner review.
+
+[33mcommit f50ba2bed667a8285c933a6026132ff97cd144ac[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Fri Jan 24 14:20:21 2020 +0800
+
+    updated sales chart screen.
+
+[33mcommit 41cf6f84bab5fb6794bc9d40d72611973f228c64[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Fri Jan 24 00:24:07 2020 +0800
+
+    General UI enhancement after partner review.
+    > honor validation on product option selections.
+    > fix InputNumber scroll.
+    > fixed sales chart screen logic.
+    > show most recent shift and clock out information.
+    > show floor capacity and available seats.
+    > fix a bug in store save without permission and login success calling announcement before authentication.
+
+[33mcommit 3c05fb84e28a0bf39a39f3e5c48122a6b4cda2f0[m
+Merge: 4763e47 985cb6f
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Thu Jan 23 21:30:46 2020 +0800
+
+    Merge pull request #45 from tingjan1982/dev
+    
+    Show AnnouncementsList in HomeScreen && Chart Render && Announcements…
+
+[33mcommit 985cb6fc80041bb11806d9b3c7cc093c8ac5c429[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Thu Jan 23 17:59:38 2020 +0630
+
+    Show AnnouncementsList in HomeScreen && Chart Render && Announcements Order Drag and Drop
+
+[33mcommit 4763e47ef7e4da22e4171ccb68288642cef3ef21[m
+Merge: 42c086d b2b1938
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Wed Jan 22 12:27:41 2020 +0800
+
+    Merge pull request #44 from tingjan1982/dev
+    
+    Time Ago status fix && ReportingCharts Implementing && Announcements …
+
+[33mcommit b2b1938c27d9def6a149197cc695c58d4daa2dea[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Tue Jan 21 00:25:38 2020 +0630
+
+    remove commented code
+
+[33mcommit 8079872343dc183296d2abe570b7563715d6d7c4[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Mon Jan 20 14:00:36 2020 +0630
+
+    Time Ago status fix && ReportingCharts Implementing && Announcements CRUD
+
+[33mcommit 42c086db9a695d693e6c81e66921ece6cdb04c7f[m
+Merge: 6d7d290 b367055
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Fri Jan 17 16:22:31 2020 +0800
+
+    Merge pull request #43 from tingjan1982/general-enhancement
+    
+    Unify layouts across as many screens as possible by using predefined …
+
+[33mcommit b367055e384cfa8330eee13064d46f02ed2e76f6[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Wed Jan 15 20:36:19 2020 +0800
+
+    Unify layouts across as many screens as possible by using predefined styles to place header, content and bottom buttons.
+    > moved available tables to OrderStart to fix an issue that caused available tables not returning correctly.
+    > refactored shift open and close screens to include a cash balance text input.
+    > fixed change language issue.
+    > add refresh icon to Orders screen.
+    > place buttons to the bottom of the screen.
+    > enhanced dispatchFetchRequest with x-suppress-error custom header.
+    > make accordion items clickable and styles Accordion and its header to unify look and feel.
+    > further remove unused code.
+
+[33mcommit 6d7d290ad715ad3db2de10df5855e09cd9dd34dc[m
+Merge: c83f01b 03f7398
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Tue Jan 14 14:47:06 2020 +0800
+
+    Merge pull request #42 from tingjan1982/fetch-request-update
+    
+    Refactored to use dispatchFetchRequest function on all actions js.
+
+[33mcommit 03f7398275a26da35325933ce33fc4924cec20ce[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Tue Jan 14 00:01:08 2020 +0800
+
+    Refactored to use dispatchFetchRequest function on all actions js.
+    > removed all reference to the ip address so we can update backend infrastructure.
+    > removed the refreshing state and other obsolete states as I dont think it's used anymore.
+
+[33mcommit c83f01b56b5a0d14d0356db6cdb65a52896150f5[m
+Merge: c43c122 a903fbc
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Mon Jan 13 00:08:20 2020 +0800
+
+    Merge pull request #41 from tingjan1982/refactor-home-screen
+    
+    Refactored home screen to show basic user information.
+
+[33mcommit a903fbc7d250d343de683c9986f559a43344b35e[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Fri Jan 10 14:52:09 2020 +0800
+
+    Refactored home screen to show basic user information.
+    > introduced several flavor of formatDate function.
+    > created dispatchFetchRequest function for later refactoring on all action functions to properly handle errors.
+    > removed obsolete item from AsyncStorage.
+    > added loggedIn to token and client user token.
+
+[33mcommit c43c1229b826e1b4d54b6beaec4ee4d5a1a3450f[m
+Merge: bf153ec ebe0b7d
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Sun Jan 12 14:55:29 2020 +0800
+
+    Merge pull request #40 from tingjan1982/dev
+    
+    reportDetails/ordersLists with corresponding popup Added
+
+[33mcommit ebe0b7d5cd8c39d767c94556dd5ec724bc75d074[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Sun Jan 12 12:31:02 2020 +0630
+
+    reportDetails/ordersLists with corresponding popup Added
+
+[33mcommit bf153ec883684110a2fb4fc367f089a5d3ea4137[m
+Merge: 72330aa 33e4d78
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Wed Jan 8 13:35:17 2020 +0900
+
+    Merge pull request #39 from tingjan1982/apply-i18n
+    
+    Applied language customization to all screens.
+
+[33mcommit 33e4d78c0510d08166a9cf7a0b2c32ca7ce38077[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Tue Jan 7 23:36:35 2020 +0800
+
+    Added missing translations.
+
+[33mcommit 7ecdf1f22474285bb1a20ddea93de657524d9bd2[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Fri Jan 3 00:34:44 2020 +0900
+
+    Applied language customization to all screens.
+    > tuned layouts on some screens to fill up screen space.
+    > display screen even if there is no data in certain screens.
+
+[33mcommit 72330aa27d89c5b97484deaaf8cbf893e2dae7dc[m
+Merge: 6aa2ad9 833c863
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Fri Jan 3 23:27:23 2020 +0900
+
+    Merge pull request #38 from tingjan1982/dev
+    
+    Sales Dash Board Adding
+
+[33mcommit 833c863c653cccab8128d0c5444638b7c388540c[m
+Merge: 7f59391 cc6aa94
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Jan 3 17:15:23 2020 +0630
+
+    Merge branch 'dev' of https://github.com/tingjan1982/nextpos-app into dev
+
+[33mcommit 7f59391cc4b0d7eb9e286df33db554f63841cb79[m
+Merge: 9f1419d fb7fa33
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Jan 3 16:59:18 2020 +0630
+
+    Merge branch 'dev' of https://github.com/tingjan1982/nextpos-app into dev
+
+[33mcommit cc6aa949f6d2d5fe08bbb90abe453f89ab8097db[m
+Merge: 9f1419d fb7fa33
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Jan 3 16:59:18 2020 +0630
+
+    Merge branch 'dev' of https://github.com/tingjan1982/nextpos-app into dev
+
+[33mcommit 9f1419d070bde1c2733b4fe3d01b5488a61ab147[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Jan 3 15:55:17 2020 +0630
+
+    Sales Dash Board Adding
+
+[33mcommit fb7fa337e4a6e639486a28f7d5690aa646bda4b5[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Jan 3 15:55:17 2020 +0630
+
+    Sales Dash Board Adding
+
+[33mcommit 6aa2ad916377a98f5fd7fea16efc371a1ddd00ab[m
+Merge: 37e1c5b a9764e9
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Fri Jan 3 12:03:35 2020 +0800
+
+    Merge pull request #37 from tingjan1982/post-review-fix
+    
+    Post app review refactoring and fixes.
+
+[33mcommit a9764e94641f96c17b4b10f71214bbdf04476b5b[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Sun Dec 29 21:26:26 2019 +0800
+
+    Post app review refactoring and fixes.
+    > refactored client and client user login
+    > added service charge and tax inclusive to store screen
+    > refactored shift close screen
+
+[33mcommit 37e1c5b9aa50b92222d8ff3d3c6b47d5471779a2[m
+Merge: fb98dc2 febbaac
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Sun Dec 29 18:42:57 2019 +0800
+
+    Merge pull request #36 from tingjan1982/dev
+    
+    Payment implementation
+
+[33mcommit febbaacd23ae007846afb2b21d38ef566a626acc[m
+Merge: 5188bb7 c189954
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Sun Dec 29 16:14:34 2019 +0630
+
+    Merge branch 'dev' of https://github.com/tingjan1982/nextpos-app into dev
+    
+    # Conflicts:
+    #       screens/Payment.js
+    #       screens/PaymentFormScreen.js
+
+[33mcommit 5188bb75598c71eec447252af2bbc2f3c145bddd[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Sat Dec 28 19:11:08 2019 +0630
+
+    Payment implementation
+
+[33mcommit c189954ff19580d865ff16bd40d2ce1fdc1bf176[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Sat Dec 28 19:11:08 2019 +0630
+
+    Payment implementation
+
+[33mcommit fb98dc2261e7ab65b5dccc81ff497314181c1c4d[m
+Merge: 328cc50 e225cea
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Fri Dec 27 14:33:41 2019 +0800
+
+    Merge pull request #35 from tingjan1982/settings-general-fix
+    
+    Refactored table layout management
+
+[33mcommit e225cea2e5b34b2286e3faded50334c190b14f9e[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Thu Dec 26 17:24:16 2019 +0800
+
+    Refactored table layout management
+    > added i18n to working area/printer and table layouts.
+    > updated manage shift screen.
+
+[33mcommit 328cc504f9c9f43b3df15720f6eadd0296f1866f[m
+Merge: 299a8fe 256c204
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Thu Dec 26 14:18:00 2019 +0800
+
+    Merge pull request #34 from tingjan1982/dev
+    
+    availableTblsAPI Change && Payment
+
+[33mcommit 256c2047159bf34bfab12689007c7ccabbdc3228[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Dec 20 18:18:11 2019 +0630
+
+    availableTblsAPI Change && Payment
+
+[33mcommit 299a8fe524388bca094b45afd624de1fff3c41f4[m
+Merge: 9a3820e c5a52ad
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Tue Dec 17 21:26:54 2019 +1000
+
+    Merge pull request #31 from tingjan1982/dev
+    
+    TableLayout & Table CRUD
+
+[33mcommit c5a52ad8ae16cb44127ccd94ef4c2d30aea80d74[m
+Merge: 52db955 6590ddd
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Tue Dec 17 12:02:30 2019 +0630
+
+    Merge branch 'dev' of https://github.com/tingjan1982/nextpos-app into dev
+    
+    # Conflicts:
+    #       screens/TableEdit.js
+
+[33mcommit 52db95584ca17e1a348fb25fda70e6c0bebbd6e4[m
+Merge: 490871c db62bce
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Mon Dec 16 15:02:18 2019 +0630
+
+    Merge branch 'dev' of https://github.com/tingjan1982/nextpos-app into dev
+    
+    # Conflicts:
+    #       screens/TableEdit.js
+    #       screens/TableForm.js
+    #       screens/TableLayoutForm.js
+
+[33mcommit 6590dddac214daf6d8bf897e11ceab23b7bd01be[m
+Merge: 490871c db62bce
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Mon Dec 16 15:02:18 2019 +0630
+
+    Merge branch 'dev' of https://github.com/tingjan1982/nextpos-app into dev
+    
+    # Conflicts:
+    #       screens/TableEdit.js
+    #       screens/TableForm.js
+    #       screens/TableLayoutForm.js
+
+[33mcommit 490871c13eb8040ac78ec9e358c15f2fc7c27c10[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Dec 13 19:02:13 2019 +0630
+
+    TableLayout & Table CRUD
+
+[33mcommit db62bce4cb5e168254565cfa4c837c18eb79b1ec[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Dec 13 19:02:13 2019 +0630
+
+    TableLayout & Table CRUD
+
+[33mcommit 9a3820e6b83f7df23086896141b15193dea94de6[m
+Merge: 5623c6b a40d17a
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Tue Dec 10 09:29:33 2019 +1000
+
+    Merge pull request #30 from tingjan1982/dev
+    
+    uiminorFixes&OrderSummaryHrMin
+
+[33mcommit a40d17ada78d111a81fad254ac0b35cf2f7e0c8a[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Mon Dec 9 14:01:40 2019 +0630
+
+    uiminorFixes&OrderSummaryHrMin
+
+[33mcommit 5623c6b56a3d471a32cf693b6e957a7e4bd9ae75[m
+Merge: 0fba1c8 b0ee847
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Sat Dec 7 05:05:56 2019 +0800
+
+    Merge pull request #29 from tingjan1982/orderSummaryEditDelete
+    
+    Order summary edit delete
+
+[33mcommit b0ee847e4daf2f9e6363da94cfb725afc437b045[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Dec 6 19:14:34 2019 +0630
+
+    review fixed
+
+[33mcommit b4c9753e94cf7fa50304e00bccab2da7f3c341b3[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Dec 6 13:13:54 2019 +0630
+
+    lineItemEditDelete
+
+[33mcommit 9e0e6c9855a1e5bff6a73ed435470bbf627622a5[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Dec 6 12:05:59 2019 +0630
+
+    HrMin&BackBtnLoadingIssue&CloseShift&PagesCtrl Added
+
+[33mcommit 0fba1c82a1acf3d2f47e113320f25589416db4cc[m
+Merge: cce5277 1803135
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Thu Dec 5 18:52:05 2019 +0800
+
+    Merge pull request #26 from tingjan1982/general-fix
+    
+    General fix to improve user experience
+
+[33mcommit 1803135c2bfd4c30eae11e395714b393d3828df3[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Mon Dec 2 00:38:58 2019 +0800
+
+    General fix to improve user experience
+    > i18n on product screens and staff screens
+    > decorate keyboard input with Done button
+    > pass LocaleContext to nested components
+    > styled and positioned bottom action buttons
+
+[33mcommit cce52779bd3b89bdeec1e378b8f50f040097d8f6[m
+Merge: 20aa953 c5834df
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Tue Dec 3 15:51:01 2019 +0800
+
+    Merge pull request #25 from tingjan1982/dev
+    
+    Printers&KDS Added
+
+[33mcommit c5834dfce07f80c9a772e3ed6486212338e1e0de[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Tue Dec 3 14:03:11 2019 +0630
+
+    Printers&KDS Added
+
+[33mcommit 20aa95384d11ccaafc88751528256d4bea8b0e1d[m
+Merge: 4708930 07cdb56
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Sun Dec 1 23:19:36 2019 +0800
+
+    Merge pull request #23 from tingjan1982/edit-product-option
+    
+    Edit product option
+
+[33mcommit 07cdb56ce1549c0c0f5e9ffd83939d238f0d25de[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Thu Nov 28 13:57:48 2019 +0800
+
+    Enhanced product option list to support update and delete function.
+    > introduced flash message to show status.
+
+[33mcommit 4708930ffe36494763810494819bbcd6be9555d9[m
+Merge: bd961a9 5dfb9e6
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Sun Dec 1 23:16:15 2019 +0800
+
+    Merge pull request #22 from tingjan1982/store-screen
+    
+    Implemented Store screens.
+
+[33mcommit 5dfb9e6cc5a9175ac6cd46b410fdf72e4383d7d7[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Tue Nov 26 16:24:42 2019 +0800
+
+    Implemented Store screens.
+
+[33mcommit bd961a9e92a29c08c6f29ab04593c97048a40806[m
+Merge: 09b59d5 7d9f432
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Mon Nov 25 17:58:42 2019 +0800
+
+    Merge pull request #21 from tingjan1982/dev
+    
+    order completed rebased with master
+
+[33mcommit 7d9f4324c0d3da9597ecf62cb87e1691e0057025[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Sun Nov 24 01:21:40 2019 +0630
+
+    order completed rebased with master
+
+[33mcommit 09b59d5c80cc94753381cd65ff4e7d7c1466392f[m
+Merge: 9966602 8e0891d
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Wed Nov 20 23:26:07 2019 +0800
+
+    Merge pull request #19 from tingjan1982/product-option-grouping
+    
+    get product options by label in Edit Product screen.
+
+[33mcommit 8e0891d105064d25d47456b76ce182e2f85f5fd2[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Thu Nov 14 21:49:18 2019 +0800
+
+    get product options by label in Edit Product screen.
+    > fixed scroll bar in the center issue.
+    > refactored Backend.js.
+
+[33mcommit 9966602297e8cf2c819f640245b089c50b0b5d6a[m
+Merge: a06e6ba ac4dc71
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Wed Nov 20 22:38:33 2019 +0800
+
+    Merge pull request #13 from tingjan1982/i18n
+    
+    Implement multi language feature using expo-localization and i18n-js.
+
+[33mcommit ac4dc718a11ed68b6bb784588dfabc17b77fed8a[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Tue Nov 5 18:01:07 2019 +0800
+
+    Implement multi language feature using expo-localization and i18n-js.
+    > updated LoginScreen to use KeyboardAvoidingView.
+    > do not auto capitalize staff username in StaffFormScreen.
+
+[33mcommit a06e6bad9faeb67d51d56bf7a16a5eebd5f3974f[m
+Merge: 913dc24 dadee3e
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Wed Nov 20 22:04:24 2019 +0800
+
+    Merge pull request #18 from tingjan1982/dev
+    
+    Dev
+
+[33mcommit dadee3e852058cf23127877e4fdbfd69fb45a585[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Wed Nov 20 16:01:10 2019 +0630
+
+    OrderReviewFix2
+
+[33mcommit e4953a9636839b3917860893c6fc82c7c9261329[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Tue Nov 19 13:31:58 2019 +0630
+
+    OrderReview Fixed To Test
+
+[33mcommit d0ce53a904c705261071232a89dab9591016db49[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Mon Nov 18 17:15:25 2019 +0630
+
+    orderId issue to check
+
+[33mcommit 0f615ec9341e6845bf01edfd100bf72bc00809a9[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Nov 15 08:57:34 2019 +0630
+
+    ordersummary data render
+
+[33mcommit 0428ef9e3e9bc67b72eab7cdfe334b1aaa6c94f5[m
+Merge: 5f018bb 83f493b
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Thu Nov 14 17:54:59 2019 +0630
+
+    tblscreen err fix
+
+[33mcommit 5f018bbde63d81f6647fce25eb3708bc0273a22d[m
+Merge: 72fbd80 6554075
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Thu Nov 14 17:14:46 2019 +0630
+
+    add login credentials as variable
+
+[33mcommit 83f493be49125343cabbad5140613acdeef8801b[m
+Merge: 72fbd80 6554075
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Thu Nov 14 17:14:46 2019 +0630
+
+    add login credentials as variable
+
+[33mcommit 72fbd80183f93ef0ccaed4ce6a1042bd50a04c0a[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Thu Nov 14 16:45:32 2019 +0630
+
+    Add Order
+
+[33mcommit 655407562acefb3ff56aefec6991ec1e0aebe858[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Thu Nov 14 16:45:32 2019 +0630
+
+    Add Order
+
+[33mcommit 569be31af41bacd7a456daba1038034404218aef[m
+Merge: c8875d0 efa56c2
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Mon Nov 4 15:32:06 2019 +0800
+
+    Merge pull request #12 from tingjan1982/product-screen
+    
+    Added Delete product function in Edit Product screen.
+
+[33mcommit 913dc24718fc72004fc0df4a9312d2a9c0ab244a[m
+Merge: c8875d0 efa56c2
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Mon Nov 4 15:32:06 2019 +0800
+
+    Merge pull request #12 from tingjan1982/product-screen
+    
+    Added Delete product function in Edit Product screen.
+
+[33mcommit efa56c2632566da55c3e1332b70d1325dc71800e[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Wed Oct 30 14:18:18 2019 +0800
+
+    Added Delete product function in Edit Product screen.
+    > increased touchable area in Back button.
+    > introduced Delete button component bundled with pop up for action confirmation.
+    > add accordion open delay and auto close swipe left gesture when button is pressed.
+
+[33mcommit c8875d0588b67769256de0edb01413435f4e5f14[m
+Merge: df531b4 7c22890
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Tue Oct 29 20:22:01 2019 +0800
+
+    Merge pull request #11 from tingjan1982/fix-editstaff
+    
+    Fix some minor update password issues in Edit Staff screen.
+
+[33mcommit 7c22890bbf61acb071f5eeb2e513d13b8366567f[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Wed Oct 23 21:49:48 2019 +0900
+
+    Fix some minor update password issues in Edit Staff screen.
+    > Introduced Backend.js to consolidate backend API properties and operations.
+    > Refactored timecard screen to get active timecard to accommodate multiple users scenario.
+    > Use keyboard for default user.
+    > Display nickname in client users login screen if one is available.
+    > Removed duplicate styles in styles.js.
+
+[33mcommit df531b48564663ce46a340a854cd4fba8eb76a31[m
+Merge: 394f23f 4fcd59c
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Sat Oct 26 14:50:40 2019 +0900
+
+    Merge pull request #9 from tingjan1982/dev
+    
+    product editing
+
+[33mcommit 4fcd59cbd54605c046d52924f04b30636ddd1332[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Oct 25 23:08:03 2019 +0630
+
+    navfix for test
+
+[33mcommit 575040d516e28b9ad3e50de53e482c35373bea2a[m
+Merge: 4f980fc c2af375
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Oct 25 10:54:30 2019 +0630
+
+    Merge branch 'dev' of https://github.com/tingjan1982/nextpos-app into dev
+    
+    # Conflicts:
+    #       screens/Login.js
+
+[33mcommit 4f980fc67fd10ce44836b0e6682395c5ff16f502[m
+Merge: 0f089e0 d913882
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Oct 25 01:29:24 2019 +0630
+
+    Merge branch 'dev' of https://github.com/tingjan1982/nextpos-app into dev
+
+[33mcommit c2af375265c89313510ff4cc2fd275a9de6717e7[m
+Merge: 0f089e0 d913882
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Oct 25 01:29:24 2019 +0630
+
+    Merge branch 'dev' of https://github.com/tingjan1982/nextpos-app into dev
+
+[33mcommit 0f089e0d63eb0fed8f61deef4f3df5589cdab25a[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Oct 25 01:23:21 2019 +0630
+
+    bug fix
+
+[33mcommit d9461ab3cf28ea8295f496a47049afe7ffe174be[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Wed Oct 23 22:56:27 2019 +0630
+
+    bottomNav Routing
+
+[33mcommit d91388282e586a9bc98e50849ed7b4c87f2a37fa[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Wed Oct 23 22:56:27 2019 +0630
+
+    bottomNav Routing
+
+[33mcommit 5cb697583cfa393389a1d3dd029bacaf131db196[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Mon Oct 21 23:47:02 2019 +0630
+
+    product editing
+
+[33mcommit 394f23fb4f0efef90e2f438b4893eed8cdeb5dc0[m
+Merge: 294798a cc996b7
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Thu Oct 10 14:26:42 2019 +1000
+
+    Merge pull request #8 from tingjan1982/dev
+    
+    Add Category customize && implemented PrdList UI change
+
+[33mcommit cc996b7afe1b768d4c3b4db44a703eb29895c761[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Thu Oct 10 10:44:01 2019 +0630
+
+    gasture reset && proceed to blank screen fixed
+
+[33mcommit 8b0b94b8bcfab5b766d89709188b501a41f7a17d[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Wed Oct 9 14:27:32 2019 +0630
+
+    options && woringarea preselected add
+
+[33mcommit 35b1f724f8ada60c60e5d8c45daa4c8f1932d12e[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Tue Oct 8 15:43:36 2019 +0630
+
+    delete Accordion.js
+
+[33mcommit f68a99da1f7288c5738d75461c78467401dca22e[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Tue Oct 8 15:22:49 2019 +0630
+
+    Add Options && Reset gesture status
+
+[33mcommit d2d5972fa3dc97f73d1b0c866050044469fa1f3e[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Sun Oct 6 21:30:20 2019 +0630
+
+    customize category save function add
+
+[33mcommit 621a69a0d2f09ab0b636999778d3d92ffb27f7c5[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Oct 4 14:08:08 2019 +0630
+
+    build fail fix
+
+[33mcommit 991ddfdff196774ce4bbc4a85979bda241f82a61[m
+Merge: 4a79fbe 20740ae
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Oct 4 13:32:26 2019 +0630
+
+    Merge branch 'dev' of https://github.com/tingjan1982/nextpos-app into dev
+
+[33mcommit 4a79fbe166eaaa9b7c86518f52390dbc8e9b1858[m
+Merge: 4e3e95d 356370b
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Oct 4 13:06:43 2019 +0630
+
+    build fail fix
+
+[33mcommit 20740ae51a7208d01362d635f7f992a95b2d9445[m
+Merge: 4e3e95d 356370b
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Oct 4 13:06:43 2019 +0630
+
+    build fail fix
+
+[33mcommit 4e3e95d3c343820c2a50aa8dc8ea80094b4a024d[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Thu Oct 3 13:46:08 2019 +0630
+
+    Add Category customize && implemented PrdList UI change
+
+[33mcommit 356370b1a8be35e14e6b6e4e81bedf7a988bad18[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Thu Oct 3 13:46:08 2019 +0630
+
+    Add Category customize && implemented PrdList UI change
+
+[33mcommit 294798a6bee1b91daae7721fda72bb5a76950b43[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Wed Sep 25 10:56:42 2019 +0800
+
+    Fix some expo component import issues after Expo SDK upgrade to 35.
+
+[33mcommit 6b74738efb0172879ee18dfd4450dd76be9bb794[m
+Merge: 1d240db da82d43
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Wed Sep 25 10:29:38 2019 +0800
+
+    Merge pull request #7 from tingjan1982/dev
+    
+    clientuser login
+
+[33mcommit da82d437cbd2bacf924b9fd66ce06c6695e79e48[m
+Merge: 402a1ff b57755d
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Tue Sep 24 00:28:10 2019 +0630
+
+    Merge branch 'dev' of https://github.com/tingjan1982/nextpos-app into dev
+    
+    # Conflicts:
+    #       navigation/MainTabNavigator.js
+    #       package.json
+    #       screens/Staff.js
+    #       screens/StaffEditScreen.js
+    #       screens/StaffFormScreen.js
+    #       screens/StaffRow.js
+    #       styles.js
+
+[33mcommit 402a1ffcdedd12bd4b54fa0184bff3d0a3efc818[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Mon Sep 23 14:47:07 2019 +0630
+
+    stuff crud && stuff pwd update
+
+[33mcommit f12b49da9f2b5053db05d48d3e4f0d2ca46021d8[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Mon Sep 16 02:11:52 2019 +0630
+
+    staff crud && implement logouts && clockIn/Out
+
+[33mcommit b57755dcd5c93fc11290851d670d46ead504aa11[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Mon Sep 16 02:11:52 2019 +0630
+
+    staff crud && implement logouts && clockIn/Out
+
+[33mcommit 82f4fcf33718056dc38947d03d5789182b396b37[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Tue Sep 10 00:22:24 2019 +0630
+
+    clientuser login
+
+[33mcommit 1d240db77635b9f250b5fac5774cfb0ab07cfe4c[m
+Merge: db6b1b7 569994e
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Sun Sep 1 16:53:10 2019 +0800
+
+    Merge pull request #6 from tingjan1982/dev
+    
+    product crud and category adding
+
+[33mcommit 569994e9029308a013651e3a3300f89c7dc04626[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Aug 30 16:37:35 2019 +0630
+
+    product crud and category adding
+
+[33mcommit db6b1b7bcab42b78fb26fb5ecb3183be52288b63[m
+Merge: 5815bee 980e0d5
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Fri Aug 23 15:50:10 2019 +0800
+
+    Merge pull request #5 from tingjan1982/squashed-dev
+    
+    Added product list page that can display products by categories and a…
+
+[33mcommit 980e0d574514d340dd1add74a11f35f6f7c673fd[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Fri Aug 23 15:48:14 2019 +0800
+
+    add expo optimize
+
+[33mcommit e06de908b325a25b175c4f8fd07b13088dec553e[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Aug 9 15:49:22 2019 +0630
+
+    Added product list page that can display products by categories and add products and categories.
+
+[33mcommit 5815bee3dc5c2d6966a3d3925da485651706a195[m
+Merge: f77f577 76e2d91
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Fri Aug 2 15:56:06 2019 +1000
+
+    Merge pull request #3 from tingjan1982/dev-squashed
+    
+    Dev squashed
+
+[33mcommit 76e2d9107c57f4c5bbfba0397f8f89c8e220427f[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Fri Aug 2 11:06:01 2019 +0630
+
+    add updated code lost from squashed and typo fix
+
+[33mcommit 115dd655fac19e063f9f0f7490967430cc36aaed[m
+Author: shinphoo <shinphoo@gmail.com>
+Date:   Tue Jul 9 19:34:13 2019 +0630
+
+    Squashed commits for Shin's work on the following:
+    * splash screen
+    * client sign up
+    * client login
+
+[33mcommit f77f57768570702a113362263185d66008b2a614[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Wed Jun 12 00:32:13 2019 +0800
+
+    run npm install
+
+[33mcommit dab3339d74660e44f56143ac5bddd1f32e46c270[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Wed Jun 12 00:27:21 2019 +0800
+
+    update dockerfile
+
+[33mcommit fb16290ede6d416060d15aaa06e508a9eb479113[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Wed Jun 12 00:20:52 2019 +0800
+
+    update dockerfile
+
+[33mcommit 8ce98fc6afadc08f7a86d2cf4156048276a80941[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Wed Jun 12 00:09:52 2019 +0800
+
+    update dockerfile
+
+[33mcommit eeffc957d5b52be3dfe244f9bd27f086b5d791a6[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Tue Jun 11 23:55:31 2019 +0800
+
+    update typo
+
+[33mcommit 44922e1d60b8431688aa704471e651e7acef1441[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Tue Jun 11 23:51:35 2019 +0800
+
+    Integate Travis CI and update Dockerfile.
+
+[33mcommit 36eef9c289a6f8520f38360a3e5b3db94361643f[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Fri Jun 7 14:45:31 2019 +0800
+
+    Created a Dockerfile to integrate into CI for continuously publishing the latest app.
+
+[33mcommit 6c7d8041717eef6c548337c7b76c0b191292cab0[m
+Author: Joe Lin <tingjan1982@gmail.com>
+Date:   Sun Jun 2 13:32:24 2019 +0800
+
+    Create README.md
+
+[33mcommit 738a3e8658b6f61ef7e1b24f7fb1fdbcf2e0df30[m
+Author: joelin <tingjan1982@gmail.com>
+Date:   Sun Jun 2 13:31:42 2019 +0800
+
+    Creates base project structure for nextpos frontend app using React Native with Expo.

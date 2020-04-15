@@ -1,34 +1,11 @@
 import React from 'react'
-import { Field, reduxForm, FieldArray } from 'redux-form'
-import {
-  ActivityIndicator,
-  InputAccessoryView,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  ScrollView
-} from 'react-native'
-import {connect} from 'react-redux'
-import BackBtnCustom from '../components/BackBtnCustom'
-import { formatDate, getShiftStatus } from '../actions'
-import {
-  api,
-  dispatchFetchRequest,
-  successMessage, warningMessage
-} from '../constants/Backend'
+import {Field, reduxForm} from 'redux-form'
+import {KeyboardAvoidingView, ScrollView, Text, TouchableOpacity, View} from 'react-native'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
-import ConfirmActionButton from '../components/ConfirmActionButton'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import {handleCloseShift, handleOpenShift} from "../helpers/shiftActions";
-import BackBtn from "../components/BackBtn";
+import {LocaleContext} from '../locales/LocaleContext'
 import InputText from '../components/InputText'
-import { isRequired } from '../validators'
-import {enter} from "react-native/Libraries/Utilities/ReactNativeTestTools";
+import {isRequired} from '../validators'
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 
 class AccountClosureForm extends React.Component {
   static navigationOptions = {
@@ -38,39 +15,6 @@ class AccountClosureForm extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    context.localize({
-      en: {
-        accountCloseTitle: 'Closing Account',
-        staff: 'Staff',
-        cashSection: 'Cash',
-        cardSection: 'Credit Card',
-      	nextAction: 'Next',
-      	closingStatus: 'Status',
-      	startingCash: 'Starting Cash',
-      	totalCashTransitionAmt: 'Total Cash Transactions',
-      	totalCashInRegister: 'Actual Cash Amount',
-        enterAmount: 'Enter Amount',
-      	remark: 'Unbalance Reason',
-      	totalCardTransitionAmt: 'Total Card Transactions',
-      	totalCardInRegister: 'Actual Card Amount'
-      },
-      zh: {
-        accountCloseTitle: '開始關帳',
-        staff: '員工',
-        cashSection: '現金',
-        cardSection: '信用卡',
-        nextAction: '下一步',
-        closingStatus: '關帳狀態',
-        startingCash: '開帳現金',
-        totalCashTransitionAmt: '現金營業額',
-        totalCashInRegister: '實際現金總額',
-        enterAmount: '請輸入金額',
-        remark: '理由',
-        totalCardTransitionAmt: '刷卡營業額',
-        totalCardInRegister: '實際刷卡營業額'
-      }
-    })
   }
 
   render() {
@@ -85,153 +29,147 @@ class AccountClosureForm extends React.Component {
       closingShiftReport.totalByPaymentMethod = mostrecentShift.close.closingShiftReport.totalByPaymentMethod
     }
 
-    let enteredCashAmount = null
-    let enteredCardAmount = null
-
-    if (mostrecentShift.close.closingBalances !== undefined) {
-      if (mostrecentShift.close.closingBalances.hasOwnProperty('CASH')) {
-        enteredCashAmount = mostrecentShift.close.closingBalances['CASH'].closingBalance
-      }
-    }
-
     return (
-      <DismissKeyboard>
-      	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      <KeyboardAwareScrollView scrollIndicatorInsets={{right: 1}}>
 
-          {/* Cash */}
-          <View style={styles.sectionBar}>
-            <View>
-              <Text style={styles.sectionBarText}>
-                {t('cashSection')}
-              </Text>
-            </View>
+        {/* Cash */}
+        <View style={styles.sectionBar}>
+          <View>
+            <Text style={styles.sectionBarText}>
+              {t('shift.cashSection')}
+            </Text>
           </View>
+        </View>
 
-          <View style={[styles.tableRowContainerWithBorder]}>
-            <View style={[styles.tableCellView, {flex: 2}]}>
-              <Text style={[styles.fieldTitle]}>
-                {t('startingCash')}
-              </Text>
-            </View>
-            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-              <Text>${mostrecentShift.open.balance}</Text>
-            </View>
+        <View style={[styles.tableRowContainerWithBorder]}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('shift.startingCash')}
+            </Text>
           </View>
-
-          <View style={[styles.tableRowContainerWithBorder]}>
-            <View style={[styles.tableCellView, {flex: 2}]}>
-              <Text style={[styles.fieldTitle]}>
-                {t('totalCashTransitionAmt')}
-              </Text>
-            </View>
-            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-              <Text>${closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.orderTotal : 0}
-              </Text>
-            </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>${mostrecentShift.open.balance}</Text>
           </View>
+        </View>
 
-          <View style={styles.tableRowContainerWithBorder}>
-            <View style={[styles.tableCellView, {flex: 2}]}>
-              <Text style={[styles.fieldTitle]}>
-                {t('totalCashInRegister')}
-              </Text>
-            </View>
-            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-              <Field
-                name="cashclosingBalance"
-                component={InputText}
-                keyboardType={`numeric`}
-                validate={isRequired}
-                placeholder={t('enterAmount')}
-                defaultValue={String(enteredCashAmount)}
-              />
-            </View>
+        <View style={[styles.tableRowContainerWithBorder]}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('shift.totalCashTransitionAmt')}
+            </Text>
           </View>
-
-          <View style={styles.tableRowContainerWithBorder}>
-            <View style={{flex: 1}}>
-              <Field
-                name="cashunbalanceReason"
-                component={InputText}
-                placeholder={t('remark')}
-                height={35}
-              />
-            </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>${closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.orderTotal : 0}
+            </Text>
           </View>
+        </View>
 
-        	{/* #Cash */}
-
-
-        	{/* Credit Card */}
-          <View style={styles.sectionBar}>
-            <View>
-              <Text style={styles.sectionBarText}>
-                {t('cardSection')}
-              </Text>
-            </View>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('shift.totalCashInRegister')}
+            </Text>
           </View>
-
-          <View style={styles.tableRowContainerWithBorder}>
-            <View style={[styles.tableCellView, {flex: 2}]}>
-              <Text style={[styles.fieldTitle]}>
-                {t('totalCardTransitionAmt')}
-              </Text>
-            </View>
-            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-              <Text>$
-                {closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.orderTotal : 0}
-              </Text>
-            </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Field
+              name="cash.closingBalance"
+              component={InputText}
+              keyboardType={`numeric`}
+              validate={isRequired}
+              placeholder={t('shift.enterAmount')}
+              format={(value, name) => {
+                return value != null ? String(value) : '0'
+              }}
+            />
           </View>
+        </View>
 
-          <View style={styles.tableRowContainerWithBorder}>
-            <View style={[styles.tableCellView, {flex: 2}]}>
-              <Text style={[styles.fieldTitle]}>
-                {t('totalCardInRegister')}
-              </Text>
-            </View>
-            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-              <Field
-                name="cardclosingBalance"
-                component={InputText}
-                validate={isRequired}
-                keyboardType={`numeric`}
-                placeholder={t('enterAmount')}
-              />
-            </View>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={{flex: 1}}>
+            <Field
+              name="cash.unbalanceReason"
+              component={InputText}
+              placeholder={t('shift.remark')}
+              height={35}
+            />
           </View>
+        </View>
 
-          <View style={styles.tableRowContainerWithBorder}>
-            <View style={{flex: 1}}>
-              <Field
-                name="cardunbalanceReason"
-                component={InputText}
-                placeholder={t('remark')}
-              />
-            </View>
+        {/* #Cash */}
+
+
+        {/* Credit Card */}
+        <View style={styles.sectionBar}>
+          <View>
+            <Text style={styles.sectionBarText}>
+              {t('shift.cardSection')}
+            </Text>
           </View>
+        </View>
 
-          <View style={[styles.bottom, styles.horizontalMargin]}>
-            <TouchableOpacity
-              onPress={handleSubmit}
-            >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {t('nextAction')}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => this.props.navigation.goBack()}
-            >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                {t('cancel')}
-              </Text>
-            </TouchableOpacity>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('shift.totalCardTransitionAmt')}
+            </Text>
           </View>
-          {/* #Credit Card */}
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>$
+              {closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.orderTotal : 0}
+            </Text>
+          </View>
+        </View>
 
-				</ScrollView>
-      </DismissKeyboard>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('shift.totalCardInRegister')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Field
+              name="card.closingBalance"
+              component={InputText}
+              validate={isRequired}
+              keyboardType={`numeric`}
+              placeholder={t('shift.enterAmount')}
+              format={(value, name) => {
+                return value != null ? String(value) : '0'
+              }}
+            />
+          </View>
+        </View>
+
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={{flex: 1}}>
+            <Field
+              name="card.unbalanceReason"
+              component={InputText}
+              placeholder={t('shift.remark')}
+            />
+          </View>
+        </View>
+
+        <View style={[styles.bottom, styles.horizontalMargin]}>
+          <TouchableOpacity
+            onPress={handleSubmit}
+          >
+            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              {t('shift.nextAction')}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => this.props.navigation.goBack()}
+          >
+            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+              {t('action.cancel')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        {/* #Credit Card */}
+
+      </KeyboardAwareScrollView>
     )
   }
 }

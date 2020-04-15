@@ -1,9 +1,10 @@
 const en = {
-  cancel: 'Cancel',
+  login: 'Login',
   clientName: 'Client Name',
   email: 'Email Address',
   password: 'Password',
   logout: 'Logout',
+  refreshed: 'Refreshed',
   menu: {
     home: 'Home',
     tables: 'Tables',
@@ -43,17 +44,22 @@ const en = {
     confirmMessageTitle: 'Confirm Action',
     confirmMessage: 'Are you sure?',
     yes: 'Yes',
-    no: 'No'
+    no: 'No',
+    unpin: 'Unpin',
+    pin: 'Pin'
   },
   order: {
     inStore: 'In Store',
+    IN_STORE: 'In Store',
     takeOut: 'Take Out',
+    TAKE_OUT: 'Take Out',
 
     ordersTitle: 'Orders',
     fromDate: 'From ',
     toDate: 'To ',
     orderId: 'Order Id',
     date: 'Date',
+    orderStatusLong: 'Order Status',
     orderStatus: 'Status',
     noOrder: 'No Order',
 
@@ -68,15 +74,19 @@ const en = {
     visitedFrequency: 'Visited Frequency',
     notFilledIn: 'Not Filled',
     orderStartDate: 'Start Date',
-    lineItemCreatedDate: 'Start Date',
+    lineItemCreatedDate: 'Date',
+    preparationDuration: 'Order Preparation',
     endDate: 'End Date',
     duration: 'Total Duration',
     product: 'Product',
     quantity: 'Qty',
     subTotal: 'Subtotal',
-    serveBy: 'Serve By'
+    serveBy: 'Serve By',
+
+    // order messages
+    submitted: 'Order Submitted',
+    deleted: 'Order Deleted'
   },
-  orderStatus: 'Order Status',
   orderState: {
     OPEN: 'Open',
     IN_PROCESS: 'In Process',
@@ -86,12 +96,69 @@ const en = {
     COMPLETED: 'Completed',
     DELETED: 'Deleted'
   },
+  payment: {
+    cashPayment: 'Cash',
+    cardPayment: 'Credit Card'
+  },
   timecard: {
     hours: 'Hour(s)',
     minutes: 'Minute(s)'
   },
+  shift: {
+    status: {
+      INACTIVE: 'Inactive',
+      ACTIVE: 'Active',
+      CLOSING: 'Closing',
+      CONFIRM_CLOSE: 'Confirm Closing',
+      BALANCED: 'Balanced',
+      UNBALANCED: 'Unbalanced'
+    },
+    staff: 'Staff',
+    shiftSummary: 'Closing Account Summaries',
+    totalCashIncome: 'Total Cash Income',
+    totalCreditCardIncome: 'Total Card Income',
+    totalClosingAmount: 'Total Closing Amount',
+    invoicesTitle: 'Invoices',
+    totalInvoices: 'Total Number of Orders',
+    deletedOrders: 'Total Number Of Orders Deleted',
+    totalDiscounts: 'Total Amount Of Discount',
+    totalServiceCharge: 'Total Service Charge',
+    closingRemark: 'Closing Remark',
+    confirmAction: 'Confirm Close',
+    abortAction: 'Abort Close',
+    accountCloseTitle: 'Closing Account',
+    confirmCloseTitle: 'Confirm Closing Account Details',
+    cashSection: 'Cash',
+    cardSection: 'Credit Card',
+    nextAction: 'Next',
+    closingStatus: 'Status',
+    startingCash: 'Starting Cash',
+    totalCashTransitionAmt: 'Total Cash Transactions',
+    totalCashInRegister: 'Actual Cash Amount',
+    enterAmount: 'Enter Amount',
+    remark: 'Unbalance Reason',
+    totalCardTransitionAmt: 'Total Card Transactions',
+    totalCardInRegister: 'Actual Card Amount',
+    difference: 'Difference',
+
+    // messages
+    shiftOpened: 'Shift opened',
+    shiftAborted: 'Closing shift aborted',
+    shiftClosed: 'Shift closed'
+  },
   errors: {
     balanceError: 'Please enter a positive value'
+  },
+  backend: {
+    POST: 'Saved',
+    PATCH: 'Saved',
+    DELETE: 'Deleted',
+    403: 'You are not authorized for this operation.',
+    404: 'The id you used to look for an item cannot be found.',
+    message: {
+      insufficientCashAmount: 'Entered cash amount is less than the settling amount.',
+      completeAllOrdersFirst: 'Please complete all orders before closing shift.'
+    }
   },
   bar: 'Bar {{someValue}}'
 }

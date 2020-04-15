@@ -90,7 +90,7 @@ class PasswordResetForm extends React.Component {
               onPress={() => this.props.navigation.navigate('Login')}
             >
               <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                {t('cancel')}
+                {t('action.cancel')}
               </Text>
             </TouchableOpacity>
           </View>

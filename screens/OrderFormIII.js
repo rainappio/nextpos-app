@@ -19,7 +19,9 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 import OrderFormIV from './OrderFormIV'
 import { LocaleContext } from '../locales/LocaleContext'
-import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
+import { api, dispatchFetchRequest, errorAlert, makeFetchRequest, successMessage } from '../constants/Backend'
+import LoadingScreen from "./LoadingScreen";
+import BackendErrorScreen from "./BackendErrorScreen";
 
 class OrderFormIII extends React.Component {
   static navigationOptions = {
@@ -29,10 +31,6 @@ class OrderFormIII extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   componentDidMount() {
@@ -41,36 +39,33 @@ class OrderFormIII extends React.Component {
   }
 
   handleSubmit = values => {
-    let createOrderObj = {}
 
-    createOrderObj['productId'] = this.props.navigation.state.params.prdId
-    createOrderObj['quantity'] = values.quantity
-    delete values.quantity
+    const orderId = this.props.navigation.state.params.orderId
 
-    let prdOptionsCollections = []
-    let dirtyArr = Object.values(values)
-    if (dirtyArr.some(dr => dr.optionName !== undefined)) {
-      dirtyArr.map(
-        dr => dr.optionName !== undefined && prdOptionsCollections.push(dr)
-      )
+    const updatedOptions = []
+    values.productOptions != null && values.productOptions.map(option => {
+      if (Array.isArray(option)) {
+        if (option.length > 0) {
+
+          const optionValues = option.map(o => {
+            return o.optionValue
+          })
+
+          updatedOptions.push({
+            optionName: option[0].optionName,
+            optionValue: optionValues.join()
+          })
+        }
+      } else {
+        updatedOptions.push(option)
+      }
+    })
+
+    const lineItemRequest = {
+      productId: this.props.navigation.state.params.prdId,
+      quantity: values.quantity,
+      productOptions: updatedOptions
     }
-
-    if (dirtyArr.some(dr => Array.isArray(dr))) {
-      dirtyArr.map(
-        dr =>
-          Array.isArray(dr) &&
-          dr.map(d =>
-            prdOptionsCollections.push({
-              optionName: d.optionName,
-              optionValue: d.optionValue,
-              optionPrice: d.optionPrice
-            })
-          )
-      )
-    }
-
-    createOrderObj['productOptions'] = prdOptionsCollections
-    var orderId = this.props.navigation.state.params.orderId
 
     dispatchFetchRequest(
       api.order.newLineItem(orderId),
@@ -81,10 +76,9 @@ class OrderFormIII extends React.Component {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(createOrderObj)
+        body: JSON.stringify(lineItemRequest)
       },
       response => {
-        successMessage('Line item saved')
         this.props.navigation.navigate('OrderFormII', {
           orderId: orderId
         })
@@ -93,29 +87,80 @@ class OrderFormIII extends React.Component {
     ).then()
   }
 
+  handleUpdate = values => {
+
+    const orderId = this.props.navigation.state.params.orderId
+    const lineItemId = values.lineItemId
+
+    const updatedOptions = []
+    values.productOptions != null && values.productOptions.map(option => {
+      if (Array.isArray(option)) {
+        if (option.length > 0) {
+
+          const optionValues = option.map(o => {
+            return o.optionValue
+          })
+
+          updatedOptions.push({
+            optionName: option[0].optionName,
+            optionValue: optionValues.join()
+          })
+        }
+      } else {
+        updatedOptions.push(option)
+      }
+    })
+
+    const lineItemRequest = {
+      quantity: values.quantity,
+      productOptions: updatedOptions
+    }
+
+    dispatchFetchRequest(api.order.updateLineItem(orderId, lineItemId), {
+      method: 'PATCH',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(lineItemRequest)
+    }, response => {
+      this.props.navigation.navigate('OrdersSummary')
+      this.props.getOrder()
+    }).then()
+  }
+
   render() {
-    const { navigation, haveError, isLoading } = this.props
+    const { product, haveError, isLoading } = this.props
+
+    const isEditLineItem = this.props.navigation.getParam('lineItem') != null
 
     if (isLoading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen />
       )
     } else if (haveError) {
       return (
-        <View style={[styles.container]}>
-          <Text>Err during loading, check internet conn...</Text>
-        </View>
+        <BackendErrorScreen />
       )
     }
     return (
-      <OrderFormIV
-        onSubmit={this.handleSubmit}
-        product={this.props.product}
-        navigation={navigation}
-        initialValues={{quantity: 1}}
-      />
+      <View>
+        {isEditLineItem ? (
+          <OrderFormIV
+            onSubmit={this.handleUpdate}
+            product={product}
+            initialValues={this.props.navigation.getParam('lineItem')}
+          />
+        ) : (
+            <OrderFormIV
+              onSubmit={this.handleSubmit}
+              product={product}
+              initialValues={{ quantity: 1 }}
+            />
+          )}
+      </View>
+
     )
   }
 }

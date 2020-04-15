@@ -71,7 +71,7 @@ class UserTimeCards extends React.Component {
       	<TouchableOpacity
           style={styles.tableRowContainerWithBorder}
 					onPress={() => {
-          	this.props.navigation.navigate('UserTimeCardDetail',{
+          	this.props.navigation.navigate('UserTimeCardDetail', {
           		timecardId: timecard.id
           	})
           }}

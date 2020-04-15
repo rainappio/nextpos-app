@@ -18,8 +18,7 @@ export default class PopUp extends Component {
     super(props, context)
 
     this.state = {
-      isVisible: false,
-      t: context.t
+      isVisible: false
     }
   }
 
@@ -38,7 +37,7 @@ export default class PopUp extends Component {
       navigation,
       dataArr
     } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <View>

@@ -3,7 +3,7 @@ import {ActivityIndicator, Text, TouchableOpacity, View, AsyncStorage} from 'rea
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import {api, dispatchFetchRequest, successMessage, warningMessage} from '../constants/Backend'
+import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext"
 import {dateToLocaleString, doLogout, formatDate, getAnnouncements, getClientUsr, getShiftStatus} from "../actions"
 import BackBtn from "../components/BackBtn"
@@ -45,7 +45,9 @@ class ClockIn extends React.Component {
           INACTIVE: 'Inactive',
           ACTIVE: 'At Work',
           COMPLETE: 'Off Work'
-        }
+        },
+        clockedIn: 'Clocked in',
+        clockedOut: 'Clocked out'
       },
       zh: {
         timeCardTitle: '員工打卡',
@@ -66,7 +68,9 @@ class ClockIn extends React.Component {
           INACTIVE: '未曾打卡',
           ACTIVE: '上班中',
           COMPLETE: '下班'
-        }
+        },
+        clockedIn: '上班打卡完成',
+        clockedOut: '下班打卡完成'
       }
     })
 
@@ -178,31 +182,35 @@ class ClockIn extends React.Component {
   }
 
   handleClockIn = () => {
-    dispatchFetchRequest(api.timecard.clockin, {
+    dispatchFetchRequestWithOption(api.timecard.clockin, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         }
+      }, {
+        defaultMessage: false
       },
       response => {
-        successMessage('Clocked in')
+        successMessage(this.context.t('clockedIn'))
         this.props.navigation.navigate('LoginSuccess')
       }).then()
   }
 
   handleClockOut = () => {
-    dispatchFetchRequest(api.timecard.clockout, {
+    dispatchFetchRequestWithOption(api.timecard.clockout, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         }
+      }, {
+        defaultMessage: false
       },
       response => {
-        successMessage('Clocked out')
+        successMessage(this.context.t('clockedOut'))
         this.props.navigation.navigate('LoginSuccess')
       }).then()
   }

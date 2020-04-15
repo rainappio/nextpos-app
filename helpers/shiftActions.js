@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest, warningMessage} from "../constants/Backend";
+import {api, dispatchFetchRequest, successMessage, warningMessage} from "../constants/Backend";
 import i18n from 'i18n-js'
 
 export const handleOpenShift = (balance, successCallback) => {
@@ -20,6 +20,7 @@ export const handleOpenShift = (balance, successCallback) => {
       })
     },
     response => {
+      successMessage(i18n.t('shift.shiftOpened'))
       successCallback(response)
     }
   ).then()
@@ -107,4 +108,8 @@ export const handleAbortCloseShift = () => {
     response => {
       successCallback(response)
     }).then()
+}
+
+export const renderShiftStatus = (status) => {
+  return i18n.t(`shift.status.${status}`)
 }

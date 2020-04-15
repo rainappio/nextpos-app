@@ -1,6 +1,8 @@
 import { AsyncStorage } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import * as Sentry from 'sentry-expo';
+import NavigationService from "../navigation/NavigationService";
+import i18n from 'i18n-js'
 
 const storage = {
   clientAccessToken: 'token',
@@ -64,6 +66,9 @@ export const api = {
     },
     delete: id => {
       return `${apiRoot}/products/${id}`
+    },
+    togglePin: id => {
+    	return `${apiRoot}/products/${id}/togglePin`
     }
   },
   productLabel: {
@@ -100,6 +105,9 @@ export const api = {
     newLineItem: orderId => {
       return `${apiRoot}/orders/${orderId}/lineitems`
     },
+    updateLineItem: (orderId, lineItemId) => {
+      return `${api.apiRoot}/orders/${orderId}/lineitems/${lineItemId}`
+    },
     deliverLineItems: orderId => {
       return `${apiRoot}/orders/${orderId}/lineitems/deliver`
     },
@@ -120,15 +128,21 @@ export const api = {
     },
     inflightOrders: `${apiRoot}/orders/inflight`,
     getGlobalOrderOffers: `${apiRoot}/offers/globalOrderOffers`,
-    getordersByDateRange: `${apiRoot}/orders`,
-    getOrdersByDateAndRange: (dateRange, fromDate, toDate) => {
-      return `${apiRoot}/orders?dateRange=${dateRange}&fromDate=${fromDate}&toDate=${toDate}`
-    },
-    getOrdersByDate: (fromDate, toDate) => {
-      return `${apiRoot}/orders?dateRange=${'RANGE'}&fromDate=${fromDate}&toDate=${toDate}`
-    },
-    getOrdersByRange: dateRange => {
-      return `${apiRoot}/orders?dateRange=${dateRange}`
+    getOrdersByDateAndRange: (dateRange, shiftId, fromDate, toDate) => {
+      let params = ''
+
+      if (dateRange !== undefined) {
+        params += `dateRange=${dateRange}`
+      }
+      if (shiftId !== undefined) {
+        params += `&shiftId=${shiftId}`
+      }
+
+      if (fromDate !== undefined && fromDate !== null && toDate !== undefined && toDate !== null) {
+        params += `&fromDate=${fromDate}&toDate=${toDate}`
+      }
+
+      return `${apiRoot}/orders?${params}`
     }
   },
   printer: {
@@ -137,7 +151,9 @@ export const api = {
     getPrinter: id => {
       return `${apiRoot}/printers/${id}`
     },
-    update: `${apiRoot}/printers/`
+    update: id => {
+      return `${apiRoot}/printers/${id}`
+    }
   },
   workingarea: {
     create: `${apiRoot}/workingareas`,
@@ -145,13 +161,16 @@ export const api = {
       return `${apiRoot}/workingareas/${id}`
     },
     getAll: `${apiRoot}/workingareas`,
-    update: `${apiRoot}/workingareas/`
+    update: id => {
+      return `${apiRoot}/workingareas/${id}`
+    }
   },
   shift: {
     open: `${apiRoot}/shifts/open`,
     close: `${apiRoot}/shifts/close`,
     active: `${apiRoot}/shifts/active`,
     mostRecent: `${apiRoot}/shifts/mostRecent`,
+    getAll: `${apiRoot}/shifts`,
     initiate: `${apiRoot}/shifts/initiateClose`,
     confirm: `${apiRoot}/shifts/confirmClose`,
     abort: `${apiRoot}/shifts/abortClose`
@@ -162,16 +181,24 @@ export const api = {
       return `${apiRoot}/tablelayouts/${id}`
     },
     getAll: `${apiRoot}/tablelayouts`,
-    update: `${apiRoot}/tablelayouts/`,
+    update: id => {
+      return `${apiRoot}/tablelayouts/${id}`
+    },
     delete: layoutId => {
       return `${apiRoot}/tablelayouts/${layoutId}`
+    },
+    createTable: layoutId => {
+      return `${api.apiRoot}/tablelayouts/${layoutId}/tables`
     },
     updateTable: (layoutId, tableId) => {
       return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}`
     },
     deleteTable: (layoutId, tableId) => {
       return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}`
-    }
+    },
+    updateTablePosition: (layoutId, tableId) => {
+			return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}/position`
+    } 
   },
   payment: {
     charge: `${apiRoot}/orders/transactions`
@@ -182,8 +209,14 @@ export const api = {
   report: {
     getrangedSalesReport: `${apiRoot}/reporting/rangedSalesReport`,
     getsalesDistributionReport: `${apiRoot}/reporting/salesDistribution?`,
-    // getcustomerCountReport: `${apiRoot}/reporting/customerCount?`
     getcustomerCountReport: `${apiRoot}/reporting/customerStats`,
+    getCustomerTrafficReport: (year, month) => {
+      if (year !== undefined && month !== undefined) {
+        return `${apiRoot}/reporting/customerTraffic?year=${year}&month=${month}`
+      }
+
+      return `${apiRoot}/reporting/customerTraffic`
+    },
     getrangedSalesReportByDate: (date) => {
     	return `${apiRoot}/reporting/rangedSalesReport?date=${date}`
     },
@@ -221,6 +254,7 @@ export const removeToken = async () => {
   await AsyncStorage.removeItem(storage.clientAccessToken)
 }
 
+// todo: delete this
 export const makeFetchRequest = async fetchRequest => {
   try {
     let useClientUserToken = true
@@ -246,6 +280,17 @@ export const makeFetchRequest = async fetchRequest => {
 export const dispatchFetchRequest = async (
   endpoint,
   payload,
+  successCallback,
+  failCallback
+) => {
+
+  return dispatchFetchRequestWithOption(endpoint, payload, { defaultMessage: true }, successCallback, failCallback)
+}
+
+export const dispatchFetchRequestWithOption = async (
+  endpoint,
+  payload,
+  options,
   successCallback,
   failCallback
 ) => {
@@ -275,13 +320,18 @@ export const dispatchFetchRequest = async (
           failCallback(response)
         }
       } else {
+        const isUpdateOperation = ['POST', 'PATCH', 'DELETE'].includes(payload.method)
+
+        if (isUpdateOperation && options.defaultMessage) {
+          successMessage(i18n.t(`backend.${payload.method}`))
+        }
+
         successCallback(response)
       }
 
       return response
     } else {
-      const errorMessage =
-        'Token does not exist. Please consult your service provider.'
+      const errorMessage = 'Token does not exist. Please consult your service provider.'
 
       showMessage({
         message: errorMessage,
@@ -315,16 +365,20 @@ export const errorAlert = response => {
         errorMessage = 'Your are not authenticated for this operation.'
         break
       case 403:
-        errorMessage = 'You are not authorized for this operation.'
+        errorMessage = i18n.t('backend.403')
         break
       case 404:
-        errorMessage = 'The id you used to look for an item cannot be found'
+        errorMessage = i18n.t('backend.404')
         break
       case 412:
-        errorMessage = content.message
+        errorMessage = content.localizedMessageKey != null ? i18n.t(`backend.${content.localizedMessageKey}`) : content.message
         break
       default:
         errorMessage = `Encountered an error with your request. (${content.message})`
+    }
+
+    if (response.status === 401) {
+      NavigationService.navigate('Login')
     }
 
     showMessage({

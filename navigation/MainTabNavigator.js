@@ -52,7 +52,6 @@ import PrinterEdit from '../screens/PrinterEdit'
 import WorkingAreaAdd from '../screens/WorkingAreaAdd'
 import WorkingAreaEdit from '../screens/WorkingAreaEdit'
 import ShiftClose from '../screens/ShiftClose'
-import LIneItemEdit from '../screens/LIneItemEdit'
 import TableLayouts from '../screens/TableLayouts'
 import TableLayoutEdit from '../screens/TableLayoutEdit'
 import TableLayoutAdd from '../screens/TableLayoutAdd'
@@ -61,7 +60,6 @@ import TableEdit from '../screens/TableEdit'
 import Payment from '../screens/Payment'
 import PaymentOrder from '../screens/PaymentOrder'
 import CheckoutComplete from '../screens/CheckoutComplete'
-import Sales from '../screens/Sales'
 import SalesCharts from '../screens/SalesCharts'
 import OrderDetail from '../screens/OrderDetail'
 import Announcements from '../screens/Announcements'
@@ -74,6 +72,12 @@ import UserTimeCardDetail from '../screens/UserTimeCardDetail'
 import CloseComplete from '../screens/CloseComplete'
 import AccountClose from '../screens/AccountClose'
 import AccountCloseConfirm from '../screens/AccountCloseConfirm'
+import CustomerStats from "../screens/CustomerStats";
+import ShiftHistory from "../screens/ShiftHistory";
+import ShiftDetails from "../screens/ShiftDetails";
+import { getToken } from "../constants/Backend";
+import { doLogout } from "../actions";
+import ManageVisualSceen from '../screens/ManageVisualSceen'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -125,7 +129,8 @@ const Settings = createStackNavigator({
   AnnouncementsEdit: AnnouncementsEdit,
   CloseComplete: CloseComplete,
   AccountClose: AccountClose,
-  AccountCloseConfirm: AccountCloseConfirm
+  AccountCloseConfirm: AccountCloseConfirm,
+  ManageVisualSceen: ManageVisualSceen
 })
 Settings.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.settings'),
@@ -145,7 +150,6 @@ const Tables = createStackNavigator({
   OrderFormIII: OrderFormIII,
   OrderFormIV: OrderFormIV,
   OrdersSummary: OrdersSummary,
-  LIneItemEdit: LIneItemEdit,
   Payment: Payment,
   PaymentOrder: PaymentOrder,
   CheckoutComplete: CheckoutComplete
@@ -158,7 +162,7 @@ Tables.navigationOptions = ({ screenProps: { t } }) => ({
 })
 
 const Orders = createStackNavigator({
-  Orders: OrdersScreen,
+  OrdersScr: OrdersScreen,
   OrderDetail: OrderDetail
 })
 Orders.navigationOptions = ({ screenProps: { t } }) => ({
@@ -180,11 +184,13 @@ Reservation.navigationOptions = ({ screenProps: { t } }) => ({
 
 const Reports = createStackNavigator({
   Reports: ReportsScreen,
-  Sales: Sales,
   SalesCharts: SalesCharts,
   StaffTimeCard: StaffTimeCard,
   UserTimeCards: UserTimeCards,
-  UserTimeCardDetail: UserTimeCardDetail
+  UserTimeCardDetail: UserTimeCardDetail,
+  CustomerStats: CustomerStats,
+  ShiftHistory: ShiftHistory,
+  ShiftDetails: ShiftDetails
 })
 Reports.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.reporting'),
@@ -233,8 +239,16 @@ const tabBar = createBottomTabNavigator({
   }
 }, {
   defaultNavigationOptions: {
-    tabBarOnPress: ({navigation, defaultHandler}) => {
-      navigation.dispatch(StackActions.popToTop())
+    tabBarOnPress: async ({ navigation, defaultHandler }) => {
+      const tokenObj = await getToken()
+
+      if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {
+        navigation.dispatch(StackActions.popToTop())
+      } else {
+        navigation.navigate('Login')
+      }
+
+      //navigation.dispatch(StackActions.popToTop())
 
       /*navigation.dispatch(
         StackActions.reset({

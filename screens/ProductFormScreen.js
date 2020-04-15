@@ -7,12 +7,12 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import DropDown from '../components/DropDown'
 import AddBtn from '../components/AddBtn'
-import RenderRadioBtn from '../components/RadioItem'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
 import DeleteBtn from '../components/DeleteBtn'
 import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
+import RadioItemObjPick from "../components/RadioItemObjPick";
 
 class ProductFormScreen extends React.Component {
   static navigationOptions = {
@@ -62,31 +62,34 @@ class ProductFormScreen extends React.Component {
       handleDeleteProduct,
       workingareas,
       prodctoptions,
-      navigation
+      navigation,
+      isPinned,
+      productId,
+      handlepinToggle
     } = this.props
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={{flexGrow: 1}}>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
         <DismissKeyboard>
           <View style={[styles.fullWidthScreen]}>
             <ScreenHeader parentFullScreen={true}
-                          title={isEditForm ? t('editProduct') : t('newProduct')}
-                          rightComponent={
-                            <AddBtn
-                              onPress={() =>
-                                this.props.navigation.navigate('Option', {
-                                  customRoute: this.props.navigation.state.routeName
-                                })
-                              }
-                            />
-                          }
+              title={isEditForm ? t('editProduct') : t('newProduct')}
+              rightComponent={
+                <AddBtn
+                  onPress={() =>
+                    this.props.navigation.navigate('Option', {
+                      customRoute: this.props.navigation.state.routeName
+                    })
+                  }
+                />
+              }
             />
 
             <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 3}]}>
+              <View style={[styles.tableCellView, { flex: 3 }]}>
                 <Text style={styles.fieldTitle}>{t('productName')}</Text>
               </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+              <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
                 <Field
                   name="name"
                   component={InputText}
@@ -98,10 +101,10 @@ class ProductFormScreen extends React.Component {
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
+              <View style={[styles.tableCellView, { flex: 1 }]}>
                 <Text style={styles.fieldTitle}>{t('price')}</Text>
               </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+              <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
                 <Field
                   name="price"
                   component={InputText}
@@ -114,10 +117,10 @@ class ProductFormScreen extends React.Component {
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 3}]}>
+              <View style={[styles.tableCellView, { flex: 3 }]}>
                 <Text style={styles.fieldTitle}>{t('productLabel')}</Text>
               </View>
-               <View style={{flex: 1.5, justifyContent: 'flex-end'}}>
+              <View style={{ flex: 1.5, justifyContent: 'flex-end' }}>
                 <Field
                   component={DropDown}
                   name="productLabelId"
@@ -131,10 +134,10 @@ class ProductFormScreen extends React.Component {
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
+              <View style={[styles.tableCellView, { flex: 1 }]}>
                 <Text style={styles.fieldTitle}>{t('description')}</Text>
               </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+              <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
                 <Field
                   name="description"
                   component={InputText}
@@ -168,15 +171,15 @@ class ProductFormScreen extends React.Component {
                   </View>
                   {workingareas !== undefined &&
                     workingareas.map(workarea => (
-                      <View
-                        style={styles.optionsContainer}
-                        key={workarea.id}
-                      >
+                      <View key={workarea.id}>
                         <Field
-                          name="workingAreaId"
-                          component={RenderRadioBtn}
-                          customValue={workarea.id}
+                          name='workingAreaId'
+                          component={RadioItemObjPick}
+                          customValueOrder={workarea.id}
                           optionName={workarea.name}
+                          onCheck={(currentVal, fieldVal) => {
+                            return fieldVal !== undefined && currentVal === fieldVal
+                          }}
                         />
                       </View>
                     ))}
@@ -193,6 +196,25 @@ class ProductFormScreen extends React.Component {
 
               {isEditForm ? (
                 <View>
+                  {
+                    isPinned ?
+                      <TouchableOpacity onPress={() => handlepinToggle(productId)}>
+                        <Text
+                          style={[styles.bottomActionButton, styles.actionButton]}
+                        >
+                          {t('action.unpin')}
+                        </Text>
+                      </TouchableOpacity>
+                      :
+                      <TouchableOpacity onPress={() => handlepinToggle(productId)}>
+                        <Text
+                          style={[styles.bottomActionButton, styles.actionButton]}
+                        >
+                          {t('action.pin')}
+                        </Text>
+                      </TouchableOpacity>
+                  }
+
                   <TouchableOpacity onPress={handleEditCancel}>
                     <Text
                       style={[styles.bottomActionButton, styles.cancelButton]}
@@ -203,18 +225,18 @@ class ProductFormScreen extends React.Component {
                   <DeleteBtn handleDeleteAction={handleDeleteProduct} />
                 </View>
               ) : (
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate('ProductsOverview')
-                  }
-                >
-                  <Text
-                    style={[styles.bottomActionButton, styles.cancelButton]}
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate('ProductsOverview')
+                    }
                   >
-                    {t('action.cancel')}
-                  </Text>
-                </TouchableOpacity>
-              )}
+                    <Text
+                      style={[styles.bottomActionButton, styles.cancelButton]}
+                    >
+                      {t('action.cancel')}
+                    </Text>
+                  </TouchableOpacity>
+                )}
             </View>
           </View>
         </DismissKeyboard>

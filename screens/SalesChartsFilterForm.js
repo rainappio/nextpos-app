@@ -45,6 +45,7 @@ class SalesChartsFilterForm extends React.Component {
             placeholder={t('order.date')}
             isShow={this.state.show}
             showDatepicker={this.showDatepicker}
+            needWeekFilter={true}
           />
         </View>
         <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-start'}]}>

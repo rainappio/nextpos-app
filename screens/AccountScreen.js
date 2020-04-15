@@ -31,7 +31,6 @@ class AccountScreen extends React.Component {
     super(props, context)
 
     this.state = {
-      t: context.t,
       objects: []
     }
   }
@@ -85,7 +84,7 @@ class AccountScreen extends React.Component {
       )
     })
     const { currentUser } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <View style={styles.fullWidthScreen}>

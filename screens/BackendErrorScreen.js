@@ -1,11 +1,12 @@
 import styles from '../styles'
-import { Text, View } from 'react-native'
+import {Text, TouchableOpacity, View} from 'react-native'
 import React from 'react'
 import { LocaleContext } from '../locales/LocaleContext'
 import BackBtn from '../components/BackBtn'
+import {withNavigation} from "react-navigation";
 
 // todo: use this on all screens that need to show backend error.
-export default class BackendErrorScreen extends React.Component {
+class BackendErrorScreen extends React.Component {
   static contextType = LocaleContext
 
   constructor(props, context) {
@@ -15,21 +16,17 @@ export default class BackendErrorScreen extends React.Component {
       en: {
         errorScreenTitle: 'Error',
         errorMessage:
-          'There is an issue with your request. Please consult your service provider.'
+          'There is an issue with your request. Please try to login again, or consult your service provider.'
       },
       zh: {
         errorScreenTitle: '錯誤',
-        errorMessage: '您的請求有問題，請詢問你的軟體供應商.'
+        errorMessage: '您的請求有問題，請試著重新登入，或詢問你的軟體供應商.'
       }
     })
-
-    this.state = {
-      t: context.t
-    }
   }
 
   render() {
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <View style={[styles.container, { justifyContent: 'space-between' }]}>
@@ -37,8 +34,21 @@ export default class BackendErrorScreen extends React.Component {
           <BackBtn />
           <Text style={styles.screenTitle}>{t('errorScreenTitle')}</Text>
         </View>
-        <Text style={{ flex: 2 }}>{t('errorMessage')}</Text>
+        <View style={{ flex: 1 }}>
+          <Text>{t('errorMessage')}</Text>
+        </View>
+        <View style={{ flex: 1, justifyContent: 'flex-end'}}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Login')}
+          >
+            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              {t('login')}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }
 }
+
+export default withNavigation(BackendErrorScreen)

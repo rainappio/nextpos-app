@@ -12,6 +12,7 @@ import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import StaffTimeCardFilterForm from './StaffTimeCardFilterForm'
 import ScreenHeader from "../components/ScreenHeader";
+import LoadingScreen from "./LoadingScreen";
 
 class StaffTimeCard extends React.Component {
   static navigationOptions = {
@@ -84,9 +85,7 @@ class StaffTimeCard extends React.Component {
 
 		if (loading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen/>
       )
     }
 

@@ -1,6 +1,7 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native'
 const window = Dimensions.get('window')
 export const mainThemeColor = '#f18d1a'
+let CIRCLE_RADIUS = 25;
 //export const mainThemeColor = '#f18dee'
 //export const mainThemeColor = '#3e3d47'
 
@@ -134,19 +135,6 @@ export default StyleSheet.create({
   mgrbtn40: {
     marginBottom: 40
   },
-  pickerStyle: {
-    width: '100%',
-    justifyContent: 'center',
-    paddingRight: 0,
-    paddingLeft: 0,
-    marginTop: 8
-  },
-  leftpadd32: {
-    paddingLeft: 32
-  },
-  fullWidth: {
-    width: '100%'
-  },
   isActive: {
     color: '#000',
     borderBottomWidth: 2,
@@ -174,7 +162,7 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.6)'
   },
   popUpLayout: {
-    //padding: 25,
+    backgroundColor: '#fff',
     margin: 20
   },
   whiteBg: {
@@ -182,50 +170,25 @@ export default StyleSheet.create({
   },
   editIcon: {
     backgroundColor: mainThemeColor,
-    flex: 1,
+    width: '20%',
+    //flex: 1,
     alignItems: 'center',
-    position: 'absolute',
-    right: 38,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 12,
-    paddingRight: 12,
-    opacity: 0.6,
-    bottom: 4
+    justifyContent: 'center',
+    //position: 'absolute',
+    //right: 38,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
   },
   delIcon: {
-    backgroundColor: mainThemeColor,
-    flex: 1,
+    backgroundColor: '#f75336',
+    //flex: 1,
+    width: '20%',
     alignItems: 'center',
-    position: 'absolute',
-    right: 0,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 12,
-    paddingRight: 12,
-    padding: 8,
-    bottom: 4
-  },
-  standalone: {
-    marginTop: 20,
-    marginBottom: 20
-  },
-  standaloneRowFront: {
-    alignItems: 'center',
-    backgroundColor: '#CCC',
     justifyContent: 'center',
-    height: 50
-  },
-  standaloneRowBack: {
-    alignItems: 'center',
-    backgroundColor: '#8BC645',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 15
-  },
-  backTextWhite: {
-    color: '#FFF'
+    //position: 'absolute',
+    //right: 0,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
   },
   rowFront: {
     backgroundColor: '#fff',
@@ -236,31 +199,11 @@ export default StyleSheet.create({
     padding: 15
   },
   rowBack: {
-    alignItems: 'center',
+    alignItems: 'stretch',
     backgroundColor: '#fff',
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingLeft: 0
-  },
-  backRightBtn: {
-    alignItems: 'center',
-    bottom: 0,
     justifyContent: 'center',
-    position: 'absolute',
-    top: 0,
-    width: 75
-  },
-  backRightBtnLeft: {
-    backgroundColor: 'blue',
-    right: 75
-  },
-  backRightBtnRight: {
-    backgroundColor: 'red',
-    right: 0
-  },
-  borderRadius4: {
-    borderRadius: 4
   },
   textBig: {
     fontSize: 22
@@ -271,48 +214,8 @@ export default StyleSheet.create({
   textBold: {
     fontWeight: 'bold'
   },
-  uerIcon: {
-    color: '#fff',
-    fontSize: 18,
-    flex: 1,
-    textAlign: 'center',
-    position: 'absolute',
-    left: 0,
-    width: 30,
-    height: 30,
-    borderRadius: 30,
-    paddingTop: 2
-  },
   orange_bg: {
     backgroundColor: mainThemeColor
-  },
-  editIconII: {
-    backgroundColor: mainThemeColor,
-    flex: 1,
-    alignItems: 'center',
-    position: 'absolute',
-    right: 0,
-    paddingTop: 6,
-    paddingBottom: 6,
-    paddingLeft: 12,
-    paddingRight: 12,
-    opacity: 0.6,
-    bottom: 4
-  },
-  colordelIcon: {
-    flex: 1,
-    alignItems: 'center',
-    position: 'absolute',
-    right: 0
-  },
-  onethirdWidth: {
-    width: '35%'
-  },
-  onesixthWidth: {
-    width: '65%'
-  },
-  mgrtotop8: {
-    marginTop: 8
   },
   mgrtotop12: {
     marginTop: 12
@@ -325,14 +228,6 @@ export default StyleSheet.create({
   },
   mgrtotop20: {
     marginTop: 20
-  },
-  BlackColorTitle: {
-    textAlign: 'center',
-    fontSize: 20,
-    letterSpacing: 2,
-    lineHeight: 32,
-    marginBottom: 16,
-    marginTop: -8
   },
   paddingTopBtn20: {
     paddingTop: 20,
@@ -464,7 +359,7 @@ export default StyleSheet.create({
   },
   screenSubTitle: {
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 18,
     lineHeight: 32,
     marginHorizontal: 10,
     color: mainThemeColor,
@@ -565,12 +460,12 @@ export default StyleSheet.create({
   },
   horizontalMargin: {
     marginHorizontal: 15
-  } ,
+  },
   verticalPadding: {
     paddingVertical: 20
   },
   dynamicVerticalPadding: val => {
-    return {paddingVertical: val}
+    return { paddingVertical: val }
   },
   withBottomBorder: {
     borderBottomWidth: 1,
@@ -653,20 +548,6 @@ export default StyleSheet.create({
     color: '#fff',
     backgroundColor: '#f75336'
   },
-  LRmgr_35minus: {
-    marginLeft: -30,
-    marginRight: -30
-  },
-  Rightmgr_30minus: {
-    marginRight: -30
-  },
-  upButtonImage: {
-    resizeMode: 'contain',
-    width: 22,
-    height: 20,
-    marginRight: 8,
-    padding: 8
-  },
   upButton: {
     position: 'absolute',
     // width: 50,
@@ -707,7 +588,7 @@ export default StyleSheet.create({
         width: window.width - 30 * 2,
         shadowColor: 'rgba(0,0,0,0.2)',
         shadowOpacity: 1,
-        shadowOffset: {height: 2, width: 2},
+        shadowOffset: { height: 2, width: 2 },
         shadowRadius: 2
       },
 
@@ -732,25 +613,39 @@ export default StyleSheet.create({
   tbltext: { margin: 4, textAlign: 'center' },
   tblrow: { flexDirection: 'row', backgroundColor: '#f5f5f5' },
   grayPrevBtn: {
-  	position: 'absolute', 
-  	left: 45, 
-  	top: 2, 
-  	bottom: 2, 
-  	right: 2, 
-  	paddingTop: 3, 
-  	backgroundColor: '#f1f1f1', 
-  	borderRadius: 4,
-  	paddingLeft:12, 
+    position: 'absolute',
+    left: 45,
+    top: 2,
+    bottom: 2,
+    right: 2,
+    paddingTop: 3,
+    backgroundColor: '#f1f1f1',
+    borderRadius: 4,
+    paddingLeft: 12,
   },
-  grayNextBtn:{
-  	position: 'absolute', 
-  	right: 45, 
-  	top: 2, 
-  	bottom: 2, 
-  	left: 2, 
-  	paddingTop: 3, 
-  	backgroundColor:'#f1f1f1', 
-  	paddingLeft:12, 
-  	borderRadius: 4
-  }  
+  grayNextBtn: {
+    position: 'absolute',
+    right: 45,
+    top: 2,
+    bottom: 2,
+    left: 2,
+    paddingTop: 3,
+    backgroundColor: '#f1f1f1',
+    paddingLeft: 12,
+    borderRadius: 4
+  },
+  circle: {
+    backgroundColor: mainThemeColor,
+    width: CIRCLE_RADIUS * 2,
+    height: CIRCLE_RADIUS * 2,
+    borderRadius: CIRCLE_RADIUS
+  },
+  col: {
+    flexDirection: "column"
+  },
+  ballContainer: {
+    height: 600,
+    borderWidth: 1,
+    borderColor: mainThemeColor
+  }
 })

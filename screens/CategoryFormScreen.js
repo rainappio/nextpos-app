@@ -18,10 +18,6 @@ class CategoryFormScreen extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   componentDidMount() {
@@ -39,7 +35,7 @@ class CategoryFormScreen extends React.Component {
 
   render() {
     const { handleSubmit } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <DismissKeyboard>

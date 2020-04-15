@@ -119,7 +119,7 @@ class OptionFormScreen extends React.Component {
 
             <View>
               <View style={styles.tableRowContainerWithBorder}>
-                <View style={[styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                   <Field
                     name="optionName"
                     component={InputText}

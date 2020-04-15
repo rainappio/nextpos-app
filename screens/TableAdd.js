@@ -14,7 +14,7 @@ import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import TableForm from './TableForm'
-import { api, makeFetchRequest, errorAlert } from '../constants/Backend'
+import {api, makeFetchRequest, errorAlert, dispatchFetchRequest} from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
@@ -27,43 +27,29 @@ class TableAdd extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   handleSubmit = values => {
-    var layoutId = this.props.navigation.state.params.layoutId
-    makeFetchRequest(token => {
-      fetch(`${api.apiRoot}/tablelayouts/${layoutId}/tables`, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        },
-        body: JSON.stringify(values)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            this.props.navigation.navigate('TableLayoutEdit')
-            this.props.getTableLayout(layoutId)
-            this.props.getTableLayouts()
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+    const layoutId = this.props.navigation.state.params.layoutId
+
+    dispatchFetchRequest(api.tablelayout.createTable(layoutId), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    }, response => {
+      this.props.navigation.navigate('TableLayoutEdit')
+      this.props.getTableLayout(layoutId)
+      this.props.getTableLayouts()
+    }).then()
   }
 
   render() {
     const { navigation, tablelayout } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <DismissKeyboard>

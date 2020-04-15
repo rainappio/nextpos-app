@@ -25,12 +25,14 @@ import { reducer as rangedsalesreportReducer } from './rangedsalesreport'
 import { reducer as ordersbydaterangeReducer } from './ordersbydaterange'
 import { reducer as salesDistributionReportReducer } from './salesdistributionreport'
 import { reducer as customerCountRepoertReducer } from './customercountreport'
+import { reducer as customerTrafficReportReducer } from './customertrafficreport'
 import { reducer as announcementsReducer } from './announcements'
 import { reducer as announcementReducer } from './announcement'
 import { reducer as timecardsReducer } from './timecards'
 import { reducer as usertimeCardsReducer } from './usertimecards'
 import { reducer as timecardReducer } from './timecard'
 import { reducer as shiftMostRecentReducer } from './shiftMostRecent'
+import { reducer as shiftsReducer } from './shifts'
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -59,11 +61,13 @@ const rootReducer = combineReducers({
   ordersbydaterange: ordersbydaterangeReducer,
   salesdistributionreport: salesDistributionReportReducer,
   customercountreport: customerCountRepoertReducer,
+  customertrafficreport: customerTrafficReportReducer,
   announcements: announcementsReducer,
   announcement: announcementReducer,
   timecards: timecardsReducer,
 	usertimecards: usertimeCardsReducer,
 	timecard: timecardReducer,
-	mostRecentShift: shiftMostRecentReducer
+	mostRecentShift: shiftMostRecentReducer,
+  shifts: shiftsReducer
 })
 export default rootReducer

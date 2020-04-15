@@ -3,6 +3,8 @@ import { Text, View, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import ProductRow from './ProductRow'
 import styles from '../styles'
+import LoadingScreen from "./LoadingScreen";
+import BackendErrorScreen from "./BackendErrorScreen";
 
 export const ProductListScreen = ({
   isLoading,
@@ -15,15 +17,11 @@ export const ProductListScreen = ({
 }) => {
   if (isLoading) {
     return (
-      <View style={[styles.container]}>
-        <ActivityIndicator size="large" color="#ccc" />
-      </View>
+      <LoadingScreen/>
     )
   } else if (haveError) {
     return (
-      <View style={[styles.container]}>
-        <Text>Err during loading, check internet conn...</Text>
-      </View>
+      <BackendErrorScreen/>
     )
   } else if (products !== undefined && products.length === 0) {
     return (

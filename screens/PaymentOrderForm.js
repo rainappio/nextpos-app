@@ -13,6 +13,7 @@ import { LocaleContext } from '../locales/LocaleContext'
 import SegmentedControl from '../components/SegmentedControl'
 import DropDown from '../components/DropDown'
 import ScreenHeader from "../components/ScreenHeader";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 
 class PaymentOrderForm extends React.Component {
   static navigationOptions = {
@@ -31,11 +32,10 @@ class PaymentOrderForm extends React.Component {
         enterTaxIDNumber: 'Enter Tax ID Number',
         charge: 'Charge',
         paymentMethod: 'Payment Method',
-        cashPayment: 'Cash',
-        cardPayment: 'Credit Card',
         chooseCardType: 'Choose Card Type',
         CardNo: 'Last 4 Digits',
-        enterCardNo: 'Last 4 Digits'
+        enterCardNo: 'Last 4 Digits',
+        charged: 'Payment charged'
       },
       zh: {
         paymentMethodTitle: '付費方式',
@@ -44,11 +44,10 @@ class PaymentOrderForm extends React.Component {
         enterTaxIDNumber: '輸入統一編號',
         charge: '結帳',
         paymentMethod: '付費方式',
-        cashPayment: '現金',
-        cardPayment: '信用卡',
         chooseCardType: '選擇信用卡種類',
         CardNo: '卡號末四碼',
-        enterCardNo: '卡號末四碼'
+        enterCardNo: '卡號末四碼',
+        charged: '付款成功'
       }
     })
   }
@@ -123,7 +122,7 @@ class PaymentOrderForm extends React.Component {
 		}
 
     return (
-      <ScrollView scrollIndicatorInsets={{right: 1}}>
+      <KeyboardAwareScrollView scrollIndicatorInsets={{right: 1}}>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={true}
                         parentFullScreen={true}
@@ -204,7 +203,7 @@ class PaymentOrderForm extends React.Component {
               <View>
                 <View style={[styles.fieldContainer]}>
                   <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('cashPayment')}</Text>
+                    <Text style={styles.fieldTitle}>{t('payment.cashPayment')}</Text>
                   </View>
                   <View style={{flex: 3}}>
                     <Field
@@ -296,7 +295,7 @@ class PaymentOrderForm extends React.Component {
 
           </View>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     )
   }
 }

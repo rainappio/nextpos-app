@@ -27,6 +27,7 @@ import {
   errorAlert,
   warningMessage
 } from '../constants/Backend'
+import LoadingScreen from "./LoadingScreen";
 
 class OrdersScreen extends React.Component {
   static navigationOptions = {
@@ -39,30 +40,11 @@ class OrdersScreen extends React.Component {
 
     this.state = {
       scrollPosition: '',
-      filteredOrders: [],
-      filteredreportParameter: ''
     }
   }
 
   componentDidMount() {
     this.props.getOrdersByDateRange()
-    dispatchFetchRequest(
-      api.order.getOrdersByRange('SHIFT'),
-      {
-        method: 'GET',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {}
-      },
-      response => {
-        response.json().then(data => {
-          this.setState({
-          	filteredOrders: data.orders,
-          	filteredreportParameter: data.reportParameter
-          })
-        })
-      }
-    ).then()
   }
 
   upButtonHandler = () => {
@@ -77,43 +59,7 @@ class OrdersScreen extends React.Component {
     const toDate = values.toDate
     const dateRange = values.dateRange
 
-    if (fromDate && toDate && dateRange == 'RANGE') {
-      dispatchFetchRequest(
-        api.order.getOrdersByDate(fromDate, toDate),
-        {
-          method: 'GET',
-          withCredentials: true,
-          credentials: 'include',
-          headers: {}
-        },
-        response => {
-          response.json().then(data => {
-            this.setState({
-            	filteredOrders: data.orders,
-            	filteredreportParameter: data.reportParameter
-            })
-          })
-        }
-      ).then()
-    } else if (dateRange) {
-      dispatchFetchRequest(
-        api.order.getOrdersByRange(dateRange),
-        {
-          method: 'GET',
-          withCredentials: true,
-          credentials: 'include',
-          headers: {}
-        },
-        response => {
-          response.json().then(data => {
-            this.setState({
-            	filteredOrders: data.orders,
-            	filteredreportParameter: data.reportParameter
-            })
-          })
-        }
-      ).then()
-    }
+    this.props.getOrdersByDateRange(dateRange, undefined, fromDate, toDate)
   }
 
   renderItem = ({ item }) => (
@@ -154,7 +100,6 @@ class OrdersScreen extends React.Component {
   render() {
     const {getordersByDateRange, reportParameter, isLoading, haveData} = this.props
     const {t} = this.context
-    const {filteredOrders, filteredreportParameter} = this.state
 
     const orders = []
     getordersByDateRange !== undefined && getordersByDateRange.map(order => {
@@ -163,16 +108,16 @@ class OrdersScreen extends React.Component {
 
     if (isLoading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc"/>
-        </View>
+        <LoadingScreen/>
       )
     } else if (haveData) {
       return (
         <View style={[styles.fullWidthScreen]}>
           <NavigationEvents
             onWillFocus={() => {
-              this.props.getOrdersByDateRange()
+              const shiftId = this.props.navigation.getParam('shiftId')
+              this.props.getOrdersByDateRange('SHIFT', shiftId)
+              this.props.navigation.setParams({shiftId: undefined})
             }}
           />
           <ScreenHeader backNavigation={false}
@@ -199,7 +144,7 @@ class OrdersScreen extends React.Component {
                 <Text style={styles.fieldTitle}>{t('order.fromDate')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                <Text>{formatDateObj(filteredreportParameter.fromDate)}</Text>
+                <Text>{formatDateObj(reportParameter.fromDate)}</Text>
               </View>
             </View>
 
@@ -208,7 +153,7 @@ class OrdersScreen extends React.Component {
                 <Text style={styles.fieldTitle}>{t('order.toDate')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                <Text>{formatDateObj(filteredreportParameter.toDate)}</Text>
+                <Text>{formatDateObj(reportParameter.toDate)}</Text>
               </View>
             </View>
           </View>
@@ -239,7 +184,7 @@ class OrdersScreen extends React.Component {
 
             <FlatList
               keyExtractor={this.keyExtractor}
-              data={filteredOrders}
+              data={orders}
               renderItem={this.renderItem}
               ref={ref => {
                 this.ListView_Ref = ref
@@ -278,7 +223,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getOrdersByDateRange: () => dispatch(getOrdersByDateRange())
+  getOrdersByDateRange: (dateRange, shiftId, fromDate, toDate) => dispatch(getOrdersByDateRange(dateRange, shiftId, fromDate, toDate))
 })
 
 export default connect(

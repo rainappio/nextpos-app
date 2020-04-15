@@ -7,7 +7,7 @@ import AddBtn from '../components/AddBtn'
 import PrinterForm from '../screens/PrinterForm'
 import { getWorkingAreas, getPrinters } from '../actions'
 import {
-  api,
+  api, dispatchFetchRequest,
   errorAlert,
   makeFetchRequest,
   successMessage
@@ -24,43 +24,27 @@ class PrinterAdd extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   handleSubmit = values => {
-    makeFetchRequest(token => {
-      fetch(api.printer.create, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        },
-        body: JSON.stringify(values)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            successMessage('Saved')
-            this.props.navigation.navigate('PrinternKDS')
-            this.props.getWorkingAreas()
-            this.props.getPrinters()
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+    dispatchFetchRequest(api.printer.create, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values)
+    }, response => {
+      this.props.navigation.navigate('PrinternKDS')
+      this.props.getWorkingAreas()
+      this.props.getPrinters()
+    }).then()
   }
 
   render() {
     const { navigation } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <DismissKeyboard>

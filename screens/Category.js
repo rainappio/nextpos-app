@@ -23,7 +23,6 @@ class Category extends React.Component {
         body: JSON.stringify(values)
       },
       response => {
-        successMessage('Saved')
         this.props.navigation.navigate('ProductsOverview')
         this.props.getProducts()
         this.props.getLables() !== undefined && this.props.getLables()
