@@ -74,6 +74,7 @@ import UserTimeCardDetail from '../screens/UserTimeCardDetail'
 import CloseComplete from '../screens/CloseComplete'
 import AccountClose from '../screens/AccountClose'
 import AccountCloseConfirm from '../screens/AccountCloseConfirm'
+import ManageVisualSceen from '../screens/ManageVisualSceen'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -125,7 +126,8 @@ const Settings = createStackNavigator({
   AnnouncementsEdit: AnnouncementsEdit,
   CloseComplete: CloseComplete,
   AccountClose: AccountClose,
-  AccountCloseConfirm: AccountCloseConfirm
+  AccountCloseConfirm: AccountCloseConfirm,
+  ManageVisualSceen: ManageVisualSceen
 })
 Settings.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.settings'),

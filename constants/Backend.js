@@ -64,6 +64,9 @@ export const api = {
     },
     delete: id => {
       return `${apiRoot}/products/${id}`
+    },
+    togglePin: id => {
+    	return `${apiRoot}/products/${id}/togglePin`
     }
   },
   productLabel: {
@@ -171,7 +174,10 @@ export const api = {
     },
     deleteTable: (layoutId, tableId) => {
       return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}`
-    }
+    },
+    updateTablePosition: (layoutId, tableId) => {
+			return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}/position`
+    } 
   },
   payment: {
     charge: `${apiRoot}/orders/transactions`

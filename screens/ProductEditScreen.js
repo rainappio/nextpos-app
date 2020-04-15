@@ -15,7 +15,8 @@ import {
   api,
   errorAlert,
   makeFetchRequest,
-  successMessage
+  successMessage,
+  dispatchFetchRequest
 } from '../constants/Backend'
 
 class ProductEdit extends Component {
@@ -125,6 +126,25 @@ class ProductEdit extends Component {
     })
   }
 
+  handlepinToggle = productId => {
+    dispatchFetchRequest(
+      api.product.togglePin(productId),
+      {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      },
+      response => {
+        successMessage('Toggled')
+        this.props.navigation.navigate('ProductsOverview')
+        this.props.getProducts()
+      }
+    ).then()
+  }
+
   render() {
     const {
       labels,
@@ -159,6 +179,9 @@ class ProductEdit extends Component {
           refreshing={refreshing}
           workingareas={workingareas}
           prodctoptions={prodctoptions}
+          isPinned={this.props.navigation.state.params.isPinned}
+          productId={this.props.navigation.state.params.productId}
+          handlepinToggle={this.handlepinToggle}
         />
       )
     } else {
