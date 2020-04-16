@@ -67,7 +67,7 @@ class OrderTopInfo extends Component {
         </View>
 
         <View style={styles.tableRowContainer}>
-          <Text>{t('orderStatus')}: </Text>
+          <Text>{t('order.orderStatusLong')}: </Text>
           <Text style={styles.tableCellText}>{t(`orderState.${order.state}`)}</Text>
         </View>
 

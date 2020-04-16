@@ -1,4 +1,5 @@
 const en = {
+  login: 'Login',
   cancel: 'Cancel',
   clientName: 'Client Name',
   email: 'Email Address',
@@ -47,13 +48,16 @@ const en = {
   },
   order: {
     inStore: 'In Store',
+    IN_STORE: 'In Store',
     takeOut: 'Take Out',
+    TAKE_OUT: 'Take Out',
 
     ordersTitle: 'Orders',
     fromDate: 'From ',
     toDate: 'To ',
     orderId: 'Order Id',
     date: 'Date',
+    orderStatusLong: 'Order Status',
     orderStatus: 'Status',
     noOrder: 'No Order',
 
@@ -68,7 +72,8 @@ const en = {
     visitedFrequency: 'Visited Frequency',
     notFilledIn: 'Not Filled',
     orderStartDate: 'Start Date',
-    lineItemCreatedDate: 'Start Date',
+    lineItemCreatedDate: 'Date',
+    preparationDuration: 'Order Preparation',
     endDate: 'End Date',
     duration: 'Total Duration',
     product: 'Product',
@@ -76,7 +81,6 @@ const en = {
     subTotal: 'Subtotal',
     serveBy: 'Serve By'
   },
-  orderStatus: 'Order Status',
   orderState: {
     OPEN: 'Open',
     IN_PROCESS: 'In Process',
@@ -89,6 +93,41 @@ const en = {
   timecard: {
     hours: 'Hour(s)',
     minutes: 'Minute(s)'
+  },
+  shift: {
+    status: {
+      INACTIVE: 'Inactive',
+      ACTIVE: 'Active',
+      CLOSING: 'Closing',
+      CONFIRM_CLOSE: 'Confirm Closing',
+      BALANCED: 'Balanced',
+      UNBALANCED: 'Unbalanced'
+    },
+    staff: 'Staff',
+    shiftSummary: 'Closing Account Summaries',
+    totalCashIncome: 'Total Cash Income',
+    totalCreditCardIncome: 'Total Card Income',
+    totalClosingAmount: 'Total Closing Amount',
+    invoicesTitle: 'Invoices',
+    totalInvoices: 'Total Number of Orders',
+    deletedOrders: 'Total Number Of Orders Deleted',
+    totalDiscounts: 'Total Amount Of Discount',
+    totalServiceCharge: 'Total Service Charge',
+    closingRemark: 'Closing Remark',
+    confirmAction: 'Confirm Close',
+    abortAction: 'Abort Close',
+    accountCloseTitle: 'Closing Account',
+    cashSection: 'Cash',
+    cardSection: 'Credit Card',
+    nextAction: 'Next',
+    closingStatus: 'Status',
+    startingCash: 'Starting Cash',
+    totalCashTransitionAmt: 'Total Cash Transactions',
+    totalCashInRegister: 'Actual Cash Amount',
+    enterAmount: 'Enter Amount',
+    remark: 'Unbalance Reason',
+    totalCardTransitionAmt: 'Total Card Transactions',
+    totalCardInRegister: 'Actual Card Amount'
   },
   errors: {
     balanceError: 'Please enter a positive value'

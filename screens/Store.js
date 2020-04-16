@@ -5,6 +5,7 @@ import {getCurrentClient} from '../actions/client'
 import StoreFormScreen from './StoreFormScreen'
 import {ActivityIndicator, View} from 'react-native'
 import styles from '../styles'
+import LoadingScreen from "./LoadingScreen";
 
 class Store extends React.Component {
   static navigationOptions = {
@@ -44,9 +45,7 @@ class Store extends React.Component {
 
     if (loading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen/>
       )
     } else if (haveData) {
       return (

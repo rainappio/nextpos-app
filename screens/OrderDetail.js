@@ -133,6 +133,19 @@ class OrderDetail extends React.Component {
               </View>
             </View>
 
+            {order.orderPreparationTime != null && (
+              <View style={[styles.tableRowContainerWithBorder]}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <Text>{t('order.preparationDuration')}</Text>
+                </View>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  <Text>
+                    {order.orderPreparationTime.durationHours} {t('timecard.hours')} {order.orderPreparationTime.durationMinutes} {t('timecard.minutes')}
+                  </Text>
+                </View>
+              </View>
+            )}
+
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
                 <Text>{t('order.orderStartDate')}</Text>
@@ -150,7 +163,7 @@ class OrderDetail extends React.Component {
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                 <Text>
-                  {formatTime(orderDuration.orderSettledDate)}
+                  {formatTime(order.modifiedDate)}
                 </Text>
               </View>
             </View>

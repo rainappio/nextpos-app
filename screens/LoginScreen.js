@@ -43,13 +43,11 @@ class LoginScreen extends React.Component {
   componentDidMount() {
     this.context.localize({
       en: {
-        login: 'Login',
         title: 'Please enter your account email',
         next: 'Send',
         forgotPwd: 'Forgot Password'
       },
       zh: {
-        login: '登入',
         title: '請輸入你的帳號email',
         next: '送出',
         forgotPwd: '忘記密碼'
@@ -80,23 +78,26 @@ class LoginScreen extends React.Component {
               />
             </View>
 
-            <Field
-              name="username"
-              component={InputText}
-              validate={[isRequired, isEmail]}
-              placeholder={t('email')}
-              autoCapitalize="none"
-              extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
-            />
-
-            <Field
-              name="masterPassword"
-              component={InputText}
-              validate={isRequired}
-              placeholder={t('password')}
-              secureTextEntry={true}
-              extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
-            />
+            <View style={[{marginVertical: 10}]}>
+              <Field
+                name="username"
+                component={InputText}
+                validate={[isRequired, isEmail]}
+                placeholder={t('email')}
+                autoCapitalize="none"
+                extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
+              />
+            </View>
+            <View>
+              <Field
+                name="masterPassword"
+                component={InputText}
+                validate={isRequired}
+                placeholder={t('password')}
+                secureTextEntry={true}
+                extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
+              />
+            </View>
           </View>
 
           <View style={[styles.bottom]}>
