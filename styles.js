@@ -733,25 +733,25 @@ export default StyleSheet.create({
   tbltext: { margin: 4, textAlign: 'center' },
   tblrow: { flexDirection: 'row', backgroundColor: '#f5f5f5' },
   grayPrevBtn: {
-  	position: 'absolute', 
-  	left: 45, 
-  	top: 2, 
-  	bottom: 2, 
-  	right: 2, 
-  	paddingTop: 3, 
-  	backgroundColor: '#f1f1f1', 
+  	position: 'absolute',
+  	left: 45,
+  	top: 2,
+  	bottom: 2,
+  	right: 2,
+  	paddingTop: 3,
+  	backgroundColor: '#f1f1f1',
   	borderRadius: 4,
-  	paddingLeft:12, 
+  	paddingLeft:12,
   },
   grayNextBtn:{
-  	position: 'absolute', 
-  	right: 45, 
-  	top: 2, 
-  	bottom: 2, 
-  	left: 2, 
-  	paddingTop: 3, 
-  	backgroundColor:'#f1f1f1', 
-  	paddingLeft:12, 
+  	position: 'absolute',
+  	right: 45,
+  	top: 2,
+  	bottom: 2,
+  	left: 2,
+  	paddingTop: 3,
+  	backgroundColor:'#f1f1f1',
+  	paddingLeft:12,
   	borderRadius: 4
   },
   circle: {
@@ -764,9 +764,8 @@ export default StyleSheet.create({
     flexDirection: "column"
   },
   ballContainer: {
-  	height: 400,
+  	height: 600,
   	borderWidth: 1,
-  	borderColor: mainThemeColor,
-  	marginLeft: 74,
+  	borderColor: mainThemeColor
   }
 })
