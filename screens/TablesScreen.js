@@ -83,7 +83,7 @@ class TablesScreen extends React.Component {
         noInflightOrders: 'No order on this table layout',
         shiftClosing: 'Please close shift first',
         openShift: {
-          title: 'Open shift to start sales.',
+          title: 'Open shift to start sales',
           openBalance: 'Open Balance',
           enterAmount: 'Enter Amount',
           open: 'Open',
@@ -121,13 +121,12 @@ class TablesScreen extends React.Component {
     this.loadInfo()
 
     this.setState({ refreshing: false }, () => {
-      successMessage('Refreshed')
+      successMessage(this.context.t('refreshed'))
     })
   }
 
   handleOpenShift = (balance) => {
     handleOpenShift(balance, (response) => {
-      successMessage('Shift opened')
       this.loadInfo()
       this.setState({openBalance: 0})
     })
@@ -169,67 +168,66 @@ class TablesScreen extends React.Component {
       )
     } else if(recentShift !== undefined && ['CLOSING', 'CONFIRM_CLOSE'].includes(recentShift.data.shiftStatus)) {
       return (
-        <View style={styles.container}>
-          <Text style={styles.messageBlock}>{t('shiftClosing')}</Text>
+        <View style={[styles.fullWidthScreen]}>
+          <ScreenHeader backNavigation={false}
+                        parentFullScreen={true}
+                        title={t('menu.tables')}
+          />
+          <View style={[styles.sectionContainer, {flex: 1}]}>
+            <Text style={styles.messageBlock}>{t('shiftClosing')}</Text>
+          </View>
         </View>
       )
 
     } else if (shiftStatus === 'INACTIVE') {
       return (
-        <View style={styles.container}>
-          <ScrollView
-            directionalLockEnabled={true}
-            contentContainerStyle={styles.modalContainer}
+        <View style={styles.modalContainer}>
+          <View
+            style={[styles.boxShadow, styles.popUpLayout]}
           >
-            <TouchableWithoutFeedback>
-              <View
-                style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}
-              >
-                <Text style={styles.screenTitle}>
-                  {t('openShift.title')}
+            <Text style={styles.screenSubTitle}>
+              {t('openShift.title')}
+            </Text>
+            <View style={styles.tableRowContainer}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text style={[styles.fieldTitle]}>
+                  {t('openShift.openBalance')}
                 </Text>
-                <View style={styles.tableRowContainerWithBorder}>
-                  <View style={[styles.tableCellView, {flex: 1}]}>
-                    <Text style={[styles.fieldTitle]}>
-                      {t('openShift.openBalance')}
-                    </Text>
-                  </View>
-                  <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                    <TextInput
-                      name="balance"
-                      type="text"
-                      onChangeText={value =>
-                        this.setState({openBalance: value})
-                      }
-                      placeholder={t('openShift.enterAmount')}
-                      keyboardType={`numeric`}
-                      style={[styles.rootInput]}
-                    />
-                  </View>
-                </View>
-                <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-                  <View style={{width: '45%', marginHorizontal: 5}}>
-                    <TouchableOpacity onPress={() => this.handleOpenShift(this.state.openBalance)}>
-                      <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                        {t('openShift.open')}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={{width: '45%', marginHorizontal: 5}}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        this.props.navigation.navigate('LoginSuccess')
-                      }}
-                    >
-                      <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                        {t('openShift.cancel')}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
               </View>
-            </TouchableWithoutFeedback>
-          </ScrollView>
+              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                <TextInput
+                  name="balance"
+                  type="text"
+                  onChangeText={value =>
+                    this.setState({openBalance: value})
+                  }
+                  placeholder={t('openShift.enterAmount')}
+                  keyboardType={`numeric`}
+                  style={[styles.rootInput]}
+                />
+              </View>
+            </View>
+            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+              <View style={{width: '45%', marginHorizontal: 5}}>
+                <TouchableOpacity onPress={() => this.handleOpenShift(this.state.openBalance)}>
+                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                    {t('openShift.open')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{width: '45%', marginHorizontal: 5}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('LoginSuccess')
+                  }}
+                >
+                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                    {t('openShift.cancel')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
         </View>
       )
     } else {
@@ -281,10 +279,7 @@ class TablesScreen extends React.Component {
                             rightComponent={
                               <AddBtn
                                 onPress={() =>
-                                  this.props.navigation.navigate('OrderStart', {
-                                    handleOrderSubmit: handleOrderSubmit,
-                                    handleDelete: handleDelete
-                                  })
+                                  this.props.navigation.navigate('OrderStart')
                                 }
                               />
                             }

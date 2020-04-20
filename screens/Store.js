@@ -35,7 +35,6 @@ class Store extends React.Component {
         body: JSON.stringify(values)
       },
       response => {
-        successMessage('Saved')
         this.props.navigation.navigate('SettingScr')
       })
   }

@@ -5,7 +5,7 @@ import OptionFormScreen from './OptionFormScreen'
 import { getProductOption } from '../actions'
 import styles from '../styles'
 import {
-  api,
+  api, dispatchFetchRequest,
   errorAlert,
   makeFetchRequest,
   successMessage
@@ -25,62 +25,31 @@ class OptionEdit extends React.Component {
       ? (values.optionType = 'MULTIPLE_CHOICE')
       : (values.optionType = 'ONE_CHOICE')
 
-    makeFetchRequest(token => {
-      fetch(api.productOption.update(values.id), {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        },
-        body: JSON.stringify(values)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            successMessage('Saved')
-            console.debug(
-              `route to this screen: ${this.props.navigation.state.params.customRoute}`
-            )
-
-            this.props.navigation.navigate(
-              this.props.navigation.state.params.customRoute
-            )
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+    dispatchFetchRequest(api.productOption.update(values.id), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    }, response => {
+      this.props.navigation.navigate(this.props.navigation.state.params.customRoute)
+    }).then()
   }
 
   handleDeleteOption = values => {
-    makeFetchRequest(token => {
-      fetch(api.productOption.deleteById(values.id), {
-        method: 'DELETE',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token.access_token}`
-        }
-      })
-        .then(response => {
-          if (response.status === 204) {
-            successMessage('Deleted')
-            this.props.navigation.navigate(
-              this.props.navigation.state.params.customRoute
-            )
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+
+    dispatchFetchRequest(api.productOption.deleteById(values.id), {
+      method: 'DELETE',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }, response => {
+      this.props.navigation.navigate(this.props.navigation.state.params.customRoute)
+    }).then()
   }
 
   render() {

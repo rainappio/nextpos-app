@@ -18,6 +18,8 @@ import PopUp from '../components/PopUp'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
+import LoadingScreen from "./LoadingScreen";
+import BackendErrorScreen from "./BackendErrorScreen";
 
 class PrinternKDS extends React.Component {
   static navigationOptions = {
@@ -70,15 +72,11 @@ class PrinternKDS extends React.Component {
 
     if (loading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen/>
       )
     } else if (haveError) {
       return (
-        <View style={[styles.container]}>
-          <Text>Err during loading, check internet conn...</Text>
-        </View>
+        <BackendErrorScreen/>
       )
     }
     return (

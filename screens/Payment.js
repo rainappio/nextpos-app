@@ -10,7 +10,7 @@ import {
   api,
   makeFetchRequest,
   successMessage,
-  errorAlert, dispatchFetchRequest
+  errorAlert, dispatchFetchRequest, dispatchFetchRequestWithOption
 } from '../constants/Backend'
 import warnValidStyle from "react-native-web/dist/vendor/react-dom/warnValidStyle";
 
@@ -25,20 +25,22 @@ class Payment extends React.Component {
     const waiveServiceCharge = async () => {
       const waiveServiceCharge = values.waiveServiceCharge === true
 
-      await dispatchFetchRequest(api.order.waiveServiceCharge(orderId, waiveServiceCharge), {
+      await dispatchFetchRequestWithOption(api.order.waiveServiceCharge(orderId, waiveServiceCharge), {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         }
-      }, response => {
+      }, {
+        defaultMessage: false
+      },response => {
       }).then()
 
     }
 
     const applyDiscount = async () => {
-      await dispatchFetchRequest(api.order.applyDiscount(orderId), {
+      await dispatchFetchRequestWithOption(api.order.applyDiscount(orderId), {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
@@ -47,7 +49,9 @@ class Payment extends React.Component {
         },
         body: JSON.stringify(values.discount)
 
-      }, response => {
+      }, {
+        defaultMessage: false
+      },response => {
       }).then()
 
     }

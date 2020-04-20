@@ -31,18 +31,19 @@ export default class CheckBoxGroupObjPick extends React.Component {
 
         return (
           <View
-            style={[styles.borderBottomLine, styles.paddingTopBtn20]}
+            style={[styles.tableRowContainerWithBorder]}
             key={ca.id}
           >
-            <Checkbox
-              clear
-              arr
-              onChange={e => onChange(e.target.checked)}
-              //checked={value.length !== 0 && value.includes(ca.id)}
-              style={{ position: 'absolute', right: 0 }}
-            >
+            <View style={[styles.tableCellView, {flex: 2}]}>
               <Text>{ca.name === undefined ? ca.optionValue : ca.name}</Text>
-            </Checkbox>
+            </View>
+
+            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+              <Checkbox
+                onChange={e => onChange(e.target.checked)}
+              >
+              </Checkbox>
+            </View>
             {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
           </View>
         )

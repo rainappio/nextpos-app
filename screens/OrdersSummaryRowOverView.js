@@ -2,6 +2,8 @@ import React from 'react'
 import { Text, View, ActivityIndicator } from 'react-native'
 import OrdersSummaryRow from './OrdersSummaryRow'
 import styles from '../styles'
+import LoadingScreen from "./LoadingScreen";
+import BackendErrorScreen from "./BackendErrorScreen";
 
 export const OrdersSummaryRowOverView = ({
   isLoading,
@@ -9,34 +11,27 @@ export const OrdersSummaryRowOverView = ({
   order,
   navigation,
   initialValues,
-  handlePayment
+  haveData
 }) => {
   if (isLoading) {
     return (
-      <View style={[styles.container]}>
-        <ActivityIndicator size="large" color="#ccc" />
-      </View>
+      <LoadingScreen/>
     )
   } else if (haveError) {
     return (
-      <View style={[styles.container]}>
-        <Text>Err during loading, check internet conn...</Text>
-      </View>
+      <BackendErrorScreen/>
     )
-  } else if (order !== undefined && order.length === 0) {
+  } else if (haveData) {
     return (
-      <View style={[styles.container]}>
-        <Text>no order ...</Text>
-      </View>
+      <OrdersSummaryRow
+        order={order}
+        navigation={navigation}
+        initialValues={initialValues}
+      />
     )
+  } else {
+    return null
   }
-  return (
-    <OrdersSummaryRow
-      order={order}
-      navigation={navigation}
-      initialValues={initialValues}
-    />
-  )
 }
 
 export default OrdersSummaryRowOverView

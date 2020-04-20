@@ -38,6 +38,7 @@ import { api, dispatchFetchRequest, errorAlert, warningMessage } from '../consta
 import RenderTable from '../components/Table'
 import CustomerCountFilterForm from './CustomerCountFilterForm'
 import { Chevron } from 'react-native-shapes'
+import LoadingScreen from "./LoadingScreen";
 
 class SalesCharts extends React.Component {
   static navigationOptions = {
@@ -296,9 +297,7 @@ class SalesCharts extends React.Component {
 
     if (isLoading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen/>
       )
     } else if (haveError) {
       return <BackendErrorScreen />

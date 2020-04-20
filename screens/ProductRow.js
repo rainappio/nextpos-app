@@ -55,8 +55,6 @@ class ProductRow extends React.Component {
   }
 
   handleDelete = productId => {
-    //let productId = this.props.navigation.state.params.productId
-
     dispatchFetchRequest(
       api.product.delete(productId),
       {
@@ -68,7 +66,6 @@ class ProductRow extends React.Component {
         }
       },
       response => {
-        successMessage('Deleted')
         this.props.navigation.navigate('ProductsOverview')
         this.props.getProducts()
       }
@@ -90,17 +87,6 @@ class ProductRow extends React.Component {
               })
             }}
           />
-          /*<AntDesignIcon
-            name="ellipsis1"
-            size={25}
-            color="black"
-            style={{ position: 'absolute', right: 0, top: 15 }}
-            onPress={() => {
-              this.props.navigation.navigate('CategoryCustomize', {
-                labelId: labelId
-              })
-            }}
-          />*/
         )}
       </View>
     )
@@ -129,7 +115,7 @@ class ProductRow extends React.Component {
 
     const right = [
       {
-        text: <Icon name="md-close" size={24} color="#fff" />,
+        text: <Icon name="md-trash" size={24} color="#fff" />,
         onPress: () => {
           Alert.alert(
             `${t('action.confirmMessageTitle')}`,
@@ -147,7 +133,7 @@ class ProductRow extends React.Component {
             ]
           )
         },
-        style: { backgroundColor: mainThemeColor }
+        style: { backgroundColor: '#f75336' }
       }
     ]
 

@@ -31,16 +31,12 @@ class TableForm extends React.Component {
         tableCapacity: '桌位人數'
       }
     })
-
-    this.state = {
-      t: context.t
-    }
   }
 
   render() {
     const { navigation, handleSubmit, handleDeleteTable, isEdit, initialValues, tableLayout } = this.props
 
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <View style={styles.contentContainer}>

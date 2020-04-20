@@ -23,14 +23,10 @@ class BackendErrorScreen extends React.Component {
         errorMessage: '您的請求有問題，請試著重新登入，或詢問你的軟體供應商.'
       }
     })
-
-    this.state = {
-      t: context.t
-    }
   }
 
   render() {
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <View style={[styles.container, { justifyContent: 'space-between' }]}>

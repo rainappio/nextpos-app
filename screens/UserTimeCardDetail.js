@@ -59,7 +59,7 @@ class UserTimeCardDetail extends React.Component {
     } else if (haveData) {
       return (
         <View style={[styles.container, { marginLeft: 8, marginRight: 8 }]}>
-          <View style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}>
+          <View style={[styles.boxShadow, styles.popUpLayout]}>
            <Text style={styles.screenTitle}>
               {formatDateOnly(timecardDetail.clockIn)}
             </Text>

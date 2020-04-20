@@ -31,10 +31,6 @@ class TableEdit extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   componentDidMount() {
@@ -68,7 +64,6 @@ class TableEdit extends React.Component {
       credentials: 'include',
       headers: {},
     }, response => {
-      successMessage('Table deleted')
       this.props.navigation.navigate('TableLayouts')
     }).then()
   }
@@ -81,7 +76,7 @@ class TableEdit extends React.Component {
       haveError,
       isLoading
     } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     const selectedTable = tablelayout !== undefined && tablelayout.tables !== undefined && tablelayout.tables.find(
       table => table.tableId === this.props.navigation.state.params.tableId

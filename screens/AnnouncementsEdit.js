@@ -28,7 +28,6 @@ class AnnouncementsEdit extends React.Component {
   static contextType = LocaleContext
 
   handleUpdate = values => {
-    console.log('handleUpdate hit')
     const announcementId = this.props.navigation.state.params.announcementId
 
     dispatchFetchRequest(
@@ -43,7 +42,6 @@ class AnnouncementsEdit extends React.Component {
         body: JSON.stringify(values)
       },
       response => {
-        successMessage('Saved')
         this.props.navigation.navigate('Announcements')
         this.props.getAnnouncements(announcementId)
       }
@@ -60,30 +58,18 @@ class AnnouncementsEdit extends React.Component {
 
   handleDelete = id => {
     const announcementId = this.props.navigation.state.params.announcementId
-    makeFetchRequest(token => {
-      fetch(api.announcements.delete(announcementId), {
-        method: 'DELETE',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        }
-      })
-        .then(response => {
-          if (response.status === 204) {
-            successMessage('Deleted')
-            this.props.navigation.navigate('Announcements')
-            this.props.getAnnouncements()
-            this.props.clearAnnouncement(announcementId)
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+    dispatchFetchRequest(api.announcements.delete(announcementId), {
+      method: 'DELETE',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }, response => {
+      this.props.navigation.navigate('Announcements')
+      this.props.getAnnouncements()
+      this.props.clearAnnouncement(announcementId)
+    }).then()
   }
 
   render() {

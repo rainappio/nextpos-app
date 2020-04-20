@@ -17,18 +17,19 @@ import BackBtnCustom from '../components/BackBtnCustom'
 import { formatDate, getShiftStatus, getMostRecentShiftStatus } from '../actions'
 import {
   api,
-  dispatchFetchRequest,
+  dispatchFetchRequest, dispatchFetchRequestWithOption,
   successMessage, warningMessage
 } from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import {handleCloseShift, handleOpenShift} from "../helpers/shiftActions";
+import {handleCloseShift, handleOpenShift, renderShiftStatus} from "../helpers/shiftActions";
 import BackBtn from "../components/BackBtn";
 import InputText from '../components/InputText'
 import AccountClosureForm from './AccountClosureForm'
 import ScreenHeader from "../components/ScreenHeader";
+import LoadingScreen from "./LoadingScreen";
 
 class AccountClose extends React.Component {
   static navigationOptions = {
@@ -45,28 +46,18 @@ class AccountClose extends React.Component {
   }
 
   handleCloseShift = (values) => {
-  	const shiftObjToClose = {
-  		"cash": {
-				"closingBalance": values.cashclosingBalance,
-				"unbalanceReason": values.cashunbalanceReason
-			},
-			"card": {
-				"closingBalance": values.cardclosingBalance,
-				"unbalanceReason": values.cardunbalanceReason
-			}
-  	}
-
-  	dispatchFetchRequest(api.shift.close, {
+  	dispatchFetchRequestWithOption(api.shift.close, {
       method: 'POST',
       withCredentials: true,
       credentials: 'include',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(shiftObjToClose)
-    },
-    response => {
+      body: JSON.stringify(values)
+    }, {
+      defaultMessage: false
+    }, response => {
       response.json().then(data => {
         this.props.getMostRecentShiftStatus()
-      	this.props.navigation.navigate('AccountCloseConfirm')
+        this.props.navigation.navigate('AccountCloseConfirm')
       })
     }).then()
   }
@@ -75,11 +66,14 @@ class AccountClose extends React.Component {
     const { t } = this.context
 		const {loading, haveData, mostRecentShift} = this.props
 
+    const initialValues = {
+      cash: mostRecentShift.close.closingBalances['CASH'],
+      card: mostRecentShift.close.closingBalances['CARD']
+    }
+
 		if (loading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc"/>
-        </View>
+        <LoadingScreen/>
       )
     }
 
@@ -87,23 +81,24 @@ class AccountClose extends React.Component {
       <DismissKeyboard>
       	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
           <View style={[styles.container]}>
-            <ScreenHeader title={t('accountCloseTitle')}/>
+            <ScreenHeader title={t('shift.accountCloseTitle')}/>
 
             <View>
               <Text style={[styles.toRight]}>
-                {t('staff')} - {mostRecentShift.open.who}
+                {t('shift.staff')} - {mostRecentShift.open.who}
               </Text>
               <Text style={[styles.toRight]}>
                 {formatDate(mostRecentShift.open.timestamp)}
               </Text>
               <Text style={[styles.toRight]}>
-                {t('closingStatus')} - {mostRecentShift.shiftStatus}
+                {t('shift.closingStatus')} - {renderShiftStatus(mostRecentShift.shiftStatus)}
               </Text>
             </View>
           </View>
 
           <AccountClosureForm
             mostrecentShift={mostRecentShift}
+            initialValues={initialValues}
             onSubmit={this.handleCloseShift}
             navigation={this.props.navigation}
           />

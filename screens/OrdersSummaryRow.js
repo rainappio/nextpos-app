@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, Text, View, TouchableOpacity, Dimensions } from 'react-native'
+import {ScrollView, Text, View, TouchableOpacity, Dimensions, Alert} from 'react-native'
 import { SwipeListView } from 'react-native-swipe-list-view'
 import { connect } from 'react-redux'
 import {
@@ -19,7 +19,7 @@ import {
   makeFetchRequest,
   errorAlert,
   successMessage,
-  warningMessage, dispatchFetchRequest
+  warningMessage, dispatchFetchRequest, dispatchFetchRequestWithOption
 } from '../constants/Backend'
 import styles, {mainThemeColor} from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
@@ -27,6 +27,7 @@ import {CheckBox, Tooltip} from 'react-native-elements'
 import BackBtnCustom from "../components/BackBtnCustom";
 import ScreenHeader from "../components/ScreenHeader";
 import OrderTopInfo from "./OrderTopInfo";
+import {handleDelete, handleOrderSubmit} from "../helpers/orderActions";
 
 class OrdersSummaryRow extends React.Component {
   static contextType = LocaleContext
@@ -61,6 +62,7 @@ class OrdersSummaryRow extends React.Component {
             note: 'Order is paid'
           }
         },
+        deliverAllLineItems: 'Confirm to deliver all line items',
         lineItemCountCheck: 'At least one item is needed to submit an order.',
         submitOrder: 'Submit',
         backToTables: 'Back to Tables',
@@ -96,6 +98,7 @@ class OrdersSummaryRow extends React.Component {
             note: '訂單已付款完畢'
           }
         },
+        deliverAllLineItems: '確認所有品項送餐',
         lineItemCountCheck: '請加一個以上的產品到訂單裡.',
         submitOrder: '送單',
         backToTables: '回到座位區',
@@ -164,30 +167,18 @@ class OrdersSummaryRow extends React.Component {
   }
 
   handleDeleteLineItem = (orderId, lineItemId) => {
-    makeFetchRequest(token => {
-      fetch(`${api.apiRoot}/orders/${orderId}/lineitems/${lineItemId}`, {
-        method: 'PATCH',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        },
-        body: JSON.stringify({ quantity: 0 })
-      })
-        .then(response => {
-          if (response.status === 200) {
-            successMessage('Deleted')
-            this.props.navigation.navigate('OrdersSummary')
-            this.props.getOrder(this.props.order.orderId)
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+    dispatchFetchRequest(api.order.updateLineItem(orderId, lineItemId), {
+      method: 'PATCH',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({quantity: 0})
+    }, response => {
+      this.props.navigation.navigate('OrdersSummary')
+      this.props.getOrder(this.props.order.orderId)
+    }).then()
   }
 
   handleDeliver = id => {
@@ -201,41 +192,71 @@ class OrdersSummaryRow extends React.Component {
     })
 
     if (lineItemIds.length === 0) {
-      warningMessage(this.context.t('selectItemToDeliver'))
-      return
-    }
+      const formData = new FormData()
+      formData.append('action', 'DELIVER')
 
-    dispatchFetchRequest(api.order.deliverLineItems(id), {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
+      Alert.alert(
+        `${this.context.t('action.confirmMessageTitle')}`,
+        `${this.context.t('deliverAllLineItems')}`,
+        [
+          {
+            text: `${this.context.t('action.yes')}`,
+            onPress: () => {
+              dispatchFetchRequest(api.order.process(id), {
+                  method: 'POST',
+                  withCredentials: true,
+                  credentials: 'include',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: formData
+                },
+                response => {
+                  this.props.navigation.navigate('TablesSrc')
+                }).then()
+            }
+          },
+          {
+            text: `${this.context.t('action.no')}`,
+            onPress: () => console.log('Cancelled'),
+            style: 'cancel'
+          }
+        ]
+      )
+    } else {
+      dispatchFetchRequest(api.order.deliverLineItems(id), {
+          method: 'POST',
+          withCredentials: true,
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({lineItemIds: lineItemIds})
         },
-        body: JSON.stringify({lineItemIds: lineItemIds})
-      },
-      response => {
-        this.props.navigation.navigate('TablesSrc')
-      }).then()
+        response => {
+          this.props.navigation.navigate('TablesSrc')
+        }).then()
+    }
   }
 
   handleComplete = id => {
     const formData = new FormData()
     formData.append('action', 'COMPLETE')
 
-    dispatchFetchRequest(api.order.process(id), {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {},
-        body: formData
-      },
-      response => {
-        this.props.navigation.navigate('TablesSrc')
-        this.props.getfetchOrderInflights()
-        this.props.clearOrder(id)
-        this.props.getOrdersByDateRange()
-      }).then()
+    dispatchFetchRequestWithOption(api.order.process(id), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {},
+      body: formData
+    }, {
+      defaultMessage: false
+    }, response => {
+      this.props.navigation.navigate('TablesSrc')
+      this.props.getfetchOrderInflights()
+      this.props.clearOrder(id)
+      this.props.getOrdersByDateRange()
+    }).then()
   }
 
   render() {
@@ -248,7 +269,6 @@ class OrdersSummaryRow extends React.Component {
       isLoading,
       label,
       order,
-      handleDelete,
       initialValues
     } = this.props
 
@@ -267,9 +287,7 @@ class OrdersSummaryRow extends React.Component {
                               <AddBtn
                                 onPress={() =>
                                   this.props.navigation.navigate('OrderFormII', {
-                                    orderId: order.orderId,
-                                    onSubmit: this.props.navigation.state.params.onSubmit,
-                                    handleDelete: this.props.navigation.state.params.handleDelete
+                                    orderId: order.orderId
                                   })
                                 }
                               />
@@ -365,37 +383,49 @@ class OrdersSummaryRow extends React.Component {
                   </View>
                 )}
                 keyExtractor={(data, rowMap) => rowMap.toString()}
-                renderHiddenItem={(data, rowMap) => (
-                  <View style={[styles.rowBack, styles.standalone]} key={rowMap}>
-                    <View style={styles.editIcon}>
-                      <Icon
-                        name="md-create"
-                        size={25}
-                        color="#fff"
-                        onPress={() =>
-                          this.props.navigation.navigate('LIneItemEdit', {
-                            lineItemId: data.item.lineItemId,
-                            orderId: order.orderId,
-                            initialValues: data.item
-                          })
-                        }
-                      />
+                renderHiddenItem={(data, rowMap) => {
+                  if (data.item.state === 'DELIVERED') {
+                    return null
+                  }
+
+                  return (
+                    <View style={[styles.rowBack]} key={rowMap}>
+                      <View style={{width: '60%'}}>
+
+                      </View>
+                      <View style={styles.editIcon}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.props.navigation.navigate('OrderFormIII', {
+                              prdId: data.item.productId,
+                              orderId: this.props.navigation.state.params.orderId,
+                              lineItem: data.item
+                            })
+                          }>
+                          <Icon
+                            name="md-create"
+                            size={30}
+                            color="#fff"
+
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      <View style={styles.delIcon}>
+                        <DeleteBtn
+                          handleDeleteAction={(orderId, lineItemId) =>
+                            this.handleDeleteLineItem(
+                              order.orderId,
+                              data.item.lineItemId
+                            )
+                          }
+                          islineItemDelete={true}
+                        />
+                      </View>
                     </View>
-                    <View style={styles.delIcon}>
-                      <DeleteBtn
-                        handleDeleteAction={(orderId, lineItemId) =>
-                          this.handleDeleteLineItem(
-                            order.orderId,
-                            data.item.lineItemId
-                          )
-                        }
-                        islineItemDelete={true}
-                      />
-                    </View>
-                  </View>
-                )}
+                  )
+                }}
                 leftOpenValue={0}
-                rightOpenValue={-80}
+                rightOpenValue={-150}
               />
             </View>
 
@@ -441,7 +471,7 @@ class OrdersSummaryRow extends React.Component {
                 onPress={() =>
                   order.lineItems.length === 0
                     ? warningMessage(t('lineItemCountCheck'))
-                    : this.props.navigation.state.params.onSubmit(order.orderId)
+                    : handleOrderSubmit(order.orderId)
                 }
               >
                 <Text style={[styles.bottomActionButton, styles.actionButton]}>
@@ -452,7 +482,7 @@ class OrdersSummaryRow extends React.Component {
 
             {!['SETTLED', 'REFUNDED'].includes(order.state) && (
               <DeleteBtn
-                handleDeleteAction={() => this.props.navigation.state.params.handleDelete(order.orderId)}
+                handleDeleteAction={() => handleDelete(order.orderId)}
               />
             )}
 

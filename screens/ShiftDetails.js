@@ -49,7 +49,14 @@ class ShiftDetails extends React.Component {
     }
 
     const cashTotal = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.orderTotal : 0
+    const actualCashAmount = shift.close.closingBalances.hasOwnProperty('CASH') ? shift.close.closingBalances.CASH.closingBalance : 0
+    const cashUnbalanceReason = shift.close.closingBalances.hasOwnProperty('CASH') && shift.close.closingBalances.CASH.unbalanceReason
+    const cashDifference = actualCashAmount - (cashTotal + shift.open.balance)
     const cardTotal = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.orderTotal : 0
+    const actualCardAmount = shift.close.closingBalances.hasOwnProperty('CARD') ? shift.close.closingBalances.CARD.closingBalance : 0
+    const cardUnbalanceReason = shift.close.closingBalances.hasOwnProperty('CARD') && shift.close.closingBalances.CARD.unbalanceReason
+    const cardDifference = actualCardAmount - cardTotal
+
     const cashDiscount = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.discount : 0
     const cardDiscount = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.discount : 0
     const cashServiceCharge = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.serviceCharge : 0
@@ -145,7 +152,30 @@ class ShiftDetails extends React.Component {
                 </Text>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>${shift.close.closingBalances.hasOwnProperty('CASH') ? shift.close.closingBalances.CASH.closingBalance : 0}</Text>
+                <Text>${actualCashAmount}</Text>
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 2}]}>
+                <Text style={[styles.fieldTitle]}>
+                  {t('shift.difference')}
+                </Text>
+              </View>
+              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                <Text>${cashDifference}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 2}]}>
+                <Text style={[styles.fieldTitle]}>
+                  {t('shift.remark')}
+                </Text>
+              </View>
+              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                <Text>{cashUnbalanceReason}</Text>
               </View>
             </View>
             {/* #Cash */}
@@ -179,8 +209,31 @@ class ShiftDetails extends React.Component {
                 </Text>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>${shift.close.closingBalances.hasOwnProperty('CARD') && shift.close.closingBalances.CARD.closingBalance}
+                <Text>${actualCardAmount}
                 </Text>
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 2}]}>
+                <Text style={[styles.fieldTitle]}>
+                  {t('shift.difference')}
+                </Text>
+              </View>
+              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                <Text>${cardDifference}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 2}]}>
+                <Text style={[styles.fieldTitle]}>
+                  {t('shift.remark')}
+                </Text>
+              </View>
+              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                <Text>{cardUnbalanceReason}</Text>
               </View>
             </View>
             {/* #Credit Card */}

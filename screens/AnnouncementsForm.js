@@ -81,7 +81,7 @@ class AnnouncementsForm extends React.Component {
         <View>
         {iconsArr.map((icon, ix) => (
           <View
-            style={[styles.verticalPadding]}
+            //style={[styles.verticalPadding]}
             key={ix}
           >
             <Field

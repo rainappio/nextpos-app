@@ -12,7 +12,7 @@ import {
 } from '../actions'
 import styles from '../styles'
 import {
-  api,
+  api, dispatchFetchRequest,
   errorAlert,
   makeFetchRequest,
   successMessage
@@ -25,10 +25,6 @@ class CategoryCustomize extends React.Component {
     header: null
   }
 
-  state = {
-    refreshing: false
-  }
-
   componentDidMount() {
     this.props.getProductOptions()
     this.props.getWorkingAreas()
@@ -38,41 +34,21 @@ class CategoryCustomize extends React.Component {
   handleSubmit = values => {
     const labelId = this.props.navigation.state.params.labelId
 
-    makeFetchRequest(token => {
-      fetch(api.productLabel.getById(labelId), {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        },
-        body: JSON.stringify(values)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            successMessage('Saved')
+    dispatchFetchRequest(api.productLabel.getById(labelId), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    }, response => {
+      this.props.clearLabel()
+      this.props.getLables()
+      this.props.navigation.navigate('ProductsOverview')
+      this.props.getProducts()
+    }).then()
 
-            this.props.clearLabel()
-            this.props.getLables()
-            this.props.navigation.navigate('ProductsOverview')
-            this.setState({
-              refreshing: true
-            })
-            this.props.getProducts() !== undefined &&
-              this.props.getProducts().then(() => {
-                this.setState({
-                  refreshing: false
-                })
-              })
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
   }
 
   handleEditCancel = () => {
@@ -91,7 +67,6 @@ class CategoryCustomize extends React.Component {
       haveData,
       haveError
     } = this.props
-    const { refreshing } = this.state
 
     if (isLoading) {
       return (
@@ -122,7 +97,6 @@ class CategoryCustomize extends React.Component {
         <CategoryCustomizeScreen
           onSubmit={this.handleSubmit}
           navigation={navigation}
-          refreshing={refreshing}
           labelName={navigation.state.params.labelName}
           initialValues={label}
           prodctoptions={prodctoptions}

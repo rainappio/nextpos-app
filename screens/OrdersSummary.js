@@ -26,18 +26,14 @@ class OrdersSummary extends React.Component {
     } = this.props
 
     return (
-      <View>
-        {Object.keys(order).length !== 0 && (
-          <OrdersSummaryRowOverView
-            order={order}
-            navigation={navigation}
-            isLoading={isLoading}
-            haveError={haveError}
-            haveData={haveData}
-            initialValues={initialValues}
-          />
-        )}
-      </View>
+      <OrdersSummaryRowOverView
+        order={order}
+        navigation={navigation}
+        isLoading={isLoading}
+        haveError={haveError}
+        haveData={haveData}
+        initialValues={initialValues}
+      />
     )
   }
 }

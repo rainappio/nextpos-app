@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { Text, View, TouchableOpacity, ScrollView } from 'react-native'
+import {Text, View, TouchableOpacity, ScrollView, KeyboardAvoidingView} from 'react-native'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import CheckBoxGroupObjPick from '../components/CheckBoxGroupObjPick'
 import RadioItemObjPick from '../components/RadioItemObjPick'
@@ -10,6 +10,8 @@ import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import BackBtn from '../components/BackBtn'
 import ScreenHeader from "../components/ScreenHeader";
+import {withNavigation} from "react-navigation";
+import InputText from "../components/InputText";
 
 class OrderFormIV extends React.Component {
   static navigationOptions = {
@@ -23,11 +25,13 @@ class OrderFormIV extends React.Component {
     context.localize({
       en: {
         productOptions: 'Select Product Option(s)',
-        quantity: 'Quantity'
+        quantity: 'Quantity',
+        freeTextProductOption: 'Note',
       },
       zh: {
         productOptions: '選擇產品客制',
-        quantity: '數量'
+        quantity: '數量',
+        freeTextProductOption: '備註',
       }
     })
   }
@@ -36,22 +40,27 @@ class OrderFormIV extends React.Component {
     const { product } = this.props
     const { t } = this.context
 
+    const lastOptionIndex = product.productOptions != null ? product.productOptions.length : 0
+
     return (
+      <KeyboardAvoidingView behavior="padding" enabled style={[{}]}>
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
-        <View style={styles.container}>
+        <View style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={true}
-                        title={this.props.navigation.state.params.prdName}
+                        parentFullScreen={true}
+                        title={product.name}
           />
 
-          {product.productOptions !== undefined &&
-            product.productOptions.length > 0 && (
-              <Text style={[styles.textBold, styles.paddBottom_20]}>
+          {product.productOptions != null && product.productOptions.length > 0 && (
+            <View style={[styles.tableRowContainerWithBorder]}>
+              <Text style={styles.tableCellText}>
                 {t('productOptions')}
               </Text>
+            </View>
             )}
 
           {product.productOptions !== undefined &&
-          product.productOptions.map(prdOption => {
+          product.productOptions.map((prdOption, optionIndex) => {
             const requiredOption = prdOption.required
 
             var ArrForTrueState = []
@@ -67,15 +76,14 @@ class OrderFormIV extends React.Component {
               return (
                 <View
                   key={prdOption.versionId}
-                  style={{
-                    borderBottomColor: '#f1f1f1',
-                    borderBottomWidth: 1,
-                    marginBottom: 10
-                  }}
+                  style={styles.sectionContainer}
                 >
-                  <Text style={[styles.fieldTitle]}>
-                    {prdOption.optionName}
-                  </Text>
+                  <View style={styles.sectionTitleContainer}>
+                    <Text style={[styles.sectionTitleText]}>
+                      {prdOption.optionName}
+                    </Text>
+                  </View>
+
                   {prdOption.multipleChoice === false ? (
                     <View>
                       {prdOption.optionValues.map((optVal, ix) => {
@@ -87,55 +95,61 @@ class OrderFormIV extends React.Component {
 
                         return (
                           <View key={prdOption.id + ix}>
-                            {requiredOption ? (
-                              <Field
-                                name={prdOption.optionName}
-                                component={RadioItemObjPick}
-                                customValueOrder={
-                                  optionObj !== undefined && optionObj
-                                }
-                                optionName={optVal.value}
-                                validate={isRequired}
-                              />
-                            ) : (
-                              <Field
-                                name={prdOption.optionName}
-                                component={RadioItemObjPick}
-                                customValueOrder={
-                                  optionObj !== undefined && optionObj
-                                }
-                                optionName={optVal.value}
-                              />
-                            )}
+                            <Field
+                              name={`productOptions[${optionIndex}]`}
+                              component={RadioItemObjPick}
+                              customValueOrder={optionObj !== undefined && optionObj}
+                              optionName={optVal.value}
+                              onCheck={(currentVal, fieldVal) => {
+                                return fieldVal !== undefined && currentVal.optionValue === fieldVal.optionValue
+                              }}
+                              validate={requiredOption ? isRequired : null}
+                            />
                           </View>
                         )
                       })}
                     </View>
                   ) : (
-                    <View
-                      key={prdOption.id}
-                    >
-                      {requiredOption ? (
-                        <Field
-                          name={prdOption.optionName}
-                          component={CheckBoxGroupObjPick}
-                          customarr={ArrForTrueState}
-                          validate={isRequired}
-                        />
-                      ) : (
-                        <Field
-                          name={prdOption.optionName}
-                          component={CheckBoxGroupObjPick}
-                          customarr={ArrForTrueState}
-                        />
-                      )}
+                    <View>
+                      <Field
+                        name={`productOptions[${optionIndex}]`}
+                        component={CheckBoxGroupObjPick}
+                        customarr={ArrForTrueState}
+                        validate={requiredOption ? isRequired : null}
+                      />
                     </View>
                   )}
                 </View>
               )
           })}
 
-          <View style={styles.paddingTopBtn20}>
+          <View style={styles.sectionTitleContainer}>
+            <Text style={[styles.sectionTitleText]}>
+              {t('freeTextProductOption')}
+            </Text>
+          </View>
+
+          <View style={[styles.tableRowContainerWithBorder]}>
+            <View style={[{flex: 1}]}>
+              <Field
+                name={`productOptions[${lastOptionIndex}]`}
+                component={InputText}
+                placeholder={t('freeTextProductOption')}
+                alignLeft={true}
+                format={(value, name) => {
+                  return value != null ? String(value.optionValue) : ''
+                }}
+                normalize={value => {
+                  return {
+                    optionName: t('freeTextProductOption'),
+                    optionValue: value
+                  }
+                }}
+              />
+            </View>
+          </View>
+
+          <View style={styles.tableRowContainerWithBorder}>
             <Field
               name="quantity"
               component={RenderStepper}
@@ -144,7 +158,7 @@ class OrderFormIV extends React.Component {
             />
           </View>
 
-          <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+          <View style={[styles.bottom, styles.dynamicVerticalPadding(20), styles.horizontalMargin, {flexDirection: 'row'}]}>
             <View style={{flex: 1, marginHorizontal: 5}}>
               <TouchableOpacity
                 onPress={this.props.handleSubmit}
@@ -158,7 +172,7 @@ class OrderFormIV extends React.Component {
             <View style={{flex: 1, marginHorizontal: 5}}>
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate('OrderFormII')
+                  this.props.navigation.goBack()
                 }}
               >
                 <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
@@ -167,10 +181,13 @@ class OrderFormIV extends React.Component {
           </View>
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
     )
   }
 }
 
-export default OrderFormIV = reduxForm({
+OrderFormIV = reduxForm({
   form: 'OrderFormIV'
 })(OrderFormIV)
+
+export default withNavigation(OrderFormIV)

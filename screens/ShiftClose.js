@@ -15,7 +15,7 @@ import BackBtnCustom from '../components/BackBtnCustom'
 import { formatDate, getShiftStatus, getMostRecentShiftStatus } from '../actions'
 import {
   api,
-  dispatchFetchRequest,
+  dispatchFetchRequest, dispatchFetchRequestWithOption,
   successMessage, warningMessage
 } from '../constants/Backend'
 import styles from '../styles'
@@ -80,29 +80,27 @@ class ShiftClose extends React.Component {
 
   handleOpenShift = (balance) => {
     handleOpenShift(balance, (response) => {
-      successMessage('Shift opened')
       this.props.dispatch(getShiftStatus())
       this.props.getMostRecentShiftStatus()
     })
   }
 
   handleinitiateCloseShift = () => {
-  	dispatchFetchRequest(
-    	api.shift.initiate,
-    	{
-      	method: 'POST',
-      	withCredentials: true,
-      	credentials: 'include',
-      	headers: {
-        	'Content-Type': 'application/json'
-      	},
-      	body: ''
-    	},
-    	response => {
-      	this.props.getShiftStatus()
-      	this.props.getMostRecentShiftStatus()
-      	this.props.navigation.navigate('AccountClose')
-    	}).then()
+    dispatchFetchRequestWithOption(api.shift.initiate, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: ''
+    }, {
+      defaultMessage: false
+    }, response => {
+      this.props.getShiftStatus()
+      this.props.getMostRecentShiftStatus()
+      this.props.navigation.navigate('AccountClose')
+    }).then()
 	}
 
   render() {

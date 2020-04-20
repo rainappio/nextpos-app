@@ -85,7 +85,7 @@ class Announcements extends React.Component {
         		body: JSON.stringify(dataArr[i])
       		},
       		response => {
-        		successMessage('Saved')
+        		//successMessage('Saved')
         		this.props.navigation.navigate('Announcements')
         		this.props.getAnnouncements()
       		}

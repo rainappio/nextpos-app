@@ -18,15 +18,11 @@ class CreateAccFormScreen extends React.Component {
 
   constructor(props, context) {
     super(props)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   render() {
     const { handleSubmit } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <DismissKeyboard>
@@ -86,7 +82,7 @@ class CreateAccFormScreen extends React.Component {
               onPress={() => this.props.navigation.navigate('Intro')}
             >
               <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                {t('cancel')}
+                {t('action.cancel')}
               </Text>
             </TouchableOpacity>
           </View>

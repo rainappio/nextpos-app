@@ -12,7 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import styles, {mainThemeColor} from '../styles'
-import {api, dispatchFetchRequest, successMessage, warningMessage} from '../constants/Backend'
+import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
 import { LocaleContext } from '../locales/LocaleContext'
 import {encode as btoa} from "base-64";
 import InputText from "./InputText";
@@ -44,7 +44,9 @@ class EditPasswordPopUp extends Component {
         enterOldPassword: 'Enter Old Password',
         originalPassword: 'Original Password',
         enter: 'Enter',
-        enterNewPassword: 'Enter New Password'
+        enterNewPassword: 'Enter New Password',
+        incorrectPassword: 'Incorrect password',
+        passwordUpdated: 'Password is updated'
       },
       zh: {
         passwordTitle: '設定密碼',
@@ -52,7 +54,9 @@ class EditPasswordPopUp extends Component {
         enterOldPassword: '輸入原本密碼',
         originalPassword: '原本密碼',
         enter: '輸入',
-        enterNewPassword: '輸入新密碼'
+        enterNewPassword: '輸入新密碼',
+        incorrectPassword: '密碼輸入錯誤',
+        passwordUpdated: '密碼更新成功'
       }
     })
   }
@@ -89,7 +93,7 @@ class EditPasswordPopUp extends Component {
       this.setState({ showEnterNewPassword: true })
     } else {
       await this.toggleModal(false)
-      warningMessage('Password is incorrect')
+      warningMessage(this.context.t('incorrectPassword'))
     }
   }
 
@@ -98,7 +102,7 @@ class EditPasswordPopUp extends Component {
     Keyboard.dismiss()
     const updatePasswordUrl = this.props.ownAccount? api.clientUser.updateCurrentUserPassword : api.clientUser.updatePassword(this.props.name)
 
-    dispatchFetchRequest(updatePasswordUrl,
+    dispatchFetchRequestWithOption(updatePasswordUrl,
       {
         method: 'PATCH',
         withCredentials: true,
@@ -107,16 +111,16 @@ class EditPasswordPopUp extends Component {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({password: updatedPassword})
+      }, {
+        defaultMessage: false
       },
       response => {
         // async/await is to avoid update on unmounted component error in SmoothPinCodeInput.
         response.json().then(data => {
           if (data.username) {
-            successMessage('Password updated')
+            successMessage(this.context.t('passwordUpdated'))
           }
         })
-
-
       }).then()
 
     await this.setState( { showEnterNewPassword: false })
@@ -155,43 +159,35 @@ class EditPasswordPopUp extends Component {
               this.toggleModal(false)
             }}
           >
-            <ScrollView
-              directionalLockEnabled={true}
-              contentContainerStyle={styles.modalContainer}
+            <View
+              style={[styles.boxShadow, styles.popUpLayout]}
+              //contentContainerStyle={styles.modalContainer}
             >
               <TouchableWithoutFeedback>
-                <View
-                  style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}
-                >
+                <View>
                   <ScreenHeader backNavigation={false}
                                 title={t('editPassword')}/>
 
                   {this.props.ownAccount && (
-                    <View
-                      style={[
-                        styles.jc_alignIem_center,
-                        styles.paddLeft20,
-                        styles.paddRight20
-                      ]}
-                    >
+                    <View>
                       <Text style={{marginBottom: 10, textAlign: 'center'}}>
                         {t('enterOldPassword')}
                       </Text>
                       {this.props.defaultUser ? (
-                        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                        <View style={[styles.tableRowContainer]}>
                           <TextInput
                             name="originalPassword"
                             value={this.state.originalPassword}
                             onChangeText={(value) => this.setState({originalPassword: value})}
                             placeholder={t('originalPassword')}
                             secureTextEntry={true}
-                            style={[styles.rootInput, {width: 200}]}
+                            style={[styles.rootInput, {color: 'black', width: 200}]}
                           />
                           <TouchableOpacity
                             style={{marginLeft: 10}}
                             onPress={() => this.handleCheckPassword(this.state.originalPassword)}
                           >
-                            <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('enter')}</Text>
+                            <Text style={[styles.searchButton]}>{t('enter')}</Text>
                           </TouchableOpacity>
                         </View>
                       ) : (
@@ -206,18 +202,12 @@ class EditPasswordPopUp extends Component {
                   )}
 
                   {this.state.showEnterNewPassword && (
-                    <View
-                      style={[
-                        styles.jc_alignIem_center,
-                        styles.paddLeft20,
-                        styles.paddRight20
-                      ]}
-                    >
+                    <View>
                       <Text style={{marginBottom: 10, textAlign: 'center'}}>
                         {t('enterNewPassword')}
                       </Text>
                       {this.props.defaultUser ? (
-                        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                        <View style={styles.tableRowContainer}>
                           <TextInput
                             name="originalPassword"
                             value={this.state.newPassword}
@@ -225,13 +215,13 @@ class EditPasswordPopUp extends Component {
                             placeholder={t('newPassword')}
                             secureTextEntry={true}
                             validate={isvalidPassword}
-                            style={[styles.rootInput, {width: 200}]}
+                            style={[styles.rootInput, {color: 'black', width: 200}]}
                           />
                           <TouchableOpacity
                             style={{marginLeft: 10}}
                             onPress={() => this.handleChangePwd(this.state.newPassword)}
                           >
-                            <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('enter')}</Text>
+                            <Text style={[styles.searchButton]}>{t('enter')}</Text>
                           </TouchableOpacity>
                         </View>
                       ) : (
@@ -246,7 +236,7 @@ class EditPasswordPopUp extends Component {
                   )}
                 </View>
               </TouchableWithoutFeedback>
-            </ScrollView>
+            </View>
           </TouchableOpacity>
         </Modal>
       </View>

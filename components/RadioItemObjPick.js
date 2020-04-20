@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
-import { Radio, List } from '@ant-design/react-native'
+import { Radio, List, RadioItem } from '@ant-design/react-native'
 import styles from '../styles'
 
 export default class RadioItemObjPick extends React.Component {
@@ -9,25 +9,27 @@ export default class RadioItemObjPick extends React.Component {
       input: { onBlur, onChange, onFocus, value },
       customValueOrder,
       optionName,
+      onCheck,
       meta: { error, touched, valid },
       ...rest
     } = this.props
     return (
-      <View style={{ padding: 15 }}>
-        <Radio
-          key={customValueOrder}
-          clear
-          error
-          onChange={() => onChange(customValueOrder)}
-          checked={
-            customValueOrder !== undefined &&
-            value.optionValue === customValueOrder.optionValue
-          }
-          style={{ position: 'absolute', right: 0 }}
-        >
+      <View style={[styles.tableRowContainerWithBorder]}>
+        <View style={[styles.tableCellView, {flex: 1}]}>
           <Text>{optionName}</Text>
-        </Radio>
-        {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
+        </View>
+        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end', borderWidth: 0}]}>
+          <Radio
+            key={customValueOrder}
+            onChange={() => onChange(customValueOrder)}
+            checked={onCheck(value, customValueOrder)}
+            style={{ position: 'absolute', right: 10 }}
+          >
+            {/*this empty text exists to increase the radio button hit slop as the radio button reacts to the touch of the text.*/}
+            <Text style={{borderWidth: 0, paddingVertical: 10, paddingHorizontal: 100 }}/>
+            {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
+          </Radio>
+        </View>
       </View>
     )
   }

@@ -44,31 +44,18 @@ class TableLayoutEdit extends React.Component {
   }
 
   handleSubmit = values => {
-    var id = values.id
-    makeFetchRequest(token => {
-      fetch(api.tablelayout.update + `${id}`, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        },
-        body: JSON.stringify(values)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            successMessage('Saved')
-            this.props.navigation.navigate('TableLayouts')
-            this.props.getTableLayouts()
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+    dispatchFetchRequest(api.tablelayout.update(values.id), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    }, response => {
+      this.props.navigation.navigate('TableLayouts')
+      this.props.getTableLayouts()
+    }).then()
   }
 
   handleDeleteLayout = (layoutId) => {
@@ -78,7 +65,6 @@ class TableLayoutEdit extends React.Component {
       credentials: 'include',
       headers: {},
     }, response => {
-      successMessage('Table layout deleted')
       this.props.navigation.navigate('TableLayouts')
     }).then()
   }

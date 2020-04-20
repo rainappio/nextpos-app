@@ -115,7 +115,7 @@ class LoginScreen extends React.Component {
               onPress={() => this.props.navigation.navigate('Intro')}
             >
               <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                {t('cancel')}
+                {t('action.cancel')}
               </Text>
             </TouchableOpacity>
 
@@ -191,7 +191,7 @@ class ResetModal extends React.Component {
                   onPress={() => toggleModal(false)}
                 >
                   <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                    {t('cancel')}
+                    {t('action.cancel')}
                   </Text>
                 </TouchableOpacity>
               </View>
