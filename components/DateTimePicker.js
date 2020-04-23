@@ -16,6 +16,7 @@ export default class RenderDatePicker extends Component {
       getWeekState,
       showDatepicker,
       getdate,
+      needWeekFilter,
       ...rest
     } = this.props
 
@@ -45,28 +46,34 @@ export default class RenderDatePicker extends Component {
     return (
     	<View style={{flex: 1}}>
     		<View style={[styles.flex_dir_row, styles.jc_alignIem_center]}>
-    			<View style={{flex: 1, marginRight: 10, alignItems: 'flex-end'}}>
-						<Text onPress={() => onChange(moment(currentDate).isoWeekday(-6).format('YYYY-MM-DD'))}>
-    					<Icon name="ios-arrow-back" size={32} color="#f18d1a"/>
-    				</Text>
-          </View>
+    			{
+    				needWeekFilter && 
+    				<View style={{flex: 1, marginRight: 10, alignItems: 'flex-end'}}>
+    					<Text onPress={() => onChange(moment(currentDate).isoWeekday(-6).format('YYYY-MM-DD'))}>
+    			    	<Icon name="ios-arrow-back" size={32} color="#f18d1a"/>
+    			    </Text>
+    			  </View>
+    			}
 
-          <View style={{flex: 3, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#ddd', padding: 12}}>
+          <View style={{flex: 3, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#ddd', padding: 9, borderRadius: 4}}>
             <FontAwesomeIcon
               name="calendar"
               size={26}
               style={[styles.orange_color]}
             />
-            <Text onPress={showDatepicker} style={{padding: 5}}>
+            <Text onPress={showDatepicker} style={{marginLeft: 5}}>
               {value.hasOwnProperty('nativeEvent') ? moment(value.nativeEvent.timestamp).format('YYYY-MM-DD') : value}
             </Text>
           </View>
 
-        	<View style={{flex: 1, marginLeft: 10}}>
-						<Text onPress={() => onChange(moment(currentDate).isoWeekday(+8).format('YYYY-MM-DD'))}>
-    					<Icon name="ios-arrow-forward" size={32} color="#f18d1a"/>
-    				</Text>
-    			</View>
+					{
+    				needWeekFilter && 
+        		<View style={{flex: 1, marginLeft: 10}}>
+							<Text onPress={() => onChange(moment(currentDate).isoWeekday(+8).format('YYYY-MM-DD'))}>
+    						<Icon name="ios-arrow-forward" size={32} color="#f18d1a"/>
+    					</Text>
+    				</View>
+    			}
     		</View>
 
       	{isShow && (

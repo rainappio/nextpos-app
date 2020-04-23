@@ -1,6 +1,7 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native'
 const window = Dimensions.get('window')
 export const mainThemeColor = '#f18d1a'
+let CIRCLE_RADIUS = 25;
 //export const mainThemeColor = '#f18dee'
 //export const mainThemeColor = '#3e3d47'
 
@@ -632,5 +633,22 @@ export default StyleSheet.create({
   	backgroundColor:'#f1f1f1',
   	paddingLeft:12,
   	borderRadius: 4
+<<<<<<< HEAD
+=======
+  },
+  circle: {
+    backgroundColor: mainThemeColor,
+    width: CIRCLE_RADIUS * 2,
+    height: CIRCLE_RADIUS * 2,
+    borderRadius: CIRCLE_RADIUS
+  },
+  col: {
+    flexDirection: "column"
+  },
+  ballContainer: {
+  	height: 600,
+  	borderWidth: 1,
+  	borderColor: mainThemeColor
+>>>>>>> bb774fc140f6b8d699a3220259f2c93a29bb1c18
   }
 })

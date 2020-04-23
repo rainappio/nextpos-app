@@ -139,11 +139,22 @@ class TableLayoutForm extends React.Component {
 
         <View style={[styles.bottom]}>
           {isEdit ? (
+          	<View>
             <TouchableOpacity onPress={handleSubmit}>
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
                 {t('action.update')}
               </Text>
             </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('ManageVisualSceen',{
+            	tables: initialValues.tables,
+            	layoutId : initialValues.id
+            })}>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                {t('action.manageVisual')}
+              </Text>
+            </TouchableOpacity>
+            </View>
           ) : (
             <TouchableOpacity onPress={handleSubmit}>
               <Text style={[styles.bottomActionButton, styles.actionButton]}>

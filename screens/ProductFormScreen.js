@@ -62,7 +62,10 @@ class ProductFormScreen extends React.Component {
       handleDeleteProduct,
       workingareas,
       prodctoptions,
-      navigation
+      navigation,
+      isPinned,
+      productId,
+      handlepinToggle
     } = this.props
 
     return (
@@ -193,6 +196,17 @@ class ProductFormScreen extends React.Component {
 
               {isEditForm ? (
                 <View>
+                	{
+                		isPinned &&
+                		<TouchableOpacity onPress={() => handlepinToggle(productId)}>
+                	    <Text
+                	      style={[styles.bottomActionButton, styles.actionButton]}
+                	    >
+                	      {t('action.unpin')}
+                	    </Text>
+                	  </TouchableOpacity>
+                	}
+
                   <TouchableOpacity onPress={handleEditCancel}>
                     <Text
                       style={[styles.bottomActionButton, styles.cancelButton]}

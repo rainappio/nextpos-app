@@ -38,10 +38,12 @@ class OrderFormII extends React.Component {
 
     context.localize({
       en: {
-        newOrderTitle: 'New Order'
+        newOrderTitle: 'New Order',
+        pinned: 'Pinned'
       },
       zh: {
-        newOrderTitle: '新訂單'
+        newOrderTitle: '新訂單',
+        pinned: 'Pinned-CH'
       }
     })
 
@@ -119,6 +121,33 @@ class OrderFormII extends React.Component {
               onChange={this.onChange}
               activeSections={this.state.activeSections}
             >
+            	<Accordion.Panel
+                header={this.PanelHeader(t('pinned'), '0')}
+                key="pinned"
+              >
+                <List>
+                  {map.get('pinned') !== undefined &&
+                    map.get('pinned').map(prd => (
+                        <List.Item
+                          key={prd.id}                          
+                          onPress={() => {
+                            this.props.navigation.navigate('ProductEdit', {
+                              productId: prd.id,
+                              labelId: prd.productLabelId
+                            })
+                          }}
+                        >
+                        <View style={[styles.jc_alignIem_center, { flex: 1, flexDirection: 'row' }]}>
+                          <Text style={{ flex: 3 }}>{prd.name}</Text>
+                          <Text style={{ flex: 1, textAlign: 'right' }}>
+                            ${prd.price}
+                          </Text>
+                        </View>
+                        </List.Item>
+                    ))}
+                </List>
+              </Accordion.Panel>
+
               {labels.map(lbl => (
                 <Accordion.Panel
                   header={this.PanelHeader(lbl.label, lbl.id)}
