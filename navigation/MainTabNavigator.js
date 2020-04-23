@@ -72,15 +72,12 @@ import UserTimeCardDetail from '../screens/UserTimeCardDetail'
 import CloseComplete from '../screens/CloseComplete'
 import AccountClose from '../screens/AccountClose'
 import AccountCloseConfirm from '../screens/AccountCloseConfirm'
-<<<<<<< HEAD
 import CustomerStats from "../screens/CustomerStats";
 import ShiftHistory from "../screens/ShiftHistory";
 import ShiftDetails from "../screens/ShiftDetails";
-import {getToken} from "../constants/Backend";
-import {doLogout} from "../actions";
-=======
+import { getToken } from "../constants/Backend";
+import { doLogout } from "../actions";
 import ManageVisualSceen from '../screens/ManageVisualSceen'
->>>>>>> bb774fc140f6b8d699a3220259f2c93a29bb1c18
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -242,7 +239,7 @@ const tabBar = createBottomTabNavigator({
   }
 }, {
   defaultNavigationOptions: {
-    tabBarOnPress: async ({navigation, defaultHandler}) => {
+    tabBarOnPress: async ({ navigation, defaultHandler }) => {
       const tokenObj = await getToken()
 
       if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {

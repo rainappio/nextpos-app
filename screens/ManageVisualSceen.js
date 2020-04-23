@@ -1,43 +1,55 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux'
-import { StyleSheet, View, Text, PanResponder, Animated, ScrollView, DismissKeyboard, Dimensions } from "react-native";
+import { View, Text, PanResponder, Animated, ActivityIndicator } from "react-native";
 import ScreenHeader from "../components/ScreenHeader";
 import {
   successMessage,
   api,
-  makeFetchRequest,
-  errorAlert, dispatchFetchRequest
+  dispatchFetchRequest
 } from '../constants/Backend'
 import { getTableLayout } from '../actions'
 import styles from '../styles'
 
 class ManageVisualSceen extends Component {
-	static navigationOptions = {
+  static navigationOptions = {
     header: null
   }
 
   componentDidMount() {
-	  this.props.getTableLayout(this.props.navigation.state.params.layoutId)
+    this.props.getTableLayout(this.props.navigation.state.params.layoutId)
   }
 
   render() {
-	  const { tablelayout } = this.props
-  	const layoutId = this.props.navigation.state.params.layoutId !== false && this.props.navigation.state.params.layoutId;
+    const { tablelayout, isLoading } = this.props
+    const layoutId = this.props.navigation.state.params.layoutId !== false && this.props.navigation.state.params.layoutId;
+
+    if (isLoading) {
+      return (
+        <View style={[styles.container]}>
+          <ActivityIndicator size="large" color="#ccc" />
+        </View>
+      )
+    }
 
     return (
       <View style={[styles.container_nocenterCnt]}>
-    		<ScreenHeader title={"Table Layout Position"}/>
-        <View style={{flex: 1}}>
-          <View style={styles.ballContainer}>
+        <ScreenHeader title={"Table Layout Position"} />
+        {/* <Text onPress={() => this.forceRefresh()} style={{ borderWidth: 1, width: 120, textAlign: 'center', padding: 8, borderRadius: 2 }}>Reset Positions</Text> */}
+        <View style={{ flex: 1 }}>
+          <View style={[styles.ballContainer, { paddingLeft: 8, height: '100%', marginTop: 22 }]}>
             <View>
               {
                 tablelayout.tables.map(table => {
-                    return (<Draggable table={table} key={table.tableId} layoutId={layoutId} getTableLayout={this.props.getTableLayout}/>)
-                  }
-                )
+                  return (<Draggable
+                    isLoading={isLoading}
+                    table={table}
+                    key={table.tableId}
+                    layoutId={layoutId}
+                    getTableLayout={this.props.getTableLayout}
+                  />)
+                })
               }
             </View>
-
           </View>
         </View>
       </View>
@@ -52,7 +64,7 @@ const mapStateToProps = state => ({
   isLoading: state.tablelayout.loading
 })
 
-const mapDispatchToProps = (dispatch, props) => ({
+const mapDispatchToProps = (dispatch) => ({
   dispatch,
   getTableLayout: (id) => dispatch(getTableLayout(id))
 })
@@ -76,9 +88,9 @@ class Draggable extends Component {
 
   componentDidMount() {
     if (this.props.table.position != null) {
-      this.state.pan.setValue({x: Number(this.props.table.position.x), y: Number(this.props.table.position.y)})
+      this.state.pan.setValue({ x: Number(this.props.table.position.x), y: Number(this.props.table.position.y) })
     } else {
-      this.state.pan.setValue({ x:0, y:0})
+      this.state.pan.setValue({ x: 0, y: 0 })
     }
   }
 
@@ -99,7 +111,7 @@ class Draggable extends Component {
         this.state.pan.flattenOffset();
         console.log(`on release: ${JSON.stringify(this.state.pan)}`)
 
-        if (this.isDropArea(e,gesture)) {
+        if (this.isDropArea(e, gesture)) {
           Animated.timing(this.state.opacity, {
             toValue: 0,
             duration: 1000
@@ -113,17 +125,17 @@ class Draggable extends Component {
     });
   }
 
-	componentWillUnmount() {
+  componentWillUnmount() {
     // this.state.pan.x.removeAllListeners();
     // this.state.pan.y.removeAllListeners();
   }
 
-  isDropArea(e,gesture) {
-  	const layoutId = this.props.layoutId;
-  	const tableId = this.props.table.tableId;
+  isDropArea(e, gesture) {
+    const layoutId = this.props.layoutId;
+    const tableId = this.props.table.tableId;
     console.debug(`event: ${e.nativeEvent.locationX} ${e.nativeEvent.locationY} ${e.nativeEvent.pageX} ${e.nativeEvent.pageY}`)
-  	console.debug(`gesture: ${JSON.stringify(gesture)}`)
-  	console.debug(this.state.pan)
+    console.debug(`gesture: ${JSON.stringify(gesture)}`)
+    console.debug(this.state.pan)
 
     dispatchFetchRequest(api.tablelayout.updateTablePosition(layoutId, tableId), {
       method: 'POST',
@@ -132,7 +144,7 @@ class Draggable extends Component {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({x: JSON.stringify(this.state.pan.x), y: JSON.stringify(this.state.pan.y)})
+      body: JSON.stringify({ x: JSON.stringify(this.state.pan.x), y: JSON.stringify(this.state.pan.y) })
     }, response => {
       successMessage('Saved')
       this.props.getTableLayout(layoutId)
@@ -141,29 +153,59 @@ class Draggable extends Component {
     return true
   }
 
-	renderDraggable(table) {
+
+  handleReset = (layoutId, tableId) => {
+    dispatchFetchRequest(api.tablelayout.updateTablePosition(layoutId, tableId), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({})
+    }, response => {
+      successMessage('Position Resetted')
+      this.props.getTableLayout(layoutId)
+    }).then()
+    return true
+  }
+
+  renderDraggable(layoutId, table) {
     const panStyle = {
       transform: this.state.pan.getTranslateTransform()
     }
 
-  	return (
-  		<View>
-        <Animated.View
-          {...this.panResponder.panHandlers}
-          style={[panStyle, styles.circle, {position: 'absolute'}]}
-        >
-          <Text style={{color: '#fff', textAlign: 'center', marginTop: 15}} >{table.tableName}</Text>
-        </Animated.View>
-  		</View>
-  	);
+    return (
+      <View style={{ padding: 4 }}>
+        {
+          table.position !== null
+            ?
+            <View>
+              <Text onPress={() => this.handleReset(layoutId, table.tableId)} key={table.tableId} style={{ borderWidth: 0.5, textAlign: 'center', padding: 4, fontSize: 12, borderRadius: 4, width: 60 }}>Reset-{table.tableName}</Text>
+              <Animated.View
+                {...this.panResponder.panHandlers}
+                style={[panStyle, styles.circle, { position: 'absolute' }]}
+              >
+                <Text style={{ color: '#fff', textAlign: 'center', marginTop: 15 }} >{table.tableName}</Text>
+              </Animated.View>
+            </View>
+            :
+            <Animated.View
+              {...this.panResponder.panHandlers}
+              style={[panStyle, styles.circle, { marginTop: 8 }]}
+            >
+              <Text style={{ color: '#fff', textAlign: 'center', marginTop: 15 }} >{table.tableName}</Text>
+            </Animated.View>
+        }
+      </View>
+    );
   }
 
   render() {
-  	const { table } = this.props
-
+    const { table, layoutId } = this.props
     return (
-      <View style={{alignItems: "flex-start", borderWidth: 0, marginBottom: 0}} ref='self'>
-        {this.renderDraggable(table)}
+      <View style={{ alignItems: "flex-start", borderWidth: 0, marginBottom: 0 }} ref='self'>
+        {this.renderDraggable(layoutId, table)}
       </View>
     );
   }

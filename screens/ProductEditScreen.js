@@ -15,8 +15,7 @@ import {
   api, dispatchFetchRequest,
   errorAlert,
   makeFetchRequest,
-  successMessage,
-  dispatchFetchRequest
+  successMessage
 } from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 
@@ -108,7 +107,7 @@ class ProductEdit extends Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveData) {
       return (
