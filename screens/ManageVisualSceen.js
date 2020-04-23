@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux'
-import { StyleSheet, View, Text, PanResponder, Animated, ScrollView, DismissKeyboard, FlatList } from "react-native";
+import { StyleSheet, View, Text, PanResponder, Animated, ScrollView, DismissKeyboard, Dimensions } from "react-native";
 import ScreenHeader from "../components/ScreenHeader";
 import {
   successMessage,
@@ -16,30 +16,41 @@ class ManageVisualSceen extends Component {
     header: null
   }
 
+  componentDidMount() {
+	  this.props.getTableLayout(this.props.navigation.state.params.layoutId)
+  }
+
   render() {
-  	var layoutId = this.props.navigation.state.params.layoutId !== false && this.props.navigation.state.params.layoutId;
-		var tables = this.props.navigation.state.params.tables !== undefined && this.props.navigation.state.params.tables;
+	  const { tablelayout } = this.props
+  	const layoutId = this.props.navigation.state.params.layoutId !== false && this.props.navigation.state.params.layoutId;
 
     return (
       <View style={[styles.container_nocenterCnt]}>
     		<ScreenHeader title={"Table Layout Position"}/>
-    		<View style={{flex:1}}>
-        	<View style={styles.ballContainer}/>     
-        	<View style={[styles.col, {
-        		width: 80, 
-        		position: 'absolute'
-        	}]}>
-          	{
-          		tables.map(table =>
-								<Draggable table={table} key={table.tableId} layoutId={layoutId} getTableLayout={this.props.getTableLayout}/>
-          		)
-          	}
-        	</View>
+        <View style={{flex: 1}}>
+          <View style={styles.ballContainer}>
+            <View>
+              {
+                tablelayout.tables.map(table => {
+                    return (<Draggable table={table} key={table.tableId} layoutId={layoutId} getTableLayout={this.props.getTableLayout}/>)
+                  }
+                )
+              }
+            </View>
+
+          </View>
         </View>
-      </View>    
+      </View>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  tablelayout: state.tablelayout.data,
+  haveData: state.tablelayout.haveData,
+  haveError: state.tablelayout.haveError,
+  isLoading: state.tablelayout.loading
+})
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
@@ -47,7 +58,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 })
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ManageVisualSceen)
 
@@ -63,37 +74,31 @@ class Draggable extends Component {
     };
   }
 
-  // componentDidMount(){
-  // 	setTimeout(() => {
-  //     this.refs.self.measure((fx, fy, width, height, px, py) => {
-  //       console.log('Component width is: ' + width)
-  //       console.log('Component height is: ' + height)
-  //       console.log('X offset to frame: ' + fx)
-  //       console.log('Y offset to frame: ' + fy)
-  //       this.offset = { fx, fy, width, height }
-  //     })
-  //   }, 0)
-  // }
+  componentDidMount() {
+    if (this.props.table.position != null) {
+      this.state.pan.setValue({x: Number(this.props.table.position.x), y: Number(this.props.table.position.y)})
+    } else {
+      this.state.pan.setValue({ x:0, y:0})
+    }
+  }
 
   UNSAFE_componentWillMount() {
-    this._val = { x:0, y:0 }
-    this.state.pan.addListener((value) => this._val = value);
-
     this.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (e, gesture) => true,
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderGrant: (e, gesture) => {
         this.state.pan.setOffset({
-          // x: this._val.x,
-          // y:this._val.y
           x: this.state.pan.x._value,
           y: this.state.pan.y._value
         })
-        this.state.pan.setValue({ x:0, y:0})
+        //this.state.pan.setValue({ x:0, y:0})
       },
-      onPanResponderMove: Animated.event([ 
+      onPanResponderMove: Animated.event([
         null, { dx: this.state.pan.x, dy: this.state.pan.y }
       ]),
-      onPanResponderRelease: (e, gesture) => {      	
+      onPanResponderRelease: (e, gesture) => {
+        this.state.pan.flattenOffset();
+        console.log(`on release: ${JSON.stringify(this.state.pan)}`)
+
         if (this.isDropArea(e,gesture)) {
           Animated.timing(this.state.opacity, {
             toValue: 0,
@@ -103,80 +108,64 @@ class Draggable extends Component {
               showDraggable: false
             })
           );
-        } 
+        }
       }
     });
   }
 
 	componentWillUnmount() {
-    this.state.pan.x.removeAllListeners();  
-    this.state.pan.y.removeAllListeners();
+    // this.state.pan.x.removeAllListeners();
+    // this.state.pan.y.removeAllListeners();
   }
 
-  isDropArea(e,gesture) {  
-  	var layoutId = this.props.layoutId;
-  	var tableId = this.props.table.tableId;	
-  	console.log(this.state.pan)
-  	console.log(e.nativeEvent.locationX.toFixed(2))
-  	console.log(e.nativeEvent.locationY.toFixed(2))
-  	console.log("isDropArea fun hit")
+  isDropArea(e,gesture) {
+  	const layoutId = this.props.layoutId;
+  	const tableId = this.props.table.tableId;
+    console.debug(`event: ${e.nativeEvent.locationX} ${e.nativeEvent.locationY} ${e.nativeEvent.pageX} ${e.nativeEvent.pageY}`)
+  	console.debug(`gesture: ${JSON.stringify(gesture)}`)
+  	console.debug(this.state.pan)
 
-  	//return;
-  
-  		dispatchFetchRequest(api.tablelayout.updateTablePosition(layoutId, tableId), {
-      	method: 'POST',
-      	withCredentials: true,
-      	credentials: 'include',
-      	headers: {
-        	'Content-Type': 'application/json',
-      	},
-      	body: JSON.stringify({x: e.nativeEvent.locationX.toFixed(2), y: e.nativeEvent.locationY.toFixed(2)})
-    	}, response => {
-    		successMessage('Saved')      
-      	this.props.getTableLayout(layoutId)
-    	}).then()		 
-      
-    return gesture.moveY < 200;
-  } 
-	
+    dispatchFetchRequest(api.tablelayout.updateTablePosition(layoutId, tableId), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({x: JSON.stringify(this.state.pan.x), y: JSON.stringify(this.state.pan.y)})
+    }, response => {
+      successMessage('Saved')
+      this.props.getTableLayout(layoutId)
+    }).then()
+
+    return true
+  }
+
 	renderDraggable(table) {
     const panStyle = {
       transform: this.state.pan.getTranslateTransform()
-    }   
-  	var x = table.position !== null && parseInt(table.position.x)
-  	var y = table.position !== null && parseInt(table.position.y)
+    }
 
-  	return (  		
-  		<View>  	 
-  		{
-  			table.position !== null
-  			?
-  				<Animated.View
-      			{...this.panResponder.panHandlers}        	
-      			style={[panStyle, styles.circle,{position: 'absolute', marginLeft: x, marginTop: y}]}        	
-    			>
-      			<Text style={{color: '#fff', textAlign: 'center', marginTop: 15}} >{table.tableName}</Text>
-    			</Animated.View>   
-    		:
-    			<Animated.View
-      			{...this.panResponder.panHandlers}        	
-      			style={[panStyle, styles.circle]}        	
-    			>
-      			<Text style={{color: '#fff', textAlign: 'center', marginTop: 15}} >{table.tableName}</Text>
-    			</Animated.View>   		
-  			}
-  		</View>  		
+  	return (
+  		<View>
+        <Animated.View
+          {...this.panResponder.panHandlers}
+          style={[panStyle, styles.circle, {position: 'absolute'}]}
+        >
+          <Text style={{color: '#fff', textAlign: 'center', marginTop: 15}} >{table.tableName}</Text>
+        </Animated.View>
+  		</View>
   	);
   }
 
   render() {
-  	const { table } = this.props;
-  	
+  	const { table } = this.props
+
     return (
-      <View style={{alignItems: "flex-start", marginBottom: 8}} ref='self'>
-      {this.renderDraggable(table)}   			
+      <View style={{alignItems: "flex-start", borderWidth: 0, marginBottom: 0}} ref='self'>
+        {this.renderDraggable(table)}
       </View>
     );
-  }  
+  }
 }
 //https://snack.expo.io/@yoobidev/draggable-component
