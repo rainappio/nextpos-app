@@ -1,10 +1,10 @@
 const en = {
   login: 'Login',
-  cancel: 'Cancel',
   clientName: 'Client Name',
   email: 'Email Address',
   password: 'Password',
   logout: 'Logout',
+  refreshed: 'Refreshed',
   menu: {
     home: 'Home',
     tables: 'Tables',
@@ -79,7 +79,11 @@ const en = {
     product: 'Product',
     quantity: 'Qty',
     subTotal: 'Subtotal',
-    serveBy: 'Serve By'
+    serveBy: 'Serve By',
+
+    // order messages
+    submitted: 'Order Submitted',
+    deleted: 'Order Deleted'
   },
   orderState: {
     OPEN: 'Open',
@@ -89,6 +93,10 @@ const en = {
     REFUNDED: 'Refunded',
     COMPLETED: 'Completed',
     DELETED: 'Deleted'
+  },
+  payment: {
+    cashPayment: 'Cash',
+    cardPayment: 'Credit Card'
   },
   timecard: {
     hours: 'Hour(s)',
@@ -117,6 +125,7 @@ const en = {
     confirmAction: 'Confirm Close',
     abortAction: 'Abort Close',
     accountCloseTitle: 'Closing Account',
+    confirmCloseTitle: 'Confirm Closing Account Details',
     cashSection: 'Cash',
     cardSection: 'Credit Card',
     nextAction: 'Next',
@@ -127,10 +136,27 @@ const en = {
     enterAmount: 'Enter Amount',
     remark: 'Unbalance Reason',
     totalCardTransitionAmt: 'Total Card Transactions',
-    totalCardInRegister: 'Actual Card Amount'
+    totalCardInRegister: 'Actual Card Amount',
+    difference: 'Difference',
+
+    // messages
+    shiftOpened: 'Shift opened',
+    shiftAborted: 'Closing shift aborted',
+    shiftClosed: 'Shift closed'
   },
   errors: {
     balanceError: 'Please enter a positive value'
+  },
+  backend: {
+    POST: 'Saved',
+    PATCH: 'Saved',
+    DELETE: 'Deleted',
+    403: 'You are not authorized for this operation.',
+    404: 'The id you used to look for an item cannot be found.',
+    message: {
+      insufficientCashAmount: 'Entered cash amount is less than the settling amount.',
+      completeAllOrdersFirst: 'Please complete all orders before closing shift.'
+    }
   },
   bar: 'Bar {{someValue}}'
 }

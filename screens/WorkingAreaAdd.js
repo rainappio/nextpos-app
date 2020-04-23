@@ -6,7 +6,7 @@ import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import WorkingAreaForm from './WorkingAreaForm'
 import {
-  api,
+  api, dispatchFetchRequest,
   errorAlert,
   makeFetchRequest,
   successMessage
@@ -24,42 +24,26 @@ class WorkingAreaAdd extends React.Component {
 
   constructor(props, context) {
     super(props)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   handleSubmit = values => {
-    makeFetchRequest(token => {
-      fetch(api.workingarea.create, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        },
-        body: JSON.stringify(values)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            successMessage('Saved')
-            this.props.navigation.navigate('PrinternKDS')
-            this.props.getWorkingAreas()
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+    dispatchFetchRequest(api.workingarea.create, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    }, response => {
+      this.props.navigation.navigate('PrinternKDS')
+      this.props.getWorkingAreas()
+    }).then()
   }
 
   render() {
     const { navigation } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <DismissKeyboard>

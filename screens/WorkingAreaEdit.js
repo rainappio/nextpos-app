@@ -12,7 +12,7 @@ import {
   clearWorkingArea
 } from '../actions'
 import {
-  api,
+  api, dispatchFetchRequest,
   errorAlert,
   makeFetchRequest,
   successMessage
@@ -20,6 +20,8 @@ import {
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
+import LoadingScreen from "./LoadingScreen";
+import BackendErrorScreen from "./BackendErrorScreen";
 
 class WorkingAreaEdit extends React.Component {
   static navigationOptions = {
@@ -29,10 +31,6 @@ class WorkingAreaEdit extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   componentDidMount() {
@@ -40,33 +38,20 @@ class WorkingAreaEdit extends React.Component {
   }
 
   handleUpdate = values => {
-    var id = values.id
-    makeFetchRequest(token => {
-      fetch(api.workingarea.update + `${id}`, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        },
-        body: JSON.stringify(values)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            successMessage('Saved')
-            this.props.navigation.navigate('PrinternKDS')
-            this.props.getWorkingAreas()
-            this.props.getPrinters()
-            this.props.clearWorkingArea()
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+    dispatchFetchRequest(api.workingarea.update(values.id), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    }, response => {
+      this.props.navigation.navigate('PrinternKDS')
+      this.props.getWorkingAreas()
+      this.props.getPrinters()
+      this.props.clearWorkingArea()
+    }).then()
   }
 
   handleEditCancel = () => {
@@ -78,19 +63,15 @@ class WorkingAreaEdit extends React.Component {
 
   render() {
     const { navigation, workingarea, loading, haveError, haveData } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     if (loading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen/>
       )
     } else if (haveError) {
       return (
-        <View style={[styles.container]}>
-          <Text>Err during loading, check internet conn...</Text>
-        </View>
+        <BackendErrorScreen/>
       )
     }
 

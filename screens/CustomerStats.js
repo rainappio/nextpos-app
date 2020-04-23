@@ -37,12 +37,14 @@ class CustomerStats extends React.Component {
           TWENTIES: '20 - 29',
           THIRTIES: '30 - 39',
           FORTIES: '40 - 49',
-          FIFTIES_AND_ABOVE: '50+'
+          FIFTIES_AND_ABOVE: '50+',
+          NOT_ENTERED: 'Not Entered'
         },
         visit: {
           FIRST_TIME: '1',
           TWO_TO_THREE: '2 - 3',
-          MORE_THAN_THREE: '4+'
+          MORE_THAN_THREE: '4+',
+          NOT_ENTERED: 'Not Entered'
         },
         customerCount: 'Customer Count',
         maleCount: 'Male',
@@ -60,6 +62,19 @@ class CustomerStats extends React.Component {
         customerCountHeading: '來客數統計',
         total: '總數量',
         percentage: '百分比',
+        age: {
+          TWENTIES: '20 - 29',
+          THIRTIES: '30 - 39',
+          FORTIES: '40 - 49',
+          FIFTIES_AND_ABOVE: '50+',
+          NOT_ENTERED: '未輸入'
+        },
+        visit: {
+          FIRST_TIME: '1',
+          TWO_TO_THREE: '2 - 3',
+          MORE_THAN_THREE: '4+',
+          NOT_ENTERED: '未輸入'
+        },
         customerCount: '總共',
         maleCount: '男生',
         femaleCount: '女生',

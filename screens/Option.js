@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import OptionFormScreen from './OptionFormScreen'
-import { api, errorAlert, makeFetchRequest } from '../constants/Backend'
+import {api, dispatchFetchRequest, errorAlert, makeFetchRequest} from '../constants/Backend'
 
 class Option extends React.Component {
   static navigationOptions = {
@@ -9,34 +9,19 @@ class Option extends React.Component {
   }
 
   handleSubmit = values => {
-    values.multipleChoice === true
-      ? (values.optionType = 'MULTIPLE_CHOICE')
-      : (values.optionType = 'ONE_CHOICE')
+    values.multipleChoice === true ? (values.optionType = 'MULTIPLE_CHOICE') : (values.optionType = 'ONE_CHOICE')
 
-    makeFetchRequest(token => {
-      fetch(api.productOption.new, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token.access_token}`
-        },
-        body: JSON.stringify(values)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            this.props.navigation.navigate(
-              this.props.navigation.state.params.customRoute
-            )
-          } else {
-            errorAlert(response)
-          }
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+    dispatchFetchRequest(api.productOption.new, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    }, response => {
+      this.props.navigation.navigate(this.props.navigation.state.params.customRoute)
+    }).then()
   }
 
   render() {

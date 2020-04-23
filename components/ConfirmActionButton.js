@@ -9,15 +9,11 @@ class ConfirmActionButton extends React.Component {
 
   constructor(props, context) {
     super(props)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   render() {
     const { handleConfirmAction, params, buttonTitle } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     return (
       <TouchableOpacity

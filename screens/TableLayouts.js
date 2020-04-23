@@ -22,7 +22,6 @@ class TableLayouts extends React.Component {
     super(props, context)
 
     this.state = {
-      t: context.t,
       activeSections: [0]
     }
 
@@ -64,7 +63,7 @@ class TableLayouts extends React.Component {
 
   render() {
     const { navigation, tablelayouts = [], loading } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     if (loading) {
       return (

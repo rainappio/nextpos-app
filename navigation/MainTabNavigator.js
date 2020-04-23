@@ -52,7 +52,6 @@ import PrinterEdit from '../screens/PrinterEdit'
 import WorkingAreaAdd from '../screens/WorkingAreaAdd'
 import WorkingAreaEdit from '../screens/WorkingAreaEdit'
 import ShiftClose from '../screens/ShiftClose'
-import LIneItemEdit from '../screens/LIneItemEdit'
 import TableLayouts from '../screens/TableLayouts'
 import TableLayoutEdit from '../screens/TableLayoutEdit'
 import TableLayoutAdd from '../screens/TableLayoutAdd'
@@ -61,7 +60,6 @@ import TableEdit from '../screens/TableEdit'
 import Payment from '../screens/Payment'
 import PaymentOrder from '../screens/PaymentOrder'
 import CheckoutComplete from '../screens/CheckoutComplete'
-import Sales from '../screens/Sales'
 import SalesCharts from '../screens/SalesCharts'
 import OrderDetail from '../screens/OrderDetail'
 import Announcements from '../screens/Announcements'
@@ -150,7 +148,6 @@ const Tables = createStackNavigator({
   OrderFormIII: OrderFormIII,
   OrderFormIV: OrderFormIV,
   OrdersSummary: OrdersSummary,
-  LIneItemEdit: LIneItemEdit,
   Payment: Payment,
   PaymentOrder: PaymentOrder,
   CheckoutComplete: CheckoutComplete
@@ -185,7 +182,6 @@ Reservation.navigationOptions = ({ screenProps: { t } }) => ({
 
 const Reports = createStackNavigator({
   Reports: ReportsScreen,
-  Sales: Sales,
   SalesCharts: SalesCharts,
   StaffTimeCard: StaffTimeCard,
   UserTimeCards: UserTimeCards,

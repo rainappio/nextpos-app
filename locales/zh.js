@@ -1,10 +1,10 @@
 const zh = {
   login: '登入',
-  cancel: '取消',
   clientName: '商業名稱',
   email: '電子郵件',
   password: '密碼',
   logout: '登出',
+  refreshed: '已重新刷新',
   menu: {
     home: '主頁',
     tables: '座位訂單',
@@ -79,7 +79,11 @@ const zh = {
     product: '產品',
     quantity: '數量',
     subTotal: '小計',
-    serveBy: '結帳人員'
+    serveBy: '結帳人員',
+
+    // order messages
+    submitted: '訂單送出',
+    deleted: '訂單刪除'
   },
   orderState: {
     OPEN: '已開單',
@@ -89,6 +93,10 @@ const zh = {
     REFUNDED: '已退款',
     COMPLETED: '完成',
     DELETED: '刪單'
+  },
+  payment: {
+    cashPayment: '現金',
+    cardPayment: '信用卡'
   },
   timecard: {
     hours: '小時',
@@ -118,6 +126,7 @@ const zh = {
     confirmAction: '確定關帳',
     abortAction: '取消關帳',
     accountCloseTitle: '開始關帳',
+    confirmCloseTitle: '關帳確認',
     cashSection: '現金',
     cardSection: '信用卡',
     nextAction: '下一步',
@@ -128,10 +137,27 @@ const zh = {
     enterAmount: '請輸入金額',
     remark: '理由',
     totalCardTransitionAmt: '刷卡營業額',
-    totalCardInRegister: '實際刷卡營業額'
+    totalCardInRegister: '實際刷卡營業額',
+    difference: '差額',
+
+    // messages
+    shiftOpened: '已開帳',
+    shiftAborted: '關帳取消',
+    shiftClosed: '已關帳'
   },
   errors: {
     balanceError: '請輸入大於零的數字'
+  },
+  backend: {
+    POST: '儲存成功',
+    PATCH: '儲存成功',
+    DELETE: '刪除成功',
+    403: '您未被授權執行本次動作',
+    404: '您要找的項目不存在',
+    message: {
+      insufficientCashAmount: '輸入的現金金額小於訂單總金額',
+      completeAllOrdersFirst: '請先完成所有的訂單'
+    }
   },
   bar: 'Bar {{someValue}}'
 }

@@ -7,12 +7,12 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import DropDown from '../components/DropDown'
 import AddBtn from '../components/AddBtn'
-import RenderRadioBtn from '../components/RadioItem'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
 import DeleteBtn from '../components/DeleteBtn'
 import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
+import RadioItemObjPick from "../components/RadioItemObjPick";
 
 class ProductFormScreen extends React.Component {
   static navigationOptions = {
@@ -168,15 +168,15 @@ class ProductFormScreen extends React.Component {
                   </View>
                   {workingareas !== undefined &&
                     workingareas.map(workarea => (
-                      <View
-                        style={styles.optionsContainer}
-                        key={workarea.id}
-                      >
+                      <View key={workarea.id}>
                         <Field
-                          name="workingAreaId"
-                          component={RenderRadioBtn}
-                          customValue={workarea.id}
+                          name='workingAreaId'
+                          component={RadioItemObjPick}
+                          customValueOrder={workarea.id}
                           optionName={workarea.name}
+                          onCheck={(currentVal, fieldVal) => {
+                            return fieldVal !== undefined && currentVal === fieldVal
+                          }}
                         />
                       </View>
                     ))}

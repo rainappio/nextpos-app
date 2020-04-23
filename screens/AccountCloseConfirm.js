@@ -17,17 +17,18 @@ import BackBtn from '../components/BackBtn'
 import { formatDate, getShiftStatus, getMostRecentShiftStatus } from '../actions'
 import {
   api,
-  dispatchFetchRequest,
+  dispatchFetchRequest, dispatchFetchRequestWithOption,
   successMessage, warningMessage
 } from '../constants/Backend'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import {handleCloseShift, handleOpenShift, handleAbortCloseShift} from "../helpers/shiftActions";
+import {handleCloseShift, handleOpenShift, handleAbortCloseShift, renderShiftStatus} from "../helpers/shiftActions";
 import InputText from '../components/InputText'
 import AccountCloseConfirmForm from './AccountCloseConfirmForm'
 import ScreenHeader from "../components/ScreenHeader";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 
 class AccountCloseConfirm extends React.Component {
   static navigationOptions = {
@@ -40,39 +41,41 @@ class AccountCloseConfirm extends React.Component {
   }
 
   handleConfirmCloseShift = (values) => {
-  	const confirmRemark = values.hasOwnProperty('closingRemark') ? values.closingRemark : ' '
-  	dispatchFetchRequest(
-    	api.shift.confirm,
-    	{
-      	method: 'POST',
-      	withCredentials: true,
-      	credentials: 'include',
-      	headers: {
-        	'Content-Type': 'text/plain'
-      	},
-      	body: confirmRemark
-    	},
-    	response => {
-    		this.props.getMostRecentShiftStatus()
-      	this.props.navigation.navigate('CloseComplete')
-    	}).then()
+    const confirmRemark = values.hasOwnProperty('closingRemark') ? values.closingRemark : ' '
+
+    dispatchFetchRequestWithOption(api.shift.confirm, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'text/plain'
+      },
+      body: confirmRemark
+    }, {
+      defaultMessage: false
+    }, response => {
+      successMessage(this.context.t('shift.shiftClosed'))
+      this.props.getMostRecentShiftStatus()
+      this.props.navigation.navigate('CloseComplete')
+    }).then()
 	}
 
 	handleAbortCloseShift = () => {
-  	dispatchFetchRequest(
-    	api.shift.abort,
-    	{
-      	method: 'POST',
-      	withCredentials: true,
-      	credentials: 'include',
-      	headers: {
-        	'Content-Type': 'application/json'
-      	},
-      	body: ''
-    	},
-    	response => {
-      	this.props.navigation.navigate('ShiftClose')
-    	}).then()
+    dispatchFetchRequestWithOption(api.shift.abort, {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: ''
+      }, {
+        defaultMessage: false
+      },
+      response => {
+        successMessage(this.context.t('shift.shiftAborted'))
+        this.props.navigation.navigate('ShiftClose')
+      }).then()
 	}
 
   render() {
@@ -89,19 +92,19 @@ class AccountCloseConfirm extends React.Component {
 
     return (
       <DismissKeyboard>
-      	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      	<KeyboardAwareScrollView scrollIndicatorInsets={{ right: 1 }}>
           <View style={[styles.container]}>
-            <ScreenHeader title={t('confirmCloseTitle')}/>
+            <ScreenHeader title={t('shift.confirmCloseTitle')}/>
 
             <View>
               <Text style={[styles.toRight]}>
-                {t('staff')} - {mostRecentShift.open.who}
+                {t('shift.staff')} - {mostRecentShift.open.who}
               </Text>
               <Text style={[styles.toRight]}>
                 {formatDate(mostRecentShift.open.timestamp)}
               </Text>
               <Text style={[styles.toRight]}>
-                {t('closingStatus')} - {mostRecentShift.shiftStatus}
+                {t('shift.closingStatus')} - {renderShiftStatus(mostRecentShift.shiftStatus)}
               </Text>
             </View>
           </View>
@@ -111,7 +114,7 @@ class AccountCloseConfirm extends React.Component {
 						handleAbortCloseShift={this.handleAbortCloseShift}
 						mostrecentShift={mostRecentShift}
 					/>
-				</ScrollView>
+				</KeyboardAwareScrollView>
       </DismissKeyboard>
       )
   }

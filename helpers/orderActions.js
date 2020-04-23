@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest, successMessage} from "../constants/Backend";
+import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage} from "../constants/Backend";
 import NavigationService from "../navigation/NavigationService";
 import {Image, View} from "react-native";
 import images from "../assets/images";
@@ -6,6 +6,7 @@ import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon from "react-native-vector-icons/Ionicons";
 import React from "react";
 import styles from "../styles"
+import i18n from 'i18n-js'
 
 export const renderOrderState = state => {
   switch (state) {
@@ -51,7 +52,7 @@ export const handleOrderSubmit = id => {
   const formData = new FormData()
   formData.append('action', 'SUBMIT')
 
-  dispatchFetchRequest(
+  dispatchFetchRequestWithOption(
     api.order.process(id),
     {
       method: 'POST',
@@ -59,11 +60,13 @@ export const handleOrderSubmit = id => {
       credentials: 'include',
       headers: {},
       body: formData
+    }, {
+      defaultMessage: false
     },
     response => {
       response.json().then(data => {
         if (data.hasOwnProperty('orderId')) {
-          successMessage('Order submitted')
+          successMessage(i18n.t('order.submitted'))
           NavigationService.navigate('TablesSrc')
         }
       })
@@ -72,7 +75,7 @@ export const handleOrderSubmit = id => {
 }
 
 export const handleDelete = id => {
-  dispatchFetchRequest(
+  dispatchFetchRequestWithOption(
     api.order.delete(id),
     {
       method: 'DELETE',
@@ -81,9 +84,11 @@ export const handleDelete = id => {
       headers: {
         'Content-Type': 'application/json'
       }
+    }, {
+      defaultMessage: false
     },
     response => {
-      successMessage('Deleted')
+      successMessage(i18n.t('order.deleted'))
       NavigationService.navigate('TablesSrc')
     }
   ).then()

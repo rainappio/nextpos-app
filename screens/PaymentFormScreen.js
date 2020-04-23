@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
-import {ScrollView, Text, View, TouchableOpacity, TextInput, Image} from 'react-native'
+import {ScrollView, Text, View, TouchableOpacity, TextInput, Image, KeyboardAvoidingView} from 'react-native'
 import {
   getProducts,
   getLables,
@@ -26,6 +26,7 @@ import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import images from "../assets/images";
 import CustomCheckBox from "../components/CustomCheckBox";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 
 class PaymentFormScreen extends React.Component {
   static navigationOptions = {
@@ -54,7 +55,6 @@ class PaymentFormScreen extends React.Component {
     })
 
     this.state = {
-      t: context.t,
       getPercent: null
     }
   }
@@ -73,7 +73,7 @@ class PaymentFormScreen extends React.Component {
 
   render() {
     const { order, navigation, handleSubmit, globalorderoffers } = this.props
-    const { t } = this.state
+    const { t } = this.context
 
     const discounts = []
 
@@ -88,7 +88,7 @@ class PaymentFormScreen extends React.Component {
         })
       })
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      <KeyboardAwareScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
@@ -222,7 +222,7 @@ class PaymentFormScreen extends React.Component {
             </View>
           </View>
         </DismissKeyboard>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     )
   }
 }

@@ -21,10 +21,6 @@ export default class HomeScreen extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   componentDidMount() {
@@ -39,7 +35,7 @@ export default class HomeScreen extends React.Component {
   }
 
   render() {
-    let { t } = this.state
+    let { t } = this.context
 
     return (
       <View style={styles.container}>

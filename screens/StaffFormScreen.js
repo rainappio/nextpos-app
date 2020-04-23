@@ -70,7 +70,6 @@ class StaffFormScreen extends React.Component {
         }
       },
       response => {
-        successMessage('Deleted')
         this.props.navigation.navigate('StaffsOverview')
         this.props.getClientUsrs()
       }

@@ -36,41 +36,6 @@ class AccountCloseConfirmForm extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    context.localize({
-      en: {
-        confirmCloseTitle: 'Confirm Closing Account Details',
-        staff: 'Staff',
-        postClosingEntries: 'Closing Account Summaries',
-      	totalCashIncome: 'Total Cash Income',
-      	totalCreditCardIncome: 'Total Card Income',
-      	totalClosingAmount: 'Total Closing Amount',
-        invoicesTitle: 'Invoices',
-      	totalInvoices: 'Total Number of Orders',
-      	deletedOrders: 'Total Number Of Orders Deleted',
-      	totalDiscounts: 'Total Amount Of Discount',
-      	totalServiceCharge: 'Total Service Charge',
-      	closingRemark: 'Closing Remark',
-        confirmAction: 'Confirm Close',
-      	abortAction: 'Abort Close'
-      },
-      zh: {
-        confirmCloseTitle: '關帳確認',
-        staff: '員工',
-        postClosingEntries: '關帳總覽',
-        totalCashIncome: '現金營業額',
-        totalCreditCardIncome: '刷卡營業額',
-        totalClosingAmount: '總營業額',
-        invoicesTitle: '訂單總覽',
-        totalInvoices: '訂單數',
-        deletedOrders: '刪單數',
-        totalDiscounts: '折扣',
-        totalServiceCharge: '服務費',
-        closingRemark:'關帳備註',
-        confirmAction: '確定關帳',
-        abortAction: '取消關帳'
-      }
-    })
   }
 
   render() {
@@ -84,25 +49,31 @@ class AccountCloseConfirmForm extends React.Component {
 
     }
 
-    if (mostrecentShift.close.closingShiftReport !== null) {
+    if (mostrecentShift.close.closingShiftReport != null) {
       closingShiftReport.totalOrderCount = mostrecentShift.close.closingShiftReport.totalOrderCount
     }
 
-		if (mostrecentShift.close.closingShiftReport !== null && mostrecentShift.close.closingShiftReport.totalByPaymentMethod !== null) {
+		if (mostrecentShift.close.closingShiftReport != null && mostrecentShift.close.closingShiftReport.totalByPaymentMethod != null) {
 			closingShiftReport.totalByPaymentMethod = mostrecentShift.close.closingShiftReport.totalByPaymentMethod
 		}
 
-		if(mostrecentShift.close.closingShiftReport !== null && mostrecentShift.close.closingShiftReport.orderCountByState !== null) {
+		if(mostrecentShift.close.closingShiftReport != null && mostrecentShift.close.closingShiftReport.orderCountByState != null) {
 			closingShiftReport.orderCountByState = mostrecentShift.close.closingShiftReport.orderCountByState
 		}
 
     const cashTotal = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.orderTotal : 0
+    const actualCashAmount = mostrecentShift.close.closingBalances.hasOwnProperty('CASH') ? mostrecentShift.close.closingBalances.CASH.closingBalance : 0
+    const cashUnbalanceReason = mostrecentShift.close.closingBalances.hasOwnProperty('CASH') && mostrecentShift.close.closingBalances.CASH.unbalanceReason
+    const cashDifference = actualCashAmount - (cashTotal + mostrecentShift.open.balance)
     const cardTotal = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.orderTotal : 0
+    const actualCardAmount = mostrecentShift.close.closingBalances.hasOwnProperty('CARD') ? mostrecentShift.close.closingBalances.CARD.closingBalance : 0
+    const cardUnbalanceReason = mostrecentShift.close.closingBalances.hasOwnProperty('CARD') && mostrecentShift.close.closingBalances.CARD.unbalanceReason
+    const cardDifference = actualCardAmount - cardTotal
+
     const cashDiscount = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.discount : 0
     const cardDiscount = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.discount : 0
     const cashServiceCharge = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.serviceCharge : 0
     const cardServiceCharge = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.serviceCharge : 0
-
 
     return (
       <View>
@@ -110,7 +81,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.sectionBar}>
           <View>
             <Text style={styles.sectionBarText}>
-              {t('postClosingEntries')}
+              {t('shift.shiftSummary')}
             </Text>
           </View>
         </View>
@@ -118,7 +89,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.tableRowContainerWithBorder}>
           <View style={{flex: 3}}>
             <Text style={[styles.fieldTitle]}>
-              {t('totalCashIncome')}
+              {t('shift.totalCashIncome')}
             </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -129,7 +100,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.tableRowContainerWithBorder}>
           <View style={{flex: 3}}>
             <Text style={[styles.fieldTitle]}>
-              {t('totalCreditCardIncome')}
+              {t('shift.totalCreditCardIncome')}
             </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -140,7 +111,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.tableRowContainerWithBorder}>
           <View style={{flex: 3}}>
             <Text style={[styles.fieldTitle]}>
-              {t('totalClosingAmount')}
+              {t('shift.totalClosingAmount')}
             </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -155,7 +126,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.sectionBar}>
           <View>
             <Text style={styles.sectionBarText}>
-              {t('cashSection')}
+              {t('shift.cashSection')}
             </Text>
           </View>
         </View>
@@ -163,7 +134,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
             <Text style={[styles.fieldTitle]}>
-              {t('startingCash')}
+              {t('shift.startingCash')}
             </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -174,7 +145,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
             <Text style={[styles.fieldTitle]}>
-              {t('totalCashTransitionAmt')}
+              {t('shift.totalCashTransitionAmt')}
             </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -185,11 +156,32 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
             <Text style={[styles.fieldTitle]}>
-              {t('totalCashInRegister')}
+              {t('shift.totalCashInRegister')}
             </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <Text>${mostrecentShift.close.closingBalances.hasOwnProperty('CASH') ? mostrecentShift.close.closingBalances.CASH.closingBalance : 0}</Text>
+            <Text>${actualCashAmount}</Text>
+          </View>
+        </View>
+
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('shift.difference')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>${cashDifference}</Text>
+          </View>
+        </View>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('shift.remark')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>{cashUnbalanceReason}</Text>
           </View>
         </View>
         {/* #Cash */}
@@ -199,7 +191,7 @@ class AccountCloseConfirmForm extends React.Component {
           <View>
             <TouchableOpacity>
               <Text style={styles.sectionBarText}>
-                {t('cardSection')}
+                {t('shift.cardSection')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -208,7 +200,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
             <Text style={[styles.fieldTitle]}>
-              {t('totalCardTransitionAmt')}
+              {t('shift.totalCardTransitionAmt')}
             </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -219,12 +211,35 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
             <Text style={[styles.fieldTitle]}>
-              {t('totalCardInRegister')}
+              {t('shift.totalCardInRegister')}
             </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <Text>${mostrecentShift.close.closingBalances.hasOwnProperty('CARD') && mostrecentShift.close.closingBalances.CARD.closingBalance}
+            <Text>${actualCardAmount}
             </Text>
+          </View>
+        </View>
+
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('shift.difference')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>${cardDifference}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.fieldTitle]}>
+              {t('shift.remark')}
+            </Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+            <Text>{cardUnbalanceReason}</Text>
           </View>
         </View>
         {/* #Credit Card */}
@@ -233,7 +248,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.sectionBar}>
           <View>
             <Text style={styles.sectionBarText}>
-              {t('invoicesTitle')}
+              {t('shift.invoicesTitle')}
             </Text>
           </View>
         </View>
@@ -241,7 +256,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
             <Text style={[styles.fieldTitle]}>
-              {t('totalInvoices')}
+              {t('shift.totalInvoices')}
             </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -251,7 +266,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
             <Text style={[styles.fieldTitle]}>
-              {t('deletedOrders')}
+              {t('shift.deletedOrders')}
             </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -263,7 +278,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.tableRowContainerWithBorder}>
           <View style={{flex: 3}}>
             <Text style={[styles.tableCellView, {flex: 2}]}>
-              {t('totalDiscounts')}
+              {t('shift.totalDiscounts')}
             </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -274,7 +289,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.tableRowContainerWithBorder}>
           <View style={{flex: 3}}>
             <Text style={[styles.tableCellView, {flex: 2}]}>
-              {t('totalServiceCharge')}
+              {t('shift.totalServiceCharge')}
             </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -290,7 +305,7 @@ class AccountCloseConfirmForm extends React.Component {
             <Field
               name="closingRemark"
               component={InputText}
-              placeholder={t('closingRemark')}
+              placeholder={t('shift.closingRemark')}
               secureTextEntry={false}
               height={35}
             />
@@ -303,13 +318,13 @@ class AccountCloseConfirmForm extends React.Component {
             onPress={handleSubmit}
           >
             <Text style={[styles.bottomActionButton, styles.actionButton]}>
-              {t('confirmAction')}
+              {t('shift.confirmAction')}
             </Text>
           </TouchableOpacity>
 
           <ConfirmActionButton
             handleConfirmAction={handleAbortCloseShift}
-            buttonTitle='abortAction'
+            buttonTitle='shift.abortAction'
           />
         </View>
         {/* #Others */}

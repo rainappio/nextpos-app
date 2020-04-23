@@ -39,7 +39,6 @@ class AnnouncementsAdd extends React.Component {
         body: JSON.stringify(values)
       },
       response => {
-        successMessage('Saved')
         this.props.navigation.navigate('Announcements')
         this.props.getAnnouncements()
       }

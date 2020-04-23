@@ -2,6 +2,7 @@ import { AsyncStorage } from 'react-native'
 import { showMessage } from 'react-native-flash-message'
 import * as Sentry from 'sentry-expo';
 import NavigationService from "../navigation/NavigationService";
+import i18n from 'i18n-js'
 
 const storage = {
   clientAccessToken: 'token',
@@ -101,6 +102,9 @@ export const api = {
     newLineItem: orderId => {
       return `${apiRoot}/orders/${orderId}/lineitems`
     },
+    updateLineItem: (orderId, lineItemId) => {
+      return `${api.apiRoot}/orders/${orderId}/lineitems/${lineItemId}`
+    },
     deliverLineItems: orderId => {
       return `${apiRoot}/orders/${orderId}/lineitems/deliver`
     },
@@ -144,7 +148,9 @@ export const api = {
     getPrinter: id => {
       return `${apiRoot}/printers/${id}`
     },
-    update: `${apiRoot}/printers/`
+    update: id => {
+      return `${apiRoot}/printers/${id}`
+    }
   },
   workingarea: {
     create: `${apiRoot}/workingareas`,
@@ -152,7 +158,9 @@ export const api = {
       return `${apiRoot}/workingareas/${id}`
     },
     getAll: `${apiRoot}/workingareas`,
-    update: `${apiRoot}/workingareas/`
+    update: id => {
+      return `${apiRoot}/workingareas/${id}`
+    }
   },
   shift: {
     open: `${apiRoot}/shifts/open`,
@@ -170,9 +178,14 @@ export const api = {
       return `${apiRoot}/tablelayouts/${id}`
     },
     getAll: `${apiRoot}/tablelayouts`,
-    update: `${apiRoot}/tablelayouts/`,
+    update: id => {
+      return `${apiRoot}/tablelayouts/${id}`
+    },
     delete: layoutId => {
       return `${apiRoot}/tablelayouts/${layoutId}`
+    },
+    createTable: layoutId => {
+      return `${api.apiRoot}/tablelayouts/${layoutId}/tables`
     },
     updateTable: (layoutId, tableId) => {
       return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}`
@@ -235,6 +248,7 @@ export const removeToken = async () => {
   await AsyncStorage.removeItem(storage.clientAccessToken)
 }
 
+// todo: delete this
 export const makeFetchRequest = async fetchRequest => {
   try {
     let useClientUserToken = true
@@ -260,6 +274,17 @@ export const makeFetchRequest = async fetchRequest => {
 export const dispatchFetchRequest = async (
   endpoint,
   payload,
+  successCallback,
+  failCallback
+) => {
+
+  return dispatchFetchRequestWithOption(endpoint, payload, { defaultMessage: true }, successCallback, failCallback)
+}
+
+export const dispatchFetchRequestWithOption = async (
+  endpoint,
+  payload,
+  options,
   successCallback,
   failCallback
 ) => {
@@ -289,13 +314,18 @@ export const dispatchFetchRequest = async (
           failCallback(response)
         }
       } else {
+        const isUpdateOperation = ['POST', 'PATCH', 'DELETE'].includes(payload.method)
+
+        if (isUpdateOperation && options.defaultMessage) {
+          successMessage(i18n.t(`backend.${payload.method}`))
+        }
+
         successCallback(response)
       }
 
       return response
     } else {
-      const errorMessage =
-        'Token does not exist. Please consult your service provider.'
+      const errorMessage = 'Token does not exist. Please consult your service provider.'
 
       showMessage({
         message: errorMessage,
@@ -329,13 +359,13 @@ export const errorAlert = response => {
         errorMessage = 'Your are not authenticated for this operation.'
         break
       case 403:
-        errorMessage = 'You are not authorized for this operation.'
+        errorMessage = i18n.t('backend.403')
         break
       case 404:
-        errorMessage = 'The id you used to look for an item cannot be found'
+        errorMessage = i18n.t('backend.404')
         break
       case 412:
-        errorMessage = content.message
+        errorMessage = content.localizedMessageKey != null ? i18n.t(`backend.${content.localizedMessageKey}`) : content.message
         break
       default:
         errorMessage = `Encountered an error with your request. (${content.message})`

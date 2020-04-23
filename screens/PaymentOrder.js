@@ -15,7 +15,7 @@ import {
   successMessage,
   api,
   makeFetchRequest,
-  errorAlert, dispatchFetchRequest
+  errorAlert, dispatchFetchRequest, dispatchFetchRequestWithOption
 } from '../constants/Backend'
 import BackBtn from '../components/BackBtn'
 import InputText from '../components/InputText'
@@ -35,23 +35,13 @@ class PaymentOrder extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-    context.localize({
-    	en:{
-      	cashPayment: 'Cash',
-      	cardPayment: 'Credit Card'
-    	},
-    	zh: {
-      	cashPayment: '現金',
-      	cardPayment: '信用卡'
-    	}
-  	})
 
     this.state = {
     	numbersArr: [],
     	dynamicTotal: 0,
 			paymentsTypes: {
-  			0: {label: context.t('cashPayment'), value: 'CASH'},
-  			1: {label: context.t('cardPayment'), value: 'CARD'}
+  			0: {label: context.t('payment.cashPayment'), value: 'CASH'},
+  			1: {label: context.t('payment.cardPayment'), value: 'CARD'}
   			},
     	selectedPaymentType: null
   	}
@@ -79,13 +69,15 @@ class PaymentOrder extends React.Component {
     const formData = new FormData()
     formData.append('action', 'COMPLETE')
 
-    dispatchFetchRequest(api.order.process(id), {
+    dispatchFetchRequestWithOption(api.order.process(id), {
       method: 'POST',
       withCredentials: true,
       credentials: 'include',
       headers: {},
       body: formData
-    }, response => {
+    }, {
+      defaultMessage: false
+    },response => {
       this.props.navigation.navigate('TablesSrc')
     }).then()
   }
@@ -105,35 +97,26 @@ class PaymentOrder extends React.Component {
       transactionObj.paymentDetails['LAST_FOUR_DIGITS'] = values.cardNumber
     }
 
-    makeFetchRequest(token => {
-      fetch(api.payment.charge, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token.access_token
-        },
-        body: JSON.stringify(transactionObj)
-      })
-        .then(response => {
-          if (response.status === 200) {
-            successMessage('Charged')
+    dispatchFetchRequestWithOption(api.payment.charge, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(transactionObj)
+    }, {
+      defaultMessage: false
+    }, response => {
+      successMessage(this.context.t('charged'))
 
-            response.json().then(data => {
-              this.props.navigation.navigate('CheckoutComplete', {
-                transactionResponse: data,
-                onSubmit: this.handleComplete
-              })
-            })
-          } else {
-            errorAlert(response)
-          }
+      response.json().then(data => {
+        this.props.navigation.navigate('CheckoutComplete', {
+          transactionResponse: data,
+          onSubmit: this.handleComplete
         })
-        .catch(error => {
-          console.error(error)
-        })
-    })
+      })
+    }).then()
   }
 
   render() {

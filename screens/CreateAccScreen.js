@@ -16,21 +16,18 @@ class CreateAccScreen extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    this.state = {
-      t: context.t
-    }
   }
 
   componentDidMount() {
     this.context.localize({
       en: {
         signUp: 'Sign Up',
-        errorMessage:
-          'Email is already registered, please choose another email address.'
+        accountCreated: 'Your account is created',
+        errorMessage: 'Email is already registered, please choose another email address.'
       },
       zh: {
         signUp: '註冊',
+        accountCreated: '帳號註冊成功',
         errorMessage: '此email已經註冊過，請使用新的email來註冊。'
       }
     })
@@ -46,9 +43,9 @@ class CreateAccScreen extends React.Component {
     })
       .then(response => {
         if (!response.ok) {
-          warningMessage(this.state.t('errorMessage'))
+          warningMessage(this.context.t('errorMessage'))
         } else {
-          successMessage('Client created')
+          successMessage(this.context.t('accountCreated'))
           this.props.navigation.navigate('Login')
         }
       })
@@ -61,7 +58,6 @@ class CreateAccScreen extends React.Component {
     return (
       <CreateAccFormScreen
         onSubmit={this.handleSubmit}
-        screenProps={this.props.screenProps}
       />
     )
   }
