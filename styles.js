@@ -1,6 +1,7 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native'
 const window = Dimensions.get('window')
 export const mainThemeColor = '#f18d1a'
+let CIRCLE_RADIUS = 25;
 //export const mainThemeColor = '#f18dee'
 //export const mainThemeColor = '#3e3d47'
 
@@ -459,12 +460,12 @@ export default StyleSheet.create({
   },
   horizontalMargin: {
     marginHorizontal: 15
-  } ,
+  },
   verticalPadding: {
     paddingVertical: 20
   },
   dynamicVerticalPadding: val => {
-    return {paddingVertical: val}
+    return { paddingVertical: val }
   },
   withBottomBorder: {
     borderBottomWidth: 1,
@@ -587,7 +588,7 @@ export default StyleSheet.create({
         width: window.width - 30 * 2,
         shadowColor: 'rgba(0,0,0,0.2)',
         shadowOpacity: 1,
-        shadowOffset: {height: 2, width: 2},
+        shadowOffset: { height: 2, width: 2 },
         shadowRadius: 2
       },
 
@@ -612,25 +613,39 @@ export default StyleSheet.create({
   tbltext: { margin: 4, textAlign: 'center' },
   tblrow: { flexDirection: 'row', backgroundColor: '#f5f5f5' },
   grayPrevBtn: {
-  	position: 'absolute',
-  	left: 45,
-  	top: 2,
-  	bottom: 2,
-  	right: 2,
-  	paddingTop: 3,
-  	backgroundColor: '#f1f1f1',
-  	borderRadius: 4,
-  	paddingLeft:12,
+    position: 'absolute',
+    left: 45,
+    top: 2,
+    bottom: 2,
+    right: 2,
+    paddingTop: 3,
+    backgroundColor: '#f1f1f1',
+    borderRadius: 4,
+    paddingLeft: 12,
   },
-  grayNextBtn:{
-  	position: 'absolute',
-  	right: 45,
-  	top: 2,
-  	bottom: 2,
-  	left: 2,
-  	paddingTop: 3,
-  	backgroundColor:'#f1f1f1',
-  	paddingLeft:12,
-  	borderRadius: 4
+  grayNextBtn: {
+    position: 'absolute',
+    right: 45,
+    top: 2,
+    bottom: 2,
+    left: 2,
+    paddingTop: 3,
+    backgroundColor: '#f1f1f1',
+    paddingLeft: 12,
+    borderRadius: 4
+  },
+  circle: {
+    backgroundColor: mainThemeColor,
+    width: CIRCLE_RADIUS * 2,
+    height: CIRCLE_RADIUS * 2,
+    borderRadius: CIRCLE_RADIUS
+  },
+  col: {
+    flexDirection: "column"
+  },
+  ballContainer: {
+    height: 600,
+    borderWidth: 1,
+    borderColor: mainThemeColor
   }
 })

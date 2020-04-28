@@ -75,8 +75,9 @@ import AccountCloseConfirm from '../screens/AccountCloseConfirm'
 import CustomerStats from "../screens/CustomerStats";
 import ShiftHistory from "../screens/ShiftHistory";
 import ShiftDetails from "../screens/ShiftDetails";
-import {getToken} from "../constants/Backend";
-import {doLogout} from "../actions";
+import { getToken } from "../constants/Backend";
+import { doLogout } from "../actions";
+import ManageVisualSceen from '../screens/ManageVisualSceen'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -128,7 +129,8 @@ const Settings = createStackNavigator({
   AnnouncementsEdit: AnnouncementsEdit,
   CloseComplete: CloseComplete,
   AccountClose: AccountClose,
-  AccountCloseConfirm: AccountCloseConfirm
+  AccountCloseConfirm: AccountCloseConfirm,
+  ManageVisualSceen: ManageVisualSceen
 })
 Settings.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.settings'),
@@ -237,7 +239,7 @@ const tabBar = createBottomTabNavigator({
   }
 }, {
   defaultNavigationOptions: {
-    tabBarOnPress: async ({navigation, defaultHandler}) => {
+    tabBarOnPress: async ({ navigation, defaultHandler }) => {
       const tokenObj = await getToken()
 
       if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {

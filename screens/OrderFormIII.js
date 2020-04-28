@@ -19,7 +19,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 import OrderFormIV from './OrderFormIV'
 import { LocaleContext } from '../locales/LocaleContext'
-import {api, dispatchFetchRequest, errorAlert, makeFetchRequest, successMessage} from '../constants/Backend'
+import { api, dispatchFetchRequest, errorAlert, makeFetchRequest, successMessage } from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
 
@@ -137,11 +137,11 @@ class OrderFormIII extends React.Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveError) {
       return (
-        <BackendErrorScreen/>
+        <BackendErrorScreen />
       )
     }
     return (
@@ -153,12 +153,12 @@ class OrderFormIII extends React.Component {
             initialValues={this.props.navigation.getParam('lineItem')}
           />
         ) : (
-          <OrderFormIV
-            onSubmit={this.handleSubmit}
-            product={product}
-            initialValues={{quantity: 1}}
-          />
-        )}
+            <OrderFormIV
+              onSubmit={this.handleSubmit}
+              product={product}
+              initialValues={{ quantity: 1 }}
+            />
+          )}
       </View>
 
     )

@@ -26,6 +26,7 @@ import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
+import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
@@ -38,10 +39,12 @@ class OrderFormII extends React.Component {
 
     context.localize({
       en: {
-        newOrderTitle: 'New Order'
+        newOrderTitle: 'New Order',
+        pinned: 'Pinned'
       },
       zh: {
-        newOrderTitle: '新訂單'
+        newOrderTitle: '新訂單',
+        pinned: 'Pinned-CH'
       }
     })
 
@@ -73,6 +76,32 @@ class OrderFormII extends React.Component {
     )
   }
 
+  addPinnedObjtoOrderItems = productId => {
+    var orderId = this.props.navigation.state.params.orderId
+    let createOrderObj = {}
+
+    createOrderObj['productId'] = productId
+    createOrderObj['quantity'] = 1
+
+    dispatchFetchRequest(
+      api.order.newLineItem(orderId),
+      {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(createOrderObj)
+      },
+      response => {
+        successMessage('Line item saved')
+        this.props.getOrder(orderId)
+      }
+    ).then()
+  }
+
+
   render() {
     const {
       products = [],
@@ -92,11 +121,11 @@ class OrderFormII extends React.Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveError) {
       return (
-        <BackendErrorScreen/>
+        <BackendErrorScreen />
       )
     } else if (products !== undefined && products.length === 0) {
       return (
@@ -119,6 +148,33 @@ class OrderFormII extends React.Component {
               onChange={this.onChange}
               activeSections={this.state.activeSections}
             >
+              <Accordion.Panel
+                header={this.PanelHeader(t('pinned'), '0')}
+                key="pinned"
+              >
+                <List>
+                  {map.get('pinned') !== undefined &&
+                    map.get('pinned').map(prd => (
+                      <List.Item
+                        key={prd.id}
+                        onPress={() =>
+                          this.props.navigation.navigate('OrderFormIII', {
+                            prdId: prd.id,
+                            orderId: this.props.navigation.state.params.orderId
+                          })
+                        }
+                      >
+                        <View style={[styles.jc_alignIem_center, { flex: 1, flexDirection: 'row' }]}>
+                          <Text style={{ flex: 3 }}>{prd.name}</Text>
+                          <Text style={{ flex: 1, textAlign: 'right' }}>
+                            ${prd.price}
+                          </Text>
+                        </View>
+                      </List.Item>
+                    ))}
+                </List>
+              </Accordion.Panel>
+
               {labels.map(lbl => (
                 <Accordion.Panel
                   header={this.PanelHeader(lbl.label, lbl.id)}
@@ -154,15 +210,15 @@ class OrderFormII extends React.Component {
           style={[styles.orange_bg, styles.flex_dir_row, styles.shoppingBar]}
         >
           <View style={[styles.half_width, styles.jc_alignIem_center]}>
-              <Text
-                style={[
-                  styles.textBig,
-                  styles.whiteColor,
-                  {alignSelf: 'flex-start', paddingHorizontal: 10}
-                ]}
-              >
-                {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
-              </Text>
+            <Text
+              style={[
+                styles.textBig,
+                styles.whiteColor,
+                { alignSelf: 'flex-start', paddingHorizontal: 10 }
+              ]}
+            >
+              {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
+            </Text>
           </View>
 
           <View style={[styles.quarter_width, styles.flex_dir_row, styles.jc_alignIem_center]}>
@@ -170,14 +226,14 @@ class OrderFormII extends React.Component {
               name="user"
               size={30}
               color="#fff"
-              style={{marginRight: 5}}
+              style={{ marginRight: 5 }}
             />
             <Text style={[styles.textMedium, styles.whiteColor]}>
               {order.hasOwnProperty('demographicData')
-                  ? order.demographicData.male +
-                  order.demographicData.female +
-                  order.demographicData.kid
-                  : this.props.navigation.state.params.customerCount}
+                ? order.demographicData.male +
+                order.demographicData.female +
+                order.demographicData.kid
+                : this.props.navigation.state.params.customerCount}
             </Text>
           </View>
 
@@ -192,12 +248,12 @@ class OrderFormII extends React.Component {
                 })
               }
             >
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <FontAwesomeIcon
                   name="shopping-cart"
                   size={30}
                   color="#fff"
-                  style={{marginRight: 5}}
+                  style={{ marginRight: 5 }}
                 />
                 <View style={styles.itemCountContainer}>
                   <Text style={styles.itemCountText}>

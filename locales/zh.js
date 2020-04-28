@@ -44,7 +44,9 @@ const zh = {
     confirmMessageTitle: '執行確認',
     confirmMessage: '確定執行嗎？',
     yes: '是',
-    no: '不是'
+    no: '不是',
+    unpin: 'Unpin_CH',
+    pin: 'Pin_CH'
   },
   order: {
     inStore: '內用',

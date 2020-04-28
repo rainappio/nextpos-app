@@ -139,18 +139,29 @@ class TableLayoutForm extends React.Component {
 
         <View style={[styles.bottom]}>
           {isEdit ? (
-            <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {t('action.update')}
+            <View>
+              <TouchableOpacity onPress={handleSubmit}>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  {t('action.update')}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('ManageVisualSceen', {
+                tables: initialValues.tables,
+                layoutId: initialValues.id
+              })}>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  Manage Visual
               </Text>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
           ) : (
-            <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {t('action.save')}
-              </Text>
-            </TouchableOpacity>
-          )}
+              <TouchableOpacity onPress={handleSubmit}>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  {t('action.save')}
+                </Text>
+              </TouchableOpacity>
+            )}
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('TableLayouts')}
           >
@@ -164,7 +175,7 @@ class TableLayoutForm extends React.Component {
             />
           )}
         </View>
-			</View>
+      </View>
     )
   }
 }

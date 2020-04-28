@@ -6,7 +6,8 @@ import {
   View,
   RefreshControl,
   TouchableOpacity,
-  Alert
+  Alert,
+  Image
 } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -17,7 +18,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import PopUp from '../components/PopUp'
 import { getProducts, clearLabel } from '../actions'
-import styles, {mainThemeColor} from '../styles'
+import styles, { mainThemeColor } from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
 import ScreenHeader from "../components/ScreenHeader";
@@ -35,11 +36,13 @@ class ProductRow extends React.Component {
     context.localize({
       en: {
         productListTitle: 'Product List',
-        ungrouped: 'Ungrouped'
+        ungrouped: 'Ungrouped',
+        pinned: 'Pinned'
       },
       zh: {
         productListTitle: '產品列表',
-        ungrouped: '未分類'
+        ungrouped: '未分類',
+        pinned: 'Pinned-CH'
       }
     })
 
@@ -66,6 +69,25 @@ class ProductRow extends React.Component {
         }
       },
       response => {
+        this.props.navigation.navigate('ProductsOverview')
+        this.props.getProducts()
+      }
+    ).then()
+  }
+
+  handlepinToggle = productId => {
+    dispatchFetchRequest(
+      api.product.togglePin(productId),
+      {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      },
+      response => {
+        successMessage('Toggled')
         this.props.navigation.navigate('ProductsOverview')
         this.props.getProducts()
       }
@@ -112,7 +134,6 @@ class ProductRow extends React.Component {
     const { t } = this.context
 
     var map = new Map(Object.entries(products))
-
     const right = [
       {
         text: <Icon name="md-trash" size={24} color="#fff" />,
@@ -142,16 +163,16 @@ class ProductRow extends React.Component {
         <DismissKeyboard>
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
-                          title={t('productListTitle')}
-                          parentFullScreen={true}
-                          rightComponent={
-                            <PopUp
-                              navigation={navigation}
-                              toRoute1={'Category'}
-                              toRoute2={'Product'}
-                              textForRoute1={t('newItem.category')}
-                              textForRoute2={t('newItem.product')}
-                            />}
+              title={t('productListTitle')}
+              parentFullScreen={true}
+              rightComponent={
+                <PopUp
+                  navigation={navigation}
+                  toRoute1={'Category'}
+                  toRoute2={'Product'}
+                  textForRoute1={t('newItem.category')}
+                  textForRoute2={t('newItem.product')}
+                />}
             />
 
             <Accordion
@@ -160,6 +181,40 @@ class ProductRow extends React.Component {
               duration={300}
               style={styles.childContainer}
             >
+              <Accordion.Panel
+                header={this.PanelHeader(t('pinned'), '0')}
+                key="pinned"
+              >
+                <List>
+                  {map.get('pinned') !== undefined &&
+                    map.get('pinned').map(prd => (
+                      <SwipeAction
+                        autoClose={true}
+                        right={right}
+                        onOpen={() => this.onOpenNP(prd.id, '0')}
+                        onClose={() => { }}
+                        key={prd.id}
+                      >
+                        <List.Item
+                          key={prd.id}
+                          style={{
+                            backgroundColor: '#f1f1f1'
+                          }}
+                          onPress={() => {
+                            this.props.navigation.navigate('ProductEdit', {
+                              productId: prd.id,
+                              labelId: prd.productLabelId,
+                              isPinned: true
+                            })
+                          }}
+                        >
+                          {prd.name}
+                        </List.Item>
+                      </SwipeAction>
+                    ))}
+                </List>
+              </Accordion.Panel>
+
               {labels.map(lbl => (
                 <Accordion.Panel
                   header={this.PanelHeader(lbl.label, lbl.id)}
@@ -171,7 +226,7 @@ class ProductRow extends React.Component {
                         autoClose={true}
                         right={right}
                         onOpen={() => this.onOpenNP(prd.id, lbl.id)}
-                        onClose={() => {}}
+                        onClose={() => { }}
                         key={prd.id}
                       >
                         <List.Item
@@ -182,11 +237,20 @@ class ProductRow extends React.Component {
                           onPress={() => {
                             this.props.navigation.navigate('ProductEdit', {
                               productId: prd.id,
-                              labelId: prd.productLabelId
+                              labelId: prd.productLabelId,
+                              isPinned: map.get('pinned').filter(pa => pa.id == prd.id)[0] !== undefined ? true : false
                             })
                           }}
                         >
                           {prd.name}
+                          <TouchableOpacity onPress={() => this.handlepinToggle(prd.id)} style={[{ position: 'absolute', right: 15 }]}>
+                            <AntDesignIcon
+                              name={'pushpin'}
+                              size={22}
+                              color={!prd.pinned ? '#ccc' : mainThemeColor}
+                              style={{ transform: [{ rotateY: '180deg' }] }} />
+                          </TouchableOpacity>
+
                         </List.Item>
                       </SwipeAction>
                     ))}
@@ -205,7 +269,7 @@ class ProductRow extends React.Component {
                         autoClose={true}
                         right={right}
                         onOpen={() => this.onOpenNP(prd.id, '0')}
-                        onClose={() => {}}
+                        onClose={() => { }}
                         key={prd.id}
                       >
                         <List.Item
@@ -216,7 +280,8 @@ class ProductRow extends React.Component {
                           onPress={() => {
                             this.props.navigation.navigate('ProductEdit', {
                               productId: prd.id,
-                              labelId: prd.productLabelId
+                              labelId: prd.productLabelId,
+                              isPinned: map.get('pinned').filter(pa => pa.id == prd.id)[0] !== undefined ? true : false
                             })
                           }}
                         >

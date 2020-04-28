@@ -44,7 +44,9 @@ const en = {
     confirmMessageTitle: 'Confirm Action',
     confirmMessage: 'Are you sure?',
     yes: 'Yes',
-    no: 'No'
+    no: 'No',
+    unpin: 'Unpin',
+    pin: 'Pin'
   },
   order: {
     inStore: 'In Store',
