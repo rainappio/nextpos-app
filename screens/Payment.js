@@ -74,9 +74,28 @@ class Payment extends React.Component {
     const { navigation } = this.props
     const order= this.props.navigation.state.params.order
 
+    const initialDiscount = {
+      discount: -1,
+      orderDiscount: 'NO_DISCOUNT'
+    }
+
+    if (order.appliedOfferInfo != null) {
+      let overrideDiscount = order.appliedOfferInfo.overrideDiscount
+
+      if (order.appliedOfferInfo.discountDetails.discountType === 'PERCENT_OFF') {
+        overrideDiscount = overrideDiscount * 100
+      }
+
+      initialDiscount.discount = overrideDiscount
+      initialDiscount.orderDiscount = order.appliedOfferInfo.offerId
+    }
+
     return (
       <PaymentFormScreen
-        initialValues={{ waiveServiceCharge: order.serviceCharge === 0, discount: { orderDiscount: 'NO_DISCOUNT' } }}
+        initialValues={{
+          waiveServiceCharge: order.serviceCharge === 0,
+          discount: initialDiscount
+        }}
         order={order}
         navigation={navigation}
         onSubmit={this.handlePayment}

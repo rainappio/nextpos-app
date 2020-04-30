@@ -38,11 +38,6 @@ class OrderStart extends React.Component {
       ageGroup: values.ageGroup,
       visitFrequency: values.visitFrequency
     }
-    const Person = createOrder.demographicData
-    const male = Person.male !== undefined ? Person.male : 0
-    const female = Person.female !== undefined ? Person.male : 0
-    const kid = Person.kid !== undefined ? Person.kid : 0
-    const customerCount = male + female + kid
 
     dispatchFetchRequest(api.order.new, {
         method: 'POST',
@@ -56,8 +51,7 @@ class OrderStart extends React.Component {
       response => {
         response.json().then(data => {
           this.props.navigation.navigate('OrderFormII', {
-            orderId: data.orderId,
-            customerCount: customerCount
+            orderId: data.orderId
           })
         })
       }).then()

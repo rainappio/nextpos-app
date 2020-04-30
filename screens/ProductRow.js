@@ -42,7 +42,7 @@ class ProductRow extends React.Component {
       zh: {
         productListTitle: '產品列表',
         ungrouped: '未分類',
-        pinned: 'Pinned-CH'
+        pinned: '置頂產品'
       }
     })
 

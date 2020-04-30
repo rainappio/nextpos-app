@@ -45,8 +45,8 @@ const zh = {
     confirmMessage: '確定執行嗎？',
     yes: '是',
     no: '不是',
-    unpin: 'Unpin_CH',
-    pin: 'Pin_CH'
+    unpin: '移除置頂',
+    pin: '加入置頂'
   },
   order: {
     inStore: '內用',
@@ -158,6 +158,7 @@ const zh = {
     404: '您要找的項目不存在',
     message: {
       insufficientCashAmount: '輸入的現金金額小於訂單總金額',
+      discountedTotalLessThanZero: '打折後的金額不能小於零',
       completeAllOrdersFirst: '請先完成所有的訂單'
     }
   },

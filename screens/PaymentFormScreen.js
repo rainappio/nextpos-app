@@ -82,8 +82,9 @@ class PaymentFormScreen extends React.Component {
         discounts.push({
           label: globalorderoffer.displayName,
           value: {
-            discount: globalorderoffer.discountValue,
-            orderDiscount: globalorderoffer.offerName
+            offerId: globalorderoffer.offerId,
+            orderDiscount: globalorderoffer.offerName,
+            discount: globalorderoffer.discountValue
           }
         })
       })

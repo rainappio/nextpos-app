@@ -78,6 +78,7 @@ import ShiftDetails from "../screens/ShiftDetails";
 import { getToken } from "../constants/Backend";
 import { doLogout } from "../actions";
 import ManageVisualSceen from '../screens/ManageVisualSceen'
+import UpdateOrder from "../screens/UpdateOrder";
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -150,6 +151,7 @@ const Tables = createStackNavigator({
   OrderFormIII: OrderFormIII,
   OrderFormIV: OrderFormIV,
   OrdersSummary: OrdersSummary,
+  UpdateOrder: UpdateOrder,
   Payment: Payment,
   PaymentOrder: PaymentOrder,
   CheckoutComplete: CheckoutComplete

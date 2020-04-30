@@ -13,6 +13,7 @@ import {
 } from 'react-native'
 import { CheckBox } from 'react-native-elements'
 import images from '../../assets/images'
+import styles from '../../styles'
 
 class RenderCheckBox extends React.Component {
   state = {
@@ -31,27 +32,33 @@ class RenderCheckBox extends React.Component {
       meta: { error, toched, valid },
       ...rest
     } = this.props
-    var isnoDiscount = optionName === 'No Discount' && orderTotal === grandTotal
+
     return (
       <View>
         <CheckBox
           title={
             customValue.discount === 0 ? (
-              <TextInput
-                style={{
-                  height: 40,
-                  width: '80%',
-                  borderBottomColor: '#ddd',
-                  borderBottomWidth: 1,
-                  paddingLeft: 15
-                }}
-                onChangeText={val => {
-                  onChange({ discount: val, orderDiscount: 'ENTER_DISCOUNT' })
-                  getPercent(val)
-                }}
-                keyboardType={'numeric'}
-                placeholder="Enter Discount"
-              />
+              <View style={[styles.tableRowContainer]}>
+                <View style={styles.tableCellView}>
+                <Text style={styles.tableCellText}>{optionName}</Text>
+                </View>
+                <TextInput
+                  style={[styles.tableCellView, {
+                    height: 40,
+                    width: '60%',
+                    borderBottomColor: '#ddd',
+                    borderBottomWidth: 1,
+                    paddingLeft: 15
+                  }]}
+                  value={String(customValue.orderDiscount === value.orderDiscount ? value.discount : 0)}
+                  onChangeText={val => {
+                    onChange({discount: val, orderDiscount: customValue.orderDiscount})
+                    getPercent(val)
+                  }}
+                  keyboardType={'numeric'}
+                  //placeholder={optionName}
+                />
+              </View>
             ) : (
               optionName
             )
@@ -69,11 +76,11 @@ class RenderCheckBox extends React.Component {
             />
           }
           checked={
-            isnoDiscount || value.orderDiscount === customValue.orderDiscount
+            value.orderDiscount === customValue.orderDiscount
           }
           onPress={() => {
             onChange(customValue)
-            getPercent(customValue.discount)
+            //getPercent(customValue.discount)
           }}
         />
       </View>
