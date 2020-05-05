@@ -181,7 +181,7 @@ export default StyleSheet.create({
   },
   delIcon: {
     backgroundColor: '#f75336',
-    //flex: 1,
+    flex: 1,
     width: '20%',
     alignItems: 'center',
     justifyContent: 'center',

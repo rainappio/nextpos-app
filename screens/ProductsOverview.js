@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { getProducts, getLables } from '../actions'
-import ProductListScreen from './ProductListScreen'
+import LoadingScreen from "./LoadingScreen";
+import ProductRow from './ProductRow'
 
 class ProductsOverview extends React.Component {
   static navigationOptions = {
@@ -20,17 +21,26 @@ class ProductsOverview extends React.Component {
       haveData,
       haveError,
       isLoading,
-      labels
+      labels = []
     } = this.props
 
+    if (isLoading) {
+      return (
+        <LoadingScreen />
+      )
+    } else
+      if (haveError) {
+        return (
+          <BackendErrorScreen />
+        )
+      }
     return (
-      <ProductListScreen
+      <ProductRow
         products={products}
         navigation={navigation}
-        haveData={haveData}
-        haveError={haveError}
-        isLoading={isLoading}
+        getProduct={this.props.getProduct}
         labels={labels}
+        isLoading={isLoading}
       />
     )
   }
@@ -38,9 +48,9 @@ class ProductsOverview extends React.Component {
 
 const mapStateToProps = state => ({
   products: state.products.data.results,
-  haveData: state.products.haveData,
-  haveError: state.products.haveError,
-  isLoading: state.products.loading,
+  haveData: state.labels.haveData,
+  haveError: state.labels.haveError,
+  isLoading: state.labels.loading,
   labels: state.labels.data.labels
 })
 
