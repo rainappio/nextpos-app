@@ -99,6 +99,9 @@ export const api = {
     openShift: `${apiRoot}/shifts/open`,
     closeShift: `${apiRoot}/shifts/close`,
     new: `${apiRoot}/orders`,
+    update: id => {
+      return `${apiRoot}/orders/${id}`
+    },
     getById: id => {
       return `${apiRoot}/orders/${id}`
     },
@@ -198,7 +201,7 @@ export const api = {
     },
     updateTablePosition: (layoutId, tableId) => {
 			return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}/position`
-    } 
+    }
   },
   payment: {
     charge: `${apiRoot}/orders/transactions`

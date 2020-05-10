@@ -10,10 +10,25 @@ import {
 import { getTableLayout } from '../actions'
 import styles from '../styles'
 import LoadingScreen from "./LoadingScreen";
+import {LocaleContext} from "../locales/LocaleContext";
 
 class ManageVisualSceen extends Component {
   static navigationOptions = {
     header: null
+  }
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context);
+
+    context.localize({
+      en: {
+        manageVisualLayoutTitle: 'Manage Visual Layout'
+      },
+      zh: {
+        manageVisualLayoutTitle: '管理桌位位置'
+      }
+    })
   }
 
   componentDidMount() {
@@ -22,6 +37,7 @@ class ManageVisualSceen extends Component {
 
   render() {
     const { tablelayout, isLoading } = this.props
+    const { t } = this.context
     const layoutId = this.props.navigation.state.params.layoutId !== false && this.props.navigation.state.params.layoutId;
 
     if (isLoading) {
@@ -32,7 +48,7 @@ class ManageVisualSceen extends Component {
 
     return (
       <View style={[styles.container_nocenterCnt]}>
-        <ScreenHeader title={"Table Layout Position"} />
+        <ScreenHeader title={t('manageVisualLayoutTitle')} />
         {/* <Text onPress={() => this.forceRefresh()} style={{ borderWidth: 1, width: 120, textAlign: 'center', padding: 8, borderRadius: 2 }}>Reset Positions</Text> */}
         <View style={{ flex: 1 }}>
           <View style={[styles.ballContainer, { paddingLeft: 8, height: '100%', marginTop: 22 }]}>
@@ -134,7 +150,6 @@ class Draggable extends Component {
       },
       body: JSON.stringify({ x: JSON.stringify(this.state.pan.x), y: JSON.stringify(this.state.pan.y) })
     }, response => {
-      successMessage('Saved')
       this.props.getTableLayout(layoutId)
     }).then()
 
@@ -151,7 +166,6 @@ class Draggable extends Component {
       },
       body: JSON.stringify({})
     }, response => {
-      successMessage('Position Resetted')
       this.props.getTableLayout(layoutId)
     }).then()
     return true
