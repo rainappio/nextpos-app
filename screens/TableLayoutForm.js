@@ -154,7 +154,7 @@ class TableLayoutForm extends React.Component {
               })}>
                 <Text style={[styles.bottomActionButton, styles.actionButton]}>
                   {t('manageVisualLayout')}
-              </Text>
+                </Text>
               </TouchableOpacity>
             </View>
           ) : (

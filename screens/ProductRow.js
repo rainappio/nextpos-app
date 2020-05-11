@@ -2,9 +2,9 @@ import React from 'react'
 import {
   View,
   TouchableOpacity,
-  Text,
   Alert,
-  RefreshControl
+  Text,
+  Image
 } from 'react-native'
 import { connect } from 'react-redux'
 import DraggableFlatList from "react-native-draggable-flatlist";

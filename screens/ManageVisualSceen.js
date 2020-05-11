@@ -10,7 +10,7 @@ import {
 import { getTableLayout } from '../actions'
 import styles from '../styles'
 import LoadingScreen from "./LoadingScreen";
-import {LocaleContext} from "../locales/LocaleContext";
+import { LocaleContext } from "../locales/LocaleContext";
 
 class ManageVisualSceen extends Component {
   static navigationOptions = {

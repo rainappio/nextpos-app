@@ -203,11 +203,7 @@ export const api = {
       return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}`
     },
     updateTablePosition: (layoutId, tableId) => {
-<<<<<<< HEAD
       return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}/position`
-=======
-			return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}/position`
->>>>>>> be7f85e3bf310aad0ea60304343721450bd9632d
     }
   },
   payment: {
