@@ -4,7 +4,9 @@ import {
   TouchableOpacity,
   Alert,
   Text,
-  Image
+  FlatList,
+  Image,
+  SwipeableListView
 } from 'react-native'
 import { connect } from 'react-redux'
 import DraggableFlatList from "react-native-draggable-flatlist";
@@ -193,15 +195,16 @@ class ProductRow extends React.Component {
   _renderSectionItems = (item, map) => {
     const { t } = this.context
     return (
-      <SwipeListView
+      <FlatList
         data={map[item.label]}
-        extraData={this.state}
+        //extraData={this.state}
         keyExtractor={(data, rowMap) => rowMap.toString()}
         renderItem={this._renderItemSection}
-        renderHiddenItem={this._renderHiddenItemSection}
-        leftOpenValue={-60}
-        rightOpenValue={0}
-        swipeRowStyle={{ marginBottom: -2.2, backgroundColor: '#f75336' }}
+        // renderHiddenItem={this._renderHiddenItemSection}
+        // leftOpenValue={-60}
+        // rightOpenValue={0}
+        // swipeRowStyle={{ marginBottom: -2.2, backgroundColor: '#f75336' }}
+        initialNumToRender={10}
       />
     );
   }
@@ -211,11 +214,46 @@ class ProductRow extends React.Component {
     return (
       <View>
         {this._renderSectionHeader(item, index, drag, isActive)}
-        <Collapsible collapsed={!this.state.selectedToggleItems.get(item.id)}>
+        {/* <Collapsible collapsed={!this.state.selectedToggleItems.get(item.id)}>
           {
-            this._renderSectionItems(item, map)
+            // this._renderSectionItems(item, map)
+
+            map[item.label] !== undefined && map[item.label].map(data => {
+              return (
+                <View key={data.id}>
+                  <Text key={data.id}>{'' + data.pinned}</Text>
+                  <TouchableOpacity onPress={() => this.handlepinToggle(data.id)} style={[{ position: 'absolute', right: 24 }]}>
+                    <AntDesignIcon
+                      name={'pushpin'}
+                      size={22}
+                      color={data.pinned ? mainThemeColor : '#ccc'}
+                      style={{ transform: [{ rotateY: '180deg' }], marginTop: 18 }} />
+                  </TouchableOpacity>
+                </View>
+              )
+            })
+
           }
-        </Collapsible>
+        </Collapsible> */}
+        {
+          this.state.selectedToggleItems.get(item.id) &&
+          <View>
+            {map[item.label] !== undefined && map[item.label].map(data => {
+              return (
+                <View key={data.id}>
+                  <Text key={data.id}>{'' + data.pinned}</Text>
+                  <TouchableOpacity onPress={() => this.handlepinToggle(data.id)} style={[{ position: 'absolute', right: 24 }]}>
+                    <AntDesignIcon
+                      name={'pushpin'}
+                      size={22}
+                      color={data.pinned ? mainThemeColor : '#ccc'}
+                      style={{ transform: [{ rotateY: '180deg' }], marginTop: 18 }} />
+                  </TouchableOpacity>
+                </View>
+              )
+            })}
+          </View>
+        }
       </View>
     );
   };
