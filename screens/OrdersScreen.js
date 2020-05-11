@@ -118,6 +118,13 @@ class OrdersScreen extends React.Component {
               const shiftId = this.props.navigation.getParam('shiftId')
               this.props.getOrdersByDateRange('SHIFT', shiftId)
               this.props.navigation.setParams({shiftId: undefined})
+
+              // To prevent FlatList scrolls to top automatically,
+              // we have to delay scroll to the original position
+              const offset = this.state.scrollPosition
+              setTimeout(() => {
+                this.ListView_Ref.scrollToOffset({ offset, animated: false })
+              }, 500)
             }}
           />
           <ScreenHeader backNavigation={false}

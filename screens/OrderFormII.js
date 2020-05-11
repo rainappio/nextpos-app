@@ -44,7 +44,7 @@ class OrderFormII extends React.Component {
       },
       zh: {
         newOrderTitle: '新訂單',
-        pinned: 'Pinned-CH'
+        pinned: '置頂產品'
       }
     })
 
@@ -229,11 +229,7 @@ class OrderFormII extends React.Component {
               style={{ marginRight: 5 }}
             />
             <Text style={[styles.textMedium, styles.whiteColor]}>
-              {order.hasOwnProperty('demographicData')
-                ? order.demographicData.male +
-                order.demographicData.female +
-                order.demographicData.kid
-                : this.props.navigation.state.params.customerCount}
+              &nbsp;{order.demographicData != null ? order.demographicData.male + order.demographicData.female + order.demographicData.kid : 0}
             </Text>
           </View>
 
@@ -243,8 +239,7 @@ class OrderFormII extends React.Component {
                 this.props.navigation.navigate('OrdersSummary', {
                   orderId: this.props.navigation.state.params.orderId,
                   onSubmit: this.props.navigation.state.params.onSubmit,
-                  handleDelete: this.props.navigation.state.params.handleDelete,
-                  customerCount: this.props.navigation.state.params.customerCount
+                  handleDelete: this.props.navigation.state.params.handleDelete
                 })
               }
             >

@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import {LocaleContext} from "../locales/LocaleContext";
 import styles from "../styles";
-import {Text, View} from "react-native";
+import {Text, View, TouchableOpacity} from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import {formatDate} from "../actions";
 import { withNavigation } from 'react-navigation'
@@ -31,22 +31,23 @@ class OrderTopInfo extends Component {
           </View>
 
           <View style={[styles.tableCellView, {width: '15%'}]}>
-            <View>
-              <FontAwesomeIcon
-                name="user"
-                size={25}
-                style={[styles.buttonIconStyle]}
-              >
-                <Text style={[styles.textBig, styles.orange_color]}>
-                  &nbsp;
-                  {!this.props.navigation.state.params.customerCount
-                    ? order.demographicData.male +
-                    order.demographicData.female +
-                    order.demographicData.kid
-                    : this.props.navigation.state.params.customerCount}
-                </Text>
-              </FontAwesomeIcon>
-            </View>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('UpdateOrder', {
+                order: order
+              })}
+            >
+              <View>
+                <FontAwesomeIcon
+                  name="user"
+                  size={25}
+                  style={[styles.buttonIconStyle]}
+                >
+                  <Text style={[styles.textBig, styles.orange_color]}>
+                    &nbsp;{order.demographicData != null ? order.demographicData.male + order.demographicData.female + order.demographicData.kid : 0}
+                  </Text>
+                </FontAwesomeIcon>
+              </View>
+            </TouchableOpacity>
           </View>
 
           <View style={[styles.tableCellView, { justifyContent: 'flex-end', width: '50%'}]}>

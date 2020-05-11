@@ -4,6 +4,7 @@ import { View } from 'react-native'
 import { connect } from 'react-redux'
 import { getOrder } from '../actions'
 import OrdersSummaryRowOverView from './OrdersSummaryRowOverView'
+import {NavigationEvents} from "react-navigation";
 
 class OrdersSummary extends React.Component {
   static navigationOptions = {
@@ -11,7 +12,7 @@ class OrdersSummary extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getOrder()
+
   }
 
   render() {
@@ -26,14 +27,21 @@ class OrdersSummary extends React.Component {
     } = this.props
 
     return (
-      <OrdersSummaryRowOverView
-        order={order}
-        navigation={navigation}
-        isLoading={isLoading}
-        haveError={haveError}
-        haveData={haveData}
-        initialValues={initialValues}
-      />
+      <View>
+        <NavigationEvents
+          onWillFocus={() => {
+            this.props.getOrder()
+          }}
+        />
+        <OrdersSummaryRowOverView
+          order={order}
+          navigation={navigation}
+          isLoading={isLoading}
+          haveError={haveError}
+          haveData={haveData}
+          initialValues={initialValues}
+        />
+      </View>
     )
   }
 }

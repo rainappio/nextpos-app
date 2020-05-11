@@ -34,14 +34,16 @@ class TableLayoutForm extends React.Component {
         editTableLayoutTitle: 'Edit Table Layout',
         layoutName: 'Layout Name',
         totalCapacity: 'Total Floor Capacity',
-        tables: 'Tables'
+        tables: 'Tables',
+        manageVisualLayout: 'Manage Visual Layout'
       },
       zh: {
         addTableLayoutTitle: '新增樓面',
         editTableLayoutTitle: '編輯樓面',
         layoutName: '樓面名稱',
         totalCapacity: '桌位總數',
-        tables: '桌位'
+        tables: '桌位',
+        manageVisualLayout: '管理桌位位置'
       }
     })
   }
@@ -151,7 +153,7 @@ class TableLayoutForm extends React.Component {
                 layoutId: initialValues.id
               })}>
                 <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                  Manage Visual
+                  {t('manageVisualLayout')}
               </Text>
               </TouchableOpacity>
             </View>

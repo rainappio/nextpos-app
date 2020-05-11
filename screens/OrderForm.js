@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { Field, reduxForm } from 'redux-form'
+import React, {Component} from 'react'
+import {Field, reduxForm} from 'redux-form'
 import {Text, View, TouchableOpacity, ScrollView, Picker, Alert} from 'react-native'
 import DropDown from '../components/DropDown'
 import RenderStepper from '../components/RenderStepper'
-import { isRequired } from '../validators'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {isRequired} from '../validators'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import PickerInput from "../components/PickerInput";
 import SegmentedControl from "../components/SegmentedControl";
 import ScreenHeader from "../components/ScreenHeader";
@@ -27,7 +27,7 @@ class OrderForm extends Component {
         ageGroup: 'Age Group',
         visitFrequency: 'Visit Frequency',
         peopleCount: 'People Count',
-        openOrder: 'Open Order'
+        openOrder: 'Save Order'
       },
       zh: {
         newOrderTitle: '新訂單',
@@ -38,7 +38,7 @@ class OrderForm extends Component {
         ageGroup: '來客年齡層',
         visitFrequency: '造訪次數',
         peopleCount: '來客數',
-        openOrder: '建立訂單'
+        openOrder: '儲存訂單'
       }
     })
 
@@ -66,27 +66,68 @@ class OrderForm extends Component {
   }
 
   componentDidMount() {
+    const initialValues = this.props.initialValues;
+    const orderType = initialValues.orderType
 
+    if (orderType != null) {
+      this.handleOrderTypeSelection(orderType === 'IN_STORE' ? 0 : 1)
+      this.setState({selectedTableId: initialValues.tableId})
+
+      let selectedAgeGroup = null
+
+      switch (initialValues.ageGroup) {
+        case 'TWENTIES':
+          selectedAgeGroup = 0
+          break
+        case 'THIRTIES':
+          selectedAgeGroup = 1
+          break
+        case 'FORTIES':
+          selectedAgeGroup = 2
+          break
+        case 'FIFTIES_AND_ABOVE':
+          selectedAgeGroup = 3
+          break
+      }
+
+      this.handleAgeGroupSelection(selectedAgeGroup)
+
+      let selectedVisitFrequency = null
+
+      switch (initialValues.visitFrequency) {
+        case 'FIRST_TIME':
+          selectedVisitFrequency = 0
+          break
+        case 'TWO_TO_THREE':
+          selectedVisitFrequency = 1
+          break
+        case 'MORE_THAN_THREE':
+          selectedVisitFrequency = 2
+          break
+      }
+
+      this.handleVisitFrequencySelection(selectedVisitFrequency)
+    }
   }
 
   handleOrderTypeSelection = (index) => {
     const selectedIndex = this.selectedOrderType === index ? null : index
-    this.setState({ selectedOrderType: selectedIndex })
+    this.setState({selectedOrderType: selectedIndex})
   }
 
   handleAgeGroupSelection = (index) => {
     const selectedIndex = this.selectedAgeGroup === index ? null : index
-    this.setState({ selectedAgeGroup: selectedIndex })
+    this.setState({selectedAgeGroup: selectedIndex})
   }
 
   handleVisitFrequencySelection = (index) => {
     const selectedIndex = this.selectedVisitFrequency === index ? null : index
-    this.setState({ selectedVisitFrequency: selectedIndex })
+    this.setState({selectedVisitFrequency: selectedIndex})
   }
 
   render() {
-    const { tablesMap } = this.props
-    const { t } = this.context
+    const {tablesMap} = this.props
+    const {t} = this.context
 
     const orderTypes = Object.keys(this.state.orderTypes).map(key => this.state.orderTypes[key].label)
     const ageGroups = Object.keys(this.state.ageGroups).map(key => this.state.ageGroups[key].label)
@@ -109,7 +150,7 @@ class OrderForm extends Component {
     ]
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      <ScrollView scrollIndicatorInsets={{right: 1}}>
         <DismissKeyboard>
           <View style={styles.container}>
             <ScreenHeader backNavigation={true}
@@ -242,7 +283,7 @@ class OrderForm extends Component {
                             {
                               text: `${t('action.ok')}`,
                             }
-                            ])
+                          ])
                       }
                     }}
                   >

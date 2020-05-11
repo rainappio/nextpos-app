@@ -157,6 +157,7 @@ const en = {
     404: 'The id you used to look for an item cannot be found.',
     message: {
       insufficientCashAmount: 'Entered cash amount is less than the settling amount.',
+      discountedTotalLessThanZero: 'Discounted amount cannot be less than zero',
       completeAllOrdersFirst: 'Please complete all orders before closing shift.'
     }
   },
