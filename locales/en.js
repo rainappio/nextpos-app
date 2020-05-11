@@ -82,10 +82,15 @@ const en = {
     quantity: 'Qty',
     subTotal: 'Subtotal',
     serveBy: 'Serve By',
+    copiedFrom: 'Copy From',
+
+    // order specific actions
+    copyOrder: 'Copy Order',
 
     // order messages
     submitted: 'Order Submitted',
-    deleted: 'Order Deleted'
+    deleted: 'Order Deleted',
+    copied: 'Order Copied'
   },
   orderState: {
     OPEN: 'Open',
@@ -158,7 +163,9 @@ const en = {
     message: {
       insufficientCashAmount: 'Entered cash amount is less than the settling amount.',
       discountedTotalLessThanZero: 'Discounted amount cannot be less than zero',
-      completeAllOrdersFirst: 'Please complete all orders before closing shift.'
+      completeAllOrdersFirst: 'Please complete all orders before closing shift.',
+      userRoleInUse: 'This user role is used by existing user',
+      unableToChangeState: 'Unable to change order state'
     }
   },
   bar: 'Bar {{someValue}}'

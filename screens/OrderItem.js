@@ -49,16 +49,16 @@ class OrderItem extends React.PureComponent {
             })
           }
         >
-          <View style={[styles.tableCellView, {flex: 2}]}>
-            <Text>{order.orderType === 'IN_STORE' ? order.tableName : t('order.takeOut')}</Text>
+          <View style={[styles.tableCellView, {flex: 5}]}>
+            <Text>{order.orderType === 'IN_STORE' ? order.tableName : t('order.takeOut')} ({order.serialId})</Text>
           </View>
 
-          <View style={[styles.tableCellView, {flex: 1}]}>
+          {/*<View style={[styles.tableCellView, {flex: 1}]}>
             <FontAwesomeIcon name={'user'} color="#ccc" size={20}/>
             <Text style={{marginLeft: 5}}>
               {order.customerCount}
             </Text>
-          </View>
+          </View>*/}
 
           <View style={[styles.tableCellView, {flex: 2}]}>
             <Text>

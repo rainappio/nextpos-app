@@ -4,6 +4,7 @@ import StaffFormScreen from './StaffFormScreen'
 import { clearClientUser, getClientUsr, getClientUsrs, getUserRoles } from '../actions'
 import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
+import {handleRefreshToken} from "../helpers/loginActions";
 
 class StaffEditScreen extends Component {
   static navigationOptions = {
@@ -47,7 +48,9 @@ class StaffEditScreen extends Component {
         this.props.navigation.navigate('StaffsOverview')
         this.props.getClientUsrs()
       }
-    ).then()
+    ).then(() => {
+      //handleRefreshToken().then()
+    })
   }
 
   render() {

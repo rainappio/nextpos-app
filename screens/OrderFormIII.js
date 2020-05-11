@@ -14,7 +14,7 @@ import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
-import { getProduct, getOrder } from '../actions'
+import {getProduct, getOrder, getGlobalProductOffers} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 import OrderFormIV from './OrderFormIV'
@@ -36,10 +36,10 @@ class OrderFormIII extends React.Component {
   componentDidMount() {
     this.props.getProduct()
     this.props.getOrder(this.props.navigation.state.params.orderId)
+    this.props.getGlobalProductOffers()
   }
 
   handleSubmit = values => {
-
     const orderId = this.props.navigation.state.params.orderId
 
     const updatedOptions = []
@@ -64,7 +64,9 @@ class OrderFormIII extends React.Component {
     const lineItemRequest = {
       productId: this.props.navigation.state.params.prdId,
       quantity: values.quantity,
-      productOptions: updatedOptions
+      productOptions: updatedOptions,
+      productDiscount: values.lineItemDiscount.productDiscount,
+      discountValue: values.lineItemDiscount.discount
     }
 
     dispatchFetchRequest(
@@ -113,7 +115,9 @@ class OrderFormIII extends React.Component {
 
     const lineItemRequest = {
       quantity: values.quantity,
-      productOptions: updatedOptions
+      productOptions: updatedOptions,
+      productDiscount: values.lineItemDiscount.productDiscount,
+      discountValue: values.lineItemDiscount.discount
     }
 
     dispatchFetchRequest(api.order.updateLineItem(orderId, lineItemId), {
@@ -131,9 +135,33 @@ class OrderFormIII extends React.Component {
   }
 
   render() {
-    const { product, haveError, isLoading } = this.props
+    const { product, globalProductOffers, haveError, isLoading } = this.props
 
     const isEditLineItem = this.props.navigation.getParam('lineItem') != null
+    const lineItemDiscount = {
+        offerId: 'NO_DISCOUNT',
+        productDiscount: 'NO_DISCOUNT',
+        discount: -1
+    }
+
+    const initialValues = {
+      ...this.props.navigation.getParam('lineItem'),
+      lineItemDiscount: lineItemDiscount
+    }
+
+    if (initialValues.appliedOfferInfo != null) {
+      let overrideDiscount = initialValues.appliedOfferInfo.overrideDiscount
+
+      if (initialValues.appliedOfferInfo.discountDetails.discountType === 'PERCENT_OFF') {
+        overrideDiscount = overrideDiscount * 100
+      }
+
+      initialValues.lineItemDiscount = {
+        offerId: initialValues.appliedOfferInfo.offerId,
+        productDiscount: initialValues.appliedOfferInfo.offerId,
+        discount: overrideDiscount
+      }
+    }
 
     if (isLoading) {
       return (
@@ -150,33 +178,35 @@ class OrderFormIII extends React.Component {
           <OrderFormIV
             onSubmit={this.handleUpdate}
             product={product}
-            initialValues={this.props.navigation.getParam('lineItem')}
+            initialValues={initialValues}
+            globalProductOffers={globalProductOffers}
           />
         ) : (
             <OrderFormIV
               onSubmit={this.handleSubmit}
               product={product}
-              initialValues={{ quantity: 1 }}
+              initialValues={{ lineItemDiscount: lineItemDiscount, quantity: 1 }}
+              globalProductOffers={globalProductOffers}
             />
           )}
       </View>
-
     )
   }
 }
 
 const mapStateToProps = state => ({
+  globalProductOffers: state.globalProductOffers.data.results,
   product: state.product.data,
-  haveData: state.products.haveData,
-  haveError: state.products.haveError,
-  isLoading: state.products.loading,
-  order: state.order.data
+  haveData: state.product.haveData,
+  haveError: state.product.haveError,
+  isLoading: state.product.loading,
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getProduct: () => dispatch(getProduct(props.navigation.state.params.prdId)),
-  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
+  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId)),
+  getGlobalProductOffers: () => dispatch(getGlobalProductOffers())
 })
 
 export default connect(

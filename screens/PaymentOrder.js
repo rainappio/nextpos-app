@@ -43,7 +43,7 @@ class PaymentOrder extends React.Component {
   			0: {label: context.t('payment.cashPayment'), value: 'CASH'},
   			1: {label: context.t('payment.cardPayment'), value: 'CARD'}
   			},
-    	selectedPaymentType: null
+    	selectedPaymentType: 0
   	}
   }
 

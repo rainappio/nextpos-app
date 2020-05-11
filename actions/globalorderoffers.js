@@ -1,9 +1,12 @@
-import { api, dispatchFetchRequest } from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
+
 export const FETCH_GLOBAL_ORDER_OFFERS = 'FETCH_GLOBAL_ORDER_OFFERS'
-export const FETCH_GLOBAL_ORDER_OFFERS_SUCCESS =
-  'FETCH_GLOBAL_ORDER_OFFERS_SUCCESS'
-export const FETCH_GLOBAL_ORDER_OFFERS_FAILURE =
-  'FETCH_GLOBAL_ORDER_OFFERS_FAILURE'
+export const FETCH_GLOBAL_ORDER_OFFERS_SUCCESS = 'FETCH_GLOBAL_ORDER_OFFERS_SUCCESS'
+export const FETCH_GLOBAL_ORDER_OFFERS_FAILURE = 'FETCH_GLOBAL_ORDER_OFFERS_FAILURE'
+
+export const FETCH_GLOBAL_PRODUCT_OFFERS = 'FETCH_GLOBAL_PRODUCT_OFFERS'
+export const FETCH_GLOBAL_PRODUCT_OFFERS_SUCCESS = 'FETCH_GLOBAL_PRODUCT_OFFERS_SUCCESS'
+export const FETCH_GLOBAL_PRODUCT_OFFERS_FAILURE = 'FETCH_GLOBAL_PRODUCT_OFFERS_FAILURE'
 
 export const fetchglobalOrderOffers = () => ({
   type: FETCH_GLOBAL_ORDER_OFFERS
@@ -19,13 +22,25 @@ export const fetchglobalOrderOffersFailure = error => ({
   error
 })
 
+export const fetchGlobalProductOffers = () => ({
+  type: FETCH_GLOBAL_PRODUCT_OFFERS
+})
+
+export const fetchGlobalProductOffersSuccess = data => ({
+  type: FETCH_GLOBAL_PRODUCT_OFFERS_SUCCESS,
+  data
+})
+
+export const fetchGlobalProductOffersFailure = error => ({
+  type: FETCH_GLOBAL_PRODUCT_OFFERS_FAILURE,
+  error
+})
+
 export const getfetchglobalOrderOffers = () => {
   return dispatch => {
     dispatch(fetchglobalOrderOffers())
 
-    dispatchFetchRequest(
-      api.order.getGlobalOrderOffers,
-      {
+    dispatchFetchRequest(api.order.getGlobalOrderOffers, {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -43,9 +58,24 @@ export const getfetchglobalOrderOffers = () => {
   }
 }
 
-function handleErrors (response) {
-  if (!response.ok) {
-    throw Error(response.statusText)
+export const getGlobalProductOffers = () => {
+  return dispatch => {
+    dispatch(fetchGlobalProductOffers())
+
+    dispatchFetchRequest(api.order.getGlobalProductOffers, {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {}
+      },
+      response => {
+        response.json().then(data => {
+          dispatch(fetchGlobalProductOffersSuccess(data))
+        })
+      },
+      response => {
+        dispatch(fetchGlobalProductOffersFailure(response))
+      }
+    ).then()
   }
-  return response
 }

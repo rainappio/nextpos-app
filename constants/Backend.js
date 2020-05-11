@@ -4,9 +4,11 @@ import * as Sentry from 'sentry-expo';
 import NavigationService from "../navigation/NavigationService";
 import i18n from 'i18n-js'
 
-const storage = {
+export const storage = {
   clientAccessToken: 'token',
-  clientUserAccessToken: 'clientusrToken'
+  clientUserAccessToken: 'clientusrToken',
+  clientUsername: 'clientUsername',
+  clientPassword: 'clientPassword'
 }
 
 const apiRoot = 'http://35.234.63.193'
@@ -138,11 +140,18 @@ export const api = {
     applyDiscount: orderId => {
       return `${apiRoot}/orders/${orderId}/applyDiscount`
     },
+    removeDiscount: orderId => {
+      return `${apiRoot}/orders/${orderId}/removeDiscount`
+    },
     resetOrderOffers: orderId => {
       return `${apiRoot}/orders/${orderId}/resetOrderOffers`
     },
+    copyOrder: orderId => {
+      return `${apiRoot}/orders/${orderId}/copy`
+    },
     inflightOrders: `${apiRoot}/orders/inflight`,
     getGlobalOrderOffers: `${apiRoot}/offers/globalOrderOffers`,
+    getGlobalProductOffers: `${apiRoot}/offers/globalProductOffers`,
     getOrdersByDateAndRange: (dateRange, shiftId, fromDate, toDate) => {
       let params = ''
 

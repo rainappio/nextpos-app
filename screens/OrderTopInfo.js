@@ -32,9 +32,13 @@ class OrderTopInfo extends Component {
 
           <View style={[styles.tableCellView, {width: '15%'}]}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('UpdateOrder', {
-                order: order
-              })}
+              onPress={() => {
+                const originScreen = this.props.navigation.state.routeName
+                const updateOrderRoute = originScreen ==='OrdersSummary' ? 'UpdateOrder' : 'UpdateOrderFromOrderDetail'
+                this.props.navigation.navigate(updateOrderRoute, {
+                  order: order
+                })
+              }}
             >
               <View>
                 <FontAwesomeIcon
@@ -43,7 +47,7 @@ class OrderTopInfo extends Component {
                   style={[styles.buttonIconStyle]}
                 >
                   <Text style={[styles.textBig, styles.orange_color]}>
-                    &nbsp;{order.demographicData != null ? order.demographicData.male + order.demographicData.female + order.demographicData.kid : 0}
+                    &nbsp;{order.demographicData != null ? order.demographicData.customerCount : 0}
                   </Text>
                 </FontAwesomeIcon>
               </View>
@@ -65,6 +69,20 @@ class OrderTopInfo extends Component {
         <View style={styles.tableRowContainer}>
           <Text>Order ID: </Text>
           <Text style={styles.tableCellText}>{order.serialId}</Text>
+          {order.metadata.hasOwnProperty('copyFromOrderId') && order.metadata.hasOwnProperty('copyFromSerialId') && (
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate({
+                  routeName: 'OrderDetail',
+                  params: {
+                    orderId: order.metadata.copyFromOrderId
+                  },
+                  key: order.metadata.copyFromOrderId
+                })
+              }}>
+              <Text>({t('order.copiedFrom')}: {order.metadata.copyFromSerialId})</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         <View style={styles.tableRowContainer}>

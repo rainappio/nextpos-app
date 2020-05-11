@@ -28,16 +28,7 @@ class NewUserRole extends React.Component {
   }
 
   componentDidMount() {
-    this.context.localize({
-      en: {
-        newUserRoleTitle: 'New User Role',
-        roleName: 'Role Name'
-      },
-      zh: {
-        newUserRoleTitle: 'New User Role-CH',
-        roleName: 'Role Name-CH'
-      }
-    })
+
   }
 
   handleRoleSelection = (index) => {

@@ -82,10 +82,15 @@ const zh = {
     quantity: '數量',
     subTotal: '小計',
     serveBy: '結帳人員',
+    copiedFrom: '複製於',
+
+    // order specific actions
+    copyOrder: '複製訂單',
 
     // order messages
     submitted: '訂單送出',
-    deleted: '訂單刪除'
+    deleted: '訂單刪除',
+    copied: '複製訂單成功'
   },
   orderState: {
     OPEN: '已開單',
@@ -111,7 +116,7 @@ const zh = {
       CLOSING: '關帳中',
       CONFIRM_CLOSE: '關帳確認',
       BALANCED: '已關帳',
-      UNBALANCED: '已關帳(帳不平)'
+      UNBALANCED: '關帳金額異常'
     },
     shiftDetailsTitle: '帳內容',
     staff: '員工',
@@ -159,7 +164,9 @@ const zh = {
     message: {
       insufficientCashAmount: '輸入的現金金額小於訂單總金額',
       discountedTotalLessThanZero: '打折後的金額不能小於零',
-      completeAllOrdersFirst: '請先完成所有的訂單'
+      completeAllOrdersFirst: '請先完成所有的訂單',
+      userRoleInUse: '此權限正被使用中',
+      unableToChangeState: '無法更改訂單狀態'
     }
   },
   bar: 'Bar {{someValue}}'

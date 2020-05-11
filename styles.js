@@ -401,6 +401,13 @@ export default StyleSheet.create({
     marginTop: 5,
     marginBottom: 20
   },
+  sectionContainerWithBorder: {
+    justifyContent: 'center',
+    marginTop: 5,
+    marginBottom: 20,
+    borderColor: '#f1f1f1',
+    borderBottomWidth: 1,
+  },
   sectionTitleContainer: {
     alignItems: 'center',
     marginVertical: 15,
@@ -443,6 +450,9 @@ export default StyleSheet.create({
   listPanelText: {
     flex: 9,
     fontSize: 16
+  },
+  listItemContainer: {
+    backgroundColor: '#F8F8F8'
   },
   listPanelIcon: {
     flex: 1,

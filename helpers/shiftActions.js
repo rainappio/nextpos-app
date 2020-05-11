@@ -1,5 +1,6 @@
-import {api, dispatchFetchRequest, successMessage, warningMessage} from "../constants/Backend";
+import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from "../constants/Backend";
 import i18n from 'i18n-js'
+import NavigationService from "../navigation/NavigationService";
 
 export const handleOpenShift = (balance, successCallback) => {
   if (!checkBalanceInput(balance)) {
@@ -94,9 +95,7 @@ export const handleConfirmCloseShift = (values) => {
 }
 
 export const handleAbortCloseShift = () => {
- dispatchFetchRequest(
-    api.shift.abort,
-    {
+  dispatchFetchRequestWithOption(api.shift.abort, {
       method: 'POST',
       withCredentials: true,
       credentials: 'include',
@@ -104,9 +103,12 @@ export const handleAbortCloseShift = () => {
         'Content-Type': 'application/json'
       },
       body: ''
+    }, {
+      defaultMessage: false
     },
     response => {
-      successCallback(response)
+      successMessage(i18n.t('shift.shiftAborted'))
+      NavigationService.navigate('ShiftClose')
     }).then()
 }
 

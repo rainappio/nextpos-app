@@ -162,15 +162,8 @@ class SalesCharts extends React.Component {
   }
 
   handleFilterSalesChart = values => {
-  	var currentDate = '';
-  	if(typeof(values.date) === 'string'){
-				currentDate = values.date
-			}else if(typeof(values.date) === 'object'){
-				currentDate = values.date.hasOwnProperty('nativeEvent') && moment(values.date.nativeEvent.timestamp).format('YYYY-MM-DD')
-			}
-
     dispatchFetchRequest(
-      api.report.getrangedSalesReportByDate(currentDate),
+      api.report.getrangedSalesReportByDate(values.date),
       {
         method: 'GET',
         withCredentials: true,
@@ -354,7 +347,9 @@ class SalesCharts extends React.Component {
           </Text>
           <SalesChartsFilterForm
           	onSubmit={this.handleFilterSalesChart}
-          	searchDate={filteredWeeklySalesReport.searchDate !== undefined ? filteredWeeklySalesReport.searchDate :  getrangedSalesReport.searchDate}
+            initialValues={{
+              date: getrangedSalesReport.searchDate
+            }}
           	/>
           <Chart
             data={Object.keys(filteredRangedSalesData).length !== 0 ? filteredRangedSalesData : rangedSalesData}

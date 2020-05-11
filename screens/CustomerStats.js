@@ -113,32 +113,6 @@ class CustomerStats extends React.Component {
     return customerTrafficData
   }
 
-  handleFilterSalesChart = values => {
-    var currentDate = '';
-    if (typeof (values.date) === 'string') {
-      currentDate = values.date
-    } else if (typeof (values.date) === 'object') {
-      currentDate = values.date.hasOwnProperty('nativeEvent') && moment(values.date.nativeEvent.timestamp).format('YYYY-MM-DD')
-    }
-
-    dispatchFetchRequest(
-      api.report.getrangedSalesReportByDate(currentDate),
-      {
-        method: 'GET',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {}
-      },
-      response => {
-        response.json().then(data => {
-          this.setState({
-            filteredWeeklySalesReport: data
-          })
-        })
-      }
-    ).then()
-  }
-
   handleFilterChange = (index) => {
     this.setState({selectedFilter: index})
   }

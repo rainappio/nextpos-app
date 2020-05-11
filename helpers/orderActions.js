@@ -48,6 +48,18 @@ export const renderOrderState = state => {
   }
 }
 
+export const renderOptionsAndOffer = lineItem => {
+
+  let text = lineItem.options ? lineItem.options + ' ' : ''
+  const appliedOfferInfo = lineItem.appliedOfferInfo
+
+  if (appliedOfferInfo != null) {
+    text += `${appliedOfferInfo.offerName} (${appliedOfferInfo.overrideDiscount})`
+  }
+
+  return text
+}
+
 export const handleOrderSubmit = id => {
   const formData = new FormData()
   formData.append('action', 'SUBMIT')
@@ -74,7 +86,7 @@ export const handleOrderSubmit = id => {
   ).then()
 }
 
-export const handleDelete = id => {
+export const handleDelete = (id, callback) => {
   dispatchFetchRequestWithOption(
     api.order.delete(id),
     {
@@ -89,7 +101,10 @@ export const handleDelete = id => {
     },
     response => {
       successMessage(i18n.t('order.deleted'))
-      NavigationService.navigate('TablesSrc')
+
+      if (callback != null) {
+        callback()
+      }
     }
   ).then()
 }

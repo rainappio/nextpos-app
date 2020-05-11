@@ -21,8 +21,6 @@ class UpdateOrder extends React.Component {
   }
 
   handleSubmit = values => {
-    console.log(values)
-
     const updateOrder = {}
     updateOrder.orderType = values.orderType
     updateOrder.tableId = values.tableId
@@ -45,9 +43,7 @@ class UpdateOrder extends React.Component {
       },
       response => {
         response.json().then(data => {
-          this.props.navigation.navigate('OrdersSummary', {
-            orderId: data.orderId
-          })
+          this.props.navigation.pop(1)
         })
       }).then()
   }

@@ -26,7 +26,7 @@ import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
-import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
+import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
@@ -40,16 +40,18 @@ class OrderFormII extends React.Component {
     context.localize({
       en: {
         newOrderTitle: 'New Order',
-        pinned: 'Pinned'
+        pinned: 'Pinned',
+        addItemSuccess: 'Added {{product}}'
       },
       zh: {
         newOrderTitle: '新訂單',
-        pinned: '置頂產品'
+        pinned: '置頂產品',
+        addItemSuccess: '新增了 {{product}}'
       }
     })
 
     this.state = {
-      activeSections: [],
+      activeSections: [0],
       selectedProducts: [],
       status: '',
       labelId: null,
@@ -57,7 +59,7 @@ class OrderFormII extends React.Component {
       orderInfo: null
     }
     this.onChange = activeSections => {
-      this.setState({ activeSections })
+      this.setState({ activeSections: activeSections } )
     }
   }
 
@@ -76,29 +78,47 @@ class OrderFormII extends React.Component {
     )
   }
 
-  addPinnedObjtoOrderItems = productId => {
-    var orderId = this.props.navigation.state.params.orderId
-    let createOrderObj = {}
-
-    createOrderObj['productId'] = productId
-    createOrderObj['quantity'] = 1
-
-    dispatchFetchRequest(
-      api.order.newLineItem(orderId),
-      {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(createOrderObj)
-      },
-      response => {
-        successMessage('Line item saved')
-        this.props.getOrder(orderId)
+  addItemToOrder = productId => {
+    dispatchFetchRequest(api.product.getById(productId), {
+      method: 'GET',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
       }
-    ).then()
+    }, response => {
+      response.json().then(product => {
+        if (product.productOptions == null || product.productOptions.length === 0) {
+          const orderId = this.props.navigation.state.params.orderId
+          let lineItemRequest = {}
+
+          lineItemRequest['productId'] = productId
+          lineItemRequest['quantity'] = 1
+
+          dispatchFetchRequestWithOption(
+            api.order.newLineItem(orderId),
+            {
+              method: 'POST',
+              withCredentials: true,
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(lineItemRequest)
+            }, { defaultMessage: false },
+            response => {
+              successMessage(this.context.t('addItemSuccess', {product: product.name}))
+              this.props.getOrder(orderId)
+            }
+          ).then()
+        } else {
+          this.props.navigation.navigate('OrderFormIII', {
+            prdId: productId,
+            orderId: this.props.navigation.state.params.orderId
+          })
+        }
+      })
+    }).then()
   }
 
 
@@ -146,6 +166,7 @@ class OrderFormII extends React.Component {
           <View style={styles.childContainer}>
             <Accordion
               onChange={this.onChange}
+              expandMultiple={true}
               activeSections={this.state.activeSections}
             >
               <Accordion.Panel
@@ -157,11 +178,8 @@ class OrderFormII extends React.Component {
                     map.get('pinned').map(prd => (
                       <List.Item
                         key={prd.id}
-                        onPress={() =>
-                          this.props.navigation.navigate('OrderFormIII', {
-                            prdId: prd.id,
-                            orderId: this.props.navigation.state.params.orderId
-                          })
+                        style={styles.listItemContainer}
+                        onPress={() => this.addItemToOrder(prd.id)
                         }
                       >
                         <View style={[styles.jc_alignIem_center, { flex: 1, flexDirection: 'row' }]}>
@@ -184,11 +202,8 @@ class OrderFormII extends React.Component {
                     {map.get(lbl.label).map(prd => (
                       <List.Item
                         key={prd.id}
-                        onPress={() =>
-                          this.props.navigation.navigate('OrderFormIII', {
-                            prdId: prd.id,
-                            orderId: this.props.navigation.state.params.orderId
-                          })
+                        style={styles.listItemContainer}
+                        onPress={() => this.addItemToOrder(prd.id)
                         }
                       >
                         <View style={[styles.jc_alignIem_center, { flex: 1, flexDirection: 'row' }]}>

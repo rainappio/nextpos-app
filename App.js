@@ -30,6 +30,7 @@ import * as Sentry from 'sentry-expo';
 import Constants from "expo-constants/src/Constants";
 import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
+import {activateKeepAwake, useKeepAwake} from "expo-keep-awake";
 
 YellowBox.ignoreWarnings([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
@@ -176,6 +177,8 @@ export default class App extends React.Component {
         />
       )
     } else {
+      activateKeepAwake()
+
       return (
         <Provider store={store}>
           <View style={styles.mainContainer}>
