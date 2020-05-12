@@ -26,6 +26,13 @@ import DraggableAccordion from '../components/DraggableAccordion'
 import { Accordion, List, SwipeAction } from '@ant-design/react-native'
 import { tickStep } from 'd3';
 
+const exampleData = [...Array(8)].map((d, index) => ({
+  key: `item-${index}`, // For example only -- don't use index as your key!
+  label: index,
+  backgroundColor: `rgb(${Math.floor(Math.random() * 255)}, ${index *
+    5}, ${132})`
+}));
+
 class ProductRow extends React.Component {
   static navigationOptions = {
     header: null
@@ -56,6 +63,7 @@ class ProductRow extends React.Component {
       productId: null,
       data: [{ label: 'pinned', id: 'pinned' }, ...this.props.labels, { label: 'ungrouped', id: 'ungrouped' }],
       selectedToggleItems: new Map(),
+      collapsedId: []
     }
     this.onChange = activeSections => {
       this.setState({ activeSections })
@@ -68,6 +76,10 @@ class ProductRow extends React.Component {
     this.setState({
       selectedToggleItems: newSelected
     })
+  }
+
+  handleCollapsed = id => {
+    this.setState({ collapsedId: id })
   }
 
   //https://stackoverflow.com/questions/57738626/collapsible-and-draggable-sectionlist-for-react-native-application
@@ -120,12 +132,13 @@ class ProductRow extends React.Component {
           borderColor: '#f4f4f4',
           backgroundColor: isActive ? "#ccc" : ''
         }}
-        onPress={() => this.onSelect(item.id)}
+        //onPress={() => this.onSelect(item.id)}
+        onPress={() => this.handleCollapsed(item.id)}
         onLongPress={drag}
       >
         <View style={[styles.listPanel, { paddingLeft: 20, paddingRight: 20, paddingTop: 8, paddingBottom: 10 }]}>
           <Text style={[styles.listPanelText]}>{item.label}</Text>
-          {item.id !== undefined && (
+          {item.id !== 'pinned' && item.id !== 'ungrouped' && (
             <MaterialIcon
               name="edit"
               size={22}
@@ -137,122 +150,141 @@ class ProductRow extends React.Component {
               }}
             />
           )}
-          <AntDesignIcon name={this.state.selectedToggleItems.get(item.id) ? 'up' : 'down'} size={22} color="#ccc" />
+          {/* <AntDesignIcon name={this.state.selectedToggleItems.get(item.id) ? 'up' : 'down'} size={22} color="#ccc" /> */}
+          <AntDesignIcon name={this.state.collapsedId === item.id ? 'up' : 'down'} size={22} color="#ccc" />
         </View>
       </TouchableOpacity>
     );
   }
 
-  _renderItemSection = (data, rowMap) => {
-    return (
-      <View style={[{ paddingTop: 20, paddingBottom: 20, backgroundColor: '#f1f1f1', paddingLeft: 20, borderTopWidth: 0.11 }]}>
-        <Text onPress={() => {
-          this.props.navigation.navigate('ProductEdit', {
-            productId: data.item.id,
-            labelId: data.item.productLabelId,
-            isPinned: this.props.products['pinned'].filter(pa => pa.id == data.item.id)[0] !== undefined ? true : false
-          })
-        }} style={{ marginRight: 50 }}>{data.item.name}</Text>
+  // _renderItemSection = (data, rowMap) => {
+  //   return (
+  //     <View style={[{ paddingTop: 20, paddingBottom: 20, backgroundColor: '#f1f1f1', paddingLeft: 20, borderTopWidth: 0.11 }]}>
+  //       <Text onPress={() => {
+  //         this.props.navigation.navigate('ProductEdit', {
+  //           productId: data.item.id,
+  //           labelId: data.item.productLabelId,
+  //           isPinned: this.props.products['pinned'].filter(pa => pa.id == data.item.id)[0] !== undefined ? true : false
+  //         })
+  //       }} style={{ marginRight: 50 }}>{data.item.name}</Text>
 
-        <TouchableOpacity onPress={() => this.handlepinToggle(data.item.id)} style={[{ position: 'absolute', right: 24 }]}>
-          {
-            <AntDesignIcon
-              name={'pushpin'}
-              size={22}
-              color={
-                //this.state.selectedToggleItems.get(data.item.id)
-                data.item.pinned
-                  ? mainThemeColor
-                  : '#ccc'}
-              style={{ transform: [{ rotateY: '180deg' }], marginTop: 18 }} />
-          }
-        </TouchableOpacity>
-      </View>
-    )
-  }
+  //       <TouchableOpacity onPress={() => this.handlepinToggle(data.item.id)} style={[{ position: 'absolute', right: 24 }]}>
+  //         {
+  //           <AntDesignIcon
+  //             name={'pushpin'}
+  //             size={22}
+  //             color={
+  //               this.state.selectedToggleItems.get(data.item.id) === data.item.id
+  //                 //data.item.pinned
+  //                 ? mainThemeColor
+  //                 : '#ccc'}
+  //             style={{ transform: [{ rotateY: '180deg' }], marginTop: 18 }} />
+  //         }
+  //       </TouchableOpacity>
+  //     </View>
+  //   )
+  // }
 
-  _renderHiddenItemSection = (data, rowMap) => (
-    <View style={[styles.delIcon, styles.rightAlign, { top: 8, right: -4 }]} key={rowMap}>
-      <Icon name="md-trash" size={22} color="#fff" onPress={() => Alert.alert(
-        `${this.context.t('action.confirmMessageTitle')}`,
-        `${this.context.t('action.confirmMessage')}`,
-        [
-          {
-            text: `${this.context.t('action.yes')}`,
-            onPress: () => this.handleDelete(data.item.id)
-          },
-          {
-            text: `${this.context.t('action.no')}`,
-            onPress: () => console.log('Cancelled'),
-            style: 'cancel'
-          }
-        ]
-      )}
-      />
-    </View>
-  )
+  // _renderHiddenItemSection = (data, rowMap) => (
+  //   <View style={[styles.delIcon, styles.rightAlign, { top: 8, right: -4 }]} key={rowMap}>
+  //     <Icon name="md-trash" size={22} color="#fff" onPress={() => Alert.alert(
+  //       `${this.context.t('action.confirmMessageTitle')}`,
+  //       `${this.context.t('action.confirmMessage')}`,
+  //       [
+  //         {
+  //           text: `${this.context.t('action.yes')}`,
+  //           onPress: () => this.handleDelete(data.item.id)
+  //         },
+  //         {
+  //           text: `${this.context.t('action.no')}`,
+  //           onPress: () => console.log('Cancelled'),
+  //           style: 'cancel'
+  //         }
+  //       ]
+  //     )}
+  //     />
+  //   </View>
+  // )
 
-  _renderSectionItems = (item, map) => {
-    const { t } = this.context
-    return (
-      <FlatList
-        data={map[item.label]}
-        //extraData={this.state}
-        keyExtractor={(data, rowMap) => rowMap.toString()}
-        renderItem={this._renderItemSection}
-        // renderHiddenItem={this._renderHiddenItemSection}
-        // leftOpenValue={-60}
-        // rightOpenValue={0}
-        // swipeRowStyle={{ marginBottom: -2.2, backgroundColor: '#f75336' }}
-        initialNumToRender={10}
-      />
-    );
-  }
+  // _renderSectionItems = (item, map) => {
+  //   const { t } = this.context
+  //   return (
+  //     <FlatList
+  //       data={map[item.label]}
+  //       //extraData={this.state}
+  //       keyExtractor={(data, rowMap) => rowMap.toString()}
+  //       renderItem={this._renderItemSection}
+  //       // renderHiddenItem={this._renderHiddenItemSection}
+  //       // leftOpenValue={-60}
+  //       // rightOpenValue={0}
+  //       // swipeRowStyle={{ marginBottom: -2.2, backgroundColor: '#f75336' }}
+  //       initialNumToRender={10}
+  //     />
+  //   );
+  // }
 
   renderItem = ({ item, index, drag, isActive }) => {
     var map = this.props.products;
+
+    // console.log(this.state.collapsedId === item.id)
+    // console.log("inside renderItem")
+
     return (
       <View>
+        {/* <Text>DUMMY</Text>  */}
         {this._renderSectionHeader(item, index, drag, isActive)}
-        {/* <Collapsible collapsed={!this.state.selectedToggleItems.get(item.id)}>
+        {/* <Collapsible collapsed={!this.state.selectedToggleItems.get(item.id)}> */}
+        <Collapsible collapsed={this.state.collapsedId !== item.id}>
           {
             // this._renderSectionItems(item, map)
+            map[item.label] !== undefined && map[item.label].map(data => (
+              <View style={[{ paddingTop: 20, paddingBottom: 20, backgroundColor: '#f1f1f1', paddingLeft: 20, borderTopWidth: 0.11 }]} key={data.id}>
+                <Text onPress={() => {
+                  this.props.navigation.navigate('ProductEdit', {
+                    productId: data.id,
+                    labelId: data.productLabelId,
+                    isPinned: this.props.products['pinned'].filter(pa => pa.id == data.id)[0] !== undefined ? true : false
+                  })
+                }} style={{ marginRight: 50 }}>{data.name}</Text>
 
-            map[item.label] !== undefined && map[item.label].map(data => {
-              return (
-                <View key={data.id}>
-                  <Text key={data.id}>{'' + data.pinned}</Text>
-                  <TouchableOpacity onPress={() => this.handlepinToggle(data.id)} style={[{ position: 'absolute', right: 24 }]}>
+                <TouchableOpacity onPress={() => this.handlepinToggle(data.id)} style={[{ position: 'absolute', right: 24 }]}>
+                  {
                     <AntDesignIcon
                       name={'pushpin'}
                       size={22}
-                      color={data.pinned ? mainThemeColor : '#ccc'}
+                      color={
+                        //this.state.selectedToggleItems.get(data.id) === data.id
+                        //this.state.selectedToggleItem === data.id
+                        data.pinned
+                          ? mainThemeColor
+                          : '#ccc'}
                       style={{ transform: [{ rotateY: '180deg' }], marginTop: 18 }} />
-                  </TouchableOpacity>
-                </View>
-              )
-            })
-
+                  }
+                </TouchableOpacity>
+              </View>
+            )
+            )
           }
-        </Collapsible> */}
+        </Collapsible>
         {
-          this.state.selectedToggleItems.get(item.id) &&
-          <View>
-            {map[item.label] !== undefined && map[item.label].map(data => {
-              return (
-                <View key={data.id}>
-                  <Text key={data.id}>{'' + data.pinned}</Text>
-                  <TouchableOpacity onPress={() => this.handlepinToggle(data.id)} style={[{ position: 'absolute', right: 24 }]}>
-                    <AntDesignIcon
-                      name={'pushpin'}
-                      size={22}
-                      color={data.pinned ? mainThemeColor : '#ccc'}
-                      style={{ transform: [{ rotateY: '180deg' }], marginTop: 18 }} />
-                  </TouchableOpacity>
-                </View>
-              )
-            })}
-          </View>
+          //this.state.selectedToggleItems.get(item.id) &&
+          // this.state.collapsedId === item.id &&
+          // <View>
+          //   {map[item.label] !== undefined && map[item.label].map(data => {
+          //     return (
+          //       <View key={data.id}>
+          //         <Text key={data.id}>{'' + data.pinned}</Text>
+          //         <TouchableOpacity onPress={() => this.handlepinToggle(data.id)} style={[{ position: 'absolute', right: 24 }]}>
+          //           <AntDesignIcon
+          //             name={'pushpin'}
+          //             size={22}
+          //             color={data.pinned ? mainThemeColor : '#ccc'}
+          //             style={{ transform: [{ rotateY: '180deg' }], marginTop: 18 }} />
+          //         </TouchableOpacity>
+          //       </View>
+          //     )
+          //   })}
+          // </View>
         }
       </View>
     );
@@ -330,11 +362,14 @@ class ProductRow extends React.Component {
               />}
           />
           <DraggableFlatList
-            data={labelsArr}
-            renderItem={this.renderItem}
-            keyExtractor={(item) => `draggable-item-${item.label}`}
+            //data={labelsArr}
+            data={exampleData}
+            //renderItem={(item, index, drag, isActive) => this.renderItem(item, index, drag, isActive)}
+            renderItem={() => <Text>DUMMY</Text>}
+            keyExtractor={(item, index) => `draggable-item-${item.label}`}
             onDragEnd={(data) => this.handleReArrange(data)}
-            extraData={this.state.selectedToggleItems}
+            //extraData={this.state.selectedToggleItems}
+            //extraData={this.state.collapsedId}
             initialNumToRender={10}
           />
         </View>
