@@ -35,16 +35,16 @@ export default class RenderCheckboxGroup extends React.Component {
         return (
           <View key={ca.id}>
             <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
+              <View style={[styles.tableCellView, { flex: 1 }]}>
                 <Text>{ca.name}</Text>
               </View>
-              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+              <View style={[styles.tableCellView, { flex: 1, justifyContent: 'flex-end' }]}>
                 <Checkbox
                   clear
                   arr
                   onChange={e => onChange(e.target.checked)}
                   checked={value.length !== 0 && value.includes(ca.id)}
-                  style={{marginRight: 8}}
+                  style={{ marginRight: 8 }}
                 >
                 </Checkbox>
                 <AntDesignIcon

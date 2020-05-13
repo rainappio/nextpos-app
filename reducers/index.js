@@ -33,6 +33,9 @@ import { reducer as usertimeCardsReducer } from './usertimecards'
 import { reducer as timecardReducer } from './timecard'
 import { reducer as shiftMostRecentReducer } from './shiftMostRecent'
 import { reducer as shiftsReducer } from './shifts'
+import { reducer as userRolesReducer } from './userroles'
+import { reducer as userRoleReducer } from './userrole'
+import { reducer as permissionReducer } from './permissions'
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -65,9 +68,12 @@ const rootReducer = combineReducers({
   announcements: announcementsReducer,
   announcement: announcementReducer,
   timecards: timecardsReducer,
-	usertimecards: usertimeCardsReducer,
-	timecard: timecardReducer,
-	mostRecentShift: shiftMostRecentReducer,
-  shifts: shiftsReducer
+  usertimecards: usertimeCardsReducer,
+  timecard: timecardReducer,
+  mostRecentShift: shiftMostRecentReducer,
+  shifts: shiftsReducer,
+  userroles: userRolesReducer,
+  userrole: userRoleReducer,
+  permissions: permissionReducer
 })
 export default rootReducer
