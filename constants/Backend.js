@@ -34,7 +34,19 @@ export const api = {
     },
     delete: name => {
       return `${apiRoot}/clients/me/users/${name}`
-    }
+    },
+    createuserRole: `${apiRoot}/roles`,
+    getuserRoles: `${apiRoot}/roles`,
+    getuserRole: userroleId => {
+      return `${apiRoot}/roles/${userroleId}`
+    },
+    updateuserRole: userroleId => {
+      return `${apiRoot}/roles/${userroleId}`
+    },
+    deleteuserRole: userroleId => {
+      return `${apiRoot}/roles/${userroleId}`
+    },
+    getPermissions: `${apiRoot}/roles/permissions`
   },
   timecard: {
     getActive: `${apiRoot}/timecards/active`,
@@ -49,10 +61,10 @@ export const api = {
       return `${apiRoot}/timecards/${id}`
     },
     getByMonthYr: (year, month) => {
-    	return `${apiRoot}/reporting/timeCardReport?year=${year}&month=${month}`
+      return `${apiRoot}/reporting/timeCardReport?year=${year}&month=${month}`
     },
     getByMonthYrUsr: (year, month, username) => {
-    	return `${apiRoot}/timecards?year=${year}&month=${month}&username=${username}`
+      return `${apiRoot}/timecards?year=${year}&month=${month}&username=${username}`
     }
   },
   product: {
@@ -68,7 +80,7 @@ export const api = {
       return `${apiRoot}/products/${id}`
     },
     togglePin: id => {
-    	return `${apiRoot}/products/${id}/togglePin`
+      return `${apiRoot}/products/${id}/togglePin`
     }
   },
   productLabel: {
@@ -86,7 +98,7 @@ export const api = {
     getAll: labelId => {
       return `${apiRoot}/productoptions${
         labelId === undefined ? '' : `?productLabelId=${labelId}`
-      }`
+        }`
     },
     update: id => {
       return `${apiRoot}/productoptions/${id}`
@@ -200,7 +212,7 @@ export const api = {
       return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}`
     },
     updateTablePosition: (layoutId, tableId) => {
-			return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}/position`
+      return `${apiRoot}/tablelayouts/${layoutId}/tables/${tableId}/position`
     }
   },
   payment: {
@@ -221,10 +233,10 @@ export const api = {
       return `${apiRoot}/reporting/customerTraffic`
     },
     getrangedSalesReportByDate: (date) => {
-    	return `${apiRoot}/reporting/rangedSalesReport?date=${date}`
+      return `${apiRoot}/reporting/rangedSalesReport?date=${date}`
     },
     getcustomerStatsReportByDateMonth: (year, month) => {
-    	return `${apiRoot}/reporting/customerStats?year=${year}&month=${month}`
+      return `${apiRoot}/reporting/customerStats?year=${year}&month=${month}`
     }
   },
   announcements: {

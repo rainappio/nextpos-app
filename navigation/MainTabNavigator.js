@@ -79,6 +79,9 @@ import { getToken } from "../constants/Backend";
 import { doLogout } from "../actions";
 import ManageVisualSceen from '../screens/ManageVisualSceen'
 import UpdateOrder from "../screens/UpdateOrder";
+import EditUserRole from '../screens/EditUserRole'
+import NewUserRole from '../screens/NewUserRole'
+import ManageUserRole from '../screens/ManageUserRole'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -131,7 +134,11 @@ const Settings = createStackNavigator({
   CloseComplete: CloseComplete,
   AccountClose: AccountClose,
   AccountCloseConfirm: AccountCloseConfirm,
-  ManageVisualSceen: ManageVisualSceen
+  ManageVisualSceen: ManageVisualSceen,
+  EditUserRole: EditUserRole,
+  NewUserRole: NewUserRole,
+  ManageUserRole: ManageUserRole
+
 })
 Settings.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.settings'),

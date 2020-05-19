@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Picker, Platform } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select'
 import { Chevron } from 'react-native-shapes'
 import Icon from 'react-native-vector-icons/Ionicons'
-import styles, {mainThemeColor} from '../styles'
+import styles, { mainThemeColor } from '../styles'
 
 export default class DropDown extends Component {
   render() {
@@ -18,21 +18,21 @@ export default class DropDown extends Component {
 
     return (
       <View>
-          <RNPickerSelect
-            placeholder={placeholder}
-            items={options}
-            onValueChange={value => onChange(value)}
-            value={value}
-            {...inputProps}
-            useNativeAndroidPickerStyle={false}
-            style={pickerSelectStyles}
-            Icon={() => {
-              return (
-                <Icon name='md-arrow-dropdown' size={30} style={{position: 'absolute', top: -9, right: 0, borderWidth: 0}} />
-              )
-              //return <Chevron size={1.5} color="gray" />;
-            }}
-          />
+        <RNPickerSelect
+          placeholder={placeholder}
+          items={options}
+          onValueChange={value => onChange(value)}
+          value={value}
+          {...inputProps}
+          useNativeAndroidPickerStyle={false}
+          style={pickerSelectStyles}
+          Icon={() => {
+            return (
+              <Icon name='md-arrow-dropdown' size={30} style={{ position: 'absolute', top: -9, right: 0, borderWidth: 0 }} />
+            )
+            //return <Chevron size={1.5} color="gray" />;
+          }}
+        />
         {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
       </View>
     )

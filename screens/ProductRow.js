@@ -221,7 +221,7 @@ class ProductRow extends React.Component {
                   key={lbl.id}
                 >
                   <List>
-                    {map.get(lbl.label).map(prd => (
+                    {map.get(lbl.label) !== undefined && map.get(lbl.label).map(prd => (
                       <SwipeAction
                         autoClose={true}
                         right={right}

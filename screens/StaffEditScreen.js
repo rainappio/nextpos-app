@@ -1,10 +1,9 @@
-import React, {Component} from 'react'
-import {ActivityIndicator, View} from 'react-native'
-import {connect} from 'react-redux'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import StaffFormScreen from './StaffFormScreen'
-import {clearClientUser, getClientUsr, getClientUsrs, resolveRoles} from '../actions'
-import styles from '../styles'
-import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
+import { clearClientUser, getClientUsr, getClientUsrs, getUserRoles } from '../actions'
+import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
+import LoadingScreen from "./LoadingScreen";
 
 class StaffEditScreen extends Component {
   static navigationOptions = {
@@ -17,6 +16,7 @@ class StaffEditScreen extends Component {
 
   componentDidMount() {
     this.props.getClientUsr()
+    this.props.getUserRoles()
   }
 
   handleEditCancel = () => {
@@ -54,10 +54,10 @@ class StaffEditScreen extends Component {
     const {
       navigation,
       clientuser,
-      clearProduct,
       haveData,
       haveError,
-      isLoading
+      isLoading,
+      userRoles
     } = this.props
     const { isEditForm } = this.state
 
@@ -73,9 +73,7 @@ class StaffEditScreen extends Component {
 
     if (isLoading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen />
       )
     } else if (haveData) {
       return (
@@ -85,6 +83,7 @@ class StaffEditScreen extends Component {
           initialValues={clientuser}
           handleEditCancel={this.handleEditCancel}
           onSubmit={this.handleUpdate}
+          userRoles={userRoles}
         />
       )
     } else {
@@ -97,7 +96,8 @@ const mapStateToProps = state => ({
   clientuser: state.clientuser.data,
   haveData: state.clientuser.haveData,
   haveError: state.clientuser.haveError,
-  isLoading: state.clientuser.loading
+  isLoading: state.clientuser.loading,
+  userRoles: state.userroles.data.userRoles
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -105,7 +105,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   getClientUsr: () =>
     dispatch(getClientUsr(props.navigation.state.params.staffname)),
   clearClient: () => dispatch(clearClientUser()),
-  getClientUsrs: () => dispatch(getClientUsrs())
+  getClientUsrs: () => dispatch(getClientUsrs()),
+  getUserRoles: () => dispatch(getUserRoles())
 })
 
 export default connect(

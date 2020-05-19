@@ -1,18 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { AsyncStorage } from 'react-native'
 import StaffFormScreen from './StaffFormScreen'
-import {getClientUsr, getClientUsrs, resolveRoles} from '../actions'
+import { getClientUsr, getClientUsrs, resolveRoles, getUserRoles } from '../actions'
 import {
   api,
   dispatchFetchRequest,
   errorAlert,
   successMessage
 } from '../constants/Backend'
+import LoadingScreen from "./LoadingScreen";
 
 class Staff extends React.Component {
   static navigationOptions = {
     header: null
+  }
+
+  componentDidMount() {
+    this.props.getUserRoles()
   }
 
   handleCancel = () => {
@@ -42,24 +46,34 @@ class Staff extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
+    const { navigation, userRoles, isLoading } = this.props
 
+    if (isLoading) {
+      return (
+        <LoadingScreen />
+      )
+    }
     return (
       <StaffFormScreen
         isEditForm={false}
         onSubmit={this.handleSubmit}
         navigation={navigation}
         onCancel={this.handleCancel}
+        userRoles={userRoles}
       />
     )
   }
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  userRoles: state.userroles.data.userRoles,
+  isLoading: state.userroles.loading
+})
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getClientUsrs: () => dispatch(getClientUsrs())
+  getClientUsrs: () => dispatch(getClientUsrs()),
+  getUserRoles: () => dispatch(getUserRoles())
 })
 
 export default connect(
