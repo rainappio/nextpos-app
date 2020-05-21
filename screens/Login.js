@@ -4,11 +4,29 @@ import { connect } from 'react-redux'
 import { encode as btoa } from 'base-64'
 import { doLoggedIn, getClientUsrs } from '../actions'
 import LoginScreen from './LoginScreen'
-import { api, warningMessage } from '../constants/Backend'
+import {api, storage, warningMessage} from '../constants/Backend'
 
 class Login extends React.Component {
   static navigationOptions = {
     header: null
+  }
+
+  constructor(props) {
+    super(props)
+  }
+
+  handleLoginAs = async () => {
+
+    const username = await AsyncStorage.getItem(storage.clientUsername)
+    const masterPassword = await AsyncStorage.getItem(storage.clientPassword)
+
+    const values = {
+      username: username,
+      masterPassword: masterPassword
+    }
+
+    this.handleSubmit(values)
+
   }
 
   handleSubmit = async values => {
@@ -35,6 +53,9 @@ class Login extends React.Component {
       await AsyncStorage.removeItem('token')
       await AsyncStorage.removeItem('clientusrToken')
 
+      await AsyncStorage.setItem(storage.clientUsername, values.username)
+      await AsyncStorage.setItem(storage.clientPassword, values.masterPassword)
+
       const loggedIn = new Date()
       res.loggedIn = loggedIn
       res.tokenExp = new Date().setSeconds(
@@ -60,6 +81,7 @@ class Login extends React.Component {
       <LoginScreen
         onSubmit={this.handleSubmit}
         screenProps={this.props.screenProps}
+        handleLoginAs={this.handleLoginAs}
       />
     )
   }

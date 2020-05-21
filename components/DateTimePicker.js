@@ -20,36 +20,13 @@ export default class RenderDatePicker extends Component {
       ...rest
     } = this.props
 
-		var currentDate = '';
-    let promise = new Promise(function(resolve, reject) {
-  		if (value) {
-    		resolve(value)
-  		}
-  		else {
-    		reject(Error("Promise err"));
-  		}
-		})
-
-		promise.
-    then((result) => {
-      if(typeof(result) === 'string'){
-				currentDate = new Date(result).toISOString()
-			}else if(typeof(result) === 'object'){
-				var date = result.hasOwnProperty('nativeEvent') && moment(result.nativeEvent.timestamp).format('YYYY-MM-DD')
-				currentDate = new Date(date).toISOString()
-			}
-    }).
-    catch((err) => {
-      console.log(err);
-    });
-
     return (
     	<View style={{flex: 1}}>
     		<View style={[styles.flex_dir_row, styles.jc_alignIem_center]}>
     			{
-    				needWeekFilter && 
+    				needWeekFilter &&
     				<View style={{flex: 1, marginRight: 10, alignItems: 'flex-end'}}>
-    					<Text onPress={() => onChange(moment(currentDate).isoWeekday(-6).format('YYYY-MM-DD'))}>
+    					<Text onPress={() => onChange(moment(value).subtract(1, 'weeks').format('YYYY-MM-DD'))}>
     			    	<Icon name="ios-arrow-back" size={32} color="#f18d1a"/>
     			    </Text>
     			  </View>
@@ -62,14 +39,14 @@ export default class RenderDatePicker extends Component {
               style={[styles.orange_color]}
             />
             <Text onPress={showDatepicker} style={{marginLeft: 5}}>
-              {value.hasOwnProperty('nativeEvent') ? moment(value.nativeEvent.timestamp).format('YYYY-MM-DD') : value}
+              {value}
             </Text>
           </View>
 
 					{
-    				needWeekFilter && 
+    				needWeekFilter &&
         		<View style={{flex: 1, marginLeft: 10}}>
-							<Text onPress={() => onChange(moment(currentDate).isoWeekday(+8).format('YYYY-MM-DD'))}>
+							<Text onPress={() => onChange(moment(value).add(1, 'weeks').format('YYYY-MM-DD'))}>
     						<Icon name="ios-arrow-forward" size={32} color="#f18d1a"/>
     					</Text>
     				</View>
@@ -84,7 +61,9 @@ export default class RenderDatePicker extends Component {
           	mode={"date"}
           	is24Hour={true}
           	display="default"
-          	onChange={(e) => onChange(moment(e.nativeEvent.timestamp).format("YYYY-MM-DD"))}
+          	onChange={(e, selectedDate) => {
+          	  onChange(moment(e.nativeEvent.timestamp).format("YYYY-MM-DD"))
+            }}
         	/>
       	)}
     	</View>

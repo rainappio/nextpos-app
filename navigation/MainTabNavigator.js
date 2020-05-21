@@ -172,7 +172,9 @@ Tables.navigationOptions = ({ screenProps: { t } }) => ({
 
 const Orders = createStackNavigator({
   OrdersScr: OrdersScreen,
-  OrderDetail: OrderDetail
+  OrderDetail: OrderDetail,
+  UpdateOrderFromOrderDetail: UpdateOrder,
+  NewOrderForm: OrderForm
 })
 Orders.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.orders'),

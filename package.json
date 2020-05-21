@@ -76,7 +76,8 @@
     "redux-form": "^8.3.1",
     "redux-thunk": "^2.3.0",
     "sentry-expo": "^2.0.3",
-    "validator": "^11.1.0"
+    "validator": "^11.1.0",
+    "expo-keep-awake": "~8.0.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^8.0.0",

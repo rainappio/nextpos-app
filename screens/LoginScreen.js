@@ -8,7 +8,7 @@ import {
   View,
   Keyboard,
   Modal,
-  Dimensions, TouchableWithoutFeedback
+  Dimensions, TouchableWithoutFeedback, AsyncStorage
 } from 'react-native'
 import { isEmail, isRequired } from '../validators'
 import InputText from '../components/InputText'
@@ -16,6 +16,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 import { withNavigation } from 'react-navigation'
 import {LocaleContext} from "../locales/LocaleContext";
+import {storage} from "../constants/Backend";
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -25,10 +26,13 @@ class LoginScreen extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-  }
 
-  state = {
-  	modalVisible: false
+    this.state = {
+      modalVisible: false,
+      clientUsername: null
+    }
+
+
   }
 
   toggleModal = (visible) => {
@@ -45,18 +49,24 @@ class LoginScreen extends React.Component {
       en: {
         title: 'Please enter your account email',
         next: 'Send',
-        forgotPwd: 'Forgot Password'
+        forgotPwd: 'Forgot Password',
+        loginAs: 'Login as {{username}}'
       },
       zh: {
         title: '請輸入你的帳號email',
         next: '送出',
-        forgotPwd: '忘記密碼'
+        forgotPwd: '忘記密碼',
+        loginAs: '以 {{username}} 登入'
       }
+    })
+
+    AsyncStorage.getItem(storage.clientUsername).then(value => {
+      this.setState({ clientUsername: value })
     })
   }
 
   render() {
-    const { handleSubmit } = this.props
+    const { handleSubmit, handleLoginAs } = this.props
     const { t } = this.context
 
     return (
@@ -101,6 +111,16 @@ class LoginScreen extends React.Component {
           </View>
 
           <View style={[styles.bottom]}>
+            {this.state.clientUsername != null && (
+              <TouchableOpacity
+                onPress={() => handleLoginAs()}
+              >
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  {t('loginAs', { username: this.state.clientUsername})}
+                </Text>
+              </TouchableOpacity>
+            )}
+
             <TouchableOpacity
               onPress={() => {
                 Keyboard.dismiss()
@@ -154,7 +174,7 @@ class ResetModal extends React.Component {
   static contextType = LocaleContext
 
   render() {
-    const { handleSubmit, toggleModal, modalVisible, title, email, next, props } = this.props
+    const { handleSubmit, toggleModal, modalVisible } = this.props
     const { t } = this.context
 
     return (

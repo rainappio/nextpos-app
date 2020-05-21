@@ -6,6 +6,8 @@ import {LocaleContext} from '../locales/LocaleContext'
 import InputText from '../components/InputText'
 import {isRequired} from '../validators'
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
+import {handleAbortCloseShift} from "../helpers/shiftActions";
+import ConfirmActionButton from "../components/ConfirmActionButton";
 
 class AccountClosureForm extends React.Component {
   static navigationOptions = {
@@ -75,7 +77,6 @@ class AccountClosureForm extends React.Component {
               name="cash.closingBalance"
               component={InputText}
               keyboardType={`numeric`}
-              validate={isRequired}
               placeholder={t('shift.enterAmount')}
               format={(value, name) => {
                 return value != null ? String(value) : '0'
@@ -130,7 +131,6 @@ class AccountClosureForm extends React.Component {
             <Field
               name="card.closingBalance"
               component={InputText}
-              validate={isRequired}
               keyboardType={`numeric`}
               placeholder={t('shift.enterAmount')}
               format={(value, name) => {
@@ -159,13 +159,10 @@ class AccountClosureForm extends React.Component {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => this.props.navigation.goBack()}
-          >
-            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-              {t('action.cancel')}
-            </Text>
-          </TouchableOpacity>
+          <ConfirmActionButton
+            handleConfirmAction={handleAbortCloseShift}
+            buttonTitle='shift.abortAction'
+          />
         </View>
         {/* #Credit Card */}
 

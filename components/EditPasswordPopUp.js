@@ -36,8 +36,8 @@ class EditPasswordPopUp extends Component {
     this.handleChangePwd = this.handleChangePwd.bind(this)
   }
 
-  async componentDidMount() {
-    await this.context.localize({
+  componentDidMount() {
+    this.context.localize({
       en: {
         passwordTitle: 'Password',
         editPassword: 'Edit Password',

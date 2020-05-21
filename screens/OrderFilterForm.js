@@ -15,7 +15,7 @@ class OrderFilterForm extends React.Component {
     showFromDate: false,
     showToDate: false,
 		pickdateRange: ''
-  } 
+  }
 
   componentDidMount() {
 
@@ -47,7 +47,7 @@ class OrderFilterForm extends React.Component {
 		})
   }
 
-  handlegetDate = (event, selectedDate) => {  	
+  handlegetDate = (event, selectedDate) => {
   	this.setState({
       date: selectedDate,
       showFromDate: false,
@@ -107,27 +107,39 @@ class OrderFilterForm extends React.Component {
         </View>
 
         {this.state.pickdateRange === 'RANGE' && (
-          <View style={[styles.tableRowContainer]}>
-        		<View style={[styles.tableCellView, {flex: 1, marginRight: 5}]}>
-          		<Field
-            		name="fromDate"
-                component={RenderDatePicker}
-                onChange={this.handlegetDate}
-                placeholder={t('order.fromDate')}
-                isShow={this.state.showFromDate}                
-                showDatepicker={this.showFromDatepicker}           
-          		/>
-        		</View>
+          <View style={[styles.sectionContainer]}>
+            <View style={[styles.tableRowContainer]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text>{t('order.fromDate')}</Text>
+              </View>
+              <View style={[styles.tableCellView, {flex: 4}]}>
+                <Field
+                  name="fromDate"
+                  component={RenderDatePicker}
+                  onChange={this.handlegetDate}
+                  placeholder={t('order.fromDate')}
+                  isShow={this.state.showFromDate}
+                  showDatepicker={this.showFromDatepicker}
+                />
+              </View>
+            </View>
 
-        		<View style={[styles.tableCellView, {flex: .9}]}>
-          		<Field
-            		name="toDate"
-                component={RenderDatePicker}
-                onChange={this.handlegetDate}
-                placeholder={t('order.toDate')}
-                isShow={this.state.showToDate}
-                showDatepicker={this.showToDatepicker}                
-          		/>
+        		<View>
+              <View style={[styles.tableRowContainer]}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <Text>{t('order.toDate')}</Text>
+                </View>
+                <View style={[styles.tableCellView, {flex: 4}]}>
+                  <Field
+                    name="toDate"
+                    component={RenderDatePicker}
+                    onChange={this.handlegetDate}
+                    placeholder={t('order.toDate')}
+                    isShow={this.state.showToDate}
+                    showDatepicker={this.showToDatepicker}
+                  />
+                </View>
+              </View>
         		</View>
         	</View>
         )}
@@ -137,12 +149,7 @@ class OrderFilterForm extends React.Component {
 }
 
 OrderFilterForm = reduxForm({
-  form: 'orderfilterForm',
-  initialValues: {
-  	dateRange: 'SHIFT',
-  	fromDate: moment(new Date().toISOString(), 'YYYY-MM-DD').format('YYYY-MM-DD'),
-  	toDate: moment(new Date().toISOString(), 'YYYY-MM-DD').format('YYYY-MM-DD')
-  }
+  form: 'orderfilterForm'
 })(OrderFilterForm)
 
 export default OrderFilterForm

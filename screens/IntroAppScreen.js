@@ -11,16 +11,18 @@ import { connect } from 'react-redux'
 import styles from '../styles'
 import {doLogout} from '../actions'
 import {getToken} from "../constants/Backend";
+import {LocaleContext} from "../locales/LocaleContext";
 
 class IntroAppScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
 
-    this.props.screenProps.localize({
+    context.localize({
       en: {
         createAccount: 'Create Account',
         signIn: 'Sign In'
@@ -44,7 +46,7 @@ class IntroAppScreen extends React.Component {
   }
 
   render() {
-    let { t } = this.props.screenProps
+    let { t } = this.context
 
     return (
       <View style={styles.container}>

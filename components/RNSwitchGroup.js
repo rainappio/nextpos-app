@@ -12,32 +12,7 @@ class RNSwitchGroup extends Component {
   }
 
   componentDidMount() {
-    this.context.localize({
-      en: {
-        deleteOrder: 'Delete Order',
-        manageStaff: 'Manage Staff',
-        manageStore: 'Manage Store',
-        viewReport: 'View Report',
-        createOrder: 'Create Order',
-        closeShift: 'Close Shift',
-        applyDiscount: 'Apply Discount',
-        manageSettings: 'Manage Settings',
-        manageProduct: 'Manage Product',
-        manageAnnouncement: 'Manage Announcement'
-      },
-      zh: {
-        deleteOrder: 'Delete Order_CH',
-        manageStaff: 'Manage Staff_CH',
-        manageStore: 'Manage Store_CH',
-        viewReport: 'View Report_CH',
-        createOrder: 'Create Order_CH',
-        closeShift: 'Close Shift_CH',
-        applyDiscount: 'Apply Discount_CH',
-        manageSettings: 'Manage Settings_CH',
-        manageProduct: 'Manage Product_CH',
-        manageAnnouncement: 'Manage Announcement_CH'
-      }
-    })
+
   }
 
   render() {

@@ -296,7 +296,7 @@ class OrderForm extends Component {
                 <View style={{flex: 1, marginHorizontal: 5}}>
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.navigate('TablesSrc')
+                      this.props.navigation.goBack()
                     }}
                   >
                     <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>

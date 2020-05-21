@@ -40,7 +40,9 @@ class Payment extends React.Component {
     }
 
     const applyDiscount = async () => {
-      await dispatchFetchRequestWithOption(api.order.applyDiscount(orderId), {
+      const url = values.discount.offerId === 'NO_DISCOUNT' ? api.order.removeDiscount(orderId) : api.order.applyDiscount(orderId)
+
+      await dispatchFetchRequestWithOption(url, {
         method: 'POST',
         withCredentials: true,
         credentials: 'include',
@@ -75,8 +77,9 @@ class Payment extends React.Component {
     const order= this.props.navigation.state.params.order
 
     const initialDiscount = {
+      offerId: 'NO_DISCOUNT',
+      orderDiscount: 'NO_DISCOUNT',
       discount: -1,
-      orderDiscount: 'NO_DISCOUNT'
     }
 
     if (order.appliedOfferInfo != null) {
@@ -86,8 +89,9 @@ class Payment extends React.Component {
         overrideDiscount = overrideDiscount * 100
       }
 
-      initialDiscount.discount = overrideDiscount
+      initialDiscount.offerId = order.appliedOfferInfo.offerId
       initialDiscount.orderDiscount = order.appliedOfferInfo.offerId
+      initialDiscount.discount = overrideDiscount
     }
 
     return (

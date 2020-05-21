@@ -28,6 +28,7 @@ import {
   warningMessage
 } from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
+import moment from "moment";
 
 class OrdersScreen extends React.Component {
   static navigationOptions = {
@@ -39,7 +40,13 @@ class OrdersScreen extends React.Component {
     super(props, context)
 
     this.state = {
-      scrollPosition: '',
+      scrollPosition: 0,
+      searchFilter: {
+        dateRange: 'SHIFT',
+        shiftId: null,
+        fromDate: moment(new Date()).format('YYYY-MM-DD'),
+        toDate: moment(new Date()).format('YYYY-MM-DD')
+      }
     }
   }
 
@@ -49,7 +56,9 @@ class OrdersScreen extends React.Component {
 
   upButtonHandler = () => {
     //OnCLick of Up button we scrolled the list to top
-    this.ListView_Ref.scrollToOffset({ offset: 0, animated: true })
+    if (this.ListView_Ref != null) {
+      this.ListView_Ref.scrollToOffset({offset: 0, animated: true})
+    }
   }
 
   keyExtractor = (order, index) => index.toString()
@@ -58,6 +67,15 @@ class OrdersScreen extends React.Component {
     const fromDate = values.fromDate
     const toDate = values.toDate
     const dateRange = values.dateRange
+
+    this.setState({
+      searchFilter: {
+        dateRange: dateRange,
+        shiftId: null,
+        fromDate: fromDate,
+        toDate: toDate
+      }
+    })
 
     this.props.getOrdersByDateRange(dateRange, undefined, fromDate, toDate)
   }
@@ -83,7 +101,6 @@ class OrdersScreen extends React.Component {
       }
       onPress={() =>
         this.props.navigation.navigate('OrderDetail', {
-          //order: item,
           orderId: item.orderId
         })
       }
@@ -94,7 +111,9 @@ class OrdersScreen extends React.Component {
 
   //https://stackoverflow.com/questions/48061234/how-to-keep-scroll-position-using-flatlist-when-navigating-back-in-react-native
   handleScroll = event => {
-    this.setState({ scrollPosition: event.nativeEvent.contentOffset.y })
+    if (this.ListView_Ref != null) {
+      this.setState({ scrollPosition: event.nativeEvent.contentOffset.y })
+    }
   }
 
   render() {
@@ -116,15 +135,24 @@ class OrdersScreen extends React.Component {
           <NavigationEvents
             onWillFocus={() => {
               const shiftId = this.props.navigation.getParam('shiftId')
-              this.props.getOrdersByDateRange('SHIFT', shiftId)
+              const dateRangeToUse = shiftId != null ? 'SHIFT' : this.state.searchFilter.dateRange
+
+              this.props.getOrdersByDateRange(dateRangeToUse,
+                shiftId,
+                this.state.searchFilter.fromDate,
+                this.state.searchFilter.toDate)
+
               this.props.navigation.setParams({shiftId: undefined})
 
               // To prevent FlatList scrolls to top automatically,
               // we have to delay scroll to the original position
               const offset = this.state.scrollPosition
-              setTimeout(() => {
-                this.ListView_Ref.scrollToOffset({ offset, animated: false })
-              }, 500)
+
+              if (this.ListView_Ref != null) {
+                setTimeout(() => {
+                  this.ListView_Ref.scrollToOffset({offset, animated: false})
+                }, 800)
+              }
             }}
           />
           <ScreenHeader backNavigation={false}
@@ -133,6 +161,14 @@ class OrdersScreen extends React.Component {
                         rightComponent={
                           <TouchableOpacity
                             onPress={() => {
+                              this.setState({
+                                searchFilter: {
+                                  dateRange: 'SHIFT',
+                                  shiftId: null,
+                                  fromDate: moment(new Date()).format('YYYY-MM-DD'),
+                                  toDate: moment(new Date()).format('YYYY-MM-DD')
+                                }
+                              })
                               this.props.getOrdersByDateRange()
                             }}
                           >
@@ -142,7 +178,13 @@ class OrdersScreen extends React.Component {
           />
 
           <View>
-            <OrderFilterForm onSubmit={this.handleOrderFilter} />
+            <OrderFilterForm
+              onSubmit={this.handleOrderFilter}
+              initialValues={{
+                dateRange: this.state.searchFilter.dateRange,
+                fromDate: this.state.searchFilter.fromDate,
+                toDate: this.state.searchFilter.toDate
+              }}/>
           </View>
 
           <View style={{flex: 1}}>

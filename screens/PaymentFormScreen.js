@@ -75,21 +75,8 @@ class PaymentFormScreen extends React.Component {
     const { order, navigation, handleSubmit, globalorderoffers } = this.props
     const { t } = this.context
 
-    const discounts = []
-
-    globalorderoffers !== undefined &&
-      globalorderoffers.map(globalorderoffer => {
-        discounts.push({
-          label: globalorderoffer.displayName,
-          value: {
-            offerId: globalorderoffer.offerId,
-            orderDiscount: globalorderoffer.offerName,
-            discount: globalorderoffer.discountValue
-          }
-        })
-      })
     return (
-      <KeyboardAwareScrollView scrollIndicatorInsets={{ right: 1 }}>
+      <KeyboardAwareScrollView scrollIndicatorInsets={{ right: 1 }} keyboardShouldPersistTaps='always'>
         <DismissKeyboard>
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
@@ -177,7 +164,7 @@ class PaymentFormScreen extends React.Component {
                 <Text style={styles.sectionTitleText}>{t('order.discount')}</Text>
               </View>
 
-              {discounts.map((discount, ix) => (
+              {globalorderoffers != null && globalorderoffers.map((offer, ix) => (
                 <View
                   style={[]}
                   key={ix}
@@ -185,8 +172,13 @@ class PaymentFormScreen extends React.Component {
                   <Field
                     name="discount"
                     component={RenderCheckBox}
-                    customValue={discount.value}
-                    optionName={discount.label}
+                    customValue={{
+                      offerId: offer.offerId,
+                      orderDiscount: offer.offerId,
+                      discount: offer.discountValue
+                    }}
+                    optionName={offer.offerName}
+                    defaultValueDisplay={(customValue, value) => String(customValue.orderDiscount === value.orderDiscount ? value.discount : 0)}
                     total={order.orderTotal}
                     getPercent={this.getPercent}
                     orderTotal={order.total.amountWithTax.toFixed(2)}

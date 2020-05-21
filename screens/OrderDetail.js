@@ -23,10 +23,14 @@ import images from '../assets/images'
 import { getOrdersByDateRange, getOrder, formatDate, formatTime } from '../actions'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
-import {renderOrderState} from "../helpers/orderActions";
+import {handleDelete, renderOptionsAndOffer, renderOrderState} from "../helpers/orderActions";
 import filterSupportedProps from "react-native-web/dist/exports/View/filterSupportedProps";
 import ScreenHeader from "../components/ScreenHeader";
 import OrderTopInfo from "./OrderTopInfo";
+import LoadingScreen from "./LoadingScreen";
+import {api, dispatchFetchRequestWithOption, successMessage} from "../constants/Backend";
+import DeleteBtn from "../components/DeleteBtn";
+import {NavigationEvents} from "react-navigation";
 
 class OrderDetail extends React.Component {
   static navigationOptions = {
@@ -52,45 +56,69 @@ class OrderDetail extends React.Component {
     this.props.getOrder(this.props.navigation.state.params.orderId)
   }
 
+  handleCopyOrder(order) {
+    dispatchFetchRequestWithOption(api.order.copyOrder(order.orderId), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {},
+    }, {
+      defaultMessage: false
+    }, response => {
+      response.json().then(copiedOrder => {
+        successMessage('order.copied')
+        this.props.navigation.navigate('OrdersSummary', {
+          orderId: copiedOrder.orderId
+        })
+
+      })
+    }).then()
+  }
+
   render() {
     const { order, isLoading, haveData } = this.props
     const { t } = this.context
 
     Item = ({ orderDetail, lineItemDate }) => {
       return (
-       	<View style={[styles.tableRowContainer]}>
+        <View>
+          <View style={[styles.tableRowContainer]}>
             <View style={{flex: 2.5}}>
               <Text>
-              	{formatTime(lineItemDate)}
+                {formatTime(lineItemDate)}
               </Text>
             </View>
 
             <View style={{flex: 1.7}}>
               <Text>
-              	{orderDetail.productName}
+                {orderDetail.productName}
               </Text>
             </View>
 
             <View style={{flex: 0.8}}>
               <Text>
-              	{orderDetail.quantity}
+                {orderDetail.quantity}
               </Text>
             </View>
 
             <View style={{flex: 1.2}}>
               <Text style={{textAlign: 'right'}}>
-              	{orderDetail.subTotal.amount}
+                {orderDetail.lineItemSubTotal}
               </Text>
             </View>
+          </View>
+          <View style={styles.tableRowContainer}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <Text>{renderOptionsAndOffer(orderDetail)}</Text>
+            </View>
+          </View>
         </View>
       )
     }
 
     if (isLoading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen/>
       )
     } else if (haveData) {
     	const filteredageGroup = this.state.ageGroups.find( ageGroup => {
@@ -105,6 +133,11 @@ class OrderDetail extends React.Component {
 
       return (
       	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
+          <NavigationEvents
+            onWillFocus={() => {
+              this.props.getOrder()
+            }}
+          />
           <View style={[styles.fullWidthScreen]}>
             <ScreenHeader parentFullScreen={true}
                           title={t('order.orderDetailsTitle')}/>
@@ -285,6 +318,19 @@ class OrderDetail extends React.Component {
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                 {renderOrderState(order.state)}
               </View>
+            </View>
+
+            <View style={[styles.bottom, styles.horizontalMargin]}>
+              <TouchableOpacity
+                onPress={() => this.handleCopyOrder(order)}
+              >
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  {t('order.copyOrder')}
+                </Text>
+              </TouchableOpacity>
+              <DeleteBtn
+                handleDeleteAction={() => handleDelete(order.orderId, () => this.props.getOrder())}
+              />
             </View>
           </View>
         </ScrollView>

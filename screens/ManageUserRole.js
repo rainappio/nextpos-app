@@ -19,10 +19,36 @@ class ManageUserRole extends Component {
   componentDidMount() {
     this.context.localize({
       en: {
-        manageusrRoleTitle: 'Manage User Roles'
+        manageUserRoleTitle: 'Manage User Roles',
+        editUserRoleTitle: 'Edit User Role',
+        newUserRoleTitle: 'New User Role',
+        roleName: 'Role Name',
+        deleteOrder: 'Delete Order',
+        manageStaff: 'Manage Staff',
+        manageStore: 'Manage Store',
+        viewReport: 'View Report',
+        createOrder: 'Create Order',
+        closeShift: 'Close Shift',
+        applyDiscount: 'Apply Discount',
+        manageSettings: 'Manage Settings',
+        manageProduct: 'Manage Product',
+        manageAnnouncement: 'Manage Announcement'
       },
       zh: {
-        editusrRoleTitle: '員工'
+        manageUserRoleTitle: '管理使用者權限',
+        editUserRoleTitle: '編輯使用者權限',
+        newUserRoleTitle: '新增使用者權限',
+        roleName: '權限名稱',
+        deleteOrder: '刪除訂單',
+        manageStaff: '管理員工',
+        manageStore: '管理商店資訊',
+        viewReport: '讀取報表',
+        createOrder: '新增訂單',
+        closeShift: '關帳',
+        applyDiscount: '折扣',
+        manageSettings: '管理座位/工作區',
+        manageProduct: '管理產品',
+        manageAnnouncement: '管理公告'
       }
     })
     this.props.getUserRoles()
@@ -64,9 +90,18 @@ class ManageUserRole extends Component {
     }
     return (
       <DismissKeyboard>
-        <View style={styles.container_nocenterCnt}>
+        <View style={styles.fullWidthScreen}>
           <View>
-            <ScreenHeader title={t('manageusrRoleTitle')} rightComponent={<AddBtn onPress={() => this.props.navigation.navigate('NewUserRole', { permissions: Object.keys(permissions), labels: permissions })} />} />
+            <ScreenHeader title={t('manageUserRoleTitle')}
+                          parentFullScreen={true}
+                          rightComponent={
+                            <AddBtn
+                              onPress={() => this.props.navigation.navigate('NewUserRole', {
+                                permissions: Object.keys(permissions),
+                                labels: permissions
+                              })}
+                            />}
+            />
             {
               userRoles !== undefined &&
               <FlatList

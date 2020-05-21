@@ -25,6 +25,7 @@ class RenderCheckBox extends React.Component {
       input: { onBlur, onChange, onFocus, value },
       customValue,
       optionName,
+      defaultValueDisplay,
       total,
       getPercent,
       orderTotal,
@@ -50,13 +51,16 @@ class RenderCheckBox extends React.Component {
                     borderBottomWidth: 1,
                     paddingLeft: 15
                   }]}
-                  value={String(customValue.orderDiscount === value.orderDiscount ? value.discount : 0)}
+                  value={defaultValueDisplay(customValue, value)}
+                  clearTextOnFocus={true}
+                  selectTextOnFocus={true}
                   onChangeText={val => {
-                    onChange({discount: val, orderDiscount: customValue.orderDiscount})
-                    getPercent(val)
+                    const valueToChange = {...customValue}
+                    valueToChange.discount = val
+                    onChange(valueToChange)
+                    //getPercent(val)
                   }}
                   keyboardType={'numeric'}
-                  //placeholder={optionName}
                 />
               </View>
             ) : (
@@ -76,7 +80,7 @@ class RenderCheckBox extends React.Component {
             />
           }
           checked={
-            value.orderDiscount === customValue.orderDiscount
+            value.offerId === customValue.offerId
           }
           onPress={() => {
             onChange(customValue)

@@ -16,16 +16,6 @@ class EditUserRole extends Component {
   static contextType = LocaleContext
 
   componentDidMount() {
-    this.context.localize({
-      en: {
-        editusrRoleTitle: 'Edit User Roles',
-        roleName: 'Role Name'
-      },
-      zh: {
-        editusrRoleTitle: '員工',
-        roleName: 'Role Name-CH'
-      }
-    })
     this.props.getPermissions()
   }
 
@@ -74,7 +64,7 @@ class EditUserRole extends Component {
       <ScrollView>
         <DismissKeyboard>
           <View style={styles.container_nocenterCnt}>
-            <ScreenHeader title={t('editusrRoleTitle')} />
+            <ScreenHeader title={t('editUserRoleTitle')} />
             <NewUserRoleForm
               permissions={Object.keys(this.props.permissions)}
               labels={this.props.permissions}

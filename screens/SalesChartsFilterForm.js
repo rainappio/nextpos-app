@@ -63,8 +63,7 @@ class SalesChartsFilterForm extends React.Component {
 }
 
 SalesChartsFilterForm = reduxForm({
-  form: 'salesChartFilterForm',
-  initialValues: {date: moment(new Date().toISOString(), 'YYYY-MM-DD').format('YYYY-MM-DD')}
+  form: 'salesChartFilterForm'
 })(SalesChartsFilterForm)
 
 export default SalesChartsFilterForm

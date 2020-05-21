@@ -46,8 +46,9 @@ class StaffFormScreen extends React.Component {
         passwordTitle: 'Password',
         editPassword: 'Edit Password',
         enterNewPassword: 'Enter New Password',
-        editRole: 'Edit Role',
-        roleId: 'Role Id'
+        noRole: 'No Role',
+        editRole: 'Manage Roles',
+        roleId: 'User Role'
       },
       zh: {
         staffTitle: '員工',
@@ -59,8 +60,9 @@ class StaffFormScreen extends React.Component {
         passwordTitle: '設定密碼',
         editPassword: '編輯密碼',
         enterNewPassword: '輸入新密碼',
-        editRole: 'Edit Role-CH',
-        roleId: 'Role Id-CH'
+        noRole: '無權限',
+        editRole: '管理權限',
+        roleId: '使用者權限'
       }
     })
   }
@@ -184,7 +186,7 @@ class StaffFormScreen extends React.Component {
                 <Field
                   name="userRoleId"
                   component={DropDown}
-                  placeholder={{ value: null, label: t('role') }}
+                  placeholder={{ value: null, label: t('noRole') }}
                   options={roleIdArr}
                   forFilter={true}
                   search

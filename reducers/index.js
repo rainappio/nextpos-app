@@ -20,7 +20,7 @@ import { reducer as printersReducer } from './printers'
 import { reducer as printerReducer } from './printer'
 import { reducer as workingareaReducer } from './workingarea'
 import { reducer as tablesavailableReducer } from './tablesavailable'
-import { reducer as globalorderoffersReducer } from './globalorderoffers'
+import { reducer as globalorderoffersReducer, productReducer as globalproductroffersReducer } from './globalorderoffers'
 import { reducer as rangedsalesreportReducer } from './rangedsalesreport'
 import { reducer as ordersbydaterangeReducer } from './ordersbydaterange'
 import { reducer as salesDistributionReportReducer } from './salesdistributionreport'
@@ -60,6 +60,7 @@ const rootReducer = combineReducers({
   workingarea: workingareaReducer,
   tablesavailable: tablesavailableReducer,
   globalorderoffers: globalorderoffersReducer,
+  globalProductOffers: globalproductroffersReducer,
   getrangedsalesreport: rangedsalesreportReducer,
   ordersbydaterange: ordersbydaterangeReducer,
   salesdistributionreport: salesDistributionReportReducer,

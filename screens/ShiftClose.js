@@ -27,6 +27,7 @@ import BackBtn from "../components/BackBtn";
 import AccountCloseConfirm from './AccountCloseConfirm'
 import ScreenHeader from "../components/ScreenHeader";
 import {NavigationEvents} from "react-navigation";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 
 class ShiftClose extends React.Component {
   static navigationOptions = {
@@ -115,8 +116,7 @@ class ShiftClose extends React.Component {
       )
     } else {
       return (
-        <DismissKeyboard>
-          <View style={styles.fullWidthScreen}>
+          <KeyboardAwareScrollView contentContainerStyle={[styles.fullWidthScreen]}>
             <NavigationEvents
               onWillFocus={() => {
                 this.props.getShiftStatus()
@@ -199,7 +199,7 @@ class ShiftClose extends React.Component {
               )}
             </View>
 
-            <KeyboardAvoidingView style={[styles.bottom, styles.horizontalMargin]} behavior="padding" enabled>
+            <View style={[styles.bottom, styles.horizontalMargin]}>
               {
                 ['ACTIVE', 'CLOSING', 'CONFIRM_CLOSE'].includes(mostRecentShift.shiftStatus)
                 ?
@@ -255,9 +255,8 @@ class ShiftClose extends React.Component {
               				</View>
             				)
               }
-            </KeyboardAvoidingView>
-          </View>
-        </DismissKeyboard>
+            </View>
+          </KeyboardAwareScrollView>
       )
     }
   }

@@ -40,13 +40,13 @@ class OptionFormScreen extends React.Component {
         price: 'Option Price'
       },
       zh: {
-        productOptionTitle: '產品選項',
-        optionName: '選項名稱',
+        productOptionTitle: '產品註記',
+        optionName: '註記名稱',
         required: '必填',
         multiple: '可複選',
-        values: '選項列表',
-        value: '選項值',
-        price: '選項加價'
+        values: '註記設定值',
+        value: '註記值',
+        price: '註記加價'
       }
     })
   }

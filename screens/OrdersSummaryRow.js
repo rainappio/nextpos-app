@@ -27,7 +27,8 @@ import {CheckBox, Tooltip} from 'react-native-elements'
 import BackBtnCustom from "../components/BackBtnCustom";
 import ScreenHeader from "../components/ScreenHeader";
 import OrderTopInfo from "./OrderTopInfo";
-import {handleDelete, handleOrderSubmit} from "../helpers/orderActions";
+import {handleDelete, handleOrderSubmit, renderOptionsAndOffer} from "../helpers/orderActions";
+import NavigationService from "../navigation/NavigationService";
 
 class OrdersSummaryRow extends React.Component {
   static contextType = LocaleContext
@@ -368,7 +369,7 @@ class OrdersSummaryRow extends React.Component {
                         </View>
 
                         <View style={[styles.tableCellView, {flex: 3}]}>
-                          <Text>${data.item.subTotal.amountWithTax}</Text>
+                          <Text>${data.item.lineItemSubTotal}</Text>
                         </View>
                         <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
                           {this.renderStateToolTip(data.item.state, t)}
@@ -376,7 +377,7 @@ class OrdersSummaryRow extends React.Component {
                       </View>
                       <View>
                         <Text style={{textAlign: 'left', marginLeft: 15}}>
-                          {data.item.options}
+                          {renderOptionsAndOffer(data.item)}
                         </Text>
                       </View>
                     </View>
@@ -384,10 +385,6 @@ class OrdersSummaryRow extends React.Component {
                 )}
                 keyExtractor={(data, rowMap) => rowMap.toString()}
                 renderHiddenItem={(data, rowMap) => {
-                  if (data.item.state === 'DELIVERED') {
-                    return null
-                  }
-
                   return (
                     <View style={[styles.rowBack]} key={rowMap}>
                       <View style={{width: '60%'}}>
@@ -482,7 +479,7 @@ class OrdersSummaryRow extends React.Component {
 
             {!['SETTLED', 'REFUNDED'].includes(order.state) && (
               <DeleteBtn
-                handleDeleteAction={() => handleDelete(order.orderId)}
+                handleDeleteAction={() => handleDelete(order.orderId, () => NavigationService.navigate('TablesSrc'))}
               />
             )}
 
