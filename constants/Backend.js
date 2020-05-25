@@ -90,7 +90,10 @@ export const api = {
       return `${apiRoot}/labels/${id}`
     },
     getAll: `${apiRoot}/labels`,
-    new: `${apiRoot}/labels`
+    new: `${apiRoot}/labels`,
+    sortPrdList: prdLabelId => {
+      return `${apiRoot}/labels/${prdLabelId}/order`
+    }
   },
   productOption: {
     new: `${apiRoot}/productoptions`,

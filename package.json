@@ -24,6 +24,7 @@
     "expo-asset": "~8.0.0",
     "expo-constants": "~8.0.0",
     "expo-font": "~8.0.0",
+    "expo-keep-awake": "~8.0.0",
     "expo-localization": "~8.0.0",
     "expo-location": "~8.0.0",
     "expo-permissions": "~8.0.0",
@@ -40,6 +41,7 @@
     "react-native-chart-kit": "^4.4.1",
     "react-native-datepicker": "^1.7.2",
     "react-native-draggable": "^3.1.0",
+    "react-native-draggable-flatlist": "^2.3.3",
     "react-native-dropdown-menu": "^2.0.0",
     "react-native-elements": "^1.2.7",
     "react-native-flash-message": "^0.1.15",
@@ -76,8 +78,7 @@
     "redux-form": "^8.3.1",
     "redux-thunk": "^2.3.0",
     "sentry-expo": "^2.0.3",
-    "validator": "^11.1.0",
-    "expo-keep-awake": "~8.0.0"
+    "validator": "^11.1.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^8.0.0",
