@@ -11,7 +11,7 @@
     "version": "0.20.04",
     "icon": "./assets/images/icon.png",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/splash-rain.gif",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
