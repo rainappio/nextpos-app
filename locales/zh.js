@@ -101,6 +101,19 @@ const zh = {
     COMPLETED: '完成',
     DELETED: '刪單'
   },
+  orderLog: {
+    updateOrder: '更新訂單資訊',
+    stateChange: '訂單狀態',
+    addOrderLineItem: '新增品項',
+    updateOrderLineItem: '更新品項',
+    deleteOrderLineItem: '刪除品項',
+    deliverLineItems: '送餐',
+    waiveServiceCharge: '抵服務費',
+    applyOrderDiscount: '訂單折扣',
+    removeOrderDiscount: '移除折扣',
+    copyOrder: '複製訂單',
+    deleteOrder: '刪除訂單'
+  },
   payment: {
     cashPayment: '現金',
     cardPayment: '信用卡'
@@ -151,6 +164,10 @@ const zh = {
     shiftOpened: '已開帳',
     shiftAborted: '關帳取消',
     shiftClosed: '已關帳'
+  },
+  monthPicker: {
+    month: '月',
+    year: '年'
   },
   errors: {
     balanceError: '請輸入大於零的數字'

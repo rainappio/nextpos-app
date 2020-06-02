@@ -9,6 +9,9 @@ import {NavigationEvents} from "react-navigation";
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import {renderShiftStatus} from "../helpers/shiftActions";
+import MonthPicker from "../components/MonthPicker";
+import moment from "moment";
+
 
 class ShiftHistory extends React.Component {
   static navigationOptions = {
@@ -35,7 +38,10 @@ class ShiftHistory extends React.Component {
         shiftStatus: '帳狀態'
       }
     })
+
     this.state = {
+      currentDate: moment(new Date()),
+      selectedFilter: 0
     }
   }
 
@@ -102,13 +108,24 @@ class ShiftHistory extends React.Component {
         <View style={[styles.fullWidthScreen]}>
           <NavigationEvents
             onWillFocus={() => {
-              this.props.getShifts()
+              const dateToUse = this.state.currentDate.format('YYYY-MM-DD')
+
+              this.props.getShifts(dateToUse)
             }}
           />
           <ScreenHeader backNavigation={true}
                         parentFullScreen={true}
                         title={t('shiftHistoryTitle')}
           />
+
+          <MonthPicker
+            currentDate={this.state.currentDate}
+            selectedFilter={this.state.selectedFilter}
+            handleMonthChange={(date, selectedFilter) => {
+              this.setState({currentDate: date, selectedFilter: selectedFilter})
+
+              this.props.getShifts(date.format('YYYY-MM-DD'))
+          }}/>
 
           <View style={{flex: 5}}>
             <View style={[styles.sectionBar]}>
@@ -156,7 +173,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getShifts: () => dispatch(getShifts())
+  getShifts: (date) => dispatch(getShifts(date))
 })
 
 export default connect(

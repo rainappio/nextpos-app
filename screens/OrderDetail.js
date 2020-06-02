@@ -320,6 +320,38 @@ class OrderDetail extends React.Component {
               </View>
             </View>
 
+            <View style={styles.sectionTitleContainer}>
+              <Text style={styles.sectionTitleText}>Order Log</Text>
+            </View>
+
+            {order.orderLogs != null && order.orderLogs.map((log, idx) => {
+              return (
+                <View key={idx}>
+                  <View style={[styles.tableRowContainerWithBorder, {backgroundColor: '#f5f5f5'}]}>
+                    <View style={[styles.tableCellView, {flex: 2}]}>
+                      <Text>{formatTime(log.logDate)} ({log.who})</Text>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                      <Text>{t(`orderLog.${log.action}`)}</Text>
+                    </View>
+                  </View>
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[{flex: 1, alignItems: 'flex-end'}]}>
+                      {log.entries != null && log.entries.map((entry, eIdx) => {
+                        const entryValue = entry.from != null ? `${entry.from} -> ${entry.to}` : entry.to
+
+                        return (
+                          <View key={`entry-${eIdx}`}>
+                            <Text>{entry.name}: {entryValue}</Text>
+                          </View>
+                        )
+                      })}
+                    </View>
+                  </View>
+                </View>
+              )
+            })}
+
             <View style={[styles.bottom, styles.horizontalMargin]}>
               <TouchableOpacity
                 onPress={() => this.handleCopyOrder(order)}

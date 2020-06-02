@@ -12,6 +12,7 @@ import LoadingScreen from "./LoadingScreen";
 import SvgBarChart from "../components/SvgBarChart";
 import SegmentedControl from "../components/SegmentedControl";
 import Icon from "react-native-vector-icons/Ionicons";
+import MonthPicker from "../components/MonthPicker";
 
 class CustomerStats extends React.Component {
   static navigationOptions = {
@@ -83,16 +84,8 @@ class CustomerStats extends React.Component {
     })
 
     this.state = {
-      searchYear: null,
-      searchMonth: null,
-      currentDate: new Date(),
+      currentDate: moment(new Date()),
       selectedFilter: 0,
-      filterTypes: {
-        0: {label: 'Month', value: 'M'},
-        1: {label: 'Year', value: 'y'}
-      }
-
-      ,
       filteredWeeklySalesReport: [],
     }
   }
@@ -111,28 +104,6 @@ class CustomerStats extends React.Component {
     })
 
     return customerTrafficData
-  }
-
-  handleFilterChange = (index) => {
-    this.setState({selectedFilter: index})
-  }
-
-  navigatePrevious = () => {
-    const key = this.state.filterTypes[this.state.selectedFilter].value
-
-    const updated = moment(this.state.currentDate).subtract(1, key)
-    this.setState({currentDate: updated})
-
-    this.props.getCustomerTrafficReport(updated.year(), updated.month() + 1)
-  }
-
-  navigateNext = () => {
-    const key = this.state.filterTypes[this.state.selectedFilter].value
-
-    const updated = moment(this.state.currentDate).add(1, key)
-    this.setState({currentDate: updated})
-
-    this.props.getCustomerTrafficReport(updated.year(), updated.month() + 1)
   }
 
   render() {
@@ -192,45 +163,15 @@ class CustomerStats extends React.Component {
           />
         </View>
 
-        <View style={[styles.sectionTitleContainer]}>
-          <Text style={styles.sectionTitleText}>{moment(this.state.currentDate).format('MMMM, YYYY')}</Text>
-        </View>
-        <View style={styles.tableRowContainer}>
-          <View style={{flex: 1, marginRight: 10, alignItems: 'flex-end'}}>
-            <TouchableOpacity
-              style={{flex: 1}}
-              hitSlop={{top: 20, bottom: 20, left: 50, right: 5}}
-              onPress={() => this.navigatePrevious()}
-            >
-              <Text>
-                <Icon name="ios-arrow-back" size={32} color="#f18d1a"/>
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{flex: 3}}>
-            <SegmentedControl
-              selectedIndex={this.state.selectedFilter}
-              input={{
-                onChange: this.handleFilterChange
-              }}
-              values={Object.keys(this.state.filterTypes).map(key => this.state.filterTypes[key].label)}
-              normalize={value => {
-                return this.state.filterTypes[value].value
-              }}
-            />
-          </View>
-          <View style={{flex: 1, marginLeft: 10}}>
-            <TouchableOpacity
-              style={{flex: 1}}
-              hitSlop={{top: 20, bottom: 20, left: 5, right: 50}}
-              onPress={() => this.navigateNext()}
-            >
-              <Text>
-                <Icon name="ios-arrow-forward" size={32} color="#f18d1a"/>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <MonthPicker
+          currentDate={this.state.currentDate}
+          selectedFilter={this.state.selectedFilter}
+          handleMonthChange={(date, selectedFilter) => {
+            this.setState({currentDate: date, selectedFilter: selectedFilter})
+
+            this.props.getCustomerTrafficReport(date.year(), date.month() + 1)
+          }}
+        />
 
         {totalCount !== null && totalCount.orderCount === 0 && (
           <View>

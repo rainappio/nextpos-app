@@ -168,14 +168,13 @@ class OrdersSummaryRow extends React.Component {
   }
 
   handleDeleteLineItem = (orderId, lineItemId) => {
-    dispatchFetchRequest(api.order.updateLineItem(orderId, lineItemId), {
-      method: 'PATCH',
+    dispatchFetchRequest(api.order.deleteLineItem(orderId, lineItemId), {
+      method: 'DELETE',
       withCredentials: true,
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({quantity: 0})
+      }
     }, response => {
       this.props.navigation.navigate('OrdersSummary')
       this.props.getOrder(this.props.order.orderId)

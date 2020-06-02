@@ -17,12 +17,12 @@ export const fetchShiftsFailure = error => ({
   error
 })
 
-export const getShifts = () => {
+export const getShifts = (date) => {
   return async dispatch => {
     dispatch(fetchShifts())
 
     return await dispatchFetchRequest(
-      api.shift.getAll,
+      api.shift.getAll(date),
       {
         method: 'GET',
         withCredentials: true,

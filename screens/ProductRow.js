@@ -97,7 +97,6 @@ class ProductRow extends React.Component {
         }
       },
       response => {
-        successMessage('Toggled')
         this.onSelect(productId)
         this.props.getProducts()
         this.props.navigation.navigate('ProductsOverview')
@@ -157,7 +156,7 @@ class ProductRow extends React.Component {
                     this.props.navigation.navigate('ProductEdit', {
                       productId: data.id,
                       labelId: data.productLabelId,
-                      isPinned: this.props.products['pinned'].filter(pa => pa.id == data.id)[0] !== undefined ? true : false
+                      isPinned: this.props.products['pinned'].filter(pa => pa.id === data.id)[0] !== undefined
                     })
                   }} style={{ marginRight: 50 }}>{data.name}</Text>
 
@@ -221,7 +220,6 @@ class ProductRow extends React.Component {
           body: JSON.stringify(changedPosition)
         },
         response => {
-          successMessage('Success')
           this.props.getLables()
           this.props.getProducts()
         }

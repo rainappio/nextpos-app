@@ -30,12 +30,14 @@ class OrderFormIV extends React.Component {
         productOptions: 'Select Product Option(s)',
         quantity: 'Quantity',
         freeTextProductOption: 'Note',
+        overridePrice: 'Custom Price',
         lineItemDiscount: 'Line Item Discount'
       },
       zh: {
         productOptions: '選擇產品註記',
         quantity: '數量',
         freeTextProductOption: '註記',
+        overridePrice: '自訂價格',
         lineItemDiscount: '品項折扣'
       }
     })
@@ -49,7 +51,7 @@ class OrderFormIV extends React.Component {
     const lastOptionIndex = product.productOptions != null ? product.productOptions.length : 0
 
     return (
-      <KeyboardAwareScrollView scrollIndicatorInsets={{right: 1}}>
+      <KeyboardAwareScrollView scrollIndicatorInsets={{right: 1}} keyboardShouldPersistTaps='always'>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={true}
                         parentFullScreen={true}
@@ -150,6 +152,18 @@ class OrderFormIV extends React.Component {
                     optionValue: value
                   }
                 }}
+              />
+            </View>
+          </View>
+
+          <View style={[styles.tableRowContainerWithBorder]}>
+            <View style={[{flex: 1}]}>
+              <Field
+                name={`overridePrice`}
+                component={InputText}
+                placeholder={t('overridePrice')}
+                keyboardType='numeric'
+                alignLeft={true}
               />
             </View>
           </View>
