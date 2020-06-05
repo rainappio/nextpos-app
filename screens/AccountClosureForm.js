@@ -78,8 +78,9 @@ class AccountClosureForm extends React.Component {
               component={InputText}
               keyboardType={`numeric`}
               placeholder={t('shift.enterAmount')}
+              clearTextOnFocus={true}
               format={(value, name) => {
-                return value != null ? String(value) : '0'
+                return value != null ? String(value) : ''
               }}
             />
           </View>
@@ -133,8 +134,9 @@ class AccountClosureForm extends React.Component {
               component={InputText}
               keyboardType={`numeric`}
               placeholder={t('shift.enterAmount')}
+              clearTextOnFocus={true}
               format={(value, name) => {
-                return value != null ? String(value) : '0'
+                return value != null ? String(value) : ''
               }}
             />
           </View>

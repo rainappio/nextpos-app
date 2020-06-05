@@ -128,6 +128,9 @@ export const api = {
     updateLineItem: (orderId, lineItemId) => {
       return `${api.apiRoot}/orders/${orderId}/lineitems/${lineItemId}`
     },
+    deleteLineItem: (orderId, lineItemId) => {
+      return `${api.apiRoot}/orders/${orderId}/lineitems/${lineItemId}`
+    },
     deliverLineItems: orderId => {
       return `${apiRoot}/orders/${orderId}/lineitems/deliver`
     },
@@ -197,7 +200,13 @@ export const api = {
     close: `${apiRoot}/shifts/close`,
     active: `${apiRoot}/shifts/active`,
     mostRecent: `${apiRoot}/shifts/mostRecent`,
-    getAll: `${apiRoot}/shifts`,
+    getAll: date => {
+      if (date !== undefined) {
+        return `${apiRoot}/shifts?date=${date}`
+      }
+
+      return `${apiRoot}/shifts`
+    },
     initiate: `${apiRoot}/shifts/initiateClose`,
     confirm: `${apiRoot}/shifts/confirmClose`,
     abort: `${apiRoot}/shifts/abortClose`

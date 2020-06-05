@@ -64,6 +64,7 @@ class OrderFormIII extends React.Component {
     const lineItemRequest = {
       productId: this.props.navigation.state.params.prdId,
       quantity: values.quantity,
+      overridePrice: values.overridePrice,
       productOptions: updatedOptions,
       productDiscount: values.lineItemDiscount.productDiscount,
       discountValue: values.lineItemDiscount.discount
@@ -116,6 +117,7 @@ class OrderFormIII extends React.Component {
     const lineItemRequest = {
       quantity: values.quantity,
       productOptions: updatedOptions,
+      overridePrice: values.overridePrice,
       productDiscount: values.lineItemDiscount.productDiscount,
       discountValue: values.lineItemDiscount.discount
     }

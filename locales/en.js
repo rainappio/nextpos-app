@@ -101,6 +101,19 @@ const en = {
     COMPLETED: 'Completed',
     DELETED: 'Deleted'
   },
+  orderLog: {
+    updateOrder: 'Update Order Info',
+    stateChange: 'Change state',
+    addOrderLineItem: 'Add Item',
+    updateOrderLineItem: 'Update Item',
+    deleteOrderLineItem: 'Delete Item',
+    deliverLineItems: 'Deliver Line Item(s)',
+    waiveServiceCharge: 'Waive Service Charge',
+    applyOrderDiscount: 'Order Discount',
+    removeOrderDiscount: 'Remove Order Discount',
+    copyOrder: 'Copy Order',
+    deleteOrder: 'Delete Order'
+  },
   payment: {
     cashPayment: 'Cash',
     cardPayment: 'Credit Card'
@@ -150,6 +163,10 @@ const en = {
     shiftOpened: 'Shift opened',
     shiftAborted: 'Closing shift aborted',
     shiftClosed: 'Shift closed'
+  },
+  monthPicker: {
+    month: 'Month',
+    year: 'Year'
   },
   errors: {
     balanceError: 'Please enter a positive value'
