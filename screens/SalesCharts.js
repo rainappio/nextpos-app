@@ -23,7 +23,7 @@ import { LineChart } from 'react-native-chart-kit'
 import {
   getRangedSalesReport,
   getCustomerCountReport,
-  getSalesDistributionReport
+  getSalesDistributionReport, formatDate, formatDateObj
 } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
@@ -35,7 +35,7 @@ import moment from "moment";
 import ScreenHeader from "../components/ScreenHeader";
 import SalesChartsFilterForm from './SalesChartsFilterForm'
 import { api, dispatchFetchRequest, errorAlert, warningMessage } from '../constants/Backend'
-import RenderTable from '../components/Table'
+import RenderTable from '../components/RenderTable'
 import CustomerCountFilterForm from './CustomerCountFilterForm'
 import { Chevron } from 'react-native-shapes'
 import LoadingScreen from "./LoadingScreen";
@@ -52,8 +52,8 @@ class SalesCharts extends React.Component {
     context.localize({
       en: {
         salesDashboardTitle: 'Sales Dashboard',
-        todaySales: "Current Week Sales",
-        rangedSalesTitle: 'Weekly Sales',
+        rangedSalesTitle: 'Ranged Sales',
+        todaySales: 'Sales Total',
         customerCountTitle: 'Customer Count',
         averageSpendingTitle: 'Average Customer Spending',
         salesDistributionTitle: 'Sales by Month',
@@ -66,8 +66,8 @@ class SalesCharts extends React.Component {
       },
       zh: {
         salesDashboardTitle: '銷售總覽',
-        todaySales: '本週營業額',
-        rangedSalesTitle: '一週銷售圖',
+        rangedSalesTitle: '銷售圖表',
+        todaySales: '總營業額',
         customerCountTitle: '來客數量圖',
         averageSpendingTitle: '客單數圖',
         salesDistributionTitle: '年度銷售圖',
@@ -95,13 +95,17 @@ class SalesCharts extends React.Component {
 
   generateRangedSalesChart = (rangedSalesReport) => {
 
+    const fromDate = formatDateObj(new Date(rangedSalesReport.dateRange.zonedFromDate))
+    const toDate = formatDateObj(new Date(rangedSalesReport.dateRange.zonedToDate))
+
     let rangedSalesData = {
-      legend: [`${rangedSalesReport.searchDate}`],
+      legend: [`${fromDate} - ${toDate}`],
       labels: [],
       data: []
     }
     rangedSalesReport.salesByRange.map(stats => {
-      rangedSalesData.labels.push(stats.date)
+      const date = moment(stats.date).format('MM/DD')
+      rangedSalesData.labels.push(date)
       rangedSalesData.data.push(stats.total)
     })
 
@@ -125,10 +129,11 @@ class SalesCharts extends React.Component {
     }
 
     customerStatsReport.customerStatsThisMonth.map(stats => {
-      customerCountData.labels.push(stats.date)
+      const date = moment(stats.date).format('MM/DD')
+      customerCountData.labels.push(date)
       customerCountData.data.push(stats.customerCount)
 
-      customerAverageSpendingData.labels.push(stats.date)
+      customerAverageSpendingData.labels.push(date)
       customerAverageSpendingData.data.push(stats.averageSpending)
     })
 
@@ -150,7 +155,8 @@ class SalesCharts extends React.Component {
     }
 
     salesDistributionReport.salesByMonth.map(sales => {
-      yearlySalesData.labels.push(sales.date)
+      const month = moment(sales.date).format('MMM')
+      yearlySalesData.labels.push(month)
       yearlySalesData.data.push(sales.total)
     })
 
@@ -162,22 +168,11 @@ class SalesCharts extends React.Component {
   }
 
   handleFilterSalesChart = values => {
-    dispatchFetchRequest(
-      api.report.getrangedSalesReportByDate(values.date),
-      {
-        method: 'GET',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {}
-      },
-      response => {
-        response.json().then(data => {
-          this.setState({
-          	filteredWeeklySalesReport: data
-          })
-        })
-      }
-    ).then()
+    const searchFromDate = moment(values.fromDate).format("YYYY-MM-DDTHH:mm:ss")
+    const searchToDate = moment(values.toDate).format("YYYY-MM-DDTHH:mm:ss")
+    console.log(`Ranged sales selected dates - from: ${searchFromDate} to: ${searchToDate}`)
+
+    this.props.getRangedSalesReport('CUSTOM', searchFromDate, searchToDate)
   }
 
   handleFilterCCChart = values => {
@@ -273,15 +268,15 @@ class SalesCharts extends React.Component {
             <Text>{salesByPrdData.productName}</Text>
           </View>
 
-          <View style={[styles.quarter_width, styles.tableCellView]}>
+          <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
             <Text>{salesByPrdData.salesQuantity}</Text>
           </View>
 
-          <View style={[styles.quarter_width, styles.tableCellView]}>
+          <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
             <Text>{salesByPrdData.productSales}</Text>
           </View>
 
-          <View style={[styles.quarter_width, styles.tableCellView]}>
+          <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
             <Text>{salesByPrdData.percentage}%</Text>
           </View>
         </View>
@@ -311,75 +306,74 @@ class SalesCharts extends React.Component {
     }
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
-        <View style={[styles.container]}>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }} style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={true}
+                        parentFullScreen={true}
                         title={t('salesDashboardTitle')}
           />
 
-          <View style={[styles.flex_dir_row, styles.paddingTopBtn8]}>
-            <View style={{ width: '80%' }}>
-              <Text
-                style={[
-                  styles.welcomeText,
-                  styles.orange_color,
-                  styles.textBold,
-                  styles.paddingTopBtn8,
-                  { fontSize: 14 }
-                ]}
-              >
-                {t('todaySales')} - ${getrangedSalesReport.todayTotal}
-              </Text>
-            </View>
-          </View>
-        </View>
-
         <View>
-          <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textBold,
-              { fontSize: 14 }
-            ]}
-          >
-            {t('rangedSalesTitle')}
-          </Text>
           <SalesChartsFilterForm
           	onSubmit={this.handleFilterSalesChart}
             initialValues={{
-              date: getrangedSalesReport.searchDate
+              fromDate: new Date(getrangedSalesReport.dateRange.zonedFromDate),
+              toDate: new Date(getrangedSalesReport.dateRange.zonedToDate)
             }}
           	/>
+
+          <View>
+            <Text style={styles.screenSubTitle}>
+              {t('todaySales')} - ${getrangedSalesReport.todayTotal}
+            </Text>
+          </View>
+
           <Chart
             data={Object.keys(filteredRangedSalesData).length !== 0 ? filteredRangedSalesData : rangedSalesData}
-            width={Dimensions.get('window').width}
+            width={Dimensions.get('window').width * 2}
             props={{
-              yAxisLabel: '$',
-              yAxisSuffix: 'k',
-              formatYLabel: (value) => {
-                return value / 1000
-              },
-              formatXLabel: (value) => {
-                return moment(value, 'YYYY-MM-DD').format('MM/DD')
-              }
+              yAxisLabel: '$'
             }}
           />
 
-          {/*weekly table*/}
-					<RenderTable reportData={Object.keys(filteredRangedSalesData).length !== 0 ? filteredRangedSalesData : rangedSalesData}/>
-          {/*#weekly table*/}
+					<RenderTable reportData={rangedSalesData}/>
         </View>
 
-        <View style={styles.paddingTopBtn20}>
-          <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textBold,
-              { fontSize: 14 }
-            ]}
-          >
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionTitleContainer}>
+            <Text style={styles.screenSubTitle}>
+              {t('salesRankingTitle')}
+            </Text>
+          </View>
+          <View style={{marginBottom: 20}}>
+            <View style={styles.sectionBar}>
+              <View style={[styles.quarter_width, styles.tableCellView]}>
+                <Text style={[styles.sectionBarTextSmall]}>{t('product')}</Text>
+              </View>
+
+              <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                <Text style={styles.sectionBarTextSmall}>{t('quantity')}</Text>
+              </View>
+
+              <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                <Text style={styles.sectionBarTextSmall}>{t('amount')}</Text>
+              </View>
+
+              <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                <Text style={styles.sectionBarTextSmall}>{t('percentage')}</Text>
+              </View>
+            </View>
+            <FlatList
+              data={getrangedSalesReport.salesByProducts}
+              renderItem={({item}) => {
+                return <Item salesByPrdData={item}/>
+              }}
+              keyExtractor={item => item.id}
+            />
+          </View>
+        </View>
+
+        <View style={styles.sectionContainer}>
+          <Text style={styles.screenSubTitle}>
             {t('customerCountTitle')}
           </Text>
           <CustomerCountFilterForm onSubmit={this.handleFilterCCChart}/>
@@ -391,10 +385,7 @@ class SalesCharts extends React.Component {
                   data={Object.keys(filteredCustCountData).length !== 0 ? filteredCustCountData : custCountData}
                   width={Dimensions.get('window').width * 3}
                   props={{
-                    verticalLabelRotation: 45,
-                    formatXLabel: (value) => {
-                      return moment(value, 'YYYY-MM-DD').format('MM/DD')
-                    }
+                    verticalLabelRotation: 45
                   }}
                 />
               </View>
@@ -403,15 +394,8 @@ class SalesCharts extends React.Component {
           )}
         </View>
 
-        <View style={styles.paddingTopBtn20}>
-          <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textBold,
-              { fontSize: 14 }
-            ]}
-          >
+        <View style={styles.sectionContainer}>
+          <Text style={styles.screenSubTitle}>
             {t('averageSpendingTitle')}
           </Text>
           {
@@ -422,14 +406,7 @@ class SalesCharts extends React.Component {
                   width={Dimensions.get('window').width * 3}
                   props={{
                     yAxisLabel: '$',
-                    yAxisSuffix: 'k',
-                    verticalLabelRotation: 45,
-                    formatYLabel: (value) => {
-                      return value / 1000
-                    },
-                    formatXLabel: (value) => {
-                      return moment(value, 'YYYY-MM-DD').format('MM/DD')
-                    }
+                    verticalLabelRotation: 45
                   }}
                 />
                 <RenderTable reportData={Object.keys(filteredAvgSpendingData).length !== 0 ? filteredAvgSpendingData : custAvgSpendingData}/>
@@ -437,15 +414,8 @@ class SalesCharts extends React.Component {
             )}
         </View>
 
-        <View style={styles.paddingTopBtn20}>
-          <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textBold,
-              { fontSize: 14 }
-            ]}
-          >
+        <View style={styles.sectionContainer}>
+          <Text style={styles.screenSubTitle}>
             {t('salesDistributionTitle')}
           </Text>
           {haveSDData && (
@@ -455,60 +425,12 @@ class SalesCharts extends React.Component {
                 width={Dimensions.get('window').width * 2}
                 props={{
                   yAxisLabel: '$',
-                  yAxisSuffix: 'k',
                   verticalLabelRotation: 45,
-                  formatYLabel: (value) => {
-                    return value / 1000
-                  },
-                  formatXLabel: (value) => {
-                    return moment(value, 'YYYY-MM-DD').format('MMM')
-                  }
                 }}
               />
               <RenderTable reportData={salesDistributionData}/>
             </View>
           )}
-        </View>
-
-
-        <View style={styles.paddingTopBtn20}>
-          <Text
-            style={[
-              styles.welcomeText,
-              styles.orange_color,
-              styles.textBold,
-              { fontSize: 14 }
-            ]}
-          >
-            {t('salesRankingTitle')}
-          </Text>
-        </View>
-
-        <View style={{marginBottom: 20}}>
-          <View style={styles.sectionBar}>
-            <View style={[styles.quarter_width, styles.tableCellView]}>
-              <Text style={[styles.sectionBarTextSmall]}>{t('product')}</Text>
-            </View>
-
-            <View style={[styles.quarter_width, styles.tableCellView]}>
-              <Text style={styles.sectionBarTextSmall}>{t('quantity')}</Text>
-            </View>
-
-            <View style={[styles.quarter_width, styles.tableCellView]}>
-              <Text style={styles.sectionBarTextSmall}>{t('amount')}</Text>
-            </View>
-
-            <View style={[styles.quarter_width, styles.tableCellView]}>
-              <Text style={styles.sectionBarTextSmall}>{t('percentage')}</Text>
-            </View>
-          </View>
-          <FlatList
-            data={getrangedSalesReport.salesByProducts}
-            renderItem={({item}) => {
-              return <Item salesByPrdData={item}/>
-            }}
-            keyExtractor={item => item.id}
-          />
         </View>
       </ScrollView>
     )
@@ -528,7 +450,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getRangedSalesReport: () => dispatch(getRangedSalesReport()),
+  getRangedSalesReport: (rangeType, fromDate, toDate) => dispatch(getRangedSalesReport(rangeType, fromDate, toDate)),
   getCustomerCountReport: () => dispatch(getCustomerCountReport()),
   getSalesDistributionReport: () => dispatch(getSalesDistributionReport())
 })

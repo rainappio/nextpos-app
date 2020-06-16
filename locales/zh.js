@@ -169,6 +169,10 @@ const zh = {
     month: '月',
     year: '年'
   },
+  datetimeRange: {
+    pickerTitle: '選擇日期與時間',
+    select: '確定'
+  },
   errors: {
     balanceError: '請輸入大於零的數字'
   },

@@ -161,14 +161,15 @@ export const api = {
     getOrdersByDateAndRange: (dateRange, shiftId, fromDate, toDate) => {
       let params = ''
 
-      if (dateRange !== undefined) {
+      if (dateRange != null) {
         params += `dateRange=${dateRange}`
       }
-      if (shiftId !== undefined) {
+
+      if (shiftId != null) {
         params += `&shiftId=${shiftId}`
       }
 
-      if (fromDate !== undefined && fromDate !== null && toDate !== undefined && toDate !== null) {
+      if (fromDate != null && toDate != null) {
         params += `&fromDate=${fromDate}&toDate=${toDate}`
       }
 
@@ -243,7 +244,21 @@ export const api = {
     getavailTable: `${apiRoot}/orders/availableTables`
   },
   report: {
-    getrangedSalesReport: `${apiRoot}/reporting/rangedSalesReport`,
+    getrangedSalesReport: (rangeType, fromDate, toDate) => {
+
+      const xRangeType = rangeType == null ? 'WEEK' : rangeType
+      let queryParams = `rangeType=${xRangeType}`
+
+      if (fromDate != null) {
+        queryParams += `&from=${fromDate}`
+      }
+
+      if (toDate != null) {
+        queryParams += `&to=${toDate}`
+      }
+
+      return `${apiRoot}/reporting/rangedSalesReport?${queryParams}`
+    },
     getsalesDistributionReport: `${apiRoot}/reporting/salesDistribution?`,
     getcustomerCountReport: `${apiRoot}/reporting/customerStats`,
     getCustomerTrafficReport: (year, month) => {
@@ -252,9 +267,6 @@ export const api = {
       }
 
       return `${apiRoot}/reporting/customerTraffic`
-    },
-    getrangedSalesReportByDate: (date) => {
-      return `${apiRoot}/reporting/rangedSalesReport?date=${date}`
     },
     getcustomerStatsReportByDateMonth: (year, month) => {
       return `${apiRoot}/reporting/customerStats?year=${year}&month=${month}`

@@ -2,7 +2,7 @@ import React from 'react'
 import {
   ActivityIndicator,
   FlatList,
-  Image,
+  Image, ScrollView,
   Text,
   TouchableOpacity,
   View
@@ -44,8 +44,8 @@ class OrdersScreen extends React.Component {
       searchFilter: {
         dateRange: 'SHIFT',
         shiftId: null,
-        fromDate: moment(new Date()).format('YYYY-MM-DD'),
-        toDate: moment(new Date()).format('YYYY-MM-DD')
+        fromDate: new Date(),
+        toDate: new Date()
       }
     }
   }
@@ -63,21 +63,24 @@ class OrdersScreen extends React.Component {
 
   keyExtractor = (order, index) => index.toString()
 
-  handleOrderFilter = values => {
-    const fromDate = values.fromDate
-    const toDate = values.toDate
-    const dateRange = values.dateRange
+  handleOrderSearch = values => {
+    const dateRange = values.dateRange != null ? values.dateRange : 'SHIFT'
+    const shiftId = values.shiftId != null ? values.shiftId : null
+    const fromDate = moment(values.fromDate).format("YYYY-MM-DDTHH:mm:ss")
+    const toDate = moment(values.toDate).format("YYYY-MM-DDTHH:mm:ss")
 
     this.setState({
       searchFilter: {
         dateRange: dateRange,
-        shiftId: null,
-        fromDate: fromDate,
-        toDate: toDate
+        shiftId: shiftId,
+        fromDate: values.fromDate,
+        toDate: values.toDate
       }
     })
 
-    this.props.getOrdersByDateRange(dateRange, undefined, fromDate, toDate)
+    console.log(`Order screen selected dates - from: ${fromDate} to: ${toDate}`)
+
+    this.props.getOrdersByDateRange(dateRange, shiftId, fromDate, toDate)
   }
 
   renderItem = ({ item }) => (
@@ -117,7 +120,7 @@ class OrdersScreen extends React.Component {
   }
 
   render() {
-    const {getordersByDateRange, reportParameter, isLoading, haveData} = this.props
+    const {getordersByDateRange, dateRange, isLoading, haveData} = this.props
     const {t} = this.context
 
     const orders = []
@@ -137,10 +140,12 @@ class OrdersScreen extends React.Component {
               const shiftId = this.props.navigation.getParam('shiftId')
               const dateRangeToUse = shiftId != null ? 'SHIFT' : this.state.searchFilter.dateRange
 
-              this.props.getOrdersByDateRange(dateRangeToUse,
-                shiftId,
-                this.state.searchFilter.fromDate,
-                this.state.searchFilter.toDate)
+              this.handleOrderSearch({
+                dateRange: dateRangeToUse,
+                shiftId: shiftId,
+                fromDate: this.state.searchFilter.fromDate,
+                toDate: this.state.searchFilter.toDate
+              })
 
               this.props.navigation.setParams({shiftId: undefined})
 
@@ -161,15 +166,7 @@ class OrdersScreen extends React.Component {
                         rightComponent={
                           <TouchableOpacity
                             onPress={() => {
-                              this.setState({
-                                searchFilter: {
-                                  dateRange: 'SHIFT',
-                                  shiftId: null,
-                                  fromDate: moment(new Date()).format('YYYY-MM-DD'),
-                                  toDate: moment(new Date()).format('YYYY-MM-DD')
-                                }
-                              })
-                              this.props.getOrdersByDateRange()
+                              this.handleOrderSearch({})
                             }}
                           >
                             <Icon name="md-refresh" size={32} color={mainThemeColor} />
@@ -177,37 +174,17 @@ class OrdersScreen extends React.Component {
                         }
           />
 
-          <View>
+          <View style={{flex: 1}}>
             <OrderFilterForm
-              onSubmit={this.handleOrderFilter}
+              onSubmit={this.handleOrderSearch}
               initialValues={{
                 dateRange: this.state.searchFilter.dateRange,
-                fromDate: this.state.searchFilter.fromDate,
-                toDate: this.state.searchFilter.toDate
+                fromDate: new Date(dateRange.zonedFromDate),
+                toDate: new Date(dateRange.zonedToDate)
               }}/>
           </View>
 
-          <View style={{flex: 1}}>
-            <View style={[styles.tableRowContainer]}>
-              <View style={styles.tableCellView}>
-                <Text style={styles.fieldTitle}>{t('order.fromDate')}</Text>
-              </View>
-              <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                <Text>{formatDateObj(reportParameter.fromDate)}</Text>
-              </View>
-            </View>
-
-            <View style={styles.tableRowContainer}>
-              <View style={styles.tableCellView}>
-                <Text style={styles.fieldTitle}>{t('order.toDate')}</Text>
-              </View>
-              <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                <Text>{formatDateObj(reportParameter.toDate)}</Text>
-              </View>
-            </View>
-          </View>
-
-          <View style={{flex: 5}}>
+          <View style={{flex: 3}}>
             <View style={[styles.sectionBar]}>
               <View style={{flex: 2}}>
                 <Text style={styles.sectionBarTextSmall}>{t('order.orderId')}</Text>
@@ -265,7 +242,7 @@ class OrdersScreen extends React.Component {
 
 const mapStateToProps = state => ({
   getordersByDateRange: state.ordersbydaterange.data.orders,
-  reportParameter: state.ordersbydaterange.data.reportParameter,
+  dateRange: state.ordersbydaterange.data.dateRange,
   haveData: state.ordersbydaterange.haveData,
   haveError: state.ordersbydaterange.haveError,
   isLoading: state.ordersbydaterange.loading
