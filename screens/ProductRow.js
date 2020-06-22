@@ -151,7 +151,7 @@ class ProductRow extends React.Component {
           <View>
             {map[item.label] !== undefined && map[item.label].map(data => {
               return (
-                <View style={[{ paddingTop: 20, paddingBottom: 20, backgroundColor: '#f1f1f1', paddingLeft: 20, borderTopWidth: 0.11 }]} key={data.id}>
+                <View style={[{ paddingTop: 20, paddingBottom: 20, backgroundColor: '#F8F8F8', paddingLeft: 20, borderTopWidth: 0.11 }]} key={data.id}>
                   <Text onPress={() => {
                     this.props.navigation.navigate('ProductEdit', {
                       productId: data.id,

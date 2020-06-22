@@ -19,12 +19,12 @@ export const fetchRangedSalesReportFailure = error => ({
   error
 })
 
-export const getRangedSalesReport = () => {
+export const getRangedSalesReport = (rangeType, fromDate, toDate) => {
   return dispatch => {
     dispatch(fetchRangedSalesReport())
 
     dispatchFetchRequest(
-      api.report.getrangedSalesReport,
+      api.report.getrangedSalesReport(rangeType, fromDate, toDate),
       {
         method: 'GET',
         withCredentials: true,

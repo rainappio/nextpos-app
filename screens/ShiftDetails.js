@@ -3,6 +3,7 @@ import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
+import {formatDate, formatDateObj} from "../actions";
 
 class ShiftDetails extends React.Component {
   static navigationOptions = {
@@ -69,6 +70,9 @@ class ShiftDetails extends React.Component {
                         title={t('shiftDetailsTitle')}/>
 
           <View>
+            <View style={{ alignItems: 'center'}}>
+              <Text>{formatDate(shift.open.timestamp)} - {formatDate(shift.close.timestamp)}</Text>
+            </View>
             {/* Post-Closing Entries */}
             <View style={styles.sectionBar}>
               <View>

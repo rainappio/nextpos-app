@@ -168,6 +168,10 @@ const en = {
     month: 'Month',
     year: 'Year'
   },
+  datetimeRange: {
+    pickerTitle: 'Select a date time',
+    select: 'Ok'
+  },
   errors: {
     balanceError: 'Please enter a positive value'
   },
