@@ -30,7 +30,9 @@ import * as Sentry from 'sentry-expo';
 import Constants from "expo-constants/src/Constants";
 import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
-import {activateKeepAwake, useKeepAwake} from "expo-keep-awake";
+import { activateKeepAwake, useKeepAwake } from "expo-keep-awake";
+import { ThemeContext, themes } from './mode_switcher/themeContext'
+import ThemeTogglerButton from './mode_switcher/theme-toggler-btn'
 
 YellowBox.ignoreWarnings([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
@@ -90,6 +92,11 @@ restoreAuth(store.dispatch)
 export default class App extends React.Component {
   constructor(props) {
     super(props)
+    this.toggleTheme = () => {
+      this.setState(state => ({
+        theme: state.theme === themes.dark ? themes.light : themes.dark
+      }))
+    }
 
     this.state = {
       isLoadingComplete: false,
@@ -100,7 +107,9 @@ export default class App extends React.Component {
       },
       localize: this.mergeLocaleResource,
       t: this.t,
-      changeLanguage: this.changeLanguage
+      changeLanguage: this.changeLanguage,
+      theme: themes.light,
+      toggleTheme: this.toggleTheme
     }
 
     i18n.fallbacks = true
@@ -180,30 +189,34 @@ export default class App extends React.Component {
       activateKeepAwake()
 
       return (
-        <Provider store={store}>
-          <View style={styles.mainContainer}>
-            <StatusBar
-              translucent={true}
-              hidden={false}
-              barStyle="dark-content"
-            />
-            <LocaleContext.Provider value={this.state}>
-              <AppNavigator
-                ref={navigatorRef => {
-                  NavigationService.setTopLevelNavigator(navigatorRef);
-                }}
-                screenProps={{
-                  t: this.t,
-                  locale: this.state.locale,
-                  localize: this.localize,
-                  changeLanguage: this.changeLanguage
-                }}
+        <ThemeContext.Provider value={this.state}>
+          <Provider store={store}>
+            <View style={[styles.mainContainer, { backgroundColor: this.state.theme.background }]}>
+              <StatusBar
+                translucent={true}
+                hidden={false}
+                barStyle="dark-content"
               />
-            </LocaleContext.Provider>
-            {/*https://www.npmjs.com/package/react-native-flash-message?activeTab=readme*/}
-            <FlashMessage position="bottom" />
-          </View>
-        </Provider>
+              <LocaleContext.Provider value={this.state}>
+                <AppNavigator
+                  ref={navigatorRef => {
+                    NavigationService.setTopLevelNavigator(navigatorRef);
+                  }}
+                  screenProps={{
+                    t: this.t,
+                    locale: this.state.locale,
+                    localize: this.localize,
+                    changeLanguage: this.changeLanguage,
+                    themeBg: this.state.theme.background
+                  }}
+                />
+              </LocaleContext.Provider>
+              <ThemeTogglerButton />
+              {/*https://www.npmjs.com/package/react-native-flash-message?activeTab=readme*/}
+              <FlashMessage position="bottom" />
+            </View>
+          </Provider>
+        </ThemeContext.Provider>
       )
     }
   }

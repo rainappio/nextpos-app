@@ -10,6 +10,7 @@ export default class RenderStepper extends React.Component {
       customValue,
       optionName,
       meta: { error, touched, valid },
+      color,
       ...rest
     } = this.props
 
@@ -17,7 +18,7 @@ export default class RenderStepper extends React.Component {
       <View>
         <View style={[styles.flex_dir_row, { alignItems: 'center' }]}>
           <View style={{ width: '60%' }}>
-            <Text>{optionName}</Text>
+            <Text style={{ color: color }}>{optionName}</Text>
           </View>
 
           <View style={{ width: '40%' }}>

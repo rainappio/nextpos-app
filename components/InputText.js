@@ -10,7 +10,8 @@ import {
   Platform
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import styles, {mainThemeColor} from '../styles'
+import styles, { mainThemeColor } from '../styles'
+import { ThemeContext } from '../mode_switcher/themeContext'
 
 const InputText = ({
   input: {
@@ -31,47 +32,52 @@ const InputText = ({
   height, alignLeft, extraStyle,
   ...rest
 }) => (
-  <View>
-    <TextInput
-      onBlur={onBlur}
-      onChangeText={onChange}
-      onSubmitEditing={onSubmitEditing}
-      onFocus={onFocus}
-      secureTextEntry={secureTextEntry}
-      keyboardType={keyboardType}
-      value={value}
-      editable={editable}
-      autoCapitalize={autoCapitalize}
-      inputAccessoryViewID={name}
-      {...rest}
-      style={[
-        styles.rootInput,
-        { borderColor: !valid && touched ? 'red' : 'gray' },
-        { height: height },
-        (alignLeft && {textAlign: 'left'}),
-        extraStyle
-      ]}
-    />
-    {Platform.OS === 'ios' && (
-      <InputAccessoryView nativeID={name}>
-        <TouchableOpacity
-          onPress={() => Keyboard.dismiss()}
-          style={[{ flex: 1, flexDirection: 'row-reverse' }, styles.grayBg]}
-        >
-          <Text
+    <ThemeContext.Consumer>
+      {({ theme }) => (
+        <View>
+          <TextInput
+            onBlur={onBlur}
+            onChangeText={onChange}
+            onSubmitEditing={onSubmitEditing}
+            onFocus={onFocus}
+            secureTextEntry={secureTextEntry}
+            keyboardType={keyboardType}
+            value={value}
+            editable={editable}
+            autoCapitalize={autoCapitalize}
+            inputAccessoryViewID={name}
+            placeholderTextColor={theme.foreground}
+            {...rest}
             style={[
-              styles.margin_15,
-              { fontSize: 16, fontWeight: 'bold', color: mainThemeColor }
+              styles.rootInput,
+              { borderColor: !valid && touched ? 'red' : 'gray' },
+              { height: height },
+              (alignLeft && { textAlign: 'left' }),
+              extraStyle
             ]}
-          >
-            Done
+          />
+          {Platform.OS === 'ios' && (
+            <InputAccessoryView nativeID={name}>
+              <TouchableOpacity
+                onPress={() => Keyboard.dismiss()}
+                style={[{ flex: 1, flexDirection: 'row-reverse' }, styles.grayBg]}
+              >
+                <Text
+                  style={[
+                    styles.margin_15,
+                    { fontSize: 16, fontWeight: 'bold', color: mainThemeColor }
+                  ]}
+                >
+                  Done
           </Text>
-        </TouchableOpacity>
-      </InputAccessoryView>
-    )}
-    {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
-  </View>
-)
+              </TouchableOpacity>
+            </InputAccessoryView>
+          )}
+          {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
+        </View>
+      )}
+    </ThemeContext.Consumer>
+  )
 
 InputText.propTypes = {
   input: PropTypes.shape({

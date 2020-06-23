@@ -19,7 +19,7 @@ import {
   getClientUsr,
   getAnnouncements, getShiftStatus
 } from '../actions'
-import styles, {mainThemeColor} from '../styles'
+import styles, { mainThemeColor } from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
 import { NavigationEvents } from 'react-navigation'
 import { getToken } from '../constants/Backend'
@@ -27,7 +27,7 @@ import { LocaleContext } from '../locales/LocaleContext'
 import { Avatar } from 'react-native-elements'
 import Markdown from 'react-native-markdown-display'
 import IonIcon from 'react-native-vector-icons/Ionicons'
-import {handleDelete, handleOrderSubmit} from "../helpers/orderActions";
+import { handleDelete, handleOrderSubmit } from "../helpers/orderActions";
 import Constants from "expo-constants/src/Constants";
 import MenuButton from "../components/MenuButton";
 import LoadingScreen from "./LoadingScreen";
@@ -106,12 +106,12 @@ class LoginSuccessScreen extends React.Component {
       getannouncements,
       shiftStatus
     } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
     const { username, loggedIn, tokenExpiry } = this.state
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveError) {
       return <BackendErrorScreen />
@@ -130,9 +130,9 @@ class LoginSuccessScreen extends React.Component {
           handleClientUserLogout={this.handleClientUserLogout}
         />
 
-        <View style={[styles.container]}>
-          <View style={[{flexDirection: 'row', flex: 1, marginHorizontal: 10 }]}>
-            <View style={{flex: 1}}>
+        <View style={[styles.container, { backgroundColor: theme.background }]}>
+          <View style={[{ flexDirection: 'row', flex: 1, marginHorizontal: 10 }]}>
+            <View style={{ flex: 1 }}>
               <Image
                 source={
                   __DEV__
@@ -144,8 +144,8 @@ class LoginSuccessScreen extends React.Component {
             </View>
 
             <View
-            	style={[
-                {flex: 1, marginTop: 6, alignItems: 'flex-end'}
+              style={[
+                { flex: 1, marginTop: 6, alignItems: 'flex-end' }
               ]}>
               <Avatar
                 rounded
@@ -158,11 +158,11 @@ class LoginSuccessScreen extends React.Component {
             </View>
           </View>
 
-          <View style={{marginLeft: 10}}>
+          <View style={{ marginLeft: 10 }}>
             <Text style={[styles.text, styles.textBig, styles.orange_color]}>
               {t('welcome')} {currentUser.displayName}{currentUser.defaultUser && t('ownerRemark')}
             </Text>
-            <Text style={[styles.textSmall]}>
+            <Text style={[styles.textSmall, { color: theme.foreground }]}>
               {t('loggedIn')} {formatDateObj(loggedIn)}
             </Text>
           </View>
@@ -183,11 +183,11 @@ class LoginSuccessScreen extends React.Component {
                   size={40}
                   style={[styles.buttonIconStyle]}
                 />
-              }/>
+              } />
           )}
 
-          <View style={[styles.flex_dir_row, {flex: 1}]}>
-            <View style={{flex: 1}}>
+          <View style={[styles.flex_dir_row, { flex: 1 }]}>
+            <View style={{ flex: 1 }}>
               <MenuButton
                 onPress={() =>
                   this.props.navigation.navigate('ClockIn', {
@@ -200,10 +200,10 @@ class LoginSuccessScreen extends React.Component {
                     size={40}
                     style={[styles.buttonIconStyle]}
                   />
-                }/>
+                } />
             </View>
 
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <MenuButton
                 onPress={() => this.props.navigation.navigate('ClientUsers')}
                 title={t('menu.clientUsers')}
@@ -213,11 +213,11 @@ class LoginSuccessScreen extends React.Component {
                     size={40}
                     style={[styles.buttonIconStyle]}
                   />
-                }/>
+                } />
             </View>
           </View>
 
-          <View style={[{flex: 1, margin: 10}]}>
+          <View style={[{ flex: 1, margin: 10 }]}>
             {
               getannouncements.results !== undefined &&
               getannouncements.results.map(getannoc =>
@@ -232,20 +232,21 @@ class LoginSuccessScreen extends React.Component {
                         size={32}
                         color={mainThemeColor}
                       />
-                      <Text style={[styles.sectionBarText, {marginLeft: 10}]}>
+                      <Text style={[styles.sectionBarText, { marginLeft: 10, color: theme.foreground }]}>
                         {getannoc.title}
                       </Text>
                     </View>
                   </View>
+                  <ScrollView style={{ color: 'red' }}>
 
-                  <Markdown>
-                    {getannoc.markdownContent}
-                  </Markdown>
+                    <Markdown>
+                      {getannoc.markdownContent}
+                    </Markdown></ScrollView>
+
                 </View>
               )
             }
           </View>
-
         </View>
       </ScrollView>
     )
@@ -257,7 +258,7 @@ const mapStateToProps = state => ({
   haveData: state.clientuser.haveData,
   haveError: state.clientuser.haveError,
   isLoading: state.clientuser.loading,
-	getannouncements: state.announcements.data,
+  getannouncements: state.announcements.data,
   shiftStatus: state.shift.data.shiftStatus
 })
 
@@ -327,7 +328,7 @@ export class HiddenMenu extends React.Component {
               style={[
                 styles.jc_alignIem_center,
                 styles.paddingTopBtn20,
-                {flex: 1}
+                { flex: 1 }
               ]}
               onPress={() => {
                 this.toggleMenu()
@@ -341,7 +342,7 @@ export class HiddenMenu extends React.Component {
               style={[
                 styles.jc_alignIem_center,
                 styles.paddingTopBtn20,
-                {flex: 1}
+                { flex: 1 }
               ]}
               onPress={() => {
                 this.toggleMenu()

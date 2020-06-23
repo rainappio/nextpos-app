@@ -12,12 +12,12 @@ import BackBtnCustom from '../components/BackBtnCustom'
 import Icon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import images from '../assets/images'
-import {formatDate, formatDateObj, getOrdersByDateRange} from '../actions'
+import { formatDate, formatDateObj, getOrdersByDateRange } from '../actions'
 import { ListItem } from 'react-native-elements'
-import styles, {mainThemeColor} from '../styles'
+import styles, { mainThemeColor } from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
-import {renderOrderState} from "../helpers/orderActions";
-import {NavigationEvents} from "react-navigation";
+import { renderOrderState } from "../helpers/orderActions";
+import { NavigationEvents } from "react-navigation";
 import ScreenHeader from "../components/ScreenHeader";
 import buttonLikeRoles from "react-native-web/dist/modules/AccessibilityUtil/buttonLikeRoles";
 import OrderFilterForm from './OrderFilterForm'
@@ -57,7 +57,7 @@ class OrdersScreen extends React.Component {
   upButtonHandler = () => {
     //OnCLick of Up button we scrolled the list to top
     if (this.ListView_Ref != null) {
-      this.ListView_Ref.scrollToOffset({offset: 0, animated: true})
+      this.ListView_Ref.scrollToOffset({ offset: 0, animated: true })
     }
   }
 
@@ -88,16 +88,16 @@ class OrdersScreen extends React.Component {
       key={item.orderId}
       title={
         <View style={[styles.tableRowContainer]}>
-          <View style={[styles.tableCellView, { flex: 2}]}>
+          <View style={[styles.tableCellView, { flex: 2 }]}>
             <Text>{item.serialId}</Text>
           </View>
-          <View style={[styles.tableCellView, { flex: 3}]}>
+          <View style={[styles.tableCellView, { flex: 3 }]}>
             <Text>{formatDate(item.createdTime)}</Text>
           </View>
-          <View style={[styles.tableCellView, { flex: 1}]}>
+          <View style={[styles.tableCellView, { flex: 1 }]}>
             <Text>${item.orderTotal}</Text>
           </View>
-          <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+          <View style={[styles.tableCellView, { flex: 1, justifyContent: 'center' }]}>
             {renderOrderState(item.state)}
           </View>
         </View>
@@ -108,8 +108,8 @@ class OrdersScreen extends React.Component {
         })
       }
       bottomDivider
-      containerStyle={[ styles.dynamicVerticalPadding(12), { padding: 0 }]}
-     />
+      containerStyle={[styles.dynamicVerticalPadding(12), { padding: 0 }]}
+    />
   )
 
   //https://stackoverflow.com/questions/48061234/how-to-keep-scroll-position-using-flatlist-when-navigating-back-in-react-native
@@ -120,8 +120,8 @@ class OrdersScreen extends React.Component {
   }
 
   render() {
-    const {getordersByDateRange, dateRange, isLoading, haveData} = this.props
-    const {t} = this.context
+    const { getordersByDateRange, dateRange, isLoading, haveData } = this.props
+    const { t } = this.context
 
     const orders = []
     getordersByDateRange !== undefined && getordersByDateRange.map(order => {
@@ -130,7 +130,7 @@ class OrdersScreen extends React.Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveData) {
       return (
@@ -147,7 +147,7 @@ class OrdersScreen extends React.Component {
                 toDate: this.state.searchFilter.toDate
               })
 
-              this.props.navigation.setParams({shiftId: undefined})
+              this.props.navigation.setParams({ shiftId: undefined })
 
               // To prevent FlatList scrolls to top automatically,
               // we have to delay scroll to the original position
@@ -155,50 +155,50 @@ class OrdersScreen extends React.Component {
 
               if (this.ListView_Ref != null) {
                 setTimeout(() => {
-                  this.ListView_Ref.scrollToOffset({offset, animated: false})
+                  this.ListView_Ref.scrollToOffset({ offset, animated: false })
                 }, 800)
               }
             }}
           />
           <ScreenHeader backNavigation={false}
-                        parentFullScreen={true}
-                        title={t('order.ordersTitle')}
-                        rightComponent={
-                          <TouchableOpacity
-                            onPress={() => {
-                              this.handleOrderSearch({})
-                            }}
-                          >
-                            <Icon name="md-refresh" size={32} color={mainThemeColor} />
-                          </TouchableOpacity>
-                        }
+            parentFullScreen={true}
+            title={t('order.ordersTitle')}
+            rightComponent={
+              <TouchableOpacity
+                onPress={() => {
+                  this.handleOrderSearch({})
+                }}
+              >
+                <Icon name="md-refresh" size={32} color={mainThemeColor} />
+              </TouchableOpacity>
+            }
           />
 
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1, marginBottom: 40 }}>
             <OrderFilterForm
               onSubmit={this.handleOrderSearch}
               initialValues={{
                 dateRange: this.state.searchFilter.dateRange,
                 fromDate: new Date(dateRange.zonedFromDate),
                 toDate: new Date(dateRange.zonedToDate)
-              }}/>
+              }} />
           </View>
 
-          <View style={{flex: 3}}>
+          <View style={{ flex: 3 }}>
             <View style={[styles.sectionBar]}>
-              <View style={{flex: 2}}>
+              <View style={{ flex: 2 }}>
                 <Text style={styles.sectionBarTextSmall}>{t('order.orderId')}</Text>
               </View>
 
-              <View style={{flex: 3}}>
+              <View style={{ flex: 3 }}>
                 <Text style={styles.sectionBarTextSmall}>{t('order.date')}</Text>
               </View>
 
-              <View style={{flex: 1}}>
+              <View style={{ flex: 1 }}>
                 <Text style={[styles.sectionBarTextSmall]}>{t('order.total')}</Text>
               </View>
 
-              <View style={{flex: 1, alignItems: 'center'}}>
+              <View style={{ flex: 1, alignItems: 'center' }}>
                 <Text style={[styles.sectionBarTextSmall]}>{t('order.orderStatus')}</Text>
               </View>
             </View>
@@ -227,7 +227,7 @@ class OrdersScreen extends React.Component {
                 <Icon
                   name={'md-arrow-round-up'}
                   size={32}
-                  style={[styles.buttonIconStyle, {marginRight: 10}]}
+                  style={[styles.buttonIconStyle, { marginRight: 10 }]}
                 />
               </TouchableOpacity>
             ) : null}

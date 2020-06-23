@@ -1,28 +1,28 @@
-import React, {Component} from 'react'
-import {Text, View, TouchableOpacity, Modal} from 'react-native'
+import React, { Component } from 'react'
+import { Text, View, TouchableOpacity, Modal } from 'react-native'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 import Icon from 'react-native-vector-icons/Ionicons'
 import moment from 'moment'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
-import {dateToLocaleString} from "../actions";
-import {LocaleContext} from "../locales/LocaleContext";
+import { dateToLocaleString } from "../actions";
+import { LocaleContext } from "../locales/LocaleContext";
 
 export default class RenderDatePicker extends Component {
   static contextType = LocaleContext
 
   render() {
     const {
-      input: {onBlur, onChange, onFocus, value},
+      input: { onBlur, onChange, onFocus, value },
       placeholder,
-      meta: {error, toched, vali5d},
+      meta: { error, toched, vali5d },
       isShow,
       showDatepicker,
       needWeekFilter,
       readonly,
       ...rest
     } = this.props
-    const {t, locale} = this.context
+    const { t, locale } = this.context
 
     const i18nMoment = moment(value);
 
@@ -35,12 +35,12 @@ export default class RenderDatePicker extends Component {
     const fontColor = readonly ? '#c5c5c5' : '#000000'
 
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <View>
           <Modal transparent={true}
-                 visible={isShow}
+            visible={isShow}
           >
-            <View style={{flex: 1, backgroundColor: '#c5c5c5', justifyContent: 'center', alignContent: 'center'}}>
+            <View style={{ flex: 1, backgroundColor: '#c5c5c5', justifyContent: 'center', alignContent: 'center' }}>
               <Text style={styles.screenTitle}>{t('datetimeRange.pickerTitle')}</Text>
 
               <RNDateTimePicker
@@ -95,7 +95,7 @@ export default class RenderDatePicker extends Component {
                   showDatepicker()
                 }
               }}
-                    style={{fontSize: 11, color: fontColor, marginLeft: 5}}
+                style={{ fontSize: 11, color: fontColor, marginLeft: 5 }}
               >
                 {i18nMoment.format("YYYY-MM-DD HH:mm A")}
               </Text>

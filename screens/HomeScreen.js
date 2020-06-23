@@ -35,7 +35,7 @@ export default class HomeScreen extends React.Component {
   }
 
   render() {
-    let { t } = this.context
+    let { t, theme } = this.context
 
     return (
       <View style={styles.container}>
@@ -50,9 +50,9 @@ export default class HomeScreen extends React.Component {
               style={styles.welcomeImage}
             />
           </View>
-          <Text style={styles.welcomeText}>Quickly</Text>
-          <Text style={styles.welcomeText}>Easily</Text>
-          <Text style={styles.welcomeText}>Securely</Text>
+          <Text style={[styles.welcomeText, { color: theme.foreground }]}>Quickly</Text>
+          <Text style={[styles.welcomeText, { color: theme.foreground }]}>Easily</Text>
+          <Text style={[styles.welcomeText, { color: theme.foreground }]}>Securely</Text>
         </View>
 
         <View style={styles.bottom}>

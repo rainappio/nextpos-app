@@ -1,20 +1,21 @@
 import React from 'react'
-import {ActivityIndicator, Text, TouchableOpacity, View, AsyncStorage} from 'react-native'
+import { ActivityIndicator, Text, TouchableOpacity, View, AsyncStorage } from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
-import {LocaleContext} from "../locales/LocaleContext"
-import {dateToLocaleString, doLogout, formatDate, getAnnouncements, getClientUsr, getShiftStatus} from "../actions"
+import { api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage } from '../constants/Backend'
+import { LocaleContext } from "../locales/LocaleContext"
+import { dateToLocaleString, doLogout, formatDate, getAnnouncements, getClientUsr, getShiftStatus } from "../actions"
 import BackBtn from "../components/BackBtn"
 import ScreenHeader from "../components/ScreenHeader";
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions'
 import * as TaskManager from "expo-task-manager";
-import {connect} from "react-redux";
-import {getCurrentClient} from "../actions/client"
+import { connect } from "react-redux";
+import { getCurrentClient } from "../actions/client"
 import { getDistance } from 'geolib'
+import LoadingScreen from "./LoadingScreen"
 
 class ClockIn extends React.Component {
   static navigationOptions = {
@@ -169,11 +170,11 @@ class ClockIn extends React.Component {
 
   getUserTimeCard = () => {
     dispatchFetchRequest(api.timecard.mostRecent, {
-        method: 'GET',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {}
-      },
+      method: 'GET',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {}
+    },
       response => {
         response.json().then(data => {
           this.setState({ timecard: data })
@@ -183,15 +184,15 @@ class ClockIn extends React.Component {
 
   handleClockIn = () => {
     dispatchFetchRequestWithOption(api.timecard.clockin, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }, {
-        defaultMessage: false
-      },
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }, {
+      defaultMessage: false
+    },
       response => {
         successMessage(this.context.t('clockedIn'))
         this.props.navigation.navigate('LoginSuccess')
@@ -200,15 +201,15 @@ class ClockIn extends React.Component {
 
   handleClockOut = () => {
     dispatchFetchRequestWithOption(api.timecard.clockout, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }, {
-        defaultMessage: false
-      },
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }, {
+      defaultMessage: false
+    },
       response => {
         successMessage(this.context.t('clockedOut'))
         this.props.navigation.navigate('LoginSuccess')
@@ -216,7 +217,7 @@ class ClockIn extends React.Component {
   }
 
   render() {
-    const { t } = this.context
+    const { t, theme } = this.context
     const { timecard, storeLocation, distance, canClockIn } = this.state
 
     /**
@@ -225,9 +226,7 @@ class ClockIn extends React.Component {
      */
     if (!timecard) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc"/>
-        </View>
+        <LoadingScreen />
       )
     }
 
@@ -245,16 +244,16 @@ class ClockIn extends React.Component {
 
     return (
       <DismissKeyboard>
-        <View style={[styles.container_nocenterCnt]}>
+        <View style={[styles.container, { backgroundColor: theme.background }]}>
           <ScreenHeader backNavigation={true} title={t('timeCardTitle')} />
 
           <View style={{ flex: 3, justifyContent: 'center' }}>
             <View style={[styles.fieldContainer]}>
               <View style={{ flex: 2 }}>
-                <Text style={styles.fieldTitle}>{t('currentLocation')}</Text>
+                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('currentLocation')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end' }}>
+                <Text style={[{ alignSelf: 'flex-end', color: theme.foreground }]}>
                   {text}
                 </Text>
               </View>
@@ -262,10 +261,10 @@ class ClockIn extends React.Component {
 
             <View style={[styles.fieldContainer]}>
               <View style={{ flex: 2 }}>
-                <Text style={styles.fieldTitle}>{t('storeLocation')}</Text>
+                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('storeLocation')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end' }}>
+                <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>
                   {storeLocation}
                 </Text>
               </View>
@@ -273,76 +272,76 @@ class ClockIn extends React.Component {
 
             <View style={[styles.fieldContainer]}>
               <View style={{ flex: 2 }}>
-                <Text style={styles.fieldTitle}>{t('distance')}</Text>
+                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('distance')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end' }}>
-                  {distance/1000} {t('kilometers')}
+                <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>
+                  {distance / 1000} {t('kilometers')}
                 </Text>
               </View>
             </View>
 
             <View style={[styles.fieldContainer]}>
               <View style={{ flex: 2 }}>
-                <Text style={styles.fieldTitle}>{t('username')}</Text>
+                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('username')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end' }}>
+                <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>
                   {authClientUserName}
                 </Text>
               </View>
             </View>
             <View style={styles.fieldContainer}>
               <View style={{ flex: 2 }}>
-                <Text style={[styles.fieldTitle]}>{t('currentTime')}</Text>
+                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('currentTime')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end' }}>{`${dateToLocaleString(
+                <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>{`${dateToLocaleString(
                   new Date()
                 )}`}</Text>
               </View>
             </View>
             <View style={styles.sectionTitleContainer}>
-              <Text style={styles.sectionTitleText}>{t('timeCardStatus')}</Text>
+              <Text style={[styles.sectionTitleText, { color: theme.foreground }]}>{t('timeCardStatus')}</Text>
             </View>
             <View style={styles.fieldContainer}>
               <View style={{ flex: 2 }}>
-                <Text style={styles.fieldTitle}>{t('timeCardStatus')}</Text>
+                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('timeCardStatus')}</Text>
               </View>
-              <View style={{flex: 3}}>
-                <Text style={{alignSelf: 'flex-end'}}>{this.renderTimeCardStatus(timecard.timeCardStatus)}</Text>
+              <View style={{ flex: 3 }}>
+                <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>{this.renderTimeCardStatus(timecard.timeCardStatus)}</Text>
               </View>
             </View>
             <View style={styles.fieldContainer}>
-              <View style={{flex: 2}}>
-                <Text style={styles.fieldTitle}>
+              <View style={{ flex: 2 }}>
+                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>
                   {t('clockInTime')}
                 </Text>
               </View>
-              <View style={{flex: 3}}>
-                <Text style={{alignSelf: 'flex-end'}}>{timecard.clockIn != null ? `${formatDate(timecard.clockIn)}` : ''}</Text>
+              <View style={{ flex: 3 }}>
+                <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>{timecard.clockIn != null ? `${formatDate(timecard.clockIn)}` : ''}</Text>
               </View>
             </View>
-            { timeCardStatus === 'COMPLETE' && (
+            {timeCardStatus === 'COMPLETE' && (
               <View>
                 <View style={styles.fieldContainer}>
-                  <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>
+                  <View style={{ flex: 2 }}>
+                    <Text style={[styles.fieldTitle, { color: theme.foreground }]}>
                       {t('clockOutTime')}
                     </Text>
                   </View>
-                  <View style={{flex: 3}}>
-                    <Text style={{alignSelf: 'flex-end'}}>{timecard.clockOut != null ? `${formatDate(timecard.clockOut)}` : ''}</Text>
+                  <View style={{ flex: 3 }}>
+                    <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>{timecard.clockOut != null ? `${formatDate(timecard.clockOut)}` : ''}</Text>
                   </View>
                 </View>
                 <View style={styles.fieldContainer}>
-                  <View style={{flex: 1}}>
-                    <Text style={styles.fieldTitle}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.fieldTitle, { color: theme.foreground }]}>
                       {t('workingHours')}
                     </Text>
                   </View>
-                  <View style={{flex: 3}}>
-                    <Text style={{alignSelf: 'flex-end'}}>{this.renderWorkingHours(timecard)}</Text>
+                  <View style={{ flex: 3 }}>
+                    <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>{this.renderWorkingHours(timecard)}</Text>
                   </View>
                 </View>
               </View>
@@ -350,7 +349,7 @@ class ClockIn extends React.Component {
           </View>
 
           {canClockIn && (
-            <View style={[{flex: 2, alignItems: 'center'}]}>
+            <View style={[{ flex: 2, alignItems: 'center' }]}>
               <TouchableOpacity
                 style={styles.squareButton}
                 onPress={
@@ -366,7 +365,7 @@ class ClockIn extends React.Component {
                     color="#fff"
                     style={[styles.centerText, styles.margin_15]}
                   />
-                  <Text style={[styles.centerText, styles.whiteColor]}>
+                  <Text style={[styles.centerText, styles.whiteColor, { color: theme.foreground }]}>
                     {timeCardStatus === 'ACTIVE' ? t('clockOut') : t('clockIn')}
                   </Text>
                 </View>

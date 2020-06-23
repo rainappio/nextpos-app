@@ -1,12 +1,12 @@
-import React, {Component} from 'react'
-import {Field, reduxForm} from 'redux-form'
-import {Text, View, TouchableOpacity, ScrollView, Picker, Alert} from 'react-native'
+import React, { Component } from 'react'
+import { Field, reduxForm } from 'redux-form'
+import { Text, View, TouchableOpacity, ScrollView, Picker, Alert } from 'react-native'
 import DropDown from '../components/DropDown'
 import RenderStepper from '../components/RenderStepper'
-import {isRequired} from '../validators'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { isRequired } from '../validators'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import {LocaleContext} from '../locales/LocaleContext'
+import { LocaleContext } from '../locales/LocaleContext'
 import PickerInput from "../components/PickerInput";
 import SegmentedControl from "../components/SegmentedControl";
 import ScreenHeader from "../components/ScreenHeader";
@@ -46,21 +46,21 @@ class OrderForm extends Component {
       selectedTableId: null,
       selectedOrderType: null,
       orderTypes: {
-        0: {label: context.t('order.inStore'), value: 'IN_STORE'},
-        1: {label: context.t('order.takeOut'), value: 'TAKE_OUT'}
+        0: { label: context.t('order.inStore'), value: 'IN_STORE' },
+        1: { label: context.t('order.takeOut'), value: 'TAKE_OUT' }
       },
       selectedAgeGroup: null,
       ageGroups: {
-        0: {label: '20-29', value: 'TWENTIES'},
-        1: {label: '30-39', value: 'THIRTIES'},
-        2: {label: '40-49', value: 'FORTIES'},
-        3: {label: '50-59', value: 'FIFTIES_AND_ABOVE'}
+        0: { label: '20-29', value: 'TWENTIES' },
+        1: { label: '30-39', value: 'THIRTIES' },
+        2: { label: '40-49', value: 'FORTIES' },
+        3: { label: '50-59', value: 'FIFTIES_AND_ABOVE' }
       },
       selectedVisitFrequency: null,
       visitFrequencies: {
-        0: {label: '1', value: 'FIRST_TIME'},
-        1: {label: '2 - 3', value: 'TWO_TO_THREE'},
-        2: {label: '4+', value: 'MORE_THAN_THREE'}
+        0: { label: '1', value: 'FIRST_TIME' },
+        1: { label: '2 - 3', value: 'TWO_TO_THREE' },
+        2: { label: '4+', value: 'MORE_THAN_THREE' }
       }
     }
   }
@@ -71,7 +71,7 @@ class OrderForm extends Component {
 
     if (orderType != null) {
       this.handleOrderTypeSelection(orderType === 'IN_STORE' ? 0 : 1)
-      this.setState({selectedTableId: initialValues.tableId})
+      this.setState({ selectedTableId: initialValues.tableId })
 
       let selectedAgeGroup = null
 
@@ -112,22 +112,22 @@ class OrderForm extends Component {
 
   handleOrderTypeSelection = (index) => {
     const selectedIndex = this.selectedOrderType === index ? null : index
-    this.setState({selectedOrderType: selectedIndex})
+    this.setState({ selectedOrderType: selectedIndex })
   }
 
   handleAgeGroupSelection = (index) => {
     const selectedIndex = this.selectedAgeGroup === index ? null : index
-    this.setState({selectedAgeGroup: selectedIndex})
+    this.setState({ selectedAgeGroup: selectedIndex })
   }
 
   handleVisitFrequencySelection = (index) => {
     const selectedIndex = this.selectedVisitFrequency === index ? null : index
-    this.setState({selectedVisitFrequency: selectedIndex})
+    this.setState({ selectedVisitFrequency: selectedIndex })
   }
 
   render() {
-    const {tablesMap} = this.props
-    const {t} = this.context
+    const { tablesMap } = this.props
+    const { t, theme } = this.context
 
     const orderTypes = Object.keys(this.state.orderTypes).map(key => this.state.orderTypes[key].label)
     const ageGroups = Object.keys(this.state.ageGroups).map(key => this.state.ageGroups[key].label)
@@ -150,19 +150,19 @@ class OrderForm extends Component {
     ]
 
     return (
-      <ScrollView scrollIndicatorInsets={{right: 1}}>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
-          <View style={styles.container}>
+          <View style={[styles.container, { backgroundColor: theme.background }]}>
             <ScreenHeader backNavigation={true}
-                          title={t('newOrderTitle')}
+              title={t('newOrderTitle')}
             />
 
             <View style={styles.sectionContent}>
               <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('orderType')}</Text>
+                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('orderType')}</Text>
               </View>
               <View style={[styles.fieldContainer]}>
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                   <Field
                     name="orderType"
                     component={SegmentedControl}
@@ -180,7 +180,7 @@ class OrderForm extends Component {
             {this.state.selectedOrderType === 0 && Object.keys(tablesMap).length > 0 && (
               <View style={styles.sectionContent}>
                 <View style={styles.fieldContainer}>
-                  <Text style={styles.fieldTitle}>{t('table')}</Text>
+                  <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('table')}</Text>
                 </View>
                 <Field
                   component={PickerInput}
@@ -189,7 +189,7 @@ class OrderForm extends Component {
                   selectedValue={this.state.selectedTableId}
                   validate={isRequired}
                   onChange={(itemValue, itemIndex) => {
-                    this.setState({selectedTableId: itemValue})
+                    this.setState({ selectedTableId: itemValue })
                   }}
                 />
               </View>
@@ -197,17 +197,17 @@ class OrderForm extends Component {
 
             {noAvailableTables && (
               <View style={styles.sectionContent}>
-                <Text>{t('noAvailableTables')}</Text>
+                <Text style={{ color: theme.foreground }}>{t('noAvailableTables')}</Text>
               </View>
             )}
 
 
             <View style={styles.sectionContent}>
               <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('ageGroup')}</Text>
+                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('ageGroup')}</Text>
               </View>
               <View style={[styles.fieldContainer, styles.flex_dir_row]}>
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                   <Field
                     name="ageGroup"
                     component={SegmentedControl}
@@ -224,10 +224,10 @@ class OrderForm extends Component {
 
             <View style={styles.sectionContent}>
               <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('visitFrequency')}</Text>
+                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('visitFrequency')}</Text>
               </View>
               <View style={[styles.fieldContainer]}>
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                   <Field
                     name="visitFrequency"
                     component={SegmentedControl}
@@ -244,7 +244,7 @@ class OrderForm extends Component {
 
             <View style={styles.sectionContent}>
               <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('peopleCount')}</Text>
+                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('peopleCount')}</Text>
               </View>
               <View>
                 {people.map((people, ix) => (
@@ -256,6 +256,7 @@ class OrderForm extends Component {
                       name={people.value}
                       component={RenderStepper}
                       optionName={people.label}
+                      color={theme.foreground}
                     />
                   </View>
                 ))}
@@ -270,7 +271,7 @@ class OrderForm extends Component {
                   styles.mgrtotop20
                 ]}
               >
-                <View style={{flex: 1, marginHorizontal: 5}}>
+                <View style={{ flex: 1, marginHorizontal: 5 }}>
                   <TouchableOpacity
                     onPress={() => {
                       if (!noAvailableTables) {
@@ -287,13 +288,13 @@ class OrderForm extends Component {
                       }
                     }}
                   >
-                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                    <Text style={[styles.bottomActionButton, styles.actionButton, { color: theme.foreground }]}>
                       {t('openOrder')}
                     </Text>
                   </TouchableOpacity>
                 </ View>
 
-                <View style={{flex: 1, marginHorizontal: 5}}>
+                <View style={{ flex: 1, marginHorizontal: 5 }}>
                   <TouchableOpacity
                     onPress={() => {
                       this.props.navigation.goBack()

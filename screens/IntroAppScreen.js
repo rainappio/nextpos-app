@@ -9,9 +9,9 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import styles from '../styles'
-import {doLogout} from '../actions'
-import {getToken} from "../constants/Backend";
-import {LocaleContext} from "../locales/LocaleContext";
+import { doLogout } from '../actions'
+import { getToken } from "../constants/Backend";
+import { LocaleContext } from "../locales/LocaleContext";
 
 class IntroAppScreen extends React.Component {
   static navigationOptions = {
@@ -46,8 +46,7 @@ class IntroAppScreen extends React.Component {
   }
 
   render() {
-    let { t } = this.context
-
+    let { t, theme } = this.context
     return (
       <View style={styles.container}>
         <View style={{ flex: 3, justifyContent: 'center' }}>
@@ -61,9 +60,9 @@ class IntroAppScreen extends React.Component {
               style={styles.welcomeImage}
             />
           </View>
-          <Text style={styles.welcomeText}>Simplify</Text>
-          <Text style={styles.welcomeText}>Your</Text>
-          <Text style={styles.welcomeText}>Selling</Text>
+          <Text style={[styles.welcomeText, { color: theme.foreground }]}>Simplify</Text>
+          <Text style={[styles.welcomeText, { color: theme.foreground }]}>Your</Text>
+          <Text style={[styles.welcomeText, { color: theme.foreground }]}>Selling</Text>
         </View>
 
         <View style={[styles.bottom]}>

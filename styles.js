@@ -17,17 +17,17 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    marginTop: 53,
-    marginLeft: 15,
-    marginRight: 15,
-    marginBottom: 36
+    paddingTop: 53,
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingBottom: 36
   },
   container_nocenterCnt: {
     flex: 1,
-    marginTop: 53,
-    marginLeft: 15,
-    marginRight: 15,
-    marginBottom: 36
+    paddingTop: 53,
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingBottom: 36
   },
   childContainer: {
     flex: 1,

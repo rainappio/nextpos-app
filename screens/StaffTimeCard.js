@@ -21,18 +21,18 @@ class StaffTimeCard extends React.Component {
   static contextType = LocaleContext
 
   state = {
-  	filteredTimeCard: []
+    filteredTimeCard: []
   }
 
   componentDidMount() {
-  	this.props.getTimeCards()
+    this.props.getTimeCards()
   }
 
   handleFilter = (values) => {
-  	const month = values.month;
-  	const year = values.year;
+    const month = values.month;
+    const year = values.year;
 
-  	if (!month || !year) {
+    if (!month || !year) {
       warningMessage('Please Choose Both Year and Month')
       return
     }
@@ -43,15 +43,15 @@ class StaffTimeCard extends React.Component {
       credentials: 'include',
       headers: {}
     },
-    response => {
-      response.json().then(data => {
-        this.setState({filteredTimeCard: data.userTimeCards})
-      })
-    }).then()
+      response => {
+        response.json().then(data => {
+          this.setState({ filteredTimeCard: data.userTimeCards })
+        })
+      }).then()
   }
 
   render() {
-    const { t } = this.context
+    const { t, theme } = this.context
     const { timecards, haveData, haveError, loading } = this.props
     const { filteredTimeCard } = this.state
 
@@ -59,33 +59,33 @@ class StaffTimeCard extends React.Component {
       const displayName = timecard.nickname != null ? timecard.nickname : timecard.id
 
       return (
-      	<TouchableOpacity
+        <TouchableOpacity
           style={styles.tableRowContainerWithBorder}
-					onPress={() => {
-          	this.props.navigation.navigate('UserTimeCards', {
-            	name: timecard.id,
+          onPress={() => {
+            this.props.navigation.navigate('UserTimeCards', {
+              name: timecard.id,
               displayName: displayName
-          	})
-        	}}
-      		>
-          <View style={[styles.tableCellView, {flex: 5}]}>
+            })
+          }}
+        >
+          <View style={[styles.tableCellView, { flex: 5 }]}>
             <Text>{displayName}</Text>
           </View>
 
-          <View style={[styles.tableCellView, {flex: 2}]}>
+          <View style={[styles.tableCellView, { flex: 2 }]}>
             <Text>{timecard.totalShifts}</Text>
           </View>
 
-          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+          <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
             <Text >{timecard.totalHours.toFixed(2)}</Text>
           </View>
         </TouchableOpacity>
       )
     }
 
-		if (loading) {
+    if (loading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     }
 
@@ -93,33 +93,33 @@ class StaffTimeCard extends React.Component {
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
           <View style={styles.fullWidthScreen}>
-          	<ScreenHeader backNavigation={true}
-                          parentFullScreen={true}
-                          title={t('title')}
+            <ScreenHeader backNavigation={true}
+              parentFullScreen={true}
+              title={t('title')}
             />
 
-          	<StaffTimeCardFilterForm
-							onSubmit={this.handleFilter}
-          	/>
+            <StaffTimeCardFilterForm
+              onSubmit={this.handleFilter}
+            />
 
             <View style={[styles.sectionBar]}>
-              <View style={[styles.tableCellView, {flex: 5}]}>
+              <View style={[styles.tableCellView, { flex: 5 }]}>
                 <Text style={[styles.sectionBarText]}>{t('firstColTitle')}</Text>
               </View>
 
-              <View style={[styles.tableCellView, {flex: 2}]}>
+              <View style={[styles.tableCellView, { flex: 2 }]}>
                 <Text style={[styles.sectionBarText]}>{t('secColTitle')}</Text>
               </View>
 
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text style={[styles.sectionBarText, {textAlign: 'right'}]}>{t('thirdColTitle')}</Text>
+              <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
+                <Text style={[styles.sectionBarText, { textAlign: 'right' }]}>{t('thirdColTitle')}</Text>
               </View>
             </View>
 
-						<FlatList
+            <FlatList
               data={Object.keys(filteredTimeCard).length !== 0 ? filteredTimeCard : timecards}
               renderItem={({ item, index }) => (
-                <Item timecard={item} layoutId={item.id} index={index}/>
+                <Item timecard={item} layoutId={item.id} index={index} />
               )}
               keyExtractor={item => item.id}
             />

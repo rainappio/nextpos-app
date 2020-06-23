@@ -1,7 +1,7 @@
 import styles from '../styles'
-import {ActivityIndicator, View} from 'react-native'
+import { ActivityIndicator, View } from 'react-native'
 import React from 'react'
-import {LocaleContext} from '../locales/LocaleContext'
+import { LocaleContext } from '../locales/LocaleContext'
 
 
 export default class LoadingScreen extends React.Component {
@@ -13,7 +13,7 @@ export default class LoadingScreen extends React.Component {
 
   render() {
     return (
-      <View style={[styles.container]}>
+      <View style={[styles.container, { backgroundColor: this.context.theme.background }]}>
         <ActivityIndicator size="small" color="#ccc" />
       </View>
     )

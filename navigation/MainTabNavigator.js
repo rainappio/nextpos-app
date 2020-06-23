@@ -82,7 +82,7 @@ import UpdateOrder from "../screens/UpdateOrder";
 import EditUserRole from '../screens/EditUserRole'
 import NewUserRole from '../screens/NewUserRole'
 import ManageUserRole from '../screens/ManageUserRole'
-
+let bgColor = '#f5f5f5';
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
   ClientUsers: ClientUsers,
@@ -94,7 +94,8 @@ Home.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.home'),
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={'md-home'} />
-  )
+  ),
+  backgroundColor: 'pink'
 })
 
 const Settings = createStackNavigator({
@@ -249,7 +250,8 @@ const tabBar = createBottomTabNavigator({
     screen: Settings
   }
 }, {
-  defaultNavigationOptions: {
+  // defaultNavigationOptions: {
+  defaultNavigationOptions: ({ screenProps: { themeBg } }) => {
     tabBarOnPress: async ({ navigation, defaultHandler }) => {
       const tokenObj = await getToken()
 
@@ -274,11 +276,13 @@ const tabBar = createBottomTabNavigator({
       )*/
       defaultHandler()
     }
-  },
-  tabBarOptions: {
-    showLabel: false,
-    tabStyle: {
-      backgroundColor: '#f5f5f5'
+    return {
+      tabBarOptions: {
+        showLabel: false,
+        style: {
+          backgroundColor: themeBg,
+        }
+      },
     }
   }
 })

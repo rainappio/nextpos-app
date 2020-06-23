@@ -52,20 +52,20 @@ class ClientUsers extends React.Component {
 
   render() {
     const { clientusers, refreshing, navigation } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
-      <View style={[styles.container_nocenterCnt]}>
+      <View style={[styles.container_nocenterCnt, { backgroundColor: theme.background }]}>
 
         <ScreenHeader backNavigation={true}
-                      title={t('clientUsersTitle')}
-                      rightComponent={
-                        <TouchableOpacity onPress={() => this.handleDefaultUserLogout(navigation)}>
-                          <Text style={styles.sectionBarText}>
-                            {t('logout')}
-                          </Text>
-                        </TouchableOpacity>
-                      }
+          title={t('clientUsersTitle')}
+          rightComponent={
+            <TouchableOpacity onPress={() => this.handleDefaultUserLogout(navigation)}>
+              <Text style={styles.sectionBarText}>
+                {t('logout')}
+              </Text>
+            </TouchableOpacity>
+          }
         />
 
         <View style={{ marginTop: 80 }}>
@@ -99,7 +99,7 @@ class ClientUsers extends React.Component {
                 >
                   {item.username[0].toUpperCase()}
                 </Text>
-                <Text style={{ marginLeft: 60, marginTop: -30 }}>
+                <Text style={{ marginLeft: 60, marginTop: -30, color: theme.foreground }}>
                   {item.nickname != null ? item.nickname : item.username}
                 </Text>
               </TouchableOpacity>
