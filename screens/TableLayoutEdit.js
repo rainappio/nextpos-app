@@ -23,6 +23,7 @@ import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import AddBtn from "../components/AddBtn";
+import LoadingScreen from "./LoadingScreen";
 
 class TableLayoutEdit extends React.Component {
   static navigationOptions = {
@@ -81,37 +82,34 @@ class TableLayoutEdit extends React.Component {
 
     if (isLoading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen/>
       )
     }
     return (
-    	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
-      	<DismissKeyboard>
-        	<View style={[styles.container_nocenterCnt]}>
-            <ScreenHeader title={t('editTableLayoutTitle')}
-                          rightComponent={
-                            <AddBtn
-                              onPress={() =>
-                                this.props.navigation.navigate('TableAdd', {
-                                  layoutId: tablelayout.id
-                                })
-                              }
-                            />
-                          }
-            />
+    	<ScrollView scrollIndicatorInsets={{right: 1}}>
+        <View style={[styles.fullWidthScreen]}>
+          <ScreenHeader title={t('editTableLayoutTitle')}
+                        parentFullScreen={true}
+                        rightComponent={
+                          <AddBtn
+                            onPress={() =>
+                              this.props.navigation.navigate('TableAdd', {
+                                layoutId: tablelayout.id
+                              })
+                            }
+                          />
+                        }
+          />
 
-          	<TableLayoutForm
-            	onSubmit={this.handleSubmit}
-            	handleDeleteLayout={this.handleDeleteLayout}
-            	initialValues={tablelayout}
-            	isEdit={true}
-            	navigation={navigation}
-            	handleEditCancel={this.handleEditCancel}
-          	/>
-        	</View>
-      	</DismissKeyboard>
+          <TableLayoutForm
+            onSubmit={this.handleSubmit}
+            handleDeleteLayout={this.handleDeleteLayout}
+            initialValues={tablelayout}
+            isEdit={true}
+            navigation={navigation}
+            handleEditCancel={this.handleEditCancel}
+          />
+        </View>
       </ScrollView>
     )
   }

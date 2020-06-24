@@ -22,6 +22,7 @@ import {api, makeFetchRequest, errorAlert, dispatchFetchRequest, successMessage}
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
+import LoadingScreen from "./LoadingScreen";
 
 class TableEdit extends React.Component {
   static navigationOptions = {
@@ -84,27 +85,23 @@ class TableEdit extends React.Component {
 
     if (isLoading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen />
       )
     } else if (haveData && selectedTable !== undefined) {
       return (
-        <DismissKeyboard>
-          <View style={[styles.container_nocenterCnt]}>
-            <ScreenHeader title={t('editTableTitle')}/>
+        <View style={[styles.fullWidthScreen]}>
+          <ScreenHeader title={t('editTableTitle')}
+                        parentFullScreen={true}/>
 
-            <TableForm
-              onSubmit={this.handleSubmit}
-              handleDeleteTable={this.handleDeleteTable}
-              initialValues={selectedTable}
-              isEdit={true}
-              tableLayout={tablelayout}
-              navigation={navigation}
-            />
-          </View>
-
-        </DismissKeyboard>
+          <TableForm
+            onSubmit={this.handleSubmit}
+            handleDeleteTable={this.handleDeleteTable}
+            initialValues={selectedTable}
+            isEdit={true}
+            tableLayout={tablelayout}
+            navigation={navigation}
+          />
+        </View>
       )
     } else {
       return null

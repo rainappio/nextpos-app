@@ -48,8 +48,9 @@ class PrinterAdd extends React.Component {
 
     return (
       <DismissKeyboard>
-        <View style={styles.container_nocenterCnt}>
-          <ScreenHeader title={t('addPrinterTitle')}/>
+        <View style={styles.fullWidthScreen}>
+          <ScreenHeader title={t('addPrinterTitle')}
+                        parentFullScreen={true}/>
 
           <PrinterForm navigation={navigation} onSubmit={this.handleSubmit} />
         </View>

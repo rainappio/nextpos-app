@@ -50,16 +50,15 @@ class TableLayoutAdd extends React.Component {
     const { t } = this.context
 
     return (
-      <DismissKeyboard>
-        <View style={styles.container_nocenterCnt}>
-          <ScreenHeader title={t('addTableLayoutTitle')}/>
+      <View style={styles.fullWidthScreen}>
+        <ScreenHeader title={t('addTableLayoutTitle')}
+                      parentFullScreen={true}/>
 
-          <TableLayoutForm
-            onSubmit={this.handleSubmit}
-            navigation={navigation}
-          />
-        </View>
-      </DismissKeyboard>
+        <TableLayoutForm
+          onSubmit={this.handleSubmit}
+          navigation={navigation}
+        />
+      </View>
     )
   }
 }

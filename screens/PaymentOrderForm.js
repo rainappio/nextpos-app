@@ -283,7 +283,6 @@ class PaymentOrderForm extends React.Component {
                     {label: 'MasterCard', value: 'MASTER'},
                     {label: 'Other', value: 'OTHER'}
                   ]}
-                  forFilter={true}
                 />
               </View>
             }

@@ -10,6 +10,7 @@ import images from '../assets/images'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import DropDown from '../components/DropDown'
+import moment from "moment";
 
 class TimeCardFilterForm extends React.Component {
   static contextType = LocaleContext
@@ -18,6 +19,24 @@ class TimeCardFilterForm extends React.Component {
     const { t } = this.context
     const { handleSubmit } = this.props
 
+    const years = []
+    for (let i = -5; i <= 0; i++) {
+      const year = String(moment().add(i, 'y').year())
+      years.push({
+        label: year,
+        value: year
+      })
+    }
+
+    const months = []
+    for (let i = 0; i < 12; i++) {
+      const month = moment().month(i)
+      months.push({
+        label: month.format('MMMM'),
+        value: String(month.month() + 1)
+      })
+    }
+
     return (
       <View style={[styles.tableRowContainer]}>
         <View style={{flex: 2.5, marginRight: 5, marginLeft: 4}}>
@@ -25,15 +44,7 @@ class TimeCardFilterForm extends React.Component {
             name="year"
             component={DropDown}
             placeholder={{value: null, label: t('yearLabel')}}
-            options={[
-              {label: '2020', value: '2020'},
-              {label: '2021', value: '2021'},
-              {label: '2022', value: '2022'},
-              {label: '2023', value: '2023'},
-              {label: '2024', value: '2024'},
-              {label: '2025', value: '2025'},
-            ]}
-            forFilter={true}
+            options={years}
           />
         </View>
 
@@ -42,21 +53,7 @@ class TimeCardFilterForm extends React.Component {
             name="month"
             component={DropDown}
             placeholder={{value: null, label: t('monthLabel')}}
-            options={[
-              {label: 'JANUARY', value: 'JANUARY'},
-              {label: 'FEBRUARY', value: 'FEBRUARY'},
-              {label: 'MARCH', value: 'MARCH'},
-              {label: 'APRIL', value: 'APRIL'},
-              {label: 'MAY', value: 'MAY'},
-              {label: 'JUNE', value: 'JUNE'},
-              {label: 'JULY', value: 'JULY'},
-              {label: 'AUGUST', value: 'AUGUST'},
-              {label: 'SEPTEMBER', value: 'SEPTEMBER'},
-              {label: 'OCTOBER', value: 'OCTOBER'},
-              {label: 'NOVEMBER', value: 'NOVEMBER'},
-              {label: 'DECEMBER', value: 'DECEMBER'},
-            ]}
-            forFilter={true}
+            options={months}
           />
         </View>
 

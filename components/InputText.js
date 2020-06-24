@@ -31,7 +31,7 @@ const InputText = ({
   height, alignLeft, extraStyle,
   ...rest
 }) => (
-    <View>
+    <View style={{flex: 1}}>
       <TextInput
         onBlur={onBlur}
         onChangeText={onChange}

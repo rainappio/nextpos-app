@@ -77,8 +77,9 @@ class WorkingAreaEdit extends React.Component {
 
     return (
       <DismissKeyboard>
-        <View style={styles.container_nocenterCnt}>
+        <View style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={true}
+                        parentFullScreen={true}
                         backAction={() => this.handleEditCancel()}
                         title={t('editWorkingAreaTitle')}/>
 

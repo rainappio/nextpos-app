@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview"
 import { LocaleContext } from "../locales/LocaleContext";
 import { DismissKeyboard } from "../components/DismissKeyboard";
 import ScreenHeader from "../components/ScreenHeader";
-import { getOrderOffer, getOffers, clearOrderOffer, removeDuplicate } from '../actions'
+import { getOrderOffer, getOffers, clearOrderOffer } from '../actions'
 import styles from "../styles";
 import OfferForm from "./OfferForm";
 import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
@@ -42,16 +42,14 @@ class EditOffer extends Component {
   }
 
   handleSubmit = values => {
-    let productLabelIds = [];
-    let uniqueProductLabelIds = [];
     values.productIds = [];
     values.productLabelIds = [];
-    var offerId = this.props.navigation.state.params.offerId;
+    const offerId = this.props.navigation.state.params.offerId;
     const { products } = this.state;
 
-    values.offerType !== 0 && values.appliesToAllProducts === undefined ? values.appliesToAllProducts = false : null;
-    if(values.productOfferDetails.appliesToAllProducts === true){
-      values.appliesToAllProducts = true;
+    if (!values.dateBound) {
+      values.startDate = null
+      values.endDate = null
     }
 
     if (Platform.OS !== "ios") {
@@ -59,22 +57,13 @@ class EditOffer extends Component {
       values.endDate = this.state.endDate;
     }
 
-    products !== undefined && products !== false && products.map(selectedProduct => {
-      values.productIds.push(selectedProduct.productId)
-      productLabelIds.push(selectedProduct.labelId)
-      uniqueProductLabelIds = productLabelIds.filter(function (item, index) {
-        return productLabelIds.indexOf(item) == index;
-      })
-      values.productLabelIds = uniqueProductLabelIds;
-    })
-
-    if (values.offerType === "PRODUCT") {
-      values.offerType = 1;
-    } else if (values.offerType === "ORDER") {
-      values.offerType = 0;
-      values.productIds = null;
-      values.productLabelIds = null;
+    if (values.offerType === 'PRODUCT') {
+      values.appliesToAllProducts = values.productOfferDetails.appliesToAllProducts;
     }
+
+    products != null && products.map(selectedProduct => {
+      values.productIds.push(selectedProduct.productId)
+    })
 
     dispatchFetchRequest(
       api.order.updateOrderOfferById(offerId),
@@ -118,7 +107,7 @@ class EditOffer extends Component {
     this.props.clearOrderOffer();
     this.props.getOffers();
     this.props.navigation.navigate("ManageOffers");
-  };
+  }
 
   handleActivate = offerId => {
     dispatchFetchRequest(
@@ -132,7 +121,6 @@ class EditOffer extends Component {
         }
       },
       response => {
-        successMessage("Activated");
         this.props.getOrderOffer(offerId);
         this.props.navigation.navigate("EditOffer");
       }
@@ -151,7 +139,6 @@ class EditOffer extends Component {
         }
       },
       response => {
-        successMessage("Deactivated");
         this.props.getOrderOffer(offerId);
         this.props.navigation.navigate("EditOffer");
       }
@@ -166,28 +153,34 @@ class EditOffer extends Component {
       this.props.navigation.state.params !== undefined &&
       this.props.navigation.state.params.updatedProducts;
 
-    orderOffer.selectedofferType = 0;
-    if (orderOffer.offerType !== undefined) {
-      if (orderOffer.offerType === "PRODUCT") {
-        orderOffer.selectedofferType = 1;
-      }
+    const initialValues = {...orderOffer}
+
+    initialValues.selectedofferType = initialValues.offerType === "PRODUCT" ? 1 : 0;
+    initialValues.dateBound = orderOffer.startDate != null || orderOffer.endDate != null
+
+    if (orderOffer.startDate == null) {
+      initialValues.startDate = new Date()
+    }
+
+    if (orderOffer.endDate == null) {
+      initialValues.endDate = new Date()
     }
 
     if (isLoading) {
-      return <LoadingScreen />;
+      return <LoadingScreen />
+
     } else if (haveData) {
       return (
         <KeyboardAwareScrollView>
           <DismissKeyboard>
-            <View style={styles.container_nocenterCnt}>
+            <View style={styles.fullWidthScreen}>
               <ScreenHeader
                 title={t("editOfferTitle")}
+                parentFullScreen={true}
                 backAction={this.handleEditCancel}
               />
               <OfferForm
-                initialValues={
-                 Object.keys(orderOffer).length !== 0 && orderOffer
-                }
+                initialValues={initialValues}
                 handleEditCancel={this.handleEditCancel}
                 isEditForm={true}
                 onSubmit={this.handleSubmit}
@@ -195,7 +188,6 @@ class EditOffer extends Component {
                 navigation={this.props.navigation}
                 handleActivate={this.handleActivate}
                 handleDeactivate={this.handleDeactivate}
-                isLoading={isLoading}
                 selectedProducts={selectedProducts}
                 onChange={this.handleonChange}
               />

@@ -7,7 +7,7 @@ import {
 import { connect } from 'react-redux'
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import { getProducts, getLables, removeDuplicate } from '../actions'
+import { getProducts, getLables } from '../actions'
 import styles, { mainThemeColor } from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
@@ -26,14 +26,16 @@ class ProductRowforOffer extends React.Component {
 
     context.localize({
       en: {
-        productListTitle: 'Product List',
+        productListModalTitle: 'Select a product',
         ungrouped: 'Ungrouped',
-        pinned: 'Pinned'
+        pinned: 'Pinned',
+        alreadySelected: 'Selected'
       },
       zh: {
-        productListTitle: '產品列表',
+        productListModalTitle: '選擇產品',
         ungrouped: '未分類',
-        pinned: '置頂產品'
+        pinned: '置頂產品',
+        alreadySelected: '已選'
       }
     })
 
@@ -114,8 +116,16 @@ class ProductRowforOffer extends React.Component {
   createProductsArr = (item) => {
     this.state.products.push(item);
     this.setState({
-      uniqueselectedProducts: removeDuplicate(this.state.products, ans => ans.name)
+      uniqueselectedProducts: this.state.products
     })
+  }
+
+  checkProductExists = productId => {
+    const found = this.state.products.find(p => {
+      return (p.productId === productId)
+    })
+
+    return found !== undefined
   }
 
   renderItem = ({ item, index, drag, isActive }) => {
@@ -132,23 +142,21 @@ class ProductRowforOffer extends React.Component {
               return (
                 <View style={[{ paddingTop: 20, paddingBottom: 20, backgroundColor: '#f1f1f1', paddingLeft: 20, borderTopWidth: 0.11 }]} key={data.id}>
                   {
-                    this.props.isEditForm
-                      ?
-                      <Text onPress={() => {
-                        this.createProductsArr({ productId: data.id, name: data.name, labelId: data.productLabelId });
-                        this.props.navigation.navigate('EditOffer', {
-                          updatedProducts: this.state.uniqueselectedProducts,
-                          isPinned: this.props.products['pinned'].filter(pa => pa.id == data.id)[0] !== undefined ? true : false
-                        })
-                      }} style={{ marginRight: 50 }}>{data.name}</Text>
-                      :
-                      <Text onPress={() => {
-                        this.createProductsArr({ productId: data.id, name: data.name, labelId: data.productLabelId });
-                        this.props.navigation.navigate('NewOffer', {
-                          updatedProducts: this.state.uniqueselectedProducts,
-                          isPinned: this.props.products['pinned'].filter(pa => pa.id == data.id)[0] !== undefined ? true : false
-                        })
-                      }} style={{ marginRight: 50 }}>{data.name}</Text>
+                    this.checkProductExists(data.id) ? (
+                      <Text style={{marginRight: 50}}>{data.name} ({this.context.t('alreadySelected')})</Text>
+                    ) : (
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.createProductsArr({productId: data.id, name: data.name, labelId: data.productLabelId});
+                          const offerScreen = this.props.isEditForm ? 'EditOffer' : 'NewOffer'
+                          this.props.navigation.navigate(offerScreen, {
+                            updatedProducts: this.state.uniqueselectedProducts
+                          })
+                        }}
+                      >
+                        <Text style={{marginRight: 50}}>{data.name}</Text>
+                      </TouchableOpacity>
+                    )
                   }
                 </View>
               )
@@ -172,12 +180,12 @@ class ProductRowforOffer extends React.Component {
       <DismissKeyboard>
         <View style={[styles.fullWidthScreen, styles.nomgrBottom]}>
           <ScreenHeader backNavigation={true}
-            title={t('productListTitle')}
+            title={t('productListModalTitle')}
             parentFullScreen={true}
           />
           <FlatList
             data={labelsArr}
-            renderItem={(item, index, drag, isActive) => this.renderItem(item, index, drag, isActive)}
+            renderItem={(item, index, drag, isActive) => this.renderItem(item)}
             keyExtractor={(item, index) => `draggable-item-${item.label}`}
             onDragEnd={(data) => this.handleReArrange(data)}
             initialNumToRender={10}

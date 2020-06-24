@@ -10,6 +10,8 @@ import RNSwitch from '../components/RNSwitch'
 import { LocaleContext } from '../locales/LocaleContext'
 import SegmentedControl from "../components/SegmentedControl";
 import ScreenHeader from "../components/ScreenHeader";
+import moment from "moment-timezone";
+import DropDown from "../components/DropDown";
 
 class StoreFormScreen extends React.Component {
   static navigationOptions = {
@@ -34,7 +36,12 @@ class StoreFormScreen extends React.Component {
           showSeat: 'Vacant Seat',
           showTable: 'Vacant Table'
         },
-        inEffectRule: 'These settings will take effect on future orders'
+        inEffectRule: 'These settings will take effect on future orders',
+        locationData: 'Location',
+        country: 'Country',
+        timezone: 'Timezone',
+        featureToggle: 'Features',
+        applyOffer: 'Apply Offer',
       },
       zh: {
         clientName: '商家名稱',
@@ -49,7 +56,12 @@ class StoreFormScreen extends React.Component {
           showSeat: '座位數',
           showTable: '桌數'
         },
-        inEffectRule: '以下設定的更改將套用在未來訂單'
+        inEffectRule: '以下設定的更改將套用在未來訂單',
+        locationData: '位置資訊',
+        country: '國家',
+        timezone: '時區',
+        featureToggle: '進階功能',
+        applyOffer: '套用促銷',
       }
     })
 
@@ -87,6 +99,12 @@ class StoreFormScreen extends React.Component {
     const { handleSubmit } = this.props
 
     const tableDisplayTypes = Object.keys(this.state.tableDisplayTypes).map(key => this.state.tableDisplayTypes[key].label)
+
+    const timezones = moment.tz.names().filter(tz => {
+      return tz.includes('Asia/Taipei') || tz.includes('Australia/Brisbane')
+    }).map(tz => {
+      return { label: tz, value: tz }
+    })
 
     return (
       <KeyboardAvoidingView style={styles.mainContainer} behavior="padding" enabled>
@@ -229,6 +247,43 @@ class StoreFormScreen extends React.Component {
                       return this.state.tableDisplayTypes[value].value
                     }}
                   />
+                </View>
+              </View>
+
+              <View style={styles.sectionContainer}>
+                <View style={styles.sectionTitleContainer}>
+                  <Text style={styles.sectionTitleText}>{t('locationData')}</Text>
+                </View>
+
+                <View style={styles.fieldContainer}>
+                  <View style={[styles.tableCellView, styles.flex(1)]}>
+                    <Text style={styles.fieldTitle}>{t('timezone')}</Text>
+                  </View>
+                  <View style={[styles.justifyRight]}>
+                    <Field
+                      name="timezone"
+                      component={DropDown}
+                      options={timezones}
+                    />
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.sectionContainer}>
+                <View style={styles.sectionTitleContainer}>
+                  <Text style={styles.sectionTitleText}>{t('featureToggle')}</Text>
+                </View>
+
+                <View style={styles.fieldContainer}>
+                  <View style={{flex: 1}}>
+                    <Text style={styles.fieldTitle}>{t('applyOffer')}</Text>
+                  </View>
+                  <View style={[styles.alignRight]}>
+                    <Field
+                      name="clientSettings.APPLY_CUSTOM_OFFER.enabled"
+                      component={RNSwitch}
+                    />
+                  </View>
                 </View>
               </View>
 

@@ -3,6 +3,9 @@ import { connect } from 'react-redux'
 import { getProducts, getLables } from '../actions'
 import LoadingScreen from "./LoadingScreen";
 import ProductRow from './ProductRow'
+import BackendErrorScreen from "./BackendErrorScreen";
+import {View} from "react-native";
+import {NavigationEvents} from "react-navigation";
 
 class ProductsOverview extends React.Component {
   static navigationOptions = {
@@ -35,13 +38,24 @@ class ProductsOverview extends React.Component {
         )
       }
     return (
-      <ProductRow
-        products={products}
-        navigation={navigation}
-        getProduct={this.props.getProduct}
-        labels={labels}
-        isLoading={isLoading}
-      />
+      <View style={{flex: 1}}>
+        <NavigationEvents
+          onWillFocus={() => {
+            console.log("loading products and labels")
+
+            this.props.getProducts()
+            this.props.getLables()
+          }}
+        />
+
+        <ProductRow
+          products={products}
+          navigation={navigation}
+          getProduct={this.props.getProduct}
+          labels={labels}
+          isLoading={isLoading}
+        />
+      </View>
     )
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
-import {getCustomerTrafficReport} from '../actions'
+import {getCustomerCountReport, getCustomerTrafficReport} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import BackendErrorScreen from './BackendErrorScreen'
@@ -13,6 +13,7 @@ import SvgBarChart from "../components/SvgBarChart";
 import SegmentedControl from "../components/SegmentedControl";
 import Icon from "react-native-vector-icons/Ionicons";
 import MonthPicker from "../components/MonthPicker";
+import RenderTable from "../components/RenderTable";
 
 class CustomerStats extends React.Component {
   static navigationOptions = {
@@ -50,7 +51,9 @@ class CustomerStats extends React.Component {
         customerCount: 'Customer Count',
         maleCount: 'Male',
         femaleCount: 'Female',
-        kidCount: 'Kid'
+        kidCount: 'Kid',
+        customerCountTitle: 'Customer Count',
+        averageSpendingTitle: 'Average Customer Spending'
 
       },
       zh: {
@@ -79,7 +82,10 @@ class CustomerStats extends React.Component {
         customerCount: '總共',
         maleCount: '男生',
         femaleCount: '女生',
-        kidCount: '小孩'
+        kidCount: '小孩',
+        customerCountTitle: '來客數量',
+        averageSpendingTitle: '客單數',
+
       }
     })
 
@@ -92,6 +98,7 @@ class CustomerStats extends React.Component {
 
   componentDidMount() {
     this.props.getCustomerTrafficReport()
+    this.props.getCustomerCountReport()
   }
 
   generateCustomerTrafficChart = (customerTrafficReport) => {
@@ -100,18 +107,52 @@ class CustomerStats extends React.Component {
 
     customerTrafficReport.customerTraffics.map(stats => {
       customerTrafficData.push({label: stats.hourOfDay, value: stats.orderCount})
-      //customerTrafficData.push({label: stats.hourOfDay, value: (Math.random() * 200).toFixed(0)})
     })
 
     return customerTrafficData
   }
 
+  generateCustomerStatsChart = (customerStatsReport) => {
+
+    const customerCountData = {
+      legend: ['This year', 'Last year'],
+      labels: [],
+      data: [],
+      data2: []
+    }
+
+    const customerAverageSpendingData = {
+      legend: ['This year', 'Last year'],
+      labels: [],
+      data: [],
+      data2: []
+    }
+
+    customerStatsReport.customerStatsThisMonth.map(stats => {
+      const date = moment(stats.date).format('MM/DD')
+      customerCountData.labels.push(date)
+      customerCountData.data.push(stats.customerCount)
+
+      customerAverageSpendingData.labels.push(date)
+      customerAverageSpendingData.data.push(stats.averageSpending)
+    })
+
+    customerStatsReport.customerStatsThisMonthLastYear.map(stats => {
+      customerCountData.data2.push(stats.customerCount)
+      customerAverageSpendingData.data2.push(stats.averageSpending)
+    })
+
+    return { countData: customerCountData, avgSpendingData: customerAverageSpendingData }
+  }
+
   render() {
     const {
       customerTrafficReport,
+      customercountReport,
       isLoading,
       haveData,
       haveError,
+      haveCCData,
     } = this.props
     const {t} = this.context
     const containSalesData = haveData && customerTrafficReport.totalCount !== undefined && customerTrafficReport.totalCount.orderCount > 0
@@ -132,6 +173,16 @@ class CustomerStats extends React.Component {
     const ordersByVisitFrequency = customerTrafficReport.ordersByVisitFrequency
     const totalCount = customerTrafficReport.totalCount
 
+    // customer stats
+    let custCountData = {}
+    let custAvgSpendingData = {}
+
+    if (haveCCData) {
+      const { countData, avgSpendingData } = this.generateCustomerStatsChart(customercountReport);
+      custCountData = countData
+      custAvgSpendingData = avgSpendingData
+    }
+
     if (isLoading) {
       return (
         <LoadingScreen/>
@@ -139,7 +190,7 @@ class CustomerStats extends React.Component {
     } else if (haveError) {
       return <BackendErrorScreen/>
 
-    } else if (!haveData) {
+    } else if (!haveData && !haveCCData) {
       return (
         <View style={[styles.container]}>
           <View style={{flex: 1}}>
@@ -170,6 +221,7 @@ class CustomerStats extends React.Component {
             this.setState({currentDate: date, selectedFilter: selectedFilter})
 
             this.props.getCustomerTrafficReport(date.year(), date.month() + 1)
+            this.props.getCustomerCountReport(date.year(), date.month() + 1)
           }}
         />
 
@@ -294,56 +346,77 @@ class CustomerStats extends React.Component {
                 </View>
               </View>
 
-              {
-                totalCount !== null && (
-                  <View>
-                    <View style={styles.tableRowContainerWithBorder}>
-                      <View style={[styles.tableCellView, {flex: 1}]}>
-                        <Text>{t('customerCount')}</Text>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                        <Text>{totalCount.customerCount}</Text>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                        <Text>-</Text>
-                      </View>
-                    </View>
-                    <View style={styles.tableRowContainerWithBorder}>
-                      <View style={[styles.tableCellView, {flex: 1}]}>
-                        <Text>{t('maleCount')}</Text>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                        <Text>{totalCount.maleCount}</Text>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                        <Text>{totalCount.malePercentage}</Text>
-                      </View>
-                    </View>
-                    <View style={styles.tableRowContainerWithBorder}>
-                      <View style={[styles.tableCellView, {flex: 1}]}>
-                        <Text>{t('femaleCount')}</Text>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                        <Text>{totalCount.femaleCount}</Text>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                        <Text>{totalCount.femalePercentage}</Text>
-                      </View>
-                    </View>
-                    <View style={styles.tableRowContainerWithBorder}>
-                      <View style={[styles.tableCellView, {flex: 1}]}>
-                        <Text>{t('kidCount')}</Text>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                        <Text>{totalCount.kidCount}</Text>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                        <Text>{totalCount.kidPercentage}</Text>
-                      </View>
+              <View>
+                <View style={styles.tableRowContainerWithBorder}>
+                  <View style={[styles.tableCellView, {flex: 1}]}>
+                    <Text>{t('customerCount')}</Text>
+                  </View>
+                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                    <Text>{totalCount.customerCount}</Text>
+                  </View>
+                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                    <Text>-</Text>
+                  </View>
+                </View>
+                <View style={styles.tableRowContainerWithBorder}>
+                  <View style={[styles.tableCellView, {flex: 1}]}>
+                    <Text>{t('maleCount')}</Text>
+                  </View>
+                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                    <Text>{totalCount.maleCount}</Text>
+                  </View>
+                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                    <Text>{totalCount.malePercentage}</Text>
+                  </View>
+                </View>
+                <View style={styles.tableRowContainerWithBorder}>
+                  <View style={[styles.tableCellView, {flex: 1}]}>
+                    <Text>{t('femaleCount')}</Text>
+                  </View>
+                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                    <Text>{totalCount.femaleCount}</Text>
+                  </View>
+                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                    <Text>{totalCount.femalePercentage}</Text>
+                  </View>
+                </View>
+                <View style={styles.tableRowContainerWithBorder}>
+                  <View style={[styles.tableCellView, {flex: 1}]}>
+                    <Text>{t('kidCount')}</Text>
+                  </View>
+                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                    <Text>{totalCount.kidCount}</Text>
+                  </View>
+                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                    <Text>{totalCount.kidPercentage}</Text>
+                  </View>
+                </View>
+              </View>
+
+              {haveCCData && (
+                <View>
+                  <View style={styles.sectionContainer}>
+                    <Text style={styles.screenSubTitle}>
+                      {t('customerCountTitle')}
+                    </Text>
+                    <RenderTable
+                      reportData={custCountData}
+                    />
+                  </View>
+                  <View style={styles.sectionContainer}>
+                    <Text style={styles.screenSubTitle}>
+                      {t('averageSpendingTitle')}
+                    </Text>
+                    <View>
+
+                      <RenderTable
+                        reportData={custAvgSpendingData}
+                        isCurrency={true}
+                      />
                     </View>
                   </View>
-                )
-              }
+                </View>
+              )}
             </View>
           </View>
         )}
@@ -356,13 +429,16 @@ class CustomerStats extends React.Component {
 const mapStateToProps = state => ({
   customerTrafficReport: state.customertrafficreport.data,
   haveData: state.customertrafficreport.haveData,
-  haveError: state.customertrafficreport.haveError,
-  isLoading: state.customertrafficreport.loading,
+  haveError: state.customertrafficreport.haveError || state.customercountreport.haveError,
+  isLoading: state.customertrafficreport.loading || state.customercountreport.loading,
+  customercountReport: state.customercountreport.data,
+  haveCCData: state.customercountreport.haveData
 })
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getCustomerTrafficReport: (year, month) => dispatch(getCustomerTrafficReport(year, month))
+  getCustomerTrafficReport: (year, month) => dispatch(getCustomerTrafficReport(year, month)),
+  getCustomerCountReport: (year, month) => dispatch(getCustomerCountReport(year, month))
 })
 
 export default connect(

@@ -11,7 +11,7 @@ import {
   TextInput,
   Dimensions,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator, Modal
 } from 'react-native'
 import { connect } from 'react-redux'
 import InputText from '../components/InputText'
@@ -22,23 +22,22 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { LineChart } from 'react-native-chart-kit'
 import {
   getRangedSalesReport,
-  getCustomerCountReport,
-  getSalesDistributionReport, formatDate, formatDateObj
+  getSalesDistributionReport, formatDate, formatDateObj, formatCurrency, getSalesRankingReport
 } from '../actions'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import BackendErrorScreen from './BackendErrorScreen'
 import { Tooltip } from 'react-native-elements'
 import PureChart from 'react-native-pure-chart'
 import Chart from "../components/Chart";
-import moment from "moment";
+import moment from "moment-timezone";
 import ScreenHeader from "../components/ScreenHeader";
-import SalesChartsFilterForm from './SalesChartsFilterForm'
 import { api, dispatchFetchRequest, errorAlert, warningMessage } from '../constants/Backend'
 import RenderTable from '../components/RenderTable'
-import CustomerCountFilterForm from './CustomerCountFilterForm'
-import { Chevron } from 'react-native-shapes'
 import LoadingScreen from "./LoadingScreen";
+import SegmentedControl from "../components/SegmentedControl";
+import OrderFilterForm from "./OrderFilterForm";
+import TimeZoneService from "../helpers/TimeZoneService";
 
 class SalesCharts extends React.Component {
   static navigationOptions = {
@@ -53,44 +52,51 @@ class SalesCharts extends React.Component {
       en: {
         salesDashboardTitle: 'Sales Dashboard',
         rangedSalesTitle: 'Ranged Sales',
-        todaySales: 'Sales Total',
-        customerCountTitle: 'Customer Count',
-        averageSpendingTitle: 'Average Customer Spending',
+        salesTotal: 'Sales Total',
+        serviceChargeTotal: 'Service Charge Total',
+        discountTotal: 'Discount Total',
         salesDistributionTitle: 'Sales by Month',
-        salesRankingTitle: 'Sales Ranking By Product',
+        salesRankingTitle: 'Product Sales Ranking',
         product: 'Product',
         quantity: 'Quantity',
         amount: 'Amount',
         percentage: 'Percentage',
-        noSalesData: 'No sales data'
+        noSalesData: 'No sales data',
+        rankingFilter: {
+          product: 'Product',
+          label: 'Category'
+        }
       },
       zh: {
         salesDashboardTitle: '銷售總覽',
-        rangedSalesTitle: '銷售圖表',
-        todaySales: '總營業額',
-        customerCountTitle: '來客數量圖',
-        averageSpendingTitle: '客單數圖',
-        salesDistributionTitle: '年度銷售圖',
+        rangedSalesTitle: '銷售表',
+        salesTotal: '總營業額',
+        serviceChargeTotal: '總服務費',
+        discountTotal: '總折扣',
+        salesDistributionTitle: '年度銷售',
         salesRankingTitle: '產品銷售排行榜',
         product: '產品',
         quantity: '總數量',
         amount: '金額',
-        percentage: '比例',
-        noSalesData: '目前沒有銷售資料'
+        percentage: '百分比',
+        noSalesData: '目前沒有銷售資料',
+        rankingFilter: {
+          product: '產品',
+          label: '分類'
+        }
       }
     })
 
     this.state = {
-      test: {},
-      filteredWeeklySalesReport: [],
-      filteredCustomerCountReport: []
+      selectedRankingFilter: 0,
+      showProductsRanking: false,
+      selectedRangeType: 'WEEK'
     }
   }
 
   componentDidMount() {
     this.props.getRangedSalesReport()
     this.props.getSalesDistributionReport()
-    this.props.getCustomerCountReport()
   }
 
   generateRangedSalesChart = (rangedSalesReport) => {
@@ -110,39 +116,6 @@ class SalesCharts extends React.Component {
     })
 
     return rangedSalesData
-  }
-
-  generateCustomerStatsChart = (customerStatsReport) => {
-
-    const customerCountData = {
-      legend: ['This year', 'Last year'],
-      labels: [],
-      data: [],
-      data2: []
-    }
-
-    const customerAverageSpendingData = {
-      legend: ['This year', 'Last year'],
-      labels: [],
-      data: [],
-      data2: []
-    }
-
-    customerStatsReport.customerStatsThisMonth.map(stats => {
-      const date = moment(stats.date).format('MM/DD')
-      customerCountData.labels.push(date)
-      customerCountData.data.push(stats.customerCount)
-
-      customerAverageSpendingData.labels.push(date)
-      customerAverageSpendingData.data.push(stats.averageSpending)
-    })
-
-    customerStatsReport.customerStatsThisMonthLastYear.map(stats => {
-      customerCountData.data2.push(stats.customerCount)
-      customerAverageSpendingData.data2.push(stats.averageSpending)
-    })
-
-    return { countData: customerCountData, avgSpendingData: customerAverageSpendingData }
   }
 
   generateSalesDistribution = (salesDistributionReport) => {
@@ -168,116 +141,114 @@ class SalesCharts extends React.Component {
   }
 
   handleFilterSalesChart = values => {
-    const searchFromDate = moment(values.fromDate).format("YYYY-MM-DDTHH:mm:ss")
-    const searchToDate = moment(values.toDate).format("YYYY-MM-DDTHH:mm:ss")
+    const timezone = TimeZoneService.getTimeZone();
+    const searchFromDate = moment(values.fromDate).tz(timezone).format("YYYY-MM-DDTHH:mm:ss")
+    const searchToDate = moment(values.toDate).tz(timezone).format("YYYY-MM-DDTHH:mm:ss")
     console.log(`Ranged sales selected dates - from: ${searchFromDate} to: ${searchToDate}`)
 
-    this.props.getRangedSalesReport('CUSTOM', searchFromDate, searchToDate)
+    this.setState({selectedRangeType: values.dateRange})
+    this.props.getRangedSalesReport(values.dateRange, searchFromDate, searchToDate)
   }
 
-  handleFilterCCChart = values => {
-  	const month = values.month;
-  	const year = values.year;
+  handleRankingFilterChange = idx => {
+    this.setState({
+      selectedRankingFilter: idx
+    })
+  }
 
-  	if (!month || !year) {
-      warningMessage('Please Choose Both Year and Month')
-      return
-    }
-
-    dispatchFetchRequest(
-      api.report.getcustomerStatsReportByDateMonth(year, month),
-      {
-        method: 'GET',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {}
-      },
-      response => {
-        response.json().then(data => {
-          this.setState({
-          	filteredCustomerCountReport: data
-          })
-        })
-      }
-    ).then()
+  toggleProductsRankingModal = () => {
+    this.setState({
+      showProductsRanking: false
+    })
   }
 
   render() {
     const {
       getrangedSalesReport,
+      salesRankingReport,
       salesdistributionReport,
-      customercountReport,
       isLoading,
       haveData,
       haveError,
       haveSDData
     } = this.props
     const { t } = this.context
-    const { filteredWeeklySalesReport, filteredCustomerCountReport } = this.state
     const containSalesData = haveData && getrangedSalesReport.salesByRange !== undefined
 
-    // ranged sales
     let rangedSalesData = {}
+    let rankingData
 
     if (containSalesData) {
       rangedSalesData = this.generateRangedSalesChart(getrangedSalesReport);
+
+      if (this.state.selectedRankingFilter === 0) {
+        rankingData = this.props.getrangedSalesReport.salesByProducts.map((data, index) => {
+          return {
+            type: 'product',
+            id: data.id,
+            name: data.productName,
+            quantity: data.salesQuantity,
+            total: data.productSales,
+            percentage: data.percentage
+          }
+        })
+      } else {
+        rankingData = this.props.getrangedSalesReport.salesByLabels.map((data, index) => {
+          return {
+            type: 'label',
+            id: data.id,
+            name: data.productLabel,
+            quantity: data.salesQuantity,
+            total: data.productSales,
+            percentage: data.percentage
+          }
+        })
+      }
     }
 
-    const filteredcontainSalesData =
-      filteredWeeklySalesReport.length !== 0 && filteredWeeklySalesReport.salesByRange !== undefined
-
-    // filtered ranged sales
-    let filteredRangedSalesData = {}
-
-    if (filteredcontainSalesData) {
-      filteredRangedSalesData = this.generateRangedSalesChart(filteredWeeklySalesReport)
-    }
-
-    // customer stats
-    let custCountData = {}, custAvgSpendingData = {}, filteredCustCountData = {}, filteredAvgSpendingData = {}
-
-    if (this.props.haveCCData) {
-      const { countData, avgSpendingData } = this.generateCustomerStatsChart(customercountReport);
-      custCountData = countData
-      custAvgSpendingData = avgSpendingData
-    }
-
-     const filteredCustomerCountData =
-      filteredCustomerCountReport.length !== 0 && filteredCustomerCountReport.customerStatsThisMonth !== undefined
-
-      if (filteredCustomerCountData) {
-      	const { countData, avgSpendingData } = this.generateCustomerStatsChart(filteredCustomerCountReport);
-      	filteredCustCountData = countData
-      	filteredAvgSpendingData = avgSpendingData
-    }
-
-    // sales distribution
     let salesDistributionData = {}
 
     if (haveSDData) {
       salesDistributionData = this.generateSalesDistribution(salesdistributionReport)
     }
 
-    const Item = ({ salesByPrdData }) => {
+    const Item = ({salesData}) => {
       return (
         <View
           style={[styles.tableRowContainer]}
-          key={salesByPrdData.id}
+          key={salesData.id}
         >
           <View style={[styles.quarter_width, styles.tableCellView]}>
-            <Text>{salesByPrdData.productName}</Text>
+            {salesData.type === 'label' ? (
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.getSalesRankingReport(
+                    this.state.selectedRangeType,
+                    getrangedSalesReport.dateRange.fromLocalDateTime,
+                    getrangedSalesReport.dateRange.toLocalDateTime,
+                    salesData.id
+                  )
+
+                  this.setState({showProductsRanking: true})
+                }}
+              >
+                <Text>{salesData.name}</Text>
+              </TouchableOpacity>
+            ) : (
+              <Text>{salesData.name}</Text>
+            )}
           </View>
 
           <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-            <Text>{salesByPrdData.salesQuantity}</Text>
+            <Text>{salesData.quantity}</Text>
           </View>
 
           <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-            <Text>{salesByPrdData.productSales}</Text>
+            <Text>{formatCurrency(salesData.total)}</Text>
           </View>
 
           <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-            <Text>{salesByPrdData.percentage}%</Text>
+            <Text>{salesData.percentage}%</Text>
           </View>
         </View>
       )
@@ -306,36 +277,65 @@ class SalesCharts extends React.Component {
     }
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }} style={styles.fullWidthScreen}>
-          <ScreenHeader backNavigation={true}
-                        parentFullScreen={true}
-                        title={t('salesDashboardTitle')}
-          />
+      <ScrollView scrollIndicatorInsets={{right: 1}} style={styles.fullWidthScreen}>
+
+        <ProductsRanking
+          isShow={this.state.showProductsRanking}
+          toggleProductsRanking={this.toggleProductsRankingModal}
+          filteredRankingData={salesRankingReport.salesByProducts}
+        />
+
+        <ScreenHeader backNavigation={true}
+                      parentFullScreen={true}
+                      title={t('salesDashboardTitle')}
+        />
 
         <View>
-          <SalesChartsFilterForm
-          	onSubmit={this.handleFilterSalesChart}
+          <OrderFilterForm
+            onSubmit={this.handleFilterSalesChart}
             initialValues={{
+              dateRange: this.state.selectedRangeType,
               fromDate: new Date(getrangedSalesReport.dateRange.zonedFromDate),
               toDate: new Date(getrangedSalesReport.dateRange.zonedToDate)
-            }}
-          	/>
+            }} />
+        </View>
 
-          <View>
-            <Text style={styles.screenSubTitle}>
-              {t('todaySales')} - ${getrangedSalesReport.todayTotal}
-            </Text>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={styles.tableCellView}>
+            <Text style={styles.tableCellText}>{t('salesTotal')}</Text>
           </View>
-
-          <Chart
+          <View style={[styles.tableCellView, styles.justifyRight]}>
+            <Text style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.salesTotal)}</Text>
+          </View>
+          {/*<Chart
             data={Object.keys(filteredRangedSalesData).length !== 0 ? filteredRangedSalesData : rangedSalesData}
             width={Dimensions.get('window').width * 2}
             props={{
               yAxisLabel: '$'
             }}
-          />
+          />*/}
+        </View>
 
-					<RenderTable reportData={rangedSalesData}/>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={styles.tableCellView}>
+            <Text style={styles.tableCellText}>{t('serviceChargeTotal')}</Text>
+          </View>
+          <View style={[styles.tableCellView, styles.justifyRight]}>
+            <Text style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.serviceChargeTotal)}</Text>
+          </View>
+        </View>
+
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView]}>
+            <Text style={styles.tableCellText}>{t('discountTotal')}</Text>
+          </View>
+          <View style={[styles.tableCellView, styles.justifyRight]}>
+            <Text style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.discountTotal)}</Text>
+          </View>
+        </View>
+
+        <View style={styles.sectionContainer}>
+          <RenderTable reportData={rangedSalesData} isCurrency={true}/>
         </View>
 
         <View style={styles.sectionContainer}>
@@ -344,6 +344,16 @@ class SalesCharts extends React.Component {
               {t('salesRankingTitle')}
             </Text>
           </View>
+          <View style={[styles.sectionContainer, styles.dynamicHorizontalPadding(10)]}>
+            <SegmentedControl
+              selectedIndex={this.state.selectedRankingFilter}
+              input={{
+                onChange: this.handleRankingFilterChange
+              }}
+              values={[t('rankingFilter.product'), t('rankingFilter.label')]}
+            />
+          </View>
+
           <View style={{marginBottom: 20}}>
             <View style={styles.sectionBar}>
               <View style={[styles.quarter_width, styles.tableCellView]}>
@@ -363,9 +373,14 @@ class SalesCharts extends React.Component {
               </View>
             </View>
             <FlatList
-              data={getrangedSalesReport.salesByProducts}
+              data={rankingData}
               renderItem={({item}) => {
-                return <Item salesByPrdData={item}/>
+                return <Item salesData={item}/>
+              }}
+              ListEmptyComponent={() => {
+                return (
+                  <Text style={[styles.messageBlock, styles.orange_color]}>{t('noSalesData')}</Text>
+                )
               }}
               keyExtractor={item => item.id}
             />
@@ -374,61 +389,14 @@ class SalesCharts extends React.Component {
 
         <View style={styles.sectionContainer}>
           <Text style={styles.screenSubTitle}>
-            {t('customerCountTitle')}
-          </Text>
-          <CustomerCountFilterForm onSubmit={this.handleFilterCCChart}/>
-          {
-            this.props.haveCCData && (
-            <View>
-            	<View style={styles.mgrbtn12}>
-                <Chart
-                  data={Object.keys(filteredCustCountData).length !== 0 ? filteredCustCountData : custCountData}
-                  width={Dimensions.get('window').width * 3}
-                  props={{
-                    verticalLabelRotation: 45
-                  }}
-                />
-              </View>
-              <RenderTable reportData={Object.keys(filteredCustCountData).length !== 0 ? filteredCustCountData : custCountData}/>
-            </View>
-          )}
-        </View>
-
-        <View style={styles.sectionContainer}>
-          <Text style={styles.screenSubTitle}>
-            {t('averageSpendingTitle')}
-          </Text>
-          {
-            this.props.haveCCData && (
-            	<View>
-                <Chart
-                  data={Object.keys(filteredAvgSpendingData).length !== 0 ? filteredAvgSpendingData : custAvgSpendingData}
-                  width={Dimensions.get('window').width * 3}
-                  props={{
-                    yAxisLabel: '$',
-                    verticalLabelRotation: 45
-                  }}
-                />
-                <RenderTable reportData={Object.keys(filteredAvgSpendingData).length !== 0 ? filteredAvgSpendingData : custAvgSpendingData}/>
-              </View>
-            )}
-        </View>
-
-        <View style={styles.sectionContainer}>
-          <Text style={styles.screenSubTitle}>
             {t('salesDistributionTitle')}
           </Text>
           {haveSDData && (
             <View>
-              <Chart
-                data={salesDistributionData}
-                width={Dimensions.get('window').width * 2}
-                props={{
-                  yAxisLabel: '$',
-                  verticalLabelRotation: 45,
-                }}
+              <RenderTable
+                reportData={salesDistributionData}
+                isCurrency={true}
               />
-              <RenderTable reportData={salesDistributionData}/>
             </View>
           )}
         </View>
@@ -439,19 +407,18 @@ class SalesCharts extends React.Component {
 
 const mapStateToProps = state => ({
   getrangedSalesReport: state.getrangedsalesreport.data,
+  salesRankingReport: state.salesrankingreport.data,
   salesdistributionReport: state.salesdistributionreport.data,
-  customercountReport: state.customercountreport.data,
   haveData: state.getrangedsalesreport.haveData,
   haveError: state.getrangedsalesreport.haveError,
   isLoading: state.getrangedsalesreport.loading,
-  haveCCData: state.customercountreport.haveData,
   haveSDData: state.salesdistributionreport.haveData
 })
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
   getRangedSalesReport: (rangeType, fromDate, toDate) => dispatch(getRangedSalesReport(rangeType, fromDate, toDate)),
-  getCustomerCountReport: () => dispatch(getCustomerCountReport()),
+  getSalesRankingReport: (rangeType, fromDate, toDate, labelId) => dispatch(getSalesRankingReport(rangeType, fromDate, toDate, labelId)),
   getSalesDistributionReport: () => dispatch(getSalesDistributionReport())
 })
 
@@ -459,3 +426,94 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(SalesCharts)
+
+class ProductsRanking extends React.Component {
+
+  static contextType = LocaleContext
+
+  render() {
+    const { isShow, toggleProductsRanking, filteredRankingData } = this.props
+    const { t } = this.context
+
+    return (
+      <View>
+        <Modal transparent={true}
+               visible={isShow}
+        >
+          <View style={[styles.container, {flex: 1, backgroundColor: mainThemeColor, borderColor: 'red', borderRadius: 20, opacity: 0.95}]}>
+            <View style={[styles.sectionContainer, {flex: 1}]}>
+              <Text style={[styles.screenTitle, {color: '#fff'}]}>{t('salesRankingTitle')}</Text>
+            </View>
+
+            <View style={{flex: 4}}>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.quarter_width, styles.tableCellView]}>
+                <Text style={styles.tableCellWhiteText}>{t('product')}</Text>
+              </View>
+
+              <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                <Text style={styles.tableCellWhiteText}>{t('quantity')}</Text>
+              </View>
+
+              <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                <Text style={styles.tableCellWhiteText}>{t('amount')}</Text>
+              </View>
+
+              <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                <Text style={styles.tableCellWhiteText}>{t('percentage')}</Text>
+              </View>
+            </View>
+            <FlatList
+              data={filteredRankingData}
+              renderItem={({item}) => {
+                const salesData = item
+
+                return (
+                  <View
+                    style={[styles.tableRowContainer]}
+                    key={salesData.id}
+                  >
+                    <View style={[styles.quarter_width, styles.tableCellView]}>
+                      <Text style={styles.tableCellWhiteText}>{salesData.productName}</Text>
+                    </View>
+
+                    <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                      <Text style={styles.tableCellWhiteText}>{salesData.salesQuantity}</Text>
+                    </View>
+
+                    <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                      <Text style={styles.tableCellWhiteText}>{formatCurrency(salesData.productSales)}</Text>
+                    </View>
+
+                    <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                      <Text style={styles.tableCellWhiteText}>{salesData.percentage}%</Text>
+                    </View>
+                  </View>
+
+                )
+              }}
+              ListEmptyComponent={() => {
+                return (
+                  <Text style={[styles.messageBlock, styles.orange_color]}>{t('noSalesData')}</Text>
+                )
+              }}
+              keyExtractor={item => item.id}
+            />
+            </View>
+
+            <View style={styles.bottom}>
+              <TouchableOpacity
+                onPress={() => {
+                  toggleProductsRanking();
+                }}
+              >
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.done')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    )
+  }
+
+}

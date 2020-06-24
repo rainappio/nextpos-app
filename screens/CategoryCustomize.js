@@ -19,6 +19,8 @@ import {
 } from '../constants/Backend'
 import { NavigationEvents } from 'react-navigation'
 import ScreenHeader from "../components/ScreenHeader";
+import LoadingScreen from "./LoadingScreen";
+import BackendErrorScreen from "./BackendErrorScreen";
 
 class CategoryCustomize extends React.Component {
   static navigationOptions = {
@@ -70,15 +72,11 @@ class CategoryCustomize extends React.Component {
 
     if (isLoading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen/>
       )
     } else if (haveError) {
       return (
-        <View style={[styles.container]}>
-          <Text>Err during loading, check internet conn...</Text>
-        </View>
+        <BackendErrorScreen/>
       )
     } else if (label !== undefined && Object.entries(label).length === 0) {
       return (
@@ -95,13 +93,13 @@ class CategoryCustomize extends React.Component {
           }}
         />
         <CategoryCustomizeScreen
+          isEditForm={true}
           onSubmit={this.handleSubmit}
           navigation={navigation}
           labelName={navigation.state.params.labelName}
           initialValues={label}
           prodctoptions={prodctoptions}
           workingareas={workingareas}
-          onCancel={this.handleEditCancel}
         />
       </View>
     )

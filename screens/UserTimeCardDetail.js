@@ -22,6 +22,7 @@ import images from '../assets/images'
 import {getTimeCard, formatDate, formatDateObj, formatTime, formatDateOnly} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
+import LoadingScreen from "./LoadingScreen";
 
 class UserTimeCardDetail extends React.Component {
   static navigationOptions = {
@@ -52,9 +53,7 @@ class UserTimeCardDetail extends React.Component {
 
     if (isLoading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen />
       )
     } else if (haveData) {
       return (

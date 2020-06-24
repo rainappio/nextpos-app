@@ -17,12 +17,12 @@ export const fetchTimeCardsFailure = error => ({
   error
 })
 
-export const getTimeCards = () => {
+export const getTimeCards = (year, month) => {
   return dispatch => {
     dispatch(fetchTimeCards())
 
     dispatchFetchRequest(
-      api.timecard.timeCards,
+      api.timecard.timeCards(year, month),
       {
         method: 'GET',
         withCredentials: true,

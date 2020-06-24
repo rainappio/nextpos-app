@@ -49,11 +49,11 @@ class WorkingAreaForm extends React.Component {
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View>
-          <View style={styles.fieldContainer}>
-            <View style={{ flex: 2 }}>
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, styles.flex(1)]}>
               <Text style={styles.fieldTitle}>{t('workingAreaName')}</Text>
             </View>
-            <View style={{ flex: 3 }}>
+            <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
                 name="name"
                 component={InputText}
@@ -64,11 +64,11 @@ class WorkingAreaForm extends React.Component {
             </View>
           </View>
 
-          <View style={styles.fieldContainer}>
-            <View style={{ flex: 2 }}>
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, styles.flex(1)]}>
               <Text style={styles.fieldTitle}>{t('noOfPrintCopies')}</Text>
             </View>
-            <View style={{ flex: 3 }}>
+            <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
                 name="noOfPrintCopies"
                 component={InputText}
@@ -85,8 +85,8 @@ class WorkingAreaForm extends React.Component {
             </View>
           </View>
 
-          <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
-            <Text style={styles.fieldTitle}>{t('linkedPrinters')}</Text>
+          <View style={[styles.sectionTitleContainer]}>
+            <Text style={styles.sectionTitleText}>{t('linkedPrinters')}</Text>
           </View>
 
           <Field
@@ -102,7 +102,7 @@ class WorkingAreaForm extends React.Component {
           />
         </View>
 
-        <View style={styles.bottom}>
+        <View style={[styles.bottom, styles.horizontalMargin]}>
           <TouchableOpacity onPress={handleSubmit}>
             <Text style={[styles.bottomActionButton, styles.actionButton]}>
               {isEdit ? t('action.update') : t('action.save')}

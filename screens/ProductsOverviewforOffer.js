@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { getProducts, getLables } from '../actions'
 import LoadingScreen from "./LoadingScreen";
 import ProductRowforOffer from './ProductRowforOffer'
+import BackendErrorScreen from "./BackendErrorScreen";
 
 class ProductsOverviewforOffer extends React.Component {
   static navigationOptions = {

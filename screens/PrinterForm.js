@@ -73,11 +73,11 @@ class PrinterForm extends React.Component {
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View>
-          <View style={styles.fieldContainer}>
-            <View style={{ flex: 1 }}>
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, styles.flex(1)]}>
               <Text style={styles.fieldTitle}>{t('printerName')}</Text>
             </View>
-            <View style={{ flex: 2 }}>
+            <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
                 name="name"
                 component={InputText}
@@ -88,11 +88,11 @@ class PrinterForm extends React.Component {
             </View>
           </View>
 
-          <View style={styles.fieldContainer}>
-            <View style={{ flex: 1 }}>
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, styles.flex(1)]}>
               <Text style={styles.fieldTitle}>{t('ipAddress')}</Text>
             </View>
-            <View style={{ flex: 2 }}>
+            <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
                 name="ipAddress"
                 component={InputText}
@@ -104,30 +104,32 @@ class PrinterForm extends React.Component {
             </View>
           </View>
 
-          <View style={[styles.paddingTopBtn20, styles.borderBottomLine]}>
-            <Text style={styles.fieldTitle}>{t('serviceType.title')}</Text>
+          <View style={[styles.sectionTitleContainer]}>
+            <Text style={styles.sectionTitleText}>{t('serviceType.title')}</Text>
           </View>
 
-          <View style={[styles.borderBottomLine, styles.paddingTopBtn20]}>
+          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <Field
               name="serviceType"
               component={RenderRadioBtn}
               customValue="WORKING_AREA"
               optionName={t('serviceType.workingArea')}
+              validate={isRequired}
             />
           </View>
 
-          <View style={[styles.borderBottomLine, styles.paddingTopBtn20]}>
+          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <Field
               name="serviceType"
               component={RenderRadioBtn}
               customValue="CHECKOUT"
               optionName={t('serviceType.checkout')}
+              validate={isRequired}
             />
           </View>
         </View>
 
-        <View style={styles.bottom}>
+        <View style={[styles.bottom, styles.horizontalMargin]}>
           <TouchableOpacity onPress={handleSubmit}>
             <Text style={[styles.bottomActionButton, styles.actionButton]}>
               {isEdit ? t('action.update') : t('action.save')}

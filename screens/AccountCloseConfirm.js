@@ -29,6 +29,7 @@ import InputText from '../components/InputText'
 import AccountCloseConfirmForm from './AccountCloseConfirmForm'
 import ScreenHeader from "../components/ScreenHeader";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
+import LoadingScreen from "./LoadingScreen";
 
 class AccountCloseConfirm extends React.Component {
   static navigationOptions = {
@@ -84,9 +85,7 @@ class AccountCloseConfirm extends React.Component {
 
     if (loading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc"/>
-        </View>
+        <LoadingScreen/>
       )
     }
 

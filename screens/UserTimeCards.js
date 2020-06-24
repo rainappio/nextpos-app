@@ -6,14 +6,15 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { getTimeCards, getUserTimeCards, formatDate, getMonthName, formatDateObj } from '../actions'
+import { getTimeCards, getUserTimeCards, formatDate, formatDateObj } from '../actions'
 import images from '../assets/images'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import DropDown from '../components/DropDown'
-import UserTimeCardsFilterForm from './UserTimeCardsFilterForm'
 import { api, dispatchFetchRequest, errorAlert, warningMessage } from '../constants/Backend'
 import ScreenHeader from "../components/ScreenHeader";
+import LoadingScreen from "./LoadingScreen";
+import StaffTimeCardFilterForm from "./StaffTimeCardFilterForm";
 
 class UserTimeCards extends React.Component {
   static navigationOptions = {
@@ -23,7 +24,8 @@ class UserTimeCards extends React.Component {
 
   state = {
   	timecardId: null,
-  	filteredUsrTimeCards: []
+  	selectedYear: this.props.navigation.getParam('year'),
+  	selectedMonth: this.props.navigation.getParam('month')
   }
 
   handleFilter = (values) => {
@@ -36,33 +38,22 @@ class UserTimeCards extends React.Component {
       return
     }
 
-     dispatchFetchRequest(api.timecard.getByMonthYrUsr(year, month, username), {
-        method: 'GET',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {}
-      },
-      response => {
-        response.json().then(data => {
-          this.setState({filteredUsrTimeCards: data.timeCards})
-        })
-      }).then()
+    this.setState({ selectedYear: year, selectedMonth: month })
+
+  	this.props.getUserTimeCards(username, year, month)
   }
 
   componentDidMount() {
-  	this.props.getUserTimeCards(this.props.navigation.state.params.name)
-  	var defaultVal={
-  		year: new Date().getFullYear(),
-  		month: getMonthName(new Date().getMonth() + 1),
-  		username: this.props.navigation.state.params.name
-  	}
-  	this.handleFilter(defaultVal)
+    const username = this.props.navigation.getParam('name')
+    const year = this.props.navigation.getParam('year')
+    const month = this.props.navigation.getParam('month')
+
+  	this.props.getUserTimeCards(username, year, month)
   }
 
   render() {
     const { t } = this.context
     const { usertimeCards, haveData, haveError, loading, timeCard } = this.props
-    const { filteredUsrTimeCards } = this.state
 
     Item = ({ timecard }) => {
       const active = timecard.timeCardStatus === 'ACTIVE'
@@ -93,9 +84,7 @@ class UserTimeCards extends React.Component {
 
 		if (loading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen/>
       )
     }
     return (
@@ -107,14 +96,26 @@ class UserTimeCards extends React.Component {
                           title={t('userTimeCardTitle')}
             />
 
-          	<UserTimeCardsFilterForm
+            <View>
+              <Text style={styles.screenSubTitle}>{this.props.navigation.getParam('displayName')}</Text>
+            </View>
+
+            <StaffTimeCardFilterForm
+              onSubmit={this.handleFilter}
+              initialValues={{
+                year: this.state.selectedYear,
+                month: this.state.selectedMonth
+              }}
+            />
+
+          	{/*<UserTimeCardsFilterForm
 							onSubmit={this.handleFilter}
 							displayName={this.props.navigation.state.params.displayName}
-            />
+            />*/}
 
 						<View style={[styles.sectionBar]}>
               	<View style={[styles.tableCellView, {flex: 1}]}>
-                	<Text style={styles.tableCellText}>{t('Day')}</Text>
+                	<Text style={styles.tableCellText}>{t('day')}</Text>
               	</View>
 
               	<View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
@@ -123,7 +124,7 @@ class UserTimeCards extends React.Component {
             </View>
 
 						<FlatList
-              data={filteredUsrTimeCards}
+              data={usertimeCards}
               renderItem={({item, index}) => (
                 <Item
                 	timecard={item}
@@ -148,9 +149,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getUserTimeCards: () => dispatch(getUserTimeCards(props.navigation.state.params.name)),
-  clearTimeCard: () => dispatch(clearTimeCard()),
-  getMonthName: () => dispatch(getMonthName())
+  getUserTimeCards: (username, year, month) => dispatch(getUserTimeCards(username, year, month)),
+  clearTimeCard: () => dispatch(clearTimeCard())
 })
 
 export default connect(

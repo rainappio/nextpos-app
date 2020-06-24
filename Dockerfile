@@ -1,5 +1,5 @@
 # https://medium.com/@hmajid2301/running-expo-react-native-in-docker-ff9c4f2a4388
-FROM node:12.4.0
+FROM node:14.4.0
 
 # need git for npm install to work
 # RUN apk add --no-cache --update bash git python
