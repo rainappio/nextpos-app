@@ -16,7 +16,7 @@ import { default as MaterialIcon } from 'react-native-vector-icons/MaterialIcons
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtnCustom from '../components/BackBtnCustom'
-import styles, {mainThemeColor} from '../styles'
+import styles, { mainThemeColor } from '../styles'
 import ScreenHeader from "../components/ScreenHeader";
 import MenuButton from "../components/MenuButton";
 
@@ -32,7 +32,7 @@ class SettingsScreen extends React.Component {
 
       <View style={[styles.container, styles.nomgrBottom]}>
         <ScreenHeader backNavigation={false}
-                      title={t('menu.settings')}/>
+          title={t('menu.settings')} />
 
 
         <Pages indicatorColor={mainThemeColor}>
@@ -48,7 +48,7 @@ class SettingsScreen extends React.Component {
                       size={40}
                       style={[styles.buttonIconStyle]}
                     />
-                  }/>
+                  } />
 
                 <MenuButton
                   onPress={() => this.props.navigation.navigate('Store')}
@@ -59,7 +59,7 @@ class SettingsScreen extends React.Component {
                       size={40}
                       style={[styles.buttonIconStyle]}
                     />
-                  }/>
+                  } />
               </View>
 
               <View style={[styles.flex_dir_row]}>
@@ -148,13 +148,25 @@ class SettingsScreen extends React.Component {
                 />
               </View>
 
-              <View style={[styles.flex_dir_row, {width: '50%'}]}>
+              <View style={[styles.flex_dir_row]}>
                 <MenuButton
                   onPress={() => this.props.navigation.navigate('Announcements')}
                   title={t('settings.announcements')}
                   icon={
                     <FontAwesomeIcon
                       name="commenting"
+                      size={40}
+                      style={[styles.buttonIconStyle]}
+                    />
+                  }
+                />
+
+                <MenuButton
+                  onPress={() => this.props.navigation.navigate('ManageOffers')}
+                  title={t('settings.manageOffers')}
+                  icon={
+                    <FontAwesomeIcon
+                      name="sun-o"
                       size={40}
                       style={[styles.buttonIconStyle]}
                     />

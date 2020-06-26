@@ -84,37 +84,46 @@ export const dateToLocaleString = dateObj => {
   })
 }
 
-export function calculatePercentage (Amount, percent) {
+export function calculatePercentage(Amount, percent) {
   return (Amount * percent) / 100
 }
 
-export function getMonthName(monthCount){
-		switch(monthCount){
-			case 1:
-				return "JANUARY";
-			case 2:
-				return "FEBRUARY";
-			case 3:
-				return "MARCH";
-			case 4:
-				return "APRIL";
-			case 5:
-				return "MAY";
-			case 6:
-				return "JUNE";
-			case 7:
-				return "JULY";
-			case 8:
-				return "AUGUST";
-			case 9:
-				return "SEPTEMBER";
-			case 10:
-				return "OCTOBER";
-			case 11:
-				return "NOVEMBER";
-			case 12:
-				return "DECEMBER";
-			default:
-				return "pls check ur dateCount";
-		}
-	}
+export function getMonthName(monthCount) {
+  switch (monthCount) {
+    case 1:
+      return "JANUARY";
+    case 2:
+      return "FEBRUARY";
+    case 3:
+      return "MARCH";
+    case 4:
+      return "APRIL";
+    case 5:
+      return "MAY";
+    case 6:
+      return "JUNE";
+    case 7:
+      return "JULY";
+    case 8:
+      return "AUGUST";
+    case 9:
+      return "SEPTEMBER";
+    case 10:
+      return "OCTOBER";
+    case 11:
+      return "NOVEMBER";
+    case 12:
+      return "DECEMBER";
+    default:
+      return "pls check ur dateCount";
+  }
+}
+
+/**
+* Remove Duplicate
+*/
+export const removeDuplicate = (data, key) => {
+  return [
+    ...new Map(data.map(x => [key(x), x])).values()
+  ]
+}

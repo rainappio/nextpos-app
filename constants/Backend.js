@@ -174,7 +174,33 @@ export const api = {
       }
 
       return `${apiRoot}/orders?${params}`
-    }
+    },
+    getOffers: `${apiRoot}/offers`,
+    getOrderOfferById: offerId => {
+      return `${apiRoot}/offers/${offerId}`
+    },
+    updateOrderOfferById: offerId => {
+      return `${apiRoot}/offers/${offerId}`
+    },
+    deleteOrderOfferById: offerId => {
+      return `${apiRoot}/offers/${offerId}`
+    },
+    getPrdOfferById: prdofferId => {
+      return `${apiRoot}/offers/${prdofferId}`
+    },
+    updatePrdOfferById: prdofferId => {
+      return `${apiRoot}/offers/${prdofferId}`
+    },
+    deletePrdOfferById: prdofferId => {
+      return `${apiRoot}/offers/${prdofferId}`
+    },
+    activateOrderOfferById: offerId => {
+      return `${apiRoot}/offers/${offerId}/activate`
+    },
+    deactivateOrderOfferById: offerId => {
+      return `${apiRoot}/offers/${offerId}/deactivate`
+    },
+    createOffer: `${apiRoot}/offers`
   },
   printer: {
     create: `${apiRoot}/printers`,

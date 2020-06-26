@@ -48,7 +48,7 @@ class SalesChartsFilterForm extends React.Component {
     return (
       <View>
         <View style={[styles.tableRowContainer]}>
-          <View style={[styles.tableCellView, {flex: 2}]}>
+          <View style={[styles.tableCellView, { flex: 2 }]}>
             <Field
               name="fromDate"
               component={RenderDatePicker}
@@ -59,10 +59,10 @@ class SalesChartsFilterForm extends React.Component {
               needWeekFilter={true}
             />
           </View>
-          <View style={[styles.tableCellView, {flex: 0.2, justifyContent: 'center'}]}>
+          <View style={[styles.tableCellView, { flex: 0.2, justifyContent: 'center' }]}>
             <Text>-</Text>
           </View>
-          <View style={[styles.tableCellView, {flex: 2}]}>
+          <View style={[styles.tableCellView, { flex: 2 }]}>
             <Field
               name="toDate"
               component={RenderDatePicker}
@@ -75,12 +75,12 @@ class SalesChartsFilterForm extends React.Component {
           </View>
         </View>
         <View style={[styles.tableRowContainer]}>
-          <View style={[styles.tableCellView, {flex: 1}]}>
+          <View style={[styles.tableCellView, { flex: 1 }]}>
             <TouchableOpacity
               onPress={() => {
                 handleSubmit()
               }}
-              style={{flex: 1}}
+              style={{ flex: 1 }}
             >
               <Text style={[styles.searchButton]}>
                 {t('action.search')}
@@ -94,7 +94,7 @@ class SalesChartsFilterForm extends React.Component {
 }
 
 SalesChartsFilterForm = reduxForm({
-  form: 'salesChartFilterForm'
+  form: 'salesChartFilterForm',
 })(SalesChartsFilterForm)
 
 export default SalesChartsFilterForm
