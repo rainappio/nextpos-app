@@ -24,7 +24,8 @@ const zh = {
     language: '語言',
     tableLayouts: '座位管理',
     manageShifts: '開關帳',
-    announcements: '公告'
+    announcements: '公告',
+    manageOffers: 'Manage Offers-CH'
   },
   newItem: {
     new: '新增',
@@ -46,7 +47,9 @@ const zh = {
     yes: '是',
     no: '不是',
     unpin: '移除置頂',
-    pin: '加入置頂'
+    pin: '加入置頂',
+    activat: 'Activate-CH',
+    deactivate: 'Deactivate-CH'
   },
   order: {
     inStore: '內用',

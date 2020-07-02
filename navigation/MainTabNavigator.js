@@ -82,6 +82,10 @@ import UpdateOrder from "../screens/UpdateOrder";
 import EditUserRole from '../screens/EditUserRole'
 import NewUserRole from '../screens/NewUserRole'
 import ManageUserRole from '../screens/ManageUserRole'
+import ManageOffers from '../screens/ManageOffers'
+import NewOffer from '../screens/NewOffer'
+import EditOffer from '../screens/EditOffer'
+import ProductsOverviewforOffer from '../screens/ProductsOverviewforOffer'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -137,7 +141,11 @@ const Settings = createStackNavigator({
   ManageVisualSceen: ManageVisualSceen,
   EditUserRole: EditUserRole,
   NewUserRole: NewUserRole,
-  ManageUserRole: ManageUserRole
+  ManageUserRole: ManageUserRole,
+  ManageOffers: ManageOffers,
+  NewOffer: NewOffer,
+  EditOffer: EditOffer,
+  ProductsOverviewforOffer: ProductsOverviewforOffer
 
 })
 Settings.navigationOptions = ({ screenProps: { t } }) => ({

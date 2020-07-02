@@ -14,7 +14,7 @@ import {
 import { CheckBox } from 'react-native-elements'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import images from '../../assets/images'
-import {mainThemeColor} from "../../styles";
+import { mainThemeColor } from "../../styles";
 
 class RenderPureCheckBox extends React.Component {
   state = {
@@ -27,6 +27,8 @@ class RenderPureCheckBox extends React.Component {
       customValue,
       optionName,
       total,
+      title,
+      isIconAsTitle,
       meta: { error, toched, valid },
       ...rest
     } = this.props
@@ -35,12 +37,16 @@ class RenderPureCheckBox extends React.Component {
       <View>
         <CheckBox
           title={
-            <IonIcon
-              name={customValue}
-              size={26}
-              color={mainThemeColor}
-              style={{ marginLeft: 22 }}
-            />
+            !isIconAsTitle
+              ?
+              title
+              :
+              <IonIcon
+                name={customValue}
+                size={26}
+                color={mainThemeColor}
+                style={{ marginLeft: 22 }}
+              />
           }
           checkedIcon={
             <Image
@@ -57,6 +63,7 @@ class RenderPureCheckBox extends React.Component {
           checked={value === customValue}
           onPress={() => onChange(customValue)}
         />
+        {!valid && touched && <Text style={[styles.rootError, styles.mgrtotop12, styles.centerText]}>{error}</Text>}
       </View>
     )
   }

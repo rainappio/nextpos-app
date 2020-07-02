@@ -24,7 +24,8 @@ const en = {
     language: 'Language',
     tableLayouts: 'Table Layouts',
     manageShifts: 'Manage Shift',
-    announcements: 'Announcements'
+    announcements: 'Announcements',
+    manageOffers: 'Manage Offers'
   },
   newItem: {
     new: 'New',
@@ -46,7 +47,9 @@ const en = {
     yes: 'Yes',
     no: 'No',
     unpin: 'Unpin',
-    pin: 'Pin'
+    pin: 'Pin',
+    activate: 'Activate',
+    deactivate: 'Deactivate'
   },
   order: {
     inStore: 'In Store',
