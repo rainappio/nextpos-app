@@ -8,7 +8,8 @@ function ThemeTogglerButton() {
       {({ theme, toggleTheme }) => (
         <Text
           onPress={toggleTheme}
-          style={{ color: theme.foreground, position: 'absolute', top: 70, right: 80 }}>
+          style={theme}
+          >
           Change Theme
         </Text>
       )}

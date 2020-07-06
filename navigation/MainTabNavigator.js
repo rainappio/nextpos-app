@@ -82,7 +82,7 @@ import UpdateOrder from "../screens/UpdateOrder";
 import EditUserRole from '../screens/EditUserRole'
 import NewUserRole from '../screens/NewUserRole'
 import ManageUserRole from '../screens/ManageUserRole'
-let bgColor = '#f5f5f5';
+
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
   ClientUsers: ClientUsers,
@@ -94,8 +94,7 @@ Home.navigationOptions = ({ screenProps: { t } }) => ({
   title: t('menu.home'),
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={'md-home'} />
-  ),
-  backgroundColor: 'pink'
+  )
 })
 
 const Settings = createStackNavigator({

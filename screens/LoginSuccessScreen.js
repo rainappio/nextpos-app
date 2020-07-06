@@ -19,7 +19,7 @@ import {
   getClientUsr,
   getAnnouncements, getShiftStatus
 } from '../actions'
-import styles, { mainThemeColor } from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
 import { NavigationEvents } from 'react-navigation'
 import { getToken } from '../constants/Backend'
@@ -130,9 +130,9 @@ class LoginSuccessScreen extends React.Component {
           handleClientUserLogout={this.handleClientUserLogout}
         />
 
-        <View style={[styles.container, { backgroundColor: theme.background }]}>
+        <View style={[styles.container,theme]}>
           <View style={[{ flexDirection: 'row', flex: 1, marginHorizontal: 10 }]}>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, color:'brown' }}>
               <Image
                 source={
                   __DEV__

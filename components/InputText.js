@@ -10,7 +10,7 @@ import {
   Platform
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import styles, { mainThemeColor } from '../styles'
+import styles,{ mainThemeColor } from '../styles'
 import { ThemeContext } from '../mode_switcher/themeContext'
 
 const InputText = ({
@@ -46,7 +46,7 @@ const InputText = ({
             editable={editable}
             autoCapitalize={autoCapitalize}
             inputAccessoryViewID={name}
-            placeholderTextColor={theme.foreground}
+            placeholderTextColor={theme.color}
             {...rest}
             style={[
               styles.rootInput,
@@ -69,7 +69,7 @@ const InputText = ({
                   ]}
                 >
                   Done
-          </Text>
+                </Text>
               </TouchableOpacity>
             </InputAccessoryView>
           )}

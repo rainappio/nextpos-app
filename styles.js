@@ -11,8 +11,8 @@ export default StyleSheet.create({
   },
   fullWidthScreen: {
     flex: 1,
-    marginTop: 53,
-    marginBottom: 36
+    paddingTop: 53,
+    paddingBottom: 36
   },
   container: {
     flex: 1,
@@ -466,7 +466,8 @@ export default StyleSheet.create({
     marginBottom: 5
   },
   fieldTitle: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    //color: theme.color
   },
   horizontalMargin: {
     marginHorizontal: 15

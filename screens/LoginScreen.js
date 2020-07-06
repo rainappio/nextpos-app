@@ -13,7 +13,7 @@ import {
 import { isEmail, isRequired } from '../validators'
 import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import styles from '../styles'
+import {styles} from '../styles'
 import { withNavigation } from 'react-navigation'
 import {LocaleContext} from "../locales/LocaleContext";
 import {storage} from "../constants/Backend";
@@ -67,12 +67,12 @@ class LoginScreen extends React.Component {
 
   render() {
     const { handleSubmit, handleLoginAs } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       <DismissKeyboard>
         <KeyboardAvoidingView
-          style={styles.container}
+          style={styles().container}
           behavior="padding"
           enabled
         >

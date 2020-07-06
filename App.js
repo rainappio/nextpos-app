@@ -191,7 +191,7 @@ export default class App extends React.Component {
       return (
         <ThemeContext.Provider value={this.state}>
           <Provider store={store}>
-            <View style={[styles.mainContainer, { backgroundColor: this.state.theme.background }]}>
+            <View style={[styles.mainContainer, this.state.theme]}>
               <StatusBar
                 translucent={true}
                 hidden={false}
@@ -211,8 +211,8 @@ export default class App extends React.Component {
                   }}
                 />
               </LocaleContext.Provider>
-              <ThemeTogglerButton />
               {/*https://www.npmjs.com/package/react-native-flash-message?activeTab=readme*/}
+              <ThemeTogglerButton/>
               <FlashMessage position="bottom" />
             </View>
           </Provider>

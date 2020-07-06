@@ -6,7 +6,8 @@ import {
   AsyncStorage,
   Button,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  StyleSheet
 } from 'react-native'
 import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
@@ -19,6 +20,8 @@ import { reduxForm } from 'redux-form'
 import { getToken } from '../constants/Backend'
 import Constants from "expo-constants/src/Constants";
 import ScreenHeader from "../components/ScreenHeader";
+import ThemeTogglerButton from '../mode_switcher/theme-toggler-btn'
+import { themes } from '../mode_switcher/themeContext'
 
 class AccountScreen extends React.Component {
   static navigationOptions = {
@@ -84,18 +87,18 @@ class AccountScreen extends React.Component {
       )
     })
     const { currentUser } = this.props
-    const { t } = this.context
-
+    const { t, theme } = this.context
+console.log(theme)
     return (
-      <View style={styles.fullWidthScreen}>
+      <View style={[styles.fullWidthScreen,theme]}>
         <ScreenHeader backNavigation={true}
                       parentFullScreen={true}
                       title={t('settings.account')}
+                      rightComponent={<ThemeTogglerButton />}
         />
-
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, { flex: 1 }]}>
-              <Text style={styles.fieldTitle}>{t('username')}</Text>
+              <Text style={[styles.fieldTitle,theme]}>{t('username')}</Text>
             </View>
             <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
               <Text>
@@ -105,7 +108,7 @@ class AccountScreen extends React.Component {
           </View>
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, { flex: 1 }]}>
-              <Text style={styles.fieldTitle}>{t('nickname')}</Text>
+              <Text style={styles(theme).fieldTitle}>{t('nickname')}</Text>
             </View>
             <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
               <Text>
@@ -115,7 +118,7 @@ class AccountScreen extends React.Component {
           </View>
           <View style={[styles.tableRowContainerWithBorder]}>
             <View style={[styles.tableCellView, { flex: 1 }]}>
-              <Text style={styles.fieldTitle}>{t('password')}</Text>
+              <Text style={rainApp.fieldTitle}>{t('password')}</Text>
             </View>
             <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
               <EditPasswordPopUp defaultUser={currentUser.defaultUser} name={currentUser.username} ownAccount={true}/>
@@ -123,7 +126,7 @@ class AccountScreen extends React.Component {
           </View>
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, { flex: 1 }]}>
-              <Text style={styles.fieldTitle}>App Version</Text>
+              <Text style={rainApp.fieldTitle}>App Version</Text>
             </View>
             <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
               <Text>
@@ -131,7 +134,6 @@ class AccountScreen extends React.Component {
               </Text>
             </View>
           </View>
-
 
         {/*{currentUser.defaultUser && (
           <View style={{ flex: 2, justifyContent: 'flex-end' }}>
@@ -166,3 +168,9 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(AccountScreen)
+
+// const rainApp = StyleSheet.create({
+//   fieldTitle: {
+//     color: themes.dark.color
+//   }
+//   })
