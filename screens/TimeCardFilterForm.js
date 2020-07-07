@@ -15,7 +15,7 @@ class TimeCardFilterForm extends React.Component {
   static contextType = LocaleContext
 
   render() {
-    const { t } = this.context
+    const { t, theme } = this.context
     const { handleSubmit } = this.props
 
     return (
@@ -34,6 +34,7 @@ class TimeCardFilterForm extends React.Component {
               {label: '2025', value: '2025'},
             ]}
             forFilter={true}
+            theme={theme}
           />
         </View>
 
@@ -57,6 +58,7 @@ class TimeCardFilterForm extends React.Component {
               {label: 'DECEMBER', value: 'DECEMBER'},
             ]}
             forFilter={true}
+            theme={theme}
           />
         </View>
 

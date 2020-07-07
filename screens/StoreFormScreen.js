@@ -83,13 +83,13 @@ class StoreFormScreen extends React.Component {
   }
 
   render() {
-    const { t } = this.context
+    const { t, theme } = this.context
     const { handleSubmit } = this.props
 
     const tableDisplayTypes = Object.keys(this.state.tableDisplayTypes).map(key => this.state.tableDisplayTypes[key].label)
 
     return (
-      <KeyboardAvoidingView style={styles.mainContainer} behavior="padding" enabled>
+      <KeyboardAvoidingView style={[styles.mainContainer, theme]} behavior="padding" enabled>
         <ScrollView scrollIndicatorInsets={{right: 1}}>
           <DismissKeyboard>
             <View style={styles.container}>
@@ -98,7 +98,7 @@ class StoreFormScreen extends React.Component {
 
                 <View style={styles.fieldContainer}>
                   <View style={[styles.tableCellView, {flex: 2}]}>
-                    <Text style={styles.fieldTitle}>{t('clientStatus')}</Text>
+                    <Text style={[styles.fieldTitle, theme]}>{t('clientStatus')}</Text>
                   </View>
                   <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
                     <Field
@@ -106,13 +106,14 @@ class StoreFormScreen extends React.Component {
                       component={InputText}
                       placeholder="User Email Address"
                       editable={false}
+                      theme={theme}
                     />
                   </View>
                 </View>
 
                 <View style={styles.fieldContainer}>
                   <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('clientEmail')}</Text>
+                    <Text style={[styles.fieldTitle, theme]}>{t('clientEmail')}</Text>
                   </View>
                   <View style={{flex: 3}}>
                     <Field
@@ -120,13 +121,14 @@ class StoreFormScreen extends React.Component {
                       component={InputText}
                       placeholder="User Email Address"
                       editable={false}
+                      theme={theme}
                     />
                   </View>
                 </View>
 
                 <View style={styles.fieldContainer}>
                   <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('clientName')}</Text>
+                    <Text style={[styles.fieldTitle, theme]}>{t('clientName')}</Text>
                   </View>
                   <View style={{flex: 3}}>
                     <Field
@@ -134,44 +136,47 @@ class StoreFormScreen extends React.Component {
                       component={InputText}
                       validate={isRequired}
                       placeholder={t('clientName')}
+                      theme={theme}
                     />
                   </View>
                 </View>
 
                 <View style={styles.fieldContainer}>
                   <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('address')}</Text>
+                    <Text style={[styles.fieldTitle, theme]}>{t('address')}</Text>
                   </View>
                   <View style={{flex: 3}}>
                     <Field
                       name="attributes.ADDRESS"
                       component={InputText}
                       placeholder={t('address')}
+                      theme={theme}
                     />
                   </View>
                 </View>
 
                 <View style={styles.fieldContainer}>
                   <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('ubn')}</Text>
+                    <Text style={[styles.fieldTitle, theme]}>{t('ubn')}</Text>
                   </View>
                   <View style={{flex: 3}}>
                     <Field
                       name="attributes.UBN"
                       component={InputText}
                       placeholder={t('ubn')}
+                      theme={theme}
                     />
                   </View>
                 </View>
 
                 <View style={styles.sectionTitleContainer}>
-                  <Text style={styles.sectionTitleText}>
+                  <Text style={[styles.sectionTitleText, theme]}>
                     {t('inEffectRule')}
                   </Text>
                 </View>
                 <View style={[styles.fieldContainer]}>
                   <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('serviceCharge')}</Text>
+                    <Text style={[styles.fieldTitle, theme]}>{t('serviceCharge')}</Text>
                   </View>
                   <View style={{flex: 3}}>
                     <Field
@@ -186,6 +191,7 @@ class StoreFormScreen extends React.Component {
                       normalize={(value) => {
                         return value / 100
                       }}
+                      theme={theme}
                     />
                   </View>
                   <View style={{flex: 1, flexDirection: 'row-reverse'}}>
@@ -203,7 +209,7 @@ class StoreFormScreen extends React.Component {
                   ]}
                 >
                   <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('taxInclusive')}</Text>
+                    <Text style={[styles.fieldTitle, theme]}>{t('taxInclusive')}</Text>
                   </View>
                   <View style={{flex: 3, flexDirection: 'row-reverse'}}>
                     <Field
@@ -216,7 +222,7 @@ class StoreFormScreen extends React.Component {
 
               <View style={styles.fieldContainer}>
                 <View style={{flex: 2}}>
-                  <Text style={styles.fieldTitle}>{t('tableAvailabilityDisplayTitle')}</Text>
+                  <Text style={[styles.fieldTitle, theme]}>{t('tableAvailabilityDisplayTitle')}</Text>
                 </View>
                 <View style={{flex: 3}}>
                   <Field

@@ -20,7 +20,7 @@ import { reducer as printersReducer } from './printers'
 import { reducer as printerReducer } from './printer'
 import { reducer as workingareaReducer } from './workingarea'
 import { reducer as tablesavailableReducer } from './tablesavailable'
-import { reducer as globalorderoffersReducer, productReducer as globalproductroffersReducer } from './globalorderoffers'
+import { reducer as globalorderoffersReducer, productReducer as globalproductroffersReducer, offersReducer as orderOffersReducer } from './globalorderoffers'
 import { reducer as rangedsalesreportReducer } from './rangedsalesreport'
 import { reducer as ordersbydaterangeReducer } from './ordersbydaterange'
 import { reducer as salesDistributionReportReducer } from './salesdistributionreport'
@@ -36,6 +36,7 @@ import { reducer as shiftsReducer } from './shifts'
 import { reducer as userRolesReducer } from './userroles'
 import { reducer as userRoleReducer } from './userrole'
 import { reducer as permissionReducer } from './permissions'
+import { reducer as orderOfferReducer } from './orderOffer'
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -75,6 +76,8 @@ const rootReducer = combineReducers({
   shifts: shiftsReducer,
   userroles: userRolesReducer,
   userrole: userRoleReducer,
-  permissions: permissionReducer
+  permissions: permissionReducer,
+  offers: orderOffersReducer,
+  orderOffer: orderOfferReducer
 })
 export default rootReducer

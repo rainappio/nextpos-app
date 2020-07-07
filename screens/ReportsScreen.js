@@ -38,10 +38,10 @@ class ReportsScreen extends React.Component {
   }
 
   render() {
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }} style={theme}>
         <DismissKeyboard>
           <View style={styles.container}>
             <ScreenHeader backNavigation={false}
@@ -95,7 +95,8 @@ class ReportsScreen extends React.Component {
                       size={40}
                       style={[styles.buttonIconStyle]}
                     />
-                  }/>
+                  }
+                  theme={theme}/>
               </View>
               <View style={{flex: 1}}>
                 <MenuButton
@@ -107,7 +108,8 @@ class ReportsScreen extends React.Component {
                       size={40}
                       style={[styles.buttonIconStyle]}
                     />
-                  }/>
+                  }
+                  theme={theme}/>
               </View>
             </View>
           </View>

@@ -32,7 +32,6 @@ import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
 import { activateKeepAwake, useKeepAwake } from "expo-keep-awake";
 import { ThemeContext, themes } from './mode_switcher/themeContext'
-import ThemeTogglerButton from './mode_switcher/theme-toggler-btn'
 
 YellowBox.ignoreWarnings([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
@@ -212,7 +211,6 @@ export default class App extends React.Component {
                 />
               </LocaleContext.Provider>
               {/*https://www.npmjs.com/package/react-native-flash-message?activeTab=readme*/}
-              <ThemeTogglerButton/>
               <FlashMessage position="bottom" />
             </View>
           </Provider>

@@ -162,7 +162,7 @@ class LoginSuccessScreen extends React.Component {
             <Text style={[styles.text, styles.textBig, styles.orange_color]}>
               {t('welcome')} {currentUser.displayName}{currentUser.defaultUser && t('ownerRemark')}
             </Text>
-            <Text style={[styles.textSmall, { color: theme.foreground }]}>
+            <Text style={[styles.textSmall, theme]}>
               {t('loggedIn')} {formatDateObj(loggedIn)}
             </Text>
           </View>
@@ -183,7 +183,8 @@ class LoginSuccessScreen extends React.Component {
                   size={40}
                   style={[styles.buttonIconStyle]}
                 />
-              } />
+              }
+              theme={theme} />
           )}
 
           <View style={[styles.flex_dir_row, { flex: 1 }]}>
@@ -232,16 +233,20 @@ class LoginSuccessScreen extends React.Component {
                         size={32}
                         color={mainThemeColor}
                       />
-                      <Text style={[styles.sectionBarText, { marginLeft: 10, color: theme.foreground }]}>
+                      <Text style={[styles.sectionBarText, { marginLeft: 10 },theme]}>
                         {getannoc.title}
                       </Text>
                     </View>
                   </View>
-                  <ScrollView style={{ color: 'red' }}>
+                  <ScrollView>
 
-                    <Markdown>
+                    <Markdown
+                      style={{
+                        body: {color: theme.color}
+                      }}>
                       {getannoc.markdownContent}
-                    </Markdown></ScrollView>
+                    </Markdown>
+                  </ScrollView>
 
                 </View>
               )

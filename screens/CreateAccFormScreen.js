@@ -22,7 +22,7 @@ class CreateAccFormScreen extends React.Component {
 
   render() {
     const { handleSubmit } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       <DismissKeyboard>
@@ -46,6 +46,7 @@ class CreateAccFormScreen extends React.Component {
               component={InputText}
               placeholder={t('clientName')}
               secureTextEntry={false}
+              theme={theme}
             />
 
             <Field
@@ -55,6 +56,7 @@ class CreateAccFormScreen extends React.Component {
               placeholder={t('email')}
               secureTextEntry={false}
               autoCapitalize="none"
+              theme={theme}
             />
             <Field
               name="masterPassword"
@@ -62,6 +64,7 @@ class CreateAccFormScreen extends React.Component {
               validate={isvalidPassword}
               placeholder={t('password')}
               secureTextEntry={true}
+              theme={theme}
             />
 
             <Text style={styles.text}>

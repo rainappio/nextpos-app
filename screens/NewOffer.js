@@ -20,27 +20,28 @@ class NewOffer extends React.Component {
   state = {
     startDate: "",
     endDate: "",
+    products: [],
     productIds: [],
     productLabelIds: [],
     uniqueProductLabelIds: []
   };
 
   handleonChange = (data) => {
-    // let startDate = moment(data.date).format('YYYY-MM-DD') + 'T' + moment(data.time).format('HH:mm:ss');
-    // let endDate = moment(data.todate).format('YYYY-MM-DD') + 'T' + moment(data.totime).format('HH:mm:ss');
+    let startDate = moment(data.date).format('YYYY-MM-DD') + 'T' + moment(data.time).format('HH:mm:ss');
+    let endDate = moment(data.todate).format('YYYY-MM-DD') + 'T' + moment(data.totime).format('HH:mm:ss');
 
     this.setState({
-      startDate: moment(data.date).format('YYYY-MM-DD') + 'T' + moment(data.time).format('HH:mm:ss'),
-      endDate: moment(data.todate).format('YYYY-MM-DD') + 'T' + moment(data.totime).format('HH:mm:ss'),
-      products: data.products,
+      startDate: startDate,
+      endDate: endDate,
+      products: data.products
     });
   }
 
   componentDidMount() {
     this.props.getLables();
-    // this.setState({
-    //   products: this.props.navigation.state.params !== undefined && this.props.navigation.state.params.updatedProducts
-    // })
+    this.setState({
+      products: this.props.navigation.state.params !== undefined && this.props.navigation.state.params.updatedProducts
+    })
   }
 
   handleSubmit = values => {
@@ -73,9 +74,7 @@ class NewOffer extends React.Component {
       values.productIds = null;
       values.productLabelIds = null;
     }
-    console.log(values)
-    console.log("add payload")
-    //return;
+
     dispatchFetchRequest(
       api.order.createOffer,
       {
@@ -95,26 +94,21 @@ class NewOffer extends React.Component {
   };
 
   render() {
-    const { t } = this.context;
-    //const { products } = this.state;
-    // const selectedProducts =
-    //   this.props.navigation.state.params !== undefined &&
-    //   this.props.navigation.state.params.updatedProducts;
+    const { t, theme } = this.context;
+    const { products } = this.state;
+    const selectedProducts =
+      this.props.navigation.state.params !== undefined &&
+      this.props.navigation.state.params.updatedProducts;
 
-// console.log("==/+/=")
-// console.log(this.state)
-// console.log("==")
-// console.log(products)
     return (
       <KeyboardAwareScrollView>
-        <View style={styles.container_nocenterCnt}>
+        <View style={[styles.container_nocenterCnt, theme]}>
           <ScreenHeader title={t("newOfferTitle")} />
           <NewOfferForm
             onSubmit={this.handleSubmit}
             labels={this.props.labels}
             navigation={this.props.navigation}
-            //selectedProducts={products.length !== selectedProducts.length ? selectedProducts : products}
-            //selectedProducts={products}
+            selectedProducts={selectedProducts}
             onChange={this.handleonChange}
           />
         </View>

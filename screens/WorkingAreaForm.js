@@ -44,7 +44,7 @@ class WorkingAreaForm extends React.Component {
 
   render() {
     const { handleSubmit, isEdit, handleEditCancel, navigation } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -60,6 +60,7 @@ class WorkingAreaForm extends React.Component {
                 type="text"
                 validate={[isRequired]}
                 placeholder={t('workingAreaName')}
+                theme={theme}
               />
             </View>
           </View>
@@ -81,6 +82,7 @@ class WorkingAreaForm extends React.Component {
                     ? String(value)
                     : ''
                 }}
+                theme={theme}
               />
             </View>
           </View>

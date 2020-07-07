@@ -119,7 +119,7 @@ class ProductRow extends React.Component {
         onLongPress={drag}
       >
         <View style={[styles.listPanel, { paddingLeft: 20, paddingRight: 20, paddingTop: 8, paddingBottom: 10 }]}>
-          <Text style={[styles.listPanelText]}>{item.label}</Text>
+          <Text style={[styles.listPanelText, this.context.theme]}>{item.label}</Text>
           {item.id !== 'pinned' && item.id !== 'ungrouped' && (
             <MaterialIcon
               name="edit"
@@ -141,24 +141,24 @@ class ProductRow extends React.Component {
 
   renderItem = ({ item, index, drag, isActive }) => {
     var map = this.props.products;
-
+    const { theme } = this.context;
     return (
       <View>
-        {this._renderSectionHeader(item, index, drag, isActive)}
+        {this._renderSectionHeader(item, index, drag, isActive, theme)}
         {
           this.state.selectedToggleItems.get(item.id) &&
           //this.state.collapsedId === item.id &&
           <View>
             {map[item.label] !== undefined && map[item.label].map(data => {
               return (
-                <View style={[{ paddingTop: 20, paddingBottom: 20, backgroundColor: '#F8F8F8', paddingLeft: 20, borderTopWidth: 0.11 }]} key={data.id}>
+                <View style={[{ paddingTop: 20, paddingBottom: 20, backgroundColor: '#F8F8F8', paddingLeft: 20, borderTopWidth: 0.11 }, theme]} key={data.id}>
                   <Text onPress={() => {
                     this.props.navigation.navigate('ProductEdit', {
                       productId: data.id,
                       labelId: data.productLabelId,
                       isPinned: this.props.products['pinned'].filter(pa => pa.id === data.id)[0] !== undefined
                     })
-                  }} style={{ marginRight: 50 }}>{data.name}</Text>
+                  }} style={[{ marginRight: 50 }, theme]}>{data.name}</Text>
 
                   <TouchableOpacity onPress={() => this.handlepinToggle(data.id)} style={[{ position: 'absolute', right: 24 }]}>
                     {
@@ -232,13 +232,13 @@ class ProductRow extends React.Component {
       labels = [],
       navigation
     } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
     var getlabels = labels !== undefined && labels
     var labelsArr = [{ label: 'pinned', id: 'pinned' }, ...getlabels, { label: 'ungrouped', id: 'ungrouped' }]
 
     return (
       <DismissKeyboard>
-        <View style={[styles.fullWidthScreen, styles.nomgrBottom]}>
+        <View style={[styles.fullWidthScreen, styles.nomgrBottom, theme]}>
           <ScreenHeader backNavigation={true}
             title={t('productListTitle')}
             parentFullScreen={true}
@@ -253,7 +253,7 @@ class ProductRow extends React.Component {
           />
           <DraggableFlatList
             data={labelsArr}
-            renderItem={(item, index, drag, isActive) => this.renderItem(item, index, drag, isActive)}
+            renderItem={(item, index, drag, isActive, theme) => this.renderItem(item, index, drag, isActive, theme)}
             keyExtractor={(item, index) => `draggable-item-${item.label}`}
             onDragEnd={(data) => this.handleReArrange(data)}
             initialNumToRender={10}

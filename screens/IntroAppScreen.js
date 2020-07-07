@@ -62,9 +62,9 @@ class IntroAppScreen extends React.Component {
               style={styles.welcomeImage}
             />
           </View>
-          <Text style={[styles.welcomeText, modeCtrlstyles.textColor(theme)]}>Simplify</Text>
-          <Text style={[styles.welcomeText, theme]}>Your</Text>
-          <Text style={[styles.welcomeText, modeCtrlstyles.textColor(theme)]}>Selling</Text>
+          <Text style={[styles.welcomeText,theme]}>Simplify</Text>
+          <Text style={[styles.welcomeText,theme]}>Your</Text>
+          <Text style={[styles.welcomeText,theme]}>Selling</Text>
         </View>
 
         <View style={[styles.bottom]}>

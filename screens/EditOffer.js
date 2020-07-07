@@ -76,10 +76,6 @@ class EditOffer extends Component {
       values.productLabelIds = null;
     }
 
-    console.log(values)
-    console.log("edit payload")
-    //return;
-
     dispatchFetchRequest(
       api.order.updateOrderOfferById(offerId),
       {
@@ -163,7 +159,7 @@ class EditOffer extends Component {
   };
 
   render() {
-    const { t } = this.context;
+    const { t, theme } = this.context;
     const { orderOffer, isLoading, haveData } = this.props;
 
     const selectedProducts =
@@ -183,7 +179,7 @@ class EditOffer extends Component {
       return (
         <KeyboardAwareScrollView>
           <DismissKeyboard>
-            <View style={styles.container_nocenterCnt}>
+            <View style={[styles.container_nocenterCnt,theme]}>
               <ScreenHeader
                 title={t("editOfferTitle")}
                 backAction={this.handleEditCancel}

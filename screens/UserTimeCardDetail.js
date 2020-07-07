@@ -48,17 +48,17 @@ class UserTimeCardDetail extends React.Component {
 
   render() {
     const { order, timecardDetail, isLoading, haveData } = this.props
-    const { t } = this.context
+    const { t,theme } = this.context
 
     if (isLoading) {
       return (
-        <View style={[styles.container]}>
+        <View style={[styles.container,theme]}>
           <ActivityIndicator size="large" color="#ccc" />
         </View>
       )
     } else if (haveData) {
       return (
-        <View style={[styles.container, { marginLeft: 8, marginRight: 8 }]}>
+        <View style={[styles.container, { marginLeft: 8, marginRight: 8 },theme]}>
           <View style={[styles.boxShadow, styles.popUpLayout]}>
            <Text style={styles.screenTitle}>
               {formatDateOnly(timecardDetail.clockIn)}

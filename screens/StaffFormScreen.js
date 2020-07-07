@@ -98,7 +98,7 @@ class StaffFormScreen extends React.Component {
       onCancel,
       userRoles = []
     } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
     var roleIdArr = [];
     userRoles !== undefined && userRoles.map(usrRole => roleIdArr.push({ label: usrRole.roleName, value: usrRole.id }))
 
@@ -119,6 +119,7 @@ class StaffFormScreen extends React.Component {
                   placeholder={t('nickName')}
                   secureTextEntry={false}
                   autoFocus={!isEditForm}
+                  theme={theme}
                 />
               </View>
             </View>
@@ -136,6 +137,7 @@ class StaffFormScreen extends React.Component {
                   secureTextEntry={false}
                   editable={!isEditForm}
                   autoCapitalize="none"
+                  theme={theme}
                 />
               </View>
             </View>

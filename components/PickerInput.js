@@ -8,6 +8,7 @@ const PickerInput = props => {
     meta: {error, touched, valid},
     values,
     selectedValue,
+    theme,
     ...rest
   } = props
 
@@ -25,8 +26,8 @@ const PickerInput = props => {
       <Picker
         selectedValue={selectedValue}
         onValueChange={onChange}
-        style={{width: '100%'}}
-        itemStyle={{height: 100}}
+        style={[{width: '100%'}, theme]}
+        itemStyle={[{height: 100}, theme]}
       >
         {pickerItems}
       </Picker>

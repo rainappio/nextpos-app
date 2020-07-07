@@ -1,7 +1,7 @@
 import React from 'react'
-import {View} from 'react-native'
+import { View, Text } from 'react-native'
 import SegmentedControlTab from "react-native-segmented-control-tab";
-import {mainThemeColor} from "../styles";
+import styles, { mainThemeColor } from "../styles";
 
 const SegmentedControl = props => {
   const {
@@ -9,13 +9,14 @@ const SegmentedControl = props => {
     values,
     selectedIndex,
     vertical,
+    meta: { error, touched, valid },
     ...rest
   } = props
 
   const horizontalStyleProps = {
     tabsContainerStyle: { width: '100%' },
     tabStyle: { borderColor: mainThemeColor, width: '100%' },
-    tabTextStyle: { color: mainThemeColor},
+    tabTextStyle: { color: mainThemeColor },
     activeTabStyle: { backgroundColor: mainThemeColor }
   }
 
@@ -32,9 +33,10 @@ const SegmentedControl = props => {
         values={values}
         selectedIndex={selectedIndex}
         onTabPress={onChange}
-        { ...(vertical ? verticalStyleProps : horizontalStyleProps) }
+        {...(vertical ? verticalStyleProps : horizontalStyleProps)}
         {...rest}
       />
+      {!valid && touched && <Text style={[styles.rootError, styles.mgrtotop12, styles.centerText]}>{error}</Text>}
     </View>
   )
 }

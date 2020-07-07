@@ -63,11 +63,11 @@ class TableLayouts extends React.Component {
 
   render() {
     const { navigation, tablelayouts = [], loading } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     if (loading) {
       return (
-        <View style={[styles.container]}>
+        <View style={[styles.container,theme]}>
           <ActivityIndicator size="large" color="#ccc" />
         </View>
       )
@@ -81,7 +81,7 @@ class TableLayouts extends React.Component {
         />
         <DismissKeyboard>
           <View>
-            <View style={[styles.container]}>
+            <View style={[styles.container,theme]}>
               <ScreenHeader backNavigation={true}
                             title={t('settings.tableLayouts')}
                             rightComponent={

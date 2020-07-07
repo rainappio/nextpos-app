@@ -144,7 +144,7 @@ class TablesScreen extends React.Component {
       ordersInflight,
       availableTables
     } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     if (isLoading) {
       return (
@@ -153,7 +153,7 @@ class TablesScreen extends React.Component {
     } else if (tablelayouts === undefined || tablelayouts.length === 0) {
       return (
         <ScrollView
-          contentContainerStyle={styles.contentContainer}
+          contentContainerStyle={[styles.contentContainer, theme]}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
@@ -161,7 +161,7 @@ class TablesScreen extends React.Component {
             />
           }
         >
-          <View style={styles.container}>
+          <View style={[styles.container, theme]}>
             <Text style={styles.messageBlock}>{t('noTableLayout')}</Text>
           </View>
         </ScrollView>
@@ -272,7 +272,7 @@ class TablesScreen extends React.Component {
           />
 
           <DismissKeyboard>
-            <View style={styles.fullWidthScreen}>
+            <View style={[styles.fullWidthScreen,theme]}>
               <ScreenHeader backNavigation={false}
                             title={t('menu.tables')}
                             parentFullScreen={true}
@@ -286,8 +286,8 @@ class TablesScreen extends React.Component {
               />
 
               {tablelayouts.map((tblLayout, idx) => (
-                <View style={{}} key={idx}>
-                  <View style={[styles.sectionBar, {flex: 1}]}>
+                <View key={idx}>
+                  <View style={[styles.sectionBar, {flex: 1}, theme]}>
                     <Text
                       style={[styles.sectionBarText, {flex: 4}
                       ]}
@@ -323,7 +323,7 @@ class TablesScreen extends React.Component {
                     />
                   ) : (
                     <View>
-                      <Text style={styles.messageBlock}>
+                      <Text style={[styles.messageBlock, theme]}>
                         {t('noInflightOrders')}
                       </Text>
                     </View>
@@ -331,8 +331,8 @@ class TablesScreen extends React.Component {
                 </View>
               ))}
               <View style={styles.mgrbtn20} key='noLayout'>
-                <View style={[styles.sectionBar, {flex: 1, justifyContent: 'flex-start'}]}>
-                  <Text style={[styles.sectionBarText]}>
+                <View style={[styles.sectionBar, {flex: 1, justifyContent: 'flex-start'}, theme]}>
+                  <Text style={styles.sectionBarText}>
                     {t('otherOrders')}
                   </Text>
                 </View>
@@ -354,7 +354,7 @@ class TablesScreen extends React.Component {
                   />
                 ) : (
                   <View>
-                    <Text style={styles.messageBlock}>
+                    <Text style={[styles.messageBlock,theme]}>
                       {t('noInflightOrders')}
                     </Text>
                   </View>

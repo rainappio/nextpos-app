@@ -43,7 +43,7 @@ class PasswordResetForm extends React.Component {
 
   render() {
   	const { handleSubmit } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       <DismissKeyboard>
@@ -72,6 +72,7 @@ class PasswordResetForm extends React.Component {
               	placeholder={t('newPwd')}
               	secureTextEntry={true}
               	//onSubmitEditing={val => this.clientLogin(val.nativeEvent.text)}
+                theme={theme}
             	/>
           </View>
 

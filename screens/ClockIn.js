@@ -244,16 +244,16 @@ class ClockIn extends React.Component {
 
     return (
       <DismissKeyboard>
-        <View style={[styles.container, { backgroundColor: theme.background }]}>
+        <View style={[styles.container,theme]}>
           <ScreenHeader backNavigation={true} title={t('timeCardTitle')} />
 
           <View style={{ flex: 3, justifyContent: 'center' }}>
             <View style={[styles.fieldContainer]}>
               <View style={{ flex: 2 }}>
-                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('currentLocation')}</Text>
+                <Text style={[styles.fieldTitle,theme]}>{t('currentLocation')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={[{ alignSelf: 'flex-end', color: theme.foreground }]}>
+                <Text style={[theme]}>
                   {text}
                 </Text>
               </View>
@@ -261,10 +261,10 @@ class ClockIn extends React.Component {
 
             <View style={[styles.fieldContainer]}>
               <View style={{ flex: 2 }}>
-                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('storeLocation')}</Text>
+                <Text style={[styles.fieldTitle,theme]}>{t('storeLocation')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>
+                <Text style={[{ alignSelf: 'flex-end'},theme]}>
                   {storeLocation}
                 </Text>
               </View>
@@ -272,10 +272,10 @@ class ClockIn extends React.Component {
 
             <View style={[styles.fieldContainer]}>
               <View style={{ flex: 2 }}>
-                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('distance')}</Text>
+                <Text style={[styles.fieldTitle,theme]}>{t('distance')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>
+                <Text style={[{ alignSelf: 'flex-end' },theme]}>
                   {distance / 1000} {t('kilometers')}
                 </Text>
               </View>
@@ -283,65 +283,65 @@ class ClockIn extends React.Component {
 
             <View style={[styles.fieldContainer]}>
               <View style={{ flex: 2 }}>
-                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('username')}</Text>
+                <Text style={[styles.fieldTitle,theme]}>{t('username')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>
+                <Text style={[{ alignSelf: 'flex-end' },theme]}>
                   {authClientUserName}
                 </Text>
               </View>
             </View>
             <View style={styles.fieldContainer}>
               <View style={{ flex: 2 }}>
-                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('currentTime')}</Text>
+                <Text style={[styles.fieldTitle,theme]}>{t('currentTime')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>{`${dateToLocaleString(
+                <Text style={[{alignSelf: 'flex-end'},theme]}>{`${dateToLocaleString(
                   new Date()
                 )}`}</Text>
               </View>
             </View>
             <View style={styles.sectionTitleContainer}>
-              <Text style={[styles.sectionTitleText, { color: theme.foreground }]}>{t('timeCardStatus')}</Text>
+              <Text style={[styles.sectionTitleText,theme]}>{t('timeCardStatus')}</Text>
             </View>
             <View style={styles.fieldContainer}>
               <View style={{ flex: 2 }}>
-                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('timeCardStatus')}</Text>
+                <Text style={[styles.fieldTitle,theme]}>{t('timeCardStatus')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>{this.renderTimeCardStatus(timecard.timeCardStatus)}</Text>
+                <Text style={[{ alignSelf: 'flex-end' },theme]}>{this.renderTimeCardStatus(timecard.timeCardStatus)}</Text>
               </View>
             </View>
             <View style={styles.fieldContainer}>
               <View style={{ flex: 2 }}>
-                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>
+                <Text style={[styles.fieldTitle, theme]}>
                   {t('clockInTime')}
                 </Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>{timecard.clockIn != null ? `${formatDate(timecard.clockIn)}` : ''}</Text>
+                <Text style={[{ alignSelf: 'flex-end' },theme]}>{timecard.clockIn != null ? `${formatDate(timecard.clockIn)}` : ''}</Text>
               </View>
             </View>
             {timeCardStatus === 'COMPLETE' && (
               <View>
                 <View style={styles.fieldContainer}>
                   <View style={{ flex: 2 }}>
-                    <Text style={[styles.fieldTitle, { color: theme.foreground }]}>
+                    <Text style={[styles.fieldTitle,theme]}>
                       {t('clockOutTime')}
                     </Text>
                   </View>
                   <View style={{ flex: 3 }}>
-                    <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>{timecard.clockOut != null ? `${formatDate(timecard.clockOut)}` : ''}</Text>
+                    <Text style={[{ alignSelf: 'flex-end' },theme]}>{timecard.clockOut != null ? `${formatDate(timecard.clockOut)}` : ''}</Text>
                   </View>
                 </View>
                 <View style={styles.fieldContainer}>
                   <View style={{ flex: 1 }}>
-                    <Text style={[styles.fieldTitle, { color: theme.foreground }]}>
+                    <Text style={[styles.fieldTitle,theme]}>
                       {t('workingHours')}
                     </Text>
                   </View>
                   <View style={{ flex: 3 }}>
-                    <Text style={{ alignSelf: 'flex-end', color: theme.foreground }}>{this.renderWorkingHours(timecard)}</Text>
+                    <Text style={[{ alignSelf: 'flex-end' },theme]}>{this.renderWorkingHours(timecard)}</Text>
                   </View>
                 </View>
               </View>
@@ -365,7 +365,7 @@ class ClockIn extends React.Component {
                     color="#fff"
                     style={[styles.centerText, styles.margin_15]}
                   />
-                  <Text style={[styles.centerText, styles.whiteColor, { color: theme.foreground }]}>
+                  <Text style={[styles.centerText, styles.whiteColor,theme]}>
                     {timeCardStatus === 'ACTIVE' ? t('clockOut') : t('clockIn')}
                   </Text>
                 </View>

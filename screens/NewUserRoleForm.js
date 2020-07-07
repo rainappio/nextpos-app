@@ -29,7 +29,7 @@ class NewUserRoleForm extends React.Component {
       handleDeleteUserRole,
       labels
     } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       <View>
@@ -45,6 +45,7 @@ class NewUserRoleForm extends React.Component {
               secureTextEntry={false}
               autoFocus={!isEditForm}
               validate={isRequired}
+              theme={theme}
             />
           </View>
         </View>

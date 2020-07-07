@@ -52,7 +52,7 @@ class CategoryCustomizeScreen extends React.Component {
       onCancel
     } = this.props
 
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       // scroll bar in the center issue: https://github.com/facebook/react-native/issues/26610
@@ -80,6 +80,7 @@ class CategoryCustomizeScreen extends React.Component {
                 <Field
                   name="label"
                   component={InputText}
+                  theme={theme}
                 />
               </View>
             </View>

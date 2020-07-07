@@ -11,19 +11,20 @@ export default class RadioItemObjPick extends React.Component {
       optionName,
       onCheck,
       meta: { error, touched, valid },
+      theme,
       ...rest
     } = this.props
     return (
       <View style={[styles.tableRowContainerWithBorder]}>
         <View style={[styles.tableCellView, {flex: 1}]}>
-          <Text>{optionName}</Text>
+          <Text style={theme}>{optionName}</Text>
         </View>
         <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end', borderWidth: 0}]}>
           <Radio
             key={customValueOrder}
             onChange={() => onChange(customValueOrder)}
             checked={onCheck(value, customValueOrder)}
-            style={{ position: 'absolute', right: 10 }}
+            style={[{position: 'absolute', right: 10}, theme]}
           >
             {/*this empty text exists to increase the radio button hit slop as the radio button reacts to the touch of the text.*/}
             <Text style={{borderWidth: 0, paddingVertical: 10, paddingHorizontal: 100 }}/>

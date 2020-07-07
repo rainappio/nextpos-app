@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { View, Switch, StyleSheet } from 'react-native'
+import React, { Component } from "react";
+import { View, Switch, StyleSheet } from "react-native";
 
 const RNSwitch = props => {
   const {
     input: { onChange, value, ...otherInput },
     meta,
     ...rest
-  } = props
+  } = props;
   return (
     <View>
       <Switch
@@ -16,7 +16,7 @@ const RNSwitch = props => {
         {...rest}
       />
     </View>
-  )
-}
+  );
+};
 
-export default RNSwitch
+export default RNSwitch;

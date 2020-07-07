@@ -656,5 +656,15 @@ export default StyleSheet.create({
     height: 600,
     borderWidth: 1,
     borderColor: mainThemeColor
+  },
+  datetimeBorder: {
+    borderWidth: 1,
+    padding: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+    marginRight: 8,
+    borderRadius: 4,
+    borderColor: '#ccc',
+    width: '50%'
   }
 })

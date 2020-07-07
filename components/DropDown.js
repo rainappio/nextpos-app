@@ -13,7 +13,8 @@ export default class DropDown extends Component {
       meta: { error, touched, valid },
       options,
       placeholder,
-      forFilter
+      forFilter,
+      theme
     } = this.props
 
     return (
@@ -25,10 +26,10 @@ export default class DropDown extends Component {
           value={value}
           {...inputProps}
           useNativeAndroidPickerStyle={false}
-          style={pickerSelectStyles}
+          style={pickerSelectStyles(theme)}
           Icon={() => {
             return (
-              <Icon name='md-arrow-dropdown' size={30} style={{ position: 'absolute', top: -9, right: 0, borderWidth: 0 }} />
+              <Icon name='md-arrow-dropdown' size={30} style={[{ position: 'absolute', top: -9, right: 0, borderWidth: 0 },theme]} />
             )
             //return <Chevron size={1.5} color="gray" />;
           }}
@@ -39,7 +40,7 @@ export default class DropDown extends Component {
   }
 }
 
-const pickerSelectStyles = StyleSheet.create({
+const pickerSelectStyles = (theme) => StyleSheet.create({
   inputIOS: {
     fontSize: 16,
     paddingVertical: 12,
@@ -47,7 +48,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 4,
-    color: 'black'
+    color: theme.color
   },
   inputAndroid: {
     fontSize: 16,

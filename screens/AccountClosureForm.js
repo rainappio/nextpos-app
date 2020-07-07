@@ -20,7 +20,7 @@ class AccountClosureForm extends React.Component {
   }
 
   render() {
-    const { t } = this.context
+    const { t, theme } = this.context
     const { mostrecentShift, handleSubmit } = this.props
 
     const closingShiftReport = {
@@ -82,6 +82,7 @@ class AccountClosureForm extends React.Component {
               format={(value, name) => {
                 return value != null ? String(value) : ''
               }}
+              theme={theme}
             />
           </View>
         </View>
@@ -93,6 +94,7 @@ class AccountClosureForm extends React.Component {
               component={InputText}
               placeholder={t('shift.remark')}
               height={35}
+              theme={theme}
             />
           </View>
         </View>
@@ -138,6 +140,7 @@ class AccountClosureForm extends React.Component {
               format={(value, name) => {
                 return value != null ? String(value) : ''
               }}
+              theme={theme}
             />
           </View>
         </View>
@@ -148,6 +151,7 @@ class AccountClosureForm extends React.Component {
               name="card.unbalanceReason"
               component={InputText}
               placeholder={t('shift.remark')}
+              theme={theme}
             />
           </View>
         </View>

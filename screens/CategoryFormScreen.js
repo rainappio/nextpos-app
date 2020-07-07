@@ -35,11 +35,11 @@ class CategoryFormScreen extends React.Component {
 
   render() {
     const { handleSubmit } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       <DismissKeyboard>
-        <View style={styles.container}>
+        <View style={[styles.container, theme]}>
           <View style={{ flex: 3 }}>
             <ScreenHeader title={t('newCategoryTitle')}/>
 
@@ -49,6 +49,7 @@ class CategoryFormScreen extends React.Component {
               validate={isRequired}
               placeholder={t('categoryName')}
               secureTextEntry={false}
+              theme={theme}
             />
           </View>
           <View stlye={styles.bottom}>

@@ -22,7 +22,7 @@ class OrderItem extends React.PureComponent {
       handleOrderSubmit,
       handleDelete
     } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     const timeDifference = getTimeDifference(order.createdTime)
     const thirtyMinutes = 30 * 60 * 1000
@@ -50,7 +50,7 @@ class OrderItem extends React.PureComponent {
           }
         >
           <View style={[styles.tableCellView, {flex: 5}]}>
-            <Text>{order.orderType === 'IN_STORE' ? order.tableName : t('order.takeOut')} ({order.serialId})</Text>
+            <Text style={theme}>{order.orderType === 'IN_STORE' ? order.tableName : t('order.takeOut')} ({order.serialId})</Text>
           </View>
 
           {/*<View style={[styles.tableCellView, {flex: 1}]}>
@@ -61,14 +61,14 @@ class OrderItem extends React.PureComponent {
           </View>*/}
 
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <Text>
+            <Text style={theme}>
               ${order.orderTotal}
             </Text>
           </View>
 
           <View style={[styles.tableCellView, {flex: 3}]}>
             <FontAwesomeIcon name={'clock-o'} color={timeDisplayColor} size={20}/>
-            <Text style={{marginLeft: 2}}>
+            <Text style={[{marginLeft: 2}, theme]}>
               {timeAgo.format(Date.now() - timeDifference, 'time')}
             </Text>
           </View>

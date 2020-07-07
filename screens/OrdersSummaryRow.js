@@ -128,7 +128,7 @@ class OrdersSummaryRow extends React.Component {
     this.setState({ orderLineItems: lineItems })
   }
 
-  renderStateToolTip = (state, t) => {
+  renderStateToolTip = (state, t, theme) => {
     const tooltip = (
       <View>
         <Text>
@@ -149,14 +149,14 @@ class OrdersSummaryRow extends React.Component {
     return (
       <Tooltip popover={tooltip} height={120} width={200} backgroundColor={mainThemeColor}>
         <View>
-          {state === 'OPEN' && <Text>{t('stateTip.open.display')}</Text>}
+          {state === 'OPEN' && <Text style={theme}>{t('stateTip.open.display')}</Text>}
           {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(state) && (
-            <Text>{t('stateTip.inProcess.display')}</Text>
+            <Text style={theme}>{t('stateTip.inProcess.display')}</Text>
           )}
           {state === 'DELIVERED' && (
-            <Text>{t('stateTip.delivered.display')}</Text>
+            <Text style={theme}>{t('stateTip.delivered.display')}</Text>
           )}
-          {state === 'SETTLED' && <Text>{t('stateTip.settled.display')}</Text>}
+          {state === 'SETTLED' && <Text style={theme}>{t('stateTip.settled.display')}</Text>}
         </View>
       </Tooltip>
     )
@@ -272,11 +272,11 @@ class OrdersSummaryRow extends React.Component {
       initialValues
     } = this.props
 
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       <ScrollView scrollIndicatorInsets={{right: 1}} contentContainerStyle={{flexGrow: 1}}>
-        <View style={styles.fullWidthScreen}>
+        <View style={[styles.fullWidthScreen, theme]}>
           <View style={{flex: 2}}>
             <ScreenHeader backNavigation={true}
                           parentFullScreen={true}
@@ -297,7 +297,7 @@ class OrdersSummaryRow extends React.Component {
 
             <OrderTopInfo order={order}/>
 
-            <View style={[styles.sectionBar]}>
+            <View style={[styles.sectionBar, theme]}>
               <View style={[styles.tableCellView, {flex: 6}]}>
                 <TouchableOpacity>
                   <Text style={styles.sectionBarTextSmall}>
@@ -337,7 +337,7 @@ class OrdersSummaryRow extends React.Component {
               <SwipeListView
                 data={order.lineItems}
                 renderItem={(data, rowMap) => (
-                  <View style={styles.rowFront}>
+                  <View style={[styles.rowFront, theme]}>
                     <View key={rowMap} style={{marginBottom: 20}}>
                       <View style={styles.tableRowContainer}>
                         <View style={[styles.tableCellView, {flex: 6}]}>
@@ -353,29 +353,29 @@ class OrdersSummaryRow extends React.Component {
                             />
                           )}
                           <View style={{flex: 5}}>
-                            <Text style={{textAlign: 'left'}}>
+                            <Text style={[{textAlign: 'left'}, theme]}>
                               {data.item.productName}
                             </Text>
                           </View>
                         </View>
 
                         <View style={[styles.tableCellView, {flex: 2}]}>
-                          <Text>{data.item.quantity}</Text>
+                          <Text style={theme}>{data.item.quantity}</Text>
                         </View>
 
                         <View style={[styles.tableCellView, {flex: 3}]}>
-                          <Text>${data.item.price}</Text>
+                          <Text style={theme}>${data.item.price}</Text>
                         </View>
 
                         <View style={[styles.tableCellView, {flex: 3}]}>
-                          <Text>${data.item.lineItemSubTotal}</Text>
+                          <Text style={theme}>${data.item.lineItemSubTotal}</Text>
                         </View>
                         <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                          {this.renderStateToolTip(data.item.state, t)}
+                          {this.renderStateToolTip(data.item.state, t, theme)}
                         </View>
                       </View>
                       <View>
-                        <Text style={{textAlign: 'left', marginLeft: 15}}>
+                        <Text style={[{textAlign: 'left', marginLeft: 15}, theme]}>
                           {renderOptionsAndOffer(data.item)}
                         </Text>
                       </View>
@@ -428,10 +428,10 @@ class OrdersSummaryRow extends React.Component {
             <View>
               <View style={[styles.tableRowContainerWithBorder]}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
-                  <Text>{t('order.discount')}</Text>
+                  <Text style={theme}>{t('order.discount')}</Text>
                 </View>
                 <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                  <Text style={{}}>
+                  <Text style={theme}>
                     ${order.discount}
                   </Text>
                 </View>
@@ -439,10 +439,10 @@ class OrdersSummaryRow extends React.Component {
 
               <View style={[styles.tableRowContainerWithBorder]}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
-                  <Text>{t('order.serviceCharge')}</Text>
+                  <Text style={theme}>{t('order.serviceCharge')}</Text>
                 </View>
                 <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                  <Text style={{}}>
+                  <Text style={theme}>
                     ${order.serviceCharge}
                   </Text>
                 </View>
@@ -450,10 +450,10 @@ class OrdersSummaryRow extends React.Component {
 
               <View style={[styles.tableRowContainerWithBorder]}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
-                  <Text>{t('order.total')}</Text>
+                  <Text style={theme}>{t('order.total')}</Text>
                 </View>
                 <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                  <Text>
+                  <Text style={theme}>
                     ${order.orderTotal}
                   </Text>
                 </View>

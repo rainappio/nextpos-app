@@ -52,7 +52,7 @@ class OptionFormScreen extends React.Component {
   }
 
   render() {
-    const { t } = this.context
+    const { t, theme } = this.context
     const { handleSubmit, handleDeleteOption, initialValues } = this.props
 
     const renderOptionValPopup = (name, index, fields) => (
@@ -66,6 +66,7 @@ class OptionFormScreen extends React.Component {
             name={`${name}.value`}
             placeholder={t('value')}
             alignLeft={true}
+            theme={theme}
           />
           <Field
             component={InputText}
@@ -76,6 +77,7 @@ class OptionFormScreen extends React.Component {
             format={(value, name) => {
               return value !== undefined && value !== null ? String(value) : ''
             }}
+            theme={theme}
           />
         </View>
         <View style={[{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }]}>
@@ -95,7 +97,7 @@ class OptionFormScreen extends React.Component {
         <View>
           <View style={styles.sectionContainer}>
             <View style={styles.sectionTitleContainer}>
-              <Text style={styles.sectionTitleText}>{label}</Text>
+              <Text style={[styles.sectionTitleText, theme]}>{label}</Text>
 
               <IonIcon
                 name="md-add"
@@ -112,7 +114,7 @@ class OptionFormScreen extends React.Component {
 
     return (
       <KeyboardAvoidingView behavior="padding" enabled style={{flex: 1}}>
-        <ScrollView scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={{ flexGrow: 1}}>
+        <ScrollView scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={{ flexGrow: 1}} style={theme}>
           <View style={[styles.fullWidthScreen]}>
             <ScreenHeader parentFullScreen={true}
                           title={t('productOptionTitle')}/>
@@ -125,13 +127,14 @@ class OptionFormScreen extends React.Component {
                     component={InputText}
                     placeholder={t('optionName')}
                     validate={isRequired}
+                    theme={theme}
                   />
                 </View>
               </View>
 
               <View style={styles.tableRowContainerWithBorder}>
                 <View style={[styles.tableCellView]}>
-                  <Text style={styles.fieldTitle}>{t('required')}</Text>
+                  <Text style={[styles.fieldTitle, theme]}>{t('required')}</Text>
                 </View>
                 <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
                   <Field name="required" component={RNSwitch}/>
@@ -140,7 +143,7 @@ class OptionFormScreen extends React.Component {
 
               <View style={styles.tableRowContainerWithBorder}>
                 <View style={[styles.tableCellView]}>
-                  <Text style={styles.fieldTitle}>{t('multiple')}</Text>
+                  <Text style={[styles.fieldTitle, theme]}>{t('multiple')}</Text>
                 </View>
                 <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
                   <Field name="multipleChoice" component={RNSwitch} />
@@ -156,7 +159,7 @@ class OptionFormScreen extends React.Component {
 
             <View style={[styles.bottom, styles.horizontalMargin]}>
               <TouchableOpacity onPress={handleSubmit}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                <Text style={[styles.bottomActionButton, styles.actionButton, theme]}>
                   {t('action.save')}
                 </Text>
               </TouchableOpacity>

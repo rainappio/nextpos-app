@@ -73,12 +73,12 @@ class PaymentFormScreen extends React.Component {
 
   render() {
     const { order, navigation, handleSubmit, globalorderoffers } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       <KeyboardAwareScrollView scrollIndicatorInsets={{ right: 1 }} keyboardShouldPersistTaps='always'>
         <DismissKeyboard>
-          <View style={styles.fullWidthScreen}>
+          <View style={[styles.fullWidthScreen, theme]}>
             <ScreenHeader backNavigation={true}
                           parentFullScreen={true}
                           title={t('paymentTitle')}
@@ -86,11 +86,11 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.subtotal')}</Text>
+                <Text style={theme}>{t('order.subtotal')}</Text>
               </View>
 
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text style={styles.tableCellText}>
+                <Text style={[styles.tableCellText, theme]}>
                   ${order.total.amountWithTax.toFixed(2)}
                 </Text>
               </View>
@@ -98,11 +98,11 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.discount')}</Text>
+                <Text style={theme}>{t('order.discount')}</Text>
               </View>
 
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text style={styles.tableCellText}>
+                <Text style={[styles.tableCellText, theme]}>
                   ${order.discount}
                 </Text>
               </View>
@@ -110,11 +110,11 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.serviceCharge')}</Text>
+                <Text style={theme}>{t('order.serviceCharge')}</Text>
               </View>
 
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text style={styles.tableCellText}>
+                <Text style={[styles.tableCellText, theme]}>
                   ${order.serviceCharge}
                 </Text>
               </View>
@@ -122,11 +122,11 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.total')}</Text>
+                <Text style={theme}>{t('order.total')}</Text>
               </View>
 
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text style={styles.tableCellText}>
+                <Text style={[styles.tableCellText, theme]}>
                   $
                   {(
                     order.orderTotal -
@@ -138,7 +138,7 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.sectionContainer]}>
               <View style={[styles.sectionTitleContainer]}>
-                <Text style={styles.sectionTitleText}>{t('orderOptions')}</Text>
+                <Text style={[styles.sectionTitleText, theme]}>{t('orderOptions')}</Text>
               </View>
               <View>
                 <Field
@@ -147,6 +147,7 @@ class PaymentFormScreen extends React.Component {
                   customValue={true}
                   checkboxType='checkbox'
                   optionName={t('waiveServiceCharge')}
+                  theme={theme}
                 />
               </View>
               {/*<View>
@@ -161,7 +162,7 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.sectionContainer]}>
               <View style={[styles.sectionTitleContainer]}>
-                <Text style={styles.sectionTitleText}>{t('order.discount')}</Text>
+                <Text style={[styles.sectionTitleText, theme]}>{t('order.discount')}</Text>
               </View>
 
               {globalorderoffers != null && globalorderoffers.map((offer, ix) => (
@@ -189,6 +190,7 @@ class PaymentFormScreen extends React.Component {
                         this.state.getPercent
                       )
                     ).toFixed(2)}
+                    theme={theme}
                   />
                 </View>
               ))}
@@ -196,7 +198,7 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.bottom, styles.horizontalMargin]}>
               <TouchableOpacity onPress={() => handleSubmit()}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                <Text style={[styles.bottomActionButton, styles.actionButton, theme]}>
                   {t('payOrder')}
                 </Text>
               </TouchableOpacity>
@@ -206,7 +208,7 @@ class PaymentFormScreen extends React.Component {
                   onPress={() => navigation.navigate('OrdersSummary')}
                 >
                   <Text
-                    style={[styles.bottomActionButton, styles.cancelButton]}
+                    style={[styles.bottomActionButton, styles.cancelButton, theme]}
                   >
                     {t('action.cancel')}
                   </Text>

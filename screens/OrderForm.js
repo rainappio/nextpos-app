@@ -152,14 +152,14 @@ class OrderForm extends Component {
     return (
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <DismissKeyboard>
-          <View style={[styles.container, { backgroundColor: theme.background }]}>
+          <View style={[styles.container,theme]}>
             <ScreenHeader backNavigation={true}
               title={t('newOrderTitle')}
             />
 
             <View style={styles.sectionContent}>
               <View style={styles.fieldContainer}>
-                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('orderType')}</Text>
+                <Text style={[styles.fieldTitle, theme]}>{t('orderType')}</Text>
               </View>
               <View style={[styles.fieldContainer]}>
                 <View style={{ flex: 1 }}>
@@ -180,7 +180,7 @@ class OrderForm extends Component {
             {this.state.selectedOrderType === 0 && Object.keys(tablesMap).length > 0 && (
               <View style={styles.sectionContent}>
                 <View style={styles.fieldContainer}>
-                  <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('table')}</Text>
+                  <Text style={[styles.fieldTitle, theme]}>{t('table')}</Text>
                 </View>
                 <Field
                   component={PickerInput}
@@ -191,20 +191,21 @@ class OrderForm extends Component {
                   onChange={(itemValue, itemIndex) => {
                     this.setState({ selectedTableId: itemValue })
                   }}
+                  theme={theme}
                 />
               </View>
             )}
 
             {noAvailableTables && (
               <View style={styles.sectionContent}>
-                <Text style={{ color: theme.foreground }}>{t('noAvailableTables')}</Text>
+                <Text style={theme}>{t('noAvailableTables')}</Text>
               </View>
             )}
 
 
             <View style={styles.sectionContent}>
               <View style={styles.fieldContainer}>
-                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('ageGroup')}</Text>
+                <Text style={[styles.fieldTitle, theme]}>{t('ageGroup')}</Text>
               </View>
               <View style={[styles.fieldContainer, styles.flex_dir_row]}>
                 <View style={{ flex: 1 }}>
@@ -224,7 +225,7 @@ class OrderForm extends Component {
 
             <View style={styles.sectionContent}>
               <View style={styles.fieldContainer}>
-                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('visitFrequency')}</Text>
+                <Text style={[styles.fieldTitle, theme]}>{t('visitFrequency')}</Text>
               </View>
               <View style={[styles.fieldContainer]}>
                 <View style={{ flex: 1 }}>
@@ -244,7 +245,7 @@ class OrderForm extends Component {
 
             <View style={styles.sectionContent}>
               <View style={styles.fieldContainer}>
-                <Text style={[styles.fieldTitle, { color: theme.foreground }]}>{t('peopleCount')}</Text>
+                <Text style={[styles.fieldTitle, theme]}>{t('peopleCount')}</Text>
               </View>
               <View>
                 {people.map((people, ix) => (
@@ -256,7 +257,7 @@ class OrderForm extends Component {
                       name={people.value}
                       component={RenderStepper}
                       optionName={people.label}
-                      color={theme.foreground}
+                      theme={theme}
                     />
                   </View>
                 ))}

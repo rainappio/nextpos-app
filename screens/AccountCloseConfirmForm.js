@@ -1,5 +1,5 @@
 import React from 'react'
-import { Field, reduxForm, FieldArray } from 'redux-form'
+import {Field, reduxForm, FieldArray } from 'redux-form'
 import {
   ActivityIndicator,
   InputAccessoryView,
@@ -39,7 +39,7 @@ class AccountCloseConfirmForm extends React.Component {
   }
 
   render() {
-    const { t } = this.context
+    const { t, theme } = this.context
 		const { handleSubmit, mostrecentShift, handleAbortCloseShift } = this.props
 
 		const closingShiftReport = {
@@ -308,6 +308,7 @@ class AccountCloseConfirmForm extends React.Component {
               placeholder={t('shift.closingRemark')}
               secureTextEntry={false}
               height={35}
+              theme={theme}
             />
           </View>
         </View>

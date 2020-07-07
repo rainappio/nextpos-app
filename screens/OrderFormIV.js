@@ -45,14 +45,14 @@ class OrderFormIV extends React.Component {
 
   render() {
     const { product, globalProductOffers } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     const hasProductOptions = product.productOptions != null && product.productOptions.length > 0
     const lastOptionIndex = product.productOptions != null ? product.productOptions.length : 0
 
     return (
       <KeyboardAwareScrollView scrollIndicatorInsets={{right: 1}} keyboardShouldPersistTaps='always'>
-        <View style={styles.fullWidthScreen}>
+        <View style={[styles.fullWidthScreen, theme]}>
           <ScreenHeader backNavigation={true}
                         parentFullScreen={true}
                         title={`${product.name} ($${product.price})`}
@@ -60,7 +60,7 @@ class OrderFormIV extends React.Component {
 
           {hasProductOptions && (
             <View style={[styles.tableRowContainerWithBorder]}>
-              <Text style={styles.tableCellText}>
+              <Text style={[styles.tableCellText, theme]}>
                 {t('productOptions')}
               </Text>
             </View>
@@ -86,7 +86,7 @@ class OrderFormIV extends React.Component {
                 style={styles.sectionContainer}
               >
                 <View style={styles.sectionTitleContainer}>
-                  <Text style={[styles.sectionTitleText]}>
+                  <Text style={[styles.sectionTitleText, theme]}>
                     {prdOption.optionName}
                   </Text>
                 </View>
@@ -131,7 +131,7 @@ class OrderFormIV extends React.Component {
           })}
 
           <View style={styles.sectionTitleContainer}>
-            <Text style={[styles.sectionTitleText]}>
+            <Text style={[styles.sectionTitleText, theme]}>
               {t('freeTextProductOption')}
             </Text>
           </View>
@@ -152,6 +152,7 @@ class OrderFormIV extends React.Component {
                     optionValue: value
                   }
                 }}
+                theme={theme}
               />
             </View>
           </View>
@@ -164,12 +165,13 @@ class OrderFormIV extends React.Component {
                 placeholder={t('overridePrice')}
                 keyboardType='numeric'
                 alignLeft={true}
+                theme={theme}
               />
             </View>
           </View>
 
           <View style={styles.sectionTitleContainer}>
-            <Text style={[styles.sectionTitleText]}>
+            <Text style={[styles.sectionTitleText, theme]}>
               {t('lineItemDiscount')}
             </Text>
           </View>
@@ -187,6 +189,7 @@ class OrderFormIV extends React.Component {
                   }}
                   optionName={offer.offerName}
                   defaultValueDisplay={(customValue, value) => String(customValue.productDiscount === value.productDiscount ? value.discount : 0)}
+                  theme={theme}
                 />
               </View>
             ))}
@@ -198,6 +201,7 @@ class OrderFormIV extends React.Component {
               component={RenderStepper}
               optionName={t('quantity')}
               validate={[isRequired, isCountZero]}
+              theme={theme}
             />
           </View>
 

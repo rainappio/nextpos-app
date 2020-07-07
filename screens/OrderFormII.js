@@ -73,7 +73,7 @@ class OrderFormII extends React.Component {
   PanelHeader = (labelName, labelId) => {
     return (
       <View style={styles.listPanel}>
-        <Text style={styles.listPanelText}>{labelName}</Text>
+        <Text style={[styles.listPanelText, this.context.theme]}>{labelName}</Text>
       </View>
     )
   }
@@ -130,7 +130,7 @@ class OrderFormII extends React.Component {
       isLoading,
       order
     } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
     const map = new Map(Object.entries(products))
 
     let totalQuantity = 0
@@ -157,7 +157,7 @@ class OrderFormII extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <ScrollView>
+        <ScrollView style={theme}>
           <View style={styles.container}>
             <Text style={styles.screenTitle}>
               {t('newOrderTitle')}
@@ -178,13 +178,13 @@ class OrderFormII extends React.Component {
                     map.get('pinned').map(prd => (
                       <List.Item
                         key={prd.id}
-                        style={styles.listItemContainer}
+                        style={[styles.listItemContainer,theme]}
                         onPress={() => this.addItemToOrder(prd.id)
                         }
                       >
                         <View style={[styles.jc_alignIem_center, { flex: 1, flexDirection: 'row' }]}>
-                          <Text style={{ flex: 3 }}>{prd.name}</Text>
-                          <Text style={{ flex: 1, textAlign: 'right' }}>
+                          <Text style={[{ flex: 3 }, theme]}>{prd.name}</Text>
+                          <Text style={[{ flex: 1, textAlign: 'right' }, theme]}>
                             ${prd.price}
                           </Text>
                         </View>
@@ -202,13 +202,13 @@ class OrderFormII extends React.Component {
                     {map.get(lbl.label).map(prd => (
                       <List.Item
                         key={prd.id}
-                        style={styles.listItemContainer}
+                        style={[styles.listItemContainer,theme]}
                         onPress={() => this.addItemToOrder(prd.id)
                         }
                       >
-                        <View style={[styles.jc_alignIem_center, { flex: 1, flexDirection: 'row' }]}>
-                          <Text style={{ flex: 3 }}>{prd.name}</Text>
-                          <Text style={{ flex: 1, textAlign: 'right' }}>
+                        <View style={[styles.jc_alignIem_center, { flex: 1, flexDirection: 'row' }, theme]}>
+                          <Text style={[{ flex: 3 },theme]}>{prd.name}</Text>
+                          <Text style={[{ flex: 1, textAlign: 'right' }, theme]}>
                             ${prd.price}
                           </Text>
                         </View>

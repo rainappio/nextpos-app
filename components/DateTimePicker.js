@@ -9,7 +9,8 @@ import { dateToLocaleString } from "../actions";
 import { LocaleContext } from "../locales/LocaleContext";
 
 export default class RenderDatePicker extends Component {
-  static contextType = LocaleContext
+	static contextType = LocaleContext
+
 
   render() {
     const {
@@ -20,19 +21,21 @@ export default class RenderDatePicker extends Component {
       showDatepicker,
       needWeekFilter,
       readonly,
+      theme,
       ...rest
     } = this.props
     const { t, locale } = this.context
 
-    const i18nMoment = moment(value);
 
-    if (locale === 'zh-Hant-TW') {
-      i18nMoment.locale('zh-tw')
-    } else {
-      i18nMoment.locale('en')
-    }
+		const i18nMoment = moment(value);
 
-    const fontColor = readonly ? '#c5c5c5' : '#000000'
+		if (locale === 'zh-Hant-TW') {
+			i18nMoment.locale('zh-tw')
+		} else {
+			i18nMoment.locale('en')
+		}
+
+		const fontColor = readonly ? '#c5c5c5' : '#000000'
 
     return (
       <View style={{ flex: 1 }}>
@@ -42,32 +45,31 @@ export default class RenderDatePicker extends Component {
           >
             <View style={{ flex: 1, backgroundColor: '#c5c5c5', justifyContent: 'center', alignContent: 'center' }}>
               <Text style={styles.screenTitle}>{t('datetimeRange.pickerTitle')}</Text>
+							<RNDateTimePicker
+								testID="dateTimePicker"
+								value={value}
+								mode={"datetime"}
+								is24Hour={true}
+								display="default"
+								onChange={(e, selectedDate) => {
+									console.log(`on change date: ${selectedDate} ${e.nativeEvent.timestamp}`)
 
-              <RNDateTimePicker
-                testID="dateTimePicker"
-                value={value}
-                mode={"datetime"}
-                is24Hour={true}
-                display="default"
-                onChange={(e, selectedDate) => {
-                  console.log(`on change date: ${selectedDate} ${e.nativeEvent.timestamp}`)
-
-                  onChange(new Date(e.nativeEvent.timestamp))
-                }}
-              />
-              <TouchableOpacity
-                onPress={() => {
-                  showDatepicker();
-                }}
-              >
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('datetimeRange.select')}</Text>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-        </View>
-        <View style={{}}>
-          <View style={[styles.flex_dir_row, styles.jc_alignIem_center]}>
-            {/*{
+									onChange(new Date(e.nativeEvent.timestamp))
+								}}
+							/>
+							<TouchableOpacity
+								onPress={() => {
+									showDatepicker();
+								}}
+							>
+								<Text style={[styles.bottomActionButton, styles.actionButton]}>{t('datetimeRange.select')}</Text>
+							</TouchableOpacity>
+						</View>
+					</Modal>
+				</View>
+				<View style={{}}>
+					<View style={[styles.flex_dir_row, styles.jc_alignIem_center]}>
+						{/*{
     				needWeekFilter &&
     				<View style={{flex: 1, marginRight: 10, alignItems: 'flex-end'}}>
     					<Text onPress={() => onChange(moment(value).subtract(1, 'weeks').format('YYYY-MM-DD'))}>
@@ -95,13 +97,12 @@ export default class RenderDatePicker extends Component {
                   showDatepicker()
                 }
               }}
-                style={{ fontSize: 11, color: fontColor, marginLeft: 5 }}
+                style={[{ fontSize: 11, marginLeft: 5 }, theme]}
               >
                 {i18nMoment.format("YYYY-MM-DD HH:mm A")}
               </Text>
             </View>
-
-            {/*{
+						{/*{
     				needWeekFilter &&
         		<View style={{flex: 1, marginLeft: 10}}>
 							<Text onPress={() => onChange(moment(value).add(1, 'weeks').format('YYYY-MM-DD'))}>
@@ -109,9 +110,9 @@ export default class RenderDatePicker extends Component {
     					</Text>
     				</View>
     			}*/}
-          </View>
-        </View>
-      </View>
-    )
-  }
+					</View>
+				</View>
+			</View>
+		)
+	}
 }

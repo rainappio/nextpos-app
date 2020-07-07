@@ -88,7 +88,7 @@ class AccountScreen extends React.Component {
     })
     const { currentUser } = this.props
     const { t, theme } = this.context
-console.log(theme)
+
     return (
       <View style={[styles.fullWidthScreen,theme]}>
         <ScreenHeader backNavigation={true}
@@ -101,24 +101,24 @@ console.log(theme)
               <Text style={[styles.fieldTitle,theme]}>{t('username')}</Text>
             </View>
             <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
-              <Text>
+              <Text style={theme}>
                 {currentUser.username}
               </Text>
             </View>
           </View>
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, { flex: 1 }]}>
-              <Text style={styles(theme).fieldTitle}>{t('nickname')}</Text>
+              <Text style={[styles.fieldTitle,theme]}>{t('nickname')}</Text>
             </View>
             <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
-              <Text>
+              <Text style={theme}>
                 {currentUser.nickname}
               </Text>
             </View>
           </View>
           <View style={[styles.tableRowContainerWithBorder]}>
             <View style={[styles.tableCellView, { flex: 1 }]}>
-              <Text style={rainApp.fieldTitle}>{t('password')}</Text>
+              <Text style={styles.fieldTitle,theme}>{t('password')}</Text>
             </View>
             <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
               <EditPasswordPopUp defaultUser={currentUser.defaultUser} name={currentUser.username} ownAccount={true}/>
@@ -126,10 +126,10 @@ console.log(theme)
           </View>
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, { flex: 1 }]}>
-              <Text style={rainApp.fieldTitle}>App Version</Text>
+              <Text style={[styles.fieldTitle,theme]}>App Version</Text>
             </View>
             <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
-              <Text>
+              <Text style={theme}>
                 {Constants.nativeAppVersion} | {Constants.nativeBuildVersion}
               </Text>
             </View>
@@ -168,9 +168,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(AccountScreen)
-
-// const rainApp = StyleSheet.create({
-//   fieldTitle: {
-//     color: themes.dark.color
-//   }
-//   })

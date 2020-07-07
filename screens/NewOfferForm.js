@@ -13,7 +13,7 @@ import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import RenderPureCheckBox from '../components/rn-elements/PureCheckBox'
 import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
 import DateTimeFilterControlledForm from './DateTimeFilterControlledForm'
-import { getLables, getOffers } from '../actions'
+import { getLables, getOffers, removeDuplicate } from '../actions'
 
 class NewOfferForm extends React.Component {
   static navigationOptions = {
@@ -92,16 +92,16 @@ class NewOfferForm extends React.Component {
   render() {
     const {
       handleSubmit,
-      // selectedProducts
+      selectedProducts
     } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
     const { isEnabled } = this.state
 
     return (
       <View>
         <View style={styles.fieldContainer}>
           <View style={{ flex: 1 }}>
-            <Text style={styles.fieldTitle}>{t('offerName')}</Text>
+            <Text style={[styles.fieldTitle, theme]}>{t('offerName')}</Text>
           </View>
           <View style={{ flex: 3 }}>
             <Field
@@ -109,7 +109,8 @@ class NewOfferForm extends React.Component {
               component={InputText}
               placeholder={t('offerName')}
               secureTextEntry={false}
-              //validate={isRequired}
+              validate={isRequired}
+              theme={theme}
             />
           </View>
         </View>
@@ -127,6 +128,7 @@ class NewOfferForm extends React.Component {
                   isShow={this.state.from.show}
                   showDatepicker={() => this.showDatepicker('from')}
                   needWeekFilter={true}
+                  theme={theme}
                 />
               </View>
               <View style={[styles.tableCellView, { flex: 0.2, justifyContent: 'center' }]}>
@@ -141,6 +143,7 @@ class NewOfferForm extends React.Component {
                   isShow={this.state.to.show}
                   showDatepicker={() => this.showDatepicker('to')}
                   needWeekFilter={true}
+                  theme={theme}
                 />
               </View>
             </View>
@@ -157,7 +160,7 @@ class NewOfferForm extends React.Component {
         <View style={[styles.sectionContainer, styles.horizontalMargin, { marginLeft: 0, marginRight: 0 }]}>
           <View style={[styles.sectionContent]}>
             <View style={styles.sectionTitleContainer}>
-              <Text style={styles.sectionTitleText}>{t('offerType')}</Text>
+              <Text style={[styles.sectionTitleText, theme]}>{t('offerType')}</Text>
             </View>
             <View style={{ paddingLeft: 0, paddingRight: 0 }}>
               <View>
@@ -167,7 +170,7 @@ class NewOfferForm extends React.Component {
                   selectedIndex={this.state.selectedOfferType}
                   values={["Order", "Product"]}
                   onChange={this.handleIndexChange}
-                  //validate={isRequired}
+                  validate={isRequired}
                 />
               </View>
             </View>
@@ -175,7 +178,7 @@ class NewOfferForm extends React.Component {
               this.state.selectedOfferType == 1 &&
               <View style={[styles.fieldContainer, styles.mgrtotop12, styles.mgrbtn20]}>
                 <View style={{ flex: 3 }}>
-                  <Text style={styles.fieldTitle}>{t('applytoAll')}</Text>
+                  <Text style={[styles.fieldTitle, theme]}>{t('applytoAll')}</Text>
                 </View>
                 <View style={{ flex: 1, alignItems: 'flex-end' }}>
                   <Field
@@ -203,7 +206,7 @@ class NewOfferForm extends React.Component {
                   {
                     this.state.products.map((selectedProduct) =>
                       <View style={[{ paddingTop: 15, paddingBottom: 15, paddingLeft: 20, borderBottomWidth: 0.5, borderColor: '#ddd' }]} key={selectedProduct.productId} >
-                        <Text>{selectedProduct.name}</Text>
+                        <Text style={theme}>{selectedProduct.name}</Text>
                         <TouchableOpacity style={[{ position: 'absolute', right: 24 }]}>
                           <AntDesignIcon
                             name={'closecircle'}
@@ -223,7 +226,7 @@ class NewOfferForm extends React.Component {
 
         <View style={[styles.fieldContainer, { marginTop: 8 }]}>
           <View style={[styles.sectionTitleContainer, { flex: 1 }]}>
-            <Text style={styles.sectionTitleText}>{t('discountType')}</Text>
+            <Text style={[styles.sectionTitleText, theme]}>{t('discountType')}</Text>
           </View>
         </View>
 
@@ -235,7 +238,7 @@ class NewOfferForm extends React.Component {
               customValue='AMOUNT_OFF'
               isIconAsTitle={false}
               title={t('amtOf')}
-              //validate={isRequired}
+              validate={isRequired}
             />
           </View>
 
@@ -252,7 +255,7 @@ class NewOfferForm extends React.Component {
 
         <View style={styles.fieldContainer}>
           <View style={{ flex: 1.5 }}>
-            <Text style={styles.fieldTitle}>{t('discountValue')}</Text>
+            <Text style={[styles.fieldTitle, theme]}>{t('discountValue')}</Text>
           </View>
           <View style={{ flex: 2.5 }}>
             <Field
@@ -260,7 +263,8 @@ class NewOfferForm extends React.Component {
               component={InputText}
               placeholder={t('discountValue')}
               secureTextEntry={false}
-              //validate={isRequired}
+              validate={isRequired}
+              theme={theme}
             />
           </View>
         </View>

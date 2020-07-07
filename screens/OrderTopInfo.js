@@ -11,7 +11,7 @@ class OrderTopInfo extends Component {
 
   render() {
     const {order} = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       <View>
@@ -56,10 +56,10 @@ class OrderTopInfo extends Component {
 
           <View style={[styles.tableCellView, { justifyContent: 'flex-end', width: '50%'}]}>
             <View>
-              <Text style={{textAlign: 'right'}}>
+              <Text style={[{textAlign: 'right'}, theme]}>
                 {t('order.staff')} - {order.servedBy}
               </Text>
-              <Text>
+              <Text style={theme}>
                 {formatDate(order.createdDate)}
               </Text>
             </View>
@@ -67,8 +67,8 @@ class OrderTopInfo extends Component {
         </View>
 
         <View style={styles.tableRowContainer}>
-          <Text>Order ID: </Text>
-          <Text style={styles.tableCellText}>{order.serialId}</Text>
+          <Text style={theme}>Order ID: </Text>
+          <Text style={[styles.tableCellText, theme]}>{order.serialId}</Text>
           {order.metadata.hasOwnProperty('copyFromOrderId') && order.metadata.hasOwnProperty('copyFromSerialId') && (
             <TouchableOpacity
               onPress={() => {
@@ -86,8 +86,8 @@ class OrderTopInfo extends Component {
         </View>
 
         <View style={styles.tableRowContainer}>
-          <Text>{t('order.orderStatusLong')}: </Text>
-          <Text style={styles.tableCellText}>{t(`orderState.${order.state}`)}</Text>
+          <Text style={theme}>{t('order.orderStatusLong')}: </Text>
+          <Text style={[styles.tableCellText,theme]}>{t(`orderState.${order.state}`)}</Text>
         </View>
 
       </View>

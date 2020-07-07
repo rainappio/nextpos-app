@@ -31,6 +31,7 @@ class RenderCheckBox extends React.Component {
       orderTotal,
       grandTotal,
       meta: { error, toched, valid },
+      theme,
       ...rest
     } = this.props
 
@@ -39,9 +40,9 @@ class RenderCheckBox extends React.Component {
         <CheckBox
           title={
             customValue.discount === 0 ? (
-              <View style={[styles.tableRowContainer]}>
+              <View style={styles.tableRowContainer}>
                 <View style={styles.tableCellView}>
-                <Text style={styles.tableCellText}>{optionName}</Text>
+                <Text style={[styles.tableCellText,theme]}>{optionName}</Text>
                 </View>
                 <TextInput
                   style={[styles.tableCellView, {
@@ -50,7 +51,7 @@ class RenderCheckBox extends React.Component {
                     borderBottomColor: '#ddd',
                     borderBottomWidth: 1,
                     paddingLeft: 15
-                  }]}
+                  },theme]}
                   value={defaultValueDisplay(customValue, value)}
                   clearTextOnFocus={true}
                   selectTextOnFocus={true}
@@ -86,6 +87,7 @@ class RenderCheckBox extends React.Component {
             onChange(customValue)
             //getPercent(customValue.discount)
           }}
+          containerStyle={theme}
         />
       </View>
     )

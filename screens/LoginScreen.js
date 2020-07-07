@@ -13,7 +13,7 @@ import {
 import { isEmail, isRequired } from '../validators'
 import InputText from '../components/InputText'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import {styles} from '../styles'
+import styles from '../styles'
 import { withNavigation } from 'react-navigation'
 import {LocaleContext} from "../locales/LocaleContext";
 import {storage} from "../constants/Backend";
@@ -72,7 +72,7 @@ class LoginScreen extends React.Component {
     return (
       <DismissKeyboard>
         <KeyboardAvoidingView
-          style={styles().container}
+          style={styles.container}
           behavior="padding"
           enabled
         >
@@ -96,6 +96,7 @@ class LoginScreen extends React.Component {
                 placeholder={t('email')}
                 autoCapitalize="none"
                 extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
+                theme={theme}
               />
             </View>
             <View>
@@ -106,6 +107,7 @@ class LoginScreen extends React.Component {
                 placeholder={t('password')}
                 secureTextEntry={true}
                 extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
+                theme={theme}
               />
             </View>
           </View>

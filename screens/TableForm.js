@@ -36,7 +36,7 @@ class TableForm extends React.Component {
   render() {
     const { navigation, handleSubmit, handleDeleteTable, isEdit, initialValues, tableLayout } = this.props
 
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       <View style={styles.contentContainer}>
@@ -51,6 +51,7 @@ class TableForm extends React.Component {
               validate={isRequired}
               placeholder={t('tableName')}
               autoCapitalize="none"
+              theme={theme}
             />
           </View>
         </View>

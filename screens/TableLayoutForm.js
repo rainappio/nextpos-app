@@ -55,7 +55,7 @@ class TableLayoutForm extends React.Component {
       initialValues,
       handleDeleteLayout
     } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     Item = ({ table, layoutId }) => {
       return (
@@ -96,6 +96,7 @@ class TableLayoutForm extends React.Component {
               validate={isRequired}
               placeholder={t('layoutName')}
               autoCapitalize="none"
+              theme={theme}
             />
           </View>
         </View>

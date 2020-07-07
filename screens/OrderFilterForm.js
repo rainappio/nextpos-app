@@ -57,7 +57,7 @@ class OrderFilterForm extends React.Component {
 
   render() {
     const { handleSubmit, handlegetDate } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       <View>
@@ -79,6 +79,7 @@ class OrderFilterForm extends React.Component {
                   readonly: value !== 'RANGE'
                 })
               }}
+              theme={theme}
             />
           </View>
           <View style={{ flex: 1, justifyContent: 'flex-end' }}>
@@ -106,6 +107,7 @@ class OrderFilterForm extends React.Component {
                 isShow={this.state.showFromDate}
                 showDatepicker={this.showFromDatepicker}
                 readonly={this.state.readonly}
+                theme={theme}
               />
             </View>
             <View style={[styles.tableCellView, {flex: 1}]}>
@@ -117,6 +119,7 @@ class OrderFilterForm extends React.Component {
                 isShow={this.state.showToDate}
                 showDatepicker={this.showToDatepicker}
                 readonly={this.state.readonly}
+                theme={theme}
               />
             </View>
           </View>

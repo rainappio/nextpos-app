@@ -212,7 +212,7 @@ class SalesCharts extends React.Component {
       haveError,
       haveSDData
     } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
     const { filteredWeeklySalesReport, filteredCustomerCountReport } = this.state
     const containSalesData = haveData && getrangedSalesReport.salesByRange !== undefined
 
@@ -265,19 +265,19 @@ class SalesCharts extends React.Component {
           key={salesByPrdData.id}
         >
           <View style={[styles.quarter_width, styles.tableCellView]}>
-            <Text>{salesByPrdData.productName}</Text>
+            <Text style={theme}>{salesByPrdData.productName}</Text>
           </View>
 
           <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-            <Text>{salesByPrdData.salesQuantity}</Text>
+            <Text style={theme}>{salesByPrdData.salesQuantity}</Text>
           </View>
 
           <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-            <Text>{salesByPrdData.productSales}</Text>
+            <Text style={theme}>{salesByPrdData.productSales}</Text>
           </View>
 
           <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-            <Text>{salesByPrdData.percentage}%</Text>
+            <Text style={theme}>{salesByPrdData.percentage}%</Text>
           </View>
         </View>
       )
@@ -306,7 +306,7 @@ class SalesCharts extends React.Component {
     }
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }} style={styles.fullWidthScreen}>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }} style={[styles.fullWidthScreen, theme]}>
           <ScreenHeader backNavigation={true}
                         parentFullScreen={true}
                         title={t('salesDashboardTitle')}
@@ -319,6 +319,7 @@ class SalesCharts extends React.Component {
               fromDate: new Date(getrangedSalesReport.dateRange.zonedFromDate),
               toDate: new Date(getrangedSalesReport.dateRange.zonedToDate)
             }}
+            theme={theme}
           	/>
 
           <View>

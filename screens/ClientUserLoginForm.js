@@ -40,7 +40,7 @@ class ClientUserLoginForm extends React.Component {
 
   render() {
     const {clientusersName, displayName, handleSubmit} = this.props
-    const {t} = this.context
+    const {t, theme} = this.context
 
     return (
       <KeyboardAwareScrollView contentContainerStyle={styles.fullWidthScreen} keyboardShouldPersistTaps='always'>
@@ -61,6 +61,7 @@ class ClientUserLoginForm extends React.Component {
                     placeholder={t('password')}
                     secureTextEntry={true}
                     alignLeft={true}
+                    theme={theme}
                   />
                 </View>
                 <View>

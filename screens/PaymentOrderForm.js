@@ -79,7 +79,7 @@ class PaymentOrderForm extends React.Component {
       resetTotal
     } = this.props
 
-    const { t } = this.context
+    const { t, theme } = this.context
     const { paymentsTypes, selectedPaymentType, paymentsTypeslbl, handlePaymentTypeSelection } = this.props
 
 		const TaxInputAndBottomBtns = (props) => {
@@ -87,7 +87,7 @@ class PaymentOrderForm extends React.Component {
 				<View>
 					<View style={styles.fieldContainer}>
             <View style={{flex: 2}}>
-              <Text style={styles.fieldTitle}>{t('taxIDNumber')}</Text>
+              <Text style={[styles.fieldTitle, theme]}>{t('taxIDNumber')}</Text>
             </View>
             <View style={{flex: 3}}>
               <Field
@@ -96,6 +96,7 @@ class PaymentOrderForm extends React.Component {
                 placeholder={t('enterTaxIDNumber')}
                 keyboardType={'numeric'}
                 extraStyle={{ textAlign: 'left' }}
+                theme={theme}
               />
             </View>
           </View>
@@ -123,7 +124,7 @@ class PaymentOrderForm extends React.Component {
 
     return (
       <KeyboardAwareScrollView scrollIndicatorInsets={{right: 1}}>
-        <View style={styles.fullWidthScreen}>
+        <View style={[styles.fullWidthScreen, theme]}>
           <ScreenHeader backNavigation={true}
                         parentFullScreen={true}
                         title={t('paymentMethodTitle')}
@@ -131,11 +132,11 @@ class PaymentOrderForm extends React.Component {
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text>{t('order.subtotal')}</Text>
+              <Text style={theme}>{t('order.subtotal')}</Text>
             </View>
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <Text style={styles.tableCellText}>
+              <Text style={[styles.tableCellText, theme]}>
                 ${order.total.amountWithTax.toFixed(2)}
               </Text>
             </View>
@@ -143,11 +144,11 @@ class PaymentOrderForm extends React.Component {
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text>{t('order.discount')}</Text>
+              <Text style={theme}>{t('order.discount')}</Text>
             </View>
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <Text style={styles.tableCellText}>
+              <Text style={[styles.tableCellText, theme]}>
                 ${order.discount}
               </Text>
             </View>
@@ -155,11 +156,11 @@ class PaymentOrderForm extends React.Component {
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text>{t('order.serviceCharge')}</Text>
+              <Text style={theme}>{t('order.serviceCharge')}</Text>
             </View>
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <Text style={styles.tableCellText}>
+              <Text style={[styles.tableCellText, theme]}>
                 ${order.serviceCharge}
               </Text>
             </View>
@@ -167,11 +168,11 @@ class PaymentOrderForm extends React.Component {
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text>{t('order.total')}</Text>
+              <Text style={theme}>{t('order.total')}</Text>
             </View>
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <Text style={styles.tableCellText}>
+              <Text style={[styles.tableCellText, theme]}>
                 ${order.orderTotal}
               </Text>
             </View>
@@ -180,7 +181,7 @@ class PaymentOrderForm extends React.Component {
           <View style={[styles.sectionContainer, styles.horizontalMargin]}>
             <View style={[styles.sectionContent]}>
               <View style={styles.sectionTitleContainer}>
-                <Text style={styles.sectionTitleText}>{t('paymentMethod')}</Text>
+                <Text style={[styles.sectionTitleText, theme]}>{t('paymentMethod')}</Text>
               </View>
               <View>
                 <View>
@@ -203,7 +204,7 @@ class PaymentOrderForm extends React.Component {
               <View>
                 <View style={[styles.fieldContainer]}>
                   <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('payment.cashPayment')}</Text>
+                    <Text style={[styles.fieldTitle, theme]}>{t('payment.cashPayment')}</Text>
                   </View>
                   <View style={{flex: 3}}>
                     <Field
@@ -213,6 +214,7 @@ class PaymentOrderForm extends React.Component {
                       keyboardType={'numeric'}
                       onFocus={() => resetTotal()}
                       extraStyle={{textAlign: 'left'}}
+                      theme={theme}
                     />
                   </View>
                 </View>
@@ -244,7 +246,8 @@ class PaymentOrderForm extends React.Component {
                           style={[
                             styles.orange_color,
                             styles.textBold,
-                            styles.centerText
+                            styles.centerText,
+                            theme
                           ]}
                         >
                           {moneyAmt.label}
@@ -261,7 +264,7 @@ class PaymentOrderForm extends React.Component {
               <View>
                 <View style={styles.fieldContainer}>
                   <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('CardNo')}</Text>
+                    <Text style={[styles.fieldTitle, theme]}>{t('CardNo')}</Text>
                   </View>
                   <View style={{flex: 3}}>
                     <Field
@@ -270,6 +273,7 @@ class PaymentOrderForm extends React.Component {
                       placeholder={t('enterCardNo')}
                       keyboardType={'numeric'}
                       extraStyle={{textAlign: 'left'}}
+                      theme={theme}
                     />
                   </View>
                 </View>
@@ -284,6 +288,7 @@ class PaymentOrderForm extends React.Component {
                     {label: 'Other', value: 'OTHER'}
                   ]}
                   forFilter={true}
+                  theme={theme}
                 />
               </View>
             }

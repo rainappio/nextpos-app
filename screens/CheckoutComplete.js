@@ -38,11 +38,11 @@ class CheckoutComplete extends React.Component {
   }
 
   render() {
-    const { t } = this.context
+    const { t, theme } = this.context
     const { transactionResponse } = this.props.navigation.state.params
 
     return (
-      <View style={styles.container_nocenterCnt}>
+      <View style={[styles.container_nocenterCnt, theme]}>
         <ScreenHeader backNavigation={false}
                       title={t('checkoutCompletedTitle')}/>
 
@@ -54,7 +54,7 @@ class CheckoutComplete extends React.Component {
             size={42}
             style={styles.buttonIconStyle}
           />
-          <Text style={styles.messageBlock}>
+          <Text style={[styles.messageBlock, theme]}>
             {t('totalAmount')}: ${transactionResponse.settleAmount}
           </Text>
           {transactionResponse.paymentMethod === 'CASH' && (

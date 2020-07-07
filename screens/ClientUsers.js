@@ -55,7 +55,7 @@ class ClientUsers extends React.Component {
     const { t, theme } = this.context
 
     return (
-      <View style={[styles.container_nocenterCnt, { backgroundColor: theme.background }]}>
+      <View style={[styles.container_nocenterCnt,theme]}>
 
         <ScreenHeader backNavigation={true}
           title={t('clientUsersTitle')}
@@ -99,7 +99,7 @@ class ClientUsers extends React.Component {
                 >
                   {item.username[0].toUpperCase()}
                 </Text>
-                <Text style={{ marginLeft: 60, marginTop: -30, color: theme.foreground }}>
+                <Text style={[{ marginLeft: 60, marginTop: -30 },theme]}>
                   {item.nickname != null ? item.nickname : item.username}
                 </Text>
               </TouchableOpacity>

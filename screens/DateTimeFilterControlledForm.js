@@ -181,7 +181,7 @@ class DateTimeFilterControlledForm extends React.Component {
 
   render() {
     const { handleSubmit, handlegetDate, showAndroidDateTimeOnly, startDate, endDate } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
     const { date, time } = this.state;
 
     return (
@@ -241,7 +241,7 @@ class DateTimeFilterControlledForm extends React.Component {
           <View style={[styles.tableRowContainer]}>
             <View style={[styles.tableCellView, { flex: 1 }]}>
               <TouchableOpacity onPress={() => this.showDatepicker('from')} style={styles.datetimeBorder}>
-                <Text style={{ marginRight: 8, fontSize: 13 }}>
+                <Text style={[{ marginRight: 8, fontSize: 13 }, theme]}>
                   <FontAwesomeIcon
                     name="calendar"
                     size={20}
@@ -253,7 +253,7 @@ class DateTimeFilterControlledForm extends React.Component {
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => this.showDatepicker('to')} style={styles.datetimeBorder}>
-                <Text style={{ fontSize: 13 }}>
+                <Text style={[{ fontSize: 13 }, theme]}>
                   <FontAwesomeIcon
                     name="calendar"
                     size={20}

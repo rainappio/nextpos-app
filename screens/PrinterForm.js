@@ -68,7 +68,7 @@ class PrinterForm extends React.Component {
 
   render() {
     const { handleSubmit, isEdit, handleEditCancel, ipAddress } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -84,6 +84,7 @@ class PrinterForm extends React.Component {
                 type="text"
                 validate={[isRequired]}
                 placeholder={t('printerName')}
+                theme={theme}
               />
             </View>
           </View>
@@ -100,6 +101,7 @@ class PrinterForm extends React.Component {
                 placeholder={t('ipAddress')}
                 keyboardType="numeric"
                 onChange={(value) => this.setState({ ipAddress: value })}
+                theme={theme}
               />
             </View>
           </View>

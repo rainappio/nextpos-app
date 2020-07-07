@@ -10,6 +10,7 @@ export default class CustomCheckBox extends React.Component {
       customValue,
       optionName,
       checkboxType,
+      theme,
       ...rest
     } = this.props
 
@@ -36,9 +37,8 @@ export default class CustomCheckBox extends React.Component {
             // imply radio option
             onChange(customValue)
           }
-
-
         }}
+        containerStyle={theme}
       />
     )
   }

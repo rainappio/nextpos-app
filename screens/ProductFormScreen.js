@@ -51,7 +51,7 @@ class ProductFormScreen extends React.Component {
   }
 
   render() {
-    const { t } = this.context
+    const { t, theme } = this.context
 
     const {
       initialValues,
@@ -69,7 +69,7 @@ class ProductFormScreen extends React.Component {
     } = this.props
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={{ flexGrow: 1 }} style={theme}>
         <DismissKeyboard>
           <View style={[styles.fullWidthScreen]}>
             <ScreenHeader parentFullScreen={true}
@@ -87,7 +87,7 @@ class ProductFormScreen extends React.Component {
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, { flex: 3 }]}>
-                <Text style={styles.fieldTitle}>{t('productName')}</Text>
+                <Text style={[styles.fieldTitle, theme]}>{t('productName')}</Text>
               </View>
               <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
                 <Field
@@ -96,13 +96,14 @@ class ProductFormScreen extends React.Component {
                   validate={isRequired}
                   placeholder={t('productName')}
                   secureTextEntry={false}
+                  theme={theme}
                 />
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, { flex: 1 }]}>
-                <Text style={styles.fieldTitle}>{t('price')}</Text>
+                <Text style={[styles.fieldTitle, theme]}>{t('price')}</Text>
               </View>
               <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
                 <Field
@@ -112,13 +113,14 @@ class ProductFormScreen extends React.Component {
                   placeholder={t('price')}
                   secureTextEntry={false}
                   keyboardType={'numeric'}
+                  theme={theme}
                 />
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, { flex: 3 }]}>
-                <Text style={styles.fieldTitle}>{t('productLabel')}</Text>
+                <Text style={[styles.fieldTitle, theme]}>{t('productLabel')}</Text>
               </View>
               <View style={{ flex: 1.5, justifyContent: 'flex-end' }}>
                 <Field
@@ -129,13 +131,14 @@ class ProductFormScreen extends React.Component {
                   selection
                   fluid
                   placeholder={{ value: null, label: t('productLabel') }}
+                  theme={theme}
                 />
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, { flex: 1 }]}>
-                <Text style={styles.fieldTitle}>{t('description')}</Text>
+                <Text style={[styles.fieldTitle, theme]}>{t('description')}</Text>
               </View>
               <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
                 <Field
@@ -143,6 +146,7 @@ class ProductFormScreen extends React.Component {
                   component={InputText}
                   placeholder={t('description')}
                   secureTextEntry={false}
+                  theme={theme}
                 />
               </View>
             </View>
@@ -151,7 +155,7 @@ class ProductFormScreen extends React.Component {
               <View>
                 <View style={styles.sectionContainer}>
                   <View style={styles.sectionTitleContainer}>
-                    <Text style={styles.sectionTitleText}>{t('options')}</Text>
+                    <Text style={[styles.sectionTitleText, theme]}>{t('options')}</Text>
                   </View>
 
                   <View>
@@ -167,7 +171,7 @@ class ProductFormScreen extends React.Component {
 
                 <View style={[styles.sectionContainer]}>
                   <View style={styles.sectionTitleContainer}>
-                    <Text style={styles.sectionTitleText}>{t('workingArea')}</Text>
+                    <Text style={[styles.sectionTitleText, theme]}>{t('workingArea')}</Text>
                   </View>
                   {workingareas !== undefined &&
                     workingareas.map(workarea => (
@@ -180,6 +184,7 @@ class ProductFormScreen extends React.Component {
                           onCheck={(currentVal, fieldVal) => {
                             return fieldVal !== undefined && currentVal === fieldVal
                           }}
+                          theme={theme}
                         />
                       </View>
                     ))}
@@ -189,7 +194,7 @@ class ProductFormScreen extends React.Component {
 
             <View style={[styles.bottom, styles.horizontalMargin]}>
               <TouchableOpacity onPress={handleSubmit}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                <Text style={[styles.bottomActionButton, styles.actionButton, theme]}>
                   {t('action.save')}
                 </Text>
               </TouchableOpacity>
@@ -208,7 +213,7 @@ class ProductFormScreen extends React.Component {
                       :
                       <TouchableOpacity onPress={() => handlepinToggle(productId)}>
                         <Text
-                          style={[styles.bottomActionButton, styles.actionButton]}
+                          style={[styles.bottomActionButton, styles.actionButton, theme]}
                         >
                           {t('action.pin')}
                         </Text>
@@ -217,7 +222,7 @@ class ProductFormScreen extends React.Component {
 
                   <TouchableOpacity onPress={handleEditCancel}>
                     <Text
-                      style={[styles.bottomActionButton, styles.cancelButton]}
+                      style={[styles.bottomActionButton, styles.cancelButton, theme]}
                     >
                       {t('action.cancel')}
                     </Text>
@@ -231,7 +236,7 @@ class ProductFormScreen extends React.Component {
                     }
                   >
                     <Text
-                      style={[styles.bottomActionButton, styles.cancelButton]}
+                      style={[styles.bottomActionButton, styles.cancelButton, theme]}
                     >
                       {t('action.cancel')}
                     </Text>

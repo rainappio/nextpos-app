@@ -77,39 +77,39 @@ class OrderDetail extends React.Component {
 
   render() {
     const { order, isLoading, haveData } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     Item = ({ orderDetail, lineItemDate }) => {
       return (
         <View>
           <View style={[styles.tableRowContainer]}>
             <View style={{flex: 2.5}}>
-              <Text>
+              <Text style={this.context.theme}>
                 {formatTime(lineItemDate)}
               </Text>
             </View>
 
             <View style={{flex: 1.7}}>
-              <Text>
+              <Text style={this.context.theme}>
                 {orderDetail.productName}
               </Text>
             </View>
 
             <View style={{flex: 0.8}}>
-              <Text>
+              <Text style={this.context.theme}>
                 {orderDetail.quantity}
               </Text>
             </View>
 
             <View style={{flex: 1.2}}>
-              <Text style={{textAlign: 'right'}}>
+              <Text style={[{textAlign: 'right'}, theme]}>
                 {orderDetail.lineItemSubTotal}
               </Text>
             </View>
           </View>
           <View style={styles.tableRowContainer}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text>{renderOptionsAndOffer(orderDetail)}</Text>
+              <Text style={this.context.theme}>{renderOptionsAndOffer(orderDetail)}</Text>
             </View>
           </View>
         </View>
@@ -132,7 +132,7 @@ class OrderDetail extends React.Component {
       const orderDuration = order.orderDuration !== null ? order.orderDuration : {}
 
       return (
-      	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      	<ScrollView scrollIndicatorInsets={{ right: 1 }} style={theme}>
           <NavigationEvents
             onWillFocus={() => {
               this.props.getOrder()
@@ -146,10 +146,10 @@ class OrderDetail extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.ageGroup')}</Text>
+                <Text style={theme}>{t('order.ageGroup')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
+                <Text style={theme}>
 									{filteredageGroup !== undefined ? filteredageGroup.label : t('order.notFilledIn')}
                 </Text>
               </View>
@@ -157,10 +157,10 @@ class OrderDetail extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.visitedFrequency')}</Text>
+                <Text style={theme}>{t('order.visitedFrequency')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
+                <Text style={theme}>
                   {filteredvisitFrequency !== undefined ? filteredvisitFrequency.label : t('order.notFilledIn')}
                 </Text>
               </View>
@@ -169,10 +169,10 @@ class OrderDetail extends React.Component {
             {order.orderPreparationTime != null && (
               <View style={[styles.tableRowContainerWithBorder]}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
-                  <Text>{t('order.preparationDuration')}</Text>
+                  <Text style={theme}>{t('order.preparationDuration')}</Text>
                 </View>
                 <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                  <Text>
+                  <Text style={theme}>
                     {order.orderPreparationTime.durationHours} {t('timecard.hours')} {order.orderPreparationTime.durationMinutes} {t('timecard.minutes')}
                   </Text>
                 </View>
@@ -181,10 +181,10 @@ class OrderDetail extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.orderStartDate')}</Text>
+                <Text style={theme}>{t('order.orderStartDate')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
+                <Text style={theme}>
                   {formatTime(order.createdDate)}
                 </Text>
               </View>
@@ -192,10 +192,10 @@ class OrderDetail extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.endDate')}</Text>
+                <Text style={theme}>{t('order.endDate')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
+                <Text style={theme}>
                   {formatTime(order.modifiedDate)}
                 </Text>
               </View>
@@ -203,25 +203,25 @@ class OrderDetail extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.duration')}</Text>
+                <Text style={theme}>{t('order.duration')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
+                <Text style={theme}>
                   {orderDuration.durationHours} {t('timecard.hours')} {orderDuration.durationMinutes} {t('timecard.minutes')}
                 </Text>
               </View>
             </View>
 
-            <View style={styles.sectionBar}>
+            <View style={[styles.sectionBar, theme]}>
             	<View style={{flex: 2.5}}>
-                	<Text style={styles.sectionBarTextSmall}>
+                	<Text style={[styles.sectionBarTextSmall, theme]}>
                   	{t('order.lineItemCreatedDate')}
                 	</Text>
             	</View>
 
             	<View style={{flex: 1.7}}>
               	<TouchableOpacity>
-                	<Text style={styles.sectionBarTextSmall}>
+                	<Text style={[styles.sectionBarTextSmall, theme]}>
                   	{t('order.product')}
                 	</Text>
               	</TouchableOpacity>
@@ -229,7 +229,7 @@ class OrderDetail extends React.Component {
 
             	<View style={{flex: 0.8}}>
               	<TouchableOpacity>
-                	<Text style={styles.sectionBarTextSmall}>
+                	<Text style={[styles.sectionBarTextSmall, theme]}>
                   	{t('order.quantity')}
                 	</Text>
               	</TouchableOpacity>
@@ -254,10 +254,10 @@ class OrderDetail extends React.Component {
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.serviceCharge')}</Text>
+                <Text style={theme}>{t('order.serviceCharge')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
+                <Text style={theme}>
                   ${order.serviceCharge}
                 </Text>
               </View>
@@ -265,10 +265,10 @@ class OrderDetail extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.discount')}</Text>
+                <Text style={theme}>{t('order.discount')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
+                <Text style={theme}>
                   ${order.discount}
                 </Text>
               </View>
@@ -276,10 +276,10 @@ class OrderDetail extends React.Component {
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.total')}</Text>
+                <Text style={theme}>{t('order.total')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
+                <Text style={theme}>
                   ${order.total.amount}
                 </Text>
               </View>
@@ -290,10 +290,10 @@ class OrderDetail extends React.Component {
               renderItem={({item, index}) => (
                 <View style={styles.tableRowContainerWithBorder}>
               		<View style={[styles.tableCellView, {flex: 1}]}>
-                		<Text>{t('order.paymentMethod')}</Text>
+                		<Text style={theme}>{t('order.paymentMethod')}</Text>
               		</View>
               		<View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                		<Text>{item.paymentMethod}</Text>
+                		<Text style={theme}>{item.paymentMethod}</Text>
               		</View>
             		</View>
               )}
@@ -302,10 +302,10 @@ class OrderDetail extends React.Component {
 
              <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.serveBy')}</Text>
+                <Text style={theme}>{t('order.serveBy')}</Text>
               </View>
                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                 <Text>
+                 <Text style={theme}>
                    {order.servedBy}
                  </Text>
                </View>
@@ -313,7 +313,7 @@ class OrderDetail extends React.Component {
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.orderStatus')}</Text>
+                <Text style={theme}>{t('order.orderStatus')}</Text>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                 {renderOrderState(order.state)}
@@ -321,28 +321,28 @@ class OrderDetail extends React.Component {
             </View>
 
             <View style={styles.sectionTitleContainer}>
-              <Text style={styles.sectionTitleText}>Order Log</Text>
+              <Text style={[styles.sectionTitleText, theme]}>Order Log</Text>
             </View>
 
             {order.orderLogs != null && order.orderLogs.map((log, idx) => {
               return (
                 <View key={idx}>
-                  <View style={[styles.tableRowContainerWithBorder, {backgroundColor: '#f5f5f5'}]}>
+                  <View style={[styles.tableRowContainerWithBorder, theme]}>
                     <View style={[styles.tableCellView, {flex: 2}]}>
-                      <Text>{formatTime(log.logDate)} ({log.who})</Text>
+                      <Text style={theme}>{formatTime(log.logDate)} ({log.who})</Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                      <Text>{t(`orderLog.${log.action}`)}</Text>
+                      <Text style={theme}>{t(`orderLog.${log.action}`)}</Text>
                     </View>
                   </View>
-                  <View style={styles.tableRowContainerWithBorder}>
-                    <View style={[{flex: 1, alignItems: 'flex-end'}]}>
+                  <View style={[styles.tableRowContainerWithBorder]}>
+                    <View style={{flex: 1, alignItems: 'flex-end'}}>
                       {log.entries != null && log.entries.map((entry, eIdx) => {
                         const entryValue = entry.from != null ? `${entry.from} -> ${entry.to}` : entry.to
 
                         return (
                           <View key={`entry-${eIdx}`}>
-                            <Text>{entry.name}: {entryValue}</Text>
+                            <Text style={theme}>{entry.name}: {entryValue}</Text>
                           </View>
                         )
                       })}

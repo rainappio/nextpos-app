@@ -1,4 +1,10 @@
 {
   "editor.formatOnSave": true,
-  "prettier.eslintIntegration": true
+  "prettier.eslintIntegration": true,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+  "typescript.format.insertSpaceAfterCommaDelimiter": false,
+  "typescript.format.insertSpaceAfterSemicolonInForStatements": false,
+  "prettier.bracketSpacing": false,
+  "eslint.nodePath": ""
 }

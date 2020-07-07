@@ -64,7 +64,7 @@ class Chart extends React.Component {
     }
 
     return (
-      <ScrollView horizontal={true}>
+      <ScrollView horizontal={true} style={{backgroundColor: 'red'}}>
         <TouchableOpacity activeOpacity={1} onPress={() => this.resetDotContentDisplay()}>
           <LineChart
             data={processedData}

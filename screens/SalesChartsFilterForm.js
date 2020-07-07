@@ -43,12 +43,12 @@ class SalesChartsFilterForm extends React.Component {
 
   render() {
     const { handleSubmit } = this.props
-    const { t } = this.context
+    const { t, theme } = this.context
 
     return (
       <View>
         <View style={[styles.tableRowContainer]}>
-          <View style={[styles.tableCellView, {flex: 2}]}>
+          <View style={[styles.tableCellView, { flex: 2 }]}>
             <Field
               name="fromDate"
               component={RenderDatePicker}
@@ -57,12 +57,13 @@ class SalesChartsFilterForm extends React.Component {
               isShow={this.state.from.show}
               showDatepicker={() => this.showDatepicker('from')}
               needWeekFilter={true}
+              theme={theme}
             />
           </View>
-          <View style={[styles.tableCellView, {flex: 0.2, justifyContent: 'center'}]}>
+          <View style={[styles.tableCellView, { flex: 0.2, justifyContent: 'center' }]}>
             <Text>-</Text>
           </View>
-          <View style={[styles.tableCellView, {flex: 2}]}>
+          <View style={[styles.tableCellView, { flex: 2 }]}>
             <Field
               name="toDate"
               component={RenderDatePicker}
@@ -71,16 +72,17 @@ class SalesChartsFilterForm extends React.Component {
               isShow={this.state.to.show}
               showDatepicker={() => this.showDatepicker('to')}
               needWeekFilter={true}
+              theme={theme}
             />
           </View>
         </View>
         <View style={[styles.tableRowContainer]}>
-          <View style={[styles.tableCellView, {flex: 1}]}>
+          <View style={[styles.tableCellView, { flex: 1 }]}>
             <TouchableOpacity
               onPress={() => {
                 handleSubmit()
               }}
-              style={{flex: 1}}
+              style={{ flex: 1 }}
             >
               <Text style={[styles.searchButton]}>
                 {t('action.search')}
@@ -94,7 +96,7 @@ class SalesChartsFilterForm extends React.Component {
 }
 
 SalesChartsFilterForm = reduxForm({
-  form: 'salesChartFilterForm'
+  form: 'salesChartFilterForm',
 })(SalesChartsFilterForm)
 
 export default SalesChartsFilterForm

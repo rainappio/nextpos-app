@@ -69,15 +69,15 @@ class StaffTimeCard extends React.Component {
           }}
         >
           <View style={[styles.tableCellView, { flex: 5 }]}>
-            <Text>{displayName}</Text>
+            <Text style={this.context.theme}>{displayName}</Text>
           </View>
 
           <View style={[styles.tableCellView, { flex: 2 }]}>
-            <Text>{timecard.totalShifts}</Text>
+            <Text style={this.context.theme}>{timecard.totalShifts}</Text>
           </View>
 
           <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
-            <Text >{timecard.totalHours.toFixed(2)}</Text>
+            <Text style={this.context.theme}>{timecard.totalHours.toFixed(2)}</Text>
           </View>
         </TouchableOpacity>
       )
@@ -90,9 +90,9 @@ class StaffTimeCard extends React.Component {
     }
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }} style={theme}>
         <DismissKeyboard>
-          <View style={styles.fullWidthScreen}>
+          <View style={[styles.fullWidthScreen]}>
             <ScreenHeader backNavigation={true}
               parentFullScreen={true}
               title={t('title')}
@@ -102,7 +102,7 @@ class StaffTimeCard extends React.Component {
               onSubmit={this.handleFilter}
             />
 
-            <View style={[styles.sectionBar]}>
+            <View style={[styles.sectionBar,theme]}>
               <View style={[styles.tableCellView, { flex: 5 }]}>
                 <Text style={[styles.sectionBarText]}>{t('firstColTitle')}</Text>
               </View>

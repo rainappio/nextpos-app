@@ -60,7 +60,7 @@ class UserTimeCards extends React.Component {
   }
 
   render() {
-    const { t } = this.context
+    const { t, theme } = this.context
     const { usertimeCards, haveData, haveError, loading, timeCard } = this.props
     const { filteredUsrTimeCards } = this.state
 
@@ -99,7 +99,7 @@ class UserTimeCards extends React.Component {
       )
     }
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }} style={theme}>
         <DismissKeyboard>
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
@@ -112,13 +112,13 @@ class UserTimeCards extends React.Component {
 							displayName={this.props.navigation.state.params.displayName}
             />
 
-						<View style={[styles.sectionBar]}>
+						<View style={[styles.sectionBar, theme]}>
               	<View style={[styles.tableCellView, {flex: 1}]}>
-                	<Text style={styles.tableCellText}>{t('Day')}</Text>
+                	<Text style={[styles.tableCellText, theme]}>{t('Day')}</Text>
               	</View>
 
               	<View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                	<Text style={[styles.tableCellText]}>{t('totalHr')}</Text>
+                	<Text style={[styles.tableCellText, theme]}>{t('totalHr')}</Text>
               	</View>
             </View>
 

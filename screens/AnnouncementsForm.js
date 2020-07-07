@@ -43,7 +43,7 @@ class AnnouncementsForm extends React.Component {
       initialValues
     } = this.props
 
-    const { t } = this.context
+    const { t, theme } = this.context
 
     const iconsArr = [
       { label: 'ios-attach', value: 'ios-attach' },
@@ -61,6 +61,7 @@ class AnnouncementsForm extends React.Component {
           placeholder={t('announcementTitle')}
           validate={isRequired}
           extraStyle={{ textAlign: 'left' }}
+          theme={theme}
         />
 
         <View style={styles.textAreaContainer}>
@@ -75,6 +76,7 @@ class AnnouncementsForm extends React.Component {
             height={160}
             extraStyle={{ textAlign: 'left' }}
             underlineColorAndroid="transparent"
+            theme={theme}
           />
         </View>
 
