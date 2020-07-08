@@ -28,6 +28,7 @@ import AccountCloseConfirm from './AccountCloseConfirm'
 import ScreenHeader from "../components/ScreenHeader";
 import {NavigationEvents} from "react-navigation";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
+import LoadingScreen from "./LoadingScreen";
 
 class ShiftClose extends React.Component {
   static navigationOptions = {
@@ -110,9 +111,7 @@ class ShiftClose extends React.Component {
 
     if (loading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc"/>
-        </View>
+        <LoadingScreen/>
       )
     } else {
       return (

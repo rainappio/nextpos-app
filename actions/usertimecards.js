@@ -23,12 +23,12 @@ export const clearUserTimeCards = () => ({
   type: CLEAR_USER_TIME_CARDS
 })
 
-export const getUserTimeCards = name => {
+export const getUserTimeCards = (username, year, month) => {
   return dispatch => {
-    dispatch(fetchUserTimeCards(name))
+    dispatch(fetchUserTimeCards(username))
 
     dispatchFetchRequest(
-      api.timecard.get(name),
+      api.timecard.get(username, year, month),
       {
         method: 'GET',
         withCredentials: true,

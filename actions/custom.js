@@ -1,3 +1,7 @@
+import TimeZoneService from "../helpers/TimeZoneService";
+
+const timezone = TimeZoneService.getTimeZone()
+
 /**
  * Format date string.
  */
@@ -6,7 +10,7 @@ export const formatDateObj = dateStr => {
     const dateObj = new Date(dateStr)
     return dateObj.toLocaleString('en-TW', {
       dateStyle: 'long',
-      timeZone: 'Asia/Taipei'
+      timeZone: timezone
     })
   }
 
@@ -37,7 +41,7 @@ export const formatDate = (date) => {
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleString('en-TW', {
     dateStyle: 'long',
-    timeZone: 'Asia/Taipei',
+    timeZone: timezone,
     hour12: false
   })
 }
@@ -52,7 +56,7 @@ export const formatDateOnly = date => {
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleDateString('en-TW', {
     dateStyle: 'long',
-    timeZone: 'Asia/Taipei'
+    timeZone: timezone
   })
 }
 
@@ -66,7 +70,7 @@ export const formatTime = date => {
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleTimeString('en-TW', {
     dateStyle: 'long',
-    timeZone: 'Asia/Taipei'
+    timeZone: timezone
   })
 }
 
@@ -80,50 +84,17 @@ export const getTimeDifference = date => {
 export const dateToLocaleString = dateObj => {
   return dateObj.toLocaleString('en-TW', {
     dateStyle: 'long',
-    timeZone: 'Asia/Taipei'
+    timeZone: timezone
   })
 }
 
-export function calculatePercentage(Amount, percent) {
-  return (Amount * percent) / 100
-}
-
-export function getMonthName(monthCount) {
-  switch (monthCount) {
-    case 1:
-      return "JANUARY";
-    case 2:
-      return "FEBRUARY";
-    case 3:
-      return "MARCH";
-    case 4:
-      return "APRIL";
-    case 5:
-      return "MAY";
-    case 6:
-      return "JUNE";
-    case 7:
-      return "JULY";
-    case 8:
-      return "AUGUST";
-    case 9:
-      return "SEPTEMBER";
-    case 10:
-      return "OCTOBER";
-    case 11:
-      return "NOVEMBER";
-    case 12:
-      return "DECEMBER";
-    default:
-      return "pls check ur dateCount";
+export const formatCurrency = number => {
+  if (number != null) {
+    return new Intl.NumberFormat('en-US',
+      {style: 'currency', currency: 'USD'}).format(number)
   }
 }
 
-/**
-* Remove Duplicate
-*/
-export const removeDuplicate = (data, key) => {
-  return [
-    ...new Map(data.map(x => [key(x), x])).values()
-  ]
+export function calculatePercentage (Amount, percent) {
+  return (Amount * percent) / 100
 }

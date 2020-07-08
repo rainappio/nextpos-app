@@ -12,12 +12,11 @@ export default class DropDown extends Component {
       children,
       meta: { error, touched, valid },
       options,
-      placeholder,
-      forFilter
+      placeholder
     } = this.props
 
     return (
-      <View>
+      <View style={{flex: 1}}>
         <RNPickerSelect
           placeholder={placeholder}
           items={options}
@@ -47,7 +46,6 @@ const pickerSelectStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 4,
-    color: 'black'
   },
   inputAndroid: {
     fontSize: 16,

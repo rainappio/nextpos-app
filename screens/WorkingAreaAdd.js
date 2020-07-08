@@ -47,8 +47,9 @@ class WorkingAreaAdd extends React.Component {
 
     return (
       <DismissKeyboard>
-        <View style={styles.container_nocenterCnt}>
-          <ScreenHeader title={t('addWorkingAreaTitle')}/>
+        <View style={styles.fullWidthScreen}>
+          <ScreenHeader title={t('addWorkingAreaTitle')}
+                        parentFullScreen={true}/>
 
           <WorkingAreaForm
             onSubmit={this.handleSubmit}

@@ -31,6 +31,7 @@ import BackBtn from '../components/BackBtn'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import ScreenHeader from "../components/ScreenHeader";
+import LoadingScreen from "./LoadingScreen";
 
 class Announcements extends React.Component {
   static navigationOptions = {
@@ -94,48 +95,48 @@ class Announcements extends React.Component {
 		}
   }
 
-  if(isLoading) {
-    return (
-      <View style={[styles.container]}>
-        <ActivityIndicator size="large" color="#ccc" />
-      </View>
-    )
-  }
+
   render() {
     const { navigation, getannouncements, isLoading, haveError } = this.props
      const { t } = this.context
 
-    return (
-      <View style={styles.stcontainer}>
-      	<ScreenHeader title={t('settings.announcements')}
-                      rightComponent={
-                        <AddBtn
-                          onPress={() =>
-                            this.props.navigation.navigate('AnnouncementsAdd')
-                          }
-                        />
-                      }
-        />
+    if (isLoading) {
+      return (
+        <LoadingScreen/>
+      )
+    } else {
+      return (
+        <View style={styles.stcontainer}>
+          <ScreenHeader title={t('settings.announcements')}
+                        rightComponent={
+                          <AddBtn
+                            onPress={() =>
+                              this.props.navigation.navigate('AnnouncementsAdd')
+                            }
+                          />
+                        }
+          />
 
-        	{Object.keys(getannouncements).length !== 0 && (
-          	<SortableList
-          		style={styles.list}
-             	data={getannouncements.results}
-            	vertical={true}
-            	renderRow={this._renderRow}
-            	scrollEnabled={this.state.scrollEnabled}
-            	onReleaseRow={(key, currentOrder, dataArr) =>
-              	this.handleItemOrderUpdate(
-                	key,
-                	currentOrder,
-                	getannouncements.results
-              	)
-            	}
-            	onChangeOrder={() => this._adjuxtAutoScroll(true)}
-          	/>
-        	)}
-    	</View>
-    )
+          {Object.keys(getannouncements).length !== 0 && (
+            <SortableList
+              style={styles.list}
+              data={getannouncements.results}
+              vertical={true}
+              renderRow={this._renderRow}
+              scrollEnabled={this.state.scrollEnabled}
+              onReleaseRow={(key, currentOrder, dataArr) =>
+                this.handleItemOrderUpdate(
+                  key,
+                  currentOrder,
+                  getannouncements.results
+                )
+              }
+              onChangeOrder={() => this._adjuxtAutoScroll(true)}
+            />
+          )}
+        </View>
+      )
+    }
   }
 }
 

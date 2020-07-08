@@ -9,7 +9,7 @@ const SegmentedControl = props => {
     values,
     selectedIndex,
     vertical,
-    meta: { error, touched, valid },
+    //meta: { error, touched, valid },
     ...rest
   } = props
 
@@ -36,7 +36,7 @@ const SegmentedControl = props => {
         {...(vertical ? verticalStyleProps : horizontalStyleProps)}
         {...rest}
       />
-      {!valid && touched && <Text style={[styles.rootError, styles.mgrtotop12, styles.centerText]}>{error}</Text>}
+      {/*{!valid && touched && <Text style={[styles.rootError, styles.mgrtotop12, styles.centerText]}>{error}</Text>}*/}
     </View>
   )
 }

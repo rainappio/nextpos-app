@@ -31,6 +31,7 @@ import Constants from "expo-constants/src/Constants";
 import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
 import {activateKeepAwake, useKeepAwake} from "expo-keep-awake";
+import TimeZoneService from "./helpers/TimeZoneService";
 
 YellowBox.ignoreWarnings([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
@@ -100,8 +101,11 @@ export default class App extends React.Component {
       },
       localize: this.mergeLocaleResource,
       t: this.t,
-      changeLanguage: this.changeLanguage
+      changeLanguage: this.changeLanguage,
+      client: () => store.getState().client
     }
+
+    TimeZoneService.setClientReference(() => store.getState().client)
 
     i18n.fallbacks = true
     i18n.locale = Localization.locale

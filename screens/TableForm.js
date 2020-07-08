@@ -35,16 +35,15 @@ class TableForm extends React.Component {
 
   render() {
     const { navigation, handleSubmit, handleDeleteTable, isEdit, initialValues, tableLayout } = this.props
-
     const { t } = this.context
 
     return (
       <View style={styles.contentContainer}>
-        <View style={[styles.fieldContainer]}>
-          <View style={[{ flex: 1 }]}>
+        <View style={[styles.tableRowContainerWithBorder]}>
+          <View style={[styles.tableCellView, styles.flex(1)]}>
             <Text style={styles.fieldTitle}>{t('tableName')}</Text>
           </View>
-          <View style={[{ flex: 3 }]}>
+          <View style={[styles.tableCellView, styles.justifyRight]}>
             <Field
               name="tableName"
               component={InputText}
@@ -55,11 +54,11 @@ class TableForm extends React.Component {
           </View>
         </View>
 
-        <View style={[styles.fieldContainer]}>
-          <View style={[{ flex: 1 }]}>
+        <View style={[styles.tableRowContainerWithBorder]}>
+          <View style={[styles.tableCellView, styles.flex(1)]}>
             <Text style={styles.fieldTitle}>{t('tableCapacity')}</Text>
           </View>
-          <View style={[{ flex: 3 }]}>
+          <View style={[styles.tableCellView, styles.justifyRight]}>
             <Field
               name="capacity"
               component={InputNumber}
@@ -71,7 +70,7 @@ class TableForm extends React.Component {
           </View>
         </View>
 
-        <View style={[styles.bottom]}>
+        <View style={[styles.bottom, styles.horizontalMargin]}>
           {isEdit ? (
             <TouchableOpacity onPress={handleSubmit}>
               <Text style={[styles.bottomActionButton, styles.actionButton]}>

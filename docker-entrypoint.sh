@@ -6,5 +6,4 @@ set -e
 npm install
 npm audit fix
 expo login -u ${USERNAME} -p ${PASSWORD}
-expo optimize
 expo publish

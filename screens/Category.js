@@ -4,6 +4,7 @@ import { AsyncStorage } from 'react-native'
 import { getProducts, getLables } from '../actions'
 import CategoryFormScreen from './CategoryFormScreen'
 import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
+import CategoryCustomizeScreen from "./CategoryCustomizeScreen";
 
 class Category extends React.Component {
   static navigationOptions = {
@@ -34,7 +35,8 @@ class Category extends React.Component {
     const { navigation } = this.props
 
     return (
-      <CategoryFormScreen
+      <CategoryCustomizeScreen
+        isEditForm={false}
         onSubmit={this.handleSubmit}
         navigation={navigation}
       />

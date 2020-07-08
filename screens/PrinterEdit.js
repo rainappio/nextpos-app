@@ -79,8 +79,9 @@ class PrinterEdit extends React.Component {
 
     return (
       <DismissKeyboard>
-        <View style={styles.container_nocenterCnt}>
-          <ScreenHeader title={t('editPrinterTitle')}/>
+        <View style={styles.fullWidthScreen}>
+          <ScreenHeader title={t('editPrinterTitle')}
+                        parentFullScreen={true}/>
 
           <PrinterForm
             navigation={navigation}

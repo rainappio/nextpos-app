@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, FlatList, ScrollView } from 'react-native'
+import { View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import ScreenHeader from "../components/ScreenHeader"
 import { LocaleContext } from '../locales/LocaleContext'
@@ -21,32 +21,44 @@ class ManageOffers extends React.Component {
         newOfferTitle: 'New Offer',
         editOfferTitle: 'Edit Offer',
         offerName: 'Offer Name',
-        Active: 'Active',
+        offerStatus: 'Offer Status',
+        dateBound: 'Set Date Range',
+        active: 'Active',
+        inactive: 'Inactive',
         startDate: 'Start Date',
+        endDate: 'End Date',
         offerType: 'Offer Type',
         discountValue: 'Discount Value',
         discountType: 'Discount Type',
         amountOff: 'Amount Off',
         percentOff: 'Percent Off',
-        applytoAll: 'Applies to All Product',
-        amtOf: 'Amount Off',
-        percentOff: 'Percent Off'
+        applyToAll: 'Applies to All Product',
+        offerTypeName: {
+          ORDER: 'Order',
+          PRODUCT: 'Product'
+        }
       },
       zh: {
-        manageOffersTitle: 'Manage Offers-CH',
-        newOfferTitle: 'New Offer-CH',
-        editOfferTitle: 'Edit Offer-CH',
-        offerName: 'Offer Name-CH',
-        Active: 'Active-CH',
-        endDate: 'End Date-CH',
-        offerType: 'Offer Type-CH',
-        discountValue: 'Discount Value-CH',
-        discountType: 'Discount Type-CH',
-        amountOff: 'Amount Off-CH',
-        percentOff: 'Percent Off-CH',
-        applytoAll: 'Applies to All Product-CH',
-        amtOf: 'Amount Off-CH',
-        percentOff: 'Percent Off-CH'
+        manageOffersTitle: '促銷管理',
+        newOfferTitle: '新增促銷',
+        editOfferTitle: '編輯促銷',
+        offerName: '促銷名稱',
+        offerStatus: '狀態',
+        dateBound: '設定期限',
+        active: '啟用中',
+        inactive: '停用中',
+        startDate: '開始',
+        endDate: '結束',
+        offerType: '促銷種類',
+        discountValue: '折扣',
+        discountType: '折扣種類',
+        amountOff: '折扣$',
+        percentOff: '折扣%',
+        applyToAll: '套用到所有產品',
+        offerTypeName: {
+          ORDER: '套用訂單',
+          PRODUCT: '套用產品'
+        }
       }
     })
     this.props.getOffers()
@@ -55,11 +67,13 @@ class ManageOffers extends React.Component {
   Item = (item) => {
     return (
       <View style={styles.rowFront}>
-        <Text style={styles.rowFrontText}
+        <TouchableOpacity
           onPress={() => this.props.navigation.navigate('EditOffer', {
             offerId: item.offerId
           })}
-        >{item.offerName}</Text>
+        >
+          <Text style={styles.rowFrontText}>{item.offerName} ({this.context.t(`offerTypeName.${item.offerType}`)})</Text>
+        </TouchableOpacity>
       </View>
     );
   }

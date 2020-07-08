@@ -14,7 +14,7 @@ import {
 import { CheckBox } from 'react-native-elements'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import images from '../../assets/images'
-import { mainThemeColor } from "../../styles";
+import styles, { mainThemeColor } from "../../styles";
 
 class RenderPureCheckBox extends React.Component {
   state = {
@@ -29,12 +29,12 @@ class RenderPureCheckBox extends React.Component {
       total,
       title,
       isIconAsTitle,
-      meta: { error, toched, valid },
+      meta: { error, touched, valid },
       ...rest
     } = this.props
 
     return (
-      <View>
+      <View style={styles.flex(1)}>
         <CheckBox
           title={
             !isIconAsTitle

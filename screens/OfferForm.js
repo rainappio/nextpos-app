@@ -26,16 +26,25 @@ class OfferForm extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    const selectedOfferIdx =
-      this.props.initialValues !== undefined
-        ? this.props.initialValues.selectedofferType
-        : null;
+
+    const initialValues = this.props.initialValues
+    const selectedOfferIdx = initialValues !== undefined ? initialValues.selectedofferType : 0;
+    let appliesToAllProducts = false
+
+    if (initialValues !== undefined && initialValues.offerType === 'PRODUCT' && initialValues.productOfferDetails.appliesToAllProducts) {
+      appliesToAllProducts = true
+    }
 
     this.state = {
-      isEnabled: false,
+      appliesToAllProducts: appliesToAllProducts,
       selectedOfferType: selectedOfferIdx,
+      offerTypes: {
+        0: {label: context.t('offerTypeName.ORDER'), value: 'ORDER'},
+        1: {label: context.t('offerTypeName.PRODUCT'), value: 'PRODUCT'}
+      },
       products: [],
       uniqueProducts: [],
+      dateBound: initialValues.dateBound,
       from: {
         show: false
       },
@@ -46,16 +55,14 @@ class OfferForm extends React.Component {
   }
 
   componentDidMount() {
-    let selectedProducts =
-      this.props.initialValues.productOfferDetails !== null
-        ? this.props.initialValues.productOfferDetails.selectedProducts
-        : [];
-    this.setState({
-      products:
-        this.props.selectedProducts !== undefined
-          ? this.props.selectedProducts
-          : selectedProducts
-    });
+
+    if (this.props.isEditForm) {
+      let selectedProducts = this.props.initialValues.productOfferDetails !== null ? this.props.initialValues.productOfferDetails.selectedProducts : [];
+
+      this.setState({
+        products: this.props.selectedProducts !== undefined ? this.props.selectedProducts : selectedProducts
+      });
+    }
   }
 
   handlegetDate = (event, selectedDate) => {
@@ -80,7 +87,7 @@ class OfferForm extends React.Component {
 
   toggleSwitch = () => {
     this.setState({
-      isEnabled: !this.state.isEnabled
+      appliesToAllProducts: !this.state.appliesToAllProducts
     });
   };
 
@@ -96,8 +103,7 @@ class OfferForm extends React.Component {
         }
       },
       response => {
-        successMessage("deleted");
-        this.props.navigation.navigate("NewOffer");
+        this.props.navigation.navigate("ManageOffers");
       }
     ).then();
   };
@@ -109,7 +115,7 @@ class OfferForm extends React.Component {
   };
 
   removeArrayItem = productId => {
-    var updatedItems = this.state.products.filter(item => {
+    const updatedItems = this.state.products.filter(item => {
       return item.productId !== productId;
     });
     this.setState({
@@ -136,15 +142,17 @@ class OfferForm extends React.Component {
       handleDeactivate
     } = this.props;
     const { t } = this.context;
-    const { isEnabled, products } = this.state;
+    const { appliesToAllProducts, products } = this.state;
+
+    const offerTypes = Object.keys(this.state.offerTypes).map(key => this.state.offerTypes[key].label)
 
     return (
       <View>
-        <View style={styles.fieldContainer}>
-          <View style={{ flex: 1 }}>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, { flex: 1 }]}>
             <Text style={styles.fieldTitle}>{t("offerName")}</Text>
           </View>
-          <View style={{ flex: 3 }}>
+          <View style={[styles.tableCellView, styles.justifyRight, { flex: 3 }]}>
             <Field
               name="offerName"
               component={InputText}
@@ -152,6 +160,34 @@ class OfferForm extends React.Component {
               secureTextEntry={false}
               autoFocus={!isEditForm}
               validate={isRequired}
+            />
+          </View>
+        </View>
+
+        {isEditForm && (
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <Text style={styles.fieldTitle}>{t("offerStatus")}</Text>
+            </View>
+            <View style={[styles.tableCellView, styles.justifyRight]}>
+              <Text style={styles.fieldTitle}>{initialValues.active ? t('active') : t('inactive')}</Text>
+            </View>
+          </View>
+        )}
+
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, { flex: 1 }]}>
+            <Text style={styles.fieldTitle}>{t("dateBound")}</Text>
+          </View>
+          <View style={[styles.tableCellView, styles.justifyRight]}>
+            <Field
+              name="dateBound"
+              component={RNSwitch}
+              onChange={(value) => {
+                this.setState({
+                  dateBound: value
+                })
+              }}
             />
           </View>
         </View>
@@ -166,7 +202,7 @@ class OfferForm extends React.Component {
                 placeholder={t("order.date")}
                 isShow={this.state.from.show}
                 showDatepicker={() => this.showDatepicker("from")}
-                needWeekFilter={true}
+                readonly={!this.state.dateBound}
               />
             </View>
             <View
@@ -185,7 +221,7 @@ class OfferForm extends React.Component {
                 placeholder={t("order.date")}
                 isShow={this.state.to.show}
                 showDatepicker={() => this.showDatepicker("to")}
-                needWeekFilter={true}
+                readonly={!this.state.dateBound}
               />
             </View>
           </View>
@@ -206,34 +242,35 @@ class OfferForm extends React.Component {
             { marginLeft: 0, marginRight: 0 }
           ]}
         >
-          <View style={[styles.sectionContent]}>
+          <View style={[styles.sectionContainer]}>
             <View style={styles.sectionTitleContainer}>
               <Text style={styles.sectionTitleText}>{t("offerType")}</Text>
             </View>
-            <View style={{ paddingLeft: 0, paddingRight: 0 }}>
+
+            <View style={[styles.sectionContainer, styles.dynamicHorizontalPadding(15)]}>
               <View>
                 <Field
                   name="offerType"
                   component={SegmentedControl}
                   selectedIndex={this.state.selectedOfferType}
-                  values={["Order", "Product"]}
+                  values={offerTypes}
                   onChange={this.handleIndexChange}
-                  validate={isRequired}
+                  normalize={value => {
+                    return this.state.offerTypes[value].value
+                  }}
                 />
               </View>
             </View>
-            {this.state.selectedOfferType == 1 && (
+            {this.state.selectedOfferType === 1 && (
               <View
                 style={[
-                  styles.fieldContainer,
-                  styles.mgrtotop12,
-                  styles.mgrbtn20
+                  styles.tableRowContainerWithBorder,
                 ]}
               >
-                <View style={{ flex: 3 }}>
-                  <Text style={styles.fieldTitle}>{t("applytoAll")}</Text>
+                <View style={[styles.tableCellView, { flex: 3 }]}>
+                  <Text style={styles.fieldTitle}>{t("applyToAll")}</Text>
                 </View>
-                <View style={{ flex: 1, alignItems: "flex-end" }}>
+                <View style={[styles.tableCellView, styles.justifyRight]}>
                   <Field
                     name="productOfferDetails.appliesToAllProducts"
                     component={RNSwitch}
@@ -243,135 +280,126 @@ class OfferForm extends React.Component {
               </View>
             )}
 
-            {this.state.selectedOfferType === 1 && !isEnabled && !initialValues.productOfferDetails.appliesToAllProducts && (
-                <View style={{ borderColor: "#ddd", borderWidth: 1 }}>
+            {this.state.selectedOfferType === 1 && !appliesToAllProducts && (
+              <View style={[styles.sectionContent]}>
+                <View style={[styles.tableRowContainer]}>
                   <AntDesignIcon
                     name={"pluscircle"}
                     size={22}
                     color={mainThemeColor}
-                    style={{
-                      transform: [{ rotateY: "180deg" }],
-                      marginTop: 12,
-                      marginBottom: 12,
-                      marginRight: 22
-                    }}
+                    style={[{transform: [{rotateY: "180deg"}],}, styles.justifyRight]}
                     onPress={() =>
-                      this.props.navigation.navigate(
-                        "ProductsOverviewforOffer",
-                        {
+                      this.props.navigation.navigate("ProductsOverviewforOffer", {
                           isEditForm: isEditForm,
                           updatedselectedProducts: this.state.products
                         }
                       )
                     }
                   />
-
-                  {products !== undefined &&
-                    products.map(selectedProduct => (
-                      <View
-                        style={[
-                          {
-                            paddingTop: 15,
-                            paddingBottom: 15,
-                            paddingLeft: 20,
-                            borderBottomWidth: 0.5,
-                            borderColor: "#ddd"
-                          }
-                        ]}
-                        key={selectedProduct.productId}
-                      >
-                        <Text>{selectedProduct.name}</Text>
-                        <TouchableOpacity
-                          style={[{ position: "absolute", right: 24 }]}
-                        >
-                          <AntDesignIcon
-                            name={"closecircle"}
-                            size={22}
-                            color={"#dc3545"}
-                            style={{
-                              transform: [{ rotateY: "180deg" }],
-                              marginTop: 12
-                            }}
-                            // onPress={() => this.handleDelete(selectedProduct.productId)}
-                            onPress={() =>
-                              this.removeArrayItem(selectedProduct.productId)
-                            }
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    ))}
                 </View>
-              )}
+                {products !== undefined &&
+                products.map(selectedProduct => (
+                  <View style={[styles.tableRowContainerWithBorder]}
+                        key={selectedProduct.productId}
+                  >
+                    <View style={[styles.tableCellView]}>
+                      <Text>{selectedProduct.name}</Text>
+                    </View>
+                    <View style={[styles.tableCellView, styles.justifyRight]}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          this.removeArrayItem(selectedProduct.productId)
+                        }
+                      >
+                        <AntDesignIcon
+                          name={"closecircle"}
+                          size={22}
+                          color={"#dc3545"}
+                          style={{
+                            transform: [{rotateY: "180deg"}],
+                          }}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
         </View>
 
-        <View style={[styles.fieldContainer, { marginTop: 8 }]}>
-          <View style={[styles.sectionTitleContainer, { flex: 1 }]}>
+        <View style={[styles.sectionContainer]}>
+          <View style={[styles.sectionTitleContainer, {flex: 1}]}>
             <Text style={styles.sectionTitleText}>{t("discountType")}</Text>
           </View>
+
+          <View style={styles.tableCellView}>
+            <View style={{flex: 1}}>
+              <Field
+                name="discountType"
+                component={RenderPureCheckBox}
+                customValue="AMOUNT_OFF"
+                isIconAsTitle={false}
+                title={t("amountOff")}
+                validate={isRequired}
+              />
+            </View>
+
+            <View style={{flex: 1}}>
+              <Field
+                name="discountType"
+                component={RenderPureCheckBox}
+                customValue="PERCENT_OFF"
+                isIconAsTitle={false}
+                title={t("percentOff")}
+              />
+            </View>
+          </View>
         </View>
 
-        <View style={styles.fieldContainer}>
-          <View style={{ flex: 1 }}>
-            <Field
-              name="discountType"
-              component={RenderPureCheckBox}
-              customValue="AMOUNT_OFF"
-              isIconAsTitle={false}
-              title={t("amtOf")}
-              validate={isRequired}
-            />
-          </View>
-
-          <View style={{ flex: 1 }}>
-            <Field
-              name="discountType"
-              component={RenderPureCheckBox}
-              customValue="PERCENT_OFF"
-              isIconAsTitle={false}
-              title={t("percentOff")}
-            />
-          </View>
-        </View>
-
-        <View style={styles.fieldContainer}>
-          <View style={{ flex: 1.5 }}>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, { flex: 1 }]}>
             <Text style={styles.fieldTitle}>{t("discountValue")}</Text>
           </View>
-          <View style={{ flex: 2.5 }}>
+          <View style={[styles.tableCellView, styles.justifyRight]}>
             <Field
               name="discountValue"
               component={InputText}
               placeholder={t("discountValue")}
               secureTextEntry={false}
-              //autoFocus={!isEditForm}
+              keyboardType='numeric'
               validate={isRequired}
             />
           </View>
         </View>
 
-        <View style={[styles.bottom]}>
+        <View style={[styles.bottom, styles.horizontalMargin]}>
           <TouchableOpacity onPress={handleSubmit}>
             <Text style={[styles.bottomActionButton, styles.actionButton]}>
               {t("action.save")}
             </Text>
           </TouchableOpacity>
-          {!this.props.initialValues.active ? (
-            <TouchableOpacity
-              onPress={() => handleActivate(initialValues.offerId)}
-            >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {t("action.activate")}
-              </Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={() => handleDeactivate(initialValues.offerId)}
-            >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {t("action.deactivate")}
-              </Text>
-            </TouchableOpacity>
+
+          {isEditForm && (
+            <View>
+              {!initialValues.active ? (
+                <TouchableOpacity
+                  onPress={() => handleActivate(initialValues.offerId)}
+                >
+                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                    {t("action.activate")}
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => handleDeactivate(initialValues.offerId)}
+                >
+                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                    {t("action.deactivate")}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
           )}
 
           <TouchableOpacity onPress={handleEditCancel}>
@@ -380,7 +408,10 @@ class OfferForm extends React.Component {
             </Text>
           </TouchableOpacity>
 
-          <DeleteBtn handleDeleteAction={handleDeleteOffer} />
+          {isEditForm && (
+            <DeleteBtn handleDeleteAction={handleDeleteOffer} />
+          )}
+
         </View>
       </View>
     );

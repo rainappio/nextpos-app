@@ -48,17 +48,16 @@ class TableAdd extends React.Component {
   }
 
   render() {
-    const { navigation, tablelayout } = this.props
+    const { navigation } = this.props
     const { t } = this.context
 
     return (
-      <DismissKeyboard>
-        <View style={styles.container_nocenterCnt}>
-          <ScreenHeader title={t('addTableTitle')}/>
+      <View style={styles.fullWidthScreen}>
+        <ScreenHeader title={t('addTableTitle')}
+                      parentFullScreen={true}/>
 
-          <TableForm onSubmit={this.handleSubmit} navigation={navigation} />
-        </View>
-      </DismissKeyboard>
+        <TableForm onSubmit={this.handleSubmit} navigation={navigation}/>
+      </View>
     )
   }
 }

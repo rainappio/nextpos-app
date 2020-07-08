@@ -17,6 +17,7 @@ import styles from '../styles'
 import { withNavigation } from 'react-navigation'
 import {LocaleContext} from "../locales/LocaleContext";
 import {storage} from "../constants/Backend";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -70,14 +71,9 @@ class LoginScreen extends React.Component {
     const { t } = this.context
 
     return (
-      <DismissKeyboard>
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior="padding"
-          enabled
-        >
-          <View style={{ flex: 3, justifyContent: 'center' }}>
-            <View style={[{ position: 'absolute', top: 0 }]}>
+      <KeyboardAwareScrollView contentContainerStyle={[styles.container, {justifyContent: 'space-around'}]}>
+        <View style={{flex: 1}}>
+          <View style={[styles.flex(1)]}>
               <Image
                 source={
                   __DEV__
@@ -88,75 +84,76 @@ class LoginScreen extends React.Component {
               />
             </View>
 
-            <View style={[{marginVertical: 10}]}>
-              <Field
-                name="username"
-                component={InputText}
-                validate={[isRequired, isEmail]}
-                placeholder={t('email')}
-                autoCapitalize="none"
-                extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
-              />
-            </View>
-            <View>
-              <Field
-                name="masterPassword"
-                component={InputText}
-                validate={isRequired}
-                placeholder={t('password')}
-                secureTextEntry={true}
-                extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
-              />
-            </View>
+          <View style={[styles.flex(1), styles.dynamicVerticalPadding(10)]}>
+          <View style={[styles.flex(1)]}>
+            <Field
+              name="username"
+              component={InputText}
+              validate={[isRequired, isEmail]}
+              placeholder={t('email')}
+              autoCapitalize="none"
+              extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
+            />
           </View>
+            <View style={styles.dynamicVerticalPadding(2)}/>
+          <View style={styles.flex(1)}>
+            <Field
+              name="masterPassword"
+              component={InputText}
+              validate={isRequired}
+              placeholder={t('password')}
+              secureTextEntry={true}
+              extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
+            />
+          </View>
+          </View>
+        </View>
 
-          <View style={[styles.bottom]}>
-            {this.state.clientUsername != null && (
-              <TouchableOpacity
-                onPress={() => handleLoginAs()}
-              >
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                  {t('loginAs', { username: this.state.clientUsername})}
-                </Text>
-              </TouchableOpacity>
-            )}
-
+        <View style={[styles.bottom]}>
+          {this.state.clientUsername != null && (
             <TouchableOpacity
-              onPress={() => {
-                Keyboard.dismiss()
-                handleSubmit()
-              }}
+              onPress={() => handleLoginAs()}
             >
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {t('login')}
+                {t('loginAs', {username: this.state.clientUsername})}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Intro')}
-            >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                {t('action.cancel')}
-              </Text>
-            </TouchableOpacity>
+          )}
 
-						<TouchableOpacity onPress={() => {
-							this.toggleModal(true)
-						}}>
-            	<Text style={[styles.bottomActionButton, styles.cancelButton]}>
-            	{t('forgotPwd')}
-            	</Text>
-          	</TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            onPress={() => {
+              Keyboard.dismiss()
+              handleSubmit()
+            }}
+          >
+            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              {t('login')}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Intro')}
+          >
+            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+              {t('action.cancel')}
+            </Text>
+          </TouchableOpacity>
 
-          <ResetModal
-          	onSubmit={this.getEmail}
-          	modalVisible={this.state.modalVisible}
-          	toggleModal={this.toggleModal}
-          	navigation={this.props.navigation}
-          	/>
+          <TouchableOpacity onPress={() => {
+            this.toggleModal(true)
+          }}>
+            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+              {t('forgotPwd')}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-        </KeyboardAvoidingView>
-      </DismissKeyboard>
+        <ResetModal
+          onSubmit={this.getEmail}
+          modalVisible={this.state.modalVisible}
+          toggleModal={this.toggleModal}
+          navigation={this.props.navigation}
+        />
+      </KeyboardAwareScrollView>
     )
   }
 }

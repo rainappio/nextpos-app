@@ -175,7 +175,6 @@ class OrdersScreen extends React.Component {
                 ?
                 <OrderFilterForm
                   onSubmit={this.handleOrderSearch}
-                  getOrdersByDateRange={this.props.getOrdersByDateRange}
                   initialValues={{
                     dateRange: this.state.searchFilter.dateRange,
                     fromDate: new Date(dateRange.zonedFromDate),

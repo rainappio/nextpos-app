@@ -1,12 +1,19 @@
 import React from 'react'
-import {ScrollView, View} from 'react-native'
-import {Cell, Col, Table, TableWrapper} from 'react-native-table-component'
-import styles from '../styles'
+import {ScrollView, Text, View} from 'react-native'
+import {Cell, Col, Cols, Table, TableWrapper} from 'react-native-table-component'
+import styles, {mainThemeColor} from '../styles'
+import {formatCurrency} from "../actions";
 
 const RenderTable = (props) => {
 
   const tableHeaders = props.reportData.labels
   const tableData = props.reportData.data
+  const isCurrency = props.isCurrency != null ? props.isCurrency : false
+
+  const zippedData = tableHeaders.map((data, idx) => {
+    return [data, isCurrency ? formatCurrency(tableData[idx]) : tableData[idx]]
+  })
+
   let tableDataLastYear = []
 
   if (props.reportData.hasOwnProperty('data2')) {
@@ -20,35 +27,25 @@ const RenderTable = (props) => {
   return (
     <View style={styles.tblContainer}>
       <ScrollView horizontal={true}>
-        <Table borderStyle={{borderColor: 'transparent'}}>
-          {
-            <TableWrapper style={[styles.tblrow]}>
-              <Col data={["Date"]} heightArr={[40, 40]} widthArr={[80, 80]} textStyle={[styles.tbltext, styles.whiteColor]}
-                   style={styles.orange_bg}/>
+        <Table style={{flexDirection: 'row'}}
+               borderStyle={{borderWidth: 1, borderColor: '#f75336'}}>
+          {zippedData && (
+            <TableWrapper style={[styles.tblrow, {borderWidth: 0, borderColor: '#f75336'}]}>
               {
-                tableHeaders.map((cellData, cellIndex) => (
-                  <Cell key={cellIndex}
-                        data={cellData}
-                        textStyle={styles.tbltextHeader}
-                        style={styles.tblhead}/>
-                ))
+                zippedData.map((columnData, columnIndex) => {
+                  return (
+                    <Col
+                      key={columnIndex}
+                      data={columnData}
+                      flex={1}
+                      textStyle={styles.tbltext}
+                    />
+                  )
+                })
               }
             </TableWrapper>
-          }
-          {
-            <TableWrapper style={[styles.tblrow]}>
-              <Col data={["Total"]} heightArr={[40, 40]} widthArr={[80, 80]} textStyle={styles.tbltext}/>
-              {
-                tableData.map((cellData, cellIndex) => (
-                  <Cell key={cellIndex}
-                        data={cellData}
-                        textStyle={styles.tbltext} style={{height: 40, width: 62}}/>
-                ))
-              }
-            </TableWrapper>
-          }
-
-          {tableDataLastYear && (
+          )}
+          {/*{tableDataLastYear && (
             <TableWrapper style={[styles.tblrow]}>
               <Col data={["Last Year"]} heightArr={[40, 40]} widthArr={[80, 80]} textStyle={styles.tbltext}/>
               {
@@ -59,7 +56,7 @@ const RenderTable = (props) => {
                 ))
               }
             </TableWrapper>
-          )}
+          )}*/}
         </Table>
       </ScrollView>
     </View>

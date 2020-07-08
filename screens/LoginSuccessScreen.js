@@ -14,10 +14,9 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import {
   doLogout,
-  formatDateFromMillis,
   formatDateObj,
   getClientUsr,
-  getAnnouncements, getShiftStatus
+  getAnnouncements, getShiftStatus, getCurrentClient
 } from '../actions'
 import styles, {mainThemeColor} from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
@@ -84,6 +83,7 @@ class LoginSuccessScreen extends React.Component {
 
   loadUserInfo = async () => {
     let token = await getToken()
+    this.props.getCurrentClient()
     this.props.getCurrentUser(token.username)
     this.props.getAnnouncements()
     this.props.getShiftStatus()
@@ -263,6 +263,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
+  getCurrentClient: () => dispatch(getCurrentClient()),
   getCurrentUser: name => dispatch(getClientUsr(name)),
   doLogout: () => {
     dispatch(doLogout())

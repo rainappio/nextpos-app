@@ -46,10 +46,10 @@ class CategoryCustomizeScreen extends React.Component {
   render() {
     const {
       labels,
+      isEditForm,
       prodctoptions,
       workingareas,
       handleSubmit,
-      onCancel
     } = this.props
 
     const { t } = this.context
@@ -71,67 +71,70 @@ class CategoryCustomizeScreen extends React.Component {
                         }
           />
 
-          <View>
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
-                  <Text style={styles.fieldTitle}>{t('categoryName')}</Text>
-              </View>
-              <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                <Field
-                  name="label"
-                  component={InputText}
-                />
-              </View>
-            </View>
-
-            <View style={styles.sectionContainer}>
-              <View style={styles.sectionTitleContainer}>
-                <Text style={styles.sectionTitleText}>{t('options')}</Text>
-              </View>
-
-              <Field
-                name="productOptionIds"
-                component={RenderCheckboxGroup}
-                customarr={prodctoptions}
-                navigation={this.props.navigation}
-                customRoute={'OptionEdit'}
-              />
-            </View>
-
-            <View style={styles.sectionContainer}>
-              <View style={[styles.sectionTitleContainer]}>
-                <Text style={styles.sectionTitleText}>{t('workingArea')}</Text>
-              </View>
-
-              {workingareas !== undefined &&
-              workingareas.map(workarea => (
-                <View key={workarea.id}>
-                  <Field
-                    name='workingAreaId'
-                    component={RadioItemObjPick}
-                    customValueOrder={workarea.id}
-                    optionName={workarea.name}
-                    onCheck={(currentVal, fieldVal) => {
-                      return fieldVal !== undefined && currentVal === fieldVal
-                    }}
-                  />
-                </View>
-              ))}
-            </View>
-          </View>
-
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text style={styles.fieldTitle}>{t('applyToProducts')}</Text>
+              <Text style={styles.fieldTitle}>{t('categoryName')}</Text>
             </View>
-            <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
               <Field
-                name="appliesToProducts"
-                component={RNSwitch}
-                checked={true}
+                name="label"
+                component={InputText}
               />
             </View>
           </View>
+
+          {isEditForm && (
+            <View>
+              <View style={styles.sectionContainer}>
+                <View style={styles.sectionTitleContainer}>
+                  <Text style={styles.sectionTitleText}>{t('options')}</Text>
+                </View>
+
+                <Field
+                  name="productOptionIds"
+                  component={RenderCheckboxGroup}
+                  customarr={prodctoptions}
+                  navigation={this.props.navigation}
+                  customRoute={'OptionEdit'}
+                />
+              </View>
+
+              <View style={styles.sectionContainer}>
+                <View style={[styles.sectionTitleContainer]}>
+                  <Text style={styles.sectionTitleText}>{t('workingArea')}</Text>
+                </View>
+
+                {workingareas !== undefined &&
+                workingareas.map(workarea => (
+                  <View key={workarea.id}>
+                    <Field
+                      name='workingAreaId'
+                      component={RadioItemObjPick}
+                      customValueOrder={workarea.id}
+                      optionName={workarea.name}
+                      onCheck={(currentVal, fieldVal) => {
+                        return fieldVal !== undefined && currentVal === fieldVal
+                      }}
+                    />
+                  </View>
+                ))}
+              </View>
+
+
+              <View style={styles.tableRowContainerWithBorder}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <Text style={styles.fieldTitle}>{t('applyToProducts')}</Text>
+                </View>
+                <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+                  <Field
+                    name="appliesToProducts"
+                    component={RNSwitch}
+                    checked={true}
+                  />
+                </View>
+              </View>
+            </View>
+          )}
 
           <View style={[styles.bottom, styles.horizontalMargin]}>
             <TouchableOpacity onPress={handleSubmit}>
@@ -139,7 +142,9 @@ class CategoryCustomizeScreen extends React.Component {
                 {t('action.save')}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => onCancel()}>
+            <TouchableOpacity onPress={() => {
+              this.props.navigation.navigate('ProductsOverview')
+            }}>
               <Text style={[styles.bottomActionButton, styles.cancelButton]}>
                 {t('action.cancel')}
               </Text>

@@ -19,12 +19,12 @@ export const fetchCustomerCountReportFailure = error => ({
   error
 })
 
-export const getCustomerCountReport = () => {
+export const getCustomerCountReport = (year, month) => {
   return dispatch => {
     dispatch(fetchCustomerCountReport())
 
     dispatchFetchRequest(
-      api.report.getcustomerCountReport,
+      api.report.getcustomerCountReport(year, month),
       {
         method: 'GET',
         withCredentials: true,

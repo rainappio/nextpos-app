@@ -55,18 +55,14 @@ export const api = {
     clockin: `${apiRoot}/timecards/clockin`,
     clockout: `${apiRoot}/timecards/clockout`,
     mostRecent: `${apiRoot}/timecards/mostRecent`,
-    timeCards: `${apiRoot}/reporting/timeCardReport`,
-    get: clientusername => {
-      return `${apiRoot}/timecards?username=${clientusername}`
+    timeCards: (year, month) => {
+      return `${apiRoot}/reporting/timeCardReport?year=${year}&month=${month}`
+    },
+    get: (username, year, month) => {
+      return `${apiRoot}/timecards?username=${username}&year=${year}&month=${month}`
     },
     getById: id => {
       return `${apiRoot}/timecards/${id}`
-    },
-    getByMonthYr: (year, month) => {
-      return `${apiRoot}/reporting/timeCardReport?year=${year}&month=${month}`
-    },
-    getByMonthYrUsr: (year, month, username) => {
-      return `${apiRoot}/timecards?year=${year}&month=${month}&username=${username}`
     }
   },
   product: {
@@ -75,6 +71,9 @@ export const api = {
       return `${apiRoot}/products/${id}/?version=DESIGN`
     },
     getAllGrouped: `${apiRoot}/searches/products/grouped?state=DESIGN`,
+    search: (keyword) => {
+      return `${apiRoot}/products?keyword=${keyword}`
+    },
     update: id => {
       return `${apiRoot}/products/${id}`
     },
@@ -285,8 +284,31 @@ export const api = {
 
       return `${apiRoot}/reporting/rangedSalesReport?${queryParams}`
     },
+    getSalesRankingReport: (rangeType, fromDate, toDate, labelId) => {
+
+      const xRangeType = rangeType == null ? 'WEEK' : rangeType
+      let queryParams = `rangeType=${xRangeType}`
+
+      if (fromDate != null) {
+        queryParams += `&from=${fromDate}`
+      }
+
+      if (toDate != null) {
+        queryParams += `&to=${toDate}`
+      }
+
+      queryParams += `&labelId=${labelId}`
+
+      return `${apiRoot}/reporting/salesRankingReport?${queryParams}`
+    },
     getsalesDistributionReport: `${apiRoot}/reporting/salesDistribution?`,
-    getcustomerCountReport: `${apiRoot}/reporting/customerStats`,
+    getcustomerCountReport: (year, month) => {
+      if (year !== undefined && month !== undefined) {
+        return `${apiRoot}/reporting/customerStats?year=${year}&month=${month}`
+      }
+
+      return `${apiRoot}/reporting/customerStats`
+    },
     getCustomerTrafficReport: (year, month) => {
       if (year !== undefined && month !== undefined) {
         return `${apiRoot}/reporting/customerTraffic?year=${year}&month=${month}`

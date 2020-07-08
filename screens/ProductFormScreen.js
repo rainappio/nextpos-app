@@ -86,10 +86,10 @@ class ProductFormScreen extends React.Component {
             />
 
             <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, { flex: 3 }]}>
+              <View style={[styles.tableCellView, { flex: 1 }]}>
                 <Text style={styles.fieldTitle}>{t('productName')}</Text>
               </View>
-              <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
+              <View style={[styles.tableCellView, { flex: 1, justifyContent: 'flex-end' }]}>
                 <Field
                   name="name"
                   component={InputText}
@@ -104,7 +104,7 @@ class ProductFormScreen extends React.Component {
               <View style={[styles.tableCellView, { flex: 1 }]}>
                 <Text style={styles.fieldTitle}>{t('price')}</Text>
               </View>
-              <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
+              <View style={[styles.tableCellView, { flex: 1, justifyContent: 'flex-end' }]}>
                 <Field
                   name="price"
                   component={InputText}
@@ -117,10 +117,10 @@ class ProductFormScreen extends React.Component {
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, { flex: 3 }]}>
+              <View style={[styles.tableCellView, { flex: 1 }]}>
                 <Text style={styles.fieldTitle}>{t('productLabel')}</Text>
               </View>
-              <View style={{ flex: 1.5, justifyContent: 'flex-end' }}>
+              <View style={{ flex: 1, justifyContent: 'flex-end' }}>
                 <Field
                   component={DropDown}
                   name="productLabelId"

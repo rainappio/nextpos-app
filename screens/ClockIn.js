@@ -15,6 +15,7 @@ import * as TaskManager from "expo-task-manager";
 import {connect} from "react-redux";
 import {getCurrentClient} from "../actions/client"
 import { getDistance } from 'geolib'
+import LoadingScreen from "./LoadingScreen";
 
 class ClockIn extends React.Component {
   static navigationOptions = {
@@ -225,9 +226,7 @@ class ClockIn extends React.Component {
      */
     if (!timecard) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc"/>
-        </View>
+        <LoadingScreen/>
       )
     }
 
@@ -297,9 +296,7 @@ class ClockIn extends React.Component {
                 <Text style={[styles.fieldTitle]}>{t('currentTime')}</Text>
               </View>
               <View style={{ flex: 3 }}>
-                <Text style={{ alignSelf: 'flex-end' }}>{`${dateToLocaleString(
-                  new Date()
-                )}`}</Text>
+                <Text style={{alignSelf: 'flex-end'}}>{dateToLocaleString(new Date())}</Text>
               </View>
             </View>
             <View style={styles.sectionTitleContainer}>

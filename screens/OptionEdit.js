@@ -10,6 +10,7 @@ import {
   makeFetchRequest,
   successMessage
 } from '../constants/Backend'
+import LoadingScreen from "./LoadingScreen";
 
 class OptionEdit extends React.Component {
   static navigationOptions = {
@@ -66,9 +67,7 @@ class OptionEdit extends React.Component {
 
     if (loading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen/>
       )
     } else if (haveData) {
       return (

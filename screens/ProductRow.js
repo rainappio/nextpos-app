@@ -2,7 +2,8 @@ import React from 'react'
 import {
   View,
   TouchableOpacity,
-  Text,
+  Text, FlatList,
+  Dimensions
 } from 'react-native'
 import { connect } from 'react-redux'
 import DraggableFlatList from "react-native-draggable-flatlist";
@@ -15,6 +16,7 @@ import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
 import ScreenHeader from "../components/ScreenHeader";
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
+import {SearchBar} from "react-native-elements";
 
 class ProductRow extends React.Component {
   static navigationOptions = {
@@ -28,18 +30,23 @@ class ProductRow extends React.Component {
 
     context.localize({
       en: {
+        searchPrompt: 'Search by Keyword',
         productListTitle: 'Product List',
         ungrouped: 'Ungrouped',
-        pinned: 'Pinned'
+        pinned: 'Pinned',
       },
       zh: {
+        searchPrompt: '搜尋產品',
         productListTitle: '產品列表',
         ungrouped: '未分類',
-        pinned: '置頂產品'
+        pinned: '置頂產品',
       }
     })
 
     this.state = {
+      searchKeyword: null,
+      searching: false,
+      searchResults: [],
       activeSections: [],
       selectedProducts: [],
       labelId: null,
@@ -151,15 +158,24 @@ class ProductRow extends React.Component {
           <View>
             {map[item.label] !== undefined && map[item.label].map(data => {
               return (
-                <View style={[{ paddingTop: 20, paddingBottom: 20, backgroundColor: '#F8F8F8', paddingLeft: 20, borderTopWidth: 0.11 }]} key={data.id}>
-                  <Text onPress={() => {
-                    this.props.navigation.navigate('ProductEdit', {
-                      productId: data.id,
-                      labelId: data.productLabelId,
-                      isPinned: this.props.products['pinned'].filter(pa => pa.id === data.id)[0] !== undefined
-                    })
-                  }} style={{ marginRight: 50 }}>{data.name}</Text>
-
+                <View style={[{
+                  paddingVertical: 20,
+                  paddingLeft: 20,
+                  backgroundColor: '#F8F8F8',
+                  borderColor: '#c5c5c5',
+                  borderBottomWidth: 1
+                }]} key={data.id}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('ProductEdit', {
+                        productId: data.id,
+                        labelId: data.productLabelId,
+                        isPinned: this.props.products['pinned'].filter(pa => pa.id === data.id)[0] !== undefined
+                      })
+                    }}
+                  >
+                    <Text style={{marginRight: 50}}>{data.name}</Text>
+                  </TouchableOpacity>
                   <TouchableOpacity onPress={() => this.handlepinToggle(data.id)} style={[{ position: 'absolute', right: 24 }]}>
                     {
                       <AntDesignIcon
@@ -226,6 +242,24 @@ class ProductRow extends React.Component {
       ).then()
   }
 
+  searchProduct = (keyword) => {
+    this.setState({ searching: true })
+
+    dispatchFetchRequest(api.product.search(keyword), {
+      method: 'GET',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {}
+    }, response => {
+      response.json().then(data => {
+        this.setState({
+          searchResults: data.results,
+          searching: false
+        })
+      })
+    }).then()
+  }
+
   render() {
     const {
       products = [],
@@ -251,6 +285,43 @@ class ProductRow extends React.Component {
                 textForRoute2={t('newItem.product')}
               />}
           />
+          <View>
+            <SearchBar placeholder={t('searchPrompt')}
+                       onChangeText={this.searchProduct}
+                       onClear={() => {
+                         this.setState({ searchResults: [] })
+                       }}
+                       value={this.state.searchKeyword}
+                       showLoading={this.state.searching}
+                       lightTheme={true}
+                       containerStyle={{ backgroundColor: mainThemeColor }}
+                       inputContainerStyle={{ backgroundColor: '#fff' }}
+            />
+            <FlatList
+              style={{maxHeight: Dimensions.get('window').height / 3}}
+              data={this.state.searchResults}
+              renderItem={({item}) => {
+                return (
+                  <View key={item.id} style={[styles.tableRowContainerWithBorder]}>
+                    <View style={[styles.tableCellView, {flex: 1}]}>
+                      <TouchableOpacity
+                        style={{flex: 1}}
+                        onPress={() => {
+                          this.props.navigation.navigate('ProductEdit', {
+                            productId: item.id,
+                            labelId: item.productLabelId,
+                            isPinned: item.pinned
+                          })
+                        }}
+                      >
+                        <Text style={styles.tableCellText}>{item.name}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )
+              }}
+            />
+          </View>
           <DraggableFlatList
             data={labelsArr}
             renderItem={(item, index, drag, isActive) => this.renderItem(item, index, drag, isActive)}

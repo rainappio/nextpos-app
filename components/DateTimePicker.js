@@ -2,11 +2,11 @@ import React, {Component} from 'react'
 import {Text, View, TouchableOpacity, Modal} from 'react-native'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 import Icon from 'react-native-vector-icons/Ionicons'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
-import {dateToLocaleString} from "../actions";
 import {LocaleContext} from "../locales/LocaleContext";
+import TimeZoneService from "../helpers/TimeZoneService";
 
 export default class RenderDatePicker extends Component {
 	static contextType = LocaleContext
@@ -18,13 +18,13 @@ export default class RenderDatePicker extends Component {
 			meta: { error, toched, vali5d },
 			isShow,
 			showDatepicker,
-			needWeekFilter,
 			readonly,
 			...rest
 		} = this.props
 		const { t, locale } = this.context
 
-		const i18nMoment = moment(value);
+    const timezone = TimeZoneService.getTimeZone()
+		const i18nMoment = moment(value).tz(timezone);
 
 		if (locale === 'zh-Hant-TW') {
 			i18nMoment.locale('zh-tw')
@@ -67,48 +67,31 @@ export default class RenderDatePicker extends Component {
 				</View>
 				<View style={{}}>
 					<View style={[styles.flex_dir_row, styles.jc_alignIem_center]}>
-						{/*{
-    				needWeekFilter &&
-    				<View style={{flex: 1, marginRight: 10, alignItems: 'flex-end'}}>
-    					<Text onPress={() => onChange(moment(value).subtract(1, 'weeks').format('YYYY-MM-DD'))}>
-    			    	<Icon name="ios-arrow-back" size={32} color="#f18d1a"/>
-    			    </Text>
-    			  </View>
-    			}*/}
-
 						<View style={{
-							flex: 1,
-							flexDirection: 'row',
-							alignItems: 'center',
-							borderWidth: 1,
-							borderColor: '#c5c5c5',
-							padding: 20,
-							borderRadius: 4
-						}}>
-							<FontAwesomeIcon
-								name="calendar"
-								size={24}
-								style={[styles.orange_color]}
-							/>
-							<Text onPress={(e) => {
-								if (!readonly) {
-									showDatepicker()
-								}
-							}}
-								style={{ fontSize: 11, color: fontColor, marginLeft: 5 }}
-							>
-								{i18nMoment.format("YYYY-MM-DD HH:mm A")}
-							</Text>
-						</View>
-
-						{/*{
-    				needWeekFilter &&
-        		<View style={{flex: 1, marginLeft: 10}}>
-							<Text onPress={() => onChange(moment(value).add(1, 'weeks').format('YYYY-MM-DD'))}>
-    						<Icon name="ios-arrow-forward" size={32} color="#f18d1a"/>
-    					</Text>
-    				</View>
-    			}*/}
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+              borderWidth: 1,
+              borderColor: '#c5c5c5',
+              paddingVertical: 10,
+              paddingHorizontal: 5,
+              borderRadius: 4
+            }}>
+              <FontAwesomeIcon
+                name="calendar"
+                size={24}
+                style={[styles.orange_color]}
+              />
+              <Text onPress={(e) => {
+                if (!readonly) {
+                  showDatepicker()
+                }
+              }}
+                    style={{fontSize: 11, color: fontColor, marginLeft: 5}}
+              >
+                {i18nMoment.tz(timezone).format("YYYY-MM-DD HH:mm A")}
+              </Text>
+            </View>
 					</View>
 				</View>
 			</View>

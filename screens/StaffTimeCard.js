@@ -5,7 +5,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { getTimeCards } from '../actions'
+import {getTimeCards} from '../actions'
 import { api, dispatchFetchRequest, errorAlert, warningMessage } from '../constants/Backend'
 import images from '../assets/images'
 import styles from '../styles'
@@ -13,6 +13,8 @@ import { LocaleContext } from '../locales/LocaleContext'
 import StaffTimeCardFilterForm from './StaffTimeCardFilterForm'
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
+import moment from "moment";
+import {NavigationEvents} from "react-navigation";
 
 class StaffTimeCard extends React.Component {
   static navigationOptions = {
@@ -20,12 +22,44 @@ class StaffTimeCard extends React.Component {
   }
   static contextType = LocaleContext
 
-  state = {
-  	filteredTimeCard: []
+  constructor(props, context) {
+    super(props, context);
+
+    context.localize({
+      en: {
+        title: 'Staff Time Cards',
+        yearLabel: 'Year',
+        monthLabel: 'Month',
+        firstColTitle: 'Staff',
+        secColTitle: 'Total Shifts',
+        thirdColTitle: 'Total Hours',
+
+        userTimeCardTitle: "User Time Cards",
+        day: "Shift",
+        totalHr: "Total Hours"
+      },
+      zh: {
+        title: '職員打卡表',
+        yearLabel: '年',
+        monthLabel: '月',
+        firstColTitle: '員工',
+        secColTitle: '總班數',
+        thirdColTitle: '總時數',
+
+        userTimeCardTitle: "職員打卡",
+        day: "值班",
+        totalHr: "總時數"
+      }
+    })
+
+    this.state = {
+      selectedYear: String(moment().format('YYYY')),
+      selectedMonth: String(moment().month() + 1)
+    }
   }
 
   componentDidMount() {
-  	this.props.getTimeCards()
+    this.props.getTimeCards(this.state.selectedYear, this.state.selectedMonth)
   }
 
   handleFilter = (values) => {
@@ -37,37 +71,30 @@ class StaffTimeCard extends React.Component {
       return
     }
 
-    dispatchFetchRequest(api.timecard.getByMonthYr(year, month), {
-      method: 'GET',
-      withCredentials: true,
-      credentials: 'include',
-      headers: {}
-    },
-    response => {
-      response.json().then(data => {
-        this.setState({filteredTimeCard: data.userTimeCards})
-      })
-    }).then()
+  	this.setState({ selectedYear: year, selectedMonth: month })
+
+    this.props.getTimeCards(year, month)
   }
 
   render() {
-    const { t } = this.context
-    const { timecards, haveData, haveError, loading } = this.props
-    const { filteredTimeCard } = this.state
+    const {t} = this.context
+    const {timecards, haveData, haveError, loading} = this.props
 
-    Item = ({ timecard, layoutId, index }) => {
+    Item = ({timecard, layoutId, index}) => {
       const displayName = timecard.nickname != null ? timecard.nickname : timecard.id
 
       return (
-      	<TouchableOpacity
+        <TouchableOpacity
           style={styles.tableRowContainerWithBorder}
-					onPress={() => {
-          	this.props.navigation.navigate('UserTimeCards', {
-            	name: timecard.id,
+          onPress={() => {
+            this.props.navigation.navigate('UserTimeCards', {
+              name: timecard.id,
+              year: this.state.selectedYear,
+              month: this.state.selectedMonth,
               displayName: displayName
-          	})
-        	}}
-      		>
+            })
+          }}
+        >
           <View style={[styles.tableCellView, {flex: 5}]}>
             <Text>{displayName}</Text>
           </View>
@@ -77,30 +104,40 @@ class StaffTimeCard extends React.Component {
           </View>
 
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <Text >{timecard.totalHours.toFixed(2)}</Text>
+            <Text>{timecard.totalHours.toFixed(2)}</Text>
           </View>
         </TouchableOpacity>
       )
     }
 
-		if (loading) {
+    if (loading) {
       return (
         <LoadingScreen/>
       )
-    }
+    } else if (haveData) {
+      return (
+        <ScrollView scrollIndicatorInsets={{right: 1}}>
+          <NavigationEvents
+            onWillFocus={() => {
+              console.log("loading staff time cards")
+              console.log(this.state)
 
-    return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
-        <DismissKeyboard>
+              this.props.getTimeCards(this.state.selectedYear, this.state.selectedMonth)
+            }}
+          />
           <View style={styles.fullWidthScreen}>
-          	<ScreenHeader backNavigation={true}
+            <ScreenHeader backNavigation={true}
                           parentFullScreen={true}
                           title={t('title')}
             />
 
-          	<StaffTimeCardFilterForm
-							onSubmit={this.handleFilter}
-          	/>
+            <StaffTimeCardFilterForm
+              onSubmit={this.handleFilter}
+              initialValues={{
+                year: this.state.selectedYear,
+                month: this.state.selectedMonth
+              }}
+            />
 
             <View style={[styles.sectionBar]}>
               <View style={[styles.tableCellView, {flex: 5}]}>
@@ -116,17 +153,19 @@ class StaffTimeCard extends React.Component {
               </View>
             </View>
 
-						<FlatList
-              data={Object.keys(filteredTimeCard).length !== 0 ? filteredTimeCard : timecards}
-              renderItem={({ item, index }) => (
+            <FlatList
+              data={timecards}
+              renderItem={({item, index}) => (
                 <Item timecard={item} layoutId={item.id} index={index}/>
               )}
               keyExtractor={item => item.id}
             />
           </View>
-        </DismissKeyboard>
-      </ScrollView>
-    )
+        </ScrollView>
+      )
+    } else {
+      return null
+    }
   }
 }
 
@@ -139,7 +178,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getTimeCards: () => dispatch(getTimeCards())
+  getTimeCards: (year, month) => dispatch(getTimeCards(year, month))
 })
 
 export default connect(

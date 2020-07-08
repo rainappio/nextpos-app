@@ -60,7 +60,7 @@ class AnnouncementsForm extends React.Component {
           name="title"
           placeholder={t('announcementTitle')}
           validate={isRequired}
-          extraStyle={{ textAlign: 'left' }}
+          alignLeft={true}
         />
 
         <View style={styles.textAreaContainer}>
@@ -70,10 +70,9 @@ class AnnouncementsForm extends React.Component {
             name="markdownContent"
             placeholder={t('markdownContent')}
             validate={isRequired}
-            numberOfLines={10}
             multiline={true}
-            height={160}
-            extraStyle={{ textAlign: 'left' }}
+            height={200}
+            alignLeft={true}
             underlineColorAndroid="transparent"
           />
         </View>
@@ -87,6 +86,7 @@ class AnnouncementsForm extends React.Component {
             <Field
               name="titleIcon"
               component={RenderPureCheckBox}
+              isIconAsTitle={true}
               customValue={icon.value}
               optionName={icon.label}
               validate={isRequired}

@@ -40,8 +40,6 @@ export default class RenderCheckboxGroup extends React.Component {
               </View>
               <View style={[styles.tableCellView, { flex: 1, justifyContent: 'flex-end' }]}>
                 <Checkbox
-                  clear
-                  arr
                   onChange={e => onChange(e.target.checked)}
                   checked={value.length !== 0 && value.includes(ca.id)}
                   style={{ marginRight: 8 }}

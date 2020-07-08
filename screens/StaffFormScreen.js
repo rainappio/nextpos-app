@@ -104,15 +104,16 @@ class StaffFormScreen extends React.Component {
 
     return (
       <DismissKeyboard>
-        <View style={styles.container_nocenterCnt}>
+        <View style={styles.fullWidthScreen}>
           <View>
-            <ScreenHeader title={t('staffTitle')} />
+            <ScreenHeader title={t('staffTitle')}
+                          parentFullScreen={true}/>
 
-            <View style={styles.fieldContainer}>
-              <View style={{ flex: 1 }}>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, styles.flex(1)]}>
                 <Text style={styles.fieldTitle}>{t('nickName')}</Text>
               </View>
-              <View style={{ flex: 3 }}>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
                 <Field
                   name="nickname"
                   component={InputText}
@@ -123,11 +124,11 @@ class StaffFormScreen extends React.Component {
               </View>
             </View>
 
-            <View style={styles.fieldContainer}>
-              <View style={{ flex: 1 }}>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, styles.flex(1)]}>
                 <Text style={styles.fieldTitle}>{t('username')}</Text>
               </View>
-              <View style={{ flex: 3 }}>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
                 <Field
                   name="username"
                   component={InputText}
@@ -140,11 +141,11 @@ class StaffFormScreen extends React.Component {
               </View>
             </View>
 
-            <View style={styles.fieldContainer}>
-              <View style={{ flex: 1 }}>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, styles.flex(1)]}>
                 <Text style={styles.fieldTitle}>{t('password')}</Text>
               </View>
-              <View style={{ flex: 3, alignItems: 'flex-end' }}>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
                 {isEditForm ? (
                   <EditPasswordPopUp name={initialValues.username} />
                 ) : (
@@ -160,11 +161,11 @@ class StaffFormScreen extends React.Component {
               </View>
             </View>
 
-            <View style={styles.fieldContainer}>
-              <View style={{ flex: 2 }}>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, styles.flex(1)]}>
                 <Text style={styles.fieldTitle}>{t('role')}</Text>
               </View>
-              <View style={{ flex: 2 }}>
+              <View style={[styles.flex(2)]}>
                 <Field
                   name="selectedRole"
                   component={SegmentedControl}
@@ -178,17 +179,16 @@ class StaffFormScreen extends React.Component {
               </View>
             </View>
 
-            <View style={styles.fieldContainer}>
-              <View style={{ flex: 2 }}>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, styles.flex(1)]}>
                 <Text style={styles.fieldTitle}>{t('roleId')}</Text>
               </View>
-              <View style={{ flex: 2 }}>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
                 <Field
                   name="userRoleId"
                   component={DropDown}
                   placeholder={{ value: null, label: t('noRole') }}
                   options={roleIdArr}
-                  forFilter={true}
                   search
                   selection
                   fluid
@@ -199,11 +199,11 @@ class StaffFormScreen extends React.Component {
 
           {
             isEditForm &&
-            <View style={styles.fieldContainer}>
-              <View style={{ flex: 1 }}>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, styles.flex(1)]}>
                 <Text style={styles.fieldTitle}>{t('editRole')}</Text>
               </View>
-              <View style={{ flex: 3, alignItems: 'flex-end' }}>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
                 <Icon name="md-create"
                   size={24}
                   color={mainThemeColor}
@@ -213,7 +213,7 @@ class StaffFormScreen extends React.Component {
             </View>
           }
 
-          <View style={[styles.bottom]}>
+          <View style={[styles.bottom, styles.horizontalMargin]}>
             <TouchableOpacity onPress={handleSubmit}>
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
                 {t('action.save')}

@@ -38,7 +38,8 @@ export default StyleSheet.create({
   rootInput: {
     paddingVertical: 10,
     paddingLeft: 10,
-    textAlign: 'right'
+    textAlign: 'right',
+    //flex: 1
   },
   rootError: {
     color: 'red',
@@ -63,12 +64,6 @@ export default StyleSheet.create({
     lineHeight: 32,
     marginBottom: 16,
     marginTop: -8
-  },
-  gsText: {
-    padding: 10,
-    textAlign: 'center',
-    color: '#fff',
-    fontSize: 16
   },
   text: {
     fontWeight: 'bold',
@@ -362,6 +357,7 @@ export default StyleSheet.create({
     fontSize: 18,
     lineHeight: 32,
     marginHorizontal: 10,
+    marginBottom: 10,
     color: mainThemeColor,
     fontWeight: 'bold'
   },
@@ -474,6 +470,9 @@ export default StyleSheet.create({
   verticalPadding: {
     paddingVertical: 20
   },
+  dynamicHorizontalPadding: val => {
+    return { paddingHorizontal: val }
+  },
   dynamicVerticalPadding: val => {
     return { paddingVertical: val }
   },
@@ -501,11 +500,10 @@ export default StyleSheet.create({
   tableCellText: {
     fontWeight: 'bold'
   },
-  optionsContainer: {
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderColor: '#f1f1f1',
-    borderBottomWidth: 1,
+  tableCellWhiteText: {
+    textAlign: 'center',
+    color: '#fff',
+    fontSize: 16
   },
   messageBlock: {
     padding: 10,
@@ -615,11 +613,24 @@ export default StyleSheet.create({
   tblContainer: {
     flex: 1,
     justifyContent: 'center',
+    marginHorizontal: 10
   },
-  tblhead: { height: 40, backgroundColor: mainThemeColor, width: 62 },
-  tbltextHeader: { margin: 4, textAlign: 'center', color: '#fff' },
-  tbltext: { margin: 4, textAlign: 'center' },
-  tblrow: { flexDirection: 'row', backgroundColor: '#f5f5f5' },
+  tblhead: {
+    backgroundColor: '#f75336'
+  },
+  tbltextHeader: {
+    margin: 4,
+    textAlign: 'center',
+    color: '#fff'
+  },
+  tbltext: {
+    padding: 10,
+    textAlign: 'center'
+  },
+  tblrow: {
+    flexDirection: 'row',
+    //backgroundColor: '#f5f5f5'
+  },
   grayPrevBtn: {
     position: 'absolute',
     left: 45,
@@ -665,5 +676,18 @@ export default StyleSheet.create({
     borderRadius: 4,
     borderColor: '#ccc',
     width: '50%'
+  },
+
+  // utility styles
+  justifyRight: {
+    justifyContent: 'flex-end',
+    flex: 1
+  },
+  alignRight: {
+    alignItems: 'flex-end',
+    flex: 1
+  },
+  flex: num => {
+    return { flex: num }
   }
 })

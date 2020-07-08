@@ -60,36 +60,35 @@ class TableLayoutForm extends React.Component {
     Item = ({ table, layoutId }) => {
       return (
         <View
-          style={{
-            width: '100%',
-            paddingTop: 15,
-            paddingBottom: 15
-          }}
+          style={styles.tableRowContainerWithBorder}
         >
-          <Text>{table.tableName}</Text>
-          <AntDesignIcon
-            name="ellipsis1"
-            size={25}
-            color="black"
-            style={{ position: 'absolute', right: 0, top: 15 }}
-            onPress={() => {
-              this.props.navigation.navigate('TableEdit', {
-                tableId: table.tableId,
-                layoutId: layoutId
-              })
-            }}
-          />
+          <View style={styles.tableCellView}>
+            <Text>{table.tableName}</Text>
+          </View>
+          <View style={[styles.tableCellView, styles.justifyRight]}>
+            <AntDesignIcon
+              name="ellipsis1"
+              size={25}
+              color="black"
+              onPress={() => {
+                this.props.navigation.navigate('TableEdit', {
+                  tableId: table.tableId,
+                  layoutId: layoutId
+                })
+              }}
+            />
+          </View>
         </View>
       )
     }
 
     return (
       <View style={styles.contentContainer}>
-        <View style={styles.fieldContainer}>
-          <View style={{ flex: 1 }}>
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, styles.flex(1)]}>
             <Text style={styles.fieldTitle}>{t('layoutName')}</Text>
           </View>
-          <View style={{ flex: 3 }}>
+          <View style={[styles.tableCellView, styles.justifyRight]}>
             <Field
               name="layoutName"
               component={InputText}
@@ -102,31 +101,20 @@ class TableLayoutForm extends React.Component {
 
         {isEdit && (
           <View>
-            <View style={styles.fieldContainer}>
-              <View style={{ flex: 1 }}>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, styles.flex(1)]}>
                 <Text style={styles.fieldTitle}>{t('totalCapacity')}</Text>
               </View>
-              <View style={{ flex: 3 }}>
-                <Text
-                  style={{
-                    borderWidth: 1,
-                    borderColor: '#ddd',
-                    width: 125,
-                    fontSize: 19,
-                    color: '#888',
-                    paddingTop: 10,
-                    paddingBottom: 10,
-                    paddingLeft: 25
-                  }}
-                >
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <Text style={styles.fieldTitle}>
                   {isEdit && initialValues.totalCapacity}
                 </Text>
               </View>
             </View>
 
-            <View style={styles.mgrtotop12}>
-              <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('tables')}</Text>
+            <View style={styles.sectionContainer}>
+              <View style={styles.sectionTitleContainer}>
+                <Text style={styles.sectionTitleText}>{t('tables')}</Text>
               </View>
               <FlatList
                 data={initialValues.tables}
@@ -139,7 +127,7 @@ class TableLayoutForm extends React.Component {
           </View>
         )}
 
-        <View style={[styles.bottom]}>
+        <View style={[styles.bottom, styles.horizontalMargin]}>
           {isEdit ? (
             <View>
               <TouchableOpacity onPress={handleSubmit}>

@@ -11,6 +11,7 @@ import { LocaleContext } from '../locales/LocaleContext'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import {NavigationEvents} from "react-navigation";
 import ScreenHeader from "../components/ScreenHeader";
+import LoadingScreen from "./LoadingScreen";
 
 class TableLayouts extends React.Component {
   static navigationOptions = {
@@ -67,9 +68,7 @@ class TableLayouts extends React.Component {
 
     if (loading) {
       return (
-        <View style={[styles.container]}>
-          <ActivityIndicator size="large" color="#ccc" />
-        </View>
+        <LoadingScreen />
       )
     }
     return (
