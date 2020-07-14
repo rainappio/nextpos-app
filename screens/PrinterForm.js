@@ -18,6 +18,7 @@ import RenderRadioBtn from '../components/RadioItem'
 import {testPrinter} from "../helpers/printerActions";
 import {connect} from "react-redux";
 import {successMessage, warningMessage} from "../constants/Backend";
+import {StyledText} from "../components/StyledText";
 
 class PrinterForm extends React.Component {
   static navigationOptions = {
@@ -71,11 +72,11 @@ class PrinterForm extends React.Component {
     const { t } = this.context
 
     return (
-      <ScrollView contentContainerStyle={styles.contentContainer}>
+      <View style={styles.flex(1)}>
         <View>
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, styles.flex(1)]}>
-              <Text style={styles.fieldTitle}>{t('printerName')}</Text>
+              <StyledText style={styles.fieldTitle}>{t('printerName')}</StyledText>
             </View>
             <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
@@ -90,7 +91,7 @@ class PrinterForm extends React.Component {
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, styles.flex(1)]}>
-              <Text style={styles.fieldTitle}>{t('ipAddress')}</Text>
+              <StyledText style={styles.fieldTitle}>{t('ipAddress')}</StyledText>
             </View>
             <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
@@ -105,7 +106,7 @@ class PrinterForm extends React.Component {
           </View>
 
           <View style={[styles.sectionTitleContainer]}>
-            <Text style={styles.sectionTitleText}>{t('serviceType.title')}</Text>
+            <StyledText style={styles.sectionTitleText}>{t('serviceType.title')}</StyledText>
           </View>
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
@@ -156,7 +157,7 @@ class PrinterForm extends React.Component {
             </TouchableOpacity>
           )}
         </View>
-      </ScrollView>
+      </View>
     )
   }
 }

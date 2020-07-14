@@ -14,6 +14,7 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import {StyledText} from "../components/StyledText";
 
 class WorkingAreaForm extends React.Component {
   static navigationOptions = {
@@ -47,11 +48,11 @@ class WorkingAreaForm extends React.Component {
     const { t } = this.context
 
     return (
-      <ScrollView contentContainerStyle={styles.contentContainer}>
+      <View style={styles.flex(1)}>
         <View>
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, styles.flex(1)]}>
-              <Text style={styles.fieldTitle}>{t('workingAreaName')}</Text>
+              <StyledText style={styles.fieldTitle}>{t('workingAreaName')}</StyledText>
             </View>
             <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
@@ -66,7 +67,7 @@ class WorkingAreaForm extends React.Component {
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, styles.flex(1)]}>
-              <Text style={styles.fieldTitle}>{t('noOfPrintCopies')}</Text>
+              <StyledText style={styles.fieldTitle}>{t('noOfPrintCopies')}</StyledText>
             </View>
             <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
@@ -86,7 +87,7 @@ class WorkingAreaForm extends React.Component {
           </View>
 
           <View style={[styles.sectionTitleContainer]}>
-            <Text style={styles.sectionTitleText}>{t('linkedPrinters')}</Text>
+            <StyledText style={styles.sectionTitleText}>{t('linkedPrinters')}</StyledText>
           </View>
 
           <Field
@@ -124,7 +125,7 @@ class WorkingAreaForm extends React.Component {
             </TouchableOpacity>
           )}
         </View>
-      </ScrollView>
+      </View>
     )
   }
 }

@@ -3,7 +3,9 @@ import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
-import {formatDate, formatDateObj} from "../actions";
+import {formatCurrency, formatDate, formatDateObj} from "../actions";
+import {ThemeScrollView} from "../components/ThemeScrollView";
+import {StyledText} from "../components/StyledText";
 
 class ShiftDetails extends React.Component {
   static navigationOptions = {
@@ -64,14 +66,14 @@ class ShiftDetails extends React.Component {
     const cardServiceCharge = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.serviceCharge : 0
 
     return (
-      <ScrollView scrollIndicatorInsets={{right: 1}}>
+      <ThemeScrollView>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader parentFullScreen={true}
                         title={t('shiftDetailsTitle')}/>
 
           <View>
             <View style={{ alignItems: 'center'}}>
-              <Text>{formatDate(shift.open.timestamp)} - {formatDate(shift.close.timestamp)}</Text>
+              <StyledText>{formatDate(shift.open.timestamp)} - {formatDate(shift.close.timestamp)}</StyledText>
             </View>
             {/* Post-Closing Entries */}
             <View style={styles.sectionBar}>
@@ -84,36 +86,36 @@ class ShiftDetails extends React.Component {
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={{flex: 3}}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.totalCashIncome')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>${cashTotal}</Text>
+                <StyledText>{formatCurrency(cashTotal)}</StyledText>
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={{flex: 3}}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.totalCreditCardIncome')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>${cardTotal}</Text>
+                <StyledText>{formatCurrency(cardTotal)}</StyledText>
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={{flex: 3}}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.totalClosingAmount')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>
-                  ${cashTotal + cardTotal}
-                </Text>
+                <StyledText>
+                  {formatCurrency(cashTotal + cardTotal)}
+                </StyledText>
               </View>
             </View>
             {/* #Post-Closing Entries */}
@@ -129,57 +131,57 @@ class ShiftDetails extends React.Component {
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 2}]}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.startingCash')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>${shift.open.balance}</Text>
+                <StyledText>{formatCurrency(shift.open.balance)}</StyledText>
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 2}]}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.totalCashTransitionAmt')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>${cashTotal}</Text>
+                <StyledText>{formatCurrency(cashTotal)}</StyledText>
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 2}]}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.totalCashInRegister')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>${actualCashAmount}</Text>
+                <StyledText>{formatCurrency(actualCashAmount)}</StyledText>
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 2}]}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.difference')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>${cashDifference}
-                </Text>
+                <StyledText>{formatCurrency(cashDifference)}
+                </StyledText>
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 2}]}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.remark')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>{cashUnbalanceReason}</Text>
+                <StyledText>{cashUnbalanceReason}</StyledText>
               </View>
             </View>
             {/* #Cash */}
@@ -197,47 +199,45 @@ class ShiftDetails extends React.Component {
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 2}]}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.totalCardTransitionAmt')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>${cardTotal}</Text>
+                <StyledText>{formatCurrency(cardTotal)}</StyledText>
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 2}]}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.totalCardInRegister')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>${actualCardAmount}
-                </Text>
+                <StyledText>{formatCurrency(actualCardAmount)}</StyledText>
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 2}]}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.difference')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>${cardDifference}
-                </Text>
+                <StyledText>{formatCurrency(cardDifference)}</StyledText>
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 2}]}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.remark')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>{cardUnbalanceReason}</Text>
+                <StyledText>{cardUnbalanceReason}</StyledText>
               </View>
             </View>
             {/* #Credit Card */}
@@ -253,46 +253,44 @@ class ShiftDetails extends React.Component {
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 2}]}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.totalInvoices')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>{closingShiftReport.totalOrderCount}</Text>
+                <StyledText>{closingShiftReport.totalOrderCount}</StyledText>
               </View>
             </View>
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 2}]}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.deletedOrders')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>
+                <StyledText>
                   {closingShiftReport.orderCountByState.hasOwnProperty('DELETED') ? closingShiftReport.orderCountByState.DELETED.orderCount : 0}
-                </Text>
+                </StyledText>
               </View>
             </View>
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 3}]}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.totalDiscounts')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>${cashDiscount + cardDiscount}
-                </Text>
+                <StyledText>{formatCurrency(cashDiscount + cardDiscount)}</StyledText>
               </View>
             </View>
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 3}]}>
-                <Text style={[styles.fieldTitle]}>
+                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.totalServiceCharge')}
-                </Text>
+                </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text>${cashServiceCharge + cardServiceCharge}
-                </Text>
+                <StyledText>{formatCurrency(cashServiceCharge + cardServiceCharge)}</StyledText>
               </View>
             </View>
             {/* #Invoice */}
@@ -300,10 +298,10 @@ class ShiftDetails extends React.Component {
             {/* Others */}
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 2}]}>
-                <Text style={styles.fieldTitle}>{t('shift.closingRemark')}</Text>
+                <StyledText style={styles.fieldTitle}>{t('shift.closingRemark')}</StyledText>
               </View>
               <View style={{flex: 1}}>
-                <Text>{shift.close.closingRemark}</Text>
+                <StyledText>{shift.close.closingRemark}</StyledText>
               </View>
             </View>
           </View>
@@ -320,7 +318,7 @@ class ShiftDetails extends React.Component {
           </View>
 
         </View>
-      </ScrollView>
+      </ThemeScrollView>
     )
   }
 }

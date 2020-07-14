@@ -3,6 +3,8 @@ import { View, Switch, Text } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import { LocaleContext } from '../locales/LocaleContext'
 import styles from '../styles'
+import {StyledText} from "./StyledText";
+import {withContext} from "../helpers/contextHelper";
 
 class RNSwitchGroup extends Component {
   static contextType = LocaleContext
@@ -11,16 +13,13 @@ class RNSwitchGroup extends Component {
     super(props, context)
   }
 
-  componentDidMount() {
-
-  }
-
   render() {
     const {
       input: { onChange, value, ...otherInput },
       customarr,
       meta,
       labels,
+      themeStyle,
       ...rest
     } = this.props
     const { t } = this.context
@@ -41,11 +40,11 @@ class RNSwitchGroup extends Component {
         <ListItem
           key={ix}
           title={
-            <View style={[styles.tableRowContainer, styles.nopaddingLeft]}>
+            <View style={[styles.tableRowContainer]}>
               <View style={[styles.tableCellView, { flex: 1 }]}>
-                {<Text>{t(labels[ca])}</Text>}
+                <StyledText>{t(labels[ca])}</StyledText>
               </View>
-              <View style={[styles.tableCellView, { justifyContent: 'flex-end' }]}>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
                 <Switch
                   onValueChange={onChange}
                   value={value.includes(ca)}
@@ -55,7 +54,7 @@ class RNSwitchGroup extends Component {
               </View>
             </View>}
           bottomDivider
-          containerStyle={[styles.dynamicVerticalPadding(12), { padding: 0 }]}
+          containerStyle={[styles.dynamicVerticalPadding(12), { padding: 0, backgroundColor: themeStyle.backgroundColor }]}
         />
       )
     })
@@ -67,4 +66,4 @@ class RNSwitchGroup extends Component {
   }
 }
 
-export default RNSwitchGroup
+export default withContext(RNSwitchGroup)

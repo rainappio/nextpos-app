@@ -12,6 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons'
 import NumericInput from 'react-native-numeric-input'
 import styles from '../styles'
+import {withContext} from "../helpers/contextHelper";
 
 const InputNumber = ({
   input: {
@@ -23,6 +24,7 @@ const InputNumber = ({
   },
   customVal,
   meta: { error, touched, valid },
+  themeStyle,
   ...rest
 }) => (
   <View>
@@ -33,10 +35,12 @@ const InputNumber = ({
       value={parseInt(value)}
       initValue={customVal}
       minValue={minValue}
-      upDownButtonsBackgroundColor={'#f1f1f1'}
+      inputStyle={{
+        color: themeStyle.color
+      }}
       {...rest}
     />
     {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
   </View>
 )
-export default InputNumber
+export default withContext(InputNumber)

@@ -15,6 +15,7 @@ import { getWorkingAreas, getPrinters } from '../actions'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
+import {ThemeContainer} from "../components/ThemeContainer";
 
 class WorkingAreaAdd extends React.Component {
   static navigationOptions = {
@@ -46,7 +47,7 @@ class WorkingAreaAdd extends React.Component {
     const { t } = this.context
 
     return (
-      <DismissKeyboard>
+      <ThemeContainer>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader title={t('addWorkingAreaTitle')}
                         parentFullScreen={true}/>
@@ -56,7 +57,7 @@ class WorkingAreaAdd extends React.Component {
             navigation={navigation}
           />
         </View>
-      </DismissKeyboard>
+      </ThemeContainer>
     )
   }
 }

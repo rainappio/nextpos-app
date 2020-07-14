@@ -1,14 +1,16 @@
 import React from 'react'
-import { ScrollView, Text, View, TouchableOpacity, Image } from 'react-native'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {ScrollView, Text, View, TouchableOpacity, Image} from 'react-native'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import BackBtnCustom from '../components/BackBtnCustom'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import Icon from 'react-native-vector-icons/Ionicons'
 import images from '../assets/images'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import MenuButton from "../components/MenuButton";
+import {withContext} from "../helpers/contextHelper";
+import {ThemeScrollView} from "../components/ThemeScrollView";
 
 class ReportsScreen extends React.Component {
   static navigationOptions = {
@@ -38,83 +40,70 @@ class ReportsScreen extends React.Component {
   }
 
   render() {
-    const { t } = this.context
+    const {themeStyle} = this.props
+    const {t} = this.context
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
-        <DismissKeyboard>
-          <View style={styles.container}>
-            <ScreenHeader backNavigation={false}
-                          title={t('menu.reporting')}
-            />
+      <ThemeScrollView>
+        <View style={styles.fullWidthScreen}>
+          <ScreenHeader backNavigation={false}
+                        parentFullScreen={true}
+                        title={t('menu.reporting')}
+          />
 
-            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-              <TouchableOpacity
-                style={styles.mainSquareButton}
+          <View style={[styles.flex(1)]}>
+            <View style={[styles.menuContainer]}>
+              <MenuButton
                 onPress={() => this.props.navigation.navigate('SalesCharts')}
-              >
-                <View>
+                title={t('salesReport')}
+                icon={
                   <FontAwesomeIcon
                     name="bar-chart"
                     size={40}
-                    style={[styles.centerText, styles.margin_15, styles.orange_color]}
+                    style={[styles.buttonIconStyle]}
                   />
-                  <Text
-                    style={styles.centerText}
-                  >
-                    {t('salesReport')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.mainSquareButton}
+                }/>
+              <View style={styles.dynamicHorizontalPadding(6)}/>
+              <MenuButton
                 onPress={() => this.props.navigation.navigate('StaffTimeCard')}
-              >
-                <View style={styles.jc_alignIem_center}>
+                title={t('staffTimeCardReport')}
+                icon={
                   <Icon
                     name="md-time"
                     size={40}
-                    style={[styles.centerText, styles.margin_15, styles.orange_color]}
+                    style={[styles.buttonIconStyle]}
                   />
-                  <Text style={[styles.centerText]}>
-                    {t('staffTimeCardReport')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                }/>
             </View>
 
-            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-              <View style={{flex: 1}}>
-                <MenuButton
-                  onPress={() => this.props.navigation.navigate('CustomerStats')}
-                  title={t('customerStatsReport')}
-                  icon={
-                    <Icon
-                      name="md-trending-up"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }/>
-              </View>
-              <View style={{flex: 1}}>
-                <MenuButton
-                  onPress={() => this.props.navigation.navigate('ShiftHistory')}
-                  title={t('shiftHistory')}
-                  icon={
-                    <Icon
-                      name="md-today"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }/>
-              </View>
+            <View style={[styles.menuContainer]}>
+              <MenuButton
+                onPress={() => this.props.navigation.navigate('CustomerStats')}
+                title={t('customerStatsReport')}
+                icon={
+                  <Icon
+                    name="md-trending-up"
+                    size={40}
+                    style={[styles.buttonIconStyle]}
+                  />
+                }/>
+              <View style={styles.dynamicHorizontalPadding(6)}/>
+              <MenuButton
+                onPress={() => this.props.navigation.navigate('ShiftHistory')}
+                title={t('shiftHistory')}
+                icon={
+                  <Icon
+                    name="md-today"
+                    size={40}
+                    style={[styles.buttonIconStyle]}
+                  />
+                }/>
             </View>
           </View>
-        </DismissKeyboard>
-      </ScrollView>
+        </View>
+      </ThemeScrollView>
     )
   }
 }
 
-export default ReportsScreen
+export default withContext(ReportsScreen)

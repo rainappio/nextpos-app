@@ -11,6 +11,10 @@ import LoadingScreen from "./LoadingScreen";
 import {renderShiftStatus} from "../helpers/shiftActions";
 import MonthPicker from "../components/MonthPicker";
 import moment from "moment";
+import {ThemeScrollView} from "../components/ThemeScrollView";
+import {StyledText} from "../components/StyledText";
+import {withContext} from "../helpers/contextHelper";
+import {compose} from "redux";
 
 
 class ShiftHistory extends React.Component {
@@ -74,13 +78,13 @@ class ShiftHistory extends React.Component {
         title={
           <View style={[styles.tableRowContainer]}>
             <View style={[styles.tableCellView, {flex: 3}]}>
-              <Text>{formatDate(item.open.timestamp)}</Text>
+              <StyledText>{formatDate(item.open.timestamp)}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text>{item.shiftStatus !== 'ACTIVE' ? `$${shiftTotal}` : '-'}</Text>
+              <StyledText>{item.shiftStatus !== 'ACTIVE' ? `$${shiftTotal}` : '-'}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-              <Text>{renderShiftStatus(item.shiftStatus)}</Text>
+              <StyledText>{renderShiftStatus(item.shiftStatus)}</StyledText>
             </View>
           </View>
         }
@@ -90,7 +94,7 @@ class ShiftHistory extends React.Component {
           })
         }
         bottomDivider
-        containerStyle={[styles.dynamicVerticalPadding(12), {padding: 0}]}
+        containerStyle={[styles.dynamicVerticalPadding(12), {padding: 0, backgroundColor: this.props.themeStyle.backgroundColor}]}
       />
     )
   }
@@ -105,59 +109,59 @@ class ShiftHistory extends React.Component {
       )
     } else if (haveData) {
       return (
-        <View style={[styles.fullWidthScreen]}>
-          <NavigationEvents
-            onWillFocus={() => {
-              const dateToUse = this.state.currentDate.format('YYYY-MM-DD')
+        <ThemeScrollView>
+          <View style={[styles.fullWidthScreen]}>
+            <NavigationEvents
+              onWillFocus={() => {
+                const dateToUse = this.state.currentDate.format('YYYY-MM-DD')
 
-              this.props.getShifts(dateToUse)
-            }}
-          />
-          <ScreenHeader backNavigation={true}
-                        parentFullScreen={true}
-                        title={t('shiftHistoryTitle')}
-          />
+                this.props.getShifts(dateToUse)
+              }}
+            />
+            <ScreenHeader backNavigation={true}
+                          parentFullScreen={true}
+                          title={t('shiftHistoryTitle')}
+            />
 
-          <MonthPicker
-            currentDate={this.state.currentDate}
-            selectedFilter={this.state.selectedFilter}
-            handleMonthChange={(date, selectedFilter) => {
-              this.setState({currentDate: date, selectedFilter: selectedFilter})
+            <MonthPicker
+              currentDate={this.state.currentDate}
+              selectedFilter={this.state.selectedFilter}
+              handleMonthChange={(date, selectedFilter) => {
+                this.setState({currentDate: date, selectedFilter: selectedFilter})
 
-              this.props.getShifts(date.format('YYYY-MM-DD'))
-          }}/>
+                this.props.getShifts(date.format('YYYY-MM-DD'))
+              }}/>
 
-          <View style={{flex: 5}}>
-            <View style={[styles.sectionBar]}>
-              <View style={{flex: 3}}>
-                <Text style={styles.sectionBarTextSmall}>{t('shiftStartDate')}</Text>
+            <View style={{flex: 5}}>
+              <View style={[styles.sectionBar]}>
+                <View style={{flex: 3}}>
+                  <Text style={styles.sectionBarTextSmall}>{t('shiftStartDate')}</Text>
+                </View>
+
+                <View style={{flex: 1}}>
+                  <Text style={[styles.sectionBarTextSmall]}>{t('shiftTotal')}</Text>
+                </View>
+
+                <View style={{flex: 2, alignItems: 'flex-end'}}>
+                  <Text style={[styles.sectionBarTextSmall]}>{t('shiftStatus')}</Text>
+                </View>
               </View>
 
-              <View style={{flex: 1}}>
-                <Text style={[styles.sectionBarTextSmall]}>{t('shiftTotal')}</Text>
-              </View>
 
-              <View style={{flex: 2, alignItems: 'flex-end'}}>
-                <Text style={[styles.sectionBarTextSmall]}>{t('shiftStatus')}</Text>
-              </View>
-            </View>
-
-            {shifts.length === 0 && (
-              <View>
-                <Text style={styles.messageBlock}>{t('order.noOrder')}</Text>
-              </View>
-            )}
-
-            {shifts.length > 0 &&(
               <FlatList
                 keyExtractor={this.keyExtractor}
                 data={shifts}
                 renderItem={this.renderItem}
+                ListEmptyComponent={
+                  <View>
+                    <StyledText style={styles.messageBlock}>{t('order.noOrder')}</StyledText>
+                  </View>
+                }
                 //onScroll={this.handleScroll}
               />
-            )}
+            </View>
           </View>
-        </View>
+        </ThemeScrollView>
       )
     } else {
       return null
@@ -176,7 +180,9 @@ const mapDispatchToProps = (dispatch, props) => ({
   getShifts: (date) => dispatch(getShifts(date))
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ShiftHistory)
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withContext
+)
+
+export default enhance(ShiftHistory)

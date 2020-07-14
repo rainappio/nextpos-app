@@ -11,6 +11,7 @@ import OfferForm from "./OfferForm";
 import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 import moment from "moment";
+import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 
 class EditOffer extends Component {
   static navigationOptions = {
@@ -171,8 +172,7 @@ class EditOffer extends Component {
 
     } else if (haveData) {
       return (
-        <KeyboardAwareScrollView>
-          <DismissKeyboard>
+        <ThemeKeyboardAwareScrollView>
             <View style={styles.fullWidthScreen}>
               <ScreenHeader
                 title={t("editOfferTitle")}
@@ -192,8 +192,7 @@ class EditOffer extends Component {
                 onChange={this.handleonChange}
               />
             </View>
-          </DismissKeyboard>
-        </KeyboardAwareScrollView>
+        </ThemeKeyboardAwareScrollView>
       );
     } else {
       return null;

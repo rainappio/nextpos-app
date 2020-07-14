@@ -15,7 +15,7 @@ export const renderOrderState = state => {
         <Icon
           name={'md-list'}
           size={25}
-          style={styles.stateIconStyle}/>
+          style={styles.iconStyle}/>
         )
     case 'IN_PROCESS':
       return <Image
@@ -26,7 +26,7 @@ export const renderOrderState = state => {
       return <MCIcon
         name={'silverware-fork-knife'}
         size={23}
-        style={styles.stateIconStyle}
+        style={styles.iconStyle}
       />
     case 'SETTLED':
       return <Image
@@ -37,13 +37,13 @@ export const renderOrderState = state => {
       return <Icon
         name={'md-checkmark-circle-outline'}
         size={25}
-        style={styles.stateIconStyle}
+        style={styles.iconStyle}
       />
     case 'DELETED':
       return <MCIcon
         name={'delete'}
         size={25}
-        style={styles.stateIconStyle}
+        style={styles.iconStyle}
       />
   }
 }

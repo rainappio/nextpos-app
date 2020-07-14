@@ -31,7 +31,6 @@ export default class PinCodeInput extends Component {
         <View style={[styles.jc_alignIem_center]}>
           <SmoothPinCodeInput
             placeholder=""
-            autoFocus={true}
             cellStyle={{
               borderWidth: 1,
               borderRadius: 2,

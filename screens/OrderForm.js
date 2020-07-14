@@ -10,6 +10,9 @@ import {LocaleContext} from '../locales/LocaleContext'
 import PickerInput from "../components/PickerInput";
 import SegmentedControl from "../components/SegmentedControl";
 import ScreenHeader from "../components/ScreenHeader";
+import {ThemeContainer} from "../components/ThemeContainer";
+import {StyledText} from "../components/StyledText";
+import {ThemeScrollView} from "../components/ThemeScrollView";
 
 class OrderForm extends Component {
   static contextType = LocaleContext
@@ -150,163 +153,162 @@ class OrderForm extends Component {
     ]
 
     return (
-      <ScrollView scrollIndicatorInsets={{right: 1}}>
-        <DismissKeyboard>
-          <View style={styles.container}>
-            <ScreenHeader backNavigation={true}
-                          title={t('newOrderTitle')}
-            />
+      <ThemeScrollView>
+        <View style={styles.fullWidthScreen}>
+          <ScreenHeader backNavigation={true}
+                        parentFullScreen={true}
+                        title={t('newOrderTitle')}
+          />
 
-            <View style={styles.sectionContent}>
-              <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('orderType')}</Text>
-              </View>
-              <View style={[styles.fieldContainer]}>
-                <View style={{flex: 1}}>
-                  <Field
-                    name="orderType"
-                    component={SegmentedControl}
-                    selectedIndex={this.state.selectedOrderType}
-                    onChange={this.handleOrderTypeSelection}
-                    values={orderTypes}
-                    normalize={value => {
-                      return this.state.orderTypes[value].value
-                    }}
-                  />
-                </View>
-              </View>
+          <View style={[styles.sectionContent, styles.horizontalMargin]}>
+            <View style={styles.sectionTitleContainer}>
+              <StyledText style={styles.sectionTitleText}>{t('orderType')}</StyledText>
             </View>
-
-            {this.state.selectedOrderType === 0 && Object.keys(tablesMap).length > 0 && (
-              <View style={styles.sectionContent}>
-                <View style={styles.fieldContainer}>
-                  <Text style={styles.fieldTitle}>{t('table')}</Text>
-                </View>
+            <View style={[styles.fieldContainer]}>
+              <View style={{flex: 1}}>
                 <Field
-                  component={PickerInput}
-                  name="tableId"
-                  values={tablesMap}
-                  selectedValue={this.state.selectedTableId}
-                  validate={isRequired}
-                  onChange={(itemValue, itemIndex) => {
-                    this.setState({selectedTableId: itemValue})
+                  name="orderType"
+                  component={SegmentedControl}
+                  selectedIndex={this.state.selectedOrderType}
+                  onChange={this.handleOrderTypeSelection}
+                  values={orderTypes}
+                  normalize={value => {
+                    return this.state.orderTypes[value].value
                   }}
                 />
               </View>
-            )}
-
-            {noAvailableTables && (
-              <View style={styles.sectionContent}>
-                <Text>{t('noAvailableTables')}</Text>
-              </View>
-            )}
-
-
-            <View style={styles.sectionContent}>
-              <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('ageGroup')}</Text>
-              </View>
-              <View style={[styles.fieldContainer, styles.flex_dir_row]}>
-                <View style={{flex: 1}}>
-                  <Field
-                    name="ageGroup"
-                    component={SegmentedControl}
-                    selectedIndex={this.state.selectedAgeGroup}
-                    onChange={this.handleAgeGroupSelection}
-                    values={ageGroups}
-                    normalize={value => {
-                      return this.state.ageGroups[value].value
-                    }}
-                  />
-                </View>
-              </View>
             </View>
-
-            <View style={styles.sectionContent}>
-              <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('visitFrequency')}</Text>
-              </View>
-              <View style={[styles.fieldContainer]}>
-                <View style={{flex: 1}}>
-                  <Field
-                    name="visitFrequency"
-                    component={SegmentedControl}
-                    selectedIndex={this.state.selectedVisitFrequency}
-                    onChange={this.handleVisitFrequencySelection}
-                    values={visitFrequencies}
-                    normalize={value => {
-                      return this.state.visitFrequencies[value].value
-                    }}
-                  />
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.sectionContent}>
-              <View style={styles.fieldContainer}>
-                <Text style={styles.fieldTitle}>{t('peopleCount')}</Text>
-              </View>
-              <View>
-                {people.map((people, ix) => (
-                  <View
-                    style={[styles.borderBottomLine, styles.paddingTopBtn8]}
-                    key={ix}
-                  >
-                    <Field
-                      name={people.value}
-                      component={RenderStepper}
-                      optionName={people.label}
-                    />
-                  </View>
-                ))}
-              </View>
-            </View>
-
-            {this.state.selectedOrderType != null && (
-              <View
-                style={[
-                  styles.jc_alignIem_center,
-                  styles.flex_dir_row,
-                  styles.mgrtotop20
-                ]}
-              >
-                <View style={{flex: 1, marginHorizontal: 5}}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (!noAvailableTables) {
-                        this.props.handleSubmit()
-                      } else {
-                        Alert.alert(
-                          '',
-                          `${t('noAvailableTables')}`,
-                          [
-                            {
-                              text: `${t('action.ok')}`,
-                            }
-                          ])
-                      }
-                    }}
-                  >
-                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                      {t('openOrder')}
-                    </Text>
-                  </TouchableOpacity>
-                </ View>
-
-                <View style={{flex: 1, marginHorizontal: 5}}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.goBack()
-                    }}
-                  >
-                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
           </View>
-        </DismissKeyboard>
-      </ScrollView>
+
+          {this.state.selectedOrderType === 0 && Object.keys(tablesMap).length > 0 && (
+            <View style={styles.sectionContent}>
+              <View style={styles.sectionTitleContainer}>
+                <StyledText style={styles.sectionTitleText}>{t('table')}</StyledText>
+              </View>
+              <Field
+                component={PickerInput}
+                name="tableId"
+                values={tablesMap}
+                selectedValue={this.state.selectedTableId}
+                validate={isRequired}
+                onChange={(itemValue, itemIndex) => {
+                  this.setState({selectedTableId: itemValue})
+                }}
+              />
+            </View>
+          )}
+
+          {noAvailableTables && (
+            <View style={styles.sectionContent}>
+              <StyledText>{t('noAvailableTables')}</StyledText>
+            </View>
+          )}
+
+
+          <View style={[styles.sectionContent, styles.horizontalMargin]}>
+            <View style={styles.sectionTitleContainer}>
+              <StyledText style={styles.sectionTitleText}>{t('ageGroup')}</StyledText>
+            </View>
+            <View style={[styles.fieldContainer]}>
+              <View style={{flex: 1}}>
+                <Field
+                  name="ageGroup"
+                  component={SegmentedControl}
+                  selectedIndex={this.state.selectedAgeGroup}
+                  onChange={this.handleAgeGroupSelection}
+                  values={ageGroups}
+                  normalize={value => {
+                    return this.state.ageGroups[value].value
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+
+          <View style={[styles.sectionContent, styles.horizontalMargin]}>
+            <View style={styles.sectionTitleContainer}>
+              <StyledText style={styles.sectionTitleText}>{t('visitFrequency')}</StyledText>
+            </View>
+            <View style={[styles.fieldContainer]}>
+              <View style={{flex: 1}}>
+                <Field
+                  name="visitFrequency"
+                  component={SegmentedControl}
+                  selectedIndex={this.state.selectedVisitFrequency}
+                  onChange={this.handleVisitFrequencySelection}
+                  values={visitFrequencies}
+                  normalize={value => {
+                    return this.state.visitFrequencies[value].value
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.sectionContent}>
+            <View style={styles.sectionTitleContainer}>
+              <StyledText style={styles.sectionTitleText}>{t('peopleCount')}</StyledText>
+            </View>
+            <View>
+              {people.map((people, ix) => (
+                <View
+                  style={[styles.tableRowContainerWithBorder]}
+                  key={ix}
+                >
+                  <Field
+                    name={people.value}
+                    component={RenderStepper}
+                    optionName={people.label}
+                  />
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {this.state.selectedOrderType != null && (
+            <View
+              style={[
+                styles.bottom,
+                styles.flexRow,
+                styles.horizontalMargin
+              ]}
+            >
+              <View style={{flex: 1, marginHorizontal: 5}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (!noAvailableTables) {
+                      this.props.handleSubmit()
+                    } else {
+                      Alert.alert(
+                        '',
+                        `${t('noAvailableTables')}`,
+                        [
+                          {
+                            text: `${t('action.ok')}`,
+                          }
+                        ])
+                    }
+                  }}
+                >
+                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                    {t('openOrder')}
+                  </Text>
+                </TouchableOpacity>
+              </ View>
+
+              <View style={{flex: 1, marginHorizontal: 5}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.goBack()
+                  }}
+                >
+                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </View>
+      </ThemeScrollView>
     )
   }
 }

@@ -1,17 +1,19 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import {Field, reduxForm} from 'redux-form'
 import {KeyboardAvoidingView, ScrollView, Text, TouchableOpacity, View} from 'react-native'
 import {fieldValidate, isPercentage, isRequired} from '../validators'
 import InputText from '../components/InputText'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
 import RNSwitch from '../components/RNSwitch'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import SegmentedControl from "../components/SegmentedControl";
 import ScreenHeader from "../components/ScreenHeader";
 import moment from "moment-timezone";
 import DropDown from "../components/DropDown";
+import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
+import {StyledText} from "../components/StyledText";
 
 class StoreFormScreen extends React.Component {
   static navigationOptions = {
@@ -91,219 +93,217 @@ class StoreFormScreen extends React.Component {
 
   handleTableDisplaySelection = (index) => {
     const selectedIndex = this.selectedTableDisplayType === index ? null : index
-    this.setState({ selectedTableDisplayType: selectedIndex })
+    this.setState({selectedTableDisplayType: selectedIndex})
   }
 
   render() {
-    const { t } = this.context
-    const { handleSubmit } = this.props
+    const {t} = this.context
+    const {handleSubmit} = this.props
 
     const tableDisplayTypes = Object.keys(this.state.tableDisplayTypes).map(key => this.state.tableDisplayTypes[key].label)
 
     const timezones = moment.tz.names().filter(tz => {
       return tz.includes('Asia/Taipei') || tz.includes('Australia/Brisbane')
     }).map(tz => {
-      return { label: tz, value: tz }
+      return {label: tz, value: tz}
     })
 
     return (
-      <KeyboardAvoidingView style={styles.mainContainer} behavior="padding" enabled>
+      <ThemeKeyboardAwareScrollView>
         <ScrollView scrollIndicatorInsets={{right: 1}}>
-          <DismissKeyboard>
-            <View style={styles.container}>
-              <View>
-                <ScreenHeader title={t('settings.stores')}/>
+          <View style={styles.container}>
+            <View>
+              <ScreenHeader title={t('settings.stores')}/>
 
-                <View style={styles.fieldContainer}>
-                  <View style={[styles.tableCellView, {flex: 2}]}>
-                    <Text style={styles.fieldTitle}>{t('clientStatus')}</Text>
-                  </View>
-                  <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                    <Field
-                      name="status"
-                      component={InputText}
-                      placeholder="User Email Address"
-                      editable={false}
-                    />
-                  </View>
+              <View style={styles.fieldContainer}>
+                <View style={[styles.tableCellView, {flex: 2}]}>
+                  <StyledText style={styles.fieldTitle}>{t('clientStatus')}</StyledText>
                 </View>
-
-                <View style={styles.fieldContainer}>
-                  <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('clientEmail')}</Text>
-                  </View>
-                  <View style={{flex: 3}}>
-                    <Field
-                      name="username"
-                      component={InputText}
-                      placeholder="User Email Address"
-                      editable={false}
-                    />
-                  </View>
-                </View>
-
-                <View style={styles.fieldContainer}>
-                  <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('clientName')}</Text>
-                  </View>
-                  <View style={{flex: 3}}>
-                    <Field
-                      name="clientName"
-                      component={InputText}
-                      validate={isRequired}
-                      placeholder={t('clientName')}
-                    />
-                  </View>
-                </View>
-
-                <View style={styles.fieldContainer}>
-                  <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('address')}</Text>
-                  </View>
-                  <View style={{flex: 3}}>
-                    <Field
-                      name="attributes.ADDRESS"
-                      component={InputText}
-                      placeholder={t('address')}
-                    />
-                  </View>
-                </View>
-
-                <View style={styles.fieldContainer}>
-                  <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('ubn')}</Text>
-                  </View>
-                  <View style={{flex: 3}}>
-                    <Field
-                      name="attributes.UBN"
-                      component={InputText}
-                      placeholder={t('ubn')}
-                    />
-                  </View>
-                </View>
-
-                <View style={styles.sectionTitleContainer}>
-                  <Text style={styles.sectionTitleText}>
-                    {t('inEffectRule')}
-                  </Text>
-                </View>
-                <View style={[styles.fieldContainer]}>
-                  <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('serviceCharge')}</Text>
-                  </View>
-                  <View style={{flex: 3}}>
-                    <Field
-                      name="clientSettings.SERVICE_CHARGE.value"
-                      component={InputText}
-                      placeholder={t('serviceCharge')}
-                      keyboardType="numeric"
-                      validate={isPercentage}
-                      format={(value, name) => {
-                        return value !== undefined && value !== null ? String(value * 100) : ''
-                      }}
-                      normalize={(value) => {
-                        return value / 100
-                      }}
-                    />
-                  </View>
-                  <View style={{flex: 1, flexDirection: 'row-reverse'}}>
-                    <Field
-                      name="clientSettings.SERVICE_CHARGE.enabled"
-                      component={RNSwitch}
-                    />
-                  </View>
-                </View>
-
-                <View
-                  style={[
-                    {justifyContent: 'space-between'},
-                    styles.fieldContainer
-                  ]}
-                >
-                  <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('taxInclusive')}</Text>
-                  </View>
-                  <View style={{flex: 3, flexDirection: 'row-reverse'}}>
-                    <Field
-                      name="clientSettings.TAX_INCLUSIVE.enabled"
-                      component={RNSwitch}
-                    />
-                  </View>
+                <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                  <Field
+                    name="status"
+                    component={InputText}
+                    placeholder="User Email Address"
+                    editable={false}
+                  />
                 </View>
               </View>
 
               <View style={styles.fieldContainer}>
                 <View style={{flex: 2}}>
-                  <Text style={styles.fieldTitle}>{t('tableAvailabilityDisplayTitle')}</Text>
+                  <StyledText style={styles.fieldTitle}>{t('clientEmail')}</StyledText>
                 </View>
                 <View style={{flex: 3}}>
                   <Field
-                    name="attributes.TABLE_AVAILABILITY_DISPLAY"
-                    component={SegmentedControl}
-                    selectedIndex={this.state.selectedTableDisplayType}
-                    onChange={this.handleTableDisplaySelection}
-                    values={tableDisplayTypes}
-                    normalize={value => {
-                      return this.state.tableDisplayTypes[value].value
-                    }}
+                    name="username"
+                    component={InputText}
+                    placeholder="User Email Address"
+                    editable={false}
                   />
                 </View>
               </View>
 
-              <View style={styles.sectionContainer}>
-                <View style={styles.sectionTitleContainer}>
-                  <Text style={styles.sectionTitleText}>{t('locationData')}</Text>
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 2}}>
+                  <StyledText style={styles.fieldTitle}>{t('clientName')}</StyledText>
                 </View>
-
-                <View style={styles.fieldContainer}>
-                  <View style={[styles.tableCellView, styles.flex(1)]}>
-                    <Text style={styles.fieldTitle}>{t('timezone')}</Text>
-                  </View>
-                  <View style={[styles.justifyRight]}>
-                    <Field
-                      name="timezone"
-                      component={DropDown}
-                      options={timezones}
-                    />
-                  </View>
+                <View style={{flex: 3}}>
+                  <Field
+                    name="clientName"
+                    component={InputText}
+                    validate={isRequired}
+                    placeholder={t('clientName')}
+                  />
                 </View>
               </View>
 
-              <View style={styles.sectionContainer}>
-                <View style={styles.sectionTitleContainer}>
-                  <Text style={styles.sectionTitleText}>{t('featureToggle')}</Text>
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 2}}>
+                  <StyledText style={styles.fieldTitle}>{t('address')}</StyledText>
                 </View>
-
-                <View style={styles.fieldContainer}>
-                  <View style={{flex: 1}}>
-                    <Text style={styles.fieldTitle}>{t('applyOffer')}</Text>
-                  </View>
-                  <View style={[styles.alignRight]}>
-                    <Field
-                      name="clientSettings.APPLY_CUSTOM_OFFER.enabled"
-                      component={RNSwitch}
-                    />
-                  </View>
+                <View style={{flex: 3}}>
+                  <Field
+                    name="attributes.ADDRESS"
+                    component={InputText}
+                    placeholder={t('address')}
+                  />
                 </View>
               </View>
 
-              <View style={[styles.bottom, {marginTop: 30}]}>
-                <TouchableOpacity onPress={handleSubmit}>
-                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                    {t('action.save')}
-                  </Text>
-                </TouchableOpacity>
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 2}}>
+                  <StyledText style={styles.fieldTitle}>{t('ubn')}</StyledText>
+                </View>
+                <View style={{flex: 3}}>
+                  <Field
+                    name="attributes.UBN"
+                    component={InputText}
+                    placeholder={t('ubn')}
+                  />
+                </View>
+              </View>
 
-                <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                    {t('action.cancel')}
-                  </Text>
-                </TouchableOpacity>
+              <View style={styles.sectionTitleContainer}>
+                <StyledText style={styles.sectionTitleText}>
+                  {t('inEffectRule')}
+                </StyledText>
+              </View>
+              <View style={[styles.fieldContainer]}>
+                <View style={{flex: 2}}>
+                  <StyledText style={styles.fieldTitle}>{t('serviceCharge')}</StyledText>
+                </View>
+                <View style={{flex: 2}}>
+                  <Field
+                    name="clientSettings.SERVICE_CHARGE.value"
+                    component={InputText}
+                    placeholder={t('serviceCharge')}
+                    keyboardType="numeric"
+                    validate={isPercentage}
+                    format={(value, name) => {
+                      return value !== undefined && value !== null ? String(value * 100) : ''
+                    }}
+                    normalize={(value) => {
+                      return value / 100
+                    }}
+                  />
+                </View>
+                <View style={{flex: 1, flexDirection: 'row-reverse'}}>
+                  <Field
+                    name="clientSettings.SERVICE_CHARGE.enabled"
+                    component={RNSwitch}
+                  />
+                </View>
+              </View>
+
+              <View
+                style={[
+                  {justifyContent: 'space-between'},
+                  styles.fieldContainer
+                ]}
+              >
+                <View style={{flex: 2}}>
+                  <StyledText style={styles.fieldTitle}>{t('taxInclusive')}</StyledText>
+                </View>
+                <View style={{flex: 3, flexDirection: 'row-reverse'}}>
+                  <Field
+                    name="clientSettings.TAX_INCLUSIVE.enabled"
+                    component={RNSwitch}
+                  />
+                </View>
               </View>
             </View>
-          </DismissKeyboard>
+
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 2}}>
+                <StyledText style={styles.fieldTitle}>{t('tableAvailabilityDisplayTitle')}</StyledText>
+              </View>
+              <View style={{flex: 3}}>
+                <Field
+                  name="attributes.TABLE_AVAILABILITY_DISPLAY"
+                  component={SegmentedControl}
+                  selectedIndex={this.state.selectedTableDisplayType}
+                  onChange={this.handleTableDisplaySelection}
+                  values={tableDisplayTypes}
+                  normalize={value => {
+                    return this.state.tableDisplayTypes[value].value
+                  }}
+                />
+              </View>
+            </View>
+
+            <View style={styles.sectionContainer}>
+              <View style={styles.sectionTitleContainer}>
+                <StyledText style={styles.sectionTitleText}>{t('locationData')}</StyledText>
+              </View>
+
+              <View style={styles.fieldContainer}>
+                <View style={[styles.tableCellView, styles.flex(1)]}>
+                  <StyledText style={styles.fieldTitle}>{t('timezone')}</StyledText>
+                </View>
+                <View style={[styles.justifyRight]}>
+                  <Field
+                    name="timezone"
+                    component={DropDown}
+                    options={timezones}
+                  />
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.sectionContainer}>
+              <View style={styles.sectionTitleContainer}>
+                <StyledText style={styles.sectionTitleText}>{t('featureToggle')}</StyledText>
+              </View>
+
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 1}}>
+                  <StyledText style={styles.fieldTitle}>{t('applyOffer')}</StyledText>
+                </View>
+                <View style={[styles.alignRight]}>
+                  <Field
+                    name="clientSettings.APPLY_CUSTOM_OFFER.enabled"
+                    component={RNSwitch}
+                  />
+                </View>
+              </View>
+            </View>
+
+            <View style={[styles.bottom, {marginTop: 30}]}>
+              <TouchableOpacity onPress={handleSubmit}>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  {t('action.save')}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                  {t('action.cancel')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </ScrollView>
-      </KeyboardAvoidingView>
+      </ThemeKeyboardAwareScrollView>
     )
   }
 }

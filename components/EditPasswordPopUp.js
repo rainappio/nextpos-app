@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Field } from 'redux-form'
+import React, {Component} from 'react'
+import {Field} from 'redux-form'
 import {
   Text,
   View,
@@ -13,11 +13,14 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import styles, {mainThemeColor} from '../styles'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import {encode as btoa} from "base-64";
 import InputText from "./InputText";
 import {isvalidPassword} from "../validators";
 import ScreenHeader from "./ScreenHeader";
+import {withContext} from "../helpers/contextHelper";
+import {themes} from "../themes/ThemeContext";
+import {StyledText} from "./StyledText";
 
 class EditPasswordPopUp extends Component {
   static contextType = LocaleContext
@@ -90,7 +93,7 @@ class EditPasswordPopUp extends Component {
     })
 
     if (response.status === 200) {
-      this.setState({ showEnterNewPassword: true })
+      this.setState({showEnterNewPassword: true})
     } else {
       await this.toggleModal(false)
       warningMessage(this.context.t('incorrectPassword'))
@@ -100,7 +103,7 @@ class EditPasswordPopUp extends Component {
   handleChangePwd = async updatedPassword => {
     // dismiss keyboard after pin code is fulfilled.
     Keyboard.dismiss()
-    const updatePasswordUrl = this.props.ownAccount? api.clientUser.updateCurrentUserPassword : api.clientUser.updatePassword(this.props.name)
+    const updatePasswordUrl = this.props.ownAccount ? api.clientUser.updateCurrentUserPassword : api.clientUser.updatePassword(this.props.name)
 
     dispatchFetchRequestWithOption(updatePasswordUrl,
       {
@@ -123,7 +126,7 @@ class EditPasswordPopUp extends Component {
         })
       }).then()
 
-    await this.setState( { showEnterNewPassword: false })
+    await this.setState({showEnterNewPassword: false})
     await this.toggleModal(false)
   }
 
@@ -135,7 +138,8 @@ class EditPasswordPopUp extends Component {
    * https://medium.com/@payalmaniyar/deep-understanding-of-ref-direct-manipulation-in-react-native-e89726ddb78e
    */
   render() {
-    const { t } = this.context
+    const {themeStyle} = this.props
+    const {t} = this.context
 
     return (
       <View>
@@ -144,7 +148,7 @@ class EditPasswordPopUp extends Component {
             this.toggleModal(true)
           }}
         >
-          <Icon name="md-create" size={24} color={mainThemeColor} />
+          <Icon name="md-create" size={24} color={mainThemeColor}/>
         </TouchableOpacity>
 
         <Modal
@@ -159,10 +163,7 @@ class EditPasswordPopUp extends Component {
               this.toggleModal(false)
             }}
           >
-            <View
-              style={[styles.boxShadow, styles.popUpLayout]}
-              //contentContainerStyle={styles.modalContainer}
-            >
+            <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
               <TouchableWithoutFeedback>
                 <View>
                   <ScreenHeader backNavigation={false}
@@ -170,9 +171,9 @@ class EditPasswordPopUp extends Component {
 
                   {this.props.ownAccount && (
                     <View>
-                      <Text style={{marginBottom: 10, textAlign: 'center'}}>
+                      <StyledText style={{marginBottom: 10, textAlign: 'center'}}>
                         {t('enterOldPassword')}
-                      </Text>
+                      </StyledText>
                       {this.props.defaultUser ? (
                         <View style={[styles.tableRowContainer]}>
                           <TextInput
@@ -181,7 +182,7 @@ class EditPasswordPopUp extends Component {
                             onChangeText={(value) => this.setState({originalPassword: value})}
                             placeholder={t('originalPassword')}
                             secureTextEntry={true}
-                            style={[styles.rootInput, {color: 'black', width: 200}]}
+                            style={[styles.rootInput, {width: 200}]}
                           />
                           <TouchableOpacity
                             style={{marginLeft: 10}}
@@ -203,9 +204,9 @@ class EditPasswordPopUp extends Component {
 
                   {this.state.showEnterNewPassword && (
                     <View>
-                      <Text style={{marginBottom: 10, textAlign: 'center'}}>
+                      <StyledText style={{marginBottom: 10, textAlign: 'center'}}>
                         {t('enterNewPassword')}
-                      </Text>
+                      </StyledText>
                       {this.props.defaultUser ? (
                         <View style={styles.tableRowContainer}>
                           <TextInput
@@ -243,4 +244,5 @@ class EditPasswordPopUp extends Component {
     )
   }
 }
-export default EditPasswordPopUp
+
+export default withContext(EditPasswordPopUp)

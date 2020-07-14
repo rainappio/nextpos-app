@@ -4,15 +4,19 @@ import {
   TouchableOpacity,
   Text, FlatList
 } from 'react-native'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import DraggableFlatList from "react-native-draggable-flatlist";
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import { getProducts, getLables } from '../actions'
-import styles, { mainThemeColor } from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
-import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
+import {DismissKeyboard} from '../components/DismissKeyboard'
+import {getProducts, getLables} from '../actions'
+import styles, {mainThemeColor} from '../styles'
+import {LocaleContext} from '../locales/LocaleContext'
+import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 import ScreenHeader from "../components/ScreenHeader";
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
+import {ThemeContainer} from "../components/ThemeContainer";
+import {StyledText} from "../components/StyledText";
+import {withContext} from "../helpers/contextHelper";
+import {compose} from "redux";
 
 class ProductRowforOffer extends React.Component {
   static navigationOptions = {
@@ -27,14 +31,10 @@ class ProductRowforOffer extends React.Component {
     context.localize({
       en: {
         productListModalTitle: 'Select a product',
-        ungrouped: 'Ungrouped',
-        pinned: 'Pinned',
         alreadySelected: 'Selected'
       },
       zh: {
         productListModalTitle: '選擇產品',
-        ungrouped: '未分類',
-        pinned: '置頂產品',
         alreadySelected: '已選'
       }
     })
@@ -43,20 +43,20 @@ class ProductRowforOffer extends React.Component {
       activeSections: [],
       labelId: null,
       productId: null,
-      data: [{ label: 'pinned', id: 'pinned' }, ...this.props.labels, { label: 'ungrouped', id: 'ungrouped' }],
+      data: [{label: 'pinned', id: 'pinned'}, ...this.props.labels, {label: 'ungrouped', id: 'ungrouped'}],
       selectedToggleItems: new Map(),
       collapsedId: '',
       products: [],
       uniqueselectedProducts: []
     }
     this.onChange = activeSections => {
-      this.setState({ activeSections })
+      this.setState({activeSections})
     }
   }
 
   componentDidMount() {
     let prdArr = this.props.updatedProducts !== undefined ? this.props.updatedProducts : []
-    this.setState({ products: prdArr });
+    this.setState({products: prdArr});
   }
 
   onSelect = (id) => {
@@ -68,46 +68,24 @@ class ProductRowforOffer extends React.Component {
   }
 
   handleCollapsed = id => {
-    this.setState({ collapsedId: id })
-  }
-
-  //https://stackoverflow.com/questions/57738626/collapsible-and-draggable-sectionlist-for-react-native-application
-
-  handleDelete = productId => {
-    dispatchFetchRequest(
-      api.product.delete(productId),
-      {
-        method: 'DELETE',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      },
-      response => {
-        this.props.navigation.navigate('ProductsOverviewforOffer')
-        this.props.getProducts()
-      }
-    ).then()
+    this.setState({collapsedId: id})
   }
 
   _renderSectionHeader = (item, index, drag, isActive) => {
     return (
       <TouchableOpacity
         style={{
-          paddingTop: 10,
-          paddingBottom: 6,
-          borderWidth: 0.5,
-          borderColor: '#f4f4f4',
           backgroundColor: isActive ? "#ccc" : ''
         }}
         onPress={() => this.onSelect(item.id)}
-        onLongPress={drag}
       >
-        <View style={[styles.listPanel, { paddingLeft: 20, paddingRight: 20, paddingTop: 8, paddingBottom: 10 }]}>
-          <Text style={[styles.listPanelText]}>{item.label}</Text>
-          <AntDesignIcon name={this.state.selectedToggleItems.get(item.id) ? 'up' : 'down'} size={22} color="#ccc" />
-          {/* <AntDesignIcon name={this.state.collapsedId === item.id ? 'up' : 'down'} size={22} color="#ccc" /> */}
+        <View style={[styles.productPanel]}>
+          <View style={[styles.flex(1)]}>
+            <StyledText style={[styles.listPanelText]}>{item.label}</StyledText>
+          </View>
+          <View style={[styles.flex(1), styles.alignRight]}>
+            <AntDesignIcon name={this.state.selectedToggleItems.get(item.id) ? 'up' : 'down'} size={22} color="#ccc"/>
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -128,24 +106,31 @@ class ProductRowforOffer extends React.Component {
     return found !== undefined
   }
 
-  renderItem = ({ item, index, drag, isActive }) => {
+  renderItem = ({item, index, drag, isActive}) => {
     let map = this.props.products;
+
+    let products = map[item.label]
+
+    if (products == null) {
+      products = map[item.id]
+    }
 
     return (
       <View>
         {this._renderSectionHeader(item, index, drag, isActive)}
         {
           this.state.selectedToggleItems.get(item.id) &&
-          //this.state.collapsedId === item.id &&
           <View>
-            {map[item.label] !== undefined && map[item.label].map(data => {
+            {products != null && products.map(data => {
               return (
-                <View style={[{ paddingTop: 20, paddingBottom: 20, backgroundColor: '#f1f1f1', paddingLeft: 20, borderTopWidth: 0.11 }]} key={data.id}>
+                <View style={[styles.productPanel]}
+                      key={data.id}>
                   {
                     this.checkProductExists(data.id) ? (
-                      <Text style={{marginRight: 50}}>{data.name} ({this.context.t('alreadySelected')})</Text>
+                      <StyledText style={{marginRight: 50}}>{data.name} ({this.context.t('alreadySelected')})</StyledText>
                     ) : (
                       <TouchableOpacity
+                        style={styles.flex(1)}
                         onPress={() => {
                           this.createProductsArr({productId: data.id, name: data.name, labelId: data.productLabelId});
                           const offerScreen = this.props.isEditForm ? 'EditOffer' : 'NewOffer'
@@ -154,7 +139,7 @@ class ProductRowforOffer extends React.Component {
                           })
                         }}
                       >
-                        <Text style={{marginRight: 50}}>{data.name}</Text>
+                        <StyledText>{data.name}</StyledText>
                       </TouchableOpacity>
                     )
                   }
@@ -169,40 +154,36 @@ class ProductRowforOffer extends React.Component {
 
   render() {
     const {
-      labels = [],
-      navigation
+      labels,
+      themeStyle
     } = this.props
-    const { t } = this.context
-    var getlabels = !labels ? navigation.state.params.labels : labels
-    var labelsArr = [{ label: 'pinned', id: 'pinned' }, ...getlabels, { label: 'ungrouped', id: 'ungrouped' }]
+    const {t} = this.context
+
+    const labelsArr = [{label: t('product.pinned'), id: 'pinned'}, ...labels, {label: t('product.ungrouped'), id: 'ungrouped'}]
 
     return (
-      <DismissKeyboard>
-        <View style={[styles.fullWidthScreen, styles.nomgrBottom]}>
+      <ThemeContainer>
+        <View style={[styles.fullWidthScreen]}>
           <ScreenHeader backNavigation={true}
-            title={t('productListModalTitle')}
-            parentFullScreen={true}
+                        title={t('productListModalTitle')}
+                        parentFullScreen={true}
           />
           <FlatList
             data={labelsArr}
             renderItem={(item, index, drag, isActive) => this.renderItem(item)}
-            keyExtractor={(item, index) => `draggable-item-${item.label}`}
-            onDragEnd={(data) => this.handleReArrange(data)}
+            keyExtractor={(item, index) => `item-${item.label}`}
             initialNumToRender={10}
+            ListHeaderComponent={
+              <View style={[themeStyle, {borderTopWidth: 0.4}]}/>
+            }
           />
         </View>
-      </DismissKeyboard>
+      </ThemeContainer>
     )
   }
 }
 
-const mapDispatchToProps = (dispatch, props) => ({
-  dispatch,
-  getProducts: () => dispatch(getProducts()),
-  getLables: () => dispatch(getLables())
-})
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(ProductRowforOffer)
+const enhance = compose(
+  withContext
+)
+export default enhance(ProductRowforOffer)

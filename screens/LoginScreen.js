@@ -1,5 +1,5 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import {Field, reduxForm} from 'redux-form'
 import {
   Image,
   KeyboardAvoidingView,
@@ -10,14 +10,16 @@ import {
   Modal,
   Dimensions, TouchableWithoutFeedback, AsyncStorage
 } from 'react-native'
-import { isEmail, isRequired } from '../validators'
+import {isEmail, isRequired} from '../validators'
 import InputText from '../components/InputText'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import styles from '../styles'
-import { withNavigation } from 'react-navigation'
+import {withNavigation} from 'react-navigation'
 import {LocaleContext} from "../locales/LocaleContext";
 import {storage} from "../constants/Backend";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
+import {StyledText} from "../components/StyledText";
+import {ThemeContainer} from "../components/ThemeContainer";
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -41,19 +43,21 @@ class LoginScreen extends React.Component {
   }
 
   getEmail = (values) => {
-  	values.email !== null && this.props.navigation.navigate('PasswordReset')
-  	this.toggleModal(!this.state.modalVisible)
+    values.email !== null && this.props.navigation.navigate('PasswordReset')
+    this.toggleModal(!this.state.modalVisible)
   }
 
   componentDidMount() {
     this.context.localize({
       en: {
+        loginTitle: 'Login',
         title: 'Please enter your account email',
         next: 'Send',
         forgotPwd: 'Forgot Password',
         loginAs: 'Login as {{username}}'
       },
       zh: {
+        loginTitle: '登入',
         title: '請輸入你的帳號email',
         next: '送出',
         forgotPwd: '忘記密碼',
@@ -62,18 +66,19 @@ class LoginScreen extends React.Component {
     })
 
     AsyncStorage.getItem(storage.clientUsername).then(value => {
-      this.setState({ clientUsername: value })
+      this.setState({clientUsername: value})
     })
   }
 
   render() {
-    const { handleSubmit, handleLoginAs } = this.props
-    const { t } = this.context
+    const {handleSubmit, handleLoginAs} = this.props
+    const {t} = this.context
 
     return (
-      <KeyboardAwareScrollView contentContainerStyle={[styles.container, {justifyContent: 'space-around'}]}>
-        <View style={{flex: 1}}>
-          <View style={[styles.flex(1)]}>
+      <ThemeContainer>
+        <View style={styles.container}>
+          <View style={{flex: 1}}>
+            <View>
               <Image
                 source={
                   __DEV__
@@ -84,76 +89,74 @@ class LoginScreen extends React.Component {
               />
             </View>
 
-          <View style={[styles.flex(1), styles.dynamicVerticalPadding(10)]}>
-          <View style={[styles.flex(1)]}>
+            <StyledText style={styles.welcomeText}>{t('loginTitle')}</StyledText>
+
             <Field
               name="username"
               component={InputText}
               validate={[isRequired, isEmail]}
               placeholder={t('email')}
               autoCapitalize="none"
-              extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
             />
-          </View>
-            <View style={styles.dynamicVerticalPadding(2)}/>
-          <View style={styles.flex(1)}>
             <Field
               name="masterPassword"
               component={InputText}
               validate={isRequired}
               placeholder={t('password')}
               secureTextEntry={true}
-              extraStyle={{borderWidth: 1, borderColor: '#f1f1f1', textAlign: 'left'}}
             />
           </View>
-          </View>
-        </View>
 
-        <View style={[styles.bottom]}>
-          {this.state.clientUsername != null && (
+          <View style={styles.flex(1)}>
+
+          </View>
+
+          <View style={[styles.bottom]}>
+            {this.state.clientUsername != null && (
+              <TouchableOpacity
+                onPress={() => handleLoginAs()}
+              >
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  {t('loginAs', {username: this.state.clientUsername})}
+                </Text>
+              </TouchableOpacity>
+            )}
+
             <TouchableOpacity
-              onPress={() => handleLoginAs()}
+              onPress={() => {
+                Keyboard.dismiss()
+                handleSubmit()
+              }}
             >
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {t('loginAs', {username: this.state.clientUsername})}
+                {t('login')}
               </Text>
             </TouchableOpacity>
-          )}
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Intro')}
+            >
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                {t('action.cancel')}
+              </Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => {
-              Keyboard.dismiss()
-              handleSubmit()
-            }}
-          >
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>
-              {t('login')}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Intro')}
-          >
-            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-              {t('action.cancel')}
-            </Text>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              this.toggleModal(true)
+            }}>
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                {t('forgotPwd')}
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-          <TouchableOpacity onPress={() => {
-            this.toggleModal(true)
-          }}>
-            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-              {t('forgotPwd')}
-            </Text>
-          </TouchableOpacity>
+          <ResetModal
+            onSubmit={this.getEmail}
+            modalVisible={this.state.modalVisible}
+            toggleModal={this.toggleModal}
+            navigation={this.props.navigation}
+          />
         </View>
-
-        <ResetModal
-          onSubmit={this.getEmail}
-          modalVisible={this.state.modalVisible}
-          toggleModal={this.toggleModal}
-          navigation={this.props.navigation}
-        />
-      </KeyboardAwareScrollView>
+      </ThemeContainer>
     )
   }
 }
@@ -171,8 +174,8 @@ class ResetModal extends React.Component {
   static contextType = LocaleContext
 
   render() {
-    const { handleSubmit, toggleModal, modalVisible } = this.props
-    const { t } = this.context
+    const {handleSubmit, toggleModal, modalVisible} = this.props
+    const {t} = this.context
 
     return (
       <Modal

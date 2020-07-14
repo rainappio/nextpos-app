@@ -5,6 +5,9 @@ const en = {
   password: 'Password',
   logout: 'Logout',
   refreshed: 'Refreshed',
+  general: {
+    noData: 'No data'
+  },
   menu: {
     home: 'Home',
     tables: 'Tables',
@@ -50,6 +53,10 @@ const en = {
     pin: 'Pin',
     activate: 'Activate',
     deactivate: 'Deactivate'
+  },
+  product: {
+    ungrouped: 'Ungrouped',
+    pinned: 'Pinned',
   },
   order: {
     inStore: 'In Store',
@@ -105,6 +112,7 @@ const en = {
     DELETED: 'Deleted'
   },
   orderLog: {
+    title: 'Order Logs',
     updateOrder: 'Update Order Info',
     stateChange: 'Change state',
     addOrderLineItem: 'Add Item',
@@ -126,6 +134,7 @@ const en = {
     minutes: 'Minute(s)'
   },
   shift: {
+    closeShift: 'Close Shift',
     status: {
       INACTIVE: 'Inactive',
       ACTIVE: 'Active',

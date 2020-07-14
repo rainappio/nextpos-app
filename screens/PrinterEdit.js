@@ -22,6 +22,7 @@ import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
+import {ThemeContainer} from "../components/ThemeContainer";
 
 class PrinterEdit extends React.Component {
   static navigationOptions = {
@@ -78,7 +79,7 @@ class PrinterEdit extends React.Component {
     }
 
     return (
-      <DismissKeyboard>
+      <ThemeContainer>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader title={t('editPrinterTitle')}
                         parentFullScreen={true}/>
@@ -91,7 +92,7 @@ class PrinterEdit extends React.Component {
             handleEditCancel={this.handleEditCancel}
           />
         </View>
-      </DismissKeyboard>
+      </ThemeContainer>
     )
   }
 }
