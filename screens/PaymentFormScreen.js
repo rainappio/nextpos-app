@@ -6,7 +6,7 @@ import {
   getProducts,
   getLables,
   getLabel,
-  getfetchglobalOrderOffers
+  getfetchglobalOrderOffers, formatCurrency
 } from '../actions'
 import BackBtnCustom from '../components/BackBtnCustom'
 import { DismissKeyboard } from '../components/DismissKeyboard'
@@ -27,6 +27,8 @@ import ScreenHeader from "../components/ScreenHeader";
 import images from "../assets/images";
 import CustomCheckBox from "../components/CustomCheckBox";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
+import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
+import {StyledText} from "../components/StyledText";
 
 class PaymentFormScreen extends React.Component {
   static navigationOptions = {
@@ -53,22 +55,10 @@ class PaymentFormScreen extends React.Component {
         payOrder: '付帳'
       }
     })
-
-    this.state = {
-      getPercent: null
-    }
   }
 
   componentDidMount() {
     this.props.getfetchglobalOrderOffers()
-  }
-
-  getPercent = percent => {
-    if (percent >= 0) {
-      this.setState({
-        getPercent: percent
-      })
-    }
   }
 
   render() {
@@ -76,8 +66,7 @@ class PaymentFormScreen extends React.Component {
     const { t } = this.context
 
     return (
-      <KeyboardAwareScrollView scrollIndicatorInsets={{ right: 1 }} keyboardShouldPersistTaps='always'>
-        <DismissKeyboard>
+      <ThemeKeyboardAwareScrollView>
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
                           parentFullScreen={true}
@@ -86,59 +75,55 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.subtotal')}</Text>
+                <StyledText>{t('order.subtotal')}</StyledText>
               </View>
 
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text style={styles.tableCellText}>
-                  ${order.total.amountWithTax.toFixed(2)}
-                </Text>
+                <StyledText style={styles.tableCellText}>
+                  {formatCurrency(order.total.amountWithTax)}
+                </StyledText>
               </View>
             </View>
 
             <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.discount')}</Text>
+                <StyledText>{t('order.discount')}</StyledText>
               </View>
 
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text style={styles.tableCellText}>
-                  ${order.discount}
-                </Text>
+                <StyledText style={styles.tableCellText}>
+                  {formatCurrency(order.discount)}
+                </StyledText>
               </View>
             </View>
 
             <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.serviceCharge')}</Text>
+                <StyledText>{t('order.serviceCharge')}</StyledText>
               </View>
 
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text style={styles.tableCellText}>
-                  ${order.serviceCharge}
-                </Text>
+                <StyledText style={styles.tableCellText}>
+                  {formatCurrency(order.serviceCharge)}
+                </StyledText>
               </View>
             </View>
 
             <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.total')}</Text>
+                <StyledText>{t('order.total')}</StyledText>
               </View>
 
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text style={styles.tableCellText}>
-                  $
-                  {(
-                    order.orderTotal -
-                    calculatePercentage(order.orderTotal, this.state.getPercent)
-                  ).toFixed(2)}
-                </Text>
+                <StyledText style={styles.tableCellText}>
+                  {formatCurrency(order.orderTotal)}
+                </StyledText>
               </View>
             </View>
 
             <View style={[styles.sectionContainer]}>
               <View style={[styles.sectionTitleContainer]}>
-                <Text style={styles.sectionTitleText}>{t('orderOptions')}</Text>
+                <StyledText style={styles.sectionTitleText}>{t('orderOptions')}</StyledText>
               </View>
               <View>
                 <Field
@@ -161,7 +146,7 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.sectionContainer]}>
               <View style={[styles.sectionTitleContainer]}>
-                <Text style={styles.sectionTitleText}>{t('order.discount')}</Text>
+                <StyledText style={styles.sectionTitleText}>{t('order.discount')}</StyledText>
               </View>
 
               {globalorderoffers != null && globalorderoffers.map((offer, ix) => (
@@ -179,16 +164,6 @@ class PaymentFormScreen extends React.Component {
                     }}
                     optionName={offer.offerName}
                     defaultValueDisplay={(customValue, value) => String(customValue.orderDiscount === value.orderDiscount ? value.discount : 0)}
-                    total={order.orderTotal}
-                    getPercent={this.getPercent}
-                    orderTotal={order.total.amountWithTax.toFixed(2)}
-                    grandTotal={(
-                      order.orderTotal -
-                      calculatePercentage(
-                        order.orderTotal,
-                        this.state.getPercent
-                      )
-                    ).toFixed(2)}
                   />
                 </View>
               ))}
@@ -214,8 +189,7 @@ class PaymentFormScreen extends React.Component {
               </View>
             </View>
           </View>
-        </DismissKeyboard>
-      </KeyboardAwareScrollView>
+      </ThemeKeyboardAwareScrollView>
     )
   }
 }

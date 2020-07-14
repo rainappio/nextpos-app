@@ -1,19 +1,21 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Field, reduxForm } from 'redux-form'
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
-import {getProducts, getLables, getLabel, calculatePercentage} from '../actions'
-import { successMessage } from '../constants/Backend'
+import {connect} from 'react-redux'
+import {Field, reduxForm} from 'redux-form'
+import {ScrollView, Text, View, TouchableOpacity} from 'react-native'
+import {getProducts, getLables, getLabel, calculatePercentage, formatCurrency} from '../actions'
+import {successMessage} from '../constants/Backend'
 import BackBtn from '../components/BackBtn'
 import InputText from '../components/InputText'
-import { isRequired } from '../validators'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {isRequired} from '../validators'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import styles, {mainThemeColor} from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import SegmentedControl from '../components/SegmentedControl'
 import DropDown from '../components/DropDown'
 import ScreenHeader from "../components/ScreenHeader";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
+import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
+import {StyledText} from "../components/StyledText";
 
 class PaymentOrderForm extends React.Component {
   static navigationOptions = {
@@ -79,15 +81,15 @@ class PaymentOrderForm extends React.Component {
       resetTotal
     } = this.props
 
-    const { t } = this.context
-    const { paymentsTypes, selectedPaymentType, paymentsTypeslbl, handlePaymentTypeSelection } = this.props
+    const {t} = this.context
+    const {paymentsTypes, selectedPaymentType, paymentsTypeslbl, handlePaymentTypeSelection} = this.props
 
-		const TaxInputAndBottomBtns = (props) => {
-			return(
-				<View>
-					<View style={styles.fieldContainer}>
+    const TaxInputAndBottomBtns = (props) => {
+      return (
+        <View>
+          <View style={styles.fieldContainer}>
             <View style={{flex: 2}}>
-              <Text style={styles.fieldTitle}>{t('taxIDNumber')}</Text>
+              <StyledText style={styles.fieldTitle}>{t('taxIDNumber')}</StyledText>
             </View>
             <View style={{flex: 3}}>
               <Field
@@ -95,7 +97,7 @@ class PaymentOrderForm extends React.Component {
                 component={InputText}
                 placeholder={t('enterTaxIDNumber')}
                 keyboardType={'numeric'}
-                extraStyle={{ textAlign: 'left' }}
+                extraStyle={{textAlign: 'left'}}
               />
             </View>
           </View>
@@ -118,11 +120,11 @@ class PaymentOrderForm extends React.Component {
             </View>
           </View>
         </View>
-			)
-		}
+      )
+    }
 
     return (
-      <KeyboardAwareScrollView scrollIndicatorInsets={{right: 1}}>
+      <ThemeKeyboardAwareScrollView>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={true}
                         parentFullScreen={true}
@@ -131,56 +133,56 @@ class PaymentOrderForm extends React.Component {
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text>{t('order.subtotal')}</Text>
+              <StyledText>{t('order.subtotal')}</StyledText>
             </View>
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <Text style={styles.tableCellText}>
-                ${order.total.amountWithTax.toFixed(2)}
-              </Text>
+              <StyledText style={styles.tableCellText}>
+                {formatCurrency(order.total.amountWithTax)}
+              </StyledText>
             </View>
           </View>
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text>{t('order.discount')}</Text>
+              <StyledText>{t('order.discount')}</StyledText>
             </View>
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <Text style={styles.tableCellText}>
-                ${order.discount}
-              </Text>
+              <StyledText style={styles.tableCellText}>
+                {formatCurrency(order.discount)}
+              </StyledText>
             </View>
           </View>
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text>{t('order.serviceCharge')}</Text>
+              <StyledText>{t('order.serviceCharge')}</StyledText>
             </View>
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <Text style={styles.tableCellText}>
-                ${order.serviceCharge}
-              </Text>
+              <StyledText style={styles.tableCellText}>
+                {formatCurrency(order.serviceCharge)}
+              </StyledText>
             </View>
           </View>
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text>{t('order.total')}</Text>
+              <StyledText>{t('order.total')}</StyledText>
             </View>
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <Text style={styles.tableCellText}>
-                ${order.orderTotal}
-              </Text>
+              <StyledText style={styles.tableCellText}>
+                {formatCurrency(order.orderTotal)}
+              </StyledText>
             </View>
           </View>
 
           <View style={[styles.sectionContainer, styles.horizontalMargin]}>
             <View style={[styles.sectionContent]}>
               <View style={styles.sectionTitleContainer}>
-                <Text style={styles.sectionTitleText}>{t('paymentMethod')}</Text>
+                <StyledText style={styles.sectionTitleText}>{t('paymentMethod')}</StyledText>
               </View>
               <View>
                 <View>
@@ -203,7 +205,7 @@ class PaymentOrderForm extends React.Component {
               <View>
                 <View style={[styles.fieldContainer]}>
                   <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('payment.cashPayment')}</Text>
+                    <StyledText style={styles.fieldTitle}>{t('payment.cashPayment')}</StyledText>
                   </View>
                   <View style={{flex: 3}}>
                     <Field
@@ -217,13 +219,7 @@ class PaymentOrderForm extends React.Component {
                   </View>
                 </View>
 
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'space-evenly'
-                  }}
-                >
+                <View style={[styles.fieldContainer, {justifyContent: 'space-between'}]}>
                   {moneyAmts.map((moneyAmt, ix) => (
                     <TouchableOpacity
                       onPress={() => {
@@ -233,18 +229,20 @@ class PaymentOrderForm extends React.Component {
                     >
                       <View
                         style={{
-                          width: 62,
+                          width: 70,
                           height: 50,
                           borderWidth: 2,
                           borderColor: mainThemeColor,
-                          paddingTop: 16
+                          justifyContent: 'center'
                         }}
                       >
                         <Text
                           style={[
-                            styles.orange_color,
-                            styles.textBold,
+                            styles.primaryText,
                             styles.centerText
+                            // styles.orange_color,
+                            // styles.textBold,
+                            // styles.centerText
                           ]}
                         >
                           {moneyAmt.label}
@@ -261,7 +259,7 @@ class PaymentOrderForm extends React.Component {
               <View>
                 <View style={styles.fieldContainer}>
                   <View style={{flex: 2}}>
-                    <Text style={styles.fieldTitle}>{t('CardNo')}</Text>
+                    <StyledText style={styles.fieldTitle}>{t('CardNo')}</StyledText>
                   </View>
                   <View style={{flex: 3}}>
                     <Field
@@ -269,21 +267,23 @@ class PaymentOrderForm extends React.Component {
                       component={InputText}
                       placeholder={t('enterCardNo')}
                       keyboardType={'numeric'}
-                      extraStyle={{textAlign: 'left'}}
+                      alignLeft={true}
                     />
                   </View>
                 </View>
 
-                <Field
-                  name="cardType"
-                  component={DropDown}
-                  placeholder={{value: null, label: t('chooseCardType')}}
-                  options={[
-                    {label: 'Visa', value: 'VISA'},
-                    {label: 'MasterCard', value: 'MASTER'},
-                    {label: 'Other', value: 'OTHER'}
-                  ]}
-                />
+                <View style={styles.fieldContainer}>
+                  <Field
+                    name="cardType"
+                    component={DropDown}
+                    placeholder={{value: null, label: t('chooseCardType')}}
+                    options={[
+                      {label: 'Visa', value: 'VISA'},
+                      {label: 'MasterCard', value: 'MASTER'},
+                      {label: 'Other', value: 'OTHER'}
+                    ]}
+                  />
+                </View>
               </View>
             }
 
@@ -294,15 +294,15 @@ class PaymentOrderForm extends React.Component {
 
           </View>
         </View>
-      </KeyboardAwareScrollView>
+      </ThemeKeyboardAwareScrollView>
     )
   }
 }
 
 const mapStateToProps = (state, props) => ({
   initialValues: {
-  	cash: '' + props.dynamicTotal,
-  	paymentMethod: props.selectedPaymentType === 0 ? 'CASH' : 'CARD'
+    cash: '' + props.dynamicTotal,
+    paymentMethod: props.selectedPaymentType === 0 ? 'CASH' : 'CARD'
   }
 })
 

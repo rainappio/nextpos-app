@@ -1,38 +1,22 @@
 import validator from 'validator'
+import i18n from 'i18n-js'
 
 export const isRequired = value =>
   value === undefined ||
   value === '' ||
   (Array.isArray(value) && value.length === 0)
-    ? 'This information is required'
+    ? i18n.t('errors.required')
     : undefined
 
 export const isEmail = value =>
   value && !validator.isEmail(value)
-    ? 'Please use a valid email address'
+    ? i18n.t('errors.email')
     : undefined
 
 export const isvalidPassword = value =>
   value && !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/.test(value)
-    ? 'Password must be: at least one uppercase character, one digit and minimum length of 6 characters'
+    ? i18n.t('errors.clientPassword')
     : undefined
-
-export const isPhoneNumber = value =>
-  value && !/^\+?[0-9 -]+$/.test(value)
-    ? 'Please enter a valid phone number'
-    : undefined
-
-export const isFacebookURL = value => {
-  if (!value) {
-    return undefined
-  }
-
-  if (!/^https:\/\/www.facebook.com\/.+/.test(value)) {
-    return 'A facebook URL must start with https://www.facebook.com/'
-  }
-
-  return isURL(value)
-}
 
 export const isURL = value =>
   value &&
@@ -50,32 +34,9 @@ export const isAcceptRage = value =>
 
 export const isPercentage = value =>
   value &&
-  (parseFloat(value).toFixed(2) < 0 || parseFloat(value).toFixed(2) > 100)
-    ? 'A percentage must be between 0 and 100'
+  (parseFloat(value).toFixed(2) < 0.01 || parseFloat(value).toFixed(2) > 0.99)
+    ? i18n.t('errors.percentage')
     : undefined
 
-export const isValidDateRange = value =>
-  value === undefined ? 'This information is required' : undefined
-
-export const fieldValidate = values => {
-  const errors = {}
-  if (!values.clientName) {
-    errors.clientName = 'Required'
-  }
-  if (!values.username) {
-    errors.username = 'Required'
-  }
-  if (!values.confirmusername) {
-    errors.confirmusername = 'Required'
-  }
-  if (!values.masterPassword) {
-    errors.masterPassword = 'Required'
-  }
-  if (values.username !== values.confirmusername) {
-    errors.confirmusername = 'Please use same username'
-  }
-  return errors
-}
-
 export const isCountZero = value =>
-  value === 0 ? 'Please Choose at least 1 count' : undefined
+  value === 0 ? i18n.t('errors.moreThanZero') : undefined

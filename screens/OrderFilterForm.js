@@ -6,6 +6,7 @@ import DropDown from '../components/DropDown'
 import { LocaleContext } from '../locales/LocaleContext'
 import moment from 'moment'
 import styles from '../styles'
+import {StyledText} from "../components/StyledText";
 
 class OrderFilterForm extends React.Component {
   static contextType = LocaleContext
@@ -108,7 +109,7 @@ class OrderFilterForm extends React.Component {
             />
           </View>
           <View style={[styles.tableCellView, {flex: 0.2, justifyContent: 'center'}]}>
-            <Text>-</Text>
+            <StyledText>-</StyledText>
           </View>
           <View style={[styles.tableCellView, {flex: 2}]}>
             <Field

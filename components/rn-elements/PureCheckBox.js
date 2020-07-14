@@ -11,10 +11,12 @@ import {
   TextInput,
   AsyncStorage
 } from 'react-native'
-import { CheckBox } from 'react-native-elements'
+import {CheckBox} from 'react-native-elements'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import images from '../../assets/images'
-import styles, { mainThemeColor } from "../../styles";
+import styles, {mainThemeColor} from "../../styles";
+import {withContext} from "../../helpers/contextHelper";
+import {StyledText} from "../StyledText";
 
 class RenderPureCheckBox extends React.Component {
   state = {
@@ -23,13 +25,14 @@ class RenderPureCheckBox extends React.Component {
 
   render() {
     const {
-      input: { onBlur, onChange, onFocus, value },
+      input: {onBlur, onChange, onFocus, value},
       customValue,
       optionName,
       total,
       title,
       isIconAsTitle,
-      meta: { error, touched, valid },
+      meta: {error, touched, valid},
+      themeStyle,
       ...rest
     } = this.props
 
@@ -37,35 +40,29 @@ class RenderPureCheckBox extends React.Component {
       <View style={styles.flex(1)}>
         <CheckBox
           title={
-            !isIconAsTitle
-              ?
-              title
-              :
-              <IonIcon
-                name={customValue}
-                size={26}
-                color={mainThemeColor}
-                style={{ marginLeft: 22 }}
-              />
+            <View>
+              {!isIconAsTitle ? (
+                <StyledText>{title}</StyledText>
+              ) : (
+                <IonIcon
+                  name={customValue}
+                  size={26}
+                  color={mainThemeColor}
+                  style={{marginLeft: 22}}
+                />
+              )}
+            </View>
           }
-          checkedIcon={
-            <Image
-              source={images.checkicon}
-              style={{ width: 20, height: 20 }}
-            />
-          }
-          uncheckedIcon={
-            <Image
-              source={images.checkiconOutline}
-              style={{ width: 20, height: 20 }}
-            />
-          }
+          checkedIcon={'check-circle'}
+          uncheckedIcon={'circle'}
           checked={value === customValue}
           onPress={() => onChange(customValue)}
+          containerStyle={{backgroundColor: themeStyle.backgroundColor}}
         />
         {!valid && touched && <Text style={[styles.rootError, styles.mgrtotop12, styles.centerText]}>{error}</Text>}
       </View>
     )
   }
 }
-export default RenderPureCheckBox
+
+export default withContext(RenderPureCheckBox)

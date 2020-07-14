@@ -1,6 +1,7 @@
 import React from 'react'
 import {Picker, Text, View} from 'react-native'
 import styles from "../styles";
+import {withContext} from "../helpers/contextHelper";
 
 const PickerInput = props => {
   const {
@@ -8,6 +9,7 @@ const PickerInput = props => {
     meta: {error, touched, valid},
     values,
     selectedValue,
+    themeStyle,
     ...rest
   } = props
 
@@ -26,7 +28,7 @@ const PickerInput = props => {
         selectedValue={selectedValue}
         onValueChange={onChange}
         style={{width: '100%'}}
-        itemStyle={{height: 100}}
+        itemStyle={[themeStyle, {height: 100}]}
       >
         {pickerItems}
       </Picker>
@@ -35,4 +37,4 @@ const PickerInput = props => {
   )
 }
 
-export default PickerInput
+export default withContext(PickerInput)
