@@ -18,7 +18,6 @@ import RenderRadioBtn from '../components/RadioItem'
 import {testPrinter} from "../helpers/printerActions";
 import {connect} from "react-redux";
 import {successMessage, warningMessage} from "../constants/Backend";
-import {StyledText} from "../components/StyledText";
 
 class PrinterForm extends React.Component {
   static navigationOptions = {
@@ -72,11 +71,11 @@ class PrinterForm extends React.Component {
     const { t } = this.context
 
     return (
-      <View style={styles.flex(1)}>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
         <View>
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, styles.flex(1)]}>
-              <StyledText style={styles.fieldTitle}>{t('printerName')}</StyledText>
+              <Text style={styles.fieldTitle}>{t('printerName')}</Text>
             </View>
             <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
@@ -91,7 +90,7 @@ class PrinterForm extends React.Component {
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, styles.flex(1)]}>
-              <StyledText style={styles.fieldTitle}>{t('ipAddress')}</StyledText>
+              <Text style={styles.fieldTitle}>{t('ipAddress')}</Text>
             </View>
             <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
@@ -106,7 +105,7 @@ class PrinterForm extends React.Component {
           </View>
 
           <View style={[styles.sectionTitleContainer]}>
-            <StyledText style={styles.sectionTitleText}>{t('serviceType.title')}</StyledText>
+            <Text style={styles.sectionTitleText}>{t('serviceType.title')}</Text>
           </View>
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
@@ -157,7 +156,7 @@ class PrinterForm extends React.Component {
             </TouchableOpacity>
           )}
         </View>
-      </View>
+      </ScrollView>
     )
   }
 }

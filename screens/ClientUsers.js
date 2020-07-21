@@ -9,14 +9,12 @@ import {
   TouchableHighlight,
   TouchableOpacity
 } from 'react-native'
-import {connect} from 'react-redux'
-import {getClientUsrs, doLogout} from '../actions'
+import { connect } from 'react-redux'
+import { getClientUsrs, doLogout } from '../actions'
 import styles from '../styles'
 import BackBtn from '../components/BackBtn'
-import {LocaleContext} from '../locales/LocaleContext'
+import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
-import {ThemeContainer} from "../components/ThemeContainer";
-import {StyledText} from "../components/StyledText";
 
 class ClientUsers extends React.Component {
   static navigationOptions = {
@@ -45,7 +43,6 @@ class ClientUsers extends React.Component {
   async handleDefaultUserLogout(navigation) {
     try {
       await AsyncStorage.removeItem('token')
-      await AsyncStorage.removeItem('clientusrToken')
       navigation.navigate('Login')
       this.props.dispatch(this.props.dispatch(doLogout()))
     } catch (err) {
@@ -54,68 +51,64 @@ class ClientUsers extends React.Component {
   }
 
   render() {
-    const {clientusers, navigation} = this.props
-    const {t} = this.context
+    const { clientusers, refreshing, navigation } = this.props
+    const { t } = this.context
 
     return (
-      <ThemeContainer>
-        <View style={[styles.fullWidthScreen]}>
-          <ScreenHeader backNavigation={true}
-                        parentFullScreen={true}
-                        title={t('clientUsersTitle')}
-                        rightComponent={
-                          <TouchableOpacity onPress={() => this.handleDefaultUserLogout(navigation)}>
-                            <Text style={styles.sectionBarText}>
-                              {t('logout')}
-                            </Text>
-                          </TouchableOpacity>
-                        }
-          />
+      <View style={[styles.container_nocenterCnt]}>
 
-          <View style={[styles.horizontalMargin, {marginTop: 80}]}>
-            <FlatList
-              data={clientusers}
-              renderItem={({item}) => (
-                <TouchableOpacity
+        <ScreenHeader backNavigation={true}
+                      title={t('clientUsersTitle')}
+                      rightComponent={
+                        <TouchableOpacity onPress={() => this.handleDefaultUserLogout(navigation)}>
+                          <Text style={styles.sectionBarText}>
+                            {t('logout')}
+                          </Text>
+                        </TouchableOpacity>
+                      }
+        />
+
+        <View style={{ marginTop: 80 }}>
+          <FlatList
+            data={clientusers}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  flexDirection: 'column',
+                  margin: 1,
+                  marginBottom: 30
+                }}
+                onPress={() =>
+                  this.props.navigation.navigate('ClientUserLogin', {
+                    clientusersName: item.username,
+                    displayName: item.displayName,
+                    defaultUser: item.defaultUser
+                  })
+                }
+              >
+                <Text
                   style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    margin: 1,
-                    marginBottom: 30
+                    backgroundColor: '#f1f1f1',
+                    width: 44,
+                    height: 44,
+                    borderRadius: 44,
+                    textAlign: 'center',
+                    lineHeight: 44
                   }}
-                  onPress={() =>
-                    this.props.navigation.navigate('ClientUserLogin', {
-                      clientusersName: item.username,
-                      displayName: item.displayName,
-                      defaultUser: item.defaultUser
-                    })
-                  }
                 >
-                  <View style={styles.tableCellView}>
-                    <Text
-                      style={{
-                        backgroundColor: '#f1f1f1',
-                        width: 44,
-                        height: 44,
-                        borderRadius: 44,
-                        textAlign: 'center',
-                        lineHeight: 44
-                      }}
-                    >
-                      {item.username[0].toUpperCase()}
-                    </Text>
-                    <StyledText style={{marginLeft: 15}}>
-                      {item.nickname != null ? item.nickname : item.username}
-                    </StyledText>
-                  </View>
-                </TouchableOpacity>
-              )}
-              numColumns={2}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </View>
+                  {item.username[0].toUpperCase()}
+                </Text>
+                <Text style={{ marginLeft: 60, marginTop: -30 }}>
+                  {item.nickname != null ? item.nickname : item.username}
+                </Text>
+              </TouchableOpacity>
+            )}
+            numColumns={2}
+            keyExtractor={(item, index) => index.toString()}
+          />
         </View>
-      </ThemeContainer>
+      </View>
     )
   }
 }

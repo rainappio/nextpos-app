@@ -24,7 +24,6 @@ import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import AddBtn from "../components/AddBtn";
 import LoadingScreen from "./LoadingScreen";
-import {ThemeScrollView} from "../components/ThemeScrollView";
 
 class TableLayoutEdit extends React.Component {
   static navigationOptions = {
@@ -87,7 +86,7 @@ class TableLayoutEdit extends React.Component {
       )
     }
     return (
-    	<ThemeScrollView>
+    	<ScrollView scrollIndicatorInsets={{right: 1}}>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader title={t('editTableLayoutTitle')}
                         parentFullScreen={true}
@@ -111,7 +110,7 @@ class TableLayoutEdit extends React.Component {
             handleEditCancel={this.handleEditCancel}
           />
         </View>
-      </ThemeScrollView>
+      </ScrollView>
     )
   }
 }

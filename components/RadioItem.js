@@ -2,7 +2,6 @@ import React from 'react'
 import {Text, View} from 'react-native'
 import {Radio, List} from '@ant-design/react-native'
 import styles from '../styles'
-import {StyledText} from "./StyledText";
 
 export default class RenderRadioBtn extends React.Component {
   render() {
@@ -22,7 +21,7 @@ export default class RenderRadioBtn extends React.Component {
           checked={value === customValue}
           style={{position: 'absolute', right: 0}}
         >
-          <StyledText style={styles.textBold}>{optionName}</StyledText>
+          <Text style={styles.textBold}>{optionName}</Text>
         </Radio>
       </View>
     )

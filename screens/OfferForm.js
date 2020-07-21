@@ -17,7 +17,6 @@ import {
   successMessage
 } from "../constants/Backend";
 import DateTimeFilterControlledForm from "./DateTimeFilterControlledForm";
-import {StyledText} from "../components/StyledText";
 
 class OfferForm extends React.Component {
   static navigationOptions = {
@@ -151,7 +150,7 @@ class OfferForm extends React.Component {
       <View>
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, { flex: 1 }]}>
-            <StyledText style={styles.fieldTitle}>{t("offerName")}</StyledText>
+            <Text style={styles.fieldTitle}>{t("offerName")}</Text>
           </View>
           <View style={[styles.tableCellView, styles.justifyRight, { flex: 3 }]}>
             <Field
@@ -159,6 +158,7 @@ class OfferForm extends React.Component {
               component={InputText}
               placeholder={t("offerName")}
               secureTextEntry={false}
+              autoFocus={!isEditForm}
               validate={isRequired}
             />
           </View>
@@ -167,17 +167,17 @@ class OfferForm extends React.Component {
         {isEditForm && (
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t("offerStatus")}</StyledText>
+              <Text style={styles.fieldTitle}>{t("offerStatus")}</Text>
             </View>
             <View style={[styles.tableCellView, styles.justifyRight]}>
-              <StyledText style={styles.fieldTitle}>{initialValues.active ? t('active') : t('inactive')}</StyledText>
+              <Text style={styles.fieldTitle}>{initialValues.active ? t('active') : t('inactive')}</Text>
             </View>
           </View>
         )}
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, { flex: 1 }]}>
-            <StyledText style={styles.fieldTitle}>{t("dateBound")}</StyledText>
+            <Text style={styles.fieldTitle}>{t("dateBound")}</Text>
           </View>
           <View style={[styles.tableCellView, styles.justifyRight]}>
             <Field
@@ -235,13 +235,19 @@ class OfferForm extends React.Component {
           </View>
         )}
 
-        <View style={[styles.sectionContainer, styles.horizontalMargin,]}>
+        <View
+          style={[
+            styles.sectionContainer,
+            styles.horizontalMargin,
+            { marginLeft: 0, marginRight: 0 }
+          ]}
+        >
           <View style={[styles.sectionContainer]}>
             <View style={styles.sectionTitleContainer}>
-              <StyledText style={styles.sectionTitleText}>{t("offerType")}</StyledText>
+              <Text style={styles.sectionTitleText}>{t("offerType")}</Text>
             </View>
 
-            <View style={[styles.sectionContainer]}>
+            <View style={[styles.sectionContainer, styles.dynamicHorizontalPadding(15)]}>
               <View>
                 <Field
                   name="offerType"
@@ -262,7 +268,7 @@ class OfferForm extends React.Component {
                 ]}
               >
                 <View style={[styles.tableCellView, { flex: 3 }]}>
-                  <StyledText style={styles.fieldTitle}>{t("applyToAll")}</StyledText>
+                  <Text style={styles.fieldTitle}>{t("applyToAll")}</Text>
                 </View>
                 <View style={[styles.tableCellView, styles.justifyRight]}>
                   <Field
@@ -297,7 +303,7 @@ class OfferForm extends React.Component {
                         key={selectedProduct.productId}
                   >
                     <View style={[styles.tableCellView]}>
-                      <StyledText>{selectedProduct.name}</StyledText>
+                      <Text>{selectedProduct.name}</Text>
                     </View>
                     <View style={[styles.tableCellView, styles.justifyRight]}>
                       <TouchableOpacity
@@ -324,7 +330,7 @@ class OfferForm extends React.Component {
 
         <View style={[styles.sectionContainer]}>
           <View style={[styles.sectionTitleContainer, {flex: 1}]}>
-            <StyledText style={styles.sectionTitleText}>{t("discountType")}</StyledText>
+            <Text style={styles.sectionTitleText}>{t("discountType")}</Text>
           </View>
 
           <View style={styles.tableCellView}>
@@ -349,25 +355,23 @@ class OfferForm extends React.Component {
               />
             </View>
           </View>
-
-          <View style={styles.tableRowContainer}>
-            <View style={[styles.tableCellView, { flex: 1 }]}>
-              <StyledText style={styles.fieldTitle}>{t("discountValue")}</StyledText>
-            </View>
-            <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
-              <Field
-                name="discountValue"
-                component={InputText}
-                placeholder={t("discountValue")}
-                secureTextEntry={false}
-                keyboardType='numeric'
-                validate={isRequired}
-              />
-            </View>
-          </View>
         </View>
 
-
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableCellView, { flex: 1 }]}>
+            <Text style={styles.fieldTitle}>{t("discountValue")}</Text>
+          </View>
+          <View style={[styles.tableCellView, styles.justifyRight]}>
+            <Field
+              name="discountValue"
+              component={InputText}
+              placeholder={t("discountValue")}
+              secureTextEntry={false}
+              keyboardType='numeric'
+              validate={isRequired}
+            />
+          </View>
+        </View>
 
         <View style={[styles.bottom, styles.horizontalMargin]}>
           <TouchableOpacity onPress={handleSubmit}>

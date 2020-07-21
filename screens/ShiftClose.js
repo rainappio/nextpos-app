@@ -12,16 +12,16 @@ import {
 } from 'react-native'
 import {connect} from 'react-redux'
 import BackBtnCustom from '../components/BackBtnCustom'
-import {formatDate, getShiftStatus, getMostRecentShiftStatus} from '../actions'
+import { formatDate, getShiftStatus, getMostRecentShiftStatus } from '../actions'
 import {
   api,
   dispatchFetchRequest, dispatchFetchRequestWithOption,
   successMessage, warningMessage
 } from '../constants/Backend'
 import styles from '../styles'
-import {LocaleContext} from '../locales/LocaleContext'
+import { LocaleContext } from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import {handleCloseShift, handleOpenShift, checkBalanceInput, renderShiftStatus} from "../helpers/shiftActions";
 import BackBtn from "../components/BackBtn";
 import AccountCloseConfirm from './AccountCloseConfirm'
@@ -29,9 +29,6 @@ import ScreenHeader from "../components/ScreenHeader";
 import {NavigationEvents} from "react-navigation";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 import LoadingScreen from "./LoadingScreen";
-import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
-import {StyledText} from "../components/StyledText";
-import {ThemeContainer} from "../components/ThemeContainer";
 
 class ShiftClose extends React.Component {
   static navigationOptions = {
@@ -106,11 +103,11 @@ class ShiftClose extends React.Component {
       this.props.getMostRecentShiftStatus()
       this.props.navigation.navigate('AccountClose')
     }).then()
-  }
+	}
 
   render() {
     const {loading, shift, haveData, mostRecentShift} = this.props
-    const {t} = this.context
+    const { t } = this.context
 
     if (loading) {
       return (
@@ -118,8 +115,7 @@ class ShiftClose extends React.Component {
       )
     } else {
       return (
-        <ThemeContainer>
-          <View style={[styles.fullWidthScreen]}>
+          <KeyboardAwareScrollView contentContainerStyle={[styles.fullWidthScreen]}>
             <NavigationEvents
               onWillFocus={() => {
                 this.props.getShiftStatus()
@@ -132,12 +128,12 @@ class ShiftClose extends React.Component {
             <View style={{flex: 3, justifyContent: 'center'}}>
               <View style={styles.tableRowContainerWithBorder}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
-                  <StyledText style={[styles.fieldTitle]}>
+                  <Text style={[styles.fieldTitle]}>
                     {t('shiftStatus')}
-                  </StyledText>
+                  </Text>
                 </View>
                 <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                  <StyledText>{renderShiftStatus(mostRecentShift.shiftStatus)}</StyledText>
+                  <Text>{renderShiftStatus(mostRecentShift.shiftStatus)}</Text>
                 </View>
               </View>
 
@@ -145,22 +141,22 @@ class ShiftClose extends React.Component {
                 <View>
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
-                      <StyledText style={[styles.fieldTitle]}>
+                      <Text style={[styles.fieldTitle]}>
                         {t('closedAt')}
-                      </StyledText>
+                      </Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                      <StyledText>{formatDate(mostRecentShift.close.timestamp)}</StyledText>
+                      <Text>{formatDate(mostRecentShift.close.timestamp)}</Text>
                     </View>
                   </View>
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
-                      <StyledText style={[styles.fieldTitle]}>
+                      <Text style={[styles.fieldTitle]}>
                         {t('closedBy')}
-                      </StyledText>
+                      </Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                      <StyledText>{mostRecentShift.close.who}</StyledText>
+                      <Text>{mostRecentShift.close.who}</Text>
                     </View>
                   </View>
                 </View>
@@ -170,32 +166,32 @@ class ShiftClose extends React.Component {
                 <View>
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
-                      <StyledText style={[styles.fieldTitle]}>
+                      <Text style={[styles.fieldTitle]}>
                         {t('openAt')}
-                      </StyledText>
+                      </Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                      <StyledText>{formatDate(shift.open.timestamp)}</StyledText>
+                      <Text>{formatDate(shift.open.timestamp)}</Text>
                     </View>
                   </View>
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
-                      <StyledText style={[styles.fieldTitle]}>
+                      <Text style={[styles.fieldTitle]}>
                         {t('openBalance')}
-                      </StyledText>
+                      </Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                      <StyledText>{shift.open.balance}</StyledText>
+                      <Text>{shift.open.balance}</Text>
                     </View>
                   </View>
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
-                      <StyledText style={[styles.fieldTitle]}>
+                      <Text style={[styles.fieldTitle]}>
                         {t('openBy')}
-                      </StyledText>
+                      </Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                      <StyledText>{shift.open.who}</StyledText>
+                      <Text>{shift.open.who}</Text>
                     </View>
                   </View>
                 </View>
@@ -204,74 +200,70 @@ class ShiftClose extends React.Component {
 
             <View style={[styles.bottom, styles.horizontalMargin]}>
               {
-                ['ACTIVE', 'CLOSING', 'CONFIRM_CLOSE'].includes(mostRecentShift.shiftStatus) ? (
-                  <TouchableOpacity
-                    onPress={this.handleinitiateCloseShift}
-                  >
-                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                      {t('shift.closeShift')}
-                    </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <View>
-                    {/*<View style={[styles.fieldContainer]}>
-                      <StyledText style={[styles.fieldTitle, {flex: 2}]}>
-                        {t('cash')}
-                      </StyledText>
-                      <TextInput
-                        name="balance"
-                        value={String(this.state.balance)}
-                        type='text'
-                        onChangeText={(value) => this.setState({balance: value})}
-                        placeholder={t('cash')}
-                        keyboardType={`numeric`}
-                        style={[{flex: 3, height: 44, borderBottomColor: '#f1f1f1', borderBottomWidth: 1}]}
-                        inputAccessoryViewID="shiftBalance"
-                      />
-                      {Platform.OS === 'ios' && (
-                        <InputAccessoryView nativeID="shiftBalance">
-                          <TouchableOpacity
-                            onPress={() => Keyboard.dismiss()}
-                            style={[{flex: 1, flexDirection: 'row-reverse'}, styles.grayBg]}
-                          >
-                            <Text
-                              style={[
-                                styles.margin_15,
-                                {fontSize: 16, fontWeight: 'bold', color: '#F39F86'}
-                              ]}
-                            >
-                              Done
-                            </Text>
-                          </TouchableOpacity>
-                        </InputAccessoryView>
-                      )}
-                    </View>*/}
-                    <TouchableOpacity
-                      onPress={() => this.props.navigation.navigate('Tables')}
-                    >
-                      <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                        {t('openShiftAction')}
-                      </Text>
-                    </TouchableOpacity>
-                    {/*<ConfirmActionButton
-                      handleConfirmAction={this.handleOpenShift}
-                      params={this.state.balance}
-                      buttonTitle="openShiftAction"
-                    />*/}
-                  </View>
-                )
+                ['ACTIVE', 'CLOSING', 'CONFIRM_CLOSE'].includes(mostRecentShift.shiftStatus)
+                ?
+                  (
+     								<TouchableOpacity
+       								onPress={this.handleinitiateCloseShift}
+     									>
+     									<Text style={[styles.bottomActionButton, styles.actionButton]}>
+        								{t('closeShiftAction')}
+      								</Text>
+    								</TouchableOpacity>
+    							)
+                  :
+                  	(
+                  		<View>
+                  			<View style={[styles.fieldContainer]}>
+                					<Text style={[styles.fieldTitle, {flex: 2}]}>
+                  					{t('cash')}
+                					</Text>
+                					<TextInput
+                  					name="balance"
+                  					value={String(this.state.balance)}
+                  					type='text'
+                  					onChangeText={(value) => this.setState({balance: value})}
+                  					placeholder={t('cash')}
+                  					keyboardType={`numeric`}
+                  					style={[{flex: 3, height: 44, borderBottomColor: '#f1f1f1', borderBottomWidth: 1}]}
+                  					inputAccessoryViewID="shiftBalance"
+                					/>
+                					{Platform.OS === 'ios' && (
+                  					<InputAccessoryView nativeID="shiftBalance">
+                    					<TouchableOpacity
+                      					onPress={() => Keyboard.dismiss()}
+                      					style={[{ flex: 1, flexDirection: 'row-reverse' }, styles.grayBg]}
+                    						>
+                      					<Text
+                        					style={[
+                          					styles.margin_15,
+                          					{ fontSize: 16, fontWeight: 'bold', color: '#F39F86' }
+                        					]}
+                      						>
+                        					Done
+                      					</Text>
+                    					</TouchableOpacity>
+                  					</InputAccessoryView>
+                					)}
+              					</View>
+                				<ConfirmActionButton
+                  				handleConfirmAction={this.handleOpenShift}
+                  				params={this.state.balance}
+                  				buttonTitle="openShiftAction"
+                				/>
+              				</View>
+            				)
               }
             </View>
-          </View>
-        </ThemeContainer>
+          </KeyboardAwareScrollView>
       )
     }
   }
 }
 
 const mapStateToProps = state => ({
-  shift: state.shift.data,
-  mostRecentShift: state.mostRecentShift.data,
+	shift: state.shift.data,
+	mostRecentShift: state.mostRecentShift.data,
   loading: state.mostRecentShift.loading,
   haveData: state.mostRecentShift.haveData
 })

@@ -1,10 +1,10 @@
 import React from 'react'
-import {View, Text, ScrollView} from 'react-native'
-import {connect} from 'react-redux'
-import {Accordion, List, SwipeAction} from '@ant-design/react-native'
+import { View, Text, ScrollView } from 'react-native'
+import { connect } from 'react-redux'
+import { Accordion, List, SwipeAction } from '@ant-design/react-native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import BackBtn from '../components/BackBtn'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import TableLayoutForm from './TableLayoutForm'
 import {
   api,
@@ -12,11 +12,10 @@ import {
   errorAlert,
   successMessage, dispatchFetchRequest
 } from '../constants/Backend'
-import {getTableLayouts} from '../actions'
+import { getTableLayouts } from '../actions'
 import styles from '../styles'
-import {LocaleContext} from '../locales/LocaleContext'
+import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
-import {ThemeContainer} from "../components/ThemeContainer";
 
 class TableLayoutAdd extends React.Component {
   static navigationOptions = {
@@ -47,21 +46,19 @@ class TableLayoutAdd extends React.Component {
   }
 
   render() {
-    const {navigation} = this.props
-    const {t} = this.context
+    const { navigation } = this.props
+    const { t } = this.context
 
     return (
-      <ThemeContainer>
-        <View style={styles.fullWidthScreen}>
-          <ScreenHeader title={t('addTableLayoutTitle')}
-                        parentFullScreen={true}/>
+      <View style={styles.fullWidthScreen}>
+        <ScreenHeader title={t('addTableLayoutTitle')}
+                      parentFullScreen={true}/>
 
-          <TableLayoutForm
-            onSubmit={this.handleSubmit}
-            navigation={navigation}
-          />
-        </View>
-      </ThemeContainer>
+        <TableLayoutForm
+          onSubmit={this.handleSubmit}
+          navigation={navigation}
+        />
+      </View>
     )
   }
 }

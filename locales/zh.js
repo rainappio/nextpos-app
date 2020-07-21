@@ -5,9 +5,6 @@ const zh = {
   password: '密碼',
   logout: '登出',
   refreshed: '已重新刷新',
-  general: {
-    noData: '沒有資料'
-  },
   menu: {
     home: '主頁',
     tables: '座位訂單',
@@ -53,10 +50,6 @@ const zh = {
     pin: '加入置頂',
     activate: '啟用',
     deactivate: '停用'
-  },
-  product: {
-    ungrouped: '未分類',
-    pinned: '置頂產品',
   },
   order: {
     inStore: '內用',
@@ -112,7 +105,6 @@ const zh = {
     DELETED: '刪單'
   },
   orderLog: {
-    title: '訂單日誌',
     updateOrder: '更新訂單資訊',
     stateChange: '訂單狀態',
     addOrderLineItem: '新增品項',
@@ -134,7 +126,6 @@ const zh = {
     minutes: '分鐘'
   },
   shift: {
-    closeShift: '關帳',
     status: {
       INACTIVE: '未開帳',
       ACTIVE: '開帳中',

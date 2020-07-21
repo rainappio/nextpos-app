@@ -1,20 +1,18 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
-import {ScrollView, Text, View, TouchableOpacity} from 'react-native'
-import {isRequired} from '../validators'
+import { Field, reduxForm } from 'redux-form'
+import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
+import { isRequired } from '../validators'
 import InputText from '../components/InputText'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import DropDown from '../components/DropDown'
 import AddBtn from '../components/AddBtn'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
 import DeleteBtn from '../components/DeleteBtn'
-import {LocaleContext} from '../locales/LocaleContext'
+import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import RadioItemObjPick from "../components/RadioItemObjPick";
-import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
-import {StyledText} from "../components/StyledText";
 
 class ProductFormScreen extends React.Component {
   static navigationOptions = {
@@ -53,7 +51,7 @@ class ProductFormScreen extends React.Component {
   }
 
   render() {
-    const {t} = this.context
+    const { t } = this.context
 
     const {
       initialValues,
@@ -71,176 +69,178 @@ class ProductFormScreen extends React.Component {
     } = this.props
 
     return (
-      <ThemeKeyboardAwareScrollView>
-        <View style={[styles.fullWidthScreen]}>
-          <ScreenHeader parentFullScreen={true}
-                        title={isEditForm ? t('editProduct') : t('newProduct')}
-                        rightComponent={
-                          <AddBtn
-                            onPress={() =>
-                              this.props.navigation.navigate('Option', {
-                                customRoute: this.props.navigation.state.routeName
-                              })
-                            }
-                          />
-                        }
-          />
+      <ScrollView scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+        <DismissKeyboard>
+          <View style={[styles.fullWidthScreen]}>
+            <ScreenHeader parentFullScreen={true}
+              title={isEditForm ? t('editProduct') : t('newProduct')}
+              rightComponent={
+                <AddBtn
+                  onPress={() =>
+                    this.props.navigation.navigate('Option', {
+                      customRoute: this.props.navigation.state.routeName
+                    })
+                  }
+                />
+              }
+            />
 
-          <View style={styles.tableRowContainerWithBorder}>
-            <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('productName')}</StyledText>
-            </View>
-            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <Field
-                name="name"
-                component={InputText}
-                validate={isRequired}
-                placeholder={t('productName')}
-                secureTextEntry={false}
-              />
-            </View>
-          </View>
-
-          <View style={styles.tableRowContainerWithBorder}>
-            <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('price')}</StyledText>
-            </View>
-            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <Field
-                name="price"
-                component={InputText}
-                validate={isRequired}
-                placeholder={t('price')}
-                secureTextEntry={false}
-                keyboardType={'numeric'}
-              />
-            </View>
-          </View>
-
-          <View style={styles.tableRowContainerWithBorder}>
-            <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('productLabel')}</StyledText>
-            </View>
-            <View style={{flex: 1, justifyContent: 'flex-end'}}>
-              <Field
-                component={DropDown}
-                name="productLabelId"
-                options={labels}
-                search
-                selection
-                fluid
-                placeholder={{value: null, label: t('productLabel')}}
-              />
-            </View>
-          </View>
-
-          <View style={styles.tableRowContainerWithBorder}>
-            <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('description')}</StyledText>
-            </View>
-            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-              <Field
-                name="description"
-                component={InputText}
-                placeholder={t('description')}
-                secureTextEntry={false}
-              />
-            </View>
-          </View>
-
-          {isEditForm && (
-            <View>
-              <View style={styles.sectionContainer}>
-                <View style={styles.sectionTitleContainer}>
-                  <StyledText style={styles.sectionTitleText}>{t('options')}</StyledText>
-                </View>
-
-                <View>
-                  <Field
-                    name="productOptionIds"
-                    component={RenderCheckboxGroup}
-                    customarr={prodctoptions}
-                    navigation={navigation}
-                    customRoute={'OptionEdit'}
-                  />
-                </View>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, { flex: 1 }]}>
+                <Text style={styles.fieldTitle}>{t('productName')}</Text>
               </View>
+              <View style={[styles.tableCellView, { flex: 1, justifyContent: 'flex-end' }]}>
+                <Field
+                  name="name"
+                  component={InputText}
+                  validate={isRequired}
+                  placeholder={t('productName')}
+                  secureTextEntry={false}
+                />
+              </View>
+            </View>
 
-              <View style={[styles.sectionContainer]}>
-                <View style={styles.sectionTitleContainer}>
-                  <StyledText style={styles.sectionTitleText}>{t('workingArea')}</StyledText>
-                </View>
-                {workingareas !== undefined &&
-                workingareas.map(workarea => (
-                  <View key={workarea.id}>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, { flex: 1 }]}>
+                <Text style={styles.fieldTitle}>{t('price')}</Text>
+              </View>
+              <View style={[styles.tableCellView, { flex: 1, justifyContent: 'flex-end' }]}>
+                <Field
+                  name="price"
+                  component={InputText}
+                  validate={isRequired}
+                  placeholder={t('price')}
+                  secureTextEntry={false}
+                  keyboardType={'numeric'}
+                />
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, { flex: 1 }]}>
+                <Text style={styles.fieldTitle}>{t('productLabel')}</Text>
+              </View>
+              <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                <Field
+                  component={DropDown}
+                  name="productLabelId"
+                  options={labels}
+                  search
+                  selection
+                  fluid
+                  placeholder={{ value: null, label: t('productLabel') }}
+                />
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, { flex: 1 }]}>
+                <Text style={styles.fieldTitle}>{t('description')}</Text>
+              </View>
+              <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
+                <Field
+                  name="description"
+                  component={InputText}
+                  placeholder={t('description')}
+                  secureTextEntry={false}
+                />
+              </View>
+            </View>
+
+            {isEditForm && (
+              <View>
+                <View style={styles.sectionContainer}>
+                  <View style={styles.sectionTitleContainer}>
+                    <Text style={styles.sectionTitleText}>{t('options')}</Text>
+                  </View>
+
+                  <View>
                     <Field
-                      name='workingAreaId'
-                      component={RadioItemObjPick}
-                      customValueOrder={workarea.id}
-                      optionName={workarea.name}
-                      onCheck={(currentVal, fieldVal) => {
-                        return fieldVal !== undefined && currentVal === fieldVal
-                      }}
+                      name="productOptionIds"
+                      component={RenderCheckboxGroup}
+                      customarr={prodctoptions}
+                      navigation={navigation}
+                      customRoute={'OptionEdit'}
                     />
                   </View>
-                ))}
+                </View>
+
+                <View style={[styles.sectionContainer]}>
+                  <View style={styles.sectionTitleContainer}>
+                    <Text style={styles.sectionTitleText}>{t('workingArea')}</Text>
+                  </View>
+                  {workingareas !== undefined &&
+                    workingareas.map(workarea => (
+                      <View key={workarea.id}>
+                        <Field
+                          name='workingAreaId'
+                          component={RadioItemObjPick}
+                          customValueOrder={workarea.id}
+                          optionName={workarea.name}
+                          onCheck={(currentVal, fieldVal) => {
+                            return fieldVal !== undefined && currentVal === fieldVal
+                          }}
+                        />
+                      </View>
+                    ))}
+                </View>
               </View>
-            </View>
-          )}
+            )}
 
-          <View style={[styles.bottom, styles.horizontalMargin]}>
-            <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {t('action.save')}
-              </Text>
-            </TouchableOpacity>
-
-            {isEditForm ? (
-              <View>
-                {
-                  isPinned ?
-                    <TouchableOpacity onPress={() => handlepinToggle(productId)}>
-                      <Text
-                        style={[styles.bottomActionButton, styles.actionButton]}
-                      >
-                        {t('action.unpin')}
-                      </Text>
-                    </TouchableOpacity>
-                    :
-                    <TouchableOpacity onPress={() => handlepinToggle(productId)}>
-                      <Text
-                        style={[styles.bottomActionButton, styles.actionButton]}
-                      >
-                        {t('action.pin')}
-                      </Text>
-                    </TouchableOpacity>
-                }
-
-                <TouchableOpacity onPress={handleEditCancel}>
-                  <Text
-                    style={[styles.bottomActionButton, styles.cancelButton]}
-                  >
-                    {t('action.cancel')}
-                  </Text>
-                </TouchableOpacity>
-                <DeleteBtn handleDeleteAction={handleDeleteProduct}/>
-              </View>
-            ) : (
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate('ProductsOverview')
-                }
-              >
-                <Text
-                  style={[styles.bottomActionButton, styles.cancelButton]}
-                >
-                  {t('action.cancel')}
+            <View style={[styles.bottom, styles.horizontalMargin]}>
+              <TouchableOpacity onPress={handleSubmit}>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  {t('action.save')}
                 </Text>
               </TouchableOpacity>
-            )}
+
+              {isEditForm ? (
+                <View>
+                  {
+                    isPinned ?
+                      <TouchableOpacity onPress={() => handlepinToggle(productId)}>
+                        <Text
+                          style={[styles.bottomActionButton, styles.actionButton]}
+                        >
+                          {t('action.unpin')}
+                        </Text>
+                      </TouchableOpacity>
+                      :
+                      <TouchableOpacity onPress={() => handlepinToggle(productId)}>
+                        <Text
+                          style={[styles.bottomActionButton, styles.actionButton]}
+                        >
+                          {t('action.pin')}
+                        </Text>
+                      </TouchableOpacity>
+                  }
+
+                  <TouchableOpacity onPress={handleEditCancel}>
+                    <Text
+                      style={[styles.bottomActionButton, styles.cancelButton]}
+                    >
+                      {t('action.cancel')}
+                    </Text>
+                  </TouchableOpacity>
+                  <DeleteBtn handleDeleteAction={handleDeleteProduct} />
+                </View>
+              ) : (
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate('ProductsOverview')
+                    }
+                  >
+                    <Text
+                      style={[styles.bottomActionButton, styles.cancelButton]}
+                    >
+                      {t('action.cancel')}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+            </View>
           </View>
-        </View>
-      </ThemeKeyboardAwareScrollView>
+        </DismissKeyboard>
+      </ScrollView>
     )
   }
 }

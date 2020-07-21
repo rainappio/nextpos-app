@@ -15,8 +15,6 @@ import {
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
-import {ThemeScrollView} from "../components/ThemeScrollView";
-import {ThemeContainer} from "../components/ThemeContainer";
 
 class PrinterAdd extends React.Component {
   static navigationOptions = {
@@ -49,14 +47,14 @@ class PrinterAdd extends React.Component {
     const { t } = this.context
 
     return (
-      <ThemeContainer>
+      <DismissKeyboard>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader title={t('addPrinterTitle')}
                         parentFullScreen={true}/>
 
           <PrinterForm navigation={navigation} onSubmit={this.handleSubmit} />
         </View>
-      </ThemeContainer>
+      </DismissKeyboard>
     )
   }
 }

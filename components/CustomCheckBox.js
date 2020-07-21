@@ -2,27 +2,32 @@ import React from 'react'
 import {Image, Text, View} from 'react-native'
 import {CheckBox} from 'react-native-elements'
 import images from "../assets/images";
-import {StyledText} from "./StyledText";
-import {withContext} from "../helpers/contextHelper";
 
-class CustomCheckBox extends React.Component {
+export default class CustomCheckBox extends React.Component {
   render() {
     const {
       input: {onChange, value},
       customValue,
       optionName,
       checkboxType,
-      themeStyle,
       ...rest
     } = this.props
 
     return (
       <CheckBox
-        title={
-          <StyledText>{optionName}</StyledText>
+        title={optionName}
+        checkedIcon={
+          <Image
+            source={images.checkicon}
+            style={{width: 35, height: 35}}
+          />
         }
-        checkedIcon={'check-circle'}
-        uncheckedIcon={'circle'}
+        uncheckedIcon={
+          <Image
+            source={images.checkiconOutline}
+            style={{width: 35, height: 35}}
+          />
+        }
         checked={ value === customValue }
         onPress={() => {
           if (checkboxType === 'checkbox') {
@@ -31,11 +36,10 @@ class CustomCheckBox extends React.Component {
             // imply radio option
             onChange(customValue)
           }
+
+
         }}
-        containerStyle={{backgroundColor: themeStyle.backgroundColor}}
       />
     )
   }
 }
-
-export default withContext(CustomCheckBox)

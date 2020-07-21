@@ -14,7 +14,7 @@ import {
 } from 'react-native'
 import {connect} from 'react-redux'
 import BackBtnCustom from '../components/BackBtnCustom'
-import {formatCurrency, formatDate, getShiftStatus} from '../actions'
+import { formatDate, getShiftStatus } from '../actions'
 import {
   api,
   dispatchFetchRequest,
@@ -24,13 +24,9 @@ import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
 import { DismissKeyboard } from '../components/DismissKeyboard'
-import {handleCloseShift, handleOpenShift, handleAbortCloseShift, renderShiftStatus} from "../helpers/shiftActions";
+import {handleCloseShift, handleOpenShift, handleAbortCloseShift} from "../helpers/shiftActions";
 import BackBtn from "../components/BackBtn";
 import InputText from '../components/InputText'
-import ScreenHeader from "../components/ScreenHeader";
-import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
-import StyledTextInput from "../components/StyledTextInput";
-import {StyledText} from "../components/StyledText";
 
 class AccountCloseConfirmForm extends React.Component {
   static navigationOptions = {
@@ -80,23 +76,7 @@ class AccountCloseConfirmForm extends React.Component {
     const cardServiceCharge = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.serviceCharge : 0
 
     return (
-      <ThemeKeyboardAwareScrollView>
-        <View style={[styles.container]}>
-          <ScreenHeader title={t('shift.confirmCloseTitle')}/>
-
-          <View>
-            <StyledText style={[styles.toRight]}>
-              {t('shift.staff')} - {mostrecentShift.open.who}
-            </StyledText>
-            <StyledText style={[styles.toRight]}>
-              {formatDate(mostrecentShift.open.timestamp)}
-            </StyledText>
-            <StyledText style={[styles.toRight]}>
-              {t('shift.closingStatus')} - {renderShiftStatus(mostrecentShift.shiftStatus)}
-            </StyledText>
-          </View>
-        </View>
-
+      <View>
         {/* Post-Closing Entries */}
         <View style={styles.sectionBar}>
           <View>
@@ -108,36 +88,36 @@ class AccountCloseConfirmForm extends React.Component {
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={{flex: 3}}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.totalCashIncome')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(cashTotal)}</StyledText>
+            <Text>${cashTotal}</Text>
           </View>
         </View>
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={{flex: 3}}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.totalCreditCardIncome')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(cardTotal)}</StyledText>
+            <Text>${cardTotal}</Text>
           </View>
         </View>
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={{flex: 3}}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.totalClosingAmount')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>
-              {formatCurrency(cashTotal + cardTotal)}
-            </StyledText>
+            <Text>
+              ${cashTotal + cardTotal}
+            </Text>
           </View>
         </View>
         {/* #Post-Closing Entries */}
@@ -153,55 +133,55 @@ class AccountCloseConfirmForm extends React.Component {
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.startingCash')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(mostrecentShift.open.balance)}</StyledText>
+            <Text>${mostrecentShift.open.balance}</Text>
           </View>
         </View>
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.totalCashTransitionAmt')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(cashTotal)}</StyledText>
+            <Text>${cashTotal}</Text>
           </View>
         </View>
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.totalCashInRegister')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(actualCashAmount)}</StyledText>
+            <Text>${actualCashAmount}</Text>
           </View>
         </View>
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.difference')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(cashDifference)}</StyledText>
+            <Text>${cashDifference}</Text>
           </View>
         </View>
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.remark')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{cashUnbalanceReason}</StyledText>
+            <Text>{cashUnbalanceReason}</Text>
           </View>
         </View>
         {/* #Cash */}
@@ -219,47 +199,47 @@ class AccountCloseConfirmForm extends React.Component {
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.totalCardTransitionAmt')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(cardTotal)}</StyledText>
+            <Text>${cardTotal}</Text>
           </View>
         </View>
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.totalCardInRegister')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(actualCardAmount)}
-            </StyledText>
+            <Text>${actualCardAmount}
+            </Text>
           </View>
         </View>
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.difference')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(cardDifference)}
-            </StyledText>
+            <Text>${cardDifference}
+            </Text>
           </View>
         </View>
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.remark')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{cardUnbalanceReason}</StyledText>
+            <Text>{cardUnbalanceReason}</Text>
           </View>
         </View>
         {/* #Credit Card */}
@@ -275,44 +255,46 @@ class AccountCloseConfirmForm extends React.Component {
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.totalInvoices')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{closingShiftReport.totalOrderCount}</StyledText>
+            <Text>{closingShiftReport.totalOrderCount}</Text>
           </View>
         </View>
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
+            <Text style={[styles.fieldTitle]}>
               {t('shift.deletedOrders')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>
+            <Text>
               {closingShiftReport.orderCountByState.hasOwnProperty('DELETED') ? closingShiftReport.orderCountByState.DELETED.orderCount : 0}
-            </StyledText>
+            </Text>
           </View>
         </View>
         <View style={styles.tableRowContainerWithBorder}>
           <View style={{flex: 3}}>
-            <StyledText style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.tableCellView, {flex: 2}]}>
               {t('shift.totalDiscounts')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(cashDiscount + cardDiscount)}</StyledText>
+            <Text>${cashDiscount + cardDiscount}
+            </Text>
           </View>
         </View>
         <View style={styles.tableRowContainerWithBorder}>
           <View style={{flex: 3}}>
-            <StyledText style={[styles.tableCellView, {flex: 2}]}>
+            <Text style={[styles.tableCellView, {flex: 2}]}>
               {t('shift.totalServiceCharge')}
-            </StyledText>
+            </Text>
           </View>
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(cashServiceCharge + cardServiceCharge)}</StyledText>
+            <Text>${cashServiceCharge + cardServiceCharge}
+            </Text>
           </View>
         </View>
         {/* #Invoice */}
@@ -346,7 +328,7 @@ class AccountCloseConfirmForm extends React.Component {
           />
         </View>
         {/* #Others */}
-      </ThemeKeyboardAwareScrollView>
+      </View>
     )
   }
 }

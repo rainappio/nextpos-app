@@ -7,8 +7,6 @@ import AddBtn from '../components/AddBtn'
 import { getOffers } from '../actions'
 import LoadingScreen from "./LoadingScreen"
 import styles from '../styles'
-import {ThemeScrollView} from "../components/ThemeScrollView";
-import {StyledText} from "../components/StyledText";
 
 class ManageOffers extends React.Component {
   static navigationOptions = {
@@ -74,7 +72,7 @@ class ManageOffers extends React.Component {
             offerId: item.offerId
           })}
         >
-          <StyledText style={styles.rowFrontText}>{item.offerName} ({this.context.t(`offerTypeName.${item.offerType}`)})</StyledText>
+          <Text style={styles.rowFrontText}>{item.offerName} ({this.context.t(`offerTypeName.${item.offerType}`)})</Text>
         </TouchableOpacity>
       </View>
     );
@@ -90,8 +88,8 @@ class ManageOffers extends React.Component {
       )
     }
     return (
-      <ThemeScrollView>
-        <View style={[styles.fullWidthScreen]}>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+        <View style={[styles.fullWidthScreen, styles.nomgrBottom]}>
           <ScreenHeader title={t('manageOffersTitle')}
             parentFullScreen={true}
             rightComponent={
@@ -103,14 +101,9 @@ class ManageOffers extends React.Component {
             data={offers}
             renderItem={({ item }) => this.Item(item)}
             keyExtractor={(item) => item.offerId}
-            ListEmptyComponent={
-              <View>
-                <StyledText style={styles.messageBlock}>{t('general.noData')}</StyledText>
-              </View>
-            }
           />
         </View>
-      </ThemeScrollView>
+      </ScrollView>
     )
   }
 }

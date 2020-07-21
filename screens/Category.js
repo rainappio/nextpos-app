@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { AsyncStorage } from 'react-native'
 import { getProducts, getLables } from '../actions'
+import CategoryFormScreen from './CategoryFormScreen'
 import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
 import CategoryCustomizeScreen from "./CategoryCustomizeScreen";
 

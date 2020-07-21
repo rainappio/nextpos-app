@@ -1,7 +1,7 @@
 import React from 'react'
 import { Platform, Text, AsyncStorage } from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack'
-import {createBottomTabNavigator} from 'react-navigation-tabs'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
 import {
   NavigationActions,
   StackActions,
@@ -86,7 +86,6 @@ import ManageOffers from '../screens/ManageOffers'
 import NewOffer from '../screens/NewOffer'
 import EditOffer from '../screens/EditOffer'
 import ProductsOverviewforOffer from '../screens/ProductsOverviewforOffer'
-import TabBarBottom from "react-navigation-tabs/src/views/BottomTabBar";
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -284,17 +283,11 @@ const tabBar = createBottomTabNavigator({
       defaultHandler()
     }
   },
-  //https://stackoverflow.com/questions/42910540/react-navigation-how-to-change-tabbar-color-based-on-current-tab
-  tabBarComponent: props => {
-    return (
-      <TabBarBottom
-        {...props}
-        style={props.screenProps.themeStyle}
-      />
-    )
-  },
   tabBarOptions: {
-    showLabel: false
+    showLabel: false,
+    tabStyle: {
+      backgroundColor: '#ffffff'
+    }
   }
 })
 

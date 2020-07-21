@@ -44,6 +44,7 @@ class Product extends React.Component {
         labels={labels}
         onSubmit={this.handleSubmit}
         navigation={navigation}
+        screenProps={this.props.screenProps}
       />
     )
   }

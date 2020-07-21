@@ -9,10 +9,6 @@ import { ListItem } from 'react-native-elements'
 import LoadingScreen from "./LoadingScreen";
 import AddBtn from '../components/AddBtn'
 import styles from '../styles'
-import {ThemeScrollView} from "../components/ThemeScrollView";
-import {StyledText} from "../components/StyledText";
-import {withContext} from "../helpers/contextHelper";
-import {compose} from "redux";
 
 class ManageUserRole extends Component {
   static navigationOptions = {
@@ -66,7 +62,7 @@ class ManageUserRole extends Component {
         title={
           <View style={[styles.tableRowContainer]}>
             <View style={[styles.tableCellView, { flex: 1 }]}>
-              <StyledText>{item.roleName}</StyledText>
+              <Text>{item.roleName}</Text>
             </View>
           </View>
         }
@@ -78,7 +74,7 @@ class ManageUserRole extends Component {
           })
         }
         bottomDivider
-        containerStyle={[styles.dynamicVerticalPadding(12), { padding: 0, backgroundColor: this.props.themeStyle.backgroundColor}]}
+        containerStyle={[styles.dynamicVerticalPadding(12), { padding: 0 }]}
       />
     )
   }
@@ -93,7 +89,7 @@ class ManageUserRole extends Component {
       )
     }
     return (
-      <ThemeScrollView>
+      <DismissKeyboard>
         <View style={styles.fullWidthScreen}>
           <View>
             <ScreenHeader title={t('manageUserRoleTitle')}
@@ -112,16 +108,11 @@ class ManageUserRole extends Component {
                 data={userRoles}
                 renderItem={this.renderItem}
                 keyExtractor={item => item.id}
-                ListEmptyComponent={
-                  <View>
-                    <StyledText style={styles.messageBlock}>{t('general.noData')}</StyledText>
-                  </View>
-                }
               />
             }
           </View>
         </View>
-      </ThemeScrollView>
+      </DismissKeyboard>
     )
   }
 }
@@ -140,9 +131,7 @@ const mapDispatchToProps = dispatch => ({
   getPermissions: () => dispatch(getPermissions())
 })
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withContext
-)
-
-export default enhance(ManageUserRole)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps)
+  (ManageUserRole)

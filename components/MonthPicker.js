@@ -6,7 +6,6 @@ import Icon from "react-native-vector-icons/Ionicons";
 import SegmentedControl from "./SegmentedControl";
 import React from "react";
 import {LocaleContext} from "../locales/LocaleContext";
-import {StyledText} from "./StyledText";
 
 export default class MonthPicker extends React.Component {
 
@@ -60,12 +59,12 @@ export default class MonthPicker extends React.Component {
     return (
       <View>
         <View style={[styles.sectionTitleContainer]}>
-          <StyledText style={styles.sectionTitleText}>{i18nMoment.format('MMMM, YYYY')}</StyledText>
+          <Text style={styles.sectionTitleText}>{i18nMoment.format('MMMM, YYYY')}</Text>
         </View>
         <View style={styles.tableRowContainer}>
-          <View style={[styles.tableCellView, {flex: 1, marginRight: 10, justifyContent: 'flex-end'}]}>
+          <View style={{flex: 1, marginRight: 10, alignItems: 'flex-end'}}>
             <TouchableOpacity
-              //style={{flex: 1}}
+              style={{flex: 1}}
               hitSlop={{top: 20, bottom: 20, left: 50, right: 5}}
               onPress={() => this.navigatePrevious()}
             >
@@ -74,7 +73,7 @@ export default class MonthPicker extends React.Component {
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={[{flex: 3, justifyContent: 'center'}]}>
+          <View style={{flex: 3}}>
             <SegmentedControl
               selectedIndex={this.state.selectedFilter}
               input={{
@@ -86,7 +85,7 @@ export default class MonthPicker extends React.Component {
               }}
             />
           </View>
-          <View style={[styles.tableCellView, {flex: 1, marginLeft: 10}]}>
+          <View style={{flex: 1, marginLeft: 10}}>
             <TouchableOpacity
               style={{flex: 1}}
               hitSlop={{top: 20, bottom: 20, left: 5, right: 50}}

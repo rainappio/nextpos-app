@@ -11,7 +11,6 @@ import {
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles, {mainThemeColor} from '../styles'
-import {withContext} from "../helpers/contextHelper";
 
 const InputText = ({
   input: {
@@ -22,7 +21,6 @@ const InputText = ({
     onFocus,
     value,
     placeholder,
-    placeholderTextColor,
     secureTextEntry,
     keyboardType,
     editable,
@@ -31,7 +29,6 @@ const InputText = ({
   },
   meta: { error, touched, valid },
   height, alignLeft, extraStyle,
-  themeStyle,
   ...rest
 }) => (
     <View style={{flex: 1}}>
@@ -45,17 +42,14 @@ const InputText = ({
         value={typeof (value) == 'number' ? value.toString() : value}
         editable={editable}
         autoCapitalize={autoCapitalize}
-        placeholderTextColor={themeStyle.color}
         inputAccessoryViewID={name}
         {...rest}
         style={[
           styles.rootInput,
-          //{ borderColor: !valid && touched ? 'red' : 'gray' },
+          { borderColor: !valid && touched ? 'red' : 'gray' },
           { height: height },
           (alignLeft && { textAlign: 'left' }),
-          themeStyle,
-          styles.withBorder,
-          extraStyle,
+          extraStyle
         ]}
       />
       {Platform.OS === 'ios' && (
@@ -92,4 +86,4 @@ InputText.propTypes = {
   }).isRequired
 }
 
-export default withContext(InputText)
+export default InputText

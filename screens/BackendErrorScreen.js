@@ -1,12 +1,9 @@
 import styles from '../styles'
 import {Text, TouchableOpacity, View} from 'react-native'
 import React from 'react'
-import {LocaleContext} from '../locales/LocaleContext'
+import { LocaleContext } from '../locales/LocaleContext'
 import BackBtn from '../components/BackBtn'
 import {withNavigation} from "react-navigation";
-import {ThemeContainer} from "../components/ThemeContainer";
-import {StyledText} from "../components/StyledText";
-import ScreenHeader from "../components/ScreenHeader";
 
 // todo: use this on all screens that need to show backend error.
 class BackendErrorScreen extends React.Component {
@@ -29,28 +26,27 @@ class BackendErrorScreen extends React.Component {
   }
 
   render() {
-    const {t} = this.context
+    const { t } = this.context
 
     return (
-      <ThemeContainer>
-        <View style={[styles.container]}>
-          <ScreenHeader backNavigation={false}
-                        title={t('errorScreenTitle')}/>
-
-          <View>
-            <StyledText style={styles.messageBlock}>{t('errorMessage')}</StyledText>
-          </View>
-          <View style={styles.bottom}>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Login')}
-            >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {t('login')}
-              </Text>
-            </TouchableOpacity>
-          </View>
+      <View style={[styles.container, { justifyContent: 'space-between' }]}>
+        <View style={{ flex: 1 }}>
+          <BackBtn />
+          <Text style={styles.screenTitle}>{t('errorScreenTitle')}</Text>
         </View>
-      </ThemeContainer>
+        <View style={{ flex: 1 }}>
+          <Text>{t('errorMessage')}</Text>
+        </View>
+        <View style={{ flex: 1, justifyContent: 'flex-end'}}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Login')}
+          >
+            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              {t('login')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     )
   }
 }

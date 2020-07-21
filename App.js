@@ -32,8 +32,6 @@ import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
 import {activateKeepAwake, useKeepAwake} from "expo-keep-awake";
 import TimeZoneService from "./helpers/TimeZoneService";
-import {complexTheme, ThemeContext, themes} from "./themes/ThemeContext";
-import {getTheme, storeTheme} from "./helpers/contextHelper";
 
 YellowBox.ignoreWarnings([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
@@ -104,12 +102,7 @@ export default class App extends React.Component {
       localize: this.mergeLocaleResource,
       t: this.t,
       changeLanguage: this.changeLanguage,
-
-      // theme
-      theme: 'light',
-      themeStyle: themes.light,
-      complexTheme: complexTheme.light,
-      toggleTheme: this.toggleTheme
+      client: () => store.getState().client
     }
 
     TimeZoneService.setClientReference(() => store.getState().client)
@@ -117,18 +110,6 @@ export default class App extends React.Component {
     i18n.fallbacks = true
     i18n.locale = Localization.locale
     i18n.translations = { en: { ...globalEn }, zh: { ...globalZh } }
-  }
-
-  componentDidMount() {
-    getTheme().then(theme => {
-      const themeStyle = theme === 'light' ? themes.light : themes.dark
-
-      this.setState({
-        theme: theme,
-        themeStyle: themeStyle,
-        complexTheme: complexTheme[theme]
-      })
-    })
   }
 
   mergeLocaleResource = async locales => {
@@ -179,25 +160,15 @@ export default class App extends React.Component {
 
   changeLanguage = () => {
     let toLocale = this.state.locale === 'zh-Hant-TW' ? 'en-TW' : 'zh-Hant-TW'
-    console.log(`Default locale: ${Localization.locale}, current locale: ${this.state.locale}, changing to ${toLocale}`)
+    console.log(
+      `Default locale: ${Localization.locale}, current locale: ${this.state.locale}, changing to ${toLocale}`
+    )
 
     this.setState({ locale: toLocale })
   }
 
   t = (scope, options) => {
     return i18n.t(scope, { locale: this.state.locale, ...options })
-  }
-
-  toggleTheme = () => {
-    const theme = this.state.theme === 'light' ? 'dark' : 'light'
-    const themeStyleToChange = this.state.themeStyle === themes.dark ? themes.light : themes.dark
-    storeTheme(theme).then()
-
-    this.setState({
-      theme: theme,
-      themeStyle: themeStyleToChange,
-      complexTheme: complexTheme[theme]
-    })
   }
 
   render() {
@@ -220,27 +191,19 @@ export default class App extends React.Component {
               hidden={false}
               barStyle="dark-content"
             />
-            <ThemeContext.Provider value={{
-              theme: this.state.theme,
-              themeStyle: this.state.themeStyle,
-              complexTheme: this.state.complexTheme,
-              toggleTheme: this.state.toggleTheme
-            }}>
-              <LocaleContext.Provider value={this.state}>
-                <AppNavigator
-                  ref={navigatorRef => {
-                    NavigationService.setTopLevelNavigator(navigatorRef);
-                  }}
-                  screenProps={{
-                    t: this.t,
-                    locale: this.state.locale,
-                    localize: this.localize,
-                    changeLanguage: this.changeLanguage,
-                    themeStyle: this.state.themeStyle
-                  }}
-                />
-              </LocaleContext.Provider>
-            </ThemeContext.Provider>
+            <LocaleContext.Provider value={this.state}>
+              <AppNavigator
+                ref={navigatorRef => {
+                  NavigationService.setTopLevelNavigator(navigatorRef);
+                }}
+                screenProps={{
+                  t: this.t,
+                  locale: this.state.locale,
+                  localize: this.localize,
+                  changeLanguage: this.changeLanguage
+                }}
+              />
+            </LocaleContext.Provider>
             {/*https://www.npmjs.com/package/react-native-flash-message?activeTab=readme*/}
             <FlashMessage position="bottom" />
           </View>

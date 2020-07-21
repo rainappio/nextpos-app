@@ -22,8 +22,6 @@ import { LocaleContext } from '../locales/LocaleContext'
 import { api, dispatchFetchRequest, errorAlert, makeFetchRequest, successMessage } from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
-import {ThemeContainer} from "../components/ThemeContainer";
-import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 
 class OrderFormIII extends React.Component {
   static navigationOptions = {
@@ -177,7 +175,7 @@ class OrderFormIII extends React.Component {
       )
     }
     return (
-      <ThemeKeyboardAwareScrollView>
+      <View>
         {isEditLineItem ? (
           <OrderFormIV
             onSubmit={this.handleUpdate}
@@ -193,7 +191,7 @@ class OrderFormIII extends React.Component {
               globalProductOffers={globalProductOffers}
             />
           )}
-      </ThemeKeyboardAwareScrollView>
+      </View>
     )
   }
 }

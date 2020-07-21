@@ -15,8 +15,6 @@ import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import moment from "moment";
 import {NavigationEvents} from "react-navigation";
-import {ThemeScrollView} from "../components/ThemeScrollView";
-import {StyledText} from "../components/StyledText";
 
 class StaffTimeCard extends React.Component {
   static navigationOptions = {
@@ -98,15 +96,15 @@ class StaffTimeCard extends React.Component {
           }}
         >
           <View style={[styles.tableCellView, {flex: 5}]}>
-            <StyledText>{displayName}</StyledText>
+            <Text>{displayName}</Text>
           </View>
 
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText>{timecard.totalShifts}</StyledText>
+            <Text>{timecard.totalShifts}</Text>
           </View>
 
           <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{timecard.totalHours.toFixed(2)}</StyledText>
+            <Text>{timecard.totalHours.toFixed(2)}</Text>
           </View>
         </TouchableOpacity>
       )
@@ -118,7 +116,7 @@ class StaffTimeCard extends React.Component {
       )
     } else if (haveData) {
       return (
-        <ThemeScrollView>
+        <ScrollView scrollIndicatorInsets={{right: 1}}>
           <NavigationEvents
             onWillFocus={() => {
               console.log("loading staff time cards")
@@ -163,7 +161,7 @@ class StaffTimeCard extends React.Component {
               keyExtractor={item => item.id}
             />
           </View>
-        </ThemeScrollView>
+        </ScrollView>
       )
     } else {
       return null

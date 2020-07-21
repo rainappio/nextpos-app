@@ -3,7 +3,6 @@ import {ScrollView, Text, View} from 'react-native'
 import {Cell, Col, Cols, Table, TableWrapper} from 'react-native-table-component'
 import styles, {mainThemeColor} from '../styles'
 import {formatCurrency} from "../actions";
-import {withContext} from "../helpers/contextHelper";
 
 const RenderTable = (props) => {
 
@@ -39,7 +38,7 @@ const RenderTable = (props) => {
                       key={columnIndex}
                       data={columnData}
                       flex={1}
-                      textStyle={[styles.tbltext, props.themeStyle]}
+                      textStyle={styles.tbltext}
                     />
                   )
                 })
@@ -64,4 +63,4 @@ const RenderTable = (props) => {
   )
 }
 
-export default withContext(RenderTable)
+export default RenderTable

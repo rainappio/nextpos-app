@@ -12,7 +12,7 @@ export default StyleSheet.create({
   fullWidthScreen: {
     flex: 1,
     marginTop: 53,
-    marginBottom: 23
+    marginBottom: 36
   },
   container: {
     flex: 1,
@@ -20,18 +20,26 @@ export default StyleSheet.create({
     marginTop: 53,
     marginLeft: 15,
     marginRight: 15,
-    marginBottom: 23
+    marginBottom: 36
+  },
+  container_nocenterCnt: {
+    flex: 1,
+    marginTop: 53,
+    marginLeft: 15,
+    marginRight: 15,
+    marginBottom: 36
   },
   childContainer: {
     flex: 1,
     justifyContent: 'center',
     marginTop: 8,
-    marginBottom: 5
+    marginBottom: 50
   },
   rootInput: {
     paddingVertical: 10,
-    paddingHorizontal: 10,
-    textAlign: 'right'
+    paddingLeft: 10,
+    textAlign: 'right',
+    //flex: 1
   },
   rootError: {
     color: 'red',
@@ -54,16 +62,24 @@ export default StyleSheet.create({
     fontSize: 20,
     letterSpacing: 2,
     lineHeight: 32,
-    marginVertical: 15,
+    marginBottom: 16,
+    marginTop: -8
   },
   text: {
     fontWeight: 'bold',
     marginTop: 22,
     marginBottom: 6
   },
-  subText: {
+  textSmall: {
     fontSize: 12,
-    marginVertical: 10
+    marginTop: 10,
+    marginBottom: 10
+  },
+  signInText: {
+    color: '#F39F86',
+    padding: 10,
+    textAlign: 'center',
+    fontSize: 16
   },
   margin_15: {
     margin: 10
@@ -99,11 +115,25 @@ export default StyleSheet.create({
   centerText: {
     textAlign: 'center'
   },
+  textLeftWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginBottom: 10
+  },
+  grayText: {
+    color: '#888'
+  },
   mgr_20: {
     marginRight: 20
   },
   mgrbtn40: {
     marginBottom: 40
+  },
+  isActive: {
+    color: '#000',
+    borderBottomWidth: 2,
+    borderBottomColor: '#F39F86'
   },
   whiteColor: {
     color: '#fff'
@@ -111,9 +141,10 @@ export default StyleSheet.create({
   boxShadow: {
     borderWidth: 1,
     borderRadius: 2,
-    borderColor: '#f1f1f1',
-    shadowColor: '#222222',
-    shadowOffset: { width: 5, height: 5 },
+    borderColor: '#ddd',
+    borderBottomWidth: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 5, height: 10 },
     shadowOpacity: 0.4,
     shadowRadius: 2,
     elevation: 1,
@@ -122,7 +153,8 @@ export default StyleSheet.create({
   modalContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.6)'
   },
   popUpLayout: {
     backgroundColor: '#fff',
@@ -154,6 +186,7 @@ export default StyleSheet.create({
     paddingHorizontal: 12,
   },
   rowFront: {
+    backgroundColor: '#fff',
     borderBottomColor: '#f1f1f1',
     borderBottomWidth: 1
   },
@@ -166,11 +199,6 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-  },
-  primaryText: {
-    fontSize: 22,
-    color: mainThemeColor,
-    fontWeight: 'bold'
   },
   textBig: {
     fontSize: 22
@@ -219,11 +247,27 @@ export default StyleSheet.create({
   nopaddingLeft: {
     paddingLeft: 0
   },
+  userIcon: {
+    color: '#fff',
+    fontSize: 28,
+    textAlign: 'center',
+    width: 30,
+    height: 30,
+    lineHeight: 30,
+    borderRadius: 30
+  },
   quarter_width: {
     width: '25%'
   },
   oneFifthWidth: {
     width: '20%'
+  },
+  myradio: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    width: 30,
+    height: 30,
+    borderRadius: 40
   },
   paddingTopBtn8: {
     paddingTop: 8,
@@ -253,14 +297,11 @@ export default StyleSheet.create({
     fontSize: 14
   },
   shoppingBar: {
-    backgroundColor: mainThemeColor,
-    flexDirection: 'row',
     position: 'absolute',
     bottom: 0,
     left: 0,
     width: '100%',
-    height: 45,
-    paddingHorizontal: 10
+    height: 45
   },
   item: {
     borderTopWidth: 1,
@@ -307,7 +348,7 @@ export default StyleSheet.create({
     textAlign: 'center',
     textTransform: 'uppercase',
     fontSize: 22,
-    //letterSpacing: 2,
+    letterSpacing: 2,
     color: mainThemeColor,
     fontWeight: 'bold'
   },
@@ -320,13 +361,6 @@ export default StyleSheet.create({
     color: mainThemeColor,
     fontWeight: 'bold'
   },
-  menuContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 10,
-    marginBottom: 12
-  },
   squareButton: {
     margin: 10,
     backgroundColor: mainThemeColor,
@@ -338,8 +372,8 @@ export default StyleSheet.create({
     borderRadius: 8
   },
   mainSquareButton: {
-    //margin: 10,
-    //flex: 1,
+    margin: 10,
+    flex: 1,
     height: 140,
     backgroundColor: '#f5f5f5',
     justifyContent: 'center',
@@ -355,7 +389,7 @@ export default StyleSheet.create({
     textAlign: 'center',
     marginTop: 10
   },
-  iconStyle: {
+  stateIconStyle: {
     color: mainThemeColor
   },
   sectionContainer: {
@@ -372,8 +406,7 @@ export default StyleSheet.create({
   },
   sectionTitleContainer: {
     alignItems: 'center',
-    marginTop: 12,
-    marginBottom: 15,
+    marginVertical: 15,
   },
   sectionTitleText: {
     fontSize: 16,
@@ -383,6 +416,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    backgroundColor: '#fff',
     borderColor: '#f1f1f1',
     borderBottomWidth: 1,
     paddingVertical: 8,
@@ -401,33 +435,24 @@ export default StyleSheet.create({
   sectionContent: {
     marginBottom: 20
   },
-  announcementTitle: {
-    color: mainThemeColor,
-    fontWeight: 'bold',
-    fontSize: 17
-  },
   listPanel: {
     flex: 1,
     flexDirection: 'row',
     width: '100%',
-    paddingRight: 8,
-    paddingVertical: 12
+    marginRight: 0,
+    paddingTop: 12,
+    paddingBottom: 12
   },
   listPanelText: {
+    flex: 9,
     fontSize: 16
   },
-  productPanel: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingLeft: 10,
-    paddingRight: 8,
-    paddingVertical: 12,
-    borderBottomWidth: 0.4,
-    borderColor: '#f4f4f4'
+  listItemContainer: {
+    backgroundColor: '#F8F8F8'
   },
   listPanelIcon: {
+    flex: 1,
+    justifyContent: 'flex-end',
     color: mainThemeColor
   },
   fieldContainer: {
@@ -480,10 +505,6 @@ export default StyleSheet.create({
     color: '#fff',
     fontSize: 16
   },
-  markdownContainer: {
-    backgroundColor: '#f1f1f1',
-    padding: 10
-  },
   messageBlock: {
     padding: 10,
     textAlign: 'center',
@@ -519,7 +540,6 @@ export default StyleSheet.create({
     overflow: 'hidden'
   },
   actionButton: {
-    borderColor: mainThemeColor,
     backgroundColor: mainThemeColor,
     color: '#fff'
   },
@@ -546,34 +566,42 @@ export default StyleSheet.create({
     bottom: 0
   },
   textAreaContainer: {
-    padding: 5,
-    marginVertical: 10
+    borderColor: '#ccc',
+    borderWidth: 1,
+    padding: 0
   },
   textArea: {
     height: 150,
     justifyContent: 'flex-start'
   },
+  stcontainer: {
+    flex: 1,
+    marginTop: 53,
+    marginLeft: 15,
+    marginRight: 15,
+    marginBottom: 36
+  },
   row: {
     flexDirection: 'column',
     alignItems: 'center',
+    backgroundColor: '#fff',
     borderColor: '#f1f1f1',
     borderWidth: 1,
     flex: 1,
     marginBottom: 12,
-    marginHorizontal: 10,
     borderRadius: 4,
 
     ...Platform.select({
       ios: {
-        //width: window.width - 30 * 2,
-        // shadowColor: 'rgba(0,0,0,0.2)',
-        // shadowOpacity: 1,
-        // shadowOffset: { height: 2, width: 2 },
-        // shadowRadius: 2
+        width: window.width - 30 * 2,
+        shadowColor: 'rgba(0,0,0,0.2)',
+        shadowOpacity: 1,
+        shadowOffset: { height: 2, width: 2 },
+        shadowRadius: 2
       },
 
       android: {
-        //width: window.width - 30 * 2,
+        width: window.width - 30 * 2,
         elevation: 0,
         marginVertical: 30,
       },
@@ -603,11 +631,36 @@ export default StyleSheet.create({
     flexDirection: 'row',
     //backgroundColor: '#f5f5f5'
   },
+  grayPrevBtn: {
+    position: 'absolute',
+    left: 45,
+    top: 2,
+    bottom: 2,
+    right: 2,
+    paddingTop: 3,
+    backgroundColor: '#f1f1f1',
+    borderRadius: 4,
+    paddingLeft: 12,
+  },
+  grayNextBtn: {
+    position: 'absolute',
+    right: 45,
+    top: 2,
+    bottom: 2,
+    left: 2,
+    paddingTop: 3,
+    backgroundColor: '#f1f1f1',
+    paddingLeft: 12,
+    borderRadius: 4
+  },
   circle: {
     backgroundColor: mainThemeColor,
     width: CIRCLE_RADIUS * 2,
     height: CIRCLE_RADIUS * 2,
     borderRadius: CIRCLE_RADIUS
+  },
+  col: {
+    flexDirection: "column"
   },
   ballContainer: {
     height: 600,
@@ -626,9 +679,6 @@ export default StyleSheet.create({
   },
 
   // utility styles
-  flexRow: {
-    flexDirection: 'row'
-  },
   justifyRight: {
     justifyContent: 'flex-end',
     flex: 1
@@ -639,11 +689,5 @@ export default StyleSheet.create({
   },
   flex: num => {
     return { flex: num }
-  },
-  withBorder: {
-    borderWidth: 1
-  },
-  withoutBorder: {
-    borderWidth: 0
   }
 })

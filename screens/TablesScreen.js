@@ -1,5 +1,5 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
+import { Field, reduxForm } from 'redux-form'
 import {
   Image,
   Platform,
@@ -16,9 +16,9 @@ import {
   RefreshControl,
   FlatList
 } from 'react-native'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import InputText from '../components/InputText'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import { DismissKeyboard } from '../components/DismissKeyboard'
 import BackBtnCustom from '../components/BackBtnCustom'
 import AddBtn from '../components/AddBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -38,19 +38,13 @@ import {
   successMessage,
   dispatchFetchRequest
 } from '../constants/Backend'
-import {LocaleContext} from '../locales/LocaleContext'
+import { LocaleContext } from '../locales/LocaleContext'
 import {handleDelete, handleOrderSubmit} from '../helpers/orderActions'
 import {NavigationEvents} from "react-navigation";
 import {handleOpenShift} from "../helpers/shiftActions";
 import {getCurrentClient} from "../actions/client";
 import LoadingScreen from "./LoadingScreen";
 import ScreenHeader from "../components/ScreenHeader";
-import {ThemeContainer} from "../components/ThemeContainer";
-import {ThemeScrollView} from "../components/ThemeScrollView";
-import {StyledText} from "../components/StyledText";
-import {withContext} from "../helpers/contextHelper";
-import {compose} from "redux";
-import StyledTextInput from "../components/StyledTextInput";
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -122,11 +116,11 @@ class TablesScreen extends React.Component {
   }
 
   onRefresh = async () => {
-    this.setState({refreshing: true})
+    this.setState({ refreshing: true })
 
     this.loadInfo()
 
-    this.setState({refreshing: false}, () => {
+    this.setState({ refreshing: false }, () => {
       successMessage(this.context.t('refreshed'))
     })
   }
@@ -148,10 +142,9 @@ class TablesScreen extends React.Component {
       shiftStatus,
       recentShift,
       ordersInflight,
-      availableTables,
-      themeStyle
+      availableTables
     } = this.props
-    const {t} = this.context
+    const { t } = this.context
 
     if (isLoading) {
       return (
@@ -159,7 +152,8 @@ class TablesScreen extends React.Component {
       )
     } else if (tablelayouts === undefined || tablelayouts.length === 0) {
       return (
-        <ThemeScrollView
+        <ScrollView
+          contentContainerStyle={styles.contentContainer}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
@@ -167,89 +161,76 @@ class TablesScreen extends React.Component {
             />
           }
         >
-
-          <View style={styles.fullWidthScreen}>
-            <ScreenHeader backNavigation={false}
-                          parentFullScreen={true}
-                          title={t('menu.tables')}
-            />
-            <StyledText style={styles.messageBlock}>{t('noTableLayout')}</StyledText>
+          <View style={styles.container}>
+            <Text style={styles.messageBlock}>{t('noTableLayout')}</Text>
           </View>
-        </ThemeScrollView>
+        </ScrollView>
       )
-    } else if (recentShift !== undefined && ['CLOSING', 'CONFIRM_CLOSE'].includes(recentShift.data.shiftStatus)) {
+    } else if(recentShift !== undefined && ['CLOSING', 'CONFIRM_CLOSE'].includes(recentShift.data.shiftStatus)) {
       return (
-        <ThemeContainer>
-          <View style={[styles.fullWidthScreen]}>
-            <ScreenHeader backNavigation={false}
-                          parentFullScreen={true}
-                          title={t('menu.tables')}
-            />
-            <View>
-              <StyledText style={styles.messageBlock}>{t('shiftClosing')}</StyledText>
-            </View>
-            <View style={[styles.bottom, styles.horizontalMargin]}>
-              <TouchableOpacity onPress={() => navigation.navigate('ShiftClose')}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                  {t('shift.closeShift')}
-                </Text>
-              </TouchableOpacity>
-            </View>
+        <View style={[styles.fullWidthScreen]}>
+          <ScreenHeader backNavigation={false}
+                        parentFullScreen={true}
+                        title={t('menu.tables')}
+          />
+          <View style={[styles.sectionContainer, {flex: 1}]}>
+            <Text style={styles.messageBlock}>{t('shiftClosing')}</Text>
           </View>
-        </ThemeContainer>
+        </View>
       )
 
     } else if (shiftStatus === 'INACTIVE') {
       return (
-        <ThemeContainer>
-          <View style={styles.modalContainer}>
-            <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
-              <Text style={styles.screenSubTitle}>
-                {t('openShift.title')}
-              </Text>
-              <View style={styles.tableRowContainer}>
-                <View style={[styles.tableCellView, {flex: 1}]}>
-                  <StyledText style={[styles.fieldTitle]}>
-                    {t('openShift.openBalance')}
-                  </StyledText>
-                </View>
-                <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                  <StyledTextInput
-                    name="balance"
-                    type="text"
-                    onChangeText={value =>
-                      this.setState({openBalance: value})
-                    }
-                    placeholder={t('openShift.enterAmount')}
-                    keyboardType={`numeric`}
-                  />
-                </View>
+        <View style={styles.modalContainer}>
+          <View
+            style={[styles.boxShadow, styles.popUpLayout]}
+          >
+            <Text style={styles.screenSubTitle}>
+              {t('openShift.title')}
+            </Text>
+            <View style={styles.tableRowContainer}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <Text style={[styles.fieldTitle]}>
+                  {t('openShift.openBalance')}
+                </Text>
               </View>
-              <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-                <View style={{width: '45%', marginHorizontal: 5}}>
-                  <TouchableOpacity onPress={() => this.handleOpenShift(this.state.openBalance)}>
-                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                      {t('openShift.open')}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={{width: '45%', marginHorizontal: 5}}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.navigate('LoginSuccess')
-                    }}
-                  >
-                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                      {t('openShift.cancel')}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                <TextInput
+                  name="balance"
+                  type="text"
+                  onChangeText={value =>
+                    this.setState({openBalance: value})
+                  }
+                  placeholder={t('openShift.enterAmount')}
+                  keyboardType={`numeric`}
+                  style={[styles.rootInput]}
+                />
+              </View>
+            </View>
+            <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+              <View style={{width: '45%', marginHorizontal: 5}}>
+                <TouchableOpacity onPress={() => this.handleOpenShift(this.state.openBalance)}>
+                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                    {t('openShift.open')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{width: '45%', marginHorizontal: 5}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('LoginSuccess')
+                  }}
+                >
+                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                    {t('openShift.cancel')}
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
-        </ThemeContainer>
+        </View>
       )
-    } else if (haveData) {
+    } else {
       let tableDisplay = 'SHOW_SEAT'
 
       if (client.attributes !== undefined && client.attributes.TABLE_AVAILABILITY_DISPLAY !== undefined) {
@@ -275,7 +256,7 @@ class TablesScreen extends React.Component {
       })
 
       return (
-        <ThemeScrollView
+        <ScrollView
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
@@ -290,103 +271,110 @@ class TablesScreen extends React.Component {
             }}
           />
 
-          <View style={styles.fullWidthScreen}>
-            <ScreenHeader backNavigation={false}
-                          title={t('menu.tables')}
-                          parentFullScreen={true}
-                          rightComponent={
-                            <AddBtn
-                              onPress={() =>
-                                this.props.navigation.navigate('OrderStart')
-                              }
-                            />
-                          }
-            />
+          <DismissKeyboard>
+            <View style={styles.fullWidthScreen}>
+              <ScreenHeader backNavigation={false}
+                            title={t('menu.tables')}
+                            parentFullScreen={true}
+                            rightComponent={
+                              <AddBtn
+                                onPress={() =>
+                                  this.props.navigation.navigate('OrderStart')
+                                }
+                              />
+                            }
+              />
 
-            {tablelayouts.map((tblLayout, idx) => (
-              <View style={{}} key={idx}>
-                <View style={[styles.sectionBar, {flex: 1}]}>
-                  <Text
-                    style={[styles.sectionBarText, {flex: 4}
-                    ]}
-                  >
-                    {tblLayout.layoutName}
-                  </Text>
-                  {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_SEAT' && (
-                    <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'right', marginRight: 4}]}>
-                      {t('seatingCapacity')} {tblLayout.totalCapacity} {t('availableSeats')} {floorCapacity[tblLayout.id].seatCount}
+              {tablelayouts.map((tblLayout, idx) => (
+                <View style={{}} key={idx}>
+                  <View style={[styles.sectionBar, {flex: 1}]}>
+                    <Text
+                      style={[styles.sectionBarText, {flex: 4}
+                      ]}
+                    >
+                      {tblLayout.layoutName}
                     </Text>
-                  )}
-                  {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_TABLE' && (
-                    <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'right', marginRight: 4}]}>
-                      {t('tableCapacity')} {tblLayout.totalTables} {t('availableTables')} {floorCapacity[tblLayout.id].tableCount}
-                    </Text>
+                    {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_SEAT' && (
+                      <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'right', marginRight: 4}]}>
+                        {t('seatingCapacity')} {tblLayout.totalCapacity} {t('availableSeats')} {floorCapacity[tblLayout.id].seatCount}
+                      </Text>
+                    )}
+                    {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_TABLE' && (
+                      <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'right', marginRight: 4}]}>
+                        {t('tableCapacity')} {tblLayout.totalTables} {t('availableTables')} {floorCapacity[tblLayout.id].tableCount}
+                      </Text>
+                    )}
+                  </View>
+                  {ordersInflight !== undefined && ordersInflight[tblLayout.id] !== undefined ? (
+                    <FlatList
+                      data={ordersInflight[tblLayout.id]}
+                      renderItem={({item}) => {
+                        return (
+                          <OrderItem
+                            order={item}
+                            navigation={navigation}
+                            handleOrderSubmit={handleOrderSubmit}
+                            handleDelete={handleDelete}
+                            key={item.orderId}
+                          />
+                        )
+                      }}
+                      keyExtractor={(item, idx) => item.orderId}
+                    />
+                  ) : (
+                    <View>
+                      <Text style={styles.messageBlock}>
+                        {t('noInflightOrders')}
+                      </Text>
+                    </View>
                   )}
                 </View>
-                <FlatList
-                  data={ordersInflight[tblLayout.id]}
-                  renderItem={({item}) => {
-                    return (
-                      <OrderItem
-                        order={item}
-                        navigation={navigation}
-                        handleOrderSubmit={handleOrderSubmit}
-                        handleDelete={handleDelete}
-                        key={item.orderId}
-                      />
-                    )
-                  }}
-                  ListEmptyComponent={
-                    <View>
-                      <StyledText style={styles.messageBlock}>{t('noInflightOrders')}</StyledText>
-                    </View>
-                  }
-                  keyExtractor={(item, idx) => item.orderId}
-                />
-              </View>
-            ))}
-            <View style={styles.mgrbtn20} key='noLayout'>
-              <View style={[styles.sectionBar, {flex: 1, justifyContent: 'flex-start'}]}>
-                <Text style={[styles.sectionBarText]}>
-                  {t('otherOrders')}
-                </Text>
-              </View>
-              <FlatList
-                data={ordersInflight['NO_LAYOUT']}
-                renderItem={({item}) => {
-                  return (
-                    <OrderItem
-                      order={item}
-                      navigation={navigation}
-                      handleOrderSubmit={handleOrderSubmit}
-                      handleDelete={handleDelete}
-                      key={item.orderId}
-                    />
-                  )
-                }}
-                ListEmptyComponent={
+              ))}
+              <View style={styles.mgrbtn20} key='noLayout'>
+                <View style={[styles.sectionBar, {flex: 1, justifyContent: 'flex-start'}]}>
+                  <Text style={[styles.sectionBarText]}>
+                    {t('otherOrders')}
+                  </Text>
+                </View>
+                {ordersInflight !== undefined && ordersInflight['NO_LAYOUT'] !== undefined ? (
+                  <FlatList
+                    data={ordersInflight['NO_LAYOUT']}
+                    renderItem={({item}) => {
+                      return (
+                        <OrderItem
+                          order={item}
+                          navigation={navigation}
+                          handleOrderSubmit={handleOrderSubmit}
+                          handleDelete={handleDelete}
+                          key={item.orderId}
+                        />
+                      )
+                    }}
+                    keyExtractor={(item, idx) => item.orderId}
+                  />
+                ) : (
                   <View>
-                    <StyledText style={styles.messageBlock}>{t('noInflightOrders')}</StyledText>
+                    <Text style={styles.messageBlock}>
+                      {t('noInflightOrders')}
+                    </Text>
                   </View>
-                }
-                keyExtractor={(item, idx) => item.orderId}
-              />
+                )}
+              </View>
             </View>
-          </View>
-        </ThemeScrollView>
+          </DismissKeyboard>
+        </ScrollView>
       )
-    } else {
-      return null
     }
   }
 }
 
 const mapStateToProps = state => ({
+  reduxState: state,
   tablelayouts: state.tablelayouts.data.tableLayouts,
   ordersInflight: state.ordersinflight.data.orders,
-  haveData: state.ordersinflight.haveData && state.tablelayouts.haveData,
-  haveError: state.ordersinflight.haveError || state.tablelayouts.haveError,
-  isLoading: state.ordersinflight.loading ||  state.tablelayouts.loading,
+  haveData: state.ordersinflight.haveData,
+  haveError: state.ordersinflight.haveError,
+  isLoading: state.ordersinflight.loading,
   shiftStatus: state.shift.data.shiftStatus,
   availableTables: state.tablesavailable.data.availableTables,
   client: state.client.data,
@@ -406,9 +394,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   getAvailableTables: () => dispatch(getTablesAvailable()),
   getCurrentClient: () => dispatch(getCurrentClient())
 })
-
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withContext
-)
-export default enhance(TablesScreen)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TablesScreen)

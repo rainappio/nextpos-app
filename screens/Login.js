@@ -25,7 +25,8 @@ class Login extends React.Component {
       masterPassword: masterPassword
     }
 
-    await this.handleSubmit(values)
+    this.handleSubmit(values)
+
   }
 
   handleSubmit = async values => {
@@ -79,6 +80,7 @@ class Login extends React.Component {
     return (
       <LoginScreen
         onSubmit={this.handleSubmit}
+        screenProps={this.props.screenProps}
         handleLoginAs={this.handleLoginAs}
       />
     )

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { Image, Text, TouchableOpacity, View, Linking } from 'react-native'
+import { Image, Text, TouchableOpacity, View } from 'react-native'
 import { PropTypes } from 'prop-types'
 import { isEmail, isvalidPassword } from '../validators'
 import validate from '../validate'
@@ -9,8 +9,6 @@ import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 import { withNavigation } from 'react-navigation'
 import { LocaleContext } from '../locales/LocaleContext'
-import {ThemeContainer} from "../components/ThemeContainer";
-import {StyledText} from "../components/StyledText";
 
 class CreateAccFormScreen extends React.Component {
   static navigationOptions = {
@@ -22,25 +20,15 @@ class CreateAccFormScreen extends React.Component {
     super(props)
   }
 
-  viewPrivacyPolicy = (url) => {
-    Linking.canOpenURL(url).then(supported => {
-      if (supported) {
-        Linking.openURL(url);
-      } else {
-        console.log("Don't know how to open URI: " + url);
-      }
-    });
-  }
-
   render() {
     const { handleSubmit } = this.props
     const { t } = this.context
 
     return (
-      <ThemeContainer>
+      <DismissKeyboard>
         <View style={styles.container}>
-          <View style={styles.flex(1)}>
-            <View>
+          <View style={{ flex: 3, justifyContent: 'center' }}>
+            <View style={[{ position: 'absolute', top: 0 }]}>
               <Image
                 source={
                   __DEV__
@@ -51,7 +39,7 @@ class CreateAccFormScreen extends React.Component {
               />
             </View>
 
-            <StyledText style={styles.welcomeText}>Let's Get Started!</StyledText>
+            <Text style={styles.welcomeText}>Let's Get Started!</Text>
 
             <Field
               name="clientName"
@@ -76,14 +64,12 @@ class CreateAccFormScreen extends React.Component {
               secureTextEntry={true}
             />
 
-            <StyledText style={styles.text}>
-              By signing up, you agree to the seller agreement and privacy policy.
-            </StyledText>
-            <TouchableOpacity onPress={() => this.viewPrivacyPolicy('http://rain-app.io')}>
-            <StyledText style={styles.subText}>
-              View Privacy Policy
-            </StyledText>
-            </TouchableOpacity>
+            <Text style={styles.text}>
+              Accept Seller Agreement and Privacy Policy
+            </Text>
+            <Text style={styles.textSmall}>
+              View Seller Agreement and Privacy Policy
+            </Text>
           </View>
 
           <View style={[styles.bottom]}>
@@ -101,7 +87,7 @@ class CreateAccFormScreen extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-      </ThemeContainer>
+      </DismissKeyboard>
     )
   }
 }

@@ -4,22 +4,27 @@ import styles from "../styles";
 import {Text, View, TouchableOpacity} from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import {formatDate} from "../actions";
-import {withNavigation} from 'react-navigation'
-import {StyledText} from "../components/StyledText";
+import { withNavigation } from 'react-navigation'
 
 class OrderTopInfo extends Component {
   static contextType = LocaleContext
 
   render() {
     const {order} = this.props
-    const {t} = this.context
+    const { t } = this.context
 
     return (
       <View>
         <View style={[styles.tableRowContainer]}>
           <View style={[styles.tableCellView, {width: '35%'}]}>
             <View>
-              <Text style={[styles.primaryText]}>
+              <Text
+                style={[
+                  styles.paddingTopBtn8,
+                  styles.textBig,
+                  styles.orange_color
+                ]}
+              >
                 {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
               </Text>
             </View>
@@ -29,7 +34,7 @@ class OrderTopInfo extends Component {
             <TouchableOpacity
               onPress={() => {
                 const originScreen = this.props.navigation.state.routeName
-                const updateOrderRoute = originScreen === 'OrdersSummary' ? 'UpdateOrder' : 'UpdateOrderFromOrderDetail'
+                const updateOrderRoute = originScreen ==='OrdersSummary' ? 'UpdateOrder' : 'UpdateOrderFromOrderDetail'
                 this.props.navigation.navigate(updateOrderRoute, {
                   order: order
                 })
@@ -41,7 +46,7 @@ class OrderTopInfo extends Component {
                   size={25}
                   style={[styles.buttonIconStyle]}
                 >
-                  <Text style={[styles.primaryText]}>
+                  <Text style={[styles.textBig, styles.orange_color]}>
                     &nbsp;{order.demographicData != null ? order.demographicData.customerCount : 0}
                   </Text>
                 </FontAwesomeIcon>
@@ -49,21 +54,21 @@ class OrderTopInfo extends Component {
             </TouchableOpacity>
           </View>
 
-          <View style={[styles.tableCellView, styles.justifyRight, {width: '50%'}]}>
+          <View style={[styles.tableCellView, { justifyContent: 'flex-end', width: '50%'}]}>
             <View>
-              <StyledText style={{textAlign: 'right'}}>
+              <Text style={{textAlign: 'right'}}>
                 {t('order.staff')} - {order.servedBy}
-              </StyledText>
-              <StyledText>
+              </Text>
+              <Text>
                 {formatDate(order.createdDate)}
-              </StyledText>
+              </Text>
             </View>
           </View>
         </View>
 
         <View style={styles.tableRowContainer}>
-          <StyledText>Order ID: </StyledText>
-          <StyledText style={styles.tableCellText}>{order.serialId}</StyledText>
+          <Text>Order ID: </Text>
+          <Text style={styles.tableCellText}>{order.serialId}</Text>
           {order.metadata.hasOwnProperty('copyFromOrderId') && order.metadata.hasOwnProperty('copyFromSerialId') && (
             <TouchableOpacity
               onPress={() => {
@@ -75,14 +80,14 @@ class OrderTopInfo extends Component {
                   key: order.metadata.copyFromOrderId
                 })
               }}>
-              <StyledText>({t('order.copiedFrom')}: {order.metadata.copyFromSerialId})</StyledText>
+              <Text>({t('order.copiedFrom')}: {order.metadata.copyFromSerialId})</Text>
             </TouchableOpacity>
           )}
         </View>
 
         <View style={styles.tableRowContainer}>
-          <StyledText>{t('order.orderStatusLong')}: </StyledText>
-          <StyledText style={styles.tableCellText}>{t(`orderState.${order.state}`)}</StyledText>
+          <Text>{t('order.orderStatusLong')}: </Text>
+          <Text style={styles.tableCellText}>{t(`orderState.${order.state}`)}</Text>
         </View>
 
       </View>

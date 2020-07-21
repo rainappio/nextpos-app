@@ -3,7 +3,6 @@ import { Text, View } from 'react-native'
 import { Checkbox } from '@ant-design/react-native'
 import PropTypes from 'prop-types'
 import styles from '../styles'
-import {StyledText} from "./StyledText";
 
 export default class CheckBoxGroupObjPick extends React.Component {
   render() {
@@ -36,7 +35,7 @@ export default class CheckBoxGroupObjPick extends React.Component {
             key={ca.id}
           >
             <View style={[styles.tableCellView, {flex: 2}]}>
-              <StyledText>{ca.name === undefined ? ca.optionValue : ca.name}</StyledText>
+              <Text>{ca.name === undefined ? ca.optionValue : ca.name}</Text>
             </View>
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>

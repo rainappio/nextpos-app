@@ -1,23 +1,21 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
-import {Keyboard, Text, TouchableOpacity, View} from 'react-native'
-import {connect} from 'react-redux'
-import {isRequired} from '../validators'
+import { Field, reduxForm } from 'redux-form'
+import { Keyboard, Text, TouchableOpacity, View } from 'react-native'
+import { connect } from 'react-redux'
+import { isRequired } from '../validators'
 import InputText from '../components/InputText'
 import PinCodeInput from '../components/PinCodeInput'
-import {DismissKeyboard} from '../components/DismissKeyboard'
-import {getClientUsrs, resolveRoles} from '../actions'
+import { DismissKeyboard } from '../components/DismissKeyboard'
+import { getClientUsrs, resolveRoles } from '../actions'
 import EditPasswordPopUp from '../components/EditPasswordPopUp'
 import DeleteBtn from '../components/DeleteBtn'
-import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
-import {LocaleContext} from '../locales/LocaleContext'
+import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
+import { LocaleContext } from '../locales/LocaleContext'
 import SegmentedControl from "../components/SegmentedControl"
 import ScreenHeader from "../components/ScreenHeader";
 import DropDown from '../components/DropDown'
 import Icon from 'react-native-vector-icons/Ionicons'
-import styles, {mainThemeColor} from '../styles'
-import {StyledText} from "../components/StyledText";
-import {ThemeContainer} from "../components/ThemeContainer";
+import styles, { mainThemeColor } from '../styles'
 
 
 class StaffFormScreen extends React.Component {
@@ -88,7 +86,7 @@ class StaffFormScreen extends React.Component {
   }
 
   handleRoleSelection = (index) => {
-    this.setState({selectedRole: index})
+    this.setState({ selectedRole: index })
   }
 
   render() {
@@ -100,12 +98,12 @@ class StaffFormScreen extends React.Component {
       onCancel,
       userRoles = []
     } = this.props
-    const {t} = this.context
+    const { t } = this.context
     var roleIdArr = [];
-    userRoles !== undefined && userRoles.map(usrRole => roleIdArr.push({label: usrRole.roleName, value: usrRole.id}))
+    userRoles !== undefined && userRoles.map(usrRole => roleIdArr.push({ label: usrRole.roleName, value: usrRole.id }))
 
     return (
-      <ThemeContainer>
+      <DismissKeyboard>
         <View style={styles.fullWidthScreen}>
           <View>
             <ScreenHeader title={t('staffTitle')}
@@ -113,7 +111,7 @@ class StaffFormScreen extends React.Component {
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, styles.flex(1)]}>
-                <StyledText style={styles.fieldTitle}>{t('nickName')}</StyledText>
+                <Text style={styles.fieldTitle}>{t('nickName')}</Text>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
                 <Field
@@ -121,13 +119,14 @@ class StaffFormScreen extends React.Component {
                   component={InputText}
                   placeholder={t('nickName')}
                   secureTextEntry={false}
+                  autoFocus={!isEditForm}
                 />
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, styles.flex(1)]}>
-                <StyledText style={styles.fieldTitle}>{t('username')}</StyledText>
+                <Text style={styles.fieldTitle}>{t('username')}</Text>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
                 <Field
@@ -144,27 +143,27 @@ class StaffFormScreen extends React.Component {
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, styles.flex(1)]}>
-                <StyledText style={styles.fieldTitle}>{t('password')}</StyledText>
+                <Text style={styles.fieldTitle}>{t('password')}</Text>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
                 {isEditForm ? (
-                  <EditPasswordPopUp name={initialValues.username}/>
+                  <EditPasswordPopUp name={initialValues.username} />
                 ) : (
-                  <Field
-                    name="password"
-                    component={PinCodeInput}
-                    onChange={val => Keyboard.dismiss()}
-                    customHeight={40}
-                    editable={!isEditForm}
-                  />
-                )}
+                    <Field
+                      name="password"
+                      component={PinCodeInput}
+                      onChange={val => Keyboard.dismiss()}
+                      customHeight={40}
+                      editable={!isEditForm}
+                    />
+                  )}
 
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, styles.flex(1)]}>
-                <StyledText style={styles.fieldTitle}>{t('role')}</StyledText>
+                <Text style={styles.fieldTitle}>{t('role')}</Text>
               </View>
               <View style={[styles.flex(2)]}>
                 <Field
@@ -182,13 +181,13 @@ class StaffFormScreen extends React.Component {
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, styles.flex(1)]}>
-                <StyledText style={styles.fieldTitle}>{t('roleId')}</StyledText>
+                <Text style={styles.fieldTitle}>{t('roleId')}</Text>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
                 <Field
                   name="userRoleId"
                   component={DropDown}
-                  placeholder={{value: null, label: t('noRole')}}
+                  placeholder={{ value: null, label: t('noRole') }}
                   options={roleIdArr}
                   search
                   selection
@@ -198,18 +197,21 @@ class StaffFormScreen extends React.Component {
             </View>
           </View>
 
-          <View style={styles.tableRowContainerWithBorder}>
-            <View style={[styles.tableCellView, styles.flex(1)]}>
-              <StyledText style={styles.fieldTitle}>{t('editRole')}</StyledText>
+          {
+            isEditForm &&
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, styles.flex(1)]}>
+                <Text style={styles.fieldTitle}>{t('editRole')}</Text>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <Icon name="md-create"
+                  size={24}
+                  color={mainThemeColor}
+                  onPress={() => this.props.navigation.navigate('ManageUserRole')}
+                />
+              </View>
             </View>
-            <View style={[styles.tableCellView, styles.justifyRight]}>
-              <Icon name="md-create"
-                    size={24}
-                    color={mainThemeColor}
-                    onPress={() => this.props.navigation.navigate('ManageUserRole')}
-              />
-            </View>
-          </View>
+          }
 
           <View style={[styles.bottom, styles.horizontalMargin]}>
             <TouchableOpacity onPress={handleSubmit}>
@@ -235,19 +237,19 @@ class StaffFormScreen extends React.Component {
                 />
               </View>
             ) : (
-              <View>
-                <TouchableOpacity onPress={onCancel}>
-                  <Text
-                    style={[styles.bottomActionButton, styles.cancelButton]}
-                  >
-                    {t('action.cancel')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
+                <View>
+                  <TouchableOpacity onPress={onCancel}>
+                    <Text
+                      style={[styles.bottomActionButton, styles.cancelButton]}
+                    >
+                      {t('action.cancel')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
           </View>
         </View>
-      </ThemeContainer>
+      </DismissKeyboard>
     )
   }
 }
