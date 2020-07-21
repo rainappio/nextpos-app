@@ -18,6 +18,8 @@ import AddBtn from '../components/AddBtn'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import DeleteBtn from "../components/DeleteBtn";
+import {StyledText} from "../components/StyledText";
+import {withContext} from "../helpers/contextHelper";
 
 class TableLayoutForm extends React.Component {
   static navigationOptions = {
@@ -59,17 +61,15 @@ class TableLayoutForm extends React.Component {
 
     Item = ({ table, layoutId }) => {
       return (
-        <View
-          style={styles.tableRowContainerWithBorder}
-        >
+        <View style={styles.tableRowContainerWithBorder}>
           <View style={styles.tableCellView}>
-            <Text>{table.tableName}</Text>
+            <StyledText>{table.tableName}</StyledText>
           </View>
           <View style={[styles.tableCellView, styles.justifyRight]}>
             <AntDesignIcon
               name="ellipsis1"
               size={25}
-              color="black"
+              color={this.props.themeStyle.color}
               onPress={() => {
                 this.props.navigation.navigate('TableEdit', {
                   tableId: table.tableId,
@@ -83,10 +83,10 @@ class TableLayoutForm extends React.Component {
     }
 
     return (
-      <View style={styles.contentContainer}>
+      <View style={styles.flex(1)}>
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView, styles.flex(1)]}>
-            <Text style={styles.fieldTitle}>{t('layoutName')}</Text>
+            <StyledText style={styles.fieldTitle}>{t('layoutName')}</StyledText>
           </View>
           <View style={[styles.tableCellView, styles.justifyRight]}>
             <Field
@@ -103,18 +103,18 @@ class TableLayoutForm extends React.Component {
           <View>
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, styles.flex(1)]}>
-                <Text style={styles.fieldTitle}>{t('totalCapacity')}</Text>
+                <StyledText style={styles.fieldTitle}>{t('totalCapacity')}</StyledText>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
-                <Text style={styles.fieldTitle}>
+                <StyledText style={styles.fieldTitle}>
                   {isEdit && initialValues.totalCapacity}
-                </Text>
+                </StyledText>
               </View>
             </View>
 
             <View style={styles.sectionContainer}>
               <View style={styles.sectionTitleContainer}>
-                <Text style={styles.sectionTitleText}>{t('tables')}</Text>
+                <StyledText style={styles.sectionTitleText}>{t('tables')}</StyledText>
               </View>
               <FlatList
                 data={initialValues.tables}
@@ -174,4 +174,4 @@ TableLayoutForm = reduxForm({
   form: 'tableLayoutForm'
 })(TableLayoutForm)
 
-export default TableLayoutForm
+export default withContext(TableLayoutForm)

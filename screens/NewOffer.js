@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview"
 import moment from "moment";
 import { getDate } from "javascript-time-ago/gradation";
 import OfferForm from "./OfferForm";
+import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 
 class NewOffer extends React.Component {
   static navigationOptions = {
@@ -93,7 +94,7 @@ class NewOffer extends React.Component {
     const selectedProducts = this.props.navigation.state.params !== undefined && this.props.navigation.state.params.updatedProducts;
 
     return (
-      <KeyboardAwareScrollView>
+      <ThemeKeyboardAwareScrollView>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader title={t("newOfferTitle")}
                         parentFullScreen={true}
@@ -113,7 +114,7 @@ class NewOffer extends React.Component {
             onChange={this.handleonChange}
           />
         </View>
-      </KeyboardAwareScrollView>
+      </ThemeKeyboardAwareScrollView>
     );
   }
 }

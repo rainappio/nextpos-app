@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import {
   ScrollView,
   Text,
@@ -13,10 +13,10 @@ import {
   Dimensions,
   Platform
 } from 'react-native'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import Icon from 'react-native-vector-icons/Ionicons'
 import SortableList from '../components/SortableList'
-import { getAnnouncements, getAnnouncement } from '../actions'
+import {getAnnouncements, getAnnouncement} from '../actions'
 import {
   api,
   errorAlert,
@@ -32,6 +32,8 @@ import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
+import {ThemeScrollView} from "../components/ThemeScrollView";
+import {StyledText} from "../components/StyledText";
 
 class Announcements extends React.Component {
   static navigationOptions = {
@@ -40,65 +42,61 @@ class Announcements extends React.Component {
   static contextType = LocaleContext
 
   state = {
-		scrollEnabled: true,
-		refreshing: false
-	}
+    scrollEnabled: true,
+    refreshing: false
+  }
 
   componentDidMount() {
     this.props.getAnnouncements()
 
     this.context.localize({
-      en: {
-
-      },
-      zh: {
-
-      }
+      en: {},
+      zh: {}
     })
   }
 
   _adjuxtAutoScroll(bool) {
     this.setState({
-    	scrollEnabled: bool
+      scrollEnabled: bool
     })
   }
 
-  _renderRow = ({ data, active }) => {
+  _renderRow = ({data, active}) => {
     return (
-      <Row data={data} active={active} navigation={this.props.navigation} />
+      <Row data={data} active={active} navigation={this.props.navigation}/>
     )
   }
 
   handleItemOrderUpdate = (key, currentOrder, dataArr) => {
-    for(var i=0;i<currentOrder.length;i++){
-			if(''+i !== currentOrder[i]){
-				dataArr[i].order = currentOrder[i];
+    for (var i = 0; i < currentOrder.length; i++) {
+      if ('' + i !== currentOrder[i]) {
+        dataArr[i].order = currentOrder[i];
 
-				dispatchFetchRequest(
-      		api.announcements.update(dataArr[i].id),
-      		{
-        		method: 'POST',
-        		withCredentials: true,
-        		credentials: 'include',
-        		headers: {
-          		'Content-Type': 'application/json'
-        		},
-        		body: JSON.stringify(dataArr[i])
-      		},
-      		response => {
-        		//successMessage('Saved')
-        		this.props.navigation.navigate('Announcements')
-        		this.props.getAnnouncements()
-      		}
-    		).then()
-			}
-		}
+        dispatchFetchRequest(
+          api.announcements.update(dataArr[i].id),
+          {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataArr[i])
+          },
+          response => {
+            //successMessage('Saved')
+            this.props.navigation.navigate('Announcements')
+            this.props.getAnnouncements()
+          }
+        ).then()
+      }
+    }
   }
 
 
   render() {
-    const { navigation, getannouncements, isLoading, haveError } = this.props
-     const { t } = this.context
+    const {navigation, getannouncements, isLoading, haveError} = this.props
+    const {t} = this.context
 
     if (isLoading) {
       return (
@@ -106,35 +104,38 @@ class Announcements extends React.Component {
       )
     } else {
       return (
-        <View style={styles.stcontainer}>
-          <ScreenHeader title={t('settings.announcements')}
-                        rightComponent={
-                          <AddBtn
-                            onPress={() =>
-                              this.props.navigation.navigate('AnnouncementsAdd')
-                            }
-                          />
-                        }
-          />
-
-          {Object.keys(getannouncements).length !== 0 && (
-            <SortableList
-              style={styles.list}
-              data={getannouncements.results}
-              vertical={true}
-              renderRow={this._renderRow}
-              scrollEnabled={this.state.scrollEnabled}
-              onReleaseRow={(key, currentOrder, dataArr) =>
-                this.handleItemOrderUpdate(
-                  key,
-                  currentOrder,
-                  getannouncements.results
-                )
-              }
-              onChangeOrder={() => this._adjuxtAutoScroll(true)}
+        <ThemeScrollView>
+          <View style={styles.fullWidthScreen}>
+            <ScreenHeader title={t('settings.announcements')}
+                          parentFullScreen={true}
+                          rightComponent={
+                            <AddBtn
+                              onPress={() =>
+                                this.props.navigation.navigate('AnnouncementsAdd')
+                              }
+                            />
+                          }
             />
-          )}
-        </View>
+
+            {Object.keys(getannouncements).length !== 0 && (
+              <SortableList
+                style={styles.list}
+                data={getannouncements.results}
+                vertical={true}
+                renderRow={this._renderRow}
+                scrollEnabled={this.state.scrollEnabled}
+                onReleaseRow={(key, currentOrder, dataArr) =>
+                  this.handleItemOrderUpdate(
+                    key,
+                    currentOrder,
+                    getannouncements.results
+                  )
+                }
+                onChangeOrder={() => this._adjuxtAutoScroll(true)}
+              />
+            )}
+          </View>
+        </ThemeScrollView>
       )
     }
   }
@@ -210,7 +211,7 @@ class Row extends React.Component {
   }
 
   render() {
-    const { data } = this.props
+    const {data} = this.props
 
     return (
       <Animated.View style={[
@@ -221,7 +222,7 @@ class Row extends React.Component {
           <View
             style={[styles.tableRowContainerWithBorder]}
           >
-            <View style={[styles.tableCellView, { width: '10%' }]}>
+            <View style={[styles.tableCellView, {width: '10%'}]}>
               <IonIcon
                 name={data.titleIcon}
                 size={32}
@@ -229,11 +230,11 @@ class Row extends React.Component {
               />
             </View>
 
-            <View style={[styles.tableCellView, { width: '75%'}]}>
-              <Text style={{ fontSize: 15 }}>{data.title}</Text>
+            <View style={[styles.tableCellView, {width: '75%'}]}>
+              <StyledText style={styles.announcementTitle}>{data.title}</StyledText>
             </View>
 
-            <View style={[styles.tableCellView, { justifyContent: 'flex-end', width: '15%' }]}>
+            <View style={[styles.tableCellView, {justifyContent: 'flex-end', width: '15%'}]}>
               <Icon
                 name="md-create"
                 size={24}
@@ -248,7 +249,7 @@ class Row extends React.Component {
             </View>
           </View>
 
-          <View style={[{ padding: 10 }]}>
+          <View style={styles.markdownContainer}>
             <Markdown>
               {data.markdownContent}
             </Markdown>

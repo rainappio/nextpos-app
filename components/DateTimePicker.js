@@ -7,8 +7,9 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import TimeZoneService from "../helpers/TimeZoneService";
+import {withContext} from "../helpers/contextHelper";
 
-export default class RenderDatePicker extends Component {
+class RenderDatePicker extends Component {
 	static contextType = LocaleContext
 
 	render() {
@@ -19,6 +20,7 @@ export default class RenderDatePicker extends Component {
 			isShow,
 			showDatepicker,
 			readonly,
+      themeStyle,
 			...rest
 		} = this.props
 		const { t, locale } = this.context
@@ -32,7 +34,7 @@ export default class RenderDatePicker extends Component {
 			i18nMoment.locale('en')
 		}
 
-		const fontColor = readonly ? '#c5c5c5' : '#000000'
+		const fontColor = readonly ? '#c5c5c5' : themeStyle.color
 
 		return (
 			<View style={{ flex: 1 }}>
@@ -98,3 +100,5 @@ export default class RenderDatePicker extends Component {
 		)
 	}
 }
+
+export default withContext(RenderDatePicker)

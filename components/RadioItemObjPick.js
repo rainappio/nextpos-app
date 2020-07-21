@@ -2,6 +2,7 @@ import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { Radio, List, RadioItem } from '@ant-design/react-native'
 import styles from '../styles'
+import {StyledText} from "./StyledText";
 
 export default class RadioItemObjPick extends React.Component {
   render() {
@@ -16,7 +17,7 @@ export default class RadioItemObjPick extends React.Component {
     return (
       <View style={[styles.tableRowContainerWithBorder]}>
         <View style={[styles.tableCellView, {flex: 1}]}>
-          <Text>{optionName}</Text>
+          <StyledText>{optionName}</StyledText>
         </View>
         <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end', borderWidth: 0}]}>
           <Radio

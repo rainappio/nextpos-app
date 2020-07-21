@@ -10,6 +10,7 @@ import { isRequired } from '../validators'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import SegmentedControl from "../components/SegmentedControl";
+import {withContext} from "../helpers/contextHelper";
 
 class AnnouncementsForm extends React.Component {
   static navigationOptions = {
@@ -40,7 +41,8 @@ class AnnouncementsForm extends React.Component {
       isEdit,
       handleEditCancel,
       handleDelete,
-      initialValues
+      initialValues,
+      themeStyle
     } = this.props
 
     const { t } = this.context
@@ -63,9 +65,8 @@ class AnnouncementsForm extends React.Component {
           alignLeft={true}
         />
 
-        <View style={styles.textAreaContainer}>
+        <View style={[styles.textAreaContainer, themeStyle, styles.withBorder ]}>
           <Field
-            style={[styles.textArea]}
             component={InputText}
             name="markdownContent"
             placeholder={t('markdownContent')}
@@ -73,16 +74,13 @@ class AnnouncementsForm extends React.Component {
             multiline={true}
             height={200}
             alignLeft={true}
-            underlineColorAndroid="transparent"
+            extraStyle={styles.withoutBorder}
           />
         </View>
 
         <View>
         {iconsArr.map((icon, ix) => (
-          <View
-            //style={[styles.verticalPadding]}
-            key={ix}
-          >
+          <View key={ix}>
             <Field
               name="titleIcon"
               component={RenderPureCheckBox}
@@ -134,4 +132,4 @@ AnnouncementsForm = reduxForm({
   form: 'announce_add_form'
 })(AnnouncementsForm)
 
-export default AnnouncementsForm
+export default withContext(AnnouncementsForm)

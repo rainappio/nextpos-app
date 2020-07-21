@@ -41,8 +41,6 @@ class ProductsOverview extends React.Component {
       <View style={{flex: 1}}>
         <NavigationEvents
           onWillFocus={() => {
-            console.log("loading products and labels")
-
             this.props.getProducts()
             this.props.getLables()
           }}
@@ -50,10 +48,8 @@ class ProductsOverview extends React.Component {
 
         <ProductRow
           products={products}
-          navigation={navigation}
-          getProduct={this.props.getProduct}
           labels={labels}
-          isLoading={isLoading}
+          navigation={navigation}
         />
       </View>
     )

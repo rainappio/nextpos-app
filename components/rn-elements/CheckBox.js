@@ -11,9 +11,12 @@ import {
   TextInput,
   AsyncStorage
 } from 'react-native'
-import { CheckBox } from 'react-native-elements'
+import {CheckBox} from 'react-native-elements'
 import images from '../../assets/images'
 import styles from '../../styles'
+import {withContext} from "../../helpers/contextHelper";
+import {themes} from "../../themes/ThemeContext";
+import {StyledText} from "../StyledText";
 
 class RenderCheckBox extends React.Component {
   state = {
@@ -22,73 +25,54 @@ class RenderCheckBox extends React.Component {
 
   render() {
     const {
-      input: { onBlur, onChange, onFocus, value },
+      input: {onBlur, onChange, onFocus, value},
       customValue,
       optionName,
       defaultValueDisplay,
-      total,
-      getPercent,
-      orderTotal,
-      grandTotal,
-      meta: { error, toched, valid },
+      meta: {error, touched, valid},
+      themeStyle,
       ...rest
     } = this.props
 
     return (
       <View>
         <CheckBox
+          containerStyle={{borderColor: themeStyle.borderColor, backgroundColor: themeStyle.backgroundColor}}
           title={
-            customValue.discount === 0 ? (
-              <View style={[styles.tableRowContainer]}>
-                <View style={styles.tableCellView}>
-                <Text style={styles.tableCellText}>{optionName}</Text>
-                </View>
-                <TextInput
-                  style={[styles.tableCellView, {
-                    height: 40,
-                    width: '60%',
-                    borderBottomColor: '#ddd',
-                    borderBottomWidth: 1,
-                    paddingLeft: 15
-                  }]}
-                  value={defaultValueDisplay(customValue, value)}
-                  clearTextOnFocus={true}
-                  selectTextOnFocus={true}
-                  onChangeText={val => {
-                    const valueToChange = {...customValue}
-                    valueToChange.discount = val
-                    onChange(valueToChange)
-                    //getPercent(val)
-                  }}
-                  keyboardType={'numeric'}
-                />
+            <View style={[styles.tableRowContainer]}>
+              <View style={[styles.tableCellView, styles.flex(1)]}>
+                <StyledText style={styles.tableCellText}>{optionName}</StyledText>
               </View>
-            ) : (
-              optionName
-            )
+              {customValue.discount === 0 && (
+                <View style={[styles.tableCellView, styles.flex(2)]}>
+                  <TextInput
+                    style={[styles.rootInput, styles.flex(0.6), themeStyle, styles.withBorder, {textAlign: 'left'}]}
+                    value={defaultValueDisplay(customValue, value)}
+                    clearTextOnFocus={true}
+                    selectTextOnFocus={true}
+                    onChangeText={val => {
+                      const valueToChange = {...customValue}
+                      valueToChange.discount = val
+                      onChange(valueToChange)
+                    }}
+                    keyboardType={'numeric'}
+                  />
+                </View>
+              )}
+            </View>
           }
-          checkedIcon={
-            <Image
-              source={images.checkicon}
-              style={{ width: 35, height: 35 }}
-            />
-          }
-          uncheckedIcon={
-            <Image
-              source={images.checkiconOutline}
-              style={{ width: 35, height: 35 }}
-            />
-          }
+          checkedIcon={'check-circle'}
+          uncheckedIcon={'circle'}
           checked={
             value.offerId === customValue.offerId
           }
           onPress={() => {
             onChange(customValue)
-            //getPercent(customValue.discount)
           }}
         />
       </View>
     )
   }
 }
-export default RenderCheckBox
+
+export default withContext(RenderCheckBox)

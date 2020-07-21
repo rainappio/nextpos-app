@@ -7,11 +7,13 @@ import {
   TouchableOpacity,
   AsyncStorage
 } from 'react-native'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import styles from '../styles'
 import {doLogout} from '../actions'
 import {getToken} from "../constants/Backend";
 import {LocaleContext} from "../locales/LocaleContext";
+import {ThemeContainer} from "../components/ThemeContainer";
+import {StyledText} from "../components/StyledText";
 
 class IntroAppScreen extends React.Component {
   static navigationOptions = {
@@ -46,44 +48,50 @@ class IntroAppScreen extends React.Component {
   }
 
   render() {
-    let { t } = this.context
+    let {t} = this.context
 
     return (
-      <View style={styles.container}>
-        <View style={{ flex: 3, justifyContent: 'center' }}>
-          <View style={[{ position: 'absolute', top: 0 }]}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/logo.png')
-                  : require('../assets/images/logo.png')
-              }
-              style={styles.welcomeImage}
-            />
+      <ThemeContainer>
+        <View style={styles.container}>
+          <View style={{flex: 1}}>
+            <View>
+              <Image
+                source={
+                  __DEV__
+                    ? require('../assets/images/logo.png')
+                    : require('../assets/images/logo.png')
+                }
+                style={styles.welcomeImage}
+              />
+            </View>
           </View>
-          <Text style={styles.welcomeText}>Simplify</Text>
-          <Text style={styles.welcomeText}>Your</Text>
-          <Text style={styles.welcomeText}>Selling</Text>
-        </View>
 
-        <View style={[styles.bottom]}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('CreateAcc')}
-          >
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>
-              {t('createAccount')}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={this.isTokenAlive}>
-            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-              {t('signIn')}
-            </Text>
-          </TouchableOpacity>
+          <View style={styles.flex(2)}>
+            <StyledText style={styles.welcomeText}>Simplify</StyledText>
+            <StyledText style={styles.welcomeText}>Your</StyledText>
+            <StyledText style={styles.welcomeText}>Selling</StyledText>
+          </View>
+
+          <View style={[styles.bottom]}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('CreateAcc')}
+            >
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                {t('createAccount')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.isTokenAlive}>
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                {t('signIn')}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </ThemeContainer>
     )
   }
 }
+
 const mapDispatchToProps = dispatch => ({
   dispatch
 })

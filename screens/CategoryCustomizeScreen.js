@@ -13,6 +13,8 @@ import {DismissKeyboard} from "../components/DismissKeyboard";
 import {NavigationEvents} from "react-navigation";
 import RadioItemObjPick from "../components/RadioItemObjPick";
 import {isRequired} from "../validators";
+import {ThemeScrollView} from "../components/ThemeScrollView";
+import {StyledText} from "../components/StyledText";
 
 class CategoryCustomizeScreen extends React.Component {
   static navigationOptions = {
@@ -27,14 +29,14 @@ class CategoryCustomizeScreen extends React.Component {
   componentDidMount() {
     this.context.localize({
       en: {
-        categoryTitle: 'Customize Category',
+        categoryTitle: 'Category',
         categoryName: 'Category Name',
         options: 'Options',
         applyToProducts: 'Apply to Products',
         workingArea: 'Working Area'
       },
       zh: {
-        categoryTitle: '修改產品分類',
+        categoryTitle: '產品分類',
         categoryName: '類別名稱',
         options: '產品選項',
         applyToProducts: '套用設定到產品',
@@ -56,7 +58,7 @@ class CategoryCustomizeScreen extends React.Component {
 
     return (
       // scroll bar in the center issue: https://github.com/facebook/react-native/issues/26610
-      <ScrollView scrollIndicatorInsets={{right: 1}} contentContainerStyle={{flexGrow: 1}}>
+      <ThemeScrollView>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader parentFullScreen={true}
                         title={t('categoryTitle')}
@@ -73,12 +75,13 @@ class CategoryCustomizeScreen extends React.Component {
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text style={styles.fieldTitle}>{t('categoryName')}</Text>
+              <StyledText style={styles.fieldTitle}>{t('categoryName')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
               <Field
                 name="label"
                 component={InputText}
+                placeholder={t('categoryName')}
               />
             </View>
           </View>
@@ -87,7 +90,7 @@ class CategoryCustomizeScreen extends React.Component {
             <View>
               <View style={styles.sectionContainer}>
                 <View style={styles.sectionTitleContainer}>
-                  <Text style={styles.sectionTitleText}>{t('options')}</Text>
+                  <StyledText style={styles.sectionTitleText}>{t('options')}</StyledText>
                 </View>
 
                 <Field
@@ -101,7 +104,7 @@ class CategoryCustomizeScreen extends React.Component {
 
               <View style={styles.sectionContainer}>
                 <View style={[styles.sectionTitleContainer]}>
-                  <Text style={styles.sectionTitleText}>{t('workingArea')}</Text>
+                  <StyledText style={styles.sectionTitleText}>{t('workingArea')}</StyledText>
                 </View>
 
                 {workingareas !== undefined &&
@@ -123,7 +126,7 @@ class CategoryCustomizeScreen extends React.Component {
 
               <View style={styles.tableRowContainerWithBorder}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
-                  <Text style={styles.fieldTitle}>{t('applyToProducts')}</Text>
+                  <StyledText style={styles.fieldTitle}>{t('applyToProducts')}</StyledText>
                 </View>
                 <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
                   <Field
@@ -151,7 +154,7 @@ class CategoryCustomizeScreen extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-      </ScrollView>
+      </ThemeScrollView>
     )
   }
 }

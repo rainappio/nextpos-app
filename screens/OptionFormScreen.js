@@ -1,5 +1,5 @@
 import React from 'react'
-import { Field, reduxForm, FieldArray } from 'redux-form'
+import {Field, reduxForm, FieldArray} from 'redux-form'
 import {
   ScrollView,
   Text,
@@ -13,10 +13,13 @@ import InputText from '../components/InputText'
 import RNSwitch from '../components/RNSwitch'
 import styles, {mainThemeColor} from '../styles'
 import IonIcon from 'react-native-vector-icons/Ionicons'
-import { isRequired } from '../validators'
+import {isRequired} from '../validators'
 import DeleteBtn from '../components/DeleteBtn'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
+import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
+import {StyledText} from "../components/StyledText";
+import {WhiteSpace} from "@ant-design/react-native";
 
 class OptionFormScreen extends React.Component {
   static navigationOptions = {
@@ -52,21 +55,22 @@ class OptionFormScreen extends React.Component {
   }
 
   render() {
-    const { t } = this.context
-    const { handleSubmit, handleDeleteOption, initialValues } = this.props
+    const {t} = this.context
+    const {handleSubmit, handleDeleteOption, initialValues} = this.props
 
     const renderOptionValPopup = (name, index, fields) => (
       <View
         style={[styles.tableRowContainerWithBorder]}
         key={index}
       >
-        <View style={[{ flex: 4 }]}>
+        <View style={[{flex: 4}]}>
           <Field
             component={InputText}
             name={`${name}.value`}
             placeholder={t('value')}
             alignLeft={true}
           />
+          <WhiteSpace/>
           <Field
             component={InputText}
             name={`${name}.price`}
@@ -78,7 +82,7 @@ class OptionFormScreen extends React.Component {
             }}
           />
         </View>
-        <View style={[{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }]}>
+        <View style={[{flex: 1, justifyContent: 'center', alignItems: 'flex-end'}]}>
           <Icon
             name="minuscircleo"
             size={32}
@@ -90,12 +94,12 @@ class OptionFormScreen extends React.Component {
       </View>
     )
 
-    const renderOptionsValues = ({ label, fields }) => {
+    const renderOptionsValues = ({label, fields}) => {
       return (
         <View>
           <View style={styles.sectionContainer}>
             <View style={styles.sectionTitleContainer}>
-              <Text style={styles.sectionTitleText}>{label}</Text>
+              <StyledText style={styles.sectionTitleText}>{label}</StyledText>
 
               <IonIcon
                 name="md-add"
@@ -111,79 +115,78 @@ class OptionFormScreen extends React.Component {
     }
 
     return (
-      <KeyboardAvoidingView behavior="padding" enabled style={{flex: 1}}>
-        <ScrollView scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={{ flexGrow: 1}}>
-          <View style={[styles.fullWidthScreen]}>
-            <ScreenHeader parentFullScreen={true}
-                          title={t('productOptionTitle')}/>
+      <ThemeKeyboardAwareScrollView>
+        <View style={[styles.fullWidthScreen]}>
+          <ScreenHeader parentFullScreen={true}
+                        title={t('productOptionTitle')}/>
 
-            <View>
-              <View style={styles.tableRowContainerWithBorder}>
-                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                  <Field
-                    name="optionName"
-                    component={InputText}
-                    placeholder={t('optionName')}
-                    validate={isRequired}
-                  />
-                </View>
-              </View>
-
-              <View style={styles.tableRowContainerWithBorder}>
-                <View style={[styles.tableCellView]}>
-                  <Text style={styles.fieldTitle}>{t('required')}</Text>
-                </View>
-                <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                  <Field name="required" component={RNSwitch}/>
-                </View>
-              </View>
-
-              <View style={styles.tableRowContainerWithBorder}>
-                <View style={[styles.tableCellView]}>
-                  <Text style={styles.fieldTitle}>{t('multiple')}</Text>
-                </View>
-                <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                  <Field name="multipleChoice" component={RNSwitch} />
-                </View>
-              </View>
-
-              <FieldArray
-                name="optionValues"
-                component={renderOptionsValues}
-                label={t('values')}
-              />
-            </View>
-
-            <View style={[styles.bottom, styles.horizontalMargin]}>
-              <TouchableOpacity onPress={handleSubmit}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                  {t('action.save')}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate(
-                    this.props.navigation.state.params.customRoute
-                  )
-                }
-              >
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                  {t('action.cancel')}
-                </Text>
-              </TouchableOpacity>
-              {initialValues !== undefined && initialValues.id != null && (
-                <DeleteBtn
-                  handleDeleteAction={handleDeleteOption}
-                  params={{ id: initialValues.id }}
+          <View>
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <Field
+                  name="optionName"
+                  component={InputText}
+                  placeholder={t('optionName')}
+                  validate={isRequired}
                 />
-              )}
+              </View>
             </View>
+
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView]}>
+                <StyledText style={styles.fieldTitle}>{t('required')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+                <Field name="required" component={RNSwitch}/>
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView]}>
+                <StyledText style={styles.fieldTitle}>{t('multiple')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+                <Field name="multipleChoice" component={RNSwitch}/>
+              </View>
+            </View>
+
+            <FieldArray
+              name="optionValues"
+              component={renderOptionsValues}
+              label={t('values')}
+            />
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+
+          <View style={[styles.bottom, styles.horizontalMargin]}>
+            <TouchableOpacity onPress={handleSubmit}>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                {t('action.save')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate(
+                  this.props.navigation.state.params.customRoute
+                )
+              }
+            >
+              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                {t('action.cancel')}
+              </Text>
+            </TouchableOpacity>
+            {initialValues !== undefined && initialValues.id != null && (
+              <DeleteBtn
+                handleDeleteAction={handleDeleteOption}
+                params={{id: initialValues.id}}
+              />
+            )}
+          </View>
+        </View>
+      </ThemeKeyboardAwareScrollView>
     )
   }
 }
+
 OptionFormScreen = reduxForm({
   form: 'option_form'
 })(OptionFormScreen)

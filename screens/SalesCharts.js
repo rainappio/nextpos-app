@@ -38,6 +38,8 @@ import LoadingScreen from "./LoadingScreen";
 import SegmentedControl from "../components/SegmentedControl";
 import OrderFilterForm from "./OrderFilterForm";
 import TimeZoneService from "../helpers/TimeZoneService";
+import {ThemeScrollView} from "../components/ThemeScrollView";
+import {StyledText} from "../components/StyledText";
 
 class SalesCharts extends React.Component {
   static navigationOptions = {
@@ -141,9 +143,11 @@ class SalesCharts extends React.Component {
   }
 
   handleFilterSalesChart = values => {
+    console.log(values)
+    console.log(typeof values.fromDate)
     const timezone = TimeZoneService.getTimeZone();
-    const searchFromDate = moment(values.fromDate).tz(timezone).format("YYYY-MM-DDTHH:mm:ss")
-    const searchToDate = moment(values.toDate).tz(timezone).format("YYYY-MM-DDTHH:mm:ss")
+    const searchFromDate = moment.tz(values.fromDate, timezone).format("YYYY-MM-DDTHH:mm:ss")
+    const searchToDate = moment.tz(values.toDate, timezone).format("YYYY-MM-DDTHH:mm:ss")
     console.log(`Ranged sales selected dates - from: ${searchFromDate} to: ${searchToDate}`)
 
     this.setState({selectedRangeType: values.dateRange})
@@ -232,23 +236,23 @@ class SalesCharts extends React.Component {
                   this.setState({showProductsRanking: true})
                 }}
               >
-                <Text>{salesData.name}</Text>
+                <StyledText>{salesData.name}</StyledText>
               </TouchableOpacity>
             ) : (
-              <Text>{salesData.name}</Text>
+              <StyledText>{salesData.name}</StyledText>
             )}
           </View>
 
           <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-            <Text>{salesData.quantity}</Text>
+            <StyledText>{salesData.quantity}</StyledText>
           </View>
 
           <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-            <Text>{formatCurrency(salesData.total)}</Text>
+            <StyledText>{formatCurrency(salesData.total)}</StyledText>
           </View>
 
           <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-            <Text>{salesData.percentage}%</Text>
+            <StyledText>{salesData.percentage}%</StyledText>
           </View>
         </View>
       )
@@ -277,8 +281,8 @@ class SalesCharts extends React.Component {
     }
 
     return (
-      <ScrollView scrollIndicatorInsets={{right: 1}} style={styles.fullWidthScreen}>
-
+      <ThemeScrollView>
+        <View style={styles.fullWidthScreen}>
         <ProductsRanking
           isShow={this.state.showProductsRanking}
           toggleProductsRanking={this.toggleProductsRankingModal}
@@ -302,10 +306,10 @@ class SalesCharts extends React.Component {
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={styles.tableCellView}>
-            <Text style={styles.tableCellText}>{t('salesTotal')}</Text>
+            <StyledText style={styles.tableCellText}>{t('salesTotal')}</StyledText>
           </View>
           <View style={[styles.tableCellView, styles.justifyRight]}>
-            <Text style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.salesTotal)}</Text>
+            <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.salesTotal)}</StyledText>
           </View>
           {/*<Chart
             data={Object.keys(filteredRangedSalesData).length !== 0 ? filteredRangedSalesData : rangedSalesData}
@@ -318,19 +322,19 @@ class SalesCharts extends React.Component {
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={styles.tableCellView}>
-            <Text style={styles.tableCellText}>{t('serviceChargeTotal')}</Text>
+            <StyledText style={styles.tableCellText}>{t('serviceChargeTotal')}</StyledText>
           </View>
           <View style={[styles.tableCellView, styles.justifyRight]}>
-            <Text style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.serviceChargeTotal)}</Text>
+            <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.serviceChargeTotal)}</StyledText>
           </View>
         </View>
 
         <View style={styles.tableRowContainerWithBorder}>
           <View style={[styles.tableCellView]}>
-            <Text style={styles.tableCellText}>{t('discountTotal')}</Text>
+            <StyledText style={styles.tableCellText}>{t('discountTotal')}</StyledText>
           </View>
           <View style={[styles.tableCellView, styles.justifyRight]}>
-            <Text style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.discountTotal)}</Text>
+            <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.discountTotal)}</StyledText>
           </View>
         </View>
 
@@ -400,7 +404,8 @@ class SalesCharts extends React.Component {
             </View>
           )}
         </View>
-      </ScrollView>
+        </View>
+      </ThemeScrollView>
     )
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import {
   AsyncStorage,
   View,
@@ -7,17 +7,18 @@ import {
   ScrollView,
   ActivityIndicator
 } from 'react-native'
-import { Accordion, List, SwipeAction } from '@ant-design/react-native'
+import {Accordion, List, SwipeAction} from '@ant-design/react-native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import { getTableLayout, getTableLayouts } from '../actions'
+import {getTableLayout, getTableLayouts} from '../actions'
 import AddBtn from '../components/AddBtn'
 import BackBtn from '../components/BackBtn'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import TableForm from './TableForm'
 import {api, makeFetchRequest, errorAlert, dispatchFetchRequest} from '../constants/Backend'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
+import {ThemeContainer} from "../components/ThemeContainer";
 
 class TableAdd extends React.Component {
   static navigationOptions = {
@@ -48,16 +49,18 @@ class TableAdd extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
-    const { t } = this.context
+    const {navigation} = this.props
+    const {t} = this.context
 
     return (
-      <View style={styles.fullWidthScreen}>
-        <ScreenHeader title={t('addTableTitle')}
-                      parentFullScreen={true}/>
+      <ThemeContainer>
+        <View style={styles.fullWidthScreen}>
+          <ScreenHeader title={t('addTableTitle')}
+                        parentFullScreen={true}/>
 
-        <TableForm onSubmit={this.handleSubmit} navigation={navigation}/>
-      </View>
+          <TableForm onSubmit={this.handleSubmit} navigation={navigation}/>
+        </View>
+      </ThemeContainer>
     )
   }
 }

@@ -4,8 +4,10 @@ import { Checkbox } from '@ant-design/react-native'
 import PropTypes from 'prop-types'
 import styles from '../styles'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
+import {StyledText} from "./StyledText";
+import {withContext} from "../helpers/contextHelper";
 
-export default class RenderCheckboxGroup extends React.Component {
+class RenderCheckboxGroup extends React.Component {
   render() {
     const {
       input: { onBlur, onChange, onFocus, value },
@@ -13,6 +15,7 @@ export default class RenderCheckboxGroup extends React.Component {
       optionName,
       customarr,
       customRoute,
+      themeStyle,
       meta: { error, toched, valid },
       ...rest
     } = this.props
@@ -36,7 +39,7 @@ export default class RenderCheckboxGroup extends React.Component {
           <View key={ca.id}>
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, { flex: 1 }]}>
-                <Text>{ca.name}</Text>
+                <StyledText>{ca.name}</StyledText>
               </View>
               <View style={[styles.tableCellView, { flex: 1, justifyContent: 'flex-end' }]}>
                 <Checkbox
@@ -48,7 +51,7 @@ export default class RenderCheckboxGroup extends React.Component {
                 <AntDesignIcon
                   name="ellipsis1"
                   size={25}
-                  color="black"
+                  color={themeStyle.color}
                   onPress={() => {
                     this.props.navigation.navigate(customRoute, {
                       //productOptionId: ca.id,
@@ -66,3 +69,5 @@ export default class RenderCheckboxGroup extends React.Component {
     return <View>{checkBoxes}</View>
   }
 }
+
+export default withContext(RenderCheckboxGroup)

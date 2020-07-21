@@ -3,20 +3,24 @@ import {Dimensions, StyleSheet, View} from 'react-native'
 import {Circle, G, Line, Rect, Svg, Text} from 'react-native-svg'
 import * as d3 from 'd3'
 import {mainThemeColor} from "../styles";
+import {withContext} from "../helpers/contextHelper";
+import {themes} from "../themes/ThemeContext";
 
 
-export default class SvgBarChart extends Component {
+class SvgBarChart extends Component {
   render() {
 
-    const { data, legend, round } = this.props
+    const { data, legend, round, themeStyle } = this.props
 
     return (
       <View style={[styles.container]}>
-        <BarChart data={data} horizontalMargin={20} legend={legend} round={round} />
+        <BarChart data={data} horizontalMargin={20} legend={legend} round={round} themeStyle={themeStyle} />
       </View>
     )
   }
 }
+
+export default withContext(SvgBarChart)
 
 const styles = StyleSheet.create({
   container: {
@@ -36,7 +40,7 @@ const colors = {
 class BarChart extends PureComponent {
 
   render() {
-    const { horizontalMargin, legend } = this.props
+    const { horizontalMargin, legend, themeStyle } = this.props
 
     // Dimensions
     const svgHeight = 200
@@ -44,6 +48,7 @@ class BarChart extends PureComponent {
     const graphHeight = svgHeight - 2 * GRAPH_MARGIN
     const graphWidth = svgWidth - GRAPH_MARGIN
     const horizontalPadding = (svgWidth - graphWidth) / 2
+    const fillColor = themeStyle.color
 
     const data = this.props.data
 
@@ -79,8 +84,9 @@ class BarChart extends PureComponent {
               textAnchor="end"
               //y={y(topValue) * -1 - 30}
               fontSize={12}
-              fill="black"
-              fillOpacity={0.7}>
+              fill={fillColor}
+              //fillOpacity={0.7}
+            >
               {legend}
             </Text>
           </G>
@@ -123,7 +129,7 @@ class BarChart extends PureComponent {
                 x={x(item.label) - (GRAPH_BAR_WIDTH / 2)}
                 y={y(item.value) * -1 - 3}
                 fontSize={8}
-                fill='black'
+                fill={fillColor}
               >
                 {item.value}
               </Text>
@@ -145,6 +151,7 @@ class BarChart extends PureComponent {
               fontSize="10"
               x={x(item.label)}
               y="14"
+              fill={fillColor}
               textAnchor="middle">{item.label % 4 === 0 ? item.label : ''}</Text>
           ))}
 
@@ -152,7 +159,7 @@ class BarChart extends PureComponent {
             fontSize="12"
             x={graphWidth / 2}
             y="30"
-            fill="black"
+            fill={fillColor}
             textAnchor="middle">Hours</Text>
         </G>
       </Svg>
