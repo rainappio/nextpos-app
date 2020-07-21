@@ -27,6 +27,11 @@ import { LocaleContext } from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
+import {ThemeContainer} from "../components/ThemeContainer";
+import {StyledText} from "../components/StyledText";
+import {ListItem} from "react-native-elements";
+import {withContext} from "../helpers/contextHelper";
+import {compose} from "redux";
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
@@ -73,7 +78,7 @@ class OrderFormII extends React.Component {
   PanelHeader = (labelName, labelId) => {
     return (
       <View style={styles.listPanel}>
-        <Text style={styles.listPanelText}>{labelName}</Text>
+        <StyledText style={styles.listPanelText}>{labelName}</StyledText>
       </View>
     )
   }
@@ -128,7 +133,8 @@ class OrderFormII extends React.Component {
       labels = [],
       haveError,
       isLoading,
-      order
+      order,
+      themeStyle
     } = this.props
     const { t } = this.context
     const map = new Map(Object.entries(products))
@@ -156,7 +162,7 @@ class OrderFormII extends React.Component {
     }
 
     return (
-      <View style={{ flex: 1 }}>
+      <ThemeContainer>
         <ScrollView>
           <View style={styles.container}>
             <Text style={styles.screenTitle}>
@@ -176,19 +182,22 @@ class OrderFormII extends React.Component {
                 <List>
                   {map.get('pinned') !== undefined &&
                     map.get('pinned').map(prd => (
-                      <List.Item
+                      <ListItem
                         key={prd.id}
-                        style={styles.listItemContainer}
-                        onPress={() => this.addItemToOrder(prd.id)
+                        title={
+                          <View style={[styles.tableRowContainer]}>
+                            <View style={[styles.tableCellView, styles.flex(1)]}>
+                              <StyledText>{prd.name}</StyledText>
+                            </View>
+                            <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
+                              <StyledText>${prd.price}</StyledText>
+                            </View>
+                          </View>
                         }
-                      >
-                        <View style={[styles.jc_alignIem_center, { flex: 1, flexDirection: 'row' }]}>
-                          <Text style={{ flex: 3 }}>{prd.name}</Text>
-                          <Text style={{ flex: 1, textAlign: 'right' }}>
-                            ${prd.price}
-                          </Text>
-                        </View>
-                      </List.Item>
+                        onPress={() => this.addItemToOrder(prd.id)}
+                        bottomDivider
+                        containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                      />
                     ))}
                 </List>
               </Accordion.Panel>
@@ -200,19 +209,22 @@ class OrderFormII extends React.Component {
                 >
                   <List>
                     {map.get(lbl.label).map(prd => (
-                      <List.Item
+                      <ListItem
                         key={prd.id}
-                        style={styles.listItemContainer}
-                        onPress={() => this.addItemToOrder(prd.id)
+                        title={
+                          <View style={[styles.tableRowContainer]}>
+                            <View style={[styles.tableCellView, styles.flex(1)]}>
+                              <StyledText>{prd.name}</StyledText>
+                            </View>
+                            <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
+                              <StyledText>${prd.price}</StyledText>
+                            </View>
+                          </View>
                         }
-                      >
-                        <View style={[styles.jc_alignIem_center, { flex: 1, flexDirection: 'row' }]}>
-                          <Text style={{ flex: 3 }}>{prd.name}</Text>
-                          <Text style={{ flex: 1, textAlign: 'right' }}>
-                            ${prd.price}
-                          </Text>
-                        </View>
-                      </List.Item>
+                        onPress={() => this.addItemToOrder(prd.id)}
+                        bottomDivider
+                        containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                      />
                     ))}
                   </List>
                 </Accordion.Panel>
@@ -221,34 +233,26 @@ class OrderFormII extends React.Component {
           </View>
         </ScrollView>
 
-        <View
-          style={[styles.orange_bg, styles.flex_dir_row, styles.shoppingBar]}
-        >
-          <View style={[styles.half_width, styles.jc_alignIem_center]}>
-            <Text
-              style={[
-                styles.textBig,
-                styles.whiteColor,
-                { alignSelf: 'flex-start', paddingHorizontal: 10 }
-              ]}
-            >
+        <View style={[styles.shoppingBar]}>
+          <View style={[styles.tableCellView, styles.half_width]}>
+            <Text style={[styles.primaryText, styles.whiteColor]}>
               {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
             </Text>
           </View>
 
-          <View style={[styles.quarter_width, styles.flex_dir_row, styles.jc_alignIem_center]}>
+          <View style={[styles.tableCellView, styles.quarter_width]}>
             <FontAwesomeIcon
               name="user"
               size={30}
               color="#fff"
               style={{ marginRight: 5 }}
             />
-            <Text style={[styles.textMedium, styles.whiteColor]}>
-              &nbsp;{order.demographicData != null ? order.demographicData.male + order.demographicData.female + order.demographicData.kid : 0}
+            <Text style={[styles.primaryText, styles.whiteColor]}>
+              &nbsp;{order.demographicData != null ? order.demographicData.customerCount : 0}
             </Text>
           </View>
 
-          <View style={[styles.quarter_width, styles.jc_alignIem_center]}>
+          <View style={[styles.tableCellView, styles.quarter_width, styles.justifyRight]}>
             <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate('OrdersSummary', {
@@ -274,7 +278,7 @@ class OrderFormII extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </ThemeContainer>
     )
   }
 }
@@ -300,7 +304,8 @@ OrderFormII = reduxForm({
   form: 'orderformII'
 })(OrderFormII)
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(OrderFormII)
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withContext
+)
+export default enhance(OrderFormII)

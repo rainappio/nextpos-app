@@ -2,7 +2,8 @@ import {
   FETCH_TIME_CARD,
   FETCH_TIME_CARD_SUCCESS,
   FETCH_TIME_CARD_FAILURE,
-  CLEAR_TIME_CARD
+  CLEAR_TIME_CARD,
+  UPDATE_CAN_CLOCK_IN
 } from '../actions'
 
 const initialState = {
@@ -42,6 +43,22 @@ export const reducer = (state = initialState, action) => {
       }
     case CLEAR_TIME_CARD:
       return initialState
+    default:
+      return state
+  }
+}
+
+const clockInInitialState = {
+  canClockIn: false,
+}
+
+export const clockInReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case UPDATE_CAN_CLOCK_IN:
+      return {
+        ...state,
+        canClockIn: action.canClockIn
+      }
     default:
       return state
   }

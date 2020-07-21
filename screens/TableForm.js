@@ -7,6 +7,7 @@ import InputNumber from '../components/InputNumber'
 import styles from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
 import DeleteBtn from "../components/DeleteBtn";
+import {StyledText} from "../components/StyledText";
 
 class TableForm extends React.Component {
   static navigationOptions = {
@@ -41,7 +42,7 @@ class TableForm extends React.Component {
       <View style={styles.contentContainer}>
         <View style={[styles.tableRowContainerWithBorder]}>
           <View style={[styles.tableCellView, styles.flex(1)]}>
-            <Text style={styles.fieldTitle}>{t('tableName')}</Text>
+            <StyledText style={styles.fieldTitle}>{t('tableName')}</StyledText>
           </View>
           <View style={[styles.tableCellView, styles.justifyRight]}>
             <Field
@@ -56,7 +57,7 @@ class TableForm extends React.Component {
 
         <View style={[styles.tableRowContainerWithBorder]}>
           <View style={[styles.tableCellView, styles.flex(1)]}>
-            <Text style={styles.fieldTitle}>{t('tableCapacity')}</Text>
+            <StyledText style={styles.fieldTitle}>{t('tableCapacity')}</StyledText>
           </View>
           <View style={[styles.tableCellView, styles.justifyRight]}>
             <Field

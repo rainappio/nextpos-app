@@ -39,9 +39,7 @@ class ProductsOverviewforOffer extends React.Component {
       <ProductRowforOffer
         products={products}
         navigation={navigation}
-        getProduct={this.props.getProduct}
         labels={labels}
-        isLoading={isLoading}
         isEditForm={this.props.navigation.state.params !== undefined && this.props.navigation.state.params.isEditForm}
         updatedProducts={this.props.navigation.state.params !== undefined && this.props.navigation.state.params.updatedselectedProducts}
       />

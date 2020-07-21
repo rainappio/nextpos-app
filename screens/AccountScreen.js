@@ -8,17 +8,21 @@ import {
   Alert,
   TouchableOpacity
 } from 'react-native'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import BackBtn from '../components/BackBtn'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
-import { doLogout, getClientUsr } from '../actions'
-import { connect } from 'react-redux'
+import {LocaleContext} from '../locales/LocaleContext'
+import {doLogout, getClientUsr} from '../actions'
+import {connect} from 'react-redux'
 import EditPasswordPopUp from '../components/EditPasswordPopUp'
-import { reduxForm } from 'redux-form'
-import { getToken } from '../constants/Backend'
+import {reduxForm} from 'redux-form'
+import {getToken} from '../constants/Backend'
 import Constants from "expo-constants/src/Constants";
 import ScreenHeader from "../components/ScreenHeader";
+import ThemeToggleButton from "../themes/ThemeToggleButton";
+import {withContext} from "../helpers/contextHelper";
+import {compose} from "redux";
+import {StyledText} from "../components/StyledText";
 
 class AccountScreen extends React.Component {
   static navigationOptions = {
@@ -51,7 +55,7 @@ class AccountScreen extends React.Component {
 
     for (const key of storedKeys) {
       const value = await AsyncStorage.getItem(key)
-      objects.push({ key: key, value: value })
+      objects.push({key: key, value: value})
     }
 
     this.setState({
@@ -74,66 +78,66 @@ class AccountScreen extends React.Component {
     const storageItems = this.state.objects.map(obj => {
       return (
         <View key={obj.key} style={styles.fieldContainer}>
-          <Text style={[styles.fieldTitle, { flex: 2 }]}>{obj.key}</Text>
+          <Text style={[styles.fieldTitle, {flex: 2}]}>{obj.key}</Text>
           <TouchableOpacity
-            onPress={() => Alert.alert('Value', obj.value, [{ text: 'Ok' }])}
+            onPress={() => Alert.alert('Value', obj.value, [{text: 'Ok'}])}
           >
-            <Text style={{ flex: 1 }}>Details</Text>
+            <Text style={{flex: 1}}>Details</Text>
           </TouchableOpacity>
         </View>
       )
     })
-    const { currentUser } = this.props
-    const { t } = this.context
+    const {currentUser, themeStyle} = this.props
+    const {t} = this.context
 
     return (
-      <View style={styles.fullWidthScreen}>
-        <ScreenHeader backNavigation={true}
-                      parentFullScreen={true}
-                      title={t('settings.account')}
-        />
+      <View style={[styles.mainContainer, themeStyle]}>
+        <View style={[styles.fullWidthScreen]}>
+          <ScreenHeader backNavigation={true}
+                        parentFullScreen={true}
+                        title={t('settings.account')}
+          />
 
           <View style={styles.tableRowContainerWithBorder}>
-            <View style={[styles.tableCellView, { flex: 1 }]}>
-              <Text style={styles.fieldTitle}>{t('username')}</Text>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText style={styles.fieldTitle}>{t('username')}</StyledText>
             </View>
-            <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
-              <Text>
+            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+              <StyledText>
                 {currentUser.username}
-              </Text>
+              </StyledText>
             </View>
           </View>
           <View style={styles.tableRowContainerWithBorder}>
-            <View style={[styles.tableCellView, { flex: 1 }]}>
-              <Text style={styles.fieldTitle}>{t('nickname')}</Text>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText style={styles.fieldTitle}>{t('nickname')}</StyledText>
             </View>
-            <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
-              <Text>
+            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+              <StyledText>
                 {currentUser.nickname}
-              </Text>
+              </StyledText>
             </View>
           </View>
           <View style={[styles.tableRowContainerWithBorder]}>
-            <View style={[styles.tableCellView, { flex: 1 }]}>
-              <Text style={styles.fieldTitle}>{t('password')}</Text>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText style={styles.fieldTitle}>{t('password')}</StyledText>
             </View>
-            <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
+            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <EditPasswordPopUp defaultUser={currentUser.defaultUser} name={currentUser.username} ownAccount={true}/>
             </View>
           </View>
           <View style={styles.tableRowContainerWithBorder}>
-            <View style={[styles.tableCellView, { flex: 1 }]}>
-              <Text style={styles.fieldTitle}>App Version</Text>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText style={styles.fieldTitle}>App Version</StyledText>
             </View>
-            <View style={[styles.tableCellView, { flex: 3, justifyContent: 'flex-end' }]}>
-              <Text>
+            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+              <StyledText>
                 {Constants.nativeAppVersion} | {Constants.nativeBuildVersion}
-              </Text>
+              </StyledText>
             </View>
           </View>
 
-
-        {/*{currentUser.defaultUser && (
+          {/*{currentUser.defaultUser && (
           <View style={{ flex: 2, justifyContent: 'flex-end' }}>
             <View style={[styles.fieldContainer]}>
               <Text style={styles.fieldTitle}>Developer Section</Text>
@@ -141,6 +145,7 @@ class AccountScreen extends React.Component {
             <View>{storageItems}</View>
           </View>
         )}*/}
+        </View>
       </View>
     )
   }
@@ -162,7 +167,9 @@ AccountScreen = reduxForm({
   form: 'accountForm'
 })(AccountScreen)
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AccountScreen)
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withContext
+)
+
+export default enhance(AccountScreen)

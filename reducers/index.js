@@ -30,7 +30,7 @@ import { reducer as announcementsReducer } from './announcements'
 import { reducer as announcementReducer } from './announcement'
 import { reducer as timecardsReducer } from './timecards'
 import { reducer as usertimeCardsReducer } from './usertimecards'
-import { reducer as timecardReducer } from './timecard'
+import {clockInReducer, reducer as timecardReducer} from './timecard'
 import { reducer as shiftMostRecentReducer } from './shiftMostRecent'
 import { reducer as shiftsReducer } from './shifts'
 import { reducer as userRolesReducer } from './userroles'
@@ -73,6 +73,7 @@ const rootReducer = combineReducers({
   timecards: timecardsReducer,
   usertimecards: usertimeCardsReducer,
   timecard: timecardReducer,
+  clockIn: clockInReducer,
   mostRecentShift: shiftMostRecentReducer,
   shifts: shiftsReducer,
   userroles: userRolesReducer,

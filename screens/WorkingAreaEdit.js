@@ -22,6 +22,7 @@ import { LocaleContext } from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
+import {ThemeContainer} from "../components/ThemeContainer";
 
 class WorkingAreaEdit extends React.Component {
   static navigationOptions = {
@@ -76,7 +77,7 @@ class WorkingAreaEdit extends React.Component {
     }
 
     return (
-      <DismissKeyboard>
+      <ThemeContainer>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={true}
                         parentFullScreen={true}
@@ -92,7 +93,7 @@ class WorkingAreaEdit extends React.Component {
             handleEditCancel={this.handleEditCancel}
           />
         </View>
-      </DismissKeyboard>
+      </ThemeContainer>
     )
   }
 }

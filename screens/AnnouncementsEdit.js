@@ -20,6 +20,7 @@ import AnnouncementsForm from './AnnouncementsForm'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import ScreenHeader from "../components/ScreenHeader";
+import {ThemeScrollView} from "../components/ThemeScrollView";
 
 class AnnouncementsEdit extends React.Component {
   static navigationOptions = {
@@ -77,7 +78,7 @@ class AnnouncementsEdit extends React.Component {
     const { t } = this.context
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      <ThemeScrollView>
         <DismissKeyboard>
           <View style={styles.container}>
             <ScreenHeader title={t('editAnnouncementTitle')}/>
@@ -92,7 +93,7 @@ class AnnouncementsEdit extends React.Component {
             />
           </View>
         </DismissKeyboard>
-      </ScrollView>
+      </ThemeScrollView>
     )
   }
 }

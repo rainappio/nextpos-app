@@ -1,13 +1,14 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { View, ScrollView } from 'react-native'
-import { LocaleContext } from '../locales/LocaleContext'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {View, ScrollView} from 'react-native'
+import {LocaleContext} from '../locales/LocaleContext'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import ScreenHeader from "../components/ScreenHeader";
-import { getUserRoles, getPermissions } from '../actions'
+import {getUserRoles, getPermissions} from '../actions'
 import styles from '../styles'
 import NewUserRoleForm from './NewUserRoleForm'
-import { api, dispatchFetchRequest } from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
+import {ThemeScrollView} from "../components/ThemeScrollView";
 
 class EditUserRole extends Component {
   static navigationOptions = {
@@ -27,14 +28,14 @@ class EditUserRole extends Component {
     var userroleId = this.props.navigation.state.params.userroleId;
     dispatchFetchRequest(
       api.clientUser.updateuserRole(userroleId), {
-      method: 'POST',
-      withCredentials: true,
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(values)
       },
-      body: JSON.stringify(values)
-    },
       response => {
         this.props.navigation.navigate('ManageUserRole')
         this.props.getUserRoles()
@@ -58,25 +59,23 @@ class EditUserRole extends Component {
   }
 
   render() {
-    const { t } = this.context
+    const {t} = this.context
 
     return (
-      <ScrollView>
-        <DismissKeyboard>
-          <View style={styles.container_nocenterCnt}>
-            <ScreenHeader title={t('editUserRoleTitle')} />
-            <NewUserRoleForm
-              permissions={Object.keys(this.props.permissions)}
-              labels={this.props.permissions}
-              initialValues={this.props.navigation.state.params.initialValues}
-              handleEditCancel={this.handleEditCancel}
-              isEditForm={this.props.navigation.state.params.isEditForm}
-              onSubmit={this.handleSubmit}
-              handleDeleteUserRole={this.handleDeleteUserRole}
-            />
-          </View>
-        </DismissKeyboard>
-      </ScrollView>
+      <ThemeScrollView>
+        <View style={styles.fullWidthScreen}>
+          <ScreenHeader title={t('editUserRoleTitle')} parentFullScreen={true}/>
+          <NewUserRoleForm
+            permissions={Object.keys(this.props.permissions)}
+            labels={this.props.permissions}
+            initialValues={this.props.navigation.state.params.initialValues}
+            handleEditCancel={this.handleEditCancel}
+            isEditForm={this.props.navigation.state.params.isEditForm}
+            onSubmit={this.handleSubmit}
+            handleDeleteUserRole={this.handleDeleteUserRole}
+          />
+        </View>
+      </ThemeScrollView>
     )
   }
 }
@@ -98,4 +97,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps)
-  (EditUserRole)
+(EditUserRole)

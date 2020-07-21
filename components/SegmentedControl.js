@@ -1,30 +1,32 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import {View, Text} from 'react-native'
 import SegmentedControlTab from "react-native-segmented-control-tab";
-import styles, { mainThemeColor } from "../styles";
+import styles, {mainThemeColor} from "../styles";
+import {withContext} from "../helpers/contextHelper";
 
 const SegmentedControl = props => {
   const {
-    input: { onChange },
+    input: {onChange},
     values,
     selectedIndex,
     vertical,
+    themeStyle,
     //meta: { error, touched, valid },
     ...rest
   } = props
 
   const horizontalStyleProps = {
-    tabsContainerStyle: { width: '100%' },
-    tabStyle: { borderColor: mainThemeColor, width: '100%' },
-    tabTextStyle: { color: mainThemeColor },
-    activeTabStyle: { backgroundColor: mainThemeColor }
+    tabsContainerStyle: {width: '100%'},
+    tabStyle: {borderColor: mainThemeColor, width: '100%', backgroundColor: themeStyle.backgroundColor},
+    tabTextStyle: {color: mainThemeColor},
+    activeTabStyle: {backgroundColor: mainThemeColor}
   }
 
   const verticalStyleProps = {
-    tabsContainerStyle: { width: '100%', flexDirection: 'column' },
-    tabStyle: { borderColor: mainThemeColor, width: '100%' },
-    tabTextStyle: { color: mainThemeColor },
-    activeTabStyle: { backgroundColor: mainThemeColor }
+    tabsContainerStyle: {width: '100%', flexDirection: 'column'},
+    tabStyle: {borderColor: mainThemeColor, width: '100%', backgroundColor: themeStyle.backgroundColor},
+    tabTextStyle: {color: mainThemeColor},
+    activeTabStyle: {backgroundColor: mainThemeColor}
   }
 
   return (
@@ -41,4 +43,4 @@ const SegmentedControl = props => {
   )
 }
 
-export default SegmentedControl
+export default withContext(SegmentedControl)

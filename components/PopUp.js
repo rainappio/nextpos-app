@@ -10,8 +10,10 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles, {mainThemeColor} from '../styles'
 import { LocaleContext } from '../locales/LocaleContext'
+import {ThemeContainer} from "./ThemeContainer";
+import {withContext} from "../helpers/contextHelper";
 
-export default class PopUp extends Component {
+class PopUp extends Component {
   static contextType = LocaleContext
 
   constructor(props, context) {
@@ -35,12 +37,13 @@ export default class PopUp extends Component {
       textForRoute1,
       textForRoute2,
       navigation,
-      dataArr
+      dataArr,
+      themeStyle
     } = this.props
     const { t } = this.context
 
     return (
-      <View>
+      <ThemeContainer>
         <TouchableOpacity
           onPress={() => {
             this.toggleModal(true)
@@ -67,9 +70,7 @@ export default class PopUp extends Component {
               contentContainerStyle={[styles.modalContainer, {width: '100%'}]}
             >
               <TouchableWithoutFeedback>
-                <View
-                  style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout]}
-                >
+                <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
                   <Text
                     style={[
                       styles.welcomeText,
@@ -117,7 +118,9 @@ export default class PopUp extends Component {
             </ScrollView>
           </TouchableOpacity>
         </Modal>
-      </View>
+      </ThemeContainer>
     )
   }
 }
+
+export default withContext(PopUp)

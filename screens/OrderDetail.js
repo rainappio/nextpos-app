@@ -20,7 +20,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import images from '../assets/images'
-import { getOrdersByDateRange, getOrder, formatDate, formatTime } from '../actions'
+import {getOrdersByDateRange, getOrder, formatDate, formatTime, formatCurrency} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import {handleDelete, renderOptionsAndOffer, renderOrderState} from "../helpers/orderActions";
@@ -31,6 +31,10 @@ import LoadingScreen from "./LoadingScreen";
 import {api, dispatchFetchRequestWithOption, successMessage} from "../constants/Backend";
 import DeleteBtn from "../components/DeleteBtn";
 import {NavigationEvents} from "react-navigation";
+import {ThemeScrollView} from "../components/ThemeScrollView";
+import {StyledText} from "../components/StyledText";
+import {withContext} from "../helpers/contextHelper";
+import {compose} from "redux";
 
 class OrderDetail extends React.Component {
   static navigationOptions = {
@@ -76,7 +80,7 @@ class OrderDetail extends React.Component {
   }
 
   render() {
-    const { order, isLoading, haveData } = this.props
+    const { order, isLoading, haveData, complexTheme } = this.props
     const { t } = this.context
 
     Item = ({ orderDetail, lineItemDate }) => {
@@ -84,32 +88,32 @@ class OrderDetail extends React.Component {
         <View>
           <View style={[styles.tableRowContainer]}>
             <View style={{flex: 2.5}}>
-              <Text>
+              <StyledText>
                 {formatTime(lineItemDate)}
-              </Text>
+              </StyledText>
             </View>
 
             <View style={{flex: 1.7}}>
-              <Text>
+              <StyledText>
                 {orderDetail.productName}
-              </Text>
+              </StyledText>
             </View>
 
             <View style={{flex: 0.8}}>
-              <Text>
+              <StyledText>
                 {orderDetail.quantity}
-              </Text>
+              </StyledText>
             </View>
 
             <View style={{flex: 1.2}}>
-              <Text style={{textAlign: 'right'}}>
+              <StyledText style={{textAlign: 'right'}}>
                 {orderDetail.lineItemSubTotal}
-              </Text>
+              </StyledText>
             </View>
           </View>
           <View style={styles.tableRowContainer}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text>{renderOptionsAndOffer(orderDetail)}</Text>
+              <StyledText>{renderOptionsAndOffer(orderDetail)}</StyledText>
             </View>
           </View>
         </View>
@@ -132,7 +136,7 @@ class OrderDetail extends React.Component {
       const orderDuration = order.orderDuration !== null ? order.orderDuration : {}
 
       return (
-      	<ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      	<ThemeScrollView>
           <NavigationEvents
             onWillFocus={() => {
               this.props.getOrder()
@@ -146,69 +150,69 @@ class OrderDetail extends React.Component {
 
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.ageGroup')}</Text>
+                <StyledText>{t('order.ageGroup')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
+                <StyledText>
 									{filteredageGroup !== undefined ? filteredageGroup.label : t('order.notFilledIn')}
-                </Text>
+                </StyledText>
               </View>
             </View>
 
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.visitedFrequency')}</Text>
+                <StyledText>{t('order.visitedFrequency')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
+                <StyledText>
                   {filteredvisitFrequency !== undefined ? filteredvisitFrequency.label : t('order.notFilledIn')}
-                </Text>
+                </StyledText>
               </View>
             </View>
 
             {order.orderPreparationTime != null && (
               <View style={[styles.tableRowContainerWithBorder]}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
-                  <Text>{t('order.preparationDuration')}</Text>
+                  <StyledText>{t('order.preparationDuration')}</StyledText>
                 </View>
                 <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                  <Text>
+                  <StyledText>
                     {order.orderPreparationTime.durationHours} {t('timecard.hours')} {order.orderPreparationTime.durationMinutes} {t('timecard.minutes')}
-                  </Text>
+                  </StyledText>
                 </View>
               </View>
             )}
 
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.orderStartDate')}</Text>
+                <StyledText>{t('order.orderStartDate')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
+                <StyledText>
                   {formatTime(order.createdDate)}
-                </Text>
+                </StyledText>
               </View>
             </View>
 
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.endDate')}</Text>
+                <StyledText>{t('order.endDate')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
+                <StyledText>
                   {formatTime(order.modifiedDate)}
-                </Text>
+                </StyledText>
               </View>
             </View>
 
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.duration')}</Text>
+                <StyledText>{t('order.duration')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
+                <StyledText>
                   {orderDuration.durationHours} {t('timecard.hours')} {orderDuration.durationMinutes} {t('timecard.minutes')}
-                </Text>
+                </StyledText>
               </View>
             </View>
 
@@ -236,7 +240,7 @@ class OrderDetail extends React.Component {
             	</View>
 
             	<View style={{flex: 1.3}}>
-               	<Text style={[styles.sectionBarTextSmall,{textAlign: 'right'}]}>{t('order.subTotal')}</Text>
+               	<Text style={[styles.sectionBarTextSmall, {textAlign: 'right'}]}>{t('order.subTotal')}</Text>
             	</View>
           	</View>
 
@@ -254,34 +258,34 @@ class OrderDetail extends React.Component {
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.serviceCharge')}</Text>
+                <StyledText>{t('order.serviceCharge')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
-                  ${order.serviceCharge}
-                </Text>
+                <StyledText>
+                  {formatCurrency(order.serviceCharge)}
+                </StyledText>
               </View>
             </View>
 
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.discount')}</Text>
+                <StyledText>{t('order.discount')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
-                  ${order.discount}
-                </Text>
+                <StyledText>
+                  {formatCurrency(order.discount)}
+                </StyledText>
               </View>
             </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.total')}</Text>
+                <StyledText>{t('order.total')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <Text>
-                  ${order.total.amount}
-                </Text>
+                <StyledText>
+                  {formatCurrency(order.total.amount)}
+                </StyledText>
               </View>
             </View>
 
@@ -290,10 +294,10 @@ class OrderDetail extends React.Component {
               renderItem={({item, index}) => (
                 <View style={styles.tableRowContainerWithBorder}>
               		<View style={[styles.tableCellView, {flex: 1}]}>
-                		<Text>{t('order.paymentMethod')}</Text>
+                		<StyledText>{t('order.paymentMethod')}</StyledText>
               		</View>
               		<View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                		<Text>{item.paymentMethod}</Text>
+                		<StyledText>{item.paymentMethod}</StyledText>
               		</View>
             		</View>
               )}
@@ -302,18 +306,18 @@ class OrderDetail extends React.Component {
 
              <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.serveBy')}</Text>
+                <StyledText>{t('order.serveBy')}</StyledText>
               </View>
                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                 <Text>
+                 <StyledText>
                    {order.servedBy}
-                 </Text>
+                 </StyledText>
                </View>
              </View>
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, {flex: 1}]}>
-                <Text>{t('order.orderStatus')}</Text>
+                <StyledText>{t('order.orderStatus')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                 {renderOrderState(order.state)}
@@ -321,18 +325,18 @@ class OrderDetail extends React.Component {
             </View>
 
             <View style={styles.sectionTitleContainer}>
-              <Text style={styles.sectionTitleText}>Order Log</Text>
+              <StyledText style={styles.sectionTitleText}>{t('orderLog.title')}</StyledText>
             </View>
 
             {order.orderLogs != null && order.orderLogs.map((log, idx) => {
               return (
                 <View key={idx}>
-                  <View style={[styles.tableRowContainerWithBorder, {backgroundColor: '#f5f5f5'}]}>
+                  <View style={[styles.tableRowContainerWithBorder, complexTheme.shade]}>
                     <View style={[styles.tableCellView, {flex: 2}]}>
-                      <Text>{formatTime(log.logDate)} ({log.who})</Text>
+                      <StyledText>{formatTime(log.logDate)} ({log.who})</StyledText>
                     </View>
                     <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                      <Text>{t(`orderLog.${log.action}`)}</Text>
+                      <StyledText>{t(`orderLog.${log.action}`)}</StyledText>
                     </View>
                   </View>
                   <View style={styles.tableRowContainerWithBorder}>
@@ -342,7 +346,7 @@ class OrderDetail extends React.Component {
 
                         return (
                           <View key={`entry-${eIdx}`}>
-                            <Text>{entry.name}: {entryValue}</Text>
+                            <StyledText>{entry.name}: {entryValue}</StyledText>
                           </View>
                         )
                       })}
@@ -365,7 +369,7 @@ class OrderDetail extends React.Component {
               />
             </View>
           </View>
-        </ScrollView>
+        </ThemeScrollView>
       )
     } else {
       return null
@@ -384,7 +388,9 @@ const mapDispatchToProps = (dispatch, props) => ({
   getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(OrderDetail)
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withContext
+)
+
+export default enhance(OrderDetail)

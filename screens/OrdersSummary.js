@@ -7,6 +7,8 @@ import OrdersSummaryRowOverView from './OrdersSummaryRowOverView'
 import {NavigationEvents} from "react-navigation";
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
+import OrdersSummaryRow from "./OrdersSummaryRow";
+import {ThemeScrollView} from "../components/ThemeScrollView";
 
 class OrdersSummary extends React.Component {
   static navigationOptions = {
@@ -36,20 +38,25 @@ class OrdersSummary extends React.Component {
       )
     } else if (haveData) {
       return (
-        <View>
+        <ThemeScrollView>
           <NavigationEvents
             onWillFocus={() => {
               this.props.getOrder()
             }}
           />
-          <OrdersSummaryRowOverView
+          <OrdersSummaryRow
+            order={order}
+            navigation={navigation}
+            initialValues={order}
+          />
+          {/*<OrdersSummaryRowOverView
             order={order}
             navigation={navigation}
             isLoading={isLoading}
             haveError={haveError}
             haveData={haveData}
-          />
-        </View>
+          />*/}
+        </ThemeScrollView>
       )
     } else {
       return null

@@ -8,7 +8,7 @@ import {
   AsyncStorage,
   ActivityIndicator, Modal, TouchableWithoutFeedback
 } from 'react-native'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -20,16 +20,23 @@ import {
 } from '../actions'
 import styles, {mainThemeColor} from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
-import { NavigationEvents } from 'react-navigation'
-import { getToken } from '../constants/Backend'
-import { LocaleContext } from '../locales/LocaleContext'
-import { Avatar } from 'react-native-elements'
+import {NavigationEvents} from 'react-navigation'
+import {getToken} from '../constants/Backend'
+import {LocaleContext} from '../locales/LocaleContext'
+import {Avatar} from 'react-native-elements'
 import Markdown from 'react-native-markdown-display'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import {handleDelete, handleOrderSubmit} from "../helpers/orderActions";
 import Constants from "expo-constants/src/Constants";
 import MenuButton from "../components/MenuButton";
 import LoadingScreen from "./LoadingScreen";
+import {withContext} from "../helpers/contextHelper";
+import {compose} from "redux";
+import {StyledText} from "../components/StyledText";
+import {ThemeScrollView} from "../components/ThemeScrollView";
+import {complexTheme} from "../themes/ThemeContext";
+import ThemeToggleButton from "../themes/ThemeToggleButton";
+import {WhiteSpace} from "@ant-design/react-native";
 
 class LoginSuccessScreen extends React.Component {
   static navigationOptions = {
@@ -52,7 +59,6 @@ class LoginSuccessScreen extends React.Component {
 
   async handleClientUserLogout(navigation) {
     try {
-      await AsyncStorage.removeItem('clientusrToken')
       navigation.navigate('ClientUsers')
     } catch (err) {
       console.log(`The error is: ${err}`)
@@ -104,21 +110,22 @@ class LoginSuccessScreen extends React.Component {
       isLoading,
       haveError,
       getannouncements,
-      shiftStatus
+      shiftStatus,
+      themeStyle
     } = this.props
-    const { t } = this.context
-    const { username, loggedIn, tokenExpiry } = this.state
+    const {t} = this.context
+    const {username, loggedIn, tokenExpiry} = this.state
 
     if (isLoading) {
       return (
         <LoadingScreen/>
       )
     } else if (haveError) {
-      return <BackendErrorScreen />
+      return <BackendErrorScreen/>
     }
 
     return (
-      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+      <ThemeScrollView>
         <NavigationEvents
           onWillFocus={() => {
             this.loadUserInfo().then()
@@ -130,8 +137,8 @@ class LoginSuccessScreen extends React.Component {
           handleClientUserLogout={this.handleClientUserLogout}
         />
 
-        <View style={[styles.container]}>
-          <View style={[{flexDirection: 'row', flex: 1, marginHorizontal: 10 }]}>
+        <View style={[styles.fullWidthScreen]}>
+          <View style={[{flexDirection: 'row', marginHorizontal: 10}]}>
             <View style={{flex: 1}}>
               <Image
                 source={
@@ -143,10 +150,7 @@ class LoginSuccessScreen extends React.Component {
               />
             </View>
 
-            <View
-            	style={[
-                {flex: 1, marginTop: 6, alignItems: 'flex-end'}
-              ]}>
+            <View style={[{flex: 1, marginTop: 6, alignItems: 'flex-end'}]}>
               <Avatar
                 rounded
                 title={username != null && username.charAt(0).toUpperCase()}
@@ -158,36 +162,37 @@ class LoginSuccessScreen extends React.Component {
             </View>
           </View>
 
-          <View style={{marginLeft: 10}}>
-            <Text style={[styles.text, styles.textBig, styles.orange_color]}>
+          <View style={[styles.horizontalMargin, {marginTop: 15}]}>
+            <Text style={[styles.primaryText]}>
               {t('welcome')} {currentUser.displayName}{currentUser.defaultUser && t('ownerRemark')}
             </Text>
-            <Text style={[styles.textSmall]}>
+            <StyledText style={[styles.subText]}>
               {t('loggedIn')} {formatDateObj(loggedIn)}
-            </Text>
+            </StyledText>
           </View>
 
-          {shiftStatus === 'ACTIVE' && (
+          <View>
+            {shiftStatus === 'ACTIVE' && (
+              <View style={styles.menuContainer}>
+                <MenuButton
+                  onPress={() => {
+                    this.props.navigation.navigate('OrderStart', {
+                      handleOrderSubmit: handleOrderSubmit,
+                      handleDelete: handleDelete
+                    })
+                  }}
+                  title={t('quickOrder')}
+                  icon={
+                    <MaterialIcon
+                      name="play-arrow"
+                      size={40}
+                      style={[styles.buttonIconStyle]}
+                    />
+                  }/>
+              </View>
+            )}
 
-            <MenuButton
-              onPress={() => {
-                this.props.navigation.navigate('OrderStart', {
-                  handleOrderSubmit: handleOrderSubmit,
-                  handleDelete: handleDelete
-                })
-              }}
-              title={t('quickOrder')}
-              icon={
-                <MaterialIcon
-                  name="play-arrow"
-                  size={40}
-                  style={[styles.buttonIconStyle]}
-                />
-              }/>
-          )}
-
-          <View style={[styles.flex_dir_row, {flex: 1}]}>
-            <View style={{flex: 1}}>
+            <View style={[styles.menuContainer]}>
               <MenuButton
                 onPress={() =>
                   this.props.navigation.navigate('ClockIn', {
@@ -201,9 +206,7 @@ class LoginSuccessScreen extends React.Component {
                     style={[styles.buttonIconStyle]}
                   />
                 }/>
-            </View>
-
-            <View style={{flex: 1}}>
+              <View style={styles.dynamicHorizontalPadding(6)}/>
               <MenuButton
                 onPress={() => this.props.navigation.navigate('ClientUsers')}
                 title={t('menu.clientUsers')}
@@ -215,9 +218,13 @@ class LoginSuccessScreen extends React.Component {
                   />
                 }/>
             </View>
+
+            <View style={[styles.menuContainer, styles.justifyRight]}>
+              <ThemeToggleButton/>
+            </View>
           </View>
 
-          <View style={[{flex: 1, margin: 10}]}>
+          <View style={[styles.flex(2), {margin: 10}]}>
             {
               getannouncements.results !== undefined &&
               getannouncements.results.map(getannoc =>
@@ -225,29 +232,29 @@ class LoginSuccessScreen extends React.Component {
                   style={[styles.sectionContainer, styles.withBottomBorder]}
                   key={getannoc.id}
                 >
-                  <View style={styles.flex_dir_row}>
-                    <View style={[styles.tableCellView]}>
-                      <IonIcon
-                        name={getannoc.titleIcon}
-                        size={32}
-                        color={mainThemeColor}
-                      />
-                      <Text style={[styles.sectionBarText, {marginLeft: 10}]}>
-                        {getannoc.title}
-                      </Text>
-                    </View>
+                  <View style={[styles.tableCellView]}>
+                    <IonIcon
+                      name={getannoc.titleIcon}
+                      size={32}
+                      color={mainThemeColor}
+                    />
+                    <StyledText style={[styles.announcementTitle, {marginLeft: 10}]}>
+                      {getannoc.title}
+                    </StyledText>
                   </View>
 
-                  <Markdown>
+                  <View style={styles.markdownContainer}>
+                  <Markdown style={themeStyle}>
                     {getannoc.markdownContent}
                   </Markdown>
+                  </View>
                 </View>
               )
             }
           </View>
 
         </View>
-      </ScrollView>
+      </ThemeScrollView>
     )
   }
 }
@@ -257,7 +264,7 @@ const mapStateToProps = state => ({
   haveData: state.clientuser.haveData,
   haveError: state.clientuser.haveError,
   isLoading: state.clientuser.loading,
-	getannouncements: state.announcements.data,
+  getannouncements: state.announcements.data,
   shiftStatus: state.shift.data.shiftStatus
 })
 
@@ -272,10 +279,13 @@ const mapDispatchToProps = dispatch => ({
   getShiftStatus: () => dispatch(getShiftStatus())
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginSuccessScreen)
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withContext,
+)
+
+export default enhance(LoginSuccessScreen)
+
 
 export class HiddenMenu extends React.Component {
   static contextType = LocaleContext
@@ -295,7 +305,7 @@ export class HiddenMenu extends React.Component {
   }
 
   render() {
-    let { t } = this.context
+    let {t, theme} = this.context
 
     return (
       <Modal
@@ -318,7 +328,7 @@ export class HiddenMenu extends React.Component {
                 position: 'absolute',
                 top: 100,
                 width: '100%',
-                backgroundColor: '#858585',
+                backgroundColor: complexTheme[theme].overlay.backgroundColor,
                 opacity: 1,
                 zIndex: 10
               }
@@ -335,7 +345,7 @@ export class HiddenMenu extends React.Component {
                 this.props.navigation.navigate('Account')
               }}
             >
-              <Text style={[styles.whiteColor]}>{t('settings.account')}</Text>
+              <Text style={complexTheme[theme].overlay}>{t('settings.account')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -349,7 +359,7 @@ export class HiddenMenu extends React.Component {
                 this.props.handleClientUserLogout(this.props.navigation)
               }}
             >
-              <Text style={[styles.whiteColor]}>
+              <Text style={complexTheme[theme].overlay}>
                 {t('logout')}
               </Text>
             </TouchableOpacity>

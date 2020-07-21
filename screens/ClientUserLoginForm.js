@@ -5,13 +5,15 @@ import {encode as btoa} from 'base-64'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import {DismissKeyboard} from '../components/DismissKeyboard'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import InputText from '../components/InputText'
 import {isRequired} from '../validators'
 import {api, warningMessage} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext";
 import ScreenHeader from "../components/ScreenHeader";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
+import {withContext} from "../helpers/contextHelper";
+import {ThemeScrollView} from "../components/ThemeScrollView";
 
 class ClientUserLoginForm extends React.Component {
   static navigationOptions = {
@@ -39,22 +41,24 @@ class ClientUserLoginForm extends React.Component {
   }
 
   render() {
-    const {clientusersName, displayName, handleSubmit} = this.props
+    const {clientusersName, displayName, handleSubmit, themeStyle} = this.props
     const {t} = this.context
 
     return (
-      <KeyboardAwareScrollView contentContainerStyle={styles.fullWidthScreen} keyboardShouldPersistTaps='always'>
-        <ScreenHeader parentFullScreen={true} title={t('userLoginTitle')}/>
+      <ThemeScrollView>
+        <View style={styles.fullWidthScreen}>
+          <ScreenHeader parentFullScreen={true} title={t('userLoginTitle')}/>
 
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <Text style={[styles.screenSubTitle]}>
-            {displayName}
-          </Text>
+          <View style={[styles.horizontalMargin, styles.flex(1)]}>
+            <View>
+              <Text style={[styles.screenSubTitle]}>
+                {displayName}
+              </Text>
+            </View>
 
-          <View style={[styles.horizontalMargin]}>
             {this.props.defaultUser ? (
-              <View>
-                <View style={styles.sectionContainerWithBorder}>
+              <View style={[styles.sectionContainer, styles.flex(1)]}>
+                <View style={[styles.tableCellView, styles.dynamicVerticalPadding(10)]}>
                   <Field
                     name="password"
                     component={InputText}
@@ -63,7 +67,8 @@ class ClientUserLoginForm extends React.Component {
                     alignLeft={true}
                   />
                 </View>
-                <View>
+
+                <View style={[styles.flex(3)]}>
                   <TouchableOpacity
                     onPress={handleSubmit}
                   >
@@ -72,7 +77,7 @@ class ClientUserLoginForm extends React.Component {
                 </View>
               </View>
             ) : (
-              <View style={styles.sectionContainer}>
+              <View style={[styles.sectionContainer, styles.flex(1)]}>
                 <Field
                   name="password"
                   component={PinCodeInput}
@@ -83,7 +88,7 @@ class ClientUserLoginForm extends React.Component {
             )}
           </View>
         </View>
-      </KeyboardAwareScrollView>
+      </ThemeScrollView>
     )
   }
 }
@@ -92,4 +97,4 @@ ClientUserLoginForm = reduxForm({
   form: 'ClientUserLoginForm'
 })(ClientUserLoginForm)
 
-export default ClientUserLoginForm
+export default withContext(ClientUserLoginForm)

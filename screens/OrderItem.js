@@ -11,6 +11,7 @@ import en from 'javascript-time-ago/locale/en'
 import {Tooltip} from "react-native-elements";
 import {LocaleContext} from "../locales/LocaleContext";
 import {renderOrderState} from "../helpers/orderActions";
+import {StyledText} from "../components/StyledText";
 
 class OrderItem extends React.PureComponent {
   static contextType = LocaleContext
@@ -50,7 +51,7 @@ class OrderItem extends React.PureComponent {
           }
         >
           <View style={[styles.tableCellView, {flex: 5}]}>
-            <Text>{order.orderType === 'IN_STORE' ? order.tableName : t('order.takeOut')} ({order.serialId})</Text>
+            <StyledText>{order.orderType === 'IN_STORE' ? order.tableName : t('order.takeOut')} ({order.serialId})</StyledText>
           </View>
 
           {/*<View style={[styles.tableCellView, {flex: 1}]}>
@@ -61,16 +62,16 @@ class OrderItem extends React.PureComponent {
           </View>*/}
 
           <View style={[styles.tableCellView, {flex: 2}]}>
-            <Text>
+            <StyledText>
               ${order.orderTotal}
-            </Text>
+            </StyledText>
           </View>
 
           <View style={[styles.tableCellView, {flex: 3}]}>
             <FontAwesomeIcon name={'clock-o'} color={timeDisplayColor} size={20}/>
-            <Text style={{marginLeft: 2}}>
+            <StyledText style={{marginLeft: 2}}>
               {timeAgo.format(Date.now() - timeDifference, 'time')}
-            </Text>
+            </StyledText>
           </View>
         </TouchableOpacity>
 

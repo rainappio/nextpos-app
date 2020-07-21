@@ -46,3 +46,17 @@ export const getTimeCard = id => {
     ).then()
   }
 }
+
+export const UPDATE_CAN_CLOCK_IN = 'UPDATE_CAN_CLOCK_IN'
+export const updateCanClockIn = canClockIn => ({
+  type: UPDATE_CAN_CLOCK_IN,
+  canClockIn
+})
+
+export const canClockIn = (canClockIn) => {
+  console.log(`invoke canClockIn: ${canClockIn}`)
+
+  return dispatch => {
+    dispatch(updateCanClockIn(canClockIn))
+  }
+}
