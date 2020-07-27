@@ -1,15 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  TextInput,
-  Text,
-  View,
-  Keyboard,
-  InputAccessoryView,
-  TouchableOpacity,
-  Platform
-} from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
+import {InputAccessoryView, Keyboard, Platform, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import styles, {mainThemeColor} from '../styles'
 import {withContext} from "../helpers/contextHelper";
 

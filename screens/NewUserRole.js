@@ -1,14 +1,12 @@
 import React from 'react'
-import {ScrollView, View} from 'react-native'
-import { connect } from 'react-redux'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import { getUserRoles } from '../actions'
-import { api, dispatchFetchRequest } from '../constants/Backend'
-import { LocaleContext } from '../locales/LocaleContext'
+import {View} from 'react-native'
+import {connect} from 'react-redux'
+import {getUserRoles} from '../actions'
+import {api, dispatchFetchRequest} from '../constants/Backend'
+import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import styles from '../styles'
 import NewUserRoleForm from './NewUserRoleForm'
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 
 

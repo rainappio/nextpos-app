@@ -1,33 +1,13 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {
-  ScrollView,
-  Text,
-  View,
-  ActivityIndicator,
-  TouchableOpacity,
-  Animated,
-  Easing,
-  StyleSheet,
-  Image,
-  Dimensions,
-  Platform
-} from 'react-native'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import {Animated, Easing, Platform, View} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import SortableList from '../components/SortableList'
-import {getAnnouncements, getAnnouncement} from '../actions'
-import {
-  api,
-  errorAlert,
-  dispatchFetchRequest,
-  makeFetchRequest,
-  successMessage
-} from '../constants/Backend'
 import IonIcon from 'react-native-vector-icons/Ionicons'
+import SortableList from '../components/SortableList'
+import {getAnnouncement, getAnnouncements} from '../actions'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import Markdown from 'react-native-markdown-display'
 import AddBtn from '../components/AddBtn'
-import BackBtn from '../components/BackBtn'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import ScreenHeader from "../components/ScreenHeader";

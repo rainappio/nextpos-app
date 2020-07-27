@@ -2,7 +2,7 @@
   * React Native Sortable List reference:
   * https://github.com/gitim/react-native-sortable-list/blob/master/src/Row.js
   */
-import React, {Component, cloneElement} from 'react';
+import React, {cloneElement, Component} from 'react';
 import PropTypes from 'prop-types';
 import {Animated, PanResponder, StyleSheet, ViewPropTypes} from 'react-native';
 import {shallowEqual} from './utils';

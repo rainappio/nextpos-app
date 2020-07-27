@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import styles from "../styles";
-import {Text, TouchableOpacity, View} from "react-native";
+import {TouchableOpacity, View} from "react-native";
 import {withContext} from "../helpers/contextHelper";
 import {StyledText} from "./StyledText";
 

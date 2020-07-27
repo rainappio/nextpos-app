@@ -1,11 +1,11 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
-import { isRequired } from '../validators'
+import {Field, reduxForm} from 'redux-form'
+import {Text, TouchableOpacity, View} from 'react-native'
+import {isRequired} from '../validators'
 import InputText from '../components/InputText'
 import InputNumber from '../components/InputNumber'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import DeleteBtn from "../components/DeleteBtn";
 import {StyledText} from "../components/StyledText";
 

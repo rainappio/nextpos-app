@@ -1,14 +1,14 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Text, View, TouchableOpacity, Platform, TextInput, StyleSheet } from 'react-native'
-import { LocaleContext } from '../locales/LocaleContext'
+import {connect} from 'react-redux'
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import {LocaleContext} from '../locales/LocaleContext'
 import moment from 'moment'
 import styles from '../styles'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import RNPickerSelect from 'react-native-picker-select'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { getOrdersByDateRange } from '../actions'
+import {getOrdersByDateRange} from '../actions'
 
 class DateTimeFilterControlledForm extends React.Component {
   static contextType = LocaleContext

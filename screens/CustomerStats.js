@@ -1,5 +1,5 @@
 import React from 'react'
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
+import {Text, View} from 'react-native'
 import {connect} from 'react-redux'
 import {getCustomerCountReport, getCustomerTrafficReport} from '../actions'
 import styles from '../styles'
@@ -7,11 +7,8 @@ import {LocaleContext} from '../locales/LocaleContext'
 import BackendErrorScreen from './BackendErrorScreen'
 import moment from "moment";
 import ScreenHeader from "../components/ScreenHeader";
-import {api, dispatchFetchRequest} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 import SvgBarChart from "../components/SvgBarChart";
-import SegmentedControl from "../components/SegmentedControl";
-import Icon from "react-native-vector-icons/Ionicons";
 import MonthPicker from "../components/MonthPicker";
 import RenderTable from "../components/RenderTable";
 import {ThemeScrollView} from "../components/ThemeScrollView";

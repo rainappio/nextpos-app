@@ -1,16 +1,13 @@
 import React, {Component} from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {Text, View, TouchableOpacity, ScrollView, Picker, Alert} from 'react-native'
-import DropDown from '../components/DropDown'
+import {Alert, Text, TouchableOpacity, View} from 'react-native'
 import RenderStepper from '../components/RenderStepper'
 import {isRequired} from '../validators'
-import {DismissKeyboard} from '../components/DismissKeyboard'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import PickerInput from "../components/PickerInput";
 import SegmentedControl from "../components/SegmentedControl";
 import ScreenHeader from "../components/ScreenHeader";
-import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 

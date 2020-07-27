@@ -1,18 +1,12 @@
 import React from 'react'
-import {
-  View,
-  TouchableOpacity,
-  Text, FlatList,
-  Dimensions
-} from 'react-native'
+import {Dimensions, FlatList, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
 import DraggableFlatList from "react-native-draggable-flatlist";
-import {DismissKeyboard} from '../components/DismissKeyboard'
 import PopUp from '../components/PopUp'
-import {getProducts, getLables} from '../actions'
+import {getLables, getProducts} from '../actions'
 import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
-import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import ScreenHeader from "../components/ScreenHeader";
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'

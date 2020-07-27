@@ -1,11 +1,10 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Text, View, FlatList } from 'react-native'
-import { LocaleContext } from '../locales/LocaleContext'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {FlatList, View} from 'react-native'
+import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
-import { getUserRoles, getPermissions } from '../actions'
-import { ListItem } from 'react-native-elements'
+import {getPermissions, getUserRoles} from '../actions'
+import {ListItem} from 'react-native-elements'
 import LoadingScreen from "./LoadingScreen";
 import AddBtn from '../components/AddBtn'
 import styles from '../styles'

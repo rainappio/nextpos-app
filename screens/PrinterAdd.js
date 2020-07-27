@@ -1,21 +1,12 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { ScrollView, Text, View } from 'react-native'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
-import AddBtn from '../components/AddBtn'
+import {connect} from 'react-redux'
+import {View} from 'react-native'
 import PrinterForm from '../screens/PrinterForm'
-import { getWorkingAreas, getPrinters } from '../actions'
-import {
-  api, dispatchFetchRequest,
-  errorAlert,
-  makeFetchRequest,
-  successMessage
-} from '../constants/Backend'
+import {getPrinters, getWorkingAreas} from '../actions'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
-import {ThemeScrollView} from "../components/ThemeScrollView";
 import {ThemeContainer} from "../components/ThemeContainer";
 
 class PrinterAdd extends React.Component {

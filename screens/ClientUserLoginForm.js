@@ -1,17 +1,11 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {AsyncStorage, Image, Text, TouchableOpacity, View, Modal, TouchableHighlight} from 'react-native'
-import {encode as btoa} from 'base-64'
-import Icon from 'react-native-vector-icons/Ionicons'
+import {Text, TouchableOpacity, View} from 'react-native'
 import PinCodeInput from '../components/PinCodeInput'
-import {DismissKeyboard} from '../components/DismissKeyboard'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import InputText from '../components/InputText'
-import {isRequired} from '../validators'
-import {api, warningMessage} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext";
 import ScreenHeader from "../components/ScreenHeader";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 import {withContext} from "../helpers/contextHelper";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 

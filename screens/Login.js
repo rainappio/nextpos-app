@@ -1,8 +1,8 @@
 import React from 'react'
-import { AsyncStorage } from 'react-native'
-import { connect } from 'react-redux'
-import { encode as btoa } from 'base-64'
-import { doLoggedIn, getClientUsrs } from '../actions'
+import {AsyncStorage} from 'react-native'
+import {connect} from 'react-redux'
+import {encode as btoa} from 'base-64'
+import {doLoggedIn} from '../actions'
 import LoginScreen from './LoginScreen'
 import {api, storage, warningMessage} from '../constants/Backend'
 

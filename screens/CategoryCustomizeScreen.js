@@ -1,18 +1,14 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
+import {Field, reduxForm} from 'redux-form'
+import {Text, TouchableOpacity, View} from 'react-native'
 import InputText from '../components/InputText'
-import BackBtn from '../components/BackBtn'
 import AddBtn from '../components/AddBtn'
 import RNSwitch from '../components/RNSwitch'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
-import {DismissKeyboard} from "../components/DismissKeyboard";
-import {NavigationEvents} from "react-navigation";
 import RadioItemObjPick from "../components/RadioItemObjPick";
-import {isRequired} from "../validators";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 

@@ -1,25 +1,14 @@
 import React from 'react'
-import {
-  ScrollView,
-  Text,
-  View,
-  AsyncStorage,
-  Button,
-  Alert,
-  TouchableOpacity
-} from 'react-native'
-import {DismissKeyboard} from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
+import {Alert, AsyncStorage, Text, TouchableOpacity, View} from 'react-native'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
-import {doLogout, getClientUsr} from '../actions'
+import {getClientUsr} from '../actions'
 import {connect} from 'react-redux'
 import EditPasswordPopUp from '../components/EditPasswordPopUp'
 import {reduxForm} from 'redux-form'
 import {getToken} from '../constants/Backend'
 import Constants from "expo-constants/src/Constants";
 import ScreenHeader from "../components/ScreenHeader";
-import ThemeToggleButton from "../themes/ThemeToggleButton";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import {StyledText} from "../components/StyledText";

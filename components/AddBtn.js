@@ -1,6 +1,6 @@
 import React from 'react'
-import { TouchableOpacity, View } from 'react-native'
-import { withNavigation } from 'react-navigation'
+import {TouchableOpacity, View} from 'react-native'
+import {withNavigation} from 'react-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {mainThemeColor} from "../styles";
 

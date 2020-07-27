@@ -12,6 +12,7 @@ const en = {
     home: 'Home',
     tables: 'Tables',
     orders: 'Orders',
+    orderDisplay: 'Order Display',
     reservations: 'Reservations',
     reporting: 'Reporting',
     settings: 'Settings',
@@ -28,7 +29,8 @@ const en = {
     tableLayouts: 'Table Layouts',
     manageShifts: 'Manage Shift',
     announcements: 'Announcements',
-    manageOffers: 'Manage Offers'
+    manageOffers: 'Manage Offers',
+    preferences: 'Preferences'
   },
   newItem: {
     new: 'New',
@@ -45,6 +47,7 @@ const en = {
     update: 'Update',
     cancel: 'Cancel',
     delete: 'Delete',
+    prepare: 'Prepared',
     confirmMessageTitle: 'Confirm Action',
     confirmMessage: 'Are you sure?',
     yes: 'Yes',
@@ -54,6 +57,7 @@ const en = {
     activate: 'Activate',
     deactivate: 'Deactivate'
   },
+  // ==== domain specific ====
   product: {
     ungrouped: 'Ungrouped',
     pinned: 'Pinned',
@@ -95,6 +99,7 @@ const en = {
     copiedFrom: 'Copy From',
 
     // order specific actions
+    liveOrders: 'Receive Live Orders',
     copyOrder: 'Copy Order',
 
     // order messages
@@ -176,6 +181,10 @@ const en = {
     shiftAborted: 'Closing shift aborted',
     shiftClosed: 'Shift closed'
   },
+  preferences: {
+    darkMode: 'Dark Mode'
+  },
+  // ==== component specific ====
   monthPicker: {
     month: 'Month',
     year: 'Year'

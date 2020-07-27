@@ -1,7 +1,7 @@
 import React from 'react'
-import {ScrollView, Text, View} from 'react-native'
-import {Cell, Col, Cols, Table, TableWrapper} from 'react-native-table-component'
-import styles, {mainThemeColor} from '../styles'
+import {ScrollView, View} from 'react-native'
+import {Col, Table, TableWrapper} from 'react-native-table-component'
+import styles from '../styles'
 import {formatCurrency} from "../actions";
 import {withContext} from "../helpers/contextHelper";
 

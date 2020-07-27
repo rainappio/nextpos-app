@@ -1,12 +1,8 @@
 import React, {Component} from "react";
 import {connect} from 'react-redux'
-import {View, Text, PanResponder, Animated, ActivityIndicator, TouchableOpacity} from "react-native";
+import {Animated, PanResponder, Text, TouchableOpacity, View} from "react-native";
 import ScreenHeader from "../components/ScreenHeader";
-import {
-  successMessage,
-  api,
-  dispatchFetchRequest
-} from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import {getTableLayout} from '../actions'
 import styles from '../styles'
 import LoadingScreen from "./LoadingScreen";

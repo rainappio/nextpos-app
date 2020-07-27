@@ -1,7 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import OptionFormScreen from './OptionFormScreen'
-import {api, dispatchFetchRequest, errorAlert, makeFetchRequest} from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 
 class Option extends React.Component {
   static navigationOptions = {

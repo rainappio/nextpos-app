@@ -1,15 +1,8 @@
-import React, { Component } from 'react'
-import {
-  Text,
-  View,
-  Modal,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  ScrollView
-} from 'react-native'
+import React, {Component} from 'react'
+import {Modal, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles, {mainThemeColor} from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import {ThemeContainer} from "./ThemeContainer";
 import {withContext} from "../helpers/contextHelper";
 

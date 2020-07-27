@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { View, Switch, Text } from 'react-native'
-import { ListItem } from 'react-native-elements'
-import { LocaleContext } from '../locales/LocaleContext'
+import React, {Component} from 'react'
+import {Switch, View} from 'react-native'
+import {ListItem} from 'react-native-elements'
+import {LocaleContext} from '../locales/LocaleContext'
 import styles from '../styles'
 import {StyledText} from "./StyledText";
 import {withContext} from "../helpers/contextHelper";

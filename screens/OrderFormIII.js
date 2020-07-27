@@ -1,28 +1,12 @@
 import React from 'react'
 // import { reduxForm } from 'redux-form'
-import {
-  ScrollView,
-  Text,
-  View,
-  RefreshControl,
-  AsyncStorage,
-  ActivityIndicator,
-  TouchableOpacity,
-  SafeAreaView
-} from 'react-native'
-import { connect } from 'react-redux'
-import Icon from 'react-native-vector-icons/Ionicons'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
-import {getProduct, getOrder, getGlobalProductOffers} from '../actions'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import styles from '../styles'
+import {connect} from 'react-redux'
+import {getGlobalProductOffers, getOrder, getProduct} from '../actions'
 import OrderFormIV from './OrderFormIV'
-import { LocaleContext } from '../locales/LocaleContext'
-import { api, dispatchFetchRequest, errorAlert, makeFetchRequest, successMessage } from '../constants/Backend'
+import {LocaleContext} from '../locales/LocaleContext'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
-import {ThemeContainer} from "../components/ThemeContainer";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 
 class OrderFormIII extends React.Component {

@@ -1,26 +1,13 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput, ScrollView
-} from 'react-native'
-import {Indicator, Pages} from 'react-native-pages'
+import {ScrollView, View} from 'react-native'
+import {Pages} from 'react-native-pages'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {default as MaterialIcon} from 'react-native-vector-icons/MaterialIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import {DismissKeyboard} from '../components/DismissKeyboard'
-import BackBtnCustom from '../components/BackBtnCustom'
 import styles, {mainThemeColor} from '../styles'
 import ScreenHeader from "../components/ScreenHeader";
 import MenuButton from "../components/MenuButton";
 import {LocaleContext} from "../locales/LocaleContext";
-import {withContext} from "../helpers/contextHelper";
 import {ThemeContainer} from "../components/ThemeContainer";
 
 class SettingsScreen extends React.Component {

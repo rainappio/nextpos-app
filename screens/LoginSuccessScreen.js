@@ -1,23 +1,11 @@
 import React from 'react'
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  AsyncStorage,
-  ActivityIndicator, Modal, TouchableWithoutFeedback
-} from 'react-native'
+import {Image, Modal, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
+import IonIcon from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import {
-  doLogout,
-  formatDateObj,
-  getClientUsr,
-  getAnnouncements, getShiftStatus, getCurrentClient
-} from '../actions'
+import {doLogout, formatDateObj, getAnnouncements, getClientUsr, getCurrentClient, getShiftStatus} from '../actions'
 import styles, {mainThemeColor} from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
 import {NavigationEvents} from 'react-navigation'
@@ -25,9 +13,7 @@ import {getToken} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {Avatar} from 'react-native-elements'
 import Markdown from 'react-native-markdown-display'
-import IonIcon from 'react-native-vector-icons/Ionicons'
 import {handleDelete, handleOrderSubmit} from "../helpers/orderActions";
-import Constants from "expo-constants/src/Constants";
 import MenuButton from "../components/MenuButton";
 import LoadingScreen from "./LoadingScreen";
 import {withContext} from "../helpers/contextHelper";
@@ -35,8 +21,6 @@ import {compose} from "redux";
 import {StyledText} from "../components/StyledText";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {complexTheme} from "../themes/ThemeContext";
-import ThemeToggleButton from "../themes/ThemeToggleButton";
-import {WhiteSpace} from "@ant-design/react-native";
 
 class LoginSuccessScreen extends React.Component {
   static navigationOptions = {
@@ -217,10 +201,6 @@ class LoginSuccessScreen extends React.Component {
                     style={[styles.buttonIconStyle]}
                   />
                 }/>
-            </View>
-
-            <View style={[styles.menuContainer, styles.justifyRight]}>
-              <ThemeToggleButton/>
             </View>
           </View>
 

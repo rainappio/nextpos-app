@@ -2,7 +2,6 @@ import styles from '../styles'
 import {Text, TouchableOpacity, View} from 'react-native'
 import React from 'react'
 import {LocaleContext} from '../locales/LocaleContext'
-import BackBtn from '../components/BackBtn'
 import {withNavigation} from "react-navigation";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";

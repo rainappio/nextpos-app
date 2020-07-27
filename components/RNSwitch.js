@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { View, Switch, StyleSheet } from "react-native";
+import React from "react";
+import {Switch, View} from "react-native";
 
 const RNSwitch = props => {
   const {

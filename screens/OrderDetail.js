@@ -1,30 +1,10 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput,
-  FlatList,
-  ActivityIndicator,
-  Modal
-} from 'react-native'
-import { connect } from 'react-redux'
-import InputText from '../components/InputText'
-import Icon from 'react-native-vector-icons/Ionicons'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import images from '../assets/images'
-import {getOrdersByDateRange, getOrder, formatDate, formatTime, formatCurrency} from '../actions'
+import {FlatList, Text, TouchableOpacity, View} from 'react-native'
+import {connect} from 'react-redux'
+import {formatCurrency, formatTime, getOrder} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import {handleDelete, renderOptionsAndOffer, renderOrderState} from "../helpers/orderActions";
-import filterSupportedProps from "react-native-web/dist/exports/View/filterSupportedProps";
 import ScreenHeader from "../components/ScreenHeader";
 import OrderTopInfo from "./OrderTopInfo";
 import LoadingScreen from "./LoadingScreen";

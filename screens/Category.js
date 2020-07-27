@@ -1,8 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { AsyncStorage } from 'react-native'
-import { getProducts, getLables } from '../actions'
-import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
+import {connect} from 'react-redux'
+import {getLables, getProducts} from '../actions'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import CategoryCustomizeScreen from "./CategoryCustomizeScreen";
 
 class Category extends React.Component {

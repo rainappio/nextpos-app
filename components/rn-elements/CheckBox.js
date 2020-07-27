@@ -1,21 +1,8 @@
 import React from 'react'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput,
-  AsyncStorage
-} from 'react-native'
+import {TextInput, View} from 'react-native'
 import {CheckBox} from 'react-native-elements'
-import images from '../../assets/images'
 import styles from '../../styles'
 import {withContext} from "../../helpers/contextHelper";
-import {themes} from "../../themes/ThemeContext";
 import {StyledText} from "../StyledText";
 
 class RenderCheckBox extends React.Component {

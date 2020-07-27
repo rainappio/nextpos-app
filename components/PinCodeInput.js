@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { StyleSheet, View, Text, Picker, Platform } from 'react-native'
+import React, {Component} from 'react'
+import {Text, View} from 'react-native'
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input'
 import styles, {mainThemeColor} from '../styles'
 

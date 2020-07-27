@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import {LocaleContext} from "../locales/LocaleContext";
 import styles from "../styles";
-import {Text, View, TouchableOpacity} from "react-native";
+import {Text, TouchableOpacity, View} from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import {formatDate} from "../actions";
 import {withNavigation} from 'react-navigation'

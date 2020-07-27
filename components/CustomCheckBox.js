@@ -1,7 +1,5 @@
 import React from 'react'
-import {Image, Text, View} from 'react-native'
 import {CheckBox} from 'react-native-elements'
-import images from "../assets/images";
 import {StyledText} from "./StyledText";
 import {withContext} from "../helpers/contextHelper";
 

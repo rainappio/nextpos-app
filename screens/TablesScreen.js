@@ -1,43 +1,12 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput,
-  ActivityIndicator,
-  TouchableWithoutFeedback,
-  AsyncStorage,
-  RefreshControl,
-  FlatList
-} from 'react-native'
+import {FlatList, RefreshControl, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
-import InputText from '../components/InputText'
-import {DismissKeyboard} from '../components/DismissKeyboard'
-import BackBtnCustom from '../components/BackBtnCustom'
 import AddBtn from '../components/AddBtn'
-import Icon from 'react-native-vector-icons/Ionicons'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import OrderStart from './OrderStart'
 import OrderItem from './OrderItem'
-import {
-  getTableLayouts,
-  getShiftStatus,
-  getfetchOrderInflights, getTablesAvailable, getMostRecentShiftStatus,
-} from '../actions'
+import {getfetchOrderInflights, getMostRecentShiftStatus, getShiftStatus, getTableLayouts, getTablesAvailable,} from '../actions'
 import styles from '../styles'
-import {
-  api,
-  makeFetchRequest,
-  errorAlert,
-  successMessage,
-  dispatchFetchRequest
-} from '../constants/Backend'
+import {successMessage} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {handleDelete, handleOrderSubmit} from '../helpers/orderActions'
 import {NavigationEvents} from "react-navigation";
@@ -371,6 +340,14 @@ class TablesScreen extends React.Component {
                 }
                 keyExtractor={(item, idx) => item.orderId}
               />
+            </View>
+
+            <View style={[styles.bottom, styles.horizontalMargin]}>
+              <TouchableOpacity onPress={() => navigation.navigate('OrderDisplayScreen')}>
+                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  {t('menu.orderDisplay')}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </ThemeScrollView>

@@ -1,6 +1,6 @@
 import React from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
-import { Radio, List, RadioItem } from '@ant-design/react-native'
+import {Text, View} from 'react-native'
+import {Radio} from '@ant-design/react-native'
 import styles from '../styles'
 import {StyledText} from "./StyledText";
 

@@ -1,7 +1,6 @@
 import React, {useContext} from "react";
 import {ThemeContext} from "../themes/ThemeContext";
-import {ScrollView, View} from "react-native";
-import styles from '../styles'
+import {ScrollView} from "react-native";
 
 export const ThemeScrollView = ({refreshControl, style, children}) => {
   const themeContext = useContext(ThemeContext)

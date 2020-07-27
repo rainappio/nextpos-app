@@ -1,6 +1,6 @@
 import React from 'react'
-import { ScrollView } from 'react-native'
-import { ExpoLinksView } from '@expo/samples'
+import {ScrollView} from 'react-native'
+import {ExpoLinksView} from '@expo/samples'
 import styles from '../styles'
 
 export default class LinksScreen extends React.Component {

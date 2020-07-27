@@ -1,17 +1,8 @@
 import React from 'react'
-import {View, Text, ScrollView} from 'react-native'
+import {View} from 'react-native'
 import {connect} from 'react-redux'
-import {Accordion, List, SwipeAction} from '@ant-design/react-native'
-import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import BackBtn from '../components/BackBtn'
-import {DismissKeyboard} from '../components/DismissKeyboard'
 import TableLayoutForm from './TableLayoutForm'
-import {
-  api,
-  makeFetchRequest,
-  errorAlert,
-  successMessage, dispatchFetchRequest
-} from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import {getTableLayouts} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'

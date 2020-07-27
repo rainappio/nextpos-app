@@ -1,8 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {ScrollView, Text, View, Image, TouchableOpacity} from 'react-native'
-import images from '../assets/images'
-import {formatCurrency, getfetchOrderInflights, getOrder} from '../actions'
+import {Text, TouchableOpacity, View} from 'react-native'
+import {formatCurrency, getfetchOrderInflights} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";

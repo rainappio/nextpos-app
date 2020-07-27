@@ -1,22 +1,11 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  KeyboardAvoidingView,
-  Text,
-  TouchableOpacity,
-  View,
-  FlatList,
-  ScrollView
-} from 'react-native'
+import {Field, reduxForm} from 'redux-form'
+import {FlatList, Text, TouchableOpacity, View} from 'react-native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import { isEmail, isRequired } from '../validators'
+import {isRequired} from '../validators'
 import InputText from '../components/InputText'
-import InputNumber from '../components/InputNumber'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import AddBtn from '../components/AddBtn'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import DeleteBtn from "../components/DeleteBtn";
 import {StyledText} from "../components/StyledText";
 import {withContext} from "../helpers/contextHelper";

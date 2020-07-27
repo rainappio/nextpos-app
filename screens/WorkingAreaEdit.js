@@ -1,24 +1,11 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { ScrollView, Text, View, ActivityIndicator } from 'react-native'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import BackBtnCustom from '../components/BackBtnCustom'
-import AddBtn from '../components/AddBtn'
+import {connect} from 'react-redux'
+import {View} from 'react-native'
 import WorkingAreaForm from './WorkingAreaForm'
-import {
-  getWorkingArea,
-  getWorkingAreas,
-  getPrinters,
-  clearWorkingArea
-} from '../actions'
-import {
-  api, dispatchFetchRequest,
-  errorAlert,
-  makeFetchRequest,
-  successMessage
-} from '../constants/Backend'
+import {clearWorkingArea, getPrinters, getWorkingArea, getWorkingAreas} from '../actions'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";

@@ -1,6 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { getClientUsrs } from '../actions'
+import {connect} from 'react-redux'
+import {getClientUsrs} from '../actions'
 import StaffListScreen from './StaffListScreen'
 
 class StaffsOverview extends React.Component {

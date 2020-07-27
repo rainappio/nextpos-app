@@ -1,14 +1,7 @@
 import React from 'react'
-import {Field, reduxForm, FieldArray} from 'redux-form'
-import {
-  ScrollView,
-  Text,
-  View,
-  TouchableOpacity,
-  KeyboardAvoidingView
-} from 'react-native'
+import {Field, FieldArray, reduxForm} from 'redux-form'
+import {Text, TouchableOpacity, View} from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign'
-import BackBtn from '../components/BackBtn'
 import InputText from '../components/InputText'
 import RNSwitch from '../components/RNSwitch'
 import styles, {mainThemeColor} from '../styles'

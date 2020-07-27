@@ -12,6 +12,7 @@ const zh = {
     home: '主頁',
     tables: '座位訂單',
     orders: '訂單',
+    orderDisplay: '訂單顯示',
     reservations: '訂位',
     reporting: '報表',
     settings: '設定',
@@ -28,7 +29,8 @@ const zh = {
     tableLayouts: '座位管理',
     manageShifts: '開關帳',
     announcements: '公告',
-    manageOffers: '促銷管理'
+    manageOffers: '促銷管理',
+    preferences: '喜好設定'
   },
   newItem: {
     new: '新增',
@@ -45,6 +47,7 @@ const zh = {
     update: '更新',
     cancel: '取消',
     delete: '刪除',
+    prepare: '準備完成',
     confirmMessageTitle: '執行確認',
     confirmMessage: '確定執行嗎？',
     yes: '是',
@@ -54,6 +57,7 @@ const zh = {
     activate: '啟用',
     deactivate: '停用'
   },
+  // ==== domain specific ====
   product: {
     ungrouped: '未分類',
     pinned: '置頂產品',
@@ -95,6 +99,7 @@ const zh = {
     copiedFrom: '複製於',
 
     // order specific actions
+    liveOrders: '打開即時訂單',
     copyOrder: '複製訂單',
 
     // order messages
@@ -177,6 +182,10 @@ const zh = {
     shiftAborted: '關帳取消',
     shiftClosed: '已關帳'
   },
+  preferences: {
+    darkMode: '暗黑模式'
+  },
+  // ==== component specific ====
   monthPicker: {
     month: '月',
     year: '年'

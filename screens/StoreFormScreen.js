@@ -1,10 +1,8 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {KeyboardAvoidingView, ScrollView, Text, TouchableOpacity, View} from 'react-native'
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
 import {isPercentage, isRequired} from '../validators'
 import InputText from '../components/InputText'
-import {DismissKeyboard} from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
 import styles from '../styles'
 import RNSwitch from '../components/RNSwitch'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -14,6 +12,7 @@ import moment from "moment-timezone";
 import DropDown from "../components/DropDown";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
+import ThemeToggleButton from "../themes/ThemeToggleButton";
 
 class StoreFormScreen extends React.Component {
   static navigationOptions = {
@@ -44,6 +43,7 @@ class StoreFormScreen extends React.Component {
         timezone: 'Timezone',
         featureToggle: 'Features',
         applyOffer: 'Apply Offer',
+        uiPreferences: 'UI Preferences',
       },
       zh: {
         clientName: '商家名稱',
@@ -64,6 +64,7 @@ class StoreFormScreen extends React.Component {
         timezone: '時區',
         featureToggle: '進階功能',
         applyOffer: '套用促銷',
+        uiPreferences: '介面喜好',
       }
     })
 
@@ -286,6 +287,16 @@ class StoreFormScreen extends React.Component {
                   />
                 </View>
               </View>
+            </View>
+
+            <View style={styles.sectionContainer}>
+              <View style={styles.sectionTitleContainer}>
+                <StyledText style={styles.sectionTitleText}>{t('uiPreferences')}</StyledText>
+              </View>
+              <View style={styles.fieldContainer}>
+                <ThemeToggleButton/>
+              </View>
+
             </View>
 
             <View style={[styles.bottom, {marginTop: 30}]}>

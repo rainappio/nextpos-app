@@ -1,20 +1,9 @@
 import React from 'react'
-import { Field, reduxForm, FieldArray } from 'redux-form'
-import { connect } from 'react-redux'
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
-import DeleteBtn from '../components/DeleteBtn'
-import InputText from '../components/InputText'
-import RenderPureCheckBox from '../components/rn-elements/PureCheckBox'
-import { getAnnouncements } from '../actions'
-import {
-  api,
-  errorAlert,
-  makeFetchRequest,
-  dispatchFetchRequest,
-  successMessage
-} from '../constants/Backend'
+import {connect} from 'react-redux'
+import {View} from 'react-native'
+import {DismissKeyboard} from '../components/DismissKeyboard'
+import {getAnnouncements} from '../actions'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import AnnouncementsForm from './AnnouncementsForm'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";

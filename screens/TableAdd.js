@@ -1,20 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {
-  AsyncStorage,
-  View,
-  Text,
-  ScrollView,
-  ActivityIndicator
-} from 'react-native'
-import {Accordion, List, SwipeAction} from '@ant-design/react-native'
-import AntDesignIcon from 'react-native-vector-icons/AntDesign'
+import {View} from 'react-native'
 import {getTableLayout, getTableLayouts} from '../actions'
-import AddBtn from '../components/AddBtn'
-import BackBtn from '../components/BackBtn'
-import {DismissKeyboard} from '../components/DismissKeyboard'
 import TableForm from './TableForm'
-import {api, makeFetchRequest, errorAlert, dispatchFetchRequest} from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";

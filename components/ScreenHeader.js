@@ -2,7 +2,6 @@ import React, {Component} from "react"
 import {Text, TouchableOpacity, View} from "react-native"
 import styles from '../styles'
 import Icon from "react-native-vector-icons/Ionicons"
-import PopUp from "./PopUp"
 import {LocaleContext} from "../locales/LocaleContext"
 import {withNavigation} from "react-navigation"
 

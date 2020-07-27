@@ -1,9 +1,7 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { View } from 'react-native'
-import { connect } from 'react-redux'
-import { getOrder } from '../actions'
-import OrdersSummaryRowOverView from './OrdersSummaryRowOverView'
+import {reduxForm} from 'redux-form'
+import {connect} from 'react-redux'
+import {getOrder} from '../actions'
 import {NavigationEvents} from "react-navigation";
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";

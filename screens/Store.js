@@ -1,10 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import {getCurrentClient} from '../actions/client'
 import StoreFormScreen from './StoreFormScreen'
-import {ActivityIndicator, View} from 'react-native'
-import styles from '../styles'
 import LoadingScreen from "./LoadingScreen";
 
 class Store extends React.Component {

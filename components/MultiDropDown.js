@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, {Component} from 'react'
+import {View} from 'react-native'
 import MultiSelect from 'react-native-multiple-select'
 
 export default class MultiDropDown extends Component {

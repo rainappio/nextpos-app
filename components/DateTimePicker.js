@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
-import {Text, View, TouchableOpacity, Modal} from 'react-native'
+import {Modal, Text, TouchableOpacity, View} from 'react-native'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
-import Icon from 'react-native-vector-icons/Ionicons'
 import moment from 'moment-timezone'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
