@@ -1,35 +1,19 @@
 import React from 'react'
-import {ScrollView, Text, View, TouchableOpacity, Dimensions, Alert} from 'react-native'
+import {Alert, Text, TouchableOpacity, View} from 'react-native'
 import {SwipeListView} from 'react-native-swipe-list-view'
 import {connect} from 'react-redux'
-import {
-  clearOrder,
-  getOrder,
-  getfetchOrderInflights,
-  formatDate,
-  getOrdersByDateRange
-} from '../actions'
-import BackBtn from '../components/BackBtn'
+import {clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange} from '../actions'
 import AddBtn from '../components/AddBtn'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import Icon from 'react-native-vector-icons/Ionicons'
 import DeleteBtn from '../components/DeleteBtn'
-import {
-  api,
-  makeFetchRequest,
-  errorAlert,
-  successMessage,
-  warningMessage, dispatchFetchRequest, dispatchFetchRequestWithOption
-} from '../constants/Backend'
+import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, warningMessage} from '../constants/Backend'
 import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {CheckBox, Tooltip} from 'react-native-elements'
-import BackBtnCustom from "../components/BackBtnCustom";
 import ScreenHeader from "../components/ScreenHeader";
 import OrderTopInfo from "./OrderTopInfo";
 import {handleDelete, handleOrderSubmit, renderOptionsAndOffer} from "../helpers/orderActions";
 import NavigationService from "../navigation/NavigationService";
-import {ThemeScrollView} from "../components/ThemeScrollView";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import {StyledText} from "../components/StyledText";

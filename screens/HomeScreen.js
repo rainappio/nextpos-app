@@ -1,15 +1,5 @@
 import React from 'react'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight
-} from 'react-native'
-import {connect} from 'react-redux'
+import {Image, Text, TouchableOpacity, View} from 'react-native'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {ThemeContainer} from "../components/ThemeContainer";

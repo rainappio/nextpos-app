@@ -87,6 +87,7 @@ import NewOffer from '../screens/NewOffer'
 import EditOffer from '../screens/EditOffer'
 import ProductsOverviewforOffer from '../screens/ProductsOverviewforOffer'
 import TabBarBottom from "react-navigation-tabs/src/views/BottomTabBar";
+import OrderDisplayScreen from "../screens/OrderDisplayScreen";
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -161,6 +162,7 @@ Settings.navigationOptions = ({ screenProps: { t } }) => ({
 
 const Tables = createStackNavigator({
   TablesSrc: TablesScreen,
+  OrderDisplayScreen: OrderDisplayScreen,
   OrderStart: OrderStart,
   NewOrderForm: OrderForm,
   OrderFormII: OrderFormII,

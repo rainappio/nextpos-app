@@ -1,6 +1,6 @@
 import React from "react";
 import {LineChart} from "react-native-chart-kit";
-import {Dimensions, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
+import {Dimensions, ScrollView, Text, TouchableOpacity, View} from "react-native";
 
 
 class Chart extends React.Component {

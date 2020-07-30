@@ -1,14 +1,12 @@
 import React from "react";
-import { View, Platform } from "react-native";
-import { connect } from "react-redux";
+import {Platform, View} from "react-native";
+import {connect} from "react-redux";
 import {clearOrderOffer, getLables, getOffers} from "../actions";
-import { api, dispatchFetchRequest } from "../constants/Backend";
-import { LocaleContext } from "../locales/LocaleContext";
+import {api, dispatchFetchRequest} from "../constants/Backend";
+import {LocaleContext} from "../locales/LocaleContext";
 import ScreenHeader from "../components/ScreenHeader";
 import styles from "../styles";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
 import moment from "moment";
-import { getDate } from "javascript-time-ago/gradation";
 import OfferForm from "./OfferForm";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 

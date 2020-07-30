@@ -1,6 +1,5 @@
 import React, {useContext} from "react";
 import {ThemeContext} from "../themes/ThemeContext";
-import styles from '../styles'
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 
 export const ThemeKeyboardAwareScrollView = ({children}) => {

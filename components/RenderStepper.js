@@ -1,10 +1,9 @@
 import React from 'react'
-import { Text, View } from 'react-native'
-import { Stepper, List } from '@ant-design/react-native'
+import {Text, View} from 'react-native'
+import {Stepper} from '@ant-design/react-native'
 import styles from '../styles'
 import {StyledText} from "./StyledText";
 import {withContext} from "../helpers/contextHelper";
-import {themes} from "../themes/ThemeContext";
 
 class RenderStepper extends React.Component {
   render() {

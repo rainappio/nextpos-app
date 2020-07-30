@@ -1,12 +1,5 @@
 import React from 'react'
-import {
-  Image,
-  Text,
-  View,
-  TouchableHighlight,
-  TouchableOpacity,
-  AsyncStorage
-} from 'react-native'
+import {Image, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
 import styles from '../styles'
 import {doLogout} from '../actions'

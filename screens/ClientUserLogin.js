@@ -1,8 +1,8 @@
 import React from 'react'
 import ClientUserLoginForm from './ClientUserLoginForm'
-import { AsyncStorage } from 'react-native'
+import {AsyncStorage} from 'react-native'
 import {api, warningMessage} from "../constants/Backend";
-import { encode as btoa } from 'base-64'
+import {encode as btoa} from 'base-64'
 
 class ClientUserLogin extends React.Component {
   static navigationOptions = {

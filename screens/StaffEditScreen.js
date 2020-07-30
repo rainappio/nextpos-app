@@ -1,10 +1,9 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import StaffFormScreen from './StaffFormScreen'
-import { clearClientUser, getClientUsr, getClientUsrs, getUserRoles } from '../actions'
-import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
+import {clearClientUser, getClientUsr, getClientUsrs, getUserRoles} from '../actions'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
-import {handleRefreshToken} from "../helpers/loginActions";
 
 class StaffEditScreen extends Component {
   static navigationOptions = {

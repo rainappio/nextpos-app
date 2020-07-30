@@ -1,21 +1,11 @@
 import React from 'react'
-import {
-  ScrollView,
-  Text,
-  View,
-  RefreshControl,
-  TouchableOpacity
-} from 'react-native'
-import {SwipeListView, SwipeRow} from 'react-native-swipe-list-view'
-import Icon from 'react-native-vector-icons/Ionicons'
-import {DismissKeyboard} from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
+import {TouchableOpacity, View} from 'react-native'
+import {SwipeListView} from 'react-native-swipe-list-view'
 import AddBtn from '../components/AddBtn'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import {ThemeScrollView} from "../components/ThemeScrollView";
-import {withContext} from "../helpers/contextHelper";
 import {StyledText} from "../components/StyledText";
 
 class StaffRow extends React.Component {

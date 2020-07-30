@@ -1,8 +1,8 @@
 import React from 'react'
-import { Alert, Text, TouchableOpacity } from 'react-native'
+import {Alert, Text, TouchableOpacity} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 
 class DeleteBtn extends React.Component {
   static contextType = LocaleContext

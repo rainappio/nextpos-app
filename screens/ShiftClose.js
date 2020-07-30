@@ -1,35 +1,14 @@
 import React from 'react'
-import {
-  ActivityIndicator,
-  InputAccessoryView,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
-} from 'react-native'
+import {Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
-import BackBtnCustom from '../components/BackBtnCustom'
-import {formatDate, getShiftStatus, getMostRecentShiftStatus} from '../actions'
-import {
-  api,
-  dispatchFetchRequest, dispatchFetchRequestWithOption,
-  successMessage, warningMessage
-} from '../constants/Backend'
+import {formatDate, getMostRecentShiftStatus, getShiftStatus} from '../actions'
+import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
-import ConfirmActionButton from '../components/ConfirmActionButton'
-import {DismissKeyboard} from '../components/DismissKeyboard'
-import {handleCloseShift, handleOpenShift, checkBalanceInput, renderShiftStatus} from "../helpers/shiftActions";
-import BackBtn from "../components/BackBtn";
-import AccountCloseConfirm from './AccountCloseConfirm'
+import {handleOpenShift, renderShiftStatus} from "../helpers/shiftActions";
 import ScreenHeader from "../components/ScreenHeader";
 import {NavigationEvents} from "react-navigation";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 import LoadingScreen from "./LoadingScreen";
-import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
 import {ThemeContainer} from "../components/ThemeContainer";
 

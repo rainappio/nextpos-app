@@ -1,19 +1,14 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Field, reduxForm} from 'redux-form'
-import {ScrollView, Text, View, TouchableOpacity} from 'react-native'
-import {getProducts, getLables, getLabel, calculatePercentage, formatCurrency} from '../actions'
-import {successMessage} from '../constants/Backend'
-import BackBtn from '../components/BackBtn'
+import {Text, TouchableOpacity, View} from 'react-native'
+import {formatCurrency} from '../actions'
 import InputText from '../components/InputText'
-import {isRequired} from '../validators'
-import {DismissKeyboard} from '../components/DismissKeyboard'
 import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import SegmentedControl from '../components/SegmentedControl'
 import DropDown from '../components/DropDown'
 import ScreenHeader from "../components/ScreenHeader";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
 

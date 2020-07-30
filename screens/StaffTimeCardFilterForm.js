@@ -1,14 +1,6 @@
 import React from 'react'
-import {Field, reduxForm, FieldArray} from 'redux-form'
-import {ScrollView, Text, View, TouchableOpacity, Image, ActivityIndicator, FlatList} from 'react-native'
-import {DismissKeyboard} from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import Icon from 'react-native-vector-icons/Ionicons'
-import images from '../assets/images'
-import styles from '../styles'
+import {reduxForm} from 'redux-form'
 import {LocaleContext} from '../locales/LocaleContext'
-import DropDown from '../components/DropDown'
 import TimeCardFilterForm from './TimeCardFilterForm'
 
 class StaffTimeCardFilterForm extends React.Component {

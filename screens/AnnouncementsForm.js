@@ -1,15 +1,12 @@
 import React from 'react'
-import { Field, reduxForm, FieldArray } from 'redux-form'
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
+import {Field, reduxForm} from 'redux-form'
+import {Text, TouchableOpacity, View} from 'react-native'
 import DeleteBtn from '../components/DeleteBtn'
 import InputText from '../components/InputText'
 import RenderPureCheckBox from '../components/rn-elements/PureCheckBox'
-import { isRequired } from '../validators'
+import {isRequired} from '../validators'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
-import SegmentedControl from "../components/SegmentedControl";
 import {withContext} from "../helpers/contextHelper";
 
 class AnnouncementsForm extends React.Component {

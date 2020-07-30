@@ -1,25 +1,14 @@
 import React from 'react'
-import {
-  ActivityIndicator,
-  FlatList,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native'
+import {FlatList, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
-import BackBtnCustom from '../components/BackBtnCustom'
 import Icon from 'react-native-vector-icons/Ionicons'
-import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import images from '../assets/images'
-import {formatDate, formatDateObj, getOrdersByDateRange} from '../actions'
+import {formatDate, getOrdersByDateRange} from '../actions'
 import {ListItem} from 'react-native-elements'
 import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {renderOrderState} from "../helpers/orderActions";
 import {NavigationEvents} from "react-navigation";
 import ScreenHeader from "../components/ScreenHeader";
-import buttonLikeRoles from "react-native-web/dist/modules/AccessibilityUtil/buttonLikeRoles";
 import OrderFilterForm from './OrderFilterForm'
 import LoadingScreen from "./LoadingScreen";
 import moment from "moment";

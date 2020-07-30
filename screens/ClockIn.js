@@ -1,12 +1,10 @@
 import React from 'react'
-import {ActivityIndicator, Text, TouchableOpacity, View, AsyncStorage} from 'react-native'
+import {TouchableOpacity, View} from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext"
-import {dateToLocaleString, doLogout, formatDate, getAnnouncements, getClientUsr, getShiftStatus} from "../actions"
-import BackBtn from "../components/BackBtn"
+import {dateToLocaleString, formatDate} from "../actions"
 import ScreenHeader from "../components/ScreenHeader";
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
@@ -14,7 +12,7 @@ import * as Permissions from 'expo-permissions'
 import * as TaskManager from "expo-task-manager";
 import {connect} from "react-redux";
 import {getCurrentClient} from "../actions/client"
-import { getDistance } from 'geolib'
+import {getDistance} from 'geolib'
 import LoadingScreen from "./LoadingScreen";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";

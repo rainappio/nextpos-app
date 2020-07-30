@@ -1,16 +1,9 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { ActivityIndicator, AsyncStorage, Text, View } from 'react-native'
-import {
-  clearProduct,
-  getTablesAvailable,
-  getOrdersByDateRange
-} from '../actions'
+import {connect} from 'react-redux'
+import {clearProduct, getOrdersByDateRange, getTablesAvailable} from '../actions'
 import OrderForm from './OrderForm'
-import {api, dispatchFetchRequest, makeFetchRequest, warningMessage} from '../constants/Backend'
-import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
-import BackBtn from '../components/BackBtn'
+import {api, dispatchFetchRequest} from '../constants/Backend'
+import {LocaleContext} from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
 
 class OrderStart extends React.Component {

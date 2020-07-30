@@ -5,11 +5,10 @@ import {connect} from 'react-redux'
 import {isRequired} from '../validators'
 import InputText from '../components/InputText'
 import PinCodeInput from '../components/PinCodeInput'
-import {DismissKeyboard} from '../components/DismissKeyboard'
 import {getClientUsrs, resolveRoles} from '../actions'
 import EditPasswordPopUp from '../components/EditPasswordPopUp'
 import DeleteBtn from '../components/DeleteBtn'
-import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import SegmentedControl from "../components/SegmentedControl"
 import ScreenHeader from "../components/ScreenHeader";

@@ -1,13 +1,8 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import StaffFormScreen from './StaffFormScreen'
-import { getClientUsr, getClientUsrs, resolveRoles, getUserRoles } from '../actions'
-import {
-  api,
-  dispatchFetchRequest,
-  errorAlert,
-  successMessage
-} from '../constants/Backend'
+import {getClientUsrs, getUserRoles} from '../actions'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 
 class Staff extends React.Component {

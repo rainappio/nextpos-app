@@ -1,18 +1,8 @@
 import React from 'react'
-import {
-  AsyncStorage,
-  View,
-  Text,
-  Image,
-  FlatList,
-  RefreshControl,
-  TouchableHighlight,
-  TouchableOpacity
-} from 'react-native'
+import {AsyncStorage, FlatList, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
-import {getClientUsrs, doLogout} from '../actions'
+import {doLogout, getClientUsrs} from '../actions'
 import styles from '../styles'
-import BackBtn from '../components/BackBtn'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import {ThemeContainer} from "../components/ThemeContainer";

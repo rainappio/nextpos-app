@@ -1,9 +1,9 @@
 import React from 'react'
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
+import {Text, TouchableOpacity, View} from 'react-native'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
-import {formatCurrency, formatDate, formatDateObj} from "../actions";
+import {formatCurrency, formatDate} from "../actions";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 

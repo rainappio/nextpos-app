@@ -11,7 +11,10 @@ export const storage = {
   clientPassword: 'clientPassword'
 }
 
-const apiRoot = 'http://35.234.63.193'
+//const apiRoot = 'http://35.234.63.193'
+export const apiRoot = 'http://104.199.147.121'
+//export const apiRoot = 'http://10.0.4.9:8080'
+//export const apiRoot = 'http://192.168.1.102:8080'
 
 export const api = {
   apiRoot,
@@ -129,6 +132,9 @@ export const api = {
     },
     deleteLineItem: (orderId, lineItemId) => {
       return `${api.apiRoot}/orders/${orderId}/lineitems/${lineItemId}`
+    },
+    prepareLineItem: (orderId) => {
+      return `${apiRoot}/orders/${orderId}/lineitems/prepare`
     },
     deliverLineItems: orderId => {
       return `${apiRoot}/orders/${orderId}/lineitems/deliver`

@@ -3,7 +3,11 @@ language: ruby
 services:
   - docker
 
+# Fix a watch files limit
+# https://github.com/guard/listen/wiki/Increasing-the-amount-of-inotify-watchers#the-technical-details
 before_install:
+  - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
+  - sudo sysctl -p
   - docker build -t joelin/nextpos-app:latest .
 
 script:

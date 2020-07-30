@@ -4,7 +4,7 @@
   */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {ScrollView, View, StyleSheet, Platform, RefreshControl, ViewPropTypes} from 'react-native';
+import {Platform, RefreshControl, ScrollView, StyleSheet, View, ViewPropTypes} from 'react-native';
 import {shallowEqual, swapArrayElements} from './utils';
 import Row from './Row';
 

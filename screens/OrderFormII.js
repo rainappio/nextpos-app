@@ -1,29 +1,12 @@
 import React from 'react'
-import { reduxForm } from 'redux-form'
-import {
-  ScrollView,
-  Text,
-  View,
-  RefreshControl,
-  AsyncStorage,
-  ActivityIndicator,
-  TouchableOpacity
-} from 'react-native'
-import { connect } from 'react-redux'
-import Icon from 'react-native-vector-icons/Ionicons'
-import { Accordion, List } from '@ant-design/react-native'
-import BackBtnCustom from '../components/BackBtnCustom'
-import {
-  getProducts,
-  getLables,
-  getfetchOrderInflights,
-  getOrder,
-  getTablesAvailable,
-  clearOrder
-} from '../actions'
+import {reduxForm} from 'redux-form'
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
+import {connect} from 'react-redux'
+import {Accordion, List} from '@ant-design/react-native'
+import {getLables, getOrder, getProducts} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'

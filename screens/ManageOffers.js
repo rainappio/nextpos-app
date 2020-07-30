@@ -1,10 +1,10 @@
 import React from 'react'
-import { View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native'
-import { connect } from 'react-redux'
+import {FlatList, TouchableOpacity, View} from 'react-native'
+import {connect} from 'react-redux'
 import ScreenHeader from "../components/ScreenHeader"
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import AddBtn from '../components/AddBtn'
-import { getOffers } from '../actions'
+import {getOffers} from '../actions'
 import LoadingScreen from "./LoadingScreen"
 import styles from '../styles'
 import {ThemeScrollView} from "../components/ThemeScrollView";

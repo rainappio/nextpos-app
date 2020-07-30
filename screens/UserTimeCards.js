@@ -1,17 +1,10 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Field, reduxForm, FieldArray} from 'redux-form'
-import {ScrollView, Text, View, TouchableOpacity, Image, ActivityIndicator, FlatList, Modal} from 'react-native'
-import {DismissKeyboard} from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import Icon from 'react-native-vector-icons/Ionicons'
-import {getTimeCards, getUserTimeCards, formatDate, formatDateObj} from '../actions'
-import images from '../assets/images'
+import {FlatList, Text, TouchableOpacity, View} from 'react-native'
+import {formatDate, getUserTimeCards} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
-import DropDown from '../components/DropDown'
-import {api, dispatchFetchRequest, errorAlert, warningMessage} from '../constants/Backend'
+import {warningMessage} from '../constants/Backend'
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import StaffTimeCardFilterForm from "./StaffTimeCardFilterForm";

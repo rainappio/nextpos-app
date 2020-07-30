@@ -1,18 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {
-  ScrollView,
-  Text,
-  View,
-  ActivityIndicator,
-  TouchableOpacity
-} from 'react-native'
-import {SwipeListView, SwipeRow} from 'react-native-swipe-list-view'
-import Icon from 'react-native-vector-icons/Ionicons'
-import {Accordion, List} from '@ant-design/react-native'
-import {DismissKeyboard} from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
-import AddBtn from '../components/AddBtn'
+import {Text, TouchableOpacity, View} from 'react-native'
+import {SwipeListView} from 'react-native-swipe-list-view'
 import {getPrinters, getWorkingAreas} from '../actions'
 import PopUp from '../components/PopUp'
 import styles from '../styles'

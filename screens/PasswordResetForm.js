@@ -1,19 +1,11 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  KeyboardAvoidingView,
-  Text,
-  TouchableOpacity,
-  View,
-  Keyboard,
-  Modal
-} from 'react-native'
-import { isEmail, isRequired } from '../validators'
+import {Field, reduxForm} from 'redux-form'
+import {Image, Keyboard, KeyboardAvoidingView, Text, TouchableOpacity, View} from 'react-native'
+import {isRequired} from '../validators'
 import InputText from '../components/InputText'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {DismissKeyboard} from '../components/DismissKeyboard'
 import styles from '../styles'
-import { withNavigation } from 'react-navigation'
+import {withNavigation} from 'react-navigation'
 import {LocaleContext} from "../locales/LocaleContext";
 
 class PasswordResetForm extends React.Component {

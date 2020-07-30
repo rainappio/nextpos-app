@@ -1,19 +1,10 @@
 import React from 'react'
-import {Field, reduxForm, FieldArray, formValueSelector} from 'redux-form'
-import {
-  Image,
-  KeyboardAvoidingView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native'
-import { isRequired } from '../validators'
+import {Field, formValueSelector, reduxForm} from 'redux-form'
+import {Text, TouchableOpacity, View} from 'react-native'
+import {isRequired} from '../validators'
 import InputText from '../components/InputText'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import RenderRadioBtn from '../components/RadioItem'
 import {testPrinter} from "../helpers/printerActions";
 import {connect} from "react-redux";

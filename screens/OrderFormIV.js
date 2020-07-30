@@ -1,20 +1,16 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {Text, View, TouchableOpacity, ScrollView, KeyboardAvoidingView} from 'react-native'
-import {DismissKeyboard} from '../components/DismissKeyboard'
+import {Text, TouchableOpacity, View} from 'react-native'
 import CheckBoxGroupObjPick from '../components/CheckBoxGroupObjPick'
 import RadioItemObjPick from '../components/RadioItemObjPick'
 import RenderStepper from '../components/RenderStepper'
-import {isRequired, isCountZero} from '../validators'
+import {isCountZero, isRequired} from '../validators'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
-import BackBtn from '../components/BackBtn'
 import ScreenHeader from "../components/ScreenHeader";
 import {withNavigation} from "react-navigation";
 import InputText from "../components/InputText";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 import RenderCheckBox from "../components/rn-elements/CheckBox";
-import {calculatePercentage} from "../actions";
 import {StyledText} from "../components/StyledText";
 
 class OrderFormIV extends React.Component {

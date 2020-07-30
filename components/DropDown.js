@@ -1,9 +1,8 @@
 import React, {Component} from 'react'
-import {StyleSheet, View, Text, Picker, Platform} from 'react-native'
+import {StyleSheet, Text, View} from 'react-native'
 import RNPickerSelect from 'react-native-picker-select'
-import {Chevron} from 'react-native-shapes'
 import Icon from 'react-native-vector-icons/Ionicons'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {withContext} from "../helpers/contextHelper";
 
 class DropDown extends Component {

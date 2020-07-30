@@ -4,7 +4,6 @@ import {Circle, G, Line, Rect, Svg, Text} from 'react-native-svg'
 import * as d3 from 'd3'
 import {mainThemeColor} from "../styles";
 import {withContext} from "../helpers/contextHelper";
-import {themes} from "../themes/ThemeContext";
 
 
 class SvgBarChart extends Component {

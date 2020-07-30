@@ -1,32 +1,13 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Field, reduxForm } from 'redux-form'
-import {ScrollView, Text, View, TouchableOpacity, TextInput, Image, KeyboardAvoidingView} from 'react-native'
-import {
-  getProducts,
-  getLables,
-  getLabel,
-  getfetchglobalOrderOffers, formatCurrency
-} from '../actions'
-import BackBtnCustom from '../components/BackBtnCustom'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {connect} from 'react-redux'
+import {Field, reduxForm} from 'redux-form'
+import {Text, TouchableOpacity, View} from 'react-native'
+import {formatCurrency, getfetchglobalOrderOffers} from '../actions'
 import RenderCheckBox from '../components/rn-elements/CheckBox'
-import RenderPureCheckBox from '../components/rn-elements/PureCheckBox'
-import InputText from '../components/InputText'
-import {
-  api,
-  makeFetchRequest,
-  errorAlert,
-  successMessage
-} from '../constants/Backend'
-import { isRequired } from '../validators'
-import { calculatePercentage } from '../actions'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
-import images from "../assets/images";
 import CustomCheckBox from "../components/CustomCheckBox";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
 

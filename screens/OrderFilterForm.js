@@ -1,10 +1,9 @@
 import React from 'react'
-import { Text, View, TouchableOpacity } from 'react-native'
-import { Field, reduxForm } from 'redux-form'
+import {Text, TouchableOpacity, View} from 'react-native'
+import {Field, reduxForm} from 'redux-form'
 import RenderDatePicker from '../components/DateTimePicker'
 import DropDown from '../components/DropDown'
-import { LocaleContext } from '../locales/LocaleContext'
-import moment from 'moment'
+import {LocaleContext} from '../locales/LocaleContext'
 import styles from '../styles'
 import {StyledText} from "../components/StyledText";
 

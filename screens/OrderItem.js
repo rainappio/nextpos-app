@@ -1,11 +1,8 @@
 import React from 'react'
-import {Image, Text, TouchableOpacity, View} from 'react-native'
+import {Text, TouchableOpacity, View} from 'react-native'
 import {getTimeDifference} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import Icon from 'react-native-vector-icons/Ionicons'
-import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import styles, {mainThemeColor} from '../styles'
-import images from '../assets/images'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import {Tooltip} from "react-native-elements";

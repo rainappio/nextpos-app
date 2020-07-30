@@ -1,21 +1,9 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { ScrollView, Text, View } from 'react-native'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
-import AddBtn from '../components/AddBtn'
-import {
-  getAnnouncement,
-  getAnnouncements,
-  clearAnnouncement
-} from '../actions'
-import {
-  api,
-  errorAlert,
-  dispatchFetchRequest,
-  makeFetchRequest,
-  successMessage
-} from '../constants/Backend'
+import {connect} from 'react-redux'
+import {View} from 'react-native'
+import {DismissKeyboard} from '../components/DismissKeyboard'
+import {clearAnnouncement, getAnnouncements} from '../actions'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import AnnouncementsForm from './AnnouncementsForm'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";

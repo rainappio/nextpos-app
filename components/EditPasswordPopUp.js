@@ -1,25 +1,15 @@
 import React, {Component} from 'react'
 import {Field} from 'redux-form'
-import {
-  Text,
-  View,
-  Modal,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  ScrollView,
-  Keyboard, AsyncStorage, TextInput
-} from 'react-native'
+import {AsyncStorage, Keyboard, Modal, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import styles, {mainThemeColor} from '../styles'
-import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
+import {api, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {encode as btoa} from "base-64";
-import InputText from "./InputText";
 import {isvalidPassword} from "../validators";
 import ScreenHeader from "./ScreenHeader";
 import {withContext} from "../helpers/contextHelper";
-import {themes} from "../themes/ThemeContext";
 import {StyledText} from "./StyledText";
 
 class EditPasswordPopUp extends Component {

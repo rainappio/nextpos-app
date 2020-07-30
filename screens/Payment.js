@@ -1,18 +1,6 @@
 import React from 'react'
 import PaymentFormScreen from './PaymentFormScreen'
-import {
-  getProducts,
-  getLables,
-  getLabel,
-  calculatePercentage
-} from '../actions'
-import {
-  api,
-  makeFetchRequest,
-  successMessage,
-  errorAlert, dispatchFetchRequest, dispatchFetchRequestWithOption
-} from '../constants/Backend'
-import warnValidStyle from "react-native-web/dist/vendor/react-dom/warnValidStyle";
+import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
 
 class Payment extends React.Component {
   static navigationOptions = {

@@ -1,22 +1,8 @@
-import React, { Component } from 'react'
-import { ActivityIndicator, View } from 'react-native'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import ProductFormScreen from './ProductFormScreen'
-import {
-  clearProduct,
-  getLables,
-  getProduct,
-  getProductOptions,
-  getProducts,
-  getWorkingAreas
-} from '../actions'
-import styles from '../styles'
-import {
-  api, dispatchFetchRequest,
-  errorAlert,
-  makeFetchRequest,
-  successMessage
-} from '../constants/Backend'
+import {clearProduct, getLables, getProduct, getProductOptions, getProducts, getWorkingAreas} from '../actions'
+import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 
 class ProductEdit extends Component {

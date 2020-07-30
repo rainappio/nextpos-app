@@ -1,10 +1,9 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {View, ScrollView} from 'react-native'
+import {View} from 'react-native'
 import {LocaleContext} from '../locales/LocaleContext'
-import {DismissKeyboard} from '../components/DismissKeyboard'
 import ScreenHeader from "../components/ScreenHeader";
-import {getUserRoles, getPermissions} from '../actions'
+import {getPermissions, getUserRoles} from '../actions'
 import styles from '../styles'
 import NewUserRoleForm from './NewUserRoleForm'
 import {api, dispatchFetchRequest} from '../constants/Backend'

@@ -1,6 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { getProducts, getLables } from '../actions'
+import {connect} from 'react-redux'
+import {getLables, getProducts} from '../actions'
 import LoadingScreen from "./LoadingScreen";
 import ProductRowforOffer from './ProductRowforOffer'
 import BackendErrorScreen from "./BackendErrorScreen";

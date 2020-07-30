@@ -1,7 +1,7 @@
 import React from 'react'
-import {View, Text} from 'react-native'
+import {View} from 'react-native'
 import SegmentedControlTab from "react-native-segmented-control-tab";
-import styles, {mainThemeColor} from "../styles";
+import {mainThemeColor} from "../styles";
 import {withContext} from "../helpers/contextHelper";
 
 const SegmentedControl = props => {

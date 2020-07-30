@@ -1,25 +1,7 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput,
-  FlatList,
-  ActivityIndicator,
-  Modal
-} from 'react-native'
+import {Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
-import Icon from 'react-native-vector-icons/Ionicons'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import images from '../assets/images'
-import {getTimeCard, formatDate, formatDateObj, formatTime, formatDateOnly} from '../actions'
+import {formatDateOnly, formatTime, getTimeCard} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import LoadingScreen from "./LoadingScreen";

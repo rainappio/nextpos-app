@@ -8,11 +8,11 @@
       "ios",
       "android"
     ],
-    "version": "0.20.06",
+    "version": "0.20.07",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/rain-splash-still.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -24,7 +24,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "0.20.06.1",
+      "buildNumber": "0.20.07.4",
       "bundleIdentifier": "io.rain.app",
       "infoPlist": {
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Geofencing for staff clock in",

@@ -1,21 +1,17 @@
 import React from "react";
-import { Field, reduxForm } from "redux-form";
-import { Text, TouchableOpacity, View, Switch, Platform } from "react-native";
-import { isRequired } from "../validators";
+import {Field, reduxForm} from "redux-form";
+import {Platform, Text, TouchableOpacity, View} from "react-native";
+import {isRequired} from "../validators";
 import InputText from "../components/InputText";
-import { LocaleContext } from "../locales/LocaleContext";
-import styles, { mainThemeColor } from "../styles";
+import {LocaleContext} from "../locales/LocaleContext";
+import styles, {mainThemeColor} from "../styles";
 import RNSwitch from "../components/RNSwitch";
 import DeleteBtn from "../components/DeleteBtn";
 import RenderDatePicker from "../components/DateTimePicker";
 import SegmentedControl from "../components/SegmentedControl";
 import AntDesignIcon from "react-native-vector-icons/AntDesign";
 import RenderPureCheckBox from "../components/rn-elements/PureCheckBox";
-import {
-  api,
-  dispatchFetchRequest,
-  successMessage
-} from "../constants/Backend";
+import {api, dispatchFetchRequest} from "../constants/Backend";
 import DateTimeFilterControlledForm from "./DateTimeFilterControlledForm";
 import {StyledText} from "../components/StyledText";
 

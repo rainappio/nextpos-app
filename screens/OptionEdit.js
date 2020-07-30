@@ -1,15 +1,8 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { ActivityIndicator, AsyncStorage, View, Alert } from 'react-native'
+import {connect} from 'react-redux'
 import OptionFormScreen from './OptionFormScreen'
-import { getProductOption } from '../actions'
-import styles from '../styles'
-import {
-  api, dispatchFetchRequest,
-  errorAlert,
-  makeFetchRequest,
-  successMessage
-} from '../constants/Backend'
+import {getProductOption} from '../actions'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 
 class OptionEdit extends React.Component {

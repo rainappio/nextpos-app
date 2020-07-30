@@ -1,24 +1,11 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { ActivityIndicator, Text, View } from 'react-native'
+import {connect} from 'react-redux'
+import {Text, View} from 'react-native'
 import CategoryCustomizeScreen from './CategoryCustomizeScreen'
-import {
-  clearLabel,
-  getLabel,
-  getLables,
-  getProductOptions,
-  getProducts,
-  getWorkingAreas
-} from '../actions'
+import {clearLabel, getLabel, getLables, getProductOptions, getProducts, getWorkingAreas} from '../actions'
 import styles from '../styles'
-import {
-  api, dispatchFetchRequest,
-  errorAlert,
-  makeFetchRequest,
-  successMessage
-} from '../constants/Backend'
-import { NavigationEvents } from 'react-navigation'
-import ScreenHeader from "../components/ScreenHeader";
+import {api, dispatchFetchRequest} from '../constants/Backend'
+import {NavigationEvents} from 'react-navigation'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
 

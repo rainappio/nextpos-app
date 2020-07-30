@@ -1,6 +1,6 @@
 import React from 'react'
-import { Text, View, ActivityIndicator } from 'react-native'
-import { connect } from 'react-redux'
+import {Text, View} from 'react-native'
+import {connect} from 'react-redux'
 import StaffRow from './StaffRow'
 import styles from '../styles'
 import LoadingScreen from "./LoadingScreen";

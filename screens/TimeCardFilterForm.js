@@ -1,14 +1,8 @@
 import React from 'react'
-import { Field, reduxForm, FieldArray } from 'redux-form'
-import { ScrollView, Text, View, TouchableOpacity, Image, ActivityIndicator, FlatList } from 'react-native'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import Icon from 'react-native-vector-icons/Ionicons'
-import { getTimeCards } from '../actions'
-import images from '../assets/images'
+import {Field} from 'redux-form'
+import {Text, TouchableOpacity, View} from 'react-native'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import DropDown from '../components/DropDown'
 import moment from "moment";
 

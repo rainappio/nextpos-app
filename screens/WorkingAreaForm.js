@@ -1,19 +1,11 @@
 import React from 'react'
-import { Field, reduxForm, FieldArray } from 'redux-form'
-import {
-  Image,
-  KeyboardAvoidingView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native'
-import { isRequired } from '../validators'
+import {Field, reduxForm} from 'redux-form'
+import {Text, TouchableOpacity, View} from 'react-native'
+import {isRequired} from '../validators'
 import InputText from '../components/InputText'
-import { DismissKeyboard } from '../components/DismissKeyboard'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import {StyledText} from "../components/StyledText";
 
 class WorkingAreaForm extends React.Component {

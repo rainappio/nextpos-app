@@ -1,17 +1,14 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {KeyboardAvoidingView, ScrollView, Text, TouchableOpacity, View} from 'react-native'
+import {Text, TouchableOpacity, View} from 'react-native'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import InputText from '../components/InputText'
-import {isRequired} from '../validators'
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 import {handleAbortCloseShift, renderShiftStatus} from "../helpers/shiftActions";
 import ConfirmActionButton from "../components/ConfirmActionButton";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import ScreenHeader from "../components/ScreenHeader";
 import {formatCurrency, formatDate} from "../actions";
-import StyledTextInput from "../components/StyledTextInput";
 import {StyledText} from "../components/StyledText";
 
 class AccountClosureForm extends React.Component {

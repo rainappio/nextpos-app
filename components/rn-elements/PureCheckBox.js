@@ -1,19 +1,7 @@
 import React from 'react'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TouchableHighlight,
-  TextInput,
-  AsyncStorage
-} from 'react-native'
+import {Text, View} from 'react-native'
 import {CheckBox} from 'react-native-elements'
 import IonIcon from 'react-native-vector-icons/Ionicons'
-import images from '../../assets/images'
 import styles, {mainThemeColor} from "../../styles";
 import {withContext} from "../../helpers/contextHelper";
 import {StyledText} from "../StyledText";

@@ -1,10 +1,7 @@
 import React from 'react'
-import {ScrollView, Text, View, TouchableOpacity, Image} from 'react-native'
-import {DismissKeyboard} from '../components/DismissKeyboard'
-import BackBtnCustom from '../components/BackBtnCustom'
+import {View} from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import Icon from 'react-native-vector-icons/Ionicons'
-import images from '../assets/images'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";

@@ -1,9 +1,8 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { AsyncStorage } from 'react-native'
+import {connect} from 'react-redux'
 import ProductFormScreen from './ProductFormScreen'
-import { getProducts, getLables, getLabel } from '../actions'
-import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
+import {getLables, getProducts} from '../actions'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 
 class Product extends React.Component {
   static navigationOptions = {

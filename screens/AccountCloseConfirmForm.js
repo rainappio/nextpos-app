@@ -1,35 +1,14 @@
 import React from 'react'
-import {Field, reduxForm, FieldArray } from 'redux-form'
-import {
-  ActivityIndicator,
-  InputAccessoryView,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  ScrollView
-} from 'react-native'
-import {connect} from 'react-redux'
-import BackBtnCustom from '../components/BackBtnCustom'
-import {formatCurrency, formatDate, getShiftStatus} from '../actions'
-import {
-  api,
-  dispatchFetchRequest,
-  successMessage, warningMessage
-} from '../constants/Backend'
+import {Field, reduxForm} from 'redux-form'
+import {Text, TouchableOpacity, View} from 'react-native'
+import {formatCurrency, formatDate} from '../actions'
 import styles from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import {handleCloseShift, handleOpenShift, handleAbortCloseShift, renderShiftStatus} from "../helpers/shiftActions";
-import BackBtn from "../components/BackBtn";
+import {renderShiftStatus} from "../helpers/shiftActions";
 import InputText from '../components/InputText'
 import ScreenHeader from "../components/ScreenHeader";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
-import StyledTextInput from "../components/StyledTextInput";
 import {StyledText} from "../components/StyledText";
 
 class AccountCloseConfirmForm extends React.Component {

@@ -1,38 +1,12 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TextInput,
-  Dimensions,
-  FlatList,
-  ActivityIndicator, Modal
-} from 'react-native'
-import { connect } from 'react-redux'
-import InputText from '../components/InputText'
-import { DismissKeyboard } from '../components/DismissKeyboard'
-import BackBtn from '../components/BackBtn'
-import Icon from 'react-native-vector-icons/Ionicons'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import { LineChart } from 'react-native-chart-kit'
-import {
-  getRangedSalesReport,
-  getSalesDistributionReport, formatDate, formatDateObj, formatCurrency, getSalesRankingReport
-} from '../actions'
+import {FlatList, Modal, Text, TouchableOpacity, View} from 'react-native'
+import {connect} from 'react-redux'
+import {formatCurrency, formatDateObj, getRangedSalesReport, getSalesDistributionReport, getSalesRankingReport} from '../actions'
 import styles, {mainThemeColor} from '../styles'
-import { LocaleContext } from '../locales/LocaleContext'
+import {LocaleContext} from '../locales/LocaleContext'
 import BackendErrorScreen from './BackendErrorScreen'
-import { Tooltip } from 'react-native-elements'
-import PureChart from 'react-native-pure-chart'
-import Chart from "../components/Chart";
 import moment from "moment-timezone";
 import ScreenHeader from "../components/ScreenHeader";
-import { api, dispatchFetchRequest, errorAlert, warningMessage } from '../constants/Backend'
 import RenderTable from '../components/RenderTable'
 import LoadingScreen from "./LoadingScreen";
 import SegmentedControl from "../components/SegmentedControl";

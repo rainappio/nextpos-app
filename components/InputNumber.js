@@ -1,15 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import {
-  TextInput,
-  Text,
-  View,
-  Keyboard,
-  InputAccessoryView,
-  TouchableOpacity,
-  Platform
-} from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
+import {Text, View} from 'react-native'
 import NumericInput from 'react-native-numeric-input'
 import styles from '../styles'
 import {withContext} from "../helpers/contextHelper";

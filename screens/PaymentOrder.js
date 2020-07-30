@@ -1,29 +1,9 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { connect } from 'react-redux'
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
-import {
-  getProducts,
-  getLables,
-  getLabel,
-  getfetchOrderInflights,
-  clearOrder,
-  getOrder,
-  getOrdersByDateRange
-} from '../actions'
-import {
-  successMessage,
-  api,
-  makeFetchRequest,
-  errorAlert, dispatchFetchRequest, dispatchFetchRequestWithOption
-} from '../constants/Backend'
-import BackBtn from '../components/BackBtn'
-import InputText from '../components/InputText'
-import { isRequired } from '../validators'
-import { DismissKeyboard } from '../components/DismissKeyboard'
+import {connect} from 'react-redux'
+import {getOrder} from '../actions'
+import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
 import PaymentOrderForm from './PaymentOrderForm'
-import { LocaleContext } from '../locales/LocaleContext'
-import styles from '../styles'
+import {LocaleContext} from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
 
 class PaymentOrder extends React.Component {

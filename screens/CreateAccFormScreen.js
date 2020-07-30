@@ -1,14 +1,12 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { Image, Text, TouchableOpacity, View, Linking } from 'react-native'
-import { PropTypes } from 'prop-types'
+import {Field, reduxForm} from 'redux-form'
+import {Image, Linking, Text, TouchableOpacity, View} from 'react-native'
+import {PropTypes} from 'prop-types'
 import {isEmail, isRequired, isvalidPassword} from '../validators'
-import validate from '../validate'
 import InputText from '../components/InputText'
-import { DismissKeyboard } from '../components/DismissKeyboard'
 import styles from '../styles'
-import { withNavigation } from 'react-navigation'
-import { LocaleContext } from '../locales/LocaleContext'
+import {withNavigation} from 'react-navigation'
+import {LocaleContext} from '../locales/LocaleContext'
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
 

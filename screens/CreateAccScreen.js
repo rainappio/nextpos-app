@@ -1,12 +1,7 @@
 import React from 'react'
 import CreateAccFormScreen from './CreateAccFormScreen'
-import {
-  api,
-  errorAlert,
-  successMessage,
-  warningMessage
-} from '../constants/Backend'
-import { LocaleContext } from '../locales/LocaleContext'
+import {api, successMessage, warningMessage} from '../constants/Backend'
+import {LocaleContext} from '../locales/LocaleContext'
 
 class CreateAccScreen extends React.Component {
   static navigationOptions = {

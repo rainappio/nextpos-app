@@ -1,23 +1,12 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {
-  Image,
-  KeyboardAvoidingView,
-  Text,
-  TouchableOpacity,
-  View,
-  Keyboard,
-  Modal,
-  Dimensions, TouchableWithoutFeedback, AsyncStorage
-} from 'react-native'
+import {AsyncStorage, Dimensions, Image, Keyboard, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native'
 import {isEmail, isRequired} from '../validators'
 import InputText from '../components/InputText'
-import {DismissKeyboard} from '../components/DismissKeyboard'
 import styles from '../styles'
 import {withNavigation} from 'react-navigation'
 import {LocaleContext} from "../locales/LocaleContext";
 import {storage} from "../constants/Backend";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 import {StyledText} from "../components/StyledText";
 import {ThemeContainer} from "../components/ThemeContainer";
 

@@ -1,7 +1,6 @@
 import React from 'react'
-import { Text, View } from 'react-native'
-import { Checkbox } from '@ant-design/react-native'
-import PropTypes from 'prop-types'
+import {Text, View} from 'react-native'
+import {Checkbox} from '@ant-design/react-native'
 import styles from '../styles'
 import {StyledText} from "./StyledText";
 

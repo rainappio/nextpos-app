@@ -1,14 +1,12 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { View, ScrollView, AsyncStorage } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
-import { LocaleContext } from "../locales/LocaleContext";
-import { DismissKeyboard } from "../components/DismissKeyboard";
+import React, {Component} from "react";
+import {connect} from "react-redux";
+import {View} from "react-native";
+import {LocaleContext} from "../locales/LocaleContext";
 import ScreenHeader from "../components/ScreenHeader";
-import { getOrderOffer, getOffers, clearOrderOffer } from '../actions'
+import {clearOrderOffer, getOffers, getOrderOffer} from '../actions'
 import styles from "../styles";
 import OfferForm from "./OfferForm";
-import { api, dispatchFetchRequest, successMessage } from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 import moment from "moment";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
