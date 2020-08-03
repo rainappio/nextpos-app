@@ -193,34 +193,29 @@ class ProductRow extends React.Component {
   };
 
   handleReArrange = (data) => {
-    var from = data.from;
-    var to = data.to;
-
-    var previousProductLabelId = this.state.data[from].id;
-    var nextProductLabelId = this.state.data[to].id;
-
-    var changedPosition = {};
-    changedPosition.index = to - 1;
-
-    if (changedPosition.index < 0) {
-      return false;
-    } else if (changedPosition.index === 0) {
-      changedPosition.previousProductLabelId = null;
-    } else {
-      changedPosition.previousProductLabelId = previousProductLabelId
+    const from = data.from;
+    const to = data.to;
+    const endIndex = this.state.data.length - 1
+    const labelIdToUpdate = this.state.data[from].id
+    const request = {
+      index: to,
+      previousProductLabelId: null,
+      nextProductLabelId: null
     }
 
-    if (changedPosition.index === this.state.data.length - 3) {
-      changedPosition.nextProductLabelId = null;
-    } else if (changedPosition.index > this.state.data.length - 3) {
-      return false;
+    if (to === 0 || to === 1) {
+      request.index = 0
+      request.nextProductLabelId = this.state.data[1].id
+    } else if (to === endIndex || to === endIndex - 1) {
+      request.index = endIndex
+      request.previousProductLabelId = this.state.data[endIndex - 1].id
     } else {
-      changedPosition.nextProductLabelId = nextProductLabelId
+      request.nextProductLabelId = this.state.data[to + 1].id
+      request.previousProductLabelId = this.state.data[to - 1].id
     }
 
-    previousProductLabelId !== undefined &&
     dispatchFetchRequest(
-      api.productLabel.sortPrdList(previousProductLabelId),
+      api.productLabel.sortPrdList(labelIdToUpdate),
       {
         method: 'POST',
         withCredentials: true,
@@ -228,7 +223,7 @@ class ProductRow extends React.Component {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(changedPosition)
+        body: JSON.stringify(request)
       },
       response => {
         this.props.getLables()

@@ -50,7 +50,7 @@ class OrderDetail extends React.Component {
       defaultMessage: false
     }, response => {
       response.json().then(copiedOrder => {
-        successMessage('order.copied')
+        successMessage(this.context.t('order.copied'))
         this.props.navigation.navigate('OrdersSummary', {
           orderId: copiedOrder.orderId
         })
@@ -264,7 +264,7 @@ class OrderDetail extends React.Component {
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                 <StyledText>
-                  {formatCurrency(order.total.amount)}
+                  {formatCurrency(order.orderTotal)}
                 </StyledText>
               </View>
             </View>

@@ -1,6 +1,6 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {AsyncStorage, Dimensions, Image, Keyboard, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native'
+import {AsyncStorage, Image, Keyboard, Text, TouchableOpacity, View} from 'react-native'
 import {isEmail, isRequired} from '../validators'
 import InputText from '../components/InputText'
 import styles from '../styles'
@@ -20,43 +20,33 @@ class LoginScreen extends React.Component {
     super(props, context)
 
     this.state = {
-      modalVisible: false,
       clientUsername: null
     }
 
 
   }
 
-  toggleModal = (visible) => {
-    this.setState({modalVisible: visible});
-  }
-
-  getEmail = (values) => {
-    values.email !== null && this.props.navigation.navigate('PasswordReset')
-    this.toggleModal(!this.state.modalVisible)
-  }
-
   componentDidMount() {
     this.context.localize({
       en: {
         loginTitle: 'Login',
-        title: 'Please enter your account email',
-        next: 'Send',
         forgotPwd: 'Forgot Password',
         loginAs: 'Login as {{username}}'
       },
       zh: {
         loginTitle: '登入',
-        title: '請輸入你的帳號email',
-        next: '送出',
         forgotPwd: '忘記密碼',
         loginAs: '以 {{username}} 登入'
       }
     })
 
-    AsyncStorage.getItem(storage.clientUsername).then(value => {
-      this.setState({clientUsername: value})
-    })
+    const removeLoginAs = this.props.navigation.getParam('removeLoginAs');
+
+    if (!removeLoginAs) {
+      AsyncStorage.getItem(storage.clientUsername).then(value => {
+        this.setState({clientUsername: value})
+      })
+    }
   }
 
   render() {
@@ -130,20 +120,13 @@ class LoginScreen extends React.Component {
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => {
-              this.toggleModal(true)
+              this.props.navigation.navigate('ResetClientPassword')
             }}>
               <Text style={[styles.bottomActionButton, styles.cancelButton]}>
                 {t('forgotPwd')}
               </Text>
             </TouchableOpacity>
           </View>
-
-          <ResetModal
-            onSubmit={this.getEmail}
-            modalVisible={this.state.modalVisible}
-            toggleModal={this.toggleModal}
-            navigation={this.props.navigation}
-          />
         </View>
       </ThemeContainer>
     )
@@ -155,64 +138,3 @@ LoginScreen = reduxForm({
 })(LoginScreen)
 
 export default withNavigation(LoginScreen)
-
-class ResetModal extends React.Component {
-  static navigationOptions = {
-    header: null
-  }
-  static contextType = LocaleContext
-
-  render() {
-    const {handleSubmit, toggleModal, modalVisible} = this.props
-    const {t} = this.context
-
-    return (
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-      >
-        <TouchableOpacity
-          activeOpacity={1}
-          style={[styles.modalContainer]}
-          onPressOut={() => {
-            toggleModal(false)
-          }}
-        >
-          <TouchableWithoutFeedback>
-            <View
-              style={[styles.whiteBg, styles.boxShadow, styles.popUpLayout, {width: '90%', height: Dimensions.get('window').height / 2}]}>
-              <Text>{t('title')}</Text>
-              <Field
-                name="email"
-                component={InputText}
-                validate={[isRequired, isEmail]}
-                autoCapitalize="none"
-                placeholder={t('email')}
-              />
-
-              <View style={styles.bottom}>
-                <TouchableOpacity
-                  onPress={() => handleSubmit()}>
-                  <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('next')}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => toggleModal(false)}
-                >
-                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                    {t('action.cancel')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </TouchableOpacity>
-      </Modal>
-    )
-  }
-}
-
-ResetModal = reduxForm({
-  form: 'pwdResetForm'
-})(ResetModal)
-

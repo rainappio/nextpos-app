@@ -1,15 +1,10 @@
 import React from 'react'
-import { Platform, Text, AsyncStorage } from 'react-native'
-import { createStackNavigator } from 'react-navigation-stack'
+import {Platform} from 'react-native'
+import {createStackNavigator} from 'react-navigation-stack'
 import {createBottomTabNavigator} from 'react-navigation-tabs'
-import {
-  NavigationActions,
-  StackActions,
-  createSwitchNavigator
-} from 'react-navigation'
+import {createSwitchNavigator, StackActions} from 'react-navigation'
 import TabBarIcon from '../components/TabBarIcon'
 import HomeScreen from '../screens/HomeScreen'
-import LinksScreen from '../screens/LinksScreen'
 import SettingsScreen from '../screens/SettingsScreen'
 import IntroAppScreen from '../screens/IntroAppScreen'
 import CreateAccScreen from '../screens/CreateAccScreen'
@@ -75,8 +70,7 @@ import AccountCloseConfirm from '../screens/AccountCloseConfirm'
 import CustomerStats from "../screens/CustomerStats";
 import ShiftHistory from "../screens/ShiftHistory";
 import ShiftDetails from "../screens/ShiftDetails";
-import { getToken } from "../constants/Backend";
-import { doLogout } from "../actions";
+import {getToken} from "../constants/Backend";
 import ManageVisualSceen from '../screens/ManageVisualSceen'
 import UpdateOrder from "../screens/UpdateOrder";
 import EditUserRole from '../screens/EditUserRole'
@@ -88,6 +82,7 @@ import EditOffer from '../screens/EditOffer'
 import ProductsOverviewforOffer from '../screens/ProductsOverviewforOffer'
 import TabBarBottom from "react-navigation-tabs/src/views/BottomTabBar";
 import OrderDisplayScreen from "../screens/OrderDisplayScreen";
+import ResetClientPassword from "../screens/ResetClientPassword";
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -306,6 +301,7 @@ export default createSwitchNavigator({
   CreateAcc: CreateAccScreen,
   Login: Login,
   LoginScreen: LoginScreen,
+  ResetClientPassword: ResetClientPassword,
   tabBar: {
     screen: tabBar // Calling the tabNavigator, wich contains the other stackNavigators
   }

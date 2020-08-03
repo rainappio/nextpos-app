@@ -18,12 +18,16 @@ class CreateAccScreen extends React.Component {
       en: {
         signUp: 'Sign Up',
         accountCreated: 'Your account is created',
-        errorMessage: 'Email is already registered, please choose another email address.'
+        errorMessage: 'Email is already registered, please choose another email address.',
+        privacyAgreement: 'By signing up, you agree to the seller agreement and privacy policy.',
+        viewPrivacy: 'View Privacy Policy'
       },
       zh: {
         signUp: '註冊',
         accountCreated: '帳號註冊成功',
-        errorMessage: '此email已經註冊過，請使用新的email來註冊。'
+        errorMessage: '此email已經註冊過，請使用新的email來註冊。',
+        privacyAgreement: '您創立新的帳號的同時，也等同同意我們的賣家條款以及隱私政策.',
+        viewPrivacy: '參閱隱私政策'
       }
     })
   }

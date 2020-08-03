@@ -23,7 +23,7 @@ const InputText = ({
   themeStyle,
   ...rest
 }) => (
-    <View style={{flex: 1}}>
+    <View style={[styles.flex(1)]}>
       <TextInput
         onBlur={onBlur}
         onChangeText={onChange}

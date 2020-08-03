@@ -17,7 +17,7 @@ class CreateAccFormScreen extends React.Component {
   static contextType = LocaleContext
 
   constructor(props, context) {
-    super(props)
+    super(props, context)
   }
 
   viewPrivacyPolicy = (url) => {
@@ -76,11 +76,11 @@ class CreateAccFormScreen extends React.Component {
             />
 
             <StyledText style={styles.text}>
-              By signing up, you agree to the seller agreement and privacy policy.
+              {t('privacyAgreement')}
             </StyledText>
             <TouchableOpacity onPress={() => this.viewPrivacyPolicy('http://rain-app.io')}>
             <StyledText style={styles.subText}>
-              View Privacy Policy
+              {t('viewPrivacy')}
             </StyledText>
             </TouchableOpacity>
           </View>
