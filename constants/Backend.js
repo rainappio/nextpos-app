@@ -1,5 +1,5 @@
-import { AsyncStorage } from 'react-native'
-import { showMessage } from 'react-native-flash-message'
+import {AsyncStorage} from 'react-native'
+import {showMessage} from 'react-native-flash-message'
 import * as Sentry from 'sentry-expo';
 import NavigationService from "../navigation/NavigationService";
 import i18n from 'i18n-js'
@@ -11,14 +11,23 @@ export const storage = {
   clientPassword: 'clientPassword'
 }
 
-//const apiRoot = 'http://35.234.63.193'
-export const apiRoot = 'http://104.199.147.121'
+//export const apiRoot = 'http://104.199.147.121'
 //export const apiRoot = 'http://10.0.4.9:8080'
 //export const apiRoot = 'http://192.168.1.102:8080'
+//export const apiRoot = 'http://192.168.2.244:8080'
+export const apiRoot = 'https://api.rain-app.io'
+
 
 export const api = {
   apiRoot,
   getAuthToken: `${apiRoot}/oauth/token`,
+  account: {
+    sendResetPasscode: (clientEmail) => {
+      return `${apiRoot}/account/sendResetPasscode?clientEmail=${clientEmail}`
+    },
+    verifyResetPasscode: `${apiRoot}/account/verifyResetPasscode`,
+    resetClientPassword: `${apiRoot}/account/resetClientPassword`,
+  },
   client: {
     get: `${apiRoot}/clients/me`,
     new: `${apiRoot}/clients`,

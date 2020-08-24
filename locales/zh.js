@@ -2,6 +2,7 @@ const zh = {
   login: '登入',
   clientName: '商業名稱',
   email: '電子郵件',
+  passcode: '六位數代碼',
   password: '密碼',
   logout: '登出',
   refreshed: '已重新刷新',
@@ -42,6 +43,7 @@ const zh = {
   action: {
     ok: '好',
     done: '結束',
+    enter: '輸入',
     save: '儲存',
     search: '搜尋',
     update: '更新',
@@ -200,7 +202,8 @@ const zh = {
     clientPassword: '密碼需要至少六個字母，一個數字，一個大寫字母',
     percentage: '百分比需介於1至100',
     moreThanZero: '數量至少要大於零',
-    balanceError: '請輸入大於零的數字'
+    balanceError: '請輸入大於零的數字',
+    loginFailed: '登入失敗'
   },
   backend: {
     POST: '儲存成功',

@@ -5,11 +5,14 @@ import {encode as btoa} from 'base-64'
 import {doLoggedIn} from '../actions'
 import LoginScreen from './LoginScreen'
 import {api, storage, warningMessage} from '../constants/Backend'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class Login extends React.Component {
   static navigationOptions = {
     header: null
   }
+
+  static contextType = LocaleContext
 
   constructor(props) {
     super(props)
@@ -46,7 +49,7 @@ class Login extends React.Component {
     })
 
     if (!response.ok) {
-      warningMessage('Incorrect username or password.')
+      warningMessage(this.context.t('errors.loginFailed'))
     } else {
       let res = await response.json()
       await AsyncStorage.removeItem('token')

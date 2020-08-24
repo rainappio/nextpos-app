@@ -3,11 +3,14 @@ import ClientUserLoginForm from './ClientUserLoginForm'
 import {AsyncStorage} from 'react-native'
 import {api, warningMessage} from "../constants/Backend";
 import {encode as btoa} from 'base-64'
+import {LocaleContext} from "../locales/LocaleContext";
 
 class ClientUserLogin extends React.Component {
   static navigationOptions = {
     header: null
   }
+
+  static contextType = LocaleContext
 
   clientLogin = async values => {
 
@@ -34,7 +37,7 @@ class ClientUserLogin extends React.Component {
 
     if (response.status === 400) {
       this.props.navigation.navigate('ClientUsers')
-      warningMessage('Incorrect password.')
+      warningMessage(this.context.t('errors.loginFailed'))
     } else {
       const res = await response.json()
       const loggedIn = new Date()
