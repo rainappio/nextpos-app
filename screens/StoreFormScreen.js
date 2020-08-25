@@ -42,6 +42,7 @@ class StoreFormScreen extends React.Component {
         country: 'Country',
         timezone: 'Timezone',
         featureToggle: 'Features',
+        locationBasedService: 'Location Based Clock In',
         applyOffer: 'Apply Offer',
         uiPreferences: 'UI Preferences',
       },
@@ -63,6 +64,7 @@ class StoreFormScreen extends React.Component {
         country: '國家',
         timezone: '時區',
         featureToggle: '進階功能',
+        locationBasedService: '位置打卡功能',
         applyOffer: '套用促銷',
         uiPreferences: '介面喜好',
       }
@@ -274,6 +276,18 @@ class StoreFormScreen extends React.Component {
             <View style={styles.sectionContainer}>
               <View style={styles.sectionTitleContainer}>
                 <StyledText style={styles.sectionTitleText}>{t('featureToggle')}</StyledText>
+              </View>
+
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 1}}>
+                  <StyledText style={styles.fieldTitle}>{t('locationBasedService')}</StyledText>
+                </View>
+                <View style={[styles.alignRight]}>
+                  <Field
+                    name="clientSettings.LOCATION_BASED_SERVICE.enabled"
+                    component={RNSwitch}
+                  />
+                </View>
               </View>
 
               <View style={styles.fieldContainer}>

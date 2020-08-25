@@ -12,7 +12,7 @@ import {LocaleContext} from '../locales/LocaleContext'
 import {CheckBox, Tooltip} from 'react-native-elements'
 import ScreenHeader from "../components/ScreenHeader";
 import OrderTopInfo from "./OrderTopInfo";
-import {handleDelete, handleOrderSubmit, renderOptionsAndOffer} from "../helpers/orderActions";
+import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer} from "../helpers/orderActions";
 import NavigationService from "../navigation/NavigationService";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
@@ -27,12 +27,6 @@ class OrdersSummaryRow extends React.Component {
     context.localize({
       en: {
         orderSummaryTitle: 'Order Summary',
-        staff: 'Staff',
-        product: 'Product',
-        quantity: 'Qty',
-        unitPrice: 'U/P',
-        subTotal: 'Subtotal',
-        state: 'Status',
         stateTip: {
           open: {
             display: 'Open',
@@ -63,12 +57,6 @@ class OrdersSummaryRow extends React.Component {
       },
       zh: {
         orderSummaryTitle: '訂單總覽',
-        staff: '員工',
-        product: '產品',
-        quantity: '數量',
-        unitPrice: '單價',
-        subTotal: '小計',
-        state: '狀態',
         stateTip: {
           open: {
             display: '開單',
@@ -292,7 +280,7 @@ class OrdersSummaryRow extends React.Component {
             <View style={[styles.tableCellView, {flex: 6}]}>
               <TouchableOpacity>
                 <Text style={styles.sectionBarTextSmall}>
-                  {t('product')}
+                  {t('order.product')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -300,26 +288,26 @@ class OrdersSummaryRow extends React.Component {
             <View style={[styles.tableCellView, {flex: 2}]}>
               <TouchableOpacity>
                 <Text style={styles.sectionBarTextSmall}>
-                  {t('quantity')}
+                  {t('order.quantity')}
                 </Text>
               </TouchableOpacity>
             </View>
 
             <View style={[styles.tableCellView, {flex: 3}]}>
               <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>{t('unitPrice')}</Text>
+                <Text style={styles.sectionBarTextSmall}>{t('order.unitPrice')}</Text>
               </TouchableOpacity>
             </View>
 
             <View style={[styles.tableCellView, {flex: 3}]}>
               <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>{t('subTotal')}</Text>
+                <Text style={styles.sectionBarTextSmall}>{t('order.subtotal')}</Text>
               </TouchableOpacity>
             </View>
 
             <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
               <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>{t('state')}</Text>
+                <Text style={styles.sectionBarTextSmall}>{t('order.lineState')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -329,7 +317,7 @@ class OrdersSummaryRow extends React.Component {
               data={order.lineItems}
               renderItem={(data, rowMap) => (
                 <View style={[styles.rowFront, themeStyle]}>
-                  <View key={rowMap} style={{marginBottom: 20}}>
+                  <View key={rowMap} style={{marginBottom: 15}}>
                     <View style={styles.tableRowContainer}>
                       <View style={[styles.tableCellView, {flex: 6}]}>
                         {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(data.item.state) && (
@@ -366,9 +354,12 @@ class OrdersSummaryRow extends React.Component {
                       </View>
                     </View>
                     <View>
-                      <StyledText style={{textAlign: 'left', marginLeft: 15}}>
+                      <View style={{marginLeft: 15}}>
+                        {renderChildProducts(data.item)}
+                      </View>
+                      <View style={{marginLeft: 15}}>
                         {renderOptionsAndOffer(data.item)}
-                      </StyledText>
+                      </View>
                     </View>
                   </View>
                 </View>

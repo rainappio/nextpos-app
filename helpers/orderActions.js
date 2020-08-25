@@ -1,12 +1,13 @@
-import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage} from "../constants/Backend";
+import {api, dispatchFetchRequestWithOption, successMessage} from "../constants/Backend";
 import NavigationService from "../navigation/NavigationService";
-import {Image, View} from "react-native";
+import {Image} from "react-native";
 import images from "../assets/images";
 import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon from "react-native-vector-icons/Ionicons";
 import React from "react";
 import styles from "../styles"
 import i18n from 'i18n-js'
+import {StyledText} from "../components/StyledText";
 
 export const renderOrderState = state => {
   switch (state) {
@@ -48,6 +49,15 @@ export const renderOrderState = state => {
   }
 }
 
+export const renderChildProducts = lineItem => {
+
+  return lineItem.childProducts != null && lineItem.childProducts.map(cp => {
+    return (
+      <StyledText key={cp.id}>- {cp.productName}</StyledText>
+    )
+  })
+}
+
 export const renderOptionsAndOffer = lineItem => {
 
   let text = lineItem.options ? lineItem.options + ' ' : ''
@@ -57,7 +67,9 @@ export const renderOptionsAndOffer = lineItem => {
     text += `${appliedOfferInfo.offerName} (${appliedOfferInfo.overrideDiscount})`
   }
 
-  return text
+  return (
+    <StyledText>{text}</StyledText>
+  )
 }
 
 export const handleOrderSubmit = id => {

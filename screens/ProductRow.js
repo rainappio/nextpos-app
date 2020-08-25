@@ -324,8 +324,8 @@ class ProductRow extends React.Component {
           <View style={styles.childContainer}>
             <DraggableFlatList
               data={labelsArr}
-              renderItem={(item, index, drag, isActive) => this.renderItem(item, index, drag, isActive)}
-              keyExtractor={(item, index) => `draggable-item-${item.label}`}
+              renderItem={(item, index, drag, isActive) => this.renderItem(item)}
+              keyExtractor={(item, index) => `draggable-item-${item.id}`}
               onDragEnd={(data) => this.handleReArrange(data)}
               initialNumToRender={10}
               ListHeaderComponent={

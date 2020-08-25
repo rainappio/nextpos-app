@@ -19,6 +19,14 @@ class Product extends React.Component {
   }
 
   handleSubmit = values => {
+    const request = {...values}
+
+    if (request.childProducts != null) {
+      request.childProducts = request.childProducts.map(p => {
+        return p.id
+      })
+    }
+
     dispatchFetchRequest(api.product.new, {
         method: 'POST',
         withCredentials: true,
@@ -26,23 +34,24 @@ class Product extends React.Component {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(values)
+        body: JSON.stringify(request)
       },
       response => {
         this.props.navigation.navigate('ProductsOverview')
-        this.props.getProducts()
       }
     ).then()
   }
 
   render() {
-    const { labels = [], navigation } = this.props
+    const {products, labels = [], navigation} = this.props
 
     return (
       <ProductFormScreen
+        products={products}
         labels={labels}
         onSubmit={this.handleSubmit}
         navigation={navigation}
+        isEditForm={false}
       />
     )
   }

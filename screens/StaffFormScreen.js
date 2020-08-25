@@ -31,7 +31,12 @@ class StaffFormScreen extends React.Component {
     const selectedRoleIndex = this.props.initialValues !== undefined ? this.props.initialValues.selectedRole : null
 
     this.state = {
-      selectedRole: selectedRoleIndex
+      selectedRole: selectedRoleIndex,
+      roles: {
+        0: { value: 'USER', label: context.t('roles.USER')},
+        1: { value: 'MANAGER', label: context.t('roles.MANAGER')},
+        2: { value: 'Owner', label: context.t('roles.OWNER')},
+      }
     }
   }
 
@@ -47,7 +52,12 @@ class StaffFormScreen extends React.Component {
         passwordTitle: 'Password',
         editPassword: 'Edit Password',
         enterNewPassword: 'Enter New Password',
-        noRole: 'No Role',
+        roles: {
+          USER: 'User',
+          MANAGER: 'Manager',
+          OWNER: 'Owner'
+        },
+        noRole: 'No Role Selected',
         editRole: 'Manage Roles',
         roleId: 'User Role'
       },
@@ -61,7 +71,12 @@ class StaffFormScreen extends React.Component {
         passwordTitle: '設定密碼',
         editPassword: '編輯密碼',
         enterNewPassword: '輸入新密碼',
-        noRole: '無權限',
+        roles: {
+          USER: '使用者',
+          MANAGER: '管理者',
+          OWNER: '老闆'
+        },
+        noRole: '未選',
         editRole: '管理權限',
         roleId: '使用者權限'
       }
@@ -100,8 +115,10 @@ class StaffFormScreen extends React.Component {
       userRoles = []
     } = this.props
     const {t} = this.context
-    var roleIdArr = [];
+
+    const roleIdArr = [];
     userRoles !== undefined && userRoles.map(usrRole => roleIdArr.push({label: usrRole.roleName, value: usrRole.id}))
+    const roles = Object.keys(this.state.roles).map(key => this.state.roles[key].label)
 
     return (
       <ThemeContainer>
@@ -169,7 +186,7 @@ class StaffFormScreen extends React.Component {
                 <Field
                   name="selectedRole"
                   component={SegmentedControl}
-                  values={["USER", "MANAGER", "OWNER"]}
+                  values={roles}
                   selectedIndex={this.state.selectedRole}
                   onChange={this.handleRoleSelection}
                   normalize={value => {

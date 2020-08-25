@@ -13,6 +13,8 @@ import ScreenHeader from "../components/ScreenHeader";
 import RadioItemObjPick from "../components/RadioItemObjPick";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
+import ItemList from "../components/ItemList";
+import ProductSelector from "./ProductSelector";
 
 class ProductFormScreen extends React.Component {
   static navigationOptions = {
@@ -31,9 +33,11 @@ class ProductFormScreen extends React.Component {
         newProduct: 'New Product',
         editProduct: 'Edit Product',
         productName: 'Product Name',
+        internalProductName: 'Internal Product Name',
         price: 'Price',
         productLabel: 'Product Label',
         description: 'Description',
+        childProducts: 'Child Products',
         options: 'Options',
         workingArea: 'Working Area'
       },
@@ -41,9 +45,11 @@ class ProductFormScreen extends React.Component {
         newProduct: '新增產品',
         editProduct: '修改產品',
         productName: '產品名稱',
+        internalProductName: '內部產品名稱',
         price: '價格',
         productLabel: '產品分類',
         description: '產品敘述',
+        childProducts: '子產品',
         options: '產品選項',
         workingArea: '工作區'
       }
@@ -56,6 +62,7 @@ class ProductFormScreen extends React.Component {
     const {
       initialValues,
       handleSubmit,
+      products,
       labels,
       isEditForm,
       handleEditCancel,
@@ -94,6 +101,20 @@ class ProductFormScreen extends React.Component {
                 component={InputText}
                 validate={isRequired}
                 placeholder={t('productName')}
+                secureTextEntry={false}
+              />
+            </View>
+          </View>
+
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText style={styles.fieldTitle}>{t('productName')}</StyledText>
+            </View>
+            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+              <Field
+                name="internalName"
+                component={InputText}
+                placeholder={t('internalProductName')}
                 secureTextEntry={false}
               />
             </View>
@@ -145,6 +166,28 @@ class ProductFormScreen extends React.Component {
               />
             </View>
           </View>
+
+          {(!isEditForm || initialValues.productType === 'PRODUCT_SET') && (
+            <View style={styles.sectionContainer}>
+              <View style={styles.sectionTitleContainer}>
+                <StyledText style={styles.sectionTitleText}>{t('childProducts')}</StyledText>
+              </View>
+
+              <View>
+                <Field
+                  name="childProducts"
+                  component={ItemList}
+                  listSelector={(onChange) =>
+                    <ProductSelector
+                      products={products}
+                      labels={labels}
+                      handleOnSelect={onChange}
+                    />
+                  }
+                />
+              </View>
+            </View>
+          )}
 
           {isEditForm && (
             <View>
