@@ -5,17 +5,18 @@ import {
   StyleSheet,
   View,
   AsyncStorage,
-  YellowBox
+  YellowBox,
+  Dimensions
 } from 'react-native'
-import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
+import {Provider} from 'react-redux'
+import {createStore, applyMiddleware} from 'redux'
+import {composeWithDevTools} from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import rootReducer from './reducers'
-import { AppLoading } from 'expo'
-import { Asset } from 'expo-asset'
+import {AppLoading} from 'expo'
+import {Asset} from 'expo-asset'
 import * as Font from 'expo-font'
-import { Icon, Ionicons } from '@expo/vector-icons'
+import {Icon, Ionicons} from '@expo/vector-icons'
 import {canClockIn, doLoggedIn} from './actions'
 import AppNavigator from './navigation/AppNavigator'
 import styles from './styles'
@@ -24,7 +25,7 @@ import i18n from 'i18n-js'
 import globalEn from './locales/en'
 import globalZh from './locales/zh'
 import FlashMessage from 'react-native-flash-message'
-import { LocaleContext } from './locales/LocaleContext'
+import {LocaleContext} from './locales/LocaleContext'
 import NavigationService from "./navigation/NavigationService";
 import * as Sentry from 'sentry-expo';
 import Constants from "expo-constants/src/Constants";
@@ -34,6 +35,10 @@ import {activateKeepAwake, useKeepAwake} from "expo-keep-awake";
 import TimeZoneService from "./helpers/TimeZoneService";
 import {complexTheme, ThemeContext, themes} from "./themes/ThemeContext";
 import {getTheme, storeTheme} from "./helpers/contextHelper";
+
+import * as Device from 'expo-device';
+import * as ScreenOrientation from 'expo-screen-orientation';
+
 
 YellowBox.ignoreWarnings([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
@@ -55,7 +60,7 @@ const store = createStore(
   composeWithDevTools(applyMiddleware(thunk))
 )
 
-TaskManager.defineTask('geoFencingTask', async ({ data: { eventType, region }, error }) => {
+TaskManager.defineTask('geoFencingTask', async ({data: {eventType, region}, error}) => {
   if (error) {
     console.error(error)
     // check `error.message` for more details.
@@ -117,17 +122,28 @@ export default class App extends React.Component {
 
     i18n.fallbacks = true
     i18n.locale = Localization.locale
-    i18n.translations = { en: { ...globalEn }, zh: { ...globalZh } }
+    i18n.translations = {en: {...globalEn}, zh: {...globalZh}}
+  }
+
+  //if isTablet===2:keep screen in landscape mode; else:keep screen in portrait mode
+  changeScreenOrientation = async (isTablet) => {
+    if (isTablet === 2) {
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+    } else {
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+    }
   }
 
   componentDidMount() {
-    getTheme().then(theme => {
+    getTheme().then(async (theme) => {
       const themeStyle = theme === 'light' ? themes.light : themes.dark
-
+      const isTablet = await Device.getDeviceTypeAsync();// 1=PHONE 2=TABLET
+      this.changeScreenOrientation(isTablet);
       this.setState({
         theme: theme,
         themeStyle: themeStyle,
-        complexTheme: complexTheme[theme]
+        complexTheme: complexTheme[theme],
+        isTablet: (isTablet !== 1)
       })
     })
   }
@@ -182,11 +198,11 @@ export default class App extends React.Component {
     let toLocale = this.state.locale === 'zh-Hant-TW' ? 'en-TW' : 'zh-Hant-TW'
     console.log(`Default locale: ${Localization.locale}, current locale: ${this.state.locale}, changing to ${toLocale}`)
 
-    this.setState({ locale: toLocale })
+    this.setState({locale: toLocale})
   }
 
   t = (scope, options) => {
-    return i18n.t(scope, { locale: this.state.locale, ...options })
+    return i18n.t(scope, {locale: this.state.locale, ...options})
   }
 
   toggleTheme = () => {
@@ -225,7 +241,8 @@ export default class App extends React.Component {
               theme: this.state.theme,
               themeStyle: this.state.themeStyle,
               complexTheme: this.state.complexTheme,
-              toggleTheme: this.state.toggleTheme
+              toggleTheme: this.state.toggleTheme,
+              isTablet: this.state.isTablet
             }}>
               <LocaleContext.Provider value={this.state}>
                 <AppNavigator
@@ -274,6 +291,6 @@ export default class App extends React.Component {
   }
 
   _handleFinishLoading = () => {
-    this.setState({ isLoadingComplete: true })
+    this.setState({isLoadingComplete: true})
   }
 }

@@ -118,7 +118,8 @@ const zh = {
     SETTLED: '已付款',
     REFUNDED: '已退款',
     COMPLETED: '完成',
-    DELETED: '刪單'
+    DELETED: '刪單',
+    OTHERS: '空桌'
   },
   orderLog: {
     title: '訂單日誌',

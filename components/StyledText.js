@@ -13,7 +13,7 @@ export const StyledText = ({id, style, children}) => {
   return (
     <Text
       key={id}
-      style={[...passedStyles, {color: themeContext.themeStyle.color}]}
+      style={[...passedStyles, {color: passedStyles[0]?.color ?? themeContext.themeStyle.color, borderColor: passedStyles[0]?.borderColor ?? themeContext.themeStyle.color}]}
     >
       {children}
     </Text>

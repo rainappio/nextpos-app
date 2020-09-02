@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from 'react-redux'
-import {Animated, PanResponder, Text, TouchableOpacity, View} from "react-native";
+import {Animated, PanResponder, Text, TouchableOpacity, View, Dimensions} from "react-native";
 import ScreenHeader from "../components/ScreenHeader";
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import {getTableLayout} from '../actions'
@@ -18,6 +18,14 @@ class ManageVisualSceen extends Component {
 
   constructor(props, context) {
     super(props, context);
+    const windowWidth = Dimensions.get('window').width - 30;
+    const windowHeight = Dimensions.get('window').height - 76;
+    console.log("SCREEN SIZE", context?.isTablet);
+
+    this.state = {
+      windowWidth: Dimensions.get('window').width - 30,
+      windowHeight: Dimensions.get('window').height - 76,
+    }
 
     context.localize({
       en: {
@@ -38,27 +46,37 @@ class ManageVisualSceen extends Component {
     const {t} = this.context
     const layoutId = this.props.navigation.state.params.layoutId !== false && this.props.navigation.state.params.layoutId;
 
+
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     }
 
     return (
       <ThemeContainer>
         <View style={[styles.container]}>
-          <ScreenHeader title={t('manageVisualLayoutTitle')}/>
+          <ScreenHeader title={t('manageVisualLayoutTitle')} />
           {/* <Text onPress={() => this.forceRefresh()} style={{ borderWidth: 1, width: 120, textAlign: 'center', padding: 8, borderRadius: 2 }}>Reset Positions</Text> */}
           <View style={{flex: 1}}>
-            <View style={[styles.ballContainer, {paddingLeft: 8, height: '100%', marginTop: 22}]}>
+            <View onLayout={(event) => {
+              let {x, y, width, height} = event.nativeEvent.layout;
+              this.setState({
+                tableWidth: width,
+                tableHeight: height,
+              })
+            }} style={[styles.ballContainer, {paddingLeft: 8, height: '100%', marginTop: 22}]}>
               <View>
                 {
                   tablelayout.tables.map(table => {
-                    return (<Draggable
+                    return (this.state?.tableWidth && <Draggable
                       table={table}
                       key={table.tableId}
                       layoutId={layoutId}
                       getTableLayout={this.props.getTableLayout}
+                      tableWidth={this.state?.tableWidth ?? this.state?.windowWidth}
+                      tableHeight={this.state?.tableHeight ?? this.state?.windowHeight}
+
                     />)
                   })
                 }
@@ -100,8 +118,10 @@ class Draggable extends Component {
   }
 
   componentDidMount() {
+    const windowWidth = this.props.tableWidth;
+    const windowHeight = this.props.tableHeight;
     if (this.props.table.position != null) {
-      this.state.pan.setValue({x: Number(this.props.table.position.x), y: Number(this.props.table.position.y)})
+      this.state.pan.setValue({x: Number(this.props.table.position.x * windowWidth), y: Number(this.props.table.position.y * windowHeight)})
     } else {
       this.state.pan.setValue({x: 0, y: 0})
     }
@@ -139,7 +159,11 @@ class Draggable extends Component {
     const tableId = this.props.table.tableId;
     console.debug(`event: ${e.nativeEvent.locationX} ${e.nativeEvent.locationY} ${e.nativeEvent.pageX} ${e.nativeEvent.pageY}`)
     console.debug(`gesture: ${JSON.stringify(gesture)}`)
-    console.debug(this.state.pan)
+    const windowWidth = this.props.tableWidth;
+    const windowHeight = this.props.tableHeight;
+    const numberX = {...this.state.pan.x};
+    const numberY = {...this.state.pan.y};
+    console.debug(this.state.pan, windowWidth, typeof numberX, numberX._value * 6 / windowWidth)
 
     dispatchFetchRequest(api.tablelayout.updateTablePosition(layoutId, tableId), {
       method: 'POST',
@@ -148,7 +172,7 @@ class Draggable extends Component {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({x: JSON.stringify(this.state.pan.x), y: JSON.stringify(this.state.pan.y)})
+      body: JSON.stringify({x: numberX._value / windowWidth, y: numberY._value / windowHeight})
     }, response => {
       this.props.getTableLayout(layoutId)
     }).then()
@@ -183,7 +207,7 @@ class Draggable extends Component {
             ?
             <View>
               <TouchableOpacity key={table.tableId}
-                                onPress={() => this.handleReset(layoutId, table.tableId)}>
+                onPress={() => this.handleReset(layoutId, table.tableId)}>
                 <StyledText style={{
                   borderWidth: 0.5,
                   textAlign: 'center',

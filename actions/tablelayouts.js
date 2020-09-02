@@ -1,4 +1,4 @@
-import { api, dispatchFetchRequest } from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 export const FETCH_TABLES = 'FETCH_TABLES'
 export const FETCH_TABLES_SUCCESS = 'FETCH_TABLES_SUCCESS'
 export const FETCH_TABLES_FAILURE = 'FETCH_TABLES_FAILURE'
