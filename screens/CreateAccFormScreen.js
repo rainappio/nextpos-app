@@ -1,8 +1,8 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {Image, Linking, Text, TouchableOpacity, View} from 'react-native'
+import {Image, Linking, Text, TouchableOpacity, View, KeyboardAvoidingView} from 'react-native'
 import {PropTypes} from 'prop-types'
-import {isEmail, isRequired, isvalidPassword} from '../validators'
+import {isEmail, isRequired, isvalidPassword, isconfirmPassword} from '../validators'
 import InputText from '../components/InputText'
 import styles from '../styles'
 import {withNavigation} from 'react-navigation'
@@ -17,7 +17,8 @@ class CreateAccFormScreen extends React.Component {
   static contextType = LocaleContext
 
   constructor(props, context) {
-    super(props, context)
+    super(props, context);
+    //this.state = {pwd: ''};
   }
 
   viewPrivacyPolicy = (url) => {
@@ -31,13 +32,13 @@ class CreateAccFormScreen extends React.Component {
   }
 
   render() {
-    const { handleSubmit } = this.props
-    const { t } = this.context
+    const {handleSubmit} = this.props
+    const {t} = this.context
 
     return (
       <ThemeContainer>
-        <View style={styles.container}>
-          <View style={styles.flex(2)}>
+        <KeyboardAvoidingView style={styles.container} behavior="height">
+          <View style={{...styles.flex(3), minHeight: 200}}>
             <View>
               <Image
                 source={
@@ -74,14 +75,24 @@ class CreateAccFormScreen extends React.Component {
               placeholder={t('password')}
               secureTextEntry={true}
             />
+            <Field
+              name="confirmPassword"
+              component={InputText}
+              validate={[isRequired, isconfirmPassword]}
+              placeholder={t('confirmPassword')}
+              secureTextEntry={true}
+
+            />
+
+
 
             <StyledText style={styles.text}>
               {t('privacyAgreement')}
             </StyledText>
             <TouchableOpacity onPress={() => this.viewPrivacyPolicy('http://rain-app.io')}>
-            <StyledText style={styles.subText}>
-              {t('viewPrivacy')}
-            </StyledText>
+              <StyledText style={styles.subText}>
+                {t('viewPrivacy')}
+              </StyledText>
             </TouchableOpacity>
           </View>
 
@@ -99,7 +110,7 @@ class CreateAccFormScreen extends React.Component {
               </Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </ThemeContainer>
     )
   }

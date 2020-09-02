@@ -4,6 +4,7 @@ const zh = {
   email: '電子郵件',
   passcode: '六位數代碼',
   password: '密碼',
+  confirmPassword: '確認密碼',
   logout: '登出',
   refreshed: '已重新刷新',
   general: {
@@ -201,6 +202,7 @@ const zh = {
     required: '必填',
     email: 'Email欄位',
     clientPassword: '密碼需要至少六個字母，一個數字，一個大寫字母',
+    confirmPassword: '請輸入相同的密碼',
     percentage: '百分比需介於1至100',
     moreThanZero: '數量至少要大於零',
     balanceError: '請輸入大於零的數字',

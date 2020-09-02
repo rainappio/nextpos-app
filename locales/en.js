@@ -4,6 +4,7 @@ const en = {
   email: 'Email Address',
   passcode: 'Passcode',
   password: 'Password',
+  confirmPassword: 'Confirm Password',
   logout: 'Logout',
   refreshed: 'Refreshed',
   general: {
@@ -200,6 +201,7 @@ const en = {
     required: 'Required field',
     email: 'Email field',
     clientPassword: 'Password rule: at least one uppercase character, one digit and minimum length of 6 characters',
+    confirmPassword: 'Please enter the same password',
     percentage: 'A percentage must be between 1 and 100',
     moreThanZero: 'Choose at least 1',
     balanceError: 'Please enter a positive value',
