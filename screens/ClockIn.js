@@ -217,9 +217,11 @@ class ClockIn extends React.Component {
   }
 
   render() {
-    const {canClockIn} = this.props
+    const {client, canClockIn} = this.props
     const { t } = this.context
     const { timecard, storeLocation, distance} = this.state
+
+    const locationBasedService = client.clientSettings.LOCATION_BASED_SERVICE != null ? client.clientSettings.LOCATION_BASED_SERVICE.enabled : false
 
     /**
      * This check exists to circumvent the issue that the first render() call hasn't set the this.state.timecard object yet.
@@ -341,7 +343,7 @@ class ClockIn extends React.Component {
             )}
           </View>
 
-          {canClockIn && (
+          {(canClockIn || !locationBasedService) && (
             <View style={[{flex: 1, alignItems: 'center'}]}>
               <TouchableOpacity
                 style={styles.squareButton}

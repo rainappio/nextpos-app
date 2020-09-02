@@ -220,7 +220,7 @@ class OrderDetail extends React.Component {
             	</View>
 
             	<View style={{flex: 1.3}}>
-               	<Text style={[styles.sectionBarTextSmall, {textAlign: 'right'}]}>{t('order.subTotal')}</Text>
+               	<Text style={[styles.sectionBarTextSmall, {textAlign: 'right'}]}>{t('order.subtotal')}</Text>
             	</View>
           	</View>
 

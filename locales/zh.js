@@ -22,7 +22,7 @@ const zh = {
   },
   settings: {
     account: '帳號',
-    stores: '商店資訊',
+    stores: '商店設定',
     products: '產品管理',
     staff: '員工',
     workingArea: '工作區/出單機',
@@ -80,7 +80,6 @@ const zh = {
     noOrder: '沒有資料',
 
     orderDetailsTitle: '訂單內容',
-    subtotal: '總計',
     serviceCharge: '服務費',
     discount: '折扣',
     total: '總金額',
@@ -96,7 +95,9 @@ const zh = {
     duration: '共計',
     product: '產品',
     quantity: '數量',
-    subTotal: '小計',
+    unitPrice: '單價',
+    subtotal: '小計',
+    lineState: '狀態',
     serveBy: '結帳人員',
     copiedFrom: '複製於',
 

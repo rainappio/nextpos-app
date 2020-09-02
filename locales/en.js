@@ -22,7 +22,7 @@ const en = {
   },
   settings: {
     account: 'Account',
-    stores: 'Stores',
+    stores: 'Store Settings',
     products: 'Products',
     staff: 'Staff',
     workingArea: 'Printer/Working Area',
@@ -80,7 +80,6 @@ const en = {
     noOrder: 'No Order',
 
     orderDetailsTitle: 'Order Details',
-    subtotal: 'Subtotal',
     serviceCharge: 'Service Charge',
     discount: 'Discount',
     total: 'Final Total',
@@ -96,7 +95,9 @@ const en = {
     duration: 'Total Duration',
     product: 'Product',
     quantity: 'Qty',
-    subTotal: 'Subtotal',
+    unitPrice: 'U/P',
+    subtotal: 'Subtotal',
+    lineState: 'State',
     serveBy: 'Serve By',
     copiedFrom: 'Copy From',
 

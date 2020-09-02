@@ -5,6 +5,7 @@ import {clearProduct, getLables, getProduct, getProductOptions, getProducts, get
 import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 
+// todo: rename this file to ProductEdit.
 class ProductEdit extends Component {
   static navigationOptions = {
     header: null
@@ -25,6 +26,14 @@ class ProductEdit extends Component {
   }
 
   handleUpdate = values => {
+    const request = {...values}
+
+    if (request.childProducts != null) {
+      request.childProducts = request.childProducts.map(p => {
+        return p.id
+      })
+    }
+
     let prdId = this.props.navigation.state.params.productId
 
     dispatchFetchRequest(api.product.update(prdId), {
@@ -34,11 +43,9 @@ class ProductEdit extends Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(values)
+      body: JSON.stringify(request)
     }, response => {
-      this.props.clearProduct(prdId)
       this.props.navigation.navigate('ProductsOverview')
-      this.props.getProducts()
     }).then()
   }
 
@@ -82,7 +89,7 @@ class ProductEdit extends Component {
       labels,
       navigation,
       product,
-      clearProduct,
+      products,
       haveData,
       haveError,
       isLoading,
@@ -93,11 +100,12 @@ class ProductEdit extends Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen />
+        <LoadingScreen/>
       )
     } else if (haveData) {
       return (
         <ProductFormScreen
+          products={products}
           labels={labels}
           isEditForm={true}
           navigation={navigation}
@@ -124,6 +132,7 @@ const mapStateToProps = state => ({
   haveData: state.product.haveData,
   haveError: state.product.haveError,
   isLoading: state.product.loading,
+  products: state.products.data.results,
   prodctoptions: state.prodctsoptions.data.results,
   workingareas: state.workingareas.data.workingAreas
 })

@@ -1,5 +1,5 @@
-import { StyleSheet, Platform, Dimensions } from 'react-native'
-const window = Dimensions.get('window')
+import {Platform, StyleSheet} from 'react-native'
+
 export const mainThemeColor = '#f18d1a'
 let CIRCLE_RADIUS = 25;
 //export const mainThemeColor = '#f18dee'
@@ -115,7 +115,7 @@ export default StyleSheet.create({
     borderRadius: 2,
     borderColor: '#f1f1f1',
     shadowColor: '#222222',
-    shadowOffset: { width: 5, height: 5 },
+    shadowOffset: {width: 5, height: 5},
     shadowOpacity: 0.4,
     shadowRadius: 2,
     elevation: 1,
@@ -448,10 +448,10 @@ export default StyleSheet.create({
     paddingVertical: 20
   },
   dynamicHorizontalPadding: val => {
-    return { paddingHorizontal: val }
+    return {paddingHorizontal: val}
   },
   dynamicVerticalPadding: val => {
-    return { paddingVertical: val }
+    return {paddingVertical: val}
   },
   withBottomBorder: {
     borderBottomWidth: 1,
@@ -640,12 +640,13 @@ export default StyleSheet.create({
     flex: 1
   },
   flex: num => {
-    return { flex: num }
+    return {flex: num}
   },
   withBorder: {
     borderWidth: 1
   },
   withoutBorder: {
     borderWidth: 0
-  }
+  },
+  hitSlop: {top: 20, bottom: 20, left: 50, right: 50}
 })
