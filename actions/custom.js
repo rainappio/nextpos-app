@@ -10,7 +10,7 @@ export const formatDateObj = dateStr => {
     const dateObj = new Date(dateStr)
     return dateObj.toLocaleString('en-TW', {
       dateStyle: 'long',
-      timeZone: timezone
+      //timeZone: timezone //comment because Android error
     })
   }
 
@@ -24,7 +24,7 @@ export const formatDateFromMillis = dateMillis => {
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleString('en-TW', {
     dateStyle: 'long',
-    timeZone: 'Asia/Taipei'
+    //timeZone: 'Asia/Taipei'
   })
 }
 
@@ -41,7 +41,7 @@ export const formatDate = (date) => {
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleString('en-TW', {
     dateStyle: 'long',
-    timeZone: timezone,
+    //timeZone: timezone,
     hour12: false
   })
 }
@@ -56,7 +56,7 @@ export const formatDateOnly = date => {
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleDateString('en-TW', {
     dateStyle: 'long',
-    timeZone: timezone
+    //timeZone: timezone
   })
 }
 
@@ -70,7 +70,7 @@ export const formatTime = date => {
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleTimeString('en-TW', {
     dateStyle: 'long',
-    timeZone: timezone
+    //timeZone: timezone
   })
 }
 
@@ -84,7 +84,7 @@ export const getTimeDifference = date => {
 export const dateToLocaleString = dateObj => {
   return dateObj.toLocaleString('en-TW', {
     dateStyle: 'long',
-    timeZone: timezone
+    //timeZone: timezone
   })
 }
 
@@ -95,6 +95,6 @@ export const formatCurrency = number => {
   }
 }
 
-export function calculatePercentage (Amount, percent) {
+export function calculatePercentage(Amount, percent) {
   return (Amount * percent) / 100
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import "intl";
 import {
   Platform,
   StatusBar,
@@ -7,7 +8,16 @@ import {
   AsyncStorage,
   YellowBox,
   Dimensions
-} from 'react-native'
+} from 'react-native';
+if (Platform.OS === "android") {
+  // See https://github.com/expo/expo/issues/6536 for this issue.
+  if (typeof Intl.__disableRegExpRestore === "function") {
+    Intl.__disableRegExpRestore();
+  }
+}
+import "intl/locale-data/jsonp/en";
+
+
 import {Provider} from 'react-redux'
 import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
