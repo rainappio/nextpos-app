@@ -1,7 +1,7 @@
 import {Platform, StyleSheet} from 'react-native'
 
 export const mainThemeColor = '#f18d1a'
-let CIRCLE_RADIUS = 25;
+let CIRCLE_RADIUS = 50;
 //export const mainThemeColor = '#f18dee'
 //export const mainThemeColor = '#3e3d47'
 
@@ -612,7 +612,8 @@ export default StyleSheet.create({
     borderRadius: CIRCLE_RADIUS
   },
   ballContainer: {
-    height: 600,
+    flex: 1,
+
     borderWidth: 1,
     borderColor: mainThemeColor
   },
@@ -648,5 +649,10 @@ export default StyleSheet.create({
   withoutBorder: {
     borderWidth: 0
   },
-  hitSlop: {top: 20, bottom: 20, left: 50, right: 50}
+  hitSlop: {top: 20, bottom: 20, left: 50, right: 50},
+  bottomButtonContainerWithoutFlex: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginHorizontal: 15
+  },
 })

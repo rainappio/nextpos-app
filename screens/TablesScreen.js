@@ -1,11 +1,11 @@
-import React from 'react'
-import {FlatList, RefreshControl, Text, TouchableOpacity, View} from 'react-native'
+import React, {Component, useContext} from 'react'
+import {Animated, PanResponder, FlatList, RefreshControl, Text, TouchableOpacity, View, Dimensions} from 'react-native'
 import {connect} from 'react-redux'
 import AddBtn from '../components/AddBtn'
 import OrderStart from './OrderStart'
 import OrderItem from './OrderItem'
-import {getfetchOrderInflights, getMostRecentShiftStatus, getShiftStatus, getTableLayouts, getTablesAvailable,} from '../actions'
-import styles from '../styles'
+import {getfetchOrderInflights, getMostRecentShiftStatus, getShiftStatus, getTableLayouts, getTablesAvailable, } from '../actions'
+import styles, {mainThemeColor} from '../styles'
 import {successMessage} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {handleDelete, handleOrderSubmit} from '../helpers/orderActions'
@@ -20,6 +20,13 @@ import {StyledText} from "../components/StyledText";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import StyledTextInput from "../components/StyledTextInput";
+import {withAnchorPoint} from 'react-native-anchor-point';
+import * as Device from 'expo-device';
+import {style} from 'd3';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import TimeAgo from 'javascript-time-ago';
+import {getTimeDifference} from '../actions';
+import en from 'javascript-time-ago/locale/en';
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -30,9 +37,19 @@ class TablesScreen extends React.Component {
   constructor(props, context) {
     super(props, context)
 
+    const windowWidth = Dimensions.get('window').width - 30;
+    const windowHeight = Dimensions.get('window').height - 76;
+    console.log("SCREEN SIZE", context?.isTablet);
+
     this.state = {
       openBalance: 0,
-      refreshing: false
+      refreshing: false,
+      windowWidth: Dimensions.get('window').width - 30,
+      windowHeight: Dimensions.get('window').height - 76,
+      scaleMultiple: (Dimensions.get('window').width - 30) / 300,
+      tableIndex: 0,
+      isTablet: context?.isTablet,
+      themeStyle: context?.themeStyle
     }
   }
 
@@ -85,7 +102,7 @@ class TablesScreen extends React.Component {
         seatingCapacity: '總座位',
         tableCapacity: '總桌數',
         availableSeats: '空位',
-        availableTables: '空桌'
+        availableTables: '空桌',
       }
     })
   }
@@ -99,6 +116,13 @@ class TablesScreen extends React.Component {
       successMessage(this.context.t('refreshed'))
     })
   }
+
+  getTransform = () => {
+    let transform = {
+      transform: [{scale: this.state.scaleMultiple}],
+    };
+    return withAnchorPoint(transform, {x: 0, y: 0}, {width: 300, height: 300});
+  };
 
   handleOpenShift = (balance) => {
     handleOpenShift(balance, (response) => {
@@ -124,7 +148,7 @@ class TablesScreen extends React.Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (tablelayouts === undefined || tablelayouts.length === 0) {
       return (
@@ -139,8 +163,8 @@ class TablesScreen extends React.Component {
 
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={false}
-                          parentFullScreen={true}
-                          title={t('menu.tables')}
+              parentFullScreen={true}
+              title={t('menu.tables')}
             />
             <StyledText style={styles.messageBlock}>{t('noTableLayout')}</StyledText>
           </View>
@@ -151,8 +175,8 @@ class TablesScreen extends React.Component {
         <ThemeContainer>
           <View style={[styles.fullWidthScreen]}>
             <ScreenHeader backNavigation={false}
-                          parentFullScreen={true}
-                          title={t('menu.tables')}
+              parentFullScreen={true}
+              title={t('menu.tables')}
             />
             <View>
               <StyledText style={styles.messageBlock}>{t('shiftClosing')}</StyledText>
@@ -243,57 +267,266 @@ class TablesScreen extends React.Component {
         floorCapacity[layout.id].tableCount = tableCount
       })
 
-      return (
-        <ThemeScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this.onRefresh}
-            />
-          }
-        >
-          <NavigationEvents
-            onWillFocus={() => {
-              this.loadInfo()
-              this.loadLocalization()
-            }}
-          />
-
-          <View style={styles.fullWidthScreen}>
-            <ScreenHeader backNavigation={false}
-                          title={t('menu.tables')}
-                          parentFullScreen={true}
-                          rightComponent={
-                            <AddBtn
-                              onPress={() =>
-                                this.props.navigation.navigate('OrderStart')
-                              }
-                            />
-                          }
+      /*tablet render*/
+      if (this?.state?.isTablet) {
+        return (
+          <ThemeScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this.onRefresh}
+              />
+            }
+          >
+            <NavigationEvents
+              onWillFocus={() => {
+                this.loadInfo()
+                this.loadLocalization()
+              }}
             />
 
-            {tablelayouts.map((tblLayout, idx) => (
-              <View style={{}} key={idx}>
-                <View style={[styles.sectionBar, {flex: 1}]}>
-                  <Text
-                    style={[styles.sectionBarText, {flex: 4}
-                    ]}
-                  >
-                    {tblLayout.layoutName}
+            <View style={styles.fullWidthScreen}>
+              <ScreenHeader backNavigation={false}
+                title={t('menu.tables')}
+                parentFullScreen={true}
+                rightComponent={
+                  <AddBtn
+                    onPress={() =>
+                      this.props.navigation.navigate('OrderStart')
+                    }
+                  />
+                }
+              />
+
+
+
+
+              <View style={[styles.container, {marginTop: 0, justifyContent: 'flex-start', }]}>
+                {/* table page button */}
+                <View style={{flexDirection: 'row', width: '100%'}}>
+                  {tablelayouts?.map((tblLayout, index) => {
+                    return (<TouchableOpacity
+                      style={{
+                        borderColor: this.state.themeStyle.color,
+                        borderWidth: 0.5,
+                        borderBottomWidth: 0,
+                        padding: 4,
+                        borderTopLeftRadius: 4,
+                        borderTopRightRadius: 4,
+                        width: 120,
+                        backgroundColor: this.state?.tableIndex === index ? themeStyle.color : null,
+                      }}
+                      onPress={() => {this.setState({tableIndex: index})}}>
+                      <StyledText style={[styles.sectionBarText, {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                        {tblLayout.layoutName}
+                      </StyledText>
+                      {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_SEAT' && (
+                        <>
+                          <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                            {t('seatingCapacity')} {tblLayout.totalCapacity}
+                          </Text>
+                          <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                            {t('availableSeats')} {floorCapacity[tblLayout.id].seatCount}
+                          </Text>
+                        </>
+                      )}
+                      {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_TABLE' && (
+                        <>
+                          <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                            {t('tableCapacity')} {tblLayout.totalTables}
+                          </Text>
+                          <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                            {t('availableTables')} {floorCapacity[tblLayout.id].tableCount}
+                          </Text>
+                        </>
+                      )}
+
+                    </TouchableOpacity>)
+                  })}
+                  <View style={{flex: 1, }}>
+                    <TouchableOpacity
+                      style={{
+                        borderColor: this.state.themeStyle.color,
+                        borderWidth: 0.5,
+                        borderBottomWidth: 0,
+                        padding: 4,
+                        borderTopLeftRadius: 4,
+                        borderTopRightRadius: 4,
+                        width: 120,
+                        alignSelf: 'flex-end',
+                        flex: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: this.state?.tableIndex === -1 ? themeStyle.color : null,
+                      }}
+                      onPress={() => {this.setState({tableIndex: -1})}}>
+                      <Text style={[styles.sectionBarText]}>
+                        {t('otherOrders')}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                </View>
+                {/* table */}
+                {this.state.tableIndex >= 0 &&
+                  <View style={{flex: 1}}>
+                    <View onLayout={(event) => {
+                      let {x, y, width, height} = event.nativeEvent.layout;
+                      this.setState({
+                        tableWidth: width,
+                        tableHeight: height,
+                      })
+                    }} style={[styles.ballContainer, {height: '100%', }]}>
+                      <View style={{justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, left: 0, flexDirection: 'row'}}>
+                        <View style={{backgroundColor: mainThemeColor, height: 12, width: 12, margin: 6}}></View>
+                        <StyledText>{t('orderState.OTHERS')}</StyledText>
+                        <View style={{backgroundColor: '#b58cff', height: 12, width: 12, margin: 6}}></View>
+                        <StyledText>{t('orderState.OPEN')}</StyledText>
+                        <View style={{backgroundColor: '#8ccdff', height: 12, width: 12, margin: 6}}></View>
+                        <StyledText>{t('orderState.IN_PROCESS')}</StyledText>
+                        <View style={{backgroundColor: '#ff8cf6', height: 12, width: 12, margin: 6}}></View>
+                        <StyledText>{t('orderState.DELIVERED')}</StyledText>
+                        <View style={{backgroundColor: '#32cd32', height: 12, width: 12, margin: 6}}></View>
+                        <StyledText>{t('orderState.SETTLED')}</StyledText>
+
+                      </View>
+
+                      {
+                        tablelayouts[this.state.tableIndex]?.tables?.map(table => {
+                          return (this.state?.tableWidth && <Draggable
+                            table={table}
+                            key={table.tableId}
+                            layoutId={1}
+                            getTableLayout={this.props.getTableLayout}
+                            tableWidth={this.state?.tableWidth ?? this.state?.windowWidth}
+                            tableHeight={this.state?.tableHeight ?? this.state?.windowHeight}
+                            orders={ordersInflight}
+                          />)
+                        })
+                      }
+                    </View>
+                  </View>}
+                {this.state.tableIndex === -1 &&
+                  <View style={styles.mgrbtn20} key='noLayout'>
+                    <View style={[styles.sectionBar, {flex: 1, justifyContent: 'flex-start', paddingVertical: 0, }]}>
+
+                    </View>
+                    <FlatList
+                      data={ordersInflight['NO_LAYOUT']}
+                      renderItem={({item}) => {
+                        return (
+                          <OrderItem
+                            order={item}
+                            navigation={navigation}
+                            handleOrderSubmit={handleOrderSubmit}
+                            handleDelete={handleDelete}
+                            key={item.orderId}
+                          />
+                        )
+                      }}
+                      ListEmptyComponent={
+                        <View>
+                          <StyledText style={styles.messageBlock}>{t('noInflightOrders')}</StyledText>
+                        </View>
+                      }
+                      keyExtractor={(item, idx) => item.orderId}
+                    />
+                  </View>
+                }
+              </View>
+
+              <View style={styles.bottomButtonContainerWithoutFlex}>
+                <TouchableOpacity onPress={() => navigation.navigate('OrderDisplayScreen')}>
+                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                    {t('menu.orderDisplay')}
                   </Text>
-                  {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_SEAT' && (
-                    <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'right', marginRight: 4}]}>
-                      {t('seatingCapacity')} {tblLayout.totalCapacity} {t('availableSeats')} {floorCapacity[tblLayout.id].seatCount}
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ThemeScrollView >
+        )
+      }
+      /*phone render */
+      else {
+        return (
+          <ThemeScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this.onRefresh}
+              />
+            }
+          >
+            <NavigationEvents
+              onWillFocus={() => {
+                this.loadInfo()
+                this.loadLocalization()
+              }}
+            />
+
+            <View style={styles.fullWidthScreen}>
+              <ScreenHeader backNavigation={false}
+                title={t('menu.tables')}
+                parentFullScreen={true}
+                rightComponent={
+                  <AddBtn
+                    onPress={() =>
+                      this.props.navigation.navigate('OrderStart')
+                    }
+                  />
+                }
+              />
+
+              {tablelayouts.map((tblLayout, idx) => (
+                <View style={{}} key={idx}>
+                  <View style={[styles.sectionBar, {flex: 1}]}>
+                    <Text
+                      style={[styles.sectionBarText, {flex: 4}
+                      ]}
+                    >
+                      {tblLayout.layoutName}
                     </Text>
-                  )}
-                  {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_TABLE' && (
-                    <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'right', marginRight: 4}]}>
-                      {t('tableCapacity')} {tblLayout.totalTables} {t('availableTables')} {floorCapacity[tblLayout.id].tableCount}
-                    </Text>
-                  )}
+                    {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_SEAT' && (
+                      <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'right', marginRight: 4}]}>
+                        {t('seatingCapacity')} {tblLayout.totalCapacity} {t('availableSeats')} {floorCapacity[tblLayout.id].seatCount}
+                      </Text>
+                    )}
+                    {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_TABLE' && (
+                      <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'right', marginRight: 4}]}>
+                        {t('tableCapacity')} {tblLayout.totalTables} {t('availableTables')} {floorCapacity[tblLayout.id].tableCount}
+                      </Text>
+                    )}
+                  </View>
+                  <FlatList
+                    data={ordersInflight[tblLayout.id]}
+                    renderItem={({item}) => {
+                      return (
+                        <OrderItem
+                          order={item}
+                          navigation={navigation}
+                          handleOrderSubmit={handleOrderSubmit}
+                          handleDelete={handleDelete}
+                          key={item.orderId}
+                        />
+                      )
+                    }}
+                    ListEmptyComponent={
+                      <View>
+                        <StyledText style={styles.messageBlock}>{t('noInflightOrders')}</StyledText>
+                      </View>
+                    }
+                    keyExtractor={(item, idx) => item.orderId}
+                  />
+                </View>
+              ))}
+              <View style={styles.mgrbtn20} key='noLayout'>
+                <View style={[styles.sectionBar, {flex: 1, justifyContent: 'flex-start'}]}>
+                  <Text style={[styles.sectionBarText]}>
+                    {t('otherOrders')}
+                  </Text>
                 </View>
                 <FlatList
-                  data={ordersInflight[tblLayout.id]}
+                  data={ordersInflight['NO_LAYOUT']}
                   renderItem={({item}) => {
                     return (
                       <OrderItem
@@ -313,45 +546,19 @@ class TablesScreen extends React.Component {
                   keyExtractor={(item, idx) => item.orderId}
                 />
               </View>
-            ))}
-            <View style={styles.mgrbtn20} key='noLayout'>
-              <View style={[styles.sectionBar, {flex: 1, justifyContent: 'flex-start'}]}>
-                <Text style={[styles.sectionBarText]}>
-                  {t('otherOrders')}
-                </Text>
-              </View>
-              <FlatList
-                data={ordersInflight['NO_LAYOUT']}
-                renderItem={({item}) => {
-                  return (
-                    <OrderItem
-                      order={item}
-                      navigation={navigation}
-                      handleOrderSubmit={handleOrderSubmit}
-                      handleDelete={handleDelete}
-                      key={item.orderId}
-                    />
-                  )
-                }}
-                ListEmptyComponent={
-                  <View>
-                    <StyledText style={styles.messageBlock}>{t('noInflightOrders')}</StyledText>
-                  </View>
-                }
-                keyExtractor={(item, idx) => item.orderId}
-              />
-            </View>
 
-            <View style={[styles.bottom, styles.horizontalMargin]}>
-              <TouchableOpacity onPress={() => navigation.navigate('OrderDisplayScreen')}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                  {t('menu.orderDisplay')}
-                </Text>
-              </TouchableOpacity>
+              <View style={[styles.bottom, styles.horizontalMargin]}>
+                <TouchableOpacity onPress={() => navigation.navigate('OrderDisplayScreen')}>
+                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                    {t('menu.orderDisplay')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </ThemeScrollView>
-      )
+          </ThemeScrollView>
+        )
+      }
+
     } else {
       return null
     }
@@ -363,7 +570,7 @@ const mapStateToProps = state => ({
   ordersInflight: state.ordersinflight.data.orders,
   haveData: state.ordersinflight.haveData && state.tablelayouts.haveData,
   haveError: state.ordersinflight.haveError || state.tablelayouts.haveError,
-  isLoading: state.ordersinflight.loading ||  state.tablelayouts.loading,
+  isLoading: state.ordersinflight.loading || state.tablelayouts.loading,
   shiftStatus: state.shift.data.shiftStatus,
   availableTables: state.tablesavailable.data.availableTables,
   client: state.client.data,
@@ -389,3 +596,117 @@ const enhance = compose(
   withContext
 )
 export default enhance(TablesScreen)
+
+class Draggable extends Component {
+  constructor(props) {
+    super(props);
+    console.log(JSON.stringify(props));
+    this.state = {
+      dropAreaValues: null,
+      pan: new Animated.ValueXY(),
+      opacity: new Animated.Value(1)
+    };
+  }
+
+  componentDidMount() {
+    const windowWidth = this.props.tableWidth;
+    const windowHeight = this.props.tableHeight;
+    if (this.props.table.position != null) {
+      this.state.pan.setValue({x: Number(this.props.table.position.x * windowWidth), y: Number(this.props.table.position.y * windowHeight)})
+    } else {
+      this.state.pan.setValue({x: 0, y: 0})
+    }
+  }
+
+  UNSAFE_componentWillMount() {
+    this.panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onPanResponderGrant: (e, gesture) => {
+        this.state.pan.setOffset({
+          x: this.state.pan.x._value,
+          y: this.state.pan.y._value
+        })
+        //this.state.pan.setValue({ x:0, y:0})
+      },
+      onPanResponderMove: Animated.event([
+        null, {dx: this.state.pan.x, dy: this.state.pan.y}
+      ]),
+      onPanResponderRelease: (e, gesture) => {
+        this.state.pan.flattenOffset();
+        console.log(`on release: ${JSON.stringify(this.state.pan)}`)
+
+
+        Animated.timing(this.state.opacity, {
+          toValue: 0,
+          duration: 1000
+        }).start();
+
+      }
+    });
+  }
+
+  renderDraggable(layoutId, table, order) {
+    TimeAgo.addLocale(en)
+    const timeAgo = new TimeAgo()
+
+    const panStyle = {
+      transform: this.state.pan.getTranslateTransform()
+    }
+    return (
+      <View style={{padding: 4}}>
+        {
+          table.position !== null
+            ?
+            <View>
+              <View key={table.tableId}>
+                <StyledText style={{
+                  textAlign: 'center',
+                  padding: 4,
+                  fontSize: 12,
+                  borderRadius: 4,
+                  width: 60,
+                  color: 'rgba(0,0,0,0)'
+                }}>Reset-{table.tableName}
+                </StyledText>
+              </View>
+
+              <TouchableOpacity onPress={() => {console.log(table, JSON.stringify(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})))}}
+                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around'}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
+                {
+                  backgroundColor: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'OPEN' ? '#b58cff'
+                    : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'IN_PROCESS' ? '#8ccdff'
+                      : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'DELIVERED' ? '#ff8cf6'
+                        : '#32cd32'
+                })]}>
+                <Text style={{color: '#fff', textAlign: 'center', }}>{table.tableName}</Text>
+                <Text style={{color: '#fff', textAlign: 'center', }}>{`${this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.customerCount ?? 0}/${table.capacity}`}</Text>
+                {!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime &&
+                  <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
+                    <FontAwesomeIcon name={'clock-o'} color={getTimeDifference(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime) < 30 * 60 * 1000 ? mainThemeColor : 'red'} size={20} />
+                    <StyledText style={{marginLeft: 2}}>
+                      {timeAgo.format(Date.now() - getTimeDifference(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime), 'time')}
+                    </StyledText>
+                  </View>}
+              </TouchableOpacity>
+
+            </View>
+            :
+            <TouchableOpacity onPress={() => {console.log(table.tableName)}} style={[panStyle, styles.circle, {position: 'absolute'}]}>
+              <Text onPress={() => {console.log(table.tableName)}} style={{color: '#fff', textAlign: 'center', marginTop: 15}}>{table.tableName}</Text>
+            </TouchableOpacity>
+        }
+      </View>
+    );
+  }
+
+  render() {
+    const {table, layoutId, order} = this.props
+    return (
+      <View style={{alignItems: "flex-start", borderWidth: 0, marginBottom: 0}} ref='self'>
+        {this.renderDraggable(layoutId, table, order)}
+      </View>
+    );
+  }
+}
+
+//https://snack.expo.io/@yoobidev/draggable-component

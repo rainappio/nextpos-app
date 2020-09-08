@@ -118,7 +118,8 @@ const en = {
     SETTLED: 'Settled',
     REFUNDED: 'Refunded',
     COMPLETED: 'Completed',
-    DELETED: 'Deleted'
+    DELETED: 'Deleted',
+    OTHERS: 'Empty'
   },
   orderLog: {
     title: 'Order Logs',
