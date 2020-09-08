@@ -36,6 +36,10 @@ class OrdersSummaryRow extends React.Component {
             display: 'Prep',
             note: 'Preparing order'
           },
+          prepared: {
+            display: 'Prepared',
+            note: 'order prepared'
+          },
           delivered: {
             display: 'Deliver',
             note: 'Order is delivered'
@@ -65,6 +69,10 @@ class OrdersSummaryRow extends React.Component {
           inProcess: {
             display: '準備中',
             note: '訂單已送出準備中'
+          },
+          prepared: {
+            display: '準備完成',
+            note: '訂單已準備完成'
           },
           delivered: {
             display: '已送餐',
@@ -182,14 +190,14 @@ class OrdersSummaryRow extends React.Component {
             text: `${this.context.t('action.yes')}`,
             onPress: () => {
               dispatchFetchRequest(api.order.process(id), {
-                  method: 'POST',
-                  withCredentials: true,
-                  credentials: 'include',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: formData
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json',
                 },
+                body: formData
+              },
                 response => {
                   this.props.navigation.navigate('TablesSrc')
                 }).then()
@@ -204,14 +212,14 @@ class OrdersSummaryRow extends React.Component {
       )
     } else {
       dispatchFetchRequest(api.order.deliverLineItems(id), {
-          method: 'POST',
-          withCredentials: true,
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({lineItemIds: lineItemIds})
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({lineItemIds: lineItemIds})
+      },
         response => {
           this.props.navigation.navigate('TablesSrc')
         }).then()
@@ -258,23 +266,23 @@ class OrdersSummaryRow extends React.Component {
       <View style={styles.fullWidthScreen}>
         <View style={{flex: 1}}>
           <ScreenHeader backNavigation={true}
-                        parentFullScreen={true}
-                        backAction={() => this.handleCancel(order.orderId)}
-                        title={t('orderSummaryTitle')}
-                        rightComponent={
-                          order.state !== 'SETTLED' && (
-                            <AddBtn
-                              onPress={() =>
-                                this.props.navigation.navigate('OrderFormII', {
-                                  orderId: order.orderId
-                                })
-                              }
-                            />
-                          )
-                        }
+            parentFullScreen={true}
+            backAction={() => this.handleCancel(order.orderId)}
+            title={t('orderSummaryTitle')}
+            rightComponent={
+              order.state !== 'SETTLED' && (
+                <AddBtn
+                  onPress={() =>
+                    this.props.navigation.navigate('OrderFormII', {
+                      orderId: order.orderId
+                    })
+                  }
+                />
+              )
+            }
           />
 
-          <OrderTopInfo order={order}/>
+          <OrderTopInfo order={order} />
 
           <View style={[styles.sectionBar]}>
             <View style={[styles.tableCellView, {flex: 6}]}>
