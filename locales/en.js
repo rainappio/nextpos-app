@@ -61,6 +61,11 @@ const en = {
     deactivate: 'Deactivate'
   },
   // ==== domain specific ====
+  keyboardAction: {
+    clean: 'Clean',
+    ok: 'Done',
+    back: 'Back',
+  },
   product: {
     ungrouped: 'Ungrouped',
     pinned: 'Pinned',
@@ -101,6 +106,8 @@ const en = {
     lineState: 'State',
     serveBy: 'Serve By',
     copiedFrom: 'Copy From',
+    freeLineitem: 'Free',
+    cancelFreeLineitem: 'Not Free',
 
     // order specific actions
     liveOrders: 'Receive Live Orders',
@@ -109,7 +116,9 @@ const en = {
     // order messages
     submitted: 'Order Submitted',
     deleted: 'Order Deleted',
-    copied: 'Order Copied'
+    copied: 'Order Copied',
+    free: 'price is updated',
+    cancelFree: 'price is updated'
   },
   orderState: {
     OPEN: 'Open',

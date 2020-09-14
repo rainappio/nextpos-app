@@ -507,6 +507,35 @@ export default StyleSheet.create({
     color: '#fff',
     fontSize: 16
   },
+  cardDigitBox: {
+    borderWidth: 2,
+    width: 30,
+    height: 30,
+    marginRight: 5,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  cardLabel: isSelected => {
+    if (isSelected) {
+      return {
+        flex: 1,
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: mainThemeColor,
+        paddingVertical: 5
+      }
+    }
+    else {
+      return {
+        flex: 1,
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: '#00000000',
+        paddingVertical: 5
+      }
+    }
+
+  },
   markdownContainer: {
     backgroundColor: '#f1f1f1',
     padding: 10

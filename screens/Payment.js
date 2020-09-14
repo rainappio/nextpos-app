@@ -1,10 +1,18 @@
 import React from 'react'
 import PaymentFormScreen from './PaymentFormScreen'
+import PaymentFormScreenTablet from './PaymentFormScreenTablet'
 import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
+import {LocaleContext} from '../locales/LocaleContext'
 
 class Payment extends React.Component {
   static navigationOptions = {
     header: null
+  }
+
+  static contextType = LocaleContext
+  constructor(props, context) {
+    super(props, context)
+
   }
 
   handlePayment = async values => {
@@ -22,7 +30,7 @@ class Payment extends React.Component {
         }
       }, {
         defaultMessage: false
-      },response => {
+      }, response => {
       }).then()
 
     }
@@ -41,7 +49,7 @@ class Payment extends React.Component {
 
       }, {
         defaultMessage: false
-      },response => {
+      }, response => {
       }).then()
 
     }
@@ -61,8 +69,8 @@ class Payment extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
-    const order= this.props.navigation.state.params.order
+    const {navigation} = this.props
+    const order = this.props.navigation.state.params.order
 
     const initialDiscount = {
       offerId: 'NO_DISCOUNT',
@@ -82,8 +90,8 @@ class Payment extends React.Component {
       initialDiscount.discount = overrideDiscount
     }
 
-    return (
-      <PaymentFormScreen
+    return (<>
+      {this.context.isTablet ? <PaymentFormScreenTablet
         initialValues={{
           waiveServiceCharge: order.serviceCharge === 0,
           discount: initialDiscount
@@ -92,6 +100,16 @@ class Payment extends React.Component {
         navigation={navigation}
         onSubmit={this.handlePayment}
       />
+        : <PaymentFormScreen
+          initialValues={{
+            waiveServiceCharge: order.serviceCharge === 0,
+            discount: initialDiscount
+          }}
+          order={order}
+          navigation={navigation}
+          onSubmit={this.handlePayment}
+        />}
+    </>
     )
   }
 }

@@ -321,6 +321,15 @@ class OrderForm extends Component {
                             <View style={{flex: 1, marginHorizontal: 5}}>
                                 <TouchableOpacity
                                     onPress={() => {
+                                        this.props.goBack()
+                                    }}
+                                >
+                                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{flex: 1, marginHorizontal: 5}}>
+                                <TouchableOpacity
+                                    onPress={() => {
                                         this.props.handleSubmit()
 
                                     }}
@@ -331,15 +340,7 @@ class OrderForm extends Component {
                                 </TouchableOpacity>
                             </ View>
 
-                            <View style={{flex: 1, marginHorizontal: 5}}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        this.props.goBack()
-                                    }}
-                                >
-                                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
-                                </TouchableOpacity>
-                            </View>
+
                         </View>
 
                     </View>

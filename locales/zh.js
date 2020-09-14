@@ -61,6 +61,11 @@ const zh = {
     deactivate: '停用'
   },
   // ==== domain specific ====
+  keyboardAction: {
+    clean: '清除',
+    ok: '確定',
+    back: '返回',
+  },
   product: {
     ungrouped: '未分類',
     pinned: '置頂產品',
@@ -101,6 +106,8 @@ const zh = {
     lineState: '狀態',
     serveBy: '結帳人員',
     copiedFrom: '複製於',
+    freeLineitem: '招待',
+    cancelFreeLineitem: '取消招待',
 
     // order specific actions
     liveOrders: '打開即時訂單',
@@ -109,7 +116,9 @@ const zh = {
     // order messages
     submitted: '訂單送出',
     deleted: '訂單刪除',
-    copied: '複製訂單成功'
+    copied: '複製訂單成功',
+    free: '招待成功',
+    cancelFree: '取消招待成功'
   },
   orderState: {
     OPEN: '已開單',

@@ -67,7 +67,7 @@ class RenderStepper extends React.Component {
                 clear
                 error
                 onChange={onChange}
-                max={20}
+                max={100}
                 min={0}
                 readOnly={false}
                 value={value}

@@ -22,6 +22,7 @@ import NavigationService from "../navigation/NavigationService";
 import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer} from "../helpers/orderActions";
 import {SwipeRow} from 'react-native-swipe-list-view'
 import ScreenHeader from "../components/ScreenHeader";
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
@@ -322,6 +323,31 @@ class OrderFormII extends React.Component {
     }).then()
   }
 
+  handleFreeLineitem = (orderId, lineitemId, isFree) => {
+    const formData = new FormData()
+    formData.append('free', isFree)
+    dispatchFetchRequestWithOption(
+      api.order.updateLineItemPrice(orderId, lineitemId),
+      {
+        method: 'PATCH',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: formData
+      }, {
+      defaultMessage: false
+    }, response => {
+      response.json().then(data => {
+        const message = isFree ? 'order.free' : 'order.cancelFree'
+        successMessage(this.context.t(message))
+        this.props.navigation.navigate('OrderFormII')
+        this.props.getOrder(this.props.order.orderId)
+      })
+    }).then()
+  }
+
 
   render() {
     const {
@@ -331,11 +357,12 @@ class OrderFormII extends React.Component {
       isLoading,
       order,
       themeStyle,
+
       productsData
     } = this.props
     console.log("NewOrderItem", order)
 
-    const {t} = this.context
+    const {reverseThemeStyle, t} = this.context
     const map = new Map(Object.entries(products))
 
     let totalQuantity = 0
@@ -389,14 +416,14 @@ class OrderFormII extends React.Component {
                 <View style={[themeStyle, styles.orderItemSideBar]}>
                   <ScrollView style={{flex: 1}}>
                     <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle,]}>
-                      <TouchableOpacity style={[(this.state.selectedLabel === 'pinned' ? styles.choosenLabel : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: 'pinned'})}}>
+                      <TouchableOpacity style={[(this.state.selectedLabel === 'pinned' ? styles.selectedLabel : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: 'pinned'})}}>
                         {this.PanelHeader(t('pinned'), '0')}
                       </TouchableOpacity>
                     </View>
 
                     {labels.map(lbl => (
                       <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle,]}>
-                        <TouchableOpacity style={[(this.state.selectedLabel === lbl.label ? styles.choosenLabel : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: lbl.label})}}>
+                        <TouchableOpacity style={[(this.state.selectedLabel === lbl.label ? styles.selectedLabel : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: lbl.label})}}>
                           {this.PanelHeader(lbl.label, '0')}
                         </TouchableOpacity>
                       </View>
@@ -411,11 +438,11 @@ class OrderFormII extends React.Component {
                       {(this.state?.selectedLabel === 'pinned' && map.get('pinned') !== undefined && map.get('pinned')?.length > 0) ?
                         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get('pinned').map(prd => (
 
-                          <TouchableOpacity style={[{width: '22%', backgroundColor: 'green', marginLeft: '3%', marginBottom: '3%', borderRadius: 10}, themeStyle?.reverseTheme]}
+                          <TouchableOpacity style={[{width: '22%', backgroundColor: 'green', marginLeft: '3%', marginBottom: '3%', borderRadius: 10}, reverseThemeStyle]}
                             onPress={() => this.addItemToOrder(prd.id)}>
                             <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
-                              <StyledText style={themeStyle.reverseTheme}>{prd.name}</StyledText>
-                              <StyledText style={themeStyle.reverseTheme}>${prd.price}</StyledText>
+                              <StyledText style={reverseThemeStyle}>{prd.name}</StyledText>
+                              <StyledText style={reverseThemeStyle}>${prd.price}</StyledText>
                             </View>
                           </TouchableOpacity>
                         ))}</View> : this.state?.selectedLabel === 'pinned' ? <StyledText style={{alignSelf: 'center'}}>{t('nothing')}</StyledText> : null}
@@ -427,10 +454,10 @@ class OrderFormII extends React.Component {
                               {(map.get(lbl.label) !== undefined && map.get(lbl.label)?.length > 0) ?
                                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get(lbl.label).map(prd => (
 
-                                  <TouchableOpacity style={[{width: '22%', backgroundColor: 'green', marginLeft: '3%', marginBottom: '3%', borderRadius: 10}, themeStyle?.reverseTheme]} onPress={() => this.addItemToOrder(prd.id)}>
+                                  <TouchableOpacity style={[{width: '22%', backgroundColor: 'green', marginLeft: '3%', marginBottom: '3%', borderRadius: 10}, reverseThemeStyle]} onPress={() => this.addItemToOrder(prd.id)}>
                                     <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
-                                      <StyledText style={themeStyle.reverseTheme}>{prd.name}</StyledText>
-                                      <StyledText style={themeStyle.reverseTheme}>${prd.price}</StyledText>
+                                      <StyledText style={reverseThemeStyle}>{prd.name}</StyledText>
+                                      <StyledText style={reverseThemeStyle}>${prd.price}</StyledText>
                                     </View>
                                   </TouchableOpacity>
                                 ))}</View> : <StyledText style={{alignSelf: 'center'}}>{t('nothing')}</StyledText>}
@@ -536,38 +563,51 @@ class OrderFormII extends React.Component {
                   <View style={{flex: 7}}>
                     <ScrollView style={{flex: 1}}>
                       {order?.lineItems?.length > 0 ?
-                        order?.lineItems?.map((item) => {
+                        order?.lineItems?.map((item, index) => {
                           return (
                             <SwipeRow
-                              leftOpenValue={0}
+                              leftOpenValue={50}
                               rightOpenValue={-50}
-
+                              ref={(e) => this[`ref_${index}`] = e}
                             >
-                              <View style={{...styles.delIcon, flex: 1, marginBottom: '3%', borderRadius: 10, width: '100%', alignItems: 'flex-end'}} >
-                                <DeleteBtn
-                                  ref={(e) => this.ref = e}
-                                  handleDeleteAction={() => {
-                                    this.handleDeleteLineItem(
-                                      order.orderId,
-                                      item.lineItemId
-                                    );
-                                    console.log("MYREF2")
-                                    console.log("MYREF", this.ref)
-                                  }
-                                  }
-                                  islineItemDelete={true}
-                                  containerStyle={{flex: 1, width: '100%', justifyContent: 'center', alignItems: 'flex-end'}}
-                                />
+                              <View style={{flex: 1, marginBottom: '3%', borderRadius: 10, width: '100%', flexDirection: 'row'}}>
+                                <View style={{flex: 1, borderRadius: 10}} >
+                                  <TouchableOpacity
+                                    onPress={() => {
+                                      this[`ref_${index}`]?.closeRow()
+                                      if (item.price === 0) {
+                                        this.handleFreeLineitem(order.orderId, item.lineItemId, false)
+                                      } else {
+                                        this.handleFreeLineitem(order.orderId, item.lineItemId, true)
+                                      }
+                                    }}
+                                    style={{flex: 1, backgroundColor: mainThemeColor, borderRadius: 10, paddingLeft: 5, alignItems: 'flex-start', justifyContent: 'center'}}>
+                                    <StyledText style={{width: 40}}>{item.price === 0 ? t('order.cancelFreeLineitem') : t('order.freeLineitem')}</StyledText>
+                                  </TouchableOpacity>
+                                </View>
+                                <View style={{...styles.delIcon, flex: 1, borderRadius: 10}} >
+                                  <DeleteBtn
+                                    handleDeleteAction={() => {
+                                      this[`ref_${index}`]?.closeRow()
+                                      this.handleDeleteLineItem(
+                                        order.orderId,
+                                        item.lineItemId
+                                      );
+                                    }}
+                                    islineItemDelete={true}
+                                    containerStyle={{flex: 1, width: '100%', justifyContent: 'center', alignItems: 'flex-end'}}
+                                  />
+                                </View>
                               </View>
 
-                              <TouchableOpacity style={[themeStyle?.reverseTheme, {marginBottom: '3%', borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
+                              <TouchableOpacity style={[reverseThemeStyle, {marginBottom: '3%', borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
                                 activeOpacity={0.8}
                                 onPress={() => {this.editItem(item.productId, item)}}>
                                 <View style={{aspectRatio: 1.5, alignItems: 'center', flexDirection: 'row'}}>
                                   <View style={{flex: 2.5, flexDirection: 'column', paddingLeft: '3%'}}>
-                                    <StyledText style={[{...themeStyle.reverseTheme, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price}</StyledText>
-                                    {!!item?.options && <StyledText style={[themeStyle.reverseTheme, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
-                                    {!!item?.appliedOfferInfo && <StyledText style={[themeStyle.reverseTheme, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
+                                    <StyledText style={[{...reverseThemeStyle, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price}</StyledText>
+                                    {!!item?.options && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
+                                    {!!item?.appliedOfferInfo && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
                                   </View>
                                   <View style={{flexDirection: 'column', flex: 1, paddingRight: '3%', justifyContent: 'space-around', height: '100%', alignItems: 'flex-end', borderLeftWidth: 1}} >
                                     {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && <TouchableOpacity
@@ -578,21 +618,21 @@ class OrderFormII extends React.Component {
                                         this.toggleOrderLineItem(item.lineItemId);
                                       }}
                                     >
-                                      <StyledText style={{...themeStyle.reverseTheme, padding: 5, backgroundColor: 'gray', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1}}>{t('choose')}</StyledText>
+                                      <StyledText style={{...reverseThemeStyle, padding: 5, backgroundColor: 'gray', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1}}>{t('choose')}</StyledText>
                                     </TouchableOpacity>}
                                     <View>
-                                      {item?.state === 'OPEN' && <StyledText style={[themeStyle.reverseTheme, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
+                                      {item?.state === 'OPEN' && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
                                       {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && (
-                                        <StyledText style={[themeStyle.reverseTheme, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
+                                        <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
                                       )}
-                                      {item?.state === 'PREPARED' && <StyledText style={[themeStyle.reverseTheme, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
+                                      {item?.state === 'PREPARED' && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
                                       {item?.state === 'DELIVERED' && (
-                                        <StyledText style={[themeStyle.reverseTheme, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
+                                        <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
                                       )}
-                                      {item?.state === 'SETTLED' && <StyledText style={[themeStyle.reverseTheme, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
+                                      {item?.state === 'SETTLED' && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
                                     </View>
-                                    <StyledText style={[themeStyle.reverseTheme, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{`X${item.quantity}`}</StyledText>
-                                    <StyledText style={[themeStyle.reverseTheme, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.lineItemSubTotal}</StyledText>
+                                    <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{`X${item.quantity}`}</StyledText>
+                                    <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.lineItemSubTotal}</StyledText>
                                   </View>
                                 </View>
                               </TouchableOpacity>

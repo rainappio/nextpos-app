@@ -37,8 +37,10 @@ export const formatDate = (date) => {
     return undefined
   }
 
-  const dateMillis = Date.parse(date.slice(0, date.length - 5))
+  let plusIndex = (date.lastIndexOf('+') === -1 ? date.length : date.lastIndexOf('+'))
+  const dateMillis = Date.parse(date.slice(0, plusIndex))
   const dateObj = new Date(dateMillis)
+
   return dateObj.toLocaleString('en-TW', {
     dateStyle: 'long',
     //timeZone: timezone,
@@ -52,7 +54,8 @@ export const formatDateOnly = date => {
     return undefined
   }
 
-  const dateMillis = Date.parse(date.slice(0, date.length - 5))
+  let plusIndex = (date.lastIndexOf('+') === -1 ? date.length : date.lastIndexOf('+'))
+  const dateMillis = Date.parse(date.slice(0, plusIndex))
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleDateString('en-TW', {
     dateStyle: 'long',
@@ -66,7 +69,8 @@ export const formatTime = date => {
     return undefined
   }
 
-  const dateMillis = Date.parse(date.slice(0, date.length - 5))
+  let plusIndex = (date.lastIndexOf('+') === -1 ? date.length : date.lastIndexOf('+'))
+  const dateMillis = Date.parse(date.slice(0, plusIndex))
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleTimeString('en-TW', {
     dateStyle: 'long',
@@ -75,7 +79,8 @@ export const formatTime = date => {
 }
 
 export const getTimeDifference = date => {
-  const dateMillis = Date.parse(date.slice(0, date.length - 5))
+  let plusIndex = (date.lastIndexOf('+') === -1 ? date.length : date.lastIndexOf('+'))
+  const dateMillis = Date.parse(date.slice(0, plusIndex))
   const dateObj = new Date(dateMillis)
 
   return Date.now() - dateObj

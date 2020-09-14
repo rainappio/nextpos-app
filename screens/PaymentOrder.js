@@ -17,14 +17,14 @@ class PaymentOrder extends React.Component {
     super(props, context)
 
     this.state = {
-    	numbersArr: [],
-    	dynamicTotal: 0,
-			paymentsTypes: {
-  			0: {label: context.t('payment.cashPayment'), value: 'CASH'},
-  			1: {label: context.t('payment.cardPayment'), value: 'CARD'}
-  			},
-    	selectedPaymentType: 0
-  	}
+      numbersArr: [],
+      dynamicTotal: 0,
+      paymentsTypes: {
+        0: {label: context.t('payment.cashPayment'), value: 'CASH'},
+        1: {label: context.t('payment.cardPayment'), value: 'CARD'}
+      },
+      selectedPaymentType: 0
+    }
   }
 
   componentDidMount() {
@@ -33,16 +33,16 @@ class PaymentOrder extends React.Component {
 
   handlePaymentTypeSelection = (index) => {
     const selectedIndex = this.selectedPaymentType === index ? null : index
-    this.setState({ selectedPaymentType: selectedIndex })
+    this.setState({selectedPaymentType: selectedIndex})
   }
 
   addNum = num => {
     const total = this.state.dynamicTotal + Number(num)
-    this.setState({ dynamicTotal: total})
+    this.setState({dynamicTotal: total})
   }
 
   resetTotal = () => {
-    this.setState({ dynamicTotal: 0 })
+    this.setState({dynamicTotal: 0})
   }
 
   handleComplete = id => {
@@ -57,7 +57,7 @@ class PaymentOrder extends React.Component {
       body: formData
     }, {
       defaultMessage: false
-    },response => {
+    }, response => {
       this.props.navigation.navigate('TablesSrc')
     }).then()
   }
@@ -67,6 +67,7 @@ class PaymentOrder extends React.Component {
       orderId: this.props.navigation.state.params.orderId,
       paymentMethod: values.paymentMethod,
       billType: 'SINGLE',
+      //taxIdNumber
       paymentDetails: {}
     }
     if (values.paymentMethod === 'CASH') {
@@ -100,9 +101,9 @@ class PaymentOrder extends React.Component {
   }
 
   render() {
-    const { isLoading, order } = this.props
-  	const { paymentsTypes, selectedPaymentType } = this.state
-		const paymentsTypeslbl = Object.keys(paymentsTypes).map(key => paymentsTypes[key].label)
+    const {isLoading, order} = this.props
+    const {paymentsTypes, selectedPaymentType} = this.state
+    const paymentsTypeslbl = Object.keys(paymentsTypes).map(key => paymentsTypes[key].label)
 
     if (isLoading) {
       return (
