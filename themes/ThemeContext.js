@@ -9,13 +9,25 @@ export const themes = {
     color: '#444',
     backgroundColor: '#fff',
     borderColor: '#f1f1f1',
-    shadowColor: '#222222'
+    shadowColor: '#222222',
+    reverseTheme: {
+      color: '#f1f1f1',
+      backgroundColor: '#222222',
+      borderColor: '#f1f1f1',
+      shadowColor: '#f1f1f1',
+    },
   },
   dark: {
     color: '#f1f1f1',
     backgroundColor: '#222222',
     borderColor: '#f1f1f1',
-    shadowColor: '#f1f1f1'
+    shadowColor: '#f1f1f1',
+    reverseTheme: {
+      color: '#444',
+      backgroundColor: '#fff',
+      borderColor: '#f1f1f1',
+      shadowColor: '#222222'
+    },
   },
 }
 
@@ -43,6 +55,7 @@ export const complexTheme = {
 export const ThemeContext = React.createContext({
   theme: 'light',
   themeStyle: themes.dark,
+  themeStyleReverse: themes.light,
   complexTheme: complexTheme.light,
   toggleTheme: () => {
   }

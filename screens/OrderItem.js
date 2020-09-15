@@ -20,7 +20,7 @@ class OrderItem extends React.PureComponent {
       handleOrderSubmit,
       handleDelete
     } = this.props
-    const { t } = this.context
+    const {t} = this.context
 
     const timeDifference = getTimeDifference(order.createdTime)
     const thirtyMinutes = 30 * 60 * 1000
@@ -38,13 +38,15 @@ class OrderItem extends React.PureComponent {
         <TouchableOpacity
           style={[{flexDirection: 'row', flex: 9, marginLeft: 3}]}
           key={order.orderId}
-          onPress={() =>
+          onPress={() => {
+            console.log("OrderItem", order.orderId, order.state);
             navigation.navigate('OrdersSummary', {
               orderId: order.orderId,
               onSubmit: handleOrderSubmit,
               handleDelete: handleDelete,
               orderState: order.state
             })
+          }
           }
         >
           <View style={[styles.tableCellView, {flex: 5}]}>
@@ -65,7 +67,7 @@ class OrderItem extends React.PureComponent {
           </View>
 
           <View style={[styles.tableCellView, {flex: 3}]}>
-            <FontAwesomeIcon name={'clock-o'} color={timeDisplayColor} size={20}/>
+            <FontAwesomeIcon name={'clock-o'} color={timeDisplayColor} size={20} />
             <StyledText style={{marginLeft: 2}}>
               {timeAgo.format(Date.now() - timeDifference, 'time')}
             </StyledText>
@@ -74,7 +76,7 @@ class OrderItem extends React.PureComponent {
 
         <View style={[styles.tableCellView, {justifyContent: 'center', flex: 1}]}>
           <Tooltip popover={<Text>{this.context.t(`orderState.${order.state}`)}</Text>}
-                   backgroundColor={mainThemeColor}
+            backgroundColor={mainThemeColor}
           >
             {renderOrderState(order.state)}
           </Tooltip>

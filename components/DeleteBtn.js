@@ -25,7 +25,7 @@ class DeleteBtn extends React.Component {
       islineItemDelete,
       disabled
     } = this.props
-    const { t } = this.context
+    const {t} = this.context
 
     return (
       <TouchableOpacity
@@ -47,6 +47,7 @@ class DeleteBtn extends React.Component {
           )
         }}
         disabled={disabled}
+        style={this.props?.containerStyle}
       >
         {islineItemDelete ? (
           <Icon
@@ -55,10 +56,10 @@ class DeleteBtn extends React.Component {
             color="#fff"
           />
         ) : (
-          <Text style={[styles.bottomActionButton, styles.deleteButton]}>
-            {t('action.delete')}
-          </Text>
-        )}
+            <Text style={this.props?.textStyle ?? [styles.bottomActionButton, styles.deleteButton]}>
+              {t('action.delete')}
+            </Text>
+          )}
       </TouchableOpacity>
     )
   }

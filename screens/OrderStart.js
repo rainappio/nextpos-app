@@ -21,6 +21,7 @@ class OrderStart extends React.Component {
   }
 
   handleSubmit = values => {
+    console.log("handleSubmit", JSON.stringify(values))
     const createOrder = {}
     createOrder.orderType = values.orderType
     createOrder.tableId = values.tableId
@@ -33,14 +34,14 @@ class OrderStart extends React.Component {
     }
 
     dispatchFetchRequest(api.order.new, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(createOrder)
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify(createOrder)
+    },
       response => {
         response.json().then(data => {
           this.props.navigation.navigate('OrderFormII', {
@@ -51,7 +52,7 @@ class OrderStart extends React.Component {
   }
 
   render() {
-    const { navigation, isLoading, haveData, availableTables, tableLayouts } = this.props
+    const {navigation, isLoading, haveData, availableTables, tableLayouts} = this.props
 
     const initialValues = {
       male: 0,
@@ -71,18 +72,18 @@ class OrderStart extends React.Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else {
-        return (
-          <OrderForm
-            onSubmit={this.handleSubmit}
-            navigation={navigation}
-            tablesMap={tablesMap}
-            initialValues={initialValues}
-          />
-        )
-      }
+      return (
+        <OrderForm
+          onSubmit={this.handleSubmit}
+          navigation={navigation}
+          tablesMap={tablesMap}
+          initialValues={initialValues}
+        />
+      )
+    }
   }
 }
 

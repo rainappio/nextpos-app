@@ -27,6 +27,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import TimeAgo from 'javascript-time-ago';
 import {getTimeDifference} from '../actions';
 import en from 'javascript-time-ago/locale/en';
+import NewOrderModal from './NewOrderModal';
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -49,7 +50,9 @@ class TablesScreen extends React.Component {
       scaleMultiple: (Dimensions.get('window').width - 30) / 300,
       tableIndex: 0,
       isTablet: context?.isTablet,
-      themeStyle: context?.themeStyle
+      themeStyle: context?.themeStyle,
+      modalVisible: false,
+      orderModalData: {}
     }
   }
 
@@ -300,7 +303,15 @@ class TablesScreen extends React.Component {
 
 
 
-
+              <NewOrderModal modalVisible={this.state.modalVisible}
+                submitOrder={(orderId) => {
+                  this.setState({modalVisible: false});
+                  this.props.navigation.navigate('OrderFormII', {
+                    orderId: orderId
+                  })
+                }}
+                closeModal={() => {this.setState({modalVisible: false})}}
+                data={this.state.orderModalData} />
               <View style={[styles.container, {marginTop: 0, justifyContent: 'flex-start', }]}>
                 {/* table page button */}
                 <View style={{flexDirection: 'row', width: '100%'}}>
@@ -401,6 +412,20 @@ class TablesScreen extends React.Component {
                             tableWidth={this.state?.tableWidth ?? this.state?.windowWidth}
                             tableHeight={this.state?.tableHeight ?? this.state?.windowHeight}
                             orders={ordersInflight}
+                            openOrderModal={(item) => {
+                              console.log("item", item)
+                              this.setState({
+                                modalVisible: true,
+                                orderModalData: item
+                              })
+                            }}
+                            gotoOrderDetail={(order) => {
+                              console.log("gotoOrderDetail", order);
+                              navigation.navigate('OrderFormII', {
+                                orderId: order.orderId,
+                                orderState: order.state
+                              })
+                            }}
                           />)
                         })
                       }
@@ -645,7 +670,7 @@ class Draggable extends Component {
     });
   }
 
-  renderDraggable(layoutId, table, order) {
+  renderDraggable(layoutId, table, orders, openOrderModal) {
     TimeAgo.addLocale(en)
     const timeAgo = new TimeAgo()
 
@@ -670,7 +695,22 @@ class Draggable extends Component {
                 </StyledText>
               </View>
 
-              <TouchableOpacity onPress={() => {console.log(table, JSON.stringify(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})))}}
+              <TouchableOpacity
+                onPress={() => {
+                  if (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state) {
+                    this.props?.gotoOrderDetail({
+                      orderId: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.orderId,
+                      state: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state
+                    })
+                  } else {
+                    openOrderModal({
+                      table: table,
+                      order: orders
+                    });
+                  }
+
+                  console.log(table, JSON.stringify(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})))
+                }}
                 style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around'}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
                 {
                   backgroundColor: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'OPEN' ? '#b58cff'
@@ -691,19 +731,64 @@ class Draggable extends Component {
 
             </View>
             :
-            <TouchableOpacity onPress={() => {console.log(table.tableName)}} style={[panStyle, styles.circle, {position: 'absolute'}]}>
-              <Text onPress={() => {console.log(table.tableName)}} style={{color: '#fff', textAlign: 'center', marginTop: 15}}>{table.tableName}</Text>
-            </TouchableOpacity>
+            <View style={{marginTop: 46}}>
+              <View key={table.tableId}>
+                <StyledText style={{
+                  textAlign: 'center',
+                  padding: 4,
+                  fontSize: 12,
+                  borderRadius: 4,
+                  width: 60,
+                  color: 'rgba(0,0,0,0)'
+                }}>Reset-{table.tableName}
+                </StyledText>
+              </View>
+
+              <TouchableOpacity
+                onPress={() => {
+                  if (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state) {
+                    this.props?.gotoOrderDetail({
+                      orderId: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.orderId,
+                      state: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state
+                    })
+                  } else {
+                    openOrderModal({
+                      table: table,
+                      order: orders
+                    });
+                  }
+
+                  console.log(table, JSON.stringify(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})))
+                }}
+                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around'}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
+                {
+                  backgroundColor: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'OPEN' ? '#b58cff'
+                    : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'IN_PROCESS' ? '#8ccdff'
+                      : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'DELIVERED' ? '#ff8cf6'
+                        : '#32cd32'
+                })]}>
+                <Text style={{color: '#fff', textAlign: 'center', }}>{table.tableName}</Text>
+                <Text style={{color: '#fff', textAlign: 'center', }}>{`${this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.customerCount ?? 0}/${table.capacity}`}</Text>
+                {!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime &&
+                  <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
+                    <FontAwesomeIcon name={'clock-o'} color={getTimeDifference(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime) < 30 * 60 * 1000 ? mainThemeColor : 'red'} size={20} />
+                    <StyledText style={{marginLeft: 2}}>
+                      {timeAgo.format(Date.now() - getTimeDifference(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime), 'time')}
+                    </StyledText>
+                  </View>}
+              </TouchableOpacity>
+
+            </View>
         }
       </View>
     );
   }
 
   render() {
-    const {table, layoutId, order} = this.props
+    const {table, layoutId, orders, openOrderModal} = this.props
     return (
       <View style={{alignItems: "flex-start", borderWidth: 0, marginBottom: 0}} ref='self'>
-        {this.renderDraggable(layoutId, table, order)}
+        {this.renderDraggable(layoutId, table, orders, openOrderModal)}
       </View>
     );
   }

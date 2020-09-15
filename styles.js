@@ -22,11 +22,36 @@ export default StyleSheet.create({
     marginRight: 15,
     marginBottom: 23
   },
+  selectedLabel: {
+    backgroundColor: '#9f9e9e',
+    borderRadius: 10,
+    paddingLeft: 10,
+    borderWidth: 2
+  },
   childContainer: {
     flex: 1,
     justifyContent: 'center',
     marginTop: 8,
     marginBottom: 5
+  },
+  orderItemSideBar: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    marginTop: 8,
+    marginBottom: 5
+  },
+  orderItemBox: {
+    flex: 3,
+    justifyContent: 'center',
+    marginTop: 8,
+    marginBottom: 5
+  },
+  orderItemRightList: {
+    flex: 1,
+    justifyContent: 'center',
+    marginTop: 8,
+    marginBottom: 5,
+    marginLeft: 10
   },
   rootInput: {
     paddingVertical: 10,
@@ -508,6 +533,35 @@ export default StyleSheet.create({
     justifyContent: 'flex-end',
     marginTop: 10,
     marginBottom: 10
+  },
+  flexButton: {
+    flex: 1,
+    alignItems: 'center',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: mainThemeColor,
+    justifyContent: 'center',
+    backgroundColor: mainThemeColor,
+  },
+  flexButtonText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#fff',
+  },
+  flexButtonSecondAction: {
+    flex: 1,
+    alignItems: 'center',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: mainThemeColor,
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    color: mainThemeColor
+  },
+  flexButtonSecondActionText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: mainThemeColor,
   },
   bottomActionButton: {
     width: '100%',
