@@ -33,7 +33,6 @@ class SalesCharts extends React.Component {
         discountTotal: 'Discount Total',
         salesDistributionTitle: 'Sales by Month',
         salesRankingTitle: 'Product Sales Ranking',
-        product: 'Product',
         quantity: 'Quantity',
         amount: 'Amount',
         percentage: 'Percentage',
@@ -51,7 +50,6 @@ class SalesCharts extends React.Component {
         discountTotal: '總折扣',
         salesDistributionTitle: '年度銷售',
         salesRankingTitle: '產品銷售排行榜',
-        product: '產品',
         quantity: '總數量',
         amount: '金額',
         percentage: '百分比',
@@ -335,7 +333,7 @@ class SalesCharts extends React.Component {
           <View style={{marginBottom: 20}}>
             <View style={styles.sectionBar}>
               <View style={[styles.quarter_width, styles.tableCellView]}>
-                <Text style={[styles.sectionBarTextSmall]}>{t('product')}</Text>
+                <Text style={[styles.sectionBarTextSmall]}>{t('order.product')}</Text>
               </View>
 
               <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
