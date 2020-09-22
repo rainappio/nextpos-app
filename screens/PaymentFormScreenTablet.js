@@ -138,7 +138,6 @@ class PaymentFormScreenTablet extends React.Component {
             transactionObj.paymentDetails['CARD_TYPE'] = this.state.selectedCardLabel
             transactionObj.paymentDetails['LAST_FOUR_DIGITS'] = this.state.cardKeyboardResult.join('')
         }
-        console.log('handleSubmit', transactionObj)
 
         dispatchFetchRequestWithOption(api.payment.charge, {
             method: 'POST',
