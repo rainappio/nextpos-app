@@ -148,6 +148,9 @@ export const api = {
     deliverLineItems: orderId => {
       return `${apiRoot}/orders/${orderId}/lineitems/deliver`
     },
+    updateLineItemPrice: (orderId, lineItemId) => {
+      return `${apiRoot}/orders/${orderId}/lineitems/${lineItemId}/price`
+    },
     process: orderId => {
       return `${apiRoot}/orders/${orderId}/process`
     },
@@ -395,7 +398,7 @@ export const dispatchFetchRequest = async (
   failCallback
 ) => {
 
-  return dispatchFetchRequestWithOption(endpoint, payload, { defaultMessage: true }, successCallback, failCallback)
+  return dispatchFetchRequestWithOption(endpoint, payload, {defaultMessage: true}, successCallback, failCallback)
 }
 
 export const dispatchFetchRequestWithOption = async (

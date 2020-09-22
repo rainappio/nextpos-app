@@ -504,16 +504,6 @@ class OrderItemOptions extends React.Component {
                         <View style={[styles.bottom, styles.dynamicVerticalPadding(20), styles.horizontalMargin, {flexDirection: 'row'}]}>
                             <View style={{flex: 1, marginHorizontal: 5}}>
                                 <TouchableOpacity
-                                    onPress={this.props.handleSubmit}
-                                >
-                                    <Text style={[[styles.bottomActionButton, styles.actionButton]]}>
-                                        {t('action.save')}
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={{flex: 1, marginHorizontal: 5}}>
-                                <TouchableOpacity
                                     onPress={(value) => {
                                         console.log("goBack", value)
                                         this.props.goBack()
@@ -522,6 +512,17 @@ class OrderItemOptions extends React.Component {
                                     <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
                                 </TouchableOpacity>
                             </View>
+                            <View style={{flex: 1, marginHorizontal: 5}}>
+                                <TouchableOpacity
+                                    onPress={this.props.handleSubmit}
+                                >
+                                    <Text style={[[styles.bottomActionButton, styles.actionButton]]}>
+                                        {t('action.save')}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+
+
                         </View>
                     </View>
                 </ThemeScrollView>

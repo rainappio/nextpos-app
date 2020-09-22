@@ -124,6 +124,7 @@ export default class App extends React.Component {
       // theme
       theme: 'light',
       themeStyle: themes.light,
+      reverseThemeStyle: themes.dark,
       complexTheme: complexTheme.light,
       toggleTheme: this.toggleTheme
     }
@@ -147,11 +148,13 @@ export default class App extends React.Component {
   componentDidMount() {
     getTheme().then(async (theme) => {
       const themeStyle = theme === 'light' ? themes.light : themes.dark
+      const reverseThemeStyle = theme === 'light' ? themes.dark : themes.light
       const isTablet = await Device.getDeviceTypeAsync();// 1=PHONE 2=TABLET
       this.changeScreenOrientation(isTablet);
       this.setState({
         theme: theme,
         themeStyle: themeStyle,
+        reverseThemeStyle: reverseThemeStyle,
         complexTheme: complexTheme[theme],
         isTablet: (isTablet !== 1)
       })
@@ -223,6 +226,7 @@ export default class App extends React.Component {
     this.setState({
       theme: theme,
       themeStyle: themeStyleToChange,
+      reverseThemeStyle: this.state.themeStyle,
       complexTheme: complexTheme[theme]
     })
   }
@@ -250,6 +254,7 @@ export default class App extends React.Component {
             <ThemeContext.Provider value={{
               theme: this.state.theme,
               themeStyle: this.state.themeStyle,
+              reverseThemeStyle: this.state.reverseThemeStyle,
               complexTheme: this.state.complexTheme,
               toggleTheme: this.state.toggleTheme,
               isTablet: this.state.isTablet
@@ -264,7 +269,8 @@ export default class App extends React.Component {
                     locale: this.state.locale,
                     localize: this.localize,
                     changeLanguage: this.changeLanguage,
-                    themeStyle: this.state.themeStyle
+                    themeStyle: this.state.themeStyle,
+                    reverseThemeStyle: this.state.reverseThemeStyle
                   }}
                 />
               </LocaleContext.Provider>

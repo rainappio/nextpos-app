@@ -389,15 +389,15 @@ class TablesScreen extends React.Component {
                       })
                     }} style={[styles.ballContainer, {height: '100%', }]}>
                       <View style={{justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, left: 0, flexDirection: 'row'}}>
-                        <View style={{backgroundColor: mainThemeColor, height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#fff', borderColor: mainThemeColor, borderWidth: 2, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.OTHERS')}</StyledText>
-                        <View style={{backgroundColor: '#b58cff', height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: mainThemeColor, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.OPEN')}</StyledText>
-                        <View style={{backgroundColor: '#8ccdff', height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#F5CE58', height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.IN_PROCESS')}</StyledText>
-                        <View style={{backgroundColor: '#ff8cf6', height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#0091D4', height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.DELIVERED')}</StyledText>
-                        <View style={{backgroundColor: '#32cd32', height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#00A81F', height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.SETTLED')}</StyledText>
 
                       </View>
@@ -711,19 +711,20 @@ class Draggable extends Component {
 
                   console.log(table, JSON.stringify(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})))
                 }}
-                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around'}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
+                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: mainThemeColor, borderWidth: 5}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
                 {
-                  backgroundColor: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'OPEN' ? '#b58cff'
-                    : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'IN_PROCESS' ? '#8ccdff'
-                      : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'DELIVERED' ? '#ff8cf6'
-                        : '#32cd32'
+                  borderWidth: 0,
+                  backgroundColor: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'OPEN' ? mainThemeColor
+                    : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'IN_PROCESS' ? '#F5CE58'
+                      : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'DELIVERED' ? '#0091D4'
+                        : '#00A81F'
                 })]}>
-                <Text style={{color: '#fff', textAlign: 'center', }}>{table.tableName}</Text>
-                <Text style={{color: '#fff', textAlign: 'center', }}>{`${this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.customerCount ?? 0}/${table.capacity}`}</Text>
+                <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
+                <Text style={{color: '#000', textAlign: 'center', }}>{`${this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.customerCount ?? 0}/${table.capacity}`}</Text>
                 {!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime &&
                   <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
                     <FontAwesomeIcon name={'clock-o'} color={getTimeDifference(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime) < 30 * 60 * 1000 ? mainThemeColor : 'red'} size={20} />
-                    <StyledText style={{marginLeft: 2}}>
+                    <StyledText style={{marginLeft: 2, color: '#000'}}>
                       {timeAgo.format(Date.now() - getTimeDifference(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime), 'time')}
                     </StyledText>
                   </View>}
@@ -760,19 +761,20 @@ class Draggable extends Component {
 
                   console.log(table, JSON.stringify(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})))
                 }}
-                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around'}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
+                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: mainThemeColor, borderWidth: 5}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
                 {
-                  backgroundColor: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'OPEN' ? '#b58cff'
-                    : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'IN_PROCESS' ? '#8ccdff'
-                      : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'DELIVERED' ? '#ff8cf6'
-                        : '#32cd32'
+                  borderWidth: 0,
+                  backgroundColor: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'OPEN' ? mainThemeColor
+                    : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'IN_PROCESS' ? '#F5CE58'
+                      : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'DELIVERED' ? '#0091D4'
+                        : '#00A81F'
                 })]}>
-                <Text style={{color: '#fff', textAlign: 'center', }}>{table.tableName}</Text>
-                <Text style={{color: '#fff', textAlign: 'center', }}>{`${this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.customerCount ?? 0}/${table.capacity}`}</Text>
+                <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
+                <Text style={{color: '#000', textAlign: 'center', }}>{`${this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.customerCount ?? 0}/${table.capacity}`}</Text>
                 {!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime &&
                   <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
                     <FontAwesomeIcon name={'clock-o'} color={getTimeDifference(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime) < 30 * 60 * 1000 ? mainThemeColor : 'red'} size={20} />
-                    <StyledText style={{marginLeft: 2}}>
+                    <StyledText style={{marginLeft: 2, color: '#000'}}>
                       {timeAgo.format(Date.now() - getTimeDifference(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime), 'time')}
                     </StyledText>
                   </View>}

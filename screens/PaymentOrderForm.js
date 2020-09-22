@@ -122,8 +122,8 @@ class PaymentOrderForm extends React.Component {
       <ThemeKeyboardAwareScrollView>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={true}
-                        parentFullScreen={true}
-                        title={t('paymentMethodTitle')}
+            parentFullScreen={true}
+            title={t('paymentMethodTitle')}
           />
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
