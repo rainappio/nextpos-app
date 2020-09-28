@@ -28,6 +28,7 @@ import TimeAgo from 'javascript-time-ago';
 import {getTimeDifference} from '../actions';
 import en from 'javascript-time-ago/locale/en';
 import NewOrderModal from './NewOrderModal';
+import {getInitialTablePosition, getTablePosition} from "../helpers/tableAction";
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -312,7 +313,7 @@ class TablesScreen extends React.Component {
                 }}
                 closeModal={() => {this.setState({modalVisible: false})}}
                 data={this.state.orderModalData} />
-              <View style={[styles.container, {marginTop: 0, justifyContent: 'flex-start', }]}>
+              <View style={[styles.container, {marginTop: 0, marginBottom: 10, justifyContent: 'flex-start', }]}>
                 {/* table page button */}
                 <View style={{flexDirection: 'row', width: '100%'}}>
                   {tablelayouts?.map((tblLayout, index) => {
@@ -380,15 +381,15 @@ class TablesScreen extends React.Component {
                 </View>
                 {/* table */}
                 {this.state.tableIndex >= 0 &&
-                  <View style={{flex: 1}}>
+                  <View style={[styles.ballContainer, {flex: 7}]}>
                     <View onLayout={(event) => {
                       let {x, y, width, height} = event.nativeEvent.layout;
                       this.setState({
                         tableWidth: width,
                         tableHeight: height,
                       })
-                    }} style={[styles.ballContainer, {height: '100%', }]}>
-                      <View style={{justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, left: 0, flexDirection: 'row'}}>
+                    }} style={{width: '100%', height: '100%', alignSelf: 'center', flexWrap: 'wrap'}}>
+                      <View style={{justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, right: 0, flexDirection: 'row'}}>
                         <View style={{backgroundColor: '#fff', borderColor: mainThemeColor, borderWidth: 2, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.OTHERS')}</StyledText>
                         <View style={{backgroundColor: mainThemeColor, height: 12, width: 12, margin: 6}}></View>
@@ -403,11 +404,12 @@ class TablesScreen extends React.Component {
                       </View>
 
                       {
-                        tablelayouts[this.state.tableIndex]?.tables?.map(table => {
+                        tablelayouts[this.state.tableIndex]?.tables?.map((table, index) => {
                           return (this.state?.tableWidth && <Draggable
                             table={table}
                             key={table.tableId}
                             layoutId={1}
+                            index={index}
                             getTableLayout={this.props.getTableLayout}
                             tableWidth={this.state?.tableWidth ?? this.state?.windowWidth}
                             tableHeight={this.state?.tableHeight ?? this.state?.windowHeight}
@@ -460,7 +462,7 @@ class TablesScreen extends React.Component {
                 }
               </View>
 
-              <View style={styles.bottomButtonContainerWithoutFlex}>
+              <View style={{...styles.bottomButtonContainerWithoutFlex, marginTop: 0}}>
                 <TouchableOpacity onPress={() => navigation.navigate('OrderDisplayScreen')}>
                   <Text style={[styles.bottomActionButton, styles.actionButton]}>
                     {t('menu.orderDisplay')}
@@ -637,9 +639,9 @@ class Draggable extends Component {
     const windowWidth = this.props.tableWidth;
     const windowHeight = this.props.tableHeight;
     if (this.props.table.position != null) {
-      this.state.pan.setValue({x: Number(this.props.table.position.x * windowWidth), y: Number(this.props.table.position.y * windowHeight)})
+      this.state.pan.setValue(getTablePosition(this.props.table, windowWidth, windowHeight))
     } else {
-      this.state.pan.setValue({x: 0, y: 0})
+      this.state.pan.setValue(getInitialTablePosition(this.props.index, windowHeight))
     }
   }
 
@@ -670,7 +672,7 @@ class Draggable extends Component {
     });
   }
 
-  renderDraggable(layoutId, table, orders, openOrderModal) {
+  renderDraggable(layoutId, table, orders, openOrderModal, index) {
     TimeAgo.addLocale(en)
     const timeAgo = new TimeAgo()
 
@@ -678,22 +680,11 @@ class Draggable extends Component {
       transform: this.state.pan.getTranslateTransform()
     }
     return (
-      <View style={{padding: 4}}>
+      <View >
         {
           table.position !== null
             ?
             <View>
-              <View key={table.tableId}>
-                <StyledText style={{
-                  textAlign: 'center',
-                  padding: 4,
-                  fontSize: 12,
-                  borderRadius: 4,
-                  width: 60,
-                  color: 'rgba(0,0,0,0)'
-                }}>Reset-{table.tableName}
-                </StyledText>
-              </View>
 
               <TouchableOpacity
                 onPress={() => {
@@ -708,8 +699,6 @@ class Draggable extends Component {
                       order: orders
                     });
                   }
-
-                  console.log(table, JSON.stringify(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})))
                 }}
                 style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: mainThemeColor, borderWidth: 5}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
                 {
@@ -732,18 +721,7 @@ class Draggable extends Component {
 
             </View>
             :
-            <View style={{marginTop: 46}}>
-              <View key={table.tableId}>
-                <StyledText style={{
-                  textAlign: 'center',
-                  padding: 4,
-                  fontSize: 12,
-                  borderRadius: 4,
-                  width: 60,
-                  color: 'rgba(0,0,0,0)'
-                }}>Reset-{table.tableName}
-                </StyledText>
-              </View>
+            <View >
 
               <TouchableOpacity
                 onPress={() => {
@@ -787,10 +765,10 @@ class Draggable extends Component {
   }
 
   render() {
-    const {table, layoutId, orders, openOrderModal} = this.props
+    const {table, layoutId, orders, openOrderModal, index} = this.props
     return (
       <View style={{alignItems: "flex-start", borderWidth: 0, marginBottom: 0}} ref='self'>
-        {this.renderDraggable(layoutId, table, orders, openOrderModal)}
+        {this.renderDraggable(layoutId, table, orders, openOrderModal, index)}
       </View>
     );
   }

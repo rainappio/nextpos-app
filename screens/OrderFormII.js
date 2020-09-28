@@ -3,7 +3,7 @@ import {reduxForm} from 'redux-form'
 import {Alert, ScrollView, Text, TouchableOpacity, View, TouchableWithoutFeedback} from 'react-native'
 import {connect} from 'react-redux'
 import {Accordion, List} from '@ant-design/react-native'
-import {getLables, getOrder, getProducts} from '../actions'
+import {getLables, getProducts, clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -196,6 +196,23 @@ class OrderFormII extends React.Component {
     }).then()
   }
 
+  handleComplete = id => {
+    const formData = new FormData()
+    formData.append('action', 'COMPLETE')
+
+    dispatchFetchRequestWithOption(api.order.process(id), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {},
+      body: formData
+    }, {
+      defaultMessage: false
+    }, response => {
+      this.props.navigation.navigate('TablesSrc')
+    }).then()
+  }
+
   editItem = (productId, data) => {
     console.log("editItem", productId)
     dispatchFetchRequest(api.product.getById(productId), {
@@ -240,7 +257,7 @@ class OrderFormII extends React.Component {
   }
 
   toggleOrderLineItem = (lineItemId) => {
-    const lineItem = this.state.orderLineItems?.hasOwnProperty(lineItemId) ? this.state.orderLineItems[lineItemId] : {
+    const lineItem = this.state?.orderLineItems?.hasOwnProperty(lineItemId) ? this.state.orderLineItems[lineItemId] : {
       checked: false,
       value: lineItemId
     }
@@ -805,6 +822,9 @@ const mapDispatchToProps = (dispatch, props) => ({
   getLables: () => dispatch(getLables()),
   getProducts: () => dispatch(getProducts()),
   getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId)),
+  getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
+  getOrdersByDateRange: () => dispatch(getOrdersByDateRange()),
+  clearOrder: () => dispatch(clearOrder(props.navigation.state.params.orderId)),
 })
 
 OrderFormII = reduxForm({

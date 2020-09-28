@@ -222,6 +222,7 @@ export const api = {
   printer: {
     create: `${apiRoot}/printers`,
     getPrinters: `${apiRoot}/printers`,
+    getOnePrinter: `${apiRoot}/printers/checkout`,
     getPrinter: id => {
       return `${apiRoot}/printers/${id}`
     },
@@ -281,7 +282,10 @@ export const api = {
     }
   },
   payment: {
-    charge: `${apiRoot}/orders/transactions`
+    charge: `${apiRoot}/orders/transactions`,
+    getTransaction: id => {
+      return `${apiRoot}/orders/transactions/${id}`
+    },
   },
   table: {
     getavailTable: `${apiRoot}/orders/availableTables`

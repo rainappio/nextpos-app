@@ -1,6 +1,6 @@
 
 
-export const testPrinter = (ipAddress, successCallback, errorCallback) => {
+export const testPrinter = (xml = null, ipAddress, successCallback, errorCallback) => {
 
   const url = `http://${ipAddress}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=5000`
 
@@ -15,15 +15,18 @@ export const testPrinter = (ipAddress, successCallback, errorCallback) => {
   request += '<feed line="1"/>'
   request += '<cut type="feed"/>'
   request += '</epos-print>'
-  const soap = `<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body>${request}</s:Body></s:Envelope>`;
+  let soap = `<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body>${request}</s:Body></s:Envelope>`;
+  if (xml !== null) {
+    soap = xml
+  }
 
   console.log(soap)
 
   const xhr = new XMLHttpRequest();
 
-//Open an XMLHttpRequest object
+  //Open an XMLHttpRequest object
   xhr.open('POST', url);
-//<Header settings>
+  //<Header settings>
   xhr.setRequestHeader('Content-Type', 'text/xml; charset=utf-8')
   xhr.setRequestHeader('SOAPAction', '""')
   xhr.timeout = 5000
