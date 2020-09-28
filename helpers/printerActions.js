@@ -1,6 +1,6 @@
 
 
-export const testPrinter = (xml = null, ipAddress, successCallback, errorCallback) => {
+export const printMessage = (xml = null, ipAddress, successCallback, errorCallback) => {
 
   const url = `http://${ipAddress}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=5000`
 

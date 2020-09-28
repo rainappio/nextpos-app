@@ -9,7 +9,7 @@ import ScreenHeader from "../components/ScreenHeader";
 import Icon from "react-native-vector-icons/Ionicons";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
-import {testPrinter} from "../helpers/printerActions";
+import {printMessage} from "../helpers/printerActions";
 
 
 class CheckoutComplete extends React.Component {
@@ -31,10 +31,11 @@ class CheckoutComplete extends React.Component {
         completeOrder: 'Complete Order',
         printInvoiceXML: 'Print invoice again',
         printReceiptXML: 'Print receipt details again',
-        printerSuccess: 'Print Success',
-        printerWarning: 'Print Failure',
+        printerSuccess: 'Print succeeded',
+        printerWarning: 'Print failed',
         invoiceWarning: 'Invoice has not been set',
-        noPrinterWarning: 'Printer has not been set'
+        eInvoice: 'E-invoice',
+        orderReceipt: 'Order Receipt'
       },
       zh: {
         checkoutCompletedTitle: '結帳完成',
@@ -48,7 +49,8 @@ class CheckoutComplete extends React.Component {
         printerSuccess: '列印成功',
         printerWarning: '列印失敗',
         invoiceWarning: '尚未設定電子發票',
-        noPrinterWarning: '尚未設定出單機'
+        eInvoice: '電子發票',
+        orderReceipt: '訂單明細'
       }
     })
     this.state = {
@@ -56,6 +58,8 @@ class CheckoutComplete extends React.Component {
       receiptXML: null,
       printer: null,
       isPrintFirst: false,
+      isInvoicePrint: false,
+      isReceiptPrint: false,
     }
 
   }
@@ -71,10 +75,8 @@ class CheckoutComplete extends React.Component {
     if (!this.state.isPrintFirst && !!this.state.printer && (!!this.state.invoiceXML || !!this.state.receiptXML)) {
       this.setState({isPrintFirst: true})
       if (!!this.state?.invoiceXML)
-        this.handleTestPrint(this.state?.invoiceXML, this.state.printer.ipAddress)
-      else
-        warningMessage(this.context.t('invoiceWarning'))
-      this.handleTestPrint(this.state?.receiptXML, this.state.printer.ipAddress)
+        this.handlePrint(this.state?.invoiceXML, this.state.printer.ipAddress, true)
+      this.handlePrint(this.state?.receiptXML, this.state.printer.ipAddress, false)
     }
   }
 
@@ -118,14 +120,25 @@ class CheckoutComplete extends React.Component {
     }).then()
   }
 
-  handleTestPrint = (xml, ipAddress) => {
-    testPrinter(xml, ipAddress, () => {
-      successMessage(this.context.t('printerSuccess'))
+  handlePrint = (xml, ipAddress, isInvoice) => {
+    if (isInvoice) {
+      printMessage(xml, ipAddress, () => {
+        this.setState({isInvoicePrint: true})
 
-    }, () => {
-      warningMessage(this.context.t('printerWarning'))
+      }, () => {
+        this.setState({isInvoicePrint: false})
+      }
+      )
     }
-    )
+    else {
+      printMessage(xml, ipAddress, () => {
+        this.setState({isReceiptPrint: true})
+
+      }, () => {
+        this.setState({isReceiptPrint: false})
+      }
+      )
+    }
   }
 
   render() {
@@ -159,6 +172,26 @@ class CheckoutComplete extends React.Component {
                   {t('change')}: {formatCurrency(transactionResponse.paymentDetails.values['CASH_CHANGE'])}
                 </StyledText>
               )}
+              {!!this.state.invoiceXML && <View style={{flexDirection: 'row'}}>
+                <StyledText style={styles.messageBlock}>
+                  {t('eInvoice')}
+                </StyledText>
+                <Icon
+                  name={this.state.isInvoicePrint ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
+                  size={32}
+                  style={styles.buttonIconStyle}
+                />
+              </View>}
+              {!!this.state.receiptXML && <View style={{flexDirection: 'row'}}>
+                <StyledText style={styles.messageBlock}>
+                  {t('orderReceipt')}
+                </StyledText>
+                <Icon
+                  name={this.state.isReceiptPrint ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
+                  size={32}
+                  style={styles.buttonIconStyle}
+                />
+              </View>}
 
             </View>
 
@@ -171,18 +204,14 @@ class CheckoutComplete extends React.Component {
               flexDirection: 'row',
               flexWrap: 'wrap'
             }}>
-              <View style={{width: '50%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
+              {!!this.state.invoiceXML && <View style={{width: '50%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
                 <TouchableOpacity
                   onPress={() => {
                     if (!!this.state.printer) {
                       if (!!this.state?.invoiceXML)
-                        this.handleTestPrint(this.state?.invoiceXML, this.state.printer.ipAddress)
-                      else
-                        warningMessage(t('invoiceWarning'))
+                        this.handlePrint(this.state?.invoiceXML, this.state.printer.ipAddress, true)
                     }
 
-                    else
-                      warningMessage(t('noPrinterWarning'))
                   }}
                   style={{
                     width: '100%',
@@ -204,14 +233,13 @@ class CheckoutComplete extends React.Component {
                     {t('printInvoiceXML')}
                   </Text>
                 </TouchableOpacity>
-              </View>
-              <View style={{width: '50%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
+              </View>}
+              <View style={{width: `${!!this.state.invoiceXML ? '50%' : '100%'}`, padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
                 <TouchableOpacity
                   onPress={() => {
                     if (!!this.state.printer)
-                      this.handleTestPrint(this.state?.receiptXML, this.state.printer.ipAddress)
-                    else
-                      warningMessage(t('noPrinterWarning'))
+                      this.handlePrint(this.state?.receiptXML, this.state.printer.ipAddress, false)
+
                   }}
                   style={{
                     width: '100%',
@@ -319,7 +347,7 @@ class CheckoutComplete extends React.Component {
                 <TouchableOpacity
                   onPress={() => {
                     if (printers.length > 0)
-                      this.handleTestPrint(this.state?.invoiceXML, this.state.printer.ipAddress)
+                      this.handlePrint(this.state?.invoiceXML, this.state.printer.ipAddress, true)
                     else
                       console.warn('no printer')
                   }}
@@ -333,7 +361,7 @@ class CheckoutComplete extends React.Component {
                 <TouchableOpacity
                   onPress={() => {
                     if (printers.length > 0)
-                      this.handleTestPrint(this.state?.receiptXML, this.state.printer.ipAddress)
+                      this.handlePrint(this.state?.receiptXML, this.state.printer.ipAddress, false)
                     else
                       console.warn('no printer')
                   }}

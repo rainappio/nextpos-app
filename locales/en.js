@@ -231,7 +231,9 @@ const en = {
       unableToChangeState: 'Unable to change order state'
     }
   },
-  bar: 'Bar {{someValue}}'
+  bar: 'Bar {{someValue}}',
+  printerSuccess: 'Print Success',
+  printerWarning: 'Print Failure',
 }
 
 export default en
