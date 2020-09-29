@@ -32,7 +32,8 @@ const en = {
     manageShifts: 'Manage Shift',
     announcements: 'Announcements',
     manageOffers: 'Manage Offers',
-    preferences: 'Preferences'
+    preferences: 'Preferences',
+    eInvoice: 'E-invoice'
   },
   newItem: {
     new: 'New',
@@ -201,7 +202,13 @@ const en = {
   // ==== component specific ====
   monthPicker: {
     month: 'Month',
-    year: 'Year'
+    year: 'Year',
+    monthRange1to2: 'January - February',
+    monthRange3to4: 'March - April',
+    monthRange5to6: 'May - June',
+    monthRange7to8: 'July - August',
+    monthRange9to10: 'September - October',
+    monthRange11to12: 'November - December',
   },
   datetimeRange: {
     pickerTitle: 'Select a date time',
@@ -215,7 +222,10 @@ const en = {
     percentage: 'A percentage must be between 1 and 100',
     moreThanZero: 'Choose at least 1',
     balanceError: 'Please enter a positive value',
-    loginFailed: 'Login failed'
+    loginFailed: 'Login failed',
+    requireFourDigits: 'Please enter 4 digits number',
+    requireTwoUppercaseLetters: 'Please enter 2 uppercase letter',
+    requireNDigitsNumber: `Please enter {{n}} digits number`,
   },
   backend: {
     POST: 'Saved',
@@ -228,8 +238,28 @@ const en = {
       discountedTotalLessThanZero: 'Discounted amount cannot be less than zero',
       completeAllOrdersFirst: 'Please complete all orders before closing shift.',
       userRoleInUse: 'This user role is used by existing user',
-      unableToChangeState: 'Unable to change order state'
+      unableToChangeState: 'Unable to change order state',
+      alreadyExists: 'Name is already used'
     }
+  },
+  eInvoice: {
+    eInvoiceStatusTitle: 'E-invoice Number',
+    nowEinvoiceStatus: 'Status now',
+    rangeIdentifier: 'Invoice period',
+    rangeFrom: 'Invoice start number',
+    rangeTo: 'Invoice end number',
+    remainingInvoiceNumbers: 'Number of remaining',
+    viewAllInvoice: 'View all invoice',
+    ubn: 'UBN',
+    setUBN: 'Set UBN',
+    AES_KEY: 'Seed Password',
+    setAES_KEY: 'Set Seed Password',
+    invoice: 'Invoice',
+    setInvoice: 'Set Invoice',
+    eInvoiceTitle: 'E-invoice Number',
+    prefixYear: 'Prefix Year',
+    prefixMonth: 'Prefix Month',
+    prefix: 'Invoice Prefix',
   },
   bar: 'Bar {{someValue}}',
   printerSuccess: 'Print Success',

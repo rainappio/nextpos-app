@@ -77,6 +77,9 @@ import EditUserRole from '../screens/EditUserRole'
 import NewUserRole from '../screens/NewUserRole'
 import ManageUserRole from '../screens/ManageUserRole'
 import ManageOffers from '../screens/ManageOffers'
+import EinvoiceSettingScreen from '../screens/EinvoiceSettingScreen'
+import EinvoiceStatusScreen from '../screens/EinvoiceStatusScreen'
+import EinvoiceEditScreen from '../screens/EinvoiceEditScreen'
 import NewOffer from '../screens/NewOffer'
 import EditOffer from '../screens/EditOffer'
 import ProductsOverviewforOffer from '../screens/ProductsOverviewforOffer'
@@ -91,9 +94,9 @@ const Home = createStackNavigator({
   ClockIn: ClockIn,
   PasswordReset: PasswordReset
 })
-Home.navigationOptions = ({ screenProps: { t } }) => ({
+Home.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.home'),
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <TabBarIcon focused={focused} name={'md-home'} />
   )
 })
@@ -140,14 +143,17 @@ const Settings = createStackNavigator({
   NewUserRole: NewUserRole,
   ManageUserRole: ManageUserRole,
   ManageOffers: ManageOffers,
+  EinvoiceSettingScreen: EinvoiceSettingScreen,
+  EinvoiceStatusScreen: EinvoiceStatusScreen,
+  EinvoiceEditScreen: EinvoiceEditScreen,
   NewOffer: NewOffer,
   EditOffer: EditOffer,
   ProductsOverviewforOffer: ProductsOverviewforOffer
 
 })
-Settings.navigationOptions = ({ screenProps: { t } }) => ({
+Settings.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.settings'),
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'}
@@ -169,9 +175,9 @@ const Tables = createStackNavigator({
   PaymentOrder: PaymentOrder,
   CheckoutComplete: CheckoutComplete
 })
-Tables.navigationOptions = ({ screenProps: { t } }) => ({
+Tables.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.tables'),
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <TabBarIcon focused={focused} name="md-people" />
   )
 })
@@ -182,9 +188,9 @@ const Orders = createStackNavigator({
   UpdateOrderFromOrderDetail: UpdateOrder,
   NewOrderForm: OrderForm
 })
-Orders.navigationOptions = ({ screenProps: { t } }) => ({
+Orders.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.orders'),
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <TabBarIcon focused={focused} name="md-document" />
   )
 })
@@ -192,9 +198,9 @@ Orders.navigationOptions = ({ screenProps: { t } }) => ({
 const Reservation = createStackNavigator({
   Reservation: ReservationScreen
 })
-Reservation.navigationOptions = ({ screenProps: { t } }) => ({
+Reservation.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.reservations'),
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <TabBarIcon focused={focused} name="ios-calendar" />
   )
 })
@@ -209,9 +215,9 @@ const Reports = createStackNavigator({
   ShiftHistory: ShiftHistory,
   ShiftDetails: ShiftDetails
 })
-Reports.navigationOptions = ({ screenProps: { t } }) => ({
+Reports.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.reporting'),
-  tabBarIcon: ({ focused }) => (
+  tabBarIcon: ({focused}) => (
     <FontAwesomeIcon
       focused={focused}
       name="bar-chart"
@@ -256,7 +262,7 @@ const tabBar = createBottomTabNavigator({
   }
 }, {
   defaultNavigationOptions: {
-    tabBarOnPress: async ({ navigation, defaultHandler }) => {
+    tabBarOnPress: async ({navigation, defaultHandler}) => {
       const tokenObj = await getToken()
 
       if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {View} from 'react-native'
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import {mainThemeColor} from "../styles";
@@ -28,6 +28,11 @@ const SegmentedControl = props => {
     tabTextStyle: {color: mainThemeColor},
     activeTabStyle: {backgroundColor: mainThemeColor}
   }
+
+  useEffect(() => {
+    if (!!selectedIndex)
+      onChange(selectedIndex)
+  }, []);
 
   return (
     <View>

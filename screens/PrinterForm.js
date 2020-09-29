@@ -49,7 +49,7 @@ class PrinterForm extends React.Component {
   }
 
   handleTestPrint = (ipAddress) => {
-    printMessage(ipAddress, () => {
+    printMessage(null, ipAddress, () => {
       successMessage('Test printer succeeded')
 
     }, () => {

@@ -41,7 +41,7 @@ class ClientUserLoginForm extends React.Component {
     return (
       <ThemeScrollView>
         <View style={styles.fullWidthScreen}>
-          <ScreenHeader parentFullScreen={true} title={t('userLoginTitle')}/>
+          <ScreenHeader parentFullScreen={true} title={t('userLoginTitle')} />
 
           <View style={[styles.horizontalMargin, styles.flex(1)]}>
             <View>
@@ -71,15 +71,18 @@ class ClientUserLoginForm extends React.Component {
                 </View>
               </View>
             ) : (
-              <View style={[styles.sectionContainer, styles.flex(1)]}>
-                <Field
-                  name="password"
-                  component={PinCodeInput}
-                  onChange={val => this.props.onSubmit({username: clientusersName, password: val})}
-                  customHeight={60}
-                />
-              </View>
-            )}
+                <View style={[styles.sectionContainer, styles.flex(1)]}>
+                  <Field
+                    name="password"
+                    component={PinCodeInput}
+                    onChange={val => {
+                      if (val.length === 4)
+                        this.props.onSubmit({username: clientusersName, password: val})
+                    }}
+                    customHeight={60}
+                  />
+                </View>
+              )}
           </View>
         </View>
       </ThemeScrollView>

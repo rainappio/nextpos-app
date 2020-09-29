@@ -16,10 +16,10 @@ const InputText = ({
     keyboardType,
     editable,
     onPress,
-    autoCapitalize
+    autoCapitalize,
   },
-  meta: { error, touched, valid },
-  height, alignLeft, extraStyle,
+  meta: {error, touched, valid},
+  height, alignLeft, extraStyle, defaultValue,
   themeStyle,
   ...rest
 }) => (
@@ -34,14 +34,15 @@ const InputText = ({
         value={typeof (value) == 'number' ? value.toString() : value}
         editable={editable}
         autoCapitalize={autoCapitalize}
+        placeholder={defaultValue ?? null}
         placeholderTextColor={themeStyle.color}
         inputAccessoryViewID={name}
         {...rest}
         style={[
           styles.rootInput,
           //{ borderColor: !valid && touched ? 'red' : 'gray' },
-          { height: height },
-          (alignLeft && { textAlign: 'left' }),
+          {height: height},
+          (alignLeft && {textAlign: 'left'}),
           themeStyle,
           styles.withBorder,
           extraStyle,
@@ -51,12 +52,12 @@ const InputText = ({
         <InputAccessoryView nativeID={name}>
           <TouchableOpacity
             onPress={() => Keyboard.dismiss()}
-            style={[{ flex: 1, flexDirection: 'row-reverse' }, styles.grayBg]}
+            style={[{flex: 1, flexDirection: 'row-reverse'}, styles.grayBg]}
           >
             <Text
               style={[
                 styles.margin_15,
-                { fontSize: 16, fontWeight: 'bold', color: mainThemeColor }
+                {fontSize: 16, fontWeight: 'bold', color: mainThemeColor}
               ]}
             >
               Done

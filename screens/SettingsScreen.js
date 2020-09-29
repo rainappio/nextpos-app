@@ -4,6 +4,7 @@ import {Pages} from 'react-native-pages'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {default as MaterialIcon} from 'react-native-vector-icons/MaterialIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import styles, {mainThemeColor} from '../styles'
 import ScreenHeader from "../components/ScreenHeader";
 import MenuButton from "../components/MenuButton";
@@ -24,8 +25,8 @@ class SettingsScreen extends React.Component {
       <ThemeContainer>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader backNavigation={false}
-                        parentFullScreen={true}
-                        title={t('menu.settings')}/>
+            parentFullScreen={true}
+            title={t('menu.settings')} />
 
 
           <Pages indicatorColor={mainThemeColor}>
@@ -40,8 +41,8 @@ class SettingsScreen extends React.Component {
                       size={40}
                       style={[styles.buttonIconStyle]}
                     />
-                  }/>
-                <View style={styles.dynamicHorizontalPadding(6)}/>
+                  } />
+                <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
                   onPress={() => this.props.navigation.navigate('Store')}
                   title={t('settings.stores')}
@@ -51,7 +52,7 @@ class SettingsScreen extends React.Component {
                       size={40}
                       style={[styles.buttonIconStyle]}
                     />
-                  }/>
+                  } />
               </View>
 
               <View style={[styles.menuContainer]}>
@@ -68,7 +69,7 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
-                <View style={styles.dynamicHorizontalPadding(6)}/>
+                <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
                   onPress={() =>
                     this.props.navigation.navigate('StaffsOverview')
@@ -96,7 +97,7 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
-                <View style={styles.dynamicHorizontalPadding(6)}/>
+                <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
                   onPress={() => changeLanguage()}
                   title={t('settings.language')}
@@ -125,7 +126,7 @@ class SettingsScreen extends React.Component {
                       />
                     }
                   />
-                  <View style={styles.dynamicHorizontalPadding(6)}/>
+                  <View style={styles.dynamicHorizontalPadding(6)} />
                   <MenuButton
                     onPress={() => this.props.navigation.navigate('ShiftClose')}
                     title={t('settings.manageShifts')}
@@ -151,7 +152,7 @@ class SettingsScreen extends React.Component {
                       />
                     }
                   />
-                  <View style={styles.dynamicHorizontalPadding(6)}/>
+                  <View style={styles.dynamicHorizontalPadding(6)} />
                   <MenuButton
                     onPress={() => this.props.navigation.navigate('ManageOffers')}
                     title={t('settings.manageOffers')}
@@ -163,6 +164,21 @@ class SettingsScreen extends React.Component {
                       />
                     }
                   />
+                </View>
+                <View style={[styles.menuContainer, {width: '50%'}]}>
+                  <MenuButton
+                    onPress={() => this.props.navigation.navigate('EinvoiceStatusScreen')}
+                    title={t('settings.eInvoice')}
+                    icon={
+                      <FontAwesome5Icon
+                        name="file-invoice-dollar"
+                        size={40}
+                        style={[styles.buttonIconStyle]}
+                      />
+                    }
+                  />
+                  <View style={styles.dynamicHorizontalPadding(8)} />
+
                 </View>
               </View>
             </ScrollView>

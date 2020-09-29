@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Field, FieldArray, reduxForm} from 'redux-form'
 import {Text, TouchableOpacity, View} from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign'
@@ -22,6 +22,10 @@ class OptionFormScreen extends React.Component {
 
   constructor(props, context) {
     super(props)
+
+    this.state = {
+      initialValuesCount: props?.initialValues?.optionValues?.length ?? 0
+    }
   }
 
   componentDidMount() {
@@ -46,10 +50,14 @@ class OptionFormScreen extends React.Component {
       }
     })
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState !== this.state;
+  }
 
   render() {
     const {t} = this.context
     const {handleSubmit, handleDeleteOption, initialValues} = this.props
+
 
     const renderOptionValPopup = (name, index, fields) => (
       <View
@@ -62,14 +70,16 @@ class OptionFormScreen extends React.Component {
             name={`${name}.value`}
             placeholder={t('value')}
             alignLeft={true}
+            validate={isRequired}
           />
-          <WhiteSpace/>
+          <WhiteSpace />
           <Field
             component={InputText}
             name={`${name}.price`}
             placeholder={t('price')}
             keyboardType={`numeric`}
             alignLeft={true}
+            validate={isRequired}
             format={(value, name) => {
               return value !== undefined && value !== null ? String(value) : ''
             }}
@@ -79,8 +89,11 @@ class OptionFormScreen extends React.Component {
           <Icon
             name="minuscircleo"
             size={32}
-            color={mainThemeColor}
-            onPress={() => fields.remove(index)}
+            color={fields.length > 1 ? mainThemeColor : 'gray'}
+            onPress={() => {
+              if (fields.length > 1)
+                fields.remove(index)
+            }}
           />
         </View>
 
@@ -88,6 +101,10 @@ class OptionFormScreen extends React.Component {
     )
 
     const renderOptionsValues = ({label, fields}) => {
+      useEffect(() => {
+        if (fields.length === 0 && this.state.initialValuesCount === 0)
+          fields.push()
+      }, []);
       return (
         <View>
           <View style={styles.sectionContainer}>
@@ -111,7 +128,7 @@ class OptionFormScreen extends React.Component {
       <ThemeKeyboardAwareScrollView>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader parentFullScreen={true}
-                        title={t('productOptionTitle')}/>
+            title={t('productOptionTitle')} />
 
           <View>
             <View style={styles.tableRowContainerWithBorder}>
@@ -130,7 +147,7 @@ class OptionFormScreen extends React.Component {
                 <StyledText style={styles.fieldTitle}>{t('required')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                <Field name="required" component={RNSwitch}/>
+                <Field name="required" component={RNSwitch} />
               </View>
             </View>
 
@@ -139,7 +156,7 @@ class OptionFormScreen extends React.Component {
                 <StyledText style={styles.fieldTitle}>{t('multiple')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-                <Field name="multipleChoice" component={RNSwitch}/>
+                <Field name="multipleChoice" component={RNSwitch} />
               </View>
             </View>
 
