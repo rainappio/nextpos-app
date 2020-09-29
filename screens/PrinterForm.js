@@ -6,7 +6,7 @@ import InputText from '../components/InputText'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import RenderRadioBtn from '../components/RadioItem'
-import {testPrinter} from "../helpers/printerActions";
+import {printMessage} from "../helpers/printerActions";
 import {connect} from "react-redux";
 import {successMessage, warningMessage} from "../constants/Backend";
 import {StyledText} from "../components/StyledText";
@@ -49,18 +49,18 @@ class PrinterForm extends React.Component {
   }
 
   handleTestPrint = (ipAddress) => {
-    testPrinter(ipAddress, () => {
-        successMessage('Test printer succeeded')
+    printMessage(ipAddress, () => {
+      successMessage('Test printer succeeded')
 
-      }, () => {
-        warningMessage("Test printer failed. Please check printer's IP address")
-      }
+    }, () => {
+      warningMessage("Test printer failed. Please check printer's IP address")
+    }
     )
   }
 
   render() {
-    const { handleSubmit, isEdit, handleEditCancel, ipAddress } = this.props
-    const { t } = this.context
+    const {handleSubmit, isEdit, handleEditCancel, ipAddress} = this.props
+    const {t} = this.context
 
     return (
       <View style={styles.flex(1)}>
@@ -91,7 +91,7 @@ class PrinterForm extends React.Component {
                 validate={isRequired}
                 placeholder={t('ipAddress')}
                 keyboardType="numeric"
-                onChange={(value) => this.setState({ ipAddress: value })}
+                onChange={(value) => this.setState({ipAddress: value})}
               />
             </View>
           </View>
@@ -127,7 +127,7 @@ class PrinterForm extends React.Component {
               {isEdit ? t('action.update') : t('action.save')}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { this.handleTestPrint(ipAddress) }}>
+          <TouchableOpacity onPress={() => {this.handleTestPrint(ipAddress)}}>
             <Text style={[styles.bottomActionButton, styles.actionButton]}>
               {t('testPrint')}
             </Text>
@@ -139,14 +139,14 @@ class PrinterForm extends React.Component {
               </Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('PrinternKDS')}
-            >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                {t('action.cancel')}
-              </Text>
-            </TouchableOpacity>
-          )}
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('PrinternKDS')}
+              >
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                  {t('action.cancel')}
+                </Text>
+              </TouchableOpacity>
+            )}
         </View>
       </View>
     )

@@ -232,7 +232,9 @@ const zh = {
       unableToChangeState: '無法更改訂單狀態'
     }
   },
-  bar: 'Bar {{someValue}}'
+  bar: 'Bar {{someValue}}',
+  printerSuccess: '列印成功',
+  printerWarning: '列印失敗',
 }
 
 export default zh

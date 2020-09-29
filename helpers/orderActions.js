@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequestWithOption, successMessage} from "../constants/Backend";
+import {api, dispatchFetchRequestWithOption, successMessage, warningMessage} from "../constants/Backend";
 import NavigationService from "../navigation/NavigationService";
 import {Image} from "react-native";
 import images from "../assets/images";
@@ -8,6 +8,7 @@ import React from "react";
 import styles from "../styles"
 import i18n from 'i18n-js'
 import {StyledText} from "../components/StyledText";
+import {printMessage} from "./printerActions";
 
 export const renderOrderState = state => {
   switch (state) {
@@ -16,8 +17,8 @@ export const renderOrderState = state => {
         <Icon
           name={'md-list'}
           size={25}
-          style={styles.iconStyle}/>
-        )
+          style={styles.iconStyle} />
+      )
     case 'IN_PROCESS':
       return <Image
         source={images.process}
@@ -85,11 +86,25 @@ export const handleOrderSubmit = id => {
       headers: {},
       body: formData
     }, {
-      defaultMessage: false
-    },
+    defaultMessage: false
+  },
     response => {
       response.json().then(data => {
         if (data.hasOwnProperty('orderId')) {
+          console.log('handleOrderSubmit', data)
+          data?.printerInstructions?.map((printerInstructions) => {
+            printerInstructions?.ipAddresses?.map((ipAddresses) => {
+              for (let i = 0; i < printerInstructions.noOfPrintCopies; i++) {
+                printMessage(printerInstructions.printInstruction, ipAddresses, () => {
+                  successMessage(i18n.t('printerSuccess'))
+
+                }, () => {
+                  warningMessage(i18n.t('printerWarning'))
+                }
+                )
+              }
+            })
+          })
           successMessage(i18n.t('order.submitted'))
           NavigationService.navigate('TablesSrc')
         }
@@ -109,8 +124,8 @@ export const handleDelete = (id, callback) => {
         'Content-Type': 'application/json'
       }
     }, {
-      defaultMessage: false
-    },
+    defaultMessage: false
+  },
     response => {
       successMessage(i18n.t('order.deleted'))
 
@@ -120,3 +135,4 @@ export const handleDelete = (id, callback) => {
     }
   ).then()
 }
+

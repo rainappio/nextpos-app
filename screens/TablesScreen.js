@@ -1,5 +1,5 @@
 import React, {Component, useContext} from 'react'
-import {Animated, PanResponder, FlatList, RefreshControl, Text, TouchableOpacity, View, Dimensions} from 'react-native'
+import {Animated, PanResponder, FlatList, RefreshControl, Text, TouchableOpacity, View, Dimensions, KeyboardAvoidingView} from 'react-native'
 import {connect} from 'react-redux'
 import AddBtn from '../components/AddBtn'
 import OrderStart from './OrderStart'
@@ -199,51 +199,53 @@ class TablesScreen extends React.Component {
     } else if (shiftStatus === 'INACTIVE') {
       return (
         <ThemeContainer>
-          <View style={styles.modalContainer}>
-            <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
-              <Text style={styles.screenSubTitle}>
-                {t('openShift.title')}
-              </Text>
-              <View style={styles.tableRowContainer}>
-                <View style={[styles.tableCellView, {flex: 1}]}>
-                  <StyledText style={[styles.fieldTitle]}>
-                    {t('openShift.openBalance')}
-                  </StyledText>
+          <KeyboardAvoidingView style={{flex: 1}} behavior="height">
+            <View style={styles.modalContainer}>
+              <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
+                <Text style={styles.screenSubTitle}>
+                  {t('openShift.title')}
+                </Text>
+                <View style={styles.tableRowContainer}>
+                  <View style={[styles.tableCellView, {flex: 1}]}>
+                    <StyledText style={[styles.fieldTitle]}>
+                      {t('openShift.openBalance')}
+                    </StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                    <StyledTextInput
+                      name="balance"
+                      type="text"
+                      onChangeText={value =>
+                        this.setState({openBalance: value})
+                      }
+                      placeholder={t('openShift.enterAmount')}
+                      keyboardType={`numeric`}
+                    />
+                  </View>
                 </View>
-                <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                  <StyledTextInput
-                    name="balance"
-                    type="text"
-                    onChangeText={value =>
-                      this.setState({openBalance: value})
-                    }
-                    placeholder={t('openShift.enterAmount')}
-                    keyboardType={`numeric`}
-                  />
-                </View>
-              </View>
-              <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-                <View style={{width: '45%', marginHorizontal: 5}}>
-                  <TouchableOpacity onPress={() => this.handleOpenShift(this.state.openBalance)}>
-                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                      {t('openShift.open')}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={{width: '45%', marginHorizontal: 5}}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.navigate('LoginSuccess')
-                    }}
-                  >
-                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                      {t('openShift.cancel')}
-                    </Text>
-                  </TouchableOpacity>
+                <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+                  <View style={{width: '45%', marginHorizontal: 5}}>
+                    <TouchableOpacity onPress={() => this.handleOpenShift(this.state.openBalance)}>
+                      <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                        {t('openShift.open')}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{width: '45%', marginHorizontal: 5}}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate('LoginSuccess')
+                      }}
+                    >
+                      <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                        {t('openShift.cancel')}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
+          </KeyboardAvoidingView>
         </ThemeContainer>
       )
     } else if (haveData) {
