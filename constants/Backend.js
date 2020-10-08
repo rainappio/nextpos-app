@@ -354,6 +354,23 @@ export const api = {
     delete: id => {
       return `${apiRoot}/announcements/${id}`
     }
+  },
+  eInvoice: {
+    create: `${apiRoot}/invoiceNumbers`,
+    getByUbn: ubn => {
+      return `${apiRoot}/invoiceNumbers/${ubn}`
+    },
+    getAllByUbn: ubn => {
+      return `${apiRoot}/invoiceNumbers/${ubn}/all`
+    },
+    add: (ubn, id) => {
+      return `${apiRoot}/invoiceNumbers/${ubn}/ranges/${id}`
+    },
+    delete: (ubn, id, rangeFrom) => {
+      return `${apiRoot}/invoiceNumbers/${ubn}/ranges/${id}/numberRanges/${rangeFrom}`
+    },
+    checkEligibility: `${apiRoot}/einvoices/checkEligibility`,
+    generateAESKey: `${apiRoot}/clients/me/aeskey`,
   }
 }
 
@@ -489,6 +506,8 @@ export const errorAlert = response => {
         errorMessage = i18n.t('backend.404')
         break
       case 412:
+        errorMessage = content.localizedMessageKey != null ? i18n.t(`backend.${content.localizedMessageKey}`) : content.message
+      case 409:
         errorMessage = content.localizedMessageKey != null ? i18n.t(`backend.${content.localizedMessageKey}`) : content.message
         break
       default:

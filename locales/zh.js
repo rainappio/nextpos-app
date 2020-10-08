@@ -32,7 +32,8 @@ const zh = {
     manageShifts: '開關帳',
     announcements: '公告',
     manageOffers: '促銷管理',
-    preferences: '喜好設定'
+    preferences: '喜好設定',
+    eInvoice: '電子發票'
   },
   newItem: {
     new: '新增',
@@ -202,7 +203,13 @@ const zh = {
   // ==== component specific ====
   monthPicker: {
     month: '月',
-    year: '年'
+    year: '年',
+    monthRange1to2: '一月 - 二月',
+    monthRange3to4: '三月 - 四月',
+    monthRange5to6: '五月 - 六月',
+    monthRange7to8: '七月 - 八月',
+    monthRange9to10: '九月 - 十月',
+    monthRange11to12: '十一月 - 十二月',
   },
   datetimeRange: {
     pickerTitle: '選擇日期與時間',
@@ -216,7 +223,11 @@ const zh = {
     percentage: '百分比需介於1至100',
     moreThanZero: '數量至少要大於零',
     balanceError: '請輸入大於零的數字',
-    loginFailed: '登入失敗'
+    loginFailed: '登入失敗',
+    requireFourDigits: '請輸入四位數字',
+    requireEightDigits: '請輸入八位數字',
+    requireTwoUppercaseLetters: '請輸入兩個大寫英文',
+    requireNDigitsNumber: '請輸入{{n}}位數字',
   },
   backend: {
     POST: '儲存成功',
@@ -229,8 +240,28 @@ const zh = {
       discountedTotalLessThanZero: '打折後的金額不能小於零',
       completeAllOrdersFirst: '請先完成所有的訂單',
       userRoleInUse: '此權限正被使用中',
-      unableToChangeState: '無法更改訂單狀態'
+      unableToChangeState: '無法更改訂單狀態',
+      alreadyExists: '名稱已存在'
     }
+  },
+  eInvoice: {
+    eInvoiceStatusTitle: '電子發票',
+    nowEinvoiceStatus: '目前狀態',
+    rangeIdentifier: '發票期別',
+    rangeFrom: '發票起號',
+    rangeTo: '發票迄號',
+    remainingInvoiceNumbers: '剩餘張數',
+    viewAllInvoice: '查看所有發票',
+    ubn: '統一編號',
+    setUBN: '設定統一編號',
+    AES_KEY: '種子密碼',
+    setAES_KEY: '設定種子密碼',
+    invoice: '統一發票',
+    setInvoice: '設定統一發票',
+    eInvoiceTitle: '電子發票號碼',
+    prefixYear: '字軌年份',
+    prefixMonth: '字軌月份',
+    prefix: '發票字軌',
   },
   bar: 'Bar {{someValue}}',
   printerSuccess: '列印成功',

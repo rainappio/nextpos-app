@@ -30,7 +30,7 @@ class DropDown extends Component {
           style={pickerSelectStyles(color)}
           Icon={() => {
             return (
-              <Icon name='md-arrow-dropdown' size={30} color={color} style={{position: 'absolute', top: -9, right: 0, borderWidth: 0}}/>
+              <Icon name='md-arrow-dropdown' size={30} color={color} style={{position: 'absolute', top: -9, right: 0, borderWidth: 0}} />
             )
           }}
         />

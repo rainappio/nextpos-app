@@ -46,3 +46,20 @@ export const isPercentage = value =>
 
 export const isCountZero = value =>
   value === 0 ? i18n.t('errors.moreThanZero') : undefined
+
+
+export const isTwoBigWords = val => {
+  if (!val || val?.length !== 2 || !/^[A-Z]*$/.test(val)) {
+    return i18n.t('errors.requireTwoUppercaseLetters')
+  }
+  else
+    return undefined
+}
+
+export const isNDigitsNumber = (n) => (value) => {
+  if (!value || value?.length !== n || isNaN(value)) {
+    return i18n.t('errors.requireNDigitsNumber', {n: n})
+  }
+  else
+    return undefined
+}

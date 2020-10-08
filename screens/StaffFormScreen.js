@@ -2,7 +2,7 @@ import React from 'react'
 import {Field, reduxForm} from 'redux-form'
 import {Keyboard, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
-import {isRequired} from '../validators'
+import {isRequired, isNDigitsNumber} from '../validators'
 import InputText from '../components/InputText'
 import PinCodeInput from '../components/PinCodeInput'
 import {getClientUsrs, resolveRoles} from '../actions'
@@ -28,14 +28,15 @@ class StaffFormScreen extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    const selectedRoleIndex = this.props.initialValues !== undefined ? this.props.initialValues.selectedRole : null
+    const selectedRoleIndex = this.props.initialValues !== undefined ? this.props.initialValues.selectedRole : 0
+    console.log('props', this.props.initialValues)
 
     this.state = {
       selectedRole: selectedRoleIndex,
       roles: {
-        0: { value: 'USER', label: context.t('roles.USER')},
-        1: { value: 'MANAGER', label: context.t('roles.MANAGER')},
-        2: { value: 'Owner', label: context.t('roles.OWNER')},
+        0: {value: 'USER', label: context.t('roles.USER')},
+        1: {value: 'MANAGER', label: context.t('roles.MANAGER')},
+        2: {value: 'Owner', label: context.t('roles.OWNER')},
       }
     }
   }
@@ -59,7 +60,8 @@ class StaffFormScreen extends React.Component {
         },
         noRole: 'No Role Selected',
         editRole: 'Manage Roles',
-        roleId: 'User Role'
+        roleId: 'User Role',
+
       },
       zh: {
         staffTitle: '員工',
@@ -78,7 +80,7 @@ class StaffFormScreen extends React.Component {
         },
         noRole: '未選',
         editRole: '管理權限',
-        roleId: '使用者權限'
+        roleId: '使用者權限',
       }
     })
   }
@@ -125,7 +127,7 @@ class StaffFormScreen extends React.Component {
         <View style={styles.fullWidthScreen}>
           <View>
             <ScreenHeader title={t('staffTitle')}
-                          parentFullScreen={true}/>
+              parentFullScreen={true} />
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, styles.flex(1)]}>
@@ -164,16 +166,20 @@ class StaffFormScreen extends React.Component {
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
                 {isEditForm ? (
-                  <EditPasswordPopUp name={initialValues.username}/>
+                  <EditPasswordPopUp name={initialValues.username} />
                 ) : (
-                  <Field
-                    name="password"
-                    component={PinCodeInput}
-                    onChange={val => Keyboard.dismiss()}
-                    customHeight={40}
-                    editable={!isEditForm}
-                  />
-                )}
+                    <Field
+                      name="password"
+                      component={PinCodeInput}
+                      onChange={val => {
+                        if (val.length === 4)
+                          Keyboard.dismiss()
+                      }}
+                      customHeight={40}
+                      editable={!isEditForm}
+                      validate={isNDigitsNumber(4)}
+                    />
+                  )}
 
               </View>
             </View>
@@ -220,9 +226,9 @@ class StaffFormScreen extends React.Component {
             </View>
             <View style={[styles.tableCellView, styles.justifyRight]}>
               <Icon name="md-create"
-                    size={24}
-                    color={mainThemeColor}
-                    onPress={() => this.props.navigation.navigate('ManageUserRole')}
+                size={24}
+                color={mainThemeColor}
+                onPress={() => this.props.navigation.navigate('ManageUserRole')}
               />
             </View>
           </View>
@@ -251,16 +257,16 @@ class StaffFormScreen extends React.Component {
                 />
               </View>
             ) : (
-              <View>
-                <TouchableOpacity onPress={onCancel}>
-                  <Text
-                    style={[styles.bottomActionButton, styles.cancelButton]}
-                  >
-                    {t('action.cancel')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
+                <View>
+                  <TouchableOpacity onPress={onCancel}>
+                    <Text
+                      style={[styles.bottomActionButton, styles.cancelButton]}
+                    >
+                      {t('action.cancel')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
           </View>
         </View>
       </ThemeContainer>
@@ -276,6 +282,8 @@ const mapDispatchToProps = dispatch => ({
 StaffFormScreen = reduxForm({
   form: 'staffForm'
 })(StaffFormScreen)
+
+
 
 export default connect(
   null,

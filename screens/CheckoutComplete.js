@@ -339,6 +339,26 @@ class CheckoutComplete extends React.Component {
                   {t('change')}: {formatCurrency(transactionResponse.paymentDetails.values['CASH_CHANGE'])}
                 </StyledText>
               )}
+              {!!this.state.invoiceXML && <View style={{flexDirection: 'row'}}>
+                <StyledText style={styles.messageBlock}>
+                  {t('eInvoice')}
+                </StyledText>
+                <Icon
+                  name={this.state.isInvoicePrint ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
+                  size={32}
+                  style={styles.buttonIconStyle}
+                />
+              </View>}
+              {!!this.state.receiptXML && <View style={{flexDirection: 'row'}}>
+                <StyledText style={styles.messageBlock}>
+                  {t('orderReceipt')}
+                </StyledText>
+                <Icon
+                  name={this.state.isReceiptPrint ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
+                  size={32}
+                  style={styles.buttonIconStyle}
+                />
+              </View>}
 
             </View>
 

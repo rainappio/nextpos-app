@@ -105,8 +105,8 @@ class EditPasswordPopUp extends Component {
         },
         body: JSON.stringify({password: updatedPassword})
       }, {
-        defaultMessage: false
-      },
+      defaultMessage: false
+    },
       response => {
         // async/await is to avoid update on unmounted component error in SmoothPinCodeInput.
         response.json().then(data => {
@@ -138,7 +138,7 @@ class EditPasswordPopUp extends Component {
             this.toggleModal(true)
           }}
         >
-          <Icon name="md-create" size={24} color={mainThemeColor}/>
+          <Icon name="md-create" size={24} color={mainThemeColor} />
         </TouchableOpacity>
 
         <Modal
@@ -157,7 +157,7 @@ class EditPasswordPopUp extends Component {
               <TouchableWithoutFeedback>
                 <View>
                   <ScreenHeader backNavigation={false}
-                                title={t('editPassword')}/>
+                    title={t('editPassword')} />
 
                   {this.props.ownAccount && (
                     <View>
@@ -182,13 +182,13 @@ class EditPasswordPopUp extends Component {
                           </TouchableOpacity>
                         </View>
                       ) : (
-                        <Field
-                          name="originalPassword"
-                          component={PinCodeInput}
-                          onChange={val => this.handleCheckPassword(val)}
-                          customHeight={40}
-                        />
-                      )}
+                          <Field
+                            name="originalPassword"
+                            component={PinCodeInput}
+                            onChange={val => this.handleCheckPassword(val)}
+                            customHeight={40}
+                          />
+                        )}
                     </View>
                   )}
 
@@ -216,13 +216,16 @@ class EditPasswordPopUp extends Component {
                           </TouchableOpacity>
                         </View>
                       ) : (
-                        <Field
-                          name="password"
-                          component={PinCodeInput}
-                          onChange={val => this.handleChangePwd(val)}
-                          customHeight={40}
-                        />
-                      )}
+                          <Field
+                            name="password"
+                            component={PinCodeInput}
+                            onChange={val => {
+                              if (val.length === 4)
+                                this.handleChangePwd(val)
+                            }}
+                            customHeight={40}
+                          />
+                        )}
                     </View>
                   )}
                 </View>

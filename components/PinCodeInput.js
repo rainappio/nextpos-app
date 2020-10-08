@@ -17,9 +17,9 @@ export default class PinCodeInput extends Component {
 
   render() {
     const {
-      input: { onChange, onBlur, value, ...inputProps },
+      input: {onChange, onBlur, value, ...inputProps},
       children,
-      meta: { error, touched, valid },
+      meta: {error, touched, valid},
       options,
       customHeight,
       editable,
@@ -41,8 +41,9 @@ export default class PinCodeInput extends Component {
             cellStyleFocused={null}
             editable={editable}
             value={this.state.passwordValue}
-            onTextChange={value => this.setState({ passwordValue: value })}
+            onTextChange={value => {this.setState({passwordValue: value}); onChange(value)}}
             onFulfill={value => onChange(value)}
+            keyboardType='number-pad'
             {...inputProps}
           />
         </View>
