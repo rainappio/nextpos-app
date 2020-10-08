@@ -34,7 +34,7 @@ class CheckoutComplete extends React.Component {
         printerSuccess: 'Print succeeded',
         printerWarning: 'Print failed',
         invoiceWarning: 'Invoice has not been set',
-        eInvoice: 'E-invoice',
+        eInvoiceCheckout: 'E-invoice',
         orderReceipt: 'Order Receipt'
       },
       zh: {
@@ -49,7 +49,7 @@ class CheckoutComplete extends React.Component {
         printerSuccess: '列印成功',
         printerWarning: '列印失敗',
         invoiceWarning: '尚未設定電子發票',
-        eInvoice: '電子發票',
+        eInvoiceCheckout: '電子發票',
         orderReceipt: '訂單明細'
       }
     })
@@ -174,7 +174,7 @@ class CheckoutComplete extends React.Component {
               )}
               {!!this.state.invoiceXML && <View style={{flexDirection: 'row'}}>
                 <StyledText style={styles.messageBlock}>
-                  {t('eInvoice')}
+                  {t('eInvoiceCheckout')}
                 </StyledText>
                 <Icon
                   name={this.state.isInvoicePrint ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
@@ -341,7 +341,7 @@ class CheckoutComplete extends React.Component {
               )}
               {!!this.state.invoiceXML && <View style={{flexDirection: 'row'}}>
                 <StyledText style={styles.messageBlock}>
-                  {t('eInvoice')}
+                  {t('eInvoiceCheckout')}
                 </StyledText>
                 <Icon
                   name={this.state.isInvoicePrint ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
