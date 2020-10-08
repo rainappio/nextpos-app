@@ -126,7 +126,11 @@ export default class App extends React.Component {
       themeStyle: themes.light,
       reverseThemeStyle: themes.dark,
       complexTheme: complexTheme.light,
-      toggleTheme: this.toggleTheme
+      toggleTheme: this.toggleTheme,
+      splitOrderId: null,
+      saveSplitOrderId: this.saveSplitOrderId,
+      splitParentOrderId: null,
+      saveSplitParentOrderId: this.saveSplitParentOrderId
     }
 
     TimeZoneService.setClientReference(() => store.getState().client)
@@ -159,6 +163,8 @@ export default class App extends React.Component {
         isTablet: (isTablet !== 1)
       })
     })
+    this.initSplitOrderId()
+    this.initSplitParentOrderId()
   }
 
   mergeLocaleResource = async locales => {
@@ -231,6 +237,60 @@ export default class App extends React.Component {
     })
   }
 
+  initSplitParentOrderId = async () => {
+    try {
+      AsyncStorage.getItem('splitParentOrderId').then(val => {
+        if (!val) {
+          return Promise.resolve()
+        } else {
+          this.setState({
+            splitParentOrderId: val
+          })
+        }
+      })
+    } catch (e) {
+      return Promise.resolve()
+    }
+  }
+  saveSplitParentOrderId = async (id = null) => {
+
+    if (id === null) {
+      await AsyncStorage.removeItem('splitParentOrderId')
+    } else {
+      await AsyncStorage.setItem('splitParentOrderId', id)
+    }
+    this.setState({
+      splitParentOrderId: id
+    })
+  }
+
+  initSplitOrderId = async () => {
+    try {
+      AsyncStorage.getItem('splitOrderId').then(val => {
+        if (!val) {
+          return Promise.resolve()
+        } else {
+          this.setState({
+            splitOrderId: val
+          })
+        }
+      })
+    } catch (e) {
+      return Promise.resolve()
+    }
+  }
+
+  saveSplitOrderId = async (id = null) => {
+    if (id === null) {
+      await AsyncStorage.removeItem('splitOrderId')
+    } else {
+      await AsyncStorage.setItem('splitOrderId', id)
+    }
+    this.setState({
+      splitOrderId: id
+    })
+  }
+
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -257,7 +317,11 @@ export default class App extends React.Component {
               reverseThemeStyle: this.state.reverseThemeStyle,
               complexTheme: this.state.complexTheme,
               toggleTheme: this.state.toggleTheme,
-              isTablet: this.state.isTablet
+              isTablet: this.state.isTablet,
+              splitOrderId: this.state?.splitOrderId,
+              saveSplitOrderId: this.state.saveSplitOrderId,
+              splitParentOrderId: this.state.splitParentOrderId,
+              saveSplitParentOrderId: this.state.saveSplitParentOrderId
             }}>
               <LocaleContext.Provider value={this.state}>
                 <AppNavigator

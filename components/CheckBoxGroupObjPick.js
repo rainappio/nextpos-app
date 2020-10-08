@@ -46,7 +46,7 @@ class CheckBoxGroupObjPick extends React.Component {
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
               <CheckBox
-                containerStyle={{borderColor: themeStyle.borderColor, backgroundColor: themeStyle.backgroundColor}}
+                containerStyle={{margin: 0, padding: 0}}
                 onChange={e => onChange(e.target.checked)}
                 checkedIcon={'check-circle'}
                 uncheckedIcon={'circle'}

@@ -31,8 +31,8 @@ class DeleteBtn extends React.Component {
       <TouchableOpacity
         onPress={() => {
           Alert.alert(
-            `${t('action.confirmMessageTitle')}`,
-            `${t('action.confirmMessage')}`,
+            `${this.props?.alertTitle ?? t('action.confirmMessageTitle')}`,
+            `${this.props?.alertMessage ?? t('action.confirmMessage')}`,
             [
               {
                 text: `${t('action.yes')}`,
@@ -57,7 +57,7 @@ class DeleteBtn extends React.Component {
           />
         ) : (
             <Text style={this.props?.textStyle ?? [styles.bottomActionButton, styles.deleteButton]}>
-              {t('action.delete')}
+              {this.props?.text ?? t('action.delete')}
             </Text>
           )}
       </TouchableOpacity>

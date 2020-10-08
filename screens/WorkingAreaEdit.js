@@ -42,6 +42,23 @@ class WorkingAreaEdit extends React.Component {
     }).then()
   }
 
+  handleDelete = (values) => {
+
+    dispatchFetchRequest(api.workingarea.delete(values.id), {
+      method: 'DELETE',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }, response => {
+      this.props.navigation.navigate('PrinternKDS')
+      this.props.getWorkingAreas()
+      this.props.getPrinters()
+      this.props.clearWorkingArea()
+    }).then()
+  }
+
   handleEditCancel = () => {
     this.props.clearWorkingArea()
     this.props.getPrinters()
@@ -50,16 +67,16 @@ class WorkingAreaEdit extends React.Component {
   }
 
   render() {
-    const { navigation, workingarea, loading, haveError, haveData } = this.props
-    const { t } = this.context
+    const {navigation, workingarea, loading, haveError, haveData} = this.props
+    const {t} = this.context
 
     if (loading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveError) {
       return (
-        <BackendErrorScreen/>
+        <BackendErrorScreen />
       )
     }
 
@@ -67,12 +84,13 @@ class WorkingAreaEdit extends React.Component {
       <ThemeContainer>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={true}
-                        parentFullScreen={true}
-                        backAction={() => this.handleEditCancel()}
-                        title={t('editWorkingAreaTitle')}/>
+            parentFullScreen={true}
+            backAction={() => this.handleEditCancel()}
+            title={t('editWorkingAreaTitle')} />
 
           <WorkingAreaForm
             onSubmit={this.handleUpdate}
+            handleDelete={this.handleDelete}
             navigation={navigation}
             initialValues={workingarea}
             isEdit={true}

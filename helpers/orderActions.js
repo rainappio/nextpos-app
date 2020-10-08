@@ -113,6 +113,49 @@ export const handleOrderSubmit = id => {
   ).then()
 }
 
+export const handleQuickCheckout = (order, print) => {
+  const formData = new FormData()
+  formData.append('print', print)
+
+  dispatchFetchRequestWithOption(
+    api.order.quickCheckout(order?.orderId),
+    {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {},
+      body: formData
+    }, {
+    defaultMessage: false
+  },
+    response => {
+      response.json().then(data => {
+        if (data.hasOwnProperty('orderId')) {
+          if (print) {
+            data?.printerInstructions?.map((printerInstructions) => {
+              printerInstructions?.ipAddresses?.map((ipAddresses) => {
+                for (let i = 0; i < printerInstructions.noOfPrintCopies; i++) {
+                  printMessage(printerInstructions.printInstruction, ipAddresses, () => {
+                    successMessage(i18n.t('printerSuccess'))
+
+                  }, () => {
+                    warningMessage(i18n.t('printerWarning'))
+                  }
+                  )
+                }
+              })
+            })
+          }
+          successMessage(i18n.t('order.submitted'))
+          NavigationService.navigate('Payment', {
+            order: order
+          })
+        }
+      })
+    }
+  ).then()
+}
+
 export const handleDelete = (id, callback) => {
   dispatchFetchRequestWithOption(
     api.order.delete(id),
@@ -136,3 +179,20 @@ export const handleDelete = (id, callback) => {
   ).then()
 }
 
+export const revertSplitOrder = async (sourceOrderId, splitOrderId) => {
+  const formData = new FormData()
+  formData.append('sourceOrderId', sourceOrderId)
+  await dispatchFetchRequestWithOption(api.splitOrder.revert(splitOrderId), {
+    method: 'POST',
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    body: formData
+  }, {
+    defaultMessage: false
+  }, response => {
+
+  }).then()
+}

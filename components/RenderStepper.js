@@ -30,7 +30,7 @@ class RenderStepper extends React.Component {
         <View>
           <View style={[styles.flex_dir_row, {alignItems: 'center'}]}>
             <View style={{width: '60%', flexDirection: 'row', alignItems: 'center'}}>
-              <StyledText>{optionName}</StyledText>
+              <StyledText style={{width: '15%'}}>{optionName}</StyledText>
               <View style={{marginLeft: 30, flexDirection: 'row', justifyContent: 'space-around', flex: 1}}>
                 <TouchableOpacity
                   onPress={() => {this.props.input.onChange(1)}}

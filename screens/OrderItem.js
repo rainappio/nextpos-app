@@ -20,7 +20,7 @@ class OrderItem extends React.PureComponent {
       handleOrderSubmit,
       handleDelete
     } = this.props
-    const {t} = this.context
+    const {t, isTablet} = this.context
 
     const timeDifference = getTimeDifference(order.createdTime)
     const thirtyMinutes = 30 * 60 * 1000
@@ -39,13 +39,20 @@ class OrderItem extends React.PureComponent {
           style={[{flexDirection: 'row', flex: 9, marginLeft: 3}]}
           key={order.orderId}
           onPress={() => {
-            console.log("OrderItem", order.orderId, order.state);
-            navigation.navigate('OrdersSummary', {
-              orderId: order.orderId,
-              onSubmit: handleOrderSubmit,
-              handleDelete: handleDelete,
-              orderState: order.state
-            })
+            if (isTablet) {
+              navigation.navigate('OrderFormII', {
+                orderId: order.orderId,
+                orderState: order.state
+              })
+            } else {
+              navigation.navigate('OrdersSummary', {
+                orderId: order.orderId,
+                onSubmit: handleOrderSubmit,
+                handleDelete: handleDelete,
+                orderState: order.state
+              })
+            }
+
           }
           }
         >

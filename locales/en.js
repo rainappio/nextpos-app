@@ -147,7 +147,25 @@ const en = {
   },
   payment: {
     cashPayment: 'Cash',
-    cardPayment: 'Credit Card'
+    cardPayment: 'Credit Card',
+    paymentTitle: 'Payment',
+    orderOptions: 'Order Options',
+    waiveServiceCharge: 'Waive Service Charge',
+    resetAllOffers: 'Reset All Offers',
+    payOrder: 'Pay',
+    paid: 'Paid',
+    change: 'Change',
+    remainder: 'Remainder',
+    CardNo: 'Last 4 Digits',
+    cardType: 'Card Type',
+    taxIDNumber: 'Tax ID Number',
+    enterTaxIDNumber: 'Enter Tax ID Number',
+    ok: 'Done',
+    cancel: 'Cancel',
+    charged: 'Payment charged',
+    discountOptions: 'Discount Options',
+    checkTaxIDNumber: 'Enter Correct Tax ID Number',
+    checkAutoComplete: 'Entered cash amount is less than the settling amount. Do you want to make up the difference automatically?',
   },
   timecard: {
     hours: 'Hour(s)',
@@ -239,7 +257,10 @@ const en = {
       completeAllOrdersFirst: 'Please complete all orders before closing shift.',
       userRoleInUse: 'This user role is used by existing user',
       unableToChangeState: 'Unable to change order state',
-      alreadyExists: 'Name is already used'
+      alreadyExists: 'Name is already used',
+      categoryInUse: 'This category is already in use',
+      workingAreaInUse: 'This working area is already in use',
+      printerHasWorkingArea: 'This printer is used by working area',
     }
   },
   eInvoice: {
@@ -264,6 +285,14 @@ const en = {
   bar: 'Bar {{someValue}}',
   printerSuccess: 'Print Success',
   printerWarning: 'Print Failure',
+  splittingCheck: 'There is an existing split bill, would you like to start a new split bill?',
+  splitBill: {
+    SpiltBillScreenTitle: 'Spilt Bill',
+    ConfirmCancelMessage: 'Confirm to cancel split bill?',
+    nothing: 'Nothing',
+    parentOrder: 'Original Bill',
+    splitOrder: 'Split Bill'
+  },
 }
 
 export default en

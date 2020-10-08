@@ -147,7 +147,25 @@ const zh = {
   },
   payment: {
     cashPayment: '現金',
-    cardPayment: '信用卡'
+    cardPayment: '信用卡',
+    paymentTitle: '付款',
+    orderOptions: '訂單選項',
+    waiveServiceCharge: '折抵服務費',
+    resetAllOffers: '取消訂單優惠',
+    payOrder: '付帳',
+    paid: '實收',
+    change: '找零',
+    remainder: '剩餘',
+    CardNo: '卡號末四碼',
+    cardType: '信用卡種類',
+    taxIDNumber: '統一編號',
+    enterTaxIDNumber: '輸入統一編號',
+    ok: '確定',
+    cancel: '取消',
+    charged: '付款成功',
+    discountOptions: '折扣選項',
+    checkTaxIDNumber: '請輸入正確的統一編號',
+    checkAutoComplete: '輸入的現金金額小於訂單總金額，請問您想要自動補差額嗎？',
   },
   timecard: {
     hours: '小時',
@@ -241,7 +259,10 @@ const zh = {
       completeAllOrdersFirst: '請先完成所有的訂單',
       userRoleInUse: '此權限正被使用中',
       unableToChangeState: '無法更改訂單狀態',
-      alreadyExists: '名稱已存在'
+      alreadyExists: '名稱已存在',
+      categoryInUse: '此分類正在使用中',
+      workingAreaInUse: '此工作區正在使用中',
+      printerHasWorkingArea: '此出單機有使用中的工作區',
     }
   },
   eInvoice: {
@@ -266,6 +287,14 @@ const zh = {
   bar: 'Bar {{someValue}}',
   printerSuccess: '列印成功',
   printerWarning: '列印失敗',
+  splittingCheck: '目前仍有拆帳中的訂單，確定開始新的拆帳？',
+  splitBill: {
+    SpiltBillScreenTitle: '拆帳',
+    ConfirmCancelMessage: '確定取消拆帳嗎？',
+    nothing: '尚無產品',
+    parentOrder: '原單',
+    splitOrder: '子單'
+  },
 }
 
 export default zh

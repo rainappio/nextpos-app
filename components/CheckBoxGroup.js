@@ -5,17 +5,18 @@ import styles from '../styles'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import {StyledText} from "./StyledText";
 import {withContext} from "../helpers/contextHelper";
+import {CheckBox} from 'react-native-elements'
 
 class RenderCheckboxGroup extends React.Component {
   render() {
     const {
-      input: { onBlur, onChange, onFocus, value },
+      input: {onBlur, onChange, onFocus, value},
       customValue,
       optionName,
       customarr,
       customRoute,
       themeStyle,
-      meta: { error, toched, valid },
+      meta: {error, toched, valid},
       ...rest
     } = this.props
     const arr = [...this.props.input.value]
@@ -37,16 +38,21 @@ class RenderCheckboxGroup extends React.Component {
         return (
           <View key={ca.id}>
             <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, { flex: 1 }]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
                 <StyledText>{ca.name}</StyledText>
               </View>
-              <View style={[styles.tableCellView, { flex: 1, justifyContent: 'flex-end' }]}>
-                <Checkbox
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <CheckBox
                   onChange={e => onChange(e.target.checked)}
+                  checkedIcon={'check-circle'}
+                  uncheckedIcon={'circle'}
                   checked={value.length !== 0 && value.includes(ca.id)}
-                  style={{ marginRight: 8 }}
+                  containerStyle={{margin: 0, padding: 0}}
+                  onPress={() => {
+                    onChange(!(value.length !== 0 && value.includes(ca.id)))
+                  }}
                 >
-                </Checkbox>
+                </CheckBox>
                 <AntDesignIcon
                   name="ellipsis1"
                   size={25}

@@ -3,6 +3,8 @@ import PaymentFormScreen from './PaymentFormScreen'
 import PaymentFormScreenTablet from './PaymentFormScreenTablet'
 import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
+import {handleDelete} from "../helpers/orderActions";
+import NavigationService from "../navigation/NavigationService";
 
 class Payment extends React.Component {
   static navigationOptions = {
@@ -14,6 +16,9 @@ class Payment extends React.Component {
     super(props, context)
 
   }
+
+
+
 
   handlePayment = async values => {
     const orderId = this.props.navigation.state.params.order.orderId
@@ -57,7 +62,9 @@ class Payment extends React.Component {
     const goToPaymentOrder = async () => {
       this.props.navigation.navigate('PaymentOrder', {
         orderId: this.props.navigation.state.params.order.orderId,
-        navigation: this.props.navigation
+        navigation: this.props.navigation,
+        isSplitting: this.props.navigation.state.params?.isSplitting ?? false,
+        parentOrder: this.props.navigation.state.params?.parentOrder ?? null,
       })
     }
 
@@ -99,6 +106,8 @@ class Payment extends React.Component {
         order={order}
         navigation={navigation}
         onSubmit={this.handlePayment}
+        isSplitting={this.props.navigation.state.params?.isSplitting ?? false}
+        parentOrder={this.props.navigation.state.params?.parentOrder ?? null}
       />
         : <PaymentFormScreen
           initialValues={{
@@ -108,6 +117,8 @@ class Payment extends React.Component {
           order={order}
           navigation={navigation}
           onSubmit={this.handlePayment}
+          isSplitting={this.props.navigation.state.params?.isSplitting ?? false}
+          parentOrder={this.props.navigation.state.params?.parentOrder ?? null}
         />}
     </>
     )

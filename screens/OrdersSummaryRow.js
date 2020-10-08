@@ -1,5 +1,5 @@
 import React from 'react'
-import {Alert, Text, TouchableOpacity, View} from 'react-native'
+import {Alert, Text, TouchableOpacity, View, Switch} from 'react-native'
 import {SwipeListView} from 'react-native-swipe-list-view'
 import {connect} from 'react-redux'
 import {clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange} from '../actions'
@@ -12,11 +12,12 @@ import {LocaleContext} from '../locales/LocaleContext'
 import {CheckBox, Tooltip} from 'react-native-elements'
 import ScreenHeader from "../components/ScreenHeader";
 import OrderTopInfo from "./OrderTopInfo";
-import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer} from "../helpers/orderActions";
+import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer, handleQuickCheckout, revertSplitOrder} from "../helpers/orderActions";
 import NavigationService from "../navigation/NavigationService";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import {StyledText} from "../components/StyledText";
+import {SecondActionButton} from "../components/ActionButtons";
 
 class OrdersSummaryRow extends React.Component {
   static contextType = LocaleContext
@@ -52,6 +53,9 @@ class OrdersSummaryRow extends React.Component {
         deliverAllLineItems: 'Confirm to deliver all line items',
         lineItemCountCheck: 'At least one item is needed to submit an order.',
         submitOrder: 'Submit',
+        quickCheckoutPrint: 'Print',
+        not: 'don\'t',
+        quickCheckout: 'Quick checkout',
         backToTables: 'Back to Tables',
         deleteOrder: 'Delete',
         selectItemToDeliver: 'Please select a line item to deliver',
@@ -86,6 +90,9 @@ class OrdersSummaryRow extends React.Component {
         deliverAllLineItems: '確認所有品項送餐',
         lineItemCountCheck: '請加一個以上的產品到訂單裡.',
         submitOrder: '送單',
+        quickCheckoutPrint: '出單',
+        not: '不',
+        quickCheckout: '快速結帳',
         backToTables: '回到座位區',
         deleteOrder: '刪除',
         selectItemToDeliver: '請選擇品項送餐',
@@ -96,7 +103,8 @@ class OrdersSummaryRow extends React.Component {
     })
 
     this.state = {
-      orderLineItems: {}
+      orderLineItems: {},
+      quickCheckoutPrint: true,
     }
 
     console.debug(`order summary order id: ${this.props.order.orderId}`)
@@ -246,6 +254,8 @@ class OrdersSummaryRow extends React.Component {
     }).then()
   }
 
+
+
   render() {
     const {
       products = [],
@@ -260,7 +270,7 @@ class OrdersSummaryRow extends React.Component {
       themeStyle
     } = this.props
 
-    const {t} = this.context
+    const {t, splitParentOrderId} = this.context
 
     return (
       <View style={styles.fullWidthScreen}>
@@ -466,6 +476,42 @@ class OrdersSummaryRow extends React.Component {
             </TouchableOpacity>
           )}
 
+          {['OPEN', 'IN_PROCESS'].includes(order.state) && (
+            <View>
+              <TouchableOpacity
+                onPress={() =>
+                  order.lineItems.length === 0
+                    ? warningMessage(t('lineItemCountCheck'))
+                    : handleQuickCheckout(order, this.state.quickCheckoutPrint)
+                }
+                style={{marginRight: '20%'}}
+              >
+                <View style={[styles.bottomActionButton, styles.actionButton, {width: '125%'}]}>
+                  <Text style={{
+                    textAlign: 'center',
+                    fontSize: 16, color: '#fff'
+                  }}>
+                    {t('quickCheckout')}
+                  </Text>
+                </View>
+
+              </TouchableOpacity>
+              <View style={{position: 'absolute', right: 0, top: 0, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={[styles.flexButtonText, {fontSize: 14}]}>
+                  {!this.state.quickCheckoutPrint && t('not')}{t('quickCheckoutPrint')}
+                </Text>
+                <Switch
+                  //style={{transform: [{scaleX: .7}, {scaleY: .7}]}}
+                  trackColor={{false: "#767577", true: "#1da1f2"}}
+                  thumbColor={this.state.quickCheckoutPrint ? "#f4f3f4" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={() => this.setState({quickCheckoutPrint: !this.state.quickCheckoutPrint})}
+                  value={this.state.quickCheckoutPrint}
+                />
+              </View>
+            </View>
+          )}
+
           {!['SETTLED', 'REFUNDED'].includes(order.state) && (
             <DeleteBtn
               handleDeleteAction={() => handleDelete(order.orderId, () => NavigationService.navigate('TablesSrc'))}
@@ -484,19 +530,59 @@ class OrdersSummaryRow extends React.Component {
           )}
 
           {order.state === 'DELIVERED' && (
-            <TouchableOpacity
-              onPress={() =>
-                order.lineItems.length === 0
-                  ? warningMessage(t('lineItemCountCheck'))
-                  : this.props.navigation.navigate('Payment', {
-                    order: order
-                  })
-              }
-            >
-              <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('payOrder')}</Text>
-            </TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 1, marginRight: 10}}>
+                <SecondActionButton
+                  onPress={() => {
+                    if (splitParentOrderId === null || splitParentOrderId === order?.orderId) {
+                      this.props.navigation.navigate('SpiltBillScreen', {
+                        order: order
+                      })
+                    }
+                    else {
+                      Alert.alert(
+                        `${t('splittingCheck')}`,
+                        ``,
+                        [
+                          {
+                            text: `${this.context.t('action.yes')}`,
+                            onPress: async () => {
+                              await revertSplitOrder(this.context?.splitParentOrderId, this.context?.splitOrderId)
+                              await this.context?.saveSplitOrderId(null)
+                              await this.context?.saveSplitParentOrderId(null)
+                              this.props.navigation.navigate('SpiltBillScreen', {
+                                order: order
+                              })
+                            }
+                          },
+                          {
+                            text: `${this.context.t('action.no')}`,
+                            onPress: () => console.log('Cancelled'),
+                            style: 'cancel'
+                          }
+                        ]
+                      )
+                    }
+                  }
+                  }
+                  title={t('splitBill.SpiltBillScreenTitle')}
+                /></View>
+              <View style={{flex: 1}}>
+                <TouchableOpacity
+                  onPress={() =>
+                    order.lineItems.length === 0
+                      ? warningMessage(t('lineItemCountCheck'))
+                      : this.props.navigation.navigate('Payment', {
+                        order: order
+                      })
+                  }
+                >
+                  <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('payOrder')}</Text>
+                </TouchableOpacity></View>
+            </View>
 
           )}
+
 
           {order.state === 'SETTLED' && (
             <TouchableOpacity
