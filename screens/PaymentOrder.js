@@ -1,10 +1,12 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Alert} from 'react-native'
 import {getOrder} from '../actions'
 import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
 import PaymentOrderForm from './PaymentOrderForm'
 import {LocaleContext} from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
+import {handleDelete} from "../helpers/orderActions";
 
 class PaymentOrder extends React.Component {
   static navigationOptions = {
@@ -45,6 +47,7 @@ class PaymentOrder extends React.Component {
     this.setState({dynamicTotal: 0})
   }
 
+
   handleComplete = id => {
     const formData = new FormData()
     formData.append('action', 'COMPLETE')
@@ -58,11 +61,43 @@ class PaymentOrder extends React.Component {
     }, {
       defaultMessage: false
     }, response => {
-      this.props.navigation.navigate('TablesSrc')
+      if (!!this.props.navigation.state.params?.isSplitting) {
+        if (this.props.navigation.state.params?.parentOrder?.lineItems.length !== 0) {
+          this.props.navigation.navigate('SpiltBillScreen', {
+            order: this.props.navigation.state.params?.parentOrder
+          })
+        } else {
+          this.context?.saveSplitParentOrderId(null)
+          handleDelete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate('TablesSrc'))
+        }
+
+      } else {
+        this.context?.saveSplitParentOrderId(null)
+        this.props.navigation.navigate('TablesSrc')
+      }
     }).then()
   }
 
-  handleSubmit = values => {
+
+  checkAutoComplete = (values) => {
+    if (values.paymentMethod === 'CASH' && values.cash < this.props?.order?.orderTotal) {
+      Alert.alert(
+        ``,
+        `${this.context.t('payment.checkAutoComplete')}`,
+        [
+          {text: `${this.context.t('action.yes')}`, onPress: () => this.handleSubmit(values, true, this.props?.order?.orderTotal)},
+          {
+            text: `${this.context.t('action.no')}`,
+            onPress: () => console.log('Cancelled'),
+            style: 'cancel'
+          }
+        ]
+      )
+    } else {
+      this.handleSubmit(values)
+    }
+  }
+  handleSubmit = (values, autoComplete = false, cash = 0) => {
     const transactionObj = {
       orderId: this.props.navigation.state.params.orderId,
       paymentMethod: values.paymentMethod,
@@ -71,7 +106,7 @@ class PaymentOrder extends React.Component {
       paymentDetails: {}
     }
     if (values.paymentMethod === 'CASH') {
-      transactionObj.paymentDetails['CASH'] = values.cash
+      transactionObj.paymentDetails['CASH'] = autoComplete ? cash : values.cash
     }
     if (values.paymentMethod === 'CARD') {
       transactionObj.paymentDetails['CARD_TYPE'] = values.cardType
@@ -94,7 +129,9 @@ class PaymentOrder extends React.Component {
       response.json().then(data => {
         this.props.navigation.navigate('CheckoutComplete', {
           transactionResponse: data,
-          onSubmit: this.handleComplete
+          onSubmit: this.handleComplete,
+          isSplitting: this.props.navigation.state.params?.isSplitting ?? false,
+          parentOrder: this.props.navigation.state.params?.parentOrder ?? null,
         })
       })
     }).then()
@@ -113,7 +150,7 @@ class PaymentOrder extends React.Component {
 
       return (
         <PaymentOrderForm
-          onSubmit={this.handleSubmit}
+          onSubmit={this.checkAutoComplete}
           order={order}
           navigation={this.props.navigation}
           addNum={this.addNum}

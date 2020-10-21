@@ -86,6 +86,7 @@ import ProductsOverviewforOffer from '../screens/ProductsOverviewforOffer'
 import TabBarBottom from "react-navigation-tabs/src/views/BottomTabBar";
 import OrderDisplayScreen from "../screens/OrderDisplayScreen";
 import ResetClientPassword from "../screens/ResetClientPassword";
+import SpiltBillScreen from "../screens/SpiltBillScreen";
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -173,7 +174,8 @@ const Tables = createStackNavigator({
   UpdateOrder: UpdateOrder,
   Payment: Payment,
   PaymentOrder: PaymentOrder,
-  CheckoutComplete: CheckoutComplete
+  CheckoutComplete: CheckoutComplete,
+  SpiltBillScreen: SpiltBillScreen,
 })
 Tables.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.tables'),

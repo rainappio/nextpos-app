@@ -1,6 +1,6 @@
 import React from 'react'
 import {reduxForm} from 'redux-form'
-import {Alert, ScrollView, Text, TouchableOpacity, View, TouchableWithoutFeedback} from 'react-native'
+import {Alert, ScrollView, Text, TouchableOpacity, View, Switch} from 'react-native'
 import {connect} from 'react-redux'
 import {Accordion, List} from '@ant-design/react-native'
 import {getLables, getProducts, clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange} from '../actions'
@@ -19,10 +19,11 @@ import OrderItemDetailEditModal from './OrderItemDetailEditModal';
 import OrderTopInfo from "./OrderTopInfo";
 import DeleteBtn from '../components/DeleteBtn'
 import NavigationService from "../navigation/NavigationService";
-import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer} from "../helpers/orderActions";
+import {handleDelete, handleOrderSubmit, handleQuickCheckout, revertSplitOrder} from "../helpers/orderActions";
 import {SwipeRow} from 'react-native-swipe-list-view'
 import ScreenHeader from "../components/ScreenHeader";
 import Icon from 'react-native-vector-icons/FontAwesome'
+import {SecondActionButton} from "../components/ActionButtons";
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
@@ -43,6 +44,9 @@ class OrderFormII extends React.Component {
         deliverAllLineItems: 'Confirm to deliver all line items',
         lineItemCountCheck: 'At least one item is needed to submit an order.',
         submitOrder: 'Submit',
+        quickCheckoutPrint: 'Print',
+        not: 'No',
+        quickCheckout: 'Quick checkout',
         backToTables: 'Back to Tables',
         deleteOrder: 'Delete',
         selectItemToDeliver: 'Please select a line item to deliver',
@@ -81,6 +85,9 @@ class OrderFormII extends React.Component {
         deliverAllLineItems: '確認所有品項送餐',
         lineItemCountCheck: '請加一個以上的產品到訂單裡.',
         submitOrder: '送單',
+        quickCheckoutPrint: '出單',
+        not: '不',
+        quickCheckout: '快速結帳',
         backToTables: '回到座位區',
         deleteOrder: '刪除',
         selectItemToDeliver: '請選擇品項送餐',
@@ -123,7 +130,8 @@ class OrderFormII extends React.Component {
       selectedLabel: 'pinned',
       modalVisible: false,
       modalData: {},
-      orderLineItems: {}
+      orderLineItems: {},
+      quickCheckoutPrint: true,
     }
     this.onChange = activeSections => {
       this.setState({activeSections: activeSections})
@@ -214,7 +222,6 @@ class OrderFormII extends React.Component {
   }
 
   editItem = (productId, data) => {
-    console.log("editItem", productId)
     dispatchFetchRequest(api.product.getById(productId), {
       method: 'GET',
       withCredentials: true,
@@ -366,6 +373,8 @@ class OrderFormII extends React.Component {
   }
 
 
+
+
   render() {
     const {
       products = [],
@@ -377,9 +386,8 @@ class OrderFormII extends React.Component {
 
       productsData
     } = this.props
-    console.log("NewOrderItem", order)
 
-    const {reverseThemeStyle, t} = this.context
+    const {reverseThemeStyle, t, splitParentOrderId} = this.context
     const map = new Map(Object.entries(products))
 
     let totalQuantity = 0
@@ -445,6 +453,11 @@ class OrderFormII extends React.Component {
                         </TouchableOpacity>
                       </View>
                     ))}
+                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle,]}>
+                      <TouchableOpacity style={[(this.state.selectedLabel === 'ungrouped' ? styles.selectedLabel : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: 'ungrouped'})}}>
+                        {this.PanelHeader(t('product.ungrouped'), '0')}
+                      </TouchableOpacity>
+                    </View>
                   </ScrollView>
                 </View>
                 {/* item box */}
@@ -463,6 +476,18 @@ class OrderFormII extends React.Component {
                             </View>
                           </TouchableOpacity>
                         ))}</View> : this.state?.selectedLabel === 'pinned' ? <StyledText style={{alignSelf: 'center'}}>{t('nothing')}</StyledText> : null}
+
+                      {(this.state?.selectedLabel === 'ungrouped' && map.get('ungrouped') !== undefined && map.get('ungrouped')?.length > 0) ?
+                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get('ungrouped').map(prd => (
+
+                          <TouchableOpacity style={[{width: '22%', backgroundColor: 'green', marginLeft: '3%', marginBottom: '3%', borderRadius: 10}, reverseThemeStyle]}
+                            onPress={() => this.addItemToOrder(prd.id)}>
+                            <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
+                              <StyledText style={reverseThemeStyle}>{prd.name}</StyledText>
+                              <StyledText style={reverseThemeStyle}>${prd.price}</StyledText>
+                            </View>
+                          </TouchableOpacity>
+                        ))}</View> : this.state?.selectedLabel === 'ungrouped' ? <StyledText style={{alignSelf: 'center'}}>{t('nothing')}</StyledText> : null}
 
                       {labels.map(lbl => {
                         if (this.state?.selectedLabel === lbl.label) {
@@ -510,6 +535,35 @@ class OrderFormII extends React.Component {
                           />
                         </View>
                       )}
+                      {['OPEN', 'IN_PROCESS'].includes(order.state) && (
+                        <View style={{flex: 2, marginHorizontal: 5}}>
+                          <TouchableOpacity
+                            onPress={() =>
+                              order.lineItems.length === 0
+                                ? warningMessage(t('lineItemCountCheck'))
+                                : handleQuickCheckout(order, this.state.quickCheckoutPrint)
+                            }
+                            style={styles.flexButton}
+                          >
+                            <View style={{position: 'absolute', top: 0, right: 0, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                              <Text style={[styles.flexButtonText, {fontSize: 14}]}>
+                                {!this.state.quickCheckoutPrint && t('not')}{t('quickCheckoutPrint')}
+                              </Text>
+                              <Switch
+                                style={{transform: [{scaleX: .7}, {scaleY: .7}]}}
+                                trackColor={{false: "#767577", true: "#1da1f2"}}
+                                thumbColor={this.state.quickCheckoutPrint ? "#f4f3f4" : "#f4f3f4"}
+                                ios_backgroundColor="#3e3e3e"
+                                onValueChange={() => this.setState({quickCheckoutPrint: !this.state.quickCheckoutPrint})}
+                                value={this.state.quickCheckoutPrint}
+                              />
+                            </View>
+                            <Text style={styles.flexButtonText}>
+                              {t('quickCheckout')}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      )}
                       {['OPEN', 'IN_PROCESS', 'DELIVERED'].includes(order.state) && (
                         <View style={{flex: 2, marginHorizontal: 5}}>
                           <TouchableOpacity
@@ -526,6 +580,7 @@ class OrderFormII extends React.Component {
                           </TouchableOpacity>
                         </View>
                       )}
+
                     </View>
 
 
@@ -545,19 +600,60 @@ class OrderFormII extends React.Component {
                     )}
 
                     {order.state === 'DELIVERED' && (
-                      <View style={{flex: 1, marginHorizontal: 5}}>
-                        <TouchableOpacity
-                          onPress={() =>
-                            order.lineItems.length === 0
-                              ? warningMessage(t('lineItemCountCheck'))
-                              : this.props.navigation.navigate('Payment', {
-                                order: order
-                              })
-                          }
-                          style={styles.flexButtonSecondAction}
-                        >
-                          <Text style={styles.flexButtonSecondActionText}>{t('payOrder')}</Text>
-                        </TouchableOpacity>
+                      <View style={{flex: 1, marginHorizontal: 5, flexDirection: 'row'}}>
+                        <View style={{flex: 2, marginHorizontal: 5}}>
+                          <TouchableOpacity
+                            onPress={() =>
+                              order.lineItems.length === 0
+                                ? warningMessage(t('lineItemCountCheck'))
+                                : this.props.navigation.navigate('Payment', {
+                                  order: order
+                                })
+                            }
+                            style={styles.flexButtonSecondAction}
+                          >
+                            <Text style={styles.flexButtonSecondActionText}>{t('payOrder')}</Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={{flex: 1, marginHorizontal: 5}}>
+                          <SecondActionButton
+                            onPress={() => {
+                              if (splitParentOrderId === null || splitParentOrderId === order?.orderId) {
+                                this.props.navigation.navigate('SpiltBillScreen', {
+                                  order: order
+                                })
+                              }
+                              else {
+                                Alert.alert(
+                                  `${t('splittingCheck')}`,
+                                  ``,
+                                  [
+                                    {
+                                      text: `${this.context.t('action.yes')}`,
+                                      onPress: async () => {
+                                        await revertSplitOrder(this.context?.splitParentOrderId, this.context?.splitOrderId)
+                                        await this.context?.saveSplitOrderId(null)
+                                        await this.context?.saveSplitParentOrderId(null)
+                                        this.props.navigation.navigate('SpiltBillScreen', {
+                                          order: order
+                                        })
+                                      }
+                                    },
+                                    {
+                                      text: `${this.context.t('action.no')}`,
+                                      onPress: () => console.log('Cancelled'),
+                                      style: 'cancel'
+                                    }
+                                  ]
+                                )
+                              }
+                            }
+                            }
+                            containerStyle={styles.flexButtonSecondAction}
+                            style={styles.flexButtonSecondActionText}
+                            title={t('splitBill.SpiltBillScreenTitle')}
+                          />
+                        </View>
                       </View>
 
                     )}
@@ -682,7 +778,7 @@ class OrderFormII extends React.Component {
         /*phone render */
         return (
           <ThemeContainer>
-            <ScrollView>
+            <ScrollView style={{flex: 1, marginBottom: 45}}>
               <View style={styles.container}>
                 <Text style={styles.screenTitle}>
                   {t('newOrderTitle')}
@@ -748,6 +844,32 @@ class OrderFormII extends React.Component {
                       </List>
                     </Accordion.Panel>
                   ))}
+                  <Accordion.Panel
+                    header={this.PanelHeader(t('product.ungrouped'), '0')}
+                    key="ungrouped"
+                  >
+                    <List>
+                      {map.get('ungrouped') !== undefined &&
+                        map.get('ungrouped').map(prd => (
+                          <ListItem
+                            key={prd.id}
+                            title={
+                              <View style={[styles.tableRowContainer]}>
+                                <View style={[styles.tableCellView, styles.flex(1)]}>
+                                  <StyledText>{prd.name}</StyledText>
+                                </View>
+                                <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
+                                  <StyledText>${prd.price}</StyledText>
+                                </View>
+                              </View>
+                            }
+                            onPress={() => this.addItemToOrder(prd.id)}
+                            bottomDivider
+                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                          />
+                        ))}
+                    </List>
+                  </Accordion.Panel>
                 </Accordion>
               </View>
             </ScrollView>

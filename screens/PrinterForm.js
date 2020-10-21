@@ -10,6 +10,7 @@ import {printMessage} from "../helpers/printerActions";
 import {connect} from "react-redux";
 import {successMessage, warningMessage} from "../constants/Backend";
 import {StyledText} from "../components/StyledText";
+import DeleteBtn from '../components/DeleteBtn'
 
 class PrinterForm extends React.Component {
   static navigationOptions = {
@@ -133,11 +134,16 @@ class PrinterForm extends React.Component {
             </Text>
           </TouchableOpacity>
           {isEdit ? (
-            <TouchableOpacity onPress={handleEditCancel}>
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                {t('action.cancel')}
-              </Text>
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity onPress={handleEditCancel}>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                  {t('action.cancel')}
+                </Text>
+              </TouchableOpacity>
+              <DeleteBtn handleDeleteAction={handleSubmit(data => {
+                this.props?.handleDelete(data)
+              })} />
+            </>
           ) : (
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('PrinternKDS')}

@@ -285,8 +285,8 @@ class TablesScreen extends React.Component {
             }
           >
             <NavigationEvents
-              onWillFocus={() => {
-                this.loadInfo()
+              onWillFocus={async () => {
+                await this.loadInfo()
                 this.loadLocalization()
               }}
             />
@@ -392,15 +392,15 @@ class TablesScreen extends React.Component {
                       })
                     }} style={{width: '100%', height: '100%', alignSelf: 'center', flexWrap: 'wrap'}}>
                       <View style={{justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, right: 0, flexDirection: 'row'}}>
-                        <View style={{backgroundColor: '#fff', borderColor: mainThemeColor, borderWidth: 2, height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#BFBFBF', borderColor: mainThemeColor, borderWidth: 2, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.OTHERS')}</StyledText>
-                        <View style={{backgroundColor: mainThemeColor, height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#F8CBAD', height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.OPEN')}</StyledText>
-                        <View style={{backgroundColor: '#F5CE58', height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#FFE699', height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.IN_PROCESS')}</StyledText>
-                        <View style={{backgroundColor: '#0091D4', height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#8FAADC', height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.DELIVERED')}</StyledText>
-                        <View style={{backgroundColor: '#00A81F', height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#ADD395', height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.SETTLED')}</StyledText>
 
                       </View>
@@ -408,6 +408,7 @@ class TablesScreen extends React.Component {
                       {
                         tablelayouts[this.state.tableIndex]?.tables?.map((table, index) => {
                           return (this.state?.tableWidth && <Draggable
+                            borderColor={themeStyle.color === '#f1f1f1' ? '#fff' : mainThemeColor}
                             table={table}
                             key={table.tableId}
                             layoutId={1}
@@ -424,7 +425,7 @@ class TablesScreen extends React.Component {
                               })
                             }}
                             gotoOrderDetail={(order) => {
-                              console.log("gotoOrderDetail", order);
+                              //console.log("gotoOrderDetail", order);
                               navigation.navigate('OrderFormII', {
                                 orderId: order.orderId,
                                 orderState: order.state
@@ -674,7 +675,7 @@ class Draggable extends Component {
     });
   }
 
-  renderDraggable(layoutId, table, orders, openOrderModal, index) {
+  renderDraggable(layoutId, table, orders, openOrderModal, index, borderColor) {
     TimeAgo.addLocale(en)
     const timeAgo = new TimeAgo()
 
@@ -702,13 +703,13 @@ class Draggable extends Component {
                     });
                   }
                 }}
-                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: mainThemeColor, borderWidth: 5}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
+                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#BFBFBF', borderColor: borderColor, borderWidth: 3}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
                 {
-                  borderWidth: 0,
-                  backgroundColor: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'OPEN' ? mainThemeColor
-                    : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'IN_PROCESS' ? '#F5CE58'
-                      : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'DELIVERED' ? '#0091D4'
-                        : '#00A81F'
+
+                  backgroundColor: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'OPEN' ? '#F8CBAD'
+                    : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'IN_PROCESS' ? '#FFE699'
+                      : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'DELIVERED' ? '#8FAADC'
+                        : '#ADD395'
                 })]}>
                 <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
                 <Text style={{color: '#000', textAlign: 'center', }}>{`${this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.customerCount ?? 0}/${table.capacity}`}</Text>
@@ -741,13 +742,13 @@ class Draggable extends Component {
 
                   console.log(table, JSON.stringify(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})))
                 }}
-                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: mainThemeColor, borderWidth: 5}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
+                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#BFBFBF', borderColor: borderColor, borderWidth: 3}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
                 {
-                  borderWidth: 0,
-                  backgroundColor: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'OPEN' ? mainThemeColor
-                    : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'IN_PROCESS' ? '#F5CE58'
-                      : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'DELIVERED' ? '#0091D4'
-                        : '#00A81F'
+
+                  backgroundColor: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'OPEN' ? '#F8CBAD'
+                    : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'IN_PROCESS' ? '#FFE699'
+                      : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'DELIVERED' ? '#8FAADC'
+                        : '#ADD395'
                 })]}>
                 <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
                 <Text style={{color: '#000', textAlign: 'center', }}>{`${this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.customerCount ?? 0}/${table.capacity}`}</Text>
@@ -767,10 +768,10 @@ class Draggable extends Component {
   }
 
   render() {
-    const {table, layoutId, orders, openOrderModal, index} = this.props
+    const {table, layoutId, orders, openOrderModal, index, borderColor} = this.props
     return (
       <View style={{alignItems: "flex-start", borderWidth: 0, marginBottom: 0}} ref='self'>
-        {this.renderDraggable(layoutId, table, orders, openOrderModal, index)}
+        {this.renderDraggable(layoutId, table, orders, openOrderModal, index, borderColor)}
       </View>
     );
   }

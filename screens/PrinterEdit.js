@@ -45,6 +45,22 @@ class PrinterEdit extends React.Component {
     }).then()
   }
 
+  handleDelete = (values) => {
+
+    dispatchFetchRequest(api.printer.delete(values.id), {
+      method: 'DELETE',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }, response => {
+      this.props.navigation.navigate('PrinternKDS')
+      this.props.getWorkingAreas()
+      this.props.getPrinters()
+    }).then()
+  }
+
   handleEditCancel = () => {
     this.props.clearPrinter()
     this.props.getWorkingAreas()
@@ -52,16 +68,16 @@ class PrinterEdit extends React.Component {
   }
 
   render() {
-    const { navigation, printer, loading, haveData, haveError } = this.props
-    const { t } = this.context
+    const {navigation, printer, loading, haveData, haveError} = this.props
+    const {t} = this.context
 
     if (loading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveError) {
       return (
-        <BackendErrorScreen/>
+        <BackendErrorScreen />
       )
     }
 
@@ -69,11 +85,12 @@ class PrinterEdit extends React.Component {
       <ThemeContainer>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader title={t('editPrinterTitle')}
-                        parentFullScreen={true}/>
+            parentFullScreen={true} />
 
           <PrinterForm
             navigation={navigation}
             onSubmit={this.handleUpdate}
+            handleDelete={this.handleDelete}
             isEdit={true}
             initialValues={printer}
             handleEditCancel={this.handleEditCancel}

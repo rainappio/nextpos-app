@@ -104,7 +104,10 @@ export const api = {
     new: `${apiRoot}/labels`,
     sortPrdList: prdLabelId => {
       return `${apiRoot}/labels/${prdLabelId}/order`
-    }
+    },
+    delete: prdLabelId => {
+      return `${apiRoot}/labels/${prdLabelId}`
+    },
   },
   productOption: {
     new: `${apiRoot}/productoptions`,
@@ -217,7 +220,19 @@ export const api = {
     deactivateOrderOfferById: offerId => {
       return `${apiRoot}/offers/${offerId}/deactivate`
     },
-    createOffer: `${apiRoot}/offers`
+    createOffer: `${apiRoot}/offers`,
+    quickCheckout: id => {
+      return `${apiRoot}/orders/${id}/quickCheckout`
+    },
+  },
+  splitOrder: {
+    new: `${apiRoot}/splitOrders`,
+    moveItem: orderId => {
+      return `${apiRoot}/splitOrders/${orderId}`
+    },
+    revert: orderId => {
+      return `${apiRoot}/splitOrders/${orderId}/revert`
+    },
   },
   printer: {
     create: `${apiRoot}/printers`,
@@ -228,7 +243,10 @@ export const api = {
     },
     update: id => {
       return `${apiRoot}/printers/${id}`
-    }
+    },
+    delete: id => {
+      return `${apiRoot}/printers/${id}`
+    },
   },
   workingarea: {
     create: `${apiRoot}/workingareas`,
@@ -238,7 +256,10 @@ export const api = {
     getAll: `${apiRoot}/workingareas`,
     update: id => {
       return `${apiRoot}/workingareas/${id}`
-    }
+    },
+    delete: id => {
+      return `${apiRoot}/workingareas/${id}`
+    },
   },
   shift: {
     open: `${apiRoot}/shifts/open`,

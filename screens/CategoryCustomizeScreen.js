@@ -11,6 +11,7 @@ import ScreenHeader from "../components/ScreenHeader";
 import RadioItemObjPick from "../components/RadioItemObjPick";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
+import DeleteBtn from '../components/DeleteBtn'
 
 class CategoryCustomizeScreen extends React.Component {
   static navigationOptions = {
@@ -50,23 +51,23 @@ class CategoryCustomizeScreen extends React.Component {
       handleSubmit,
     } = this.props
 
-    const { t } = this.context
+    const {t} = this.context
 
     return (
       // scroll bar in the center issue: https://github.com/facebook/react-native/issues/26610
       <ThemeScrollView>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader parentFullScreen={true}
-                        title={t('categoryTitle')}
-                        rightComponent={
-                          <AddBtn
-                            onPress={() =>
-                              this.props.navigation.navigate('Option', {
-                                customRoute: this.props.navigation.state.routeName
-                              })
-                            }
-                          />
-                        }
+            title={t('categoryTitle')}
+            rightComponent={
+              <AddBtn
+                onPress={() =>
+                  this.props.navigation.navigate('Option', {
+                    customRoute: this.props.navigation.state.routeName
+                  })
+                }
+              />
+            }
           />
 
           <View style={styles.tableRowContainerWithBorder}>
@@ -104,19 +105,19 @@ class CategoryCustomizeScreen extends React.Component {
                 </View>
 
                 {workingareas !== undefined &&
-                workingareas.map(workarea => (
-                  <View key={workarea.id}>
-                    <Field
-                      name='workingAreaId'
-                      component={RadioItemObjPick}
-                      customValueOrder={workarea.id}
-                      optionName={workarea.name}
-                      onCheck={(currentVal, fieldVal) => {
-                        return fieldVal !== undefined && currentVal === fieldVal
-                      }}
-                    />
-                  </View>
-                ))}
+                  workingareas.map(workarea => (
+                    <View key={workarea.id}>
+                      <Field
+                        name='workingAreaId'
+                        component={RadioItemObjPick}
+                        customValueOrder={workarea.id}
+                        optionName={workarea.name}
+                        onCheck={(currentVal, fieldVal) => {
+                          return fieldVal !== undefined && currentVal === fieldVal
+                        }}
+                      />
+                    </View>
+                  ))}
               </View>
 
 
@@ -148,6 +149,7 @@ class CategoryCustomizeScreen extends React.Component {
                 {t('action.cancel')}
               </Text>
             </TouchableOpacity>
+            <DeleteBtn handleDeleteAction={() => this.props?.handleDelete()} />
           </View>
         </View>
       </ThemeScrollView>

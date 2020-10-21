@@ -68,7 +68,7 @@ class OrderTopInfo extends Component {
               <View style={{flexDirection: 'row'}}>
                 <StyledText>Order ID: </StyledText>
                 <StyledText style={styles.tableCellText}>{order.serialId}</StyledText>
-                {order.metadata.hasOwnProperty('copyFromOrderId') && order.metadata.hasOwnProperty('copyFromSerialId') && (
+                {order?.metadata?.hasOwnProperty('copyFromOrderId') && order?.metadata?.hasOwnProperty('copyFromSerialId') && (
                   <TouchableOpacity
                     onPress={() => {
                       this.props.navigation.navigate({
@@ -146,7 +146,7 @@ class OrderTopInfo extends Component {
           <View style={styles.tableRowContainer}>
             <StyledText>Order ID: </StyledText>
             <StyledText style={styles.tableCellText}>{order.serialId}</StyledText>
-            {order.metadata.hasOwnProperty('copyFromOrderId') && order.metadata.hasOwnProperty('copyFromSerialId') && (
+            {order?.metadata?.hasOwnProperty('copyFromOrderId') && order?.metadata?.hasOwnProperty('copyFromSerialId') && (
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.navigate({

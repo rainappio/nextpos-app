@@ -10,6 +10,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
 import {printMessage} from "../helpers/printerActions";
+import {handleDelete} from "../helpers/orderActions";
 
 
 class CheckoutComplete extends React.Component {
@@ -35,7 +36,8 @@ class CheckoutComplete extends React.Component {
         printerWarning: 'Print failed',
         invoiceWarning: 'Invoice has not been set',
         eInvoiceCheckout: 'E-invoice',
-        orderReceipt: 'Order Receipt'
+        orderReceipt: 'Order Receipt',
+        continueSplitBill: 'Proceed to split bill'
       },
       zh: {
         checkoutCompletedTitle: '結帳完成',
@@ -50,7 +52,8 @@ class CheckoutComplete extends React.Component {
         printerWarning: '列印失敗',
         invoiceWarning: '尚未設定電子發票',
         eInvoiceCheckout: '電子發票',
-        orderReceipt: '訂單明細'
+        orderReceipt: '訂單明細',
+        continueSplitBill: '繼續拆帳'
       }
     })
     this.state = {
@@ -68,8 +71,11 @@ class CheckoutComplete extends React.Component {
     this.getXML(this.props.navigation.state.params?.transactionResponse?.transactionId)
     this.getOnePrinter()
     this.props.getWorkingAreas()
+    this.context?.saveSplitOrderId(null)
+
   }
 
+  // If dev , commet this function
   componentDidUpdate(prevProps, prevState) {
 
     if (!this.state.isPrintFirst && !!this.state.printer && (!!this.state.invoiceXML || !!this.state.receiptXML)) {
@@ -262,55 +268,94 @@ class CheckoutComplete extends React.Component {
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{width: '50%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('TablesSrc')
-                  }}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    alignContent: 'center',
-                    backgroundColor: mainThemeColor,
-                    borderRadius: 10,
-                  }}
-                >
-                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                    {t('backToTables')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
 
-              <View style={{width: '50%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.state.params.onSubmit(
-                      transactionResponse.orderId
-                    )
-                  }
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    alignContent: 'center',
-                    backgroundColor: '#fff',
-                    borderWidth: 1,
-                    borderColor: mainThemeColor,
-                    borderRadius: 10,
-                  }}
-                >
-                  <Text style={{
-                    fontSize: 16,
-                    padding: 10,
-                    marginBottom: 10,
-                    overflow: 'hidden',
-                    color: mainThemeColor
-                  }}>{t('completeOrder')}</Text>
-                </TouchableOpacity>
-              </View>
+              {/* split done or no split */}
+              {(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0) &&
+                <>
+                  <View style={{width: '50%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (!!this.props.navigation.state.params.isSplitting) {
+                          this.context?.saveSplitParentOrderId(null)
+                          handleDelete(this.props.navigation.state.params.parentOrder?.orderId, () => this.props.navigation.navigate('TablesSrc'))
+                        } else
+                          this.props.navigation.navigate('TablesSrc')
+                      }}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignContent: 'center',
+                        backgroundColor: mainThemeColor,
+                        borderRadius: 10,
+                      }}
+                    >
+                      <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                        {t('backToTables')}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  <View style={{width: '50%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigation.state.params.onSubmit(
+                          transactionResponse.orderId
+                        )
+                      }
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignContent: 'center',
+                        backgroundColor: '#fff',
+                        borderWidth: 1,
+                        borderColor: mainThemeColor,
+                        borderRadius: 10,
+                      }}
+                    >
+                      <Text style={{
+                        fontSize: 16,
+                        padding: 10,
+                        marginBottom: 10,
+                        overflow: 'hidden',
+                        color: mainThemeColor
+                      }}>{t('completeOrder')}</Text>
+                    </TouchableOpacity>
+                  </View></>}
+
+              {/* splitting */}
+              {(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0) ||
+                <View style={{width: '100%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.state.params.onSubmit(
+                        transactionResponse.orderId
+                      )
+                    }
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      alignContent: 'center',
+                      backgroundColor: '#fff',
+                      borderWidth: 1,
+                      borderColor: mainThemeColor,
+                      borderRadius: 10,
+                    }}
+                  >
+                    <Text style={{
+                      fontSize: 16,
+                      padding: 10,
+                      marginBottom: 10,
+                      overflow: 'hidden',
+                      color: mainThemeColor
+                    }}>{t('continueSplitBill')}</Text>
+                  </TouchableOpacity>
+                </View>}
             </View>
           </View>
         </ThemeContainer>
@@ -366,10 +411,11 @@ class CheckoutComplete extends React.Component {
               <View>
                 <TouchableOpacity
                   onPress={() => {
-                    if (printers.length > 0)
-                      this.handlePrint(this.state?.invoiceXML, this.state.printer.ipAddress, true)
-                    else
-                      console.warn('no printer')
+                    if (!!this.state.printer) {
+                      if (!!this.state?.invoiceXML)
+                        this.handlePrint(this.state?.invoiceXML, this.state.printer.ipAddress, true)
+                    }
+
                   }}
                 >
                   <Text style={[styles.bottomActionButton, styles.actionButton]}>
@@ -380,10 +426,9 @@ class CheckoutComplete extends React.Component {
               <View>
                 <TouchableOpacity
                   onPress={() => {
-                    if (printers.length > 0)
+                    if (!!this.state.printer)
                       this.handlePrint(this.state?.receiptXML, this.state.printer.ipAddress, false)
-                    else
-                      console.warn('no printer')
+
                   }}
                 >
                   <Text style={[styles.bottomActionButton, styles.actionButton]}>
@@ -391,17 +436,21 @@ class CheckoutComplete extends React.Component {
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View>
+              {(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0) && <View>
                 <TouchableOpacity
                   onPress={() => {
-                    this.props.navigation.navigate('TablesSrc')
+                    if (!!this.props.navigation.state.params.isSplitting) {
+                      this.context?.saveSplitParentOrderId(null)
+                      handleDelete(this.props.navigation.state.params.parentOrder?.orderId, () => this.props.navigation.navigate('TablesSrc'))
+                    } else
+                      this.props.navigation.navigate('TablesSrc')
                   }}
                 >
                   <Text style={[styles.bottomActionButton, styles.actionButton]}>
                     {t('backToTables')}
                   </Text>
                 </TouchableOpacity>
-              </View>
+              </View>}
 
               <View>
                 <TouchableOpacity
@@ -411,7 +460,7 @@ class CheckoutComplete extends React.Component {
                     )
                   }
                 >
-                  <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('completeOrder')}</Text>
+                  <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t(`${(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0) ? 'completeOrder' : 'continueSplitBill'}`)}</Text>
                 </TouchableOpacity>
               </View>
             </View>

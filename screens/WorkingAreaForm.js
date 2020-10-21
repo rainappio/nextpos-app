@@ -7,6 +7,7 @@ import RenderCheckboxGroup from '../components/CheckBoxGroup'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {StyledText} from "../components/StyledText";
+import DeleteBtn from '../components/DeleteBtn'
 
 class WorkingAreaForm extends React.Component {
   static navigationOptions = {
@@ -36,8 +37,8 @@ class WorkingAreaForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, isEdit, handleEditCancel, navigation } = this.props
-    const { t } = this.context
+    const {handleSubmit, isEdit, handleEditCancel, navigation} = this.props
+    const {t} = this.context
 
     return (
       <View style={styles.flex(1)}>
@@ -102,20 +103,25 @@ class WorkingAreaForm extends React.Component {
             </Text>
           </TouchableOpacity>
           {isEdit ? (
-            <TouchableOpacity onPress={handleEditCancel}>
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                {t('action.cancel')}
-              </Text>
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity onPress={handleEditCancel}>
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                  {t('action.cancel')}
+                </Text>
+              </TouchableOpacity>
+              <DeleteBtn handleDeleteAction={handleSubmit(data => {
+                this.props?.handleDelete(data)
+              })} />
+            </>
           ) : (
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('PrinternKDS')}
-            >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                {t('action.cancel')}
-              </Text>
-            </TouchableOpacity>
-          )}
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('PrinternKDS')}
+              >
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                  {t('action.cancel')}
+                </Text>
+              </TouchableOpacity>
+            )}
         </View>
       </View>
     )

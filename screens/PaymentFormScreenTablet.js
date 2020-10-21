@@ -17,6 +17,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import PaymentDiscountModal from './PaymentDiscountModal'
 import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
 import {isGuiNumberValid} from 'taiwan-id-validator2'
+import {handleDelete} from "../helpers/orderActions";
+import NavigationService from "../navigation/NavigationService";
+import {NavigationEvents} from 'react-navigation'
 
 class PaymentFormScreenTablet extends React.Component {
     static navigationOptions = {
@@ -27,54 +30,6 @@ class PaymentFormScreenTablet extends React.Component {
     constructor(props, context) {
         super(props, context)
 
-        context.localize({
-            en: {
-                payment: {
-                    cashPayment: 'Cash',
-                    cardPayment: 'Credit Card',
-                    paymentTitle: 'Payment',
-                    orderOptions: 'Order Options',
-                    waiveServiceCharge: 'Waive Service Charge',
-                    resetAllOffers: 'Reset All Offers',
-                    payOrder: 'Pay',
-                    paid: 'Paid',
-                    change: 'Change',
-                    remainder: 'Remainder',
-                    CardNo: 'Last 4 Digits',
-                    cardType: 'Card Type',
-                    taxIDNumber: 'Tax ID Number',
-                    enterTaxIDNumber: 'Enter Tax ID Number',
-                    ok: 'Done',
-                    cancel: 'Cancel',
-                    charged: 'Payment charged',
-                    discountOptions: 'Discount Options',
-                    checkTaxIDNumber: 'Enter Correct Tax ID Number'
-                }
-            },
-            zh: {
-                payment: {
-                    cashPayment: '現金',
-                    cardPayment: '信用卡',
-                    paymentTitle: '付款',
-                    orderOptions: '訂單選項',
-                    waiveServiceCharge: '折抵服務費',
-                    resetAllOffers: '取消訂單優惠',
-                    payOrder: '付帳',
-                    paid: '實收',
-                    change: '找零',
-                    remainder: '剩餘',
-                    CardNo: '卡號末四碼',
-                    cardType: '信用卡種類',
-                    taxIDNumber: '統一編號',
-                    enterTaxIDNumber: '輸入統一編號',
-                    ok: '確定',
-                    cancel: '取消',
-                    charged: '付款成功',
-                    discountOptions: '折扣選項',
-                    checkTaxIDNumber: '請輸入正確的統一編號'
-                }
-            }
-        })
 
         this.state = {
             keyboardResult: 0,
@@ -88,7 +43,7 @@ class PaymentFormScreenTablet extends React.Component {
             modalVisible: false,
             modalData: props.order,
             orderLineItems: {},
-            waiveServiceCharge: true,
+            waiveServiceCharge: this.props.order?.serviceCharge === 0,
         }
     }
 
@@ -98,12 +53,25 @@ class PaymentFormScreenTablet extends React.Component {
         this.setState({waiveServiceCharge: this.props.order?.serviceCharge === 0})
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props?.order !== prevProps?.order) {
+            this.setState({openDiscountKeyBoard: false, waiveServiceCharge: this.props.order?.serviceCharge === 0})
+        }
+    }
+
     refreshOrder = async () => {
         this.props.getfetchglobalOrderOffers()
         this.props.getOrder(this.props.order.orderId)
         this.setState({openDiscountKeyBoard: false})
 
     }
+
+    initScreen = async () => {
+        await this.props.getfetchglobalOrderOffers()
+        await this.props.getOrder(this.props.order.orderId)
+        this.setState({openDiscountKeyBoard: false, waiveServiceCharge: this.props.order?.serviceCharge === 0})
+    }
+
 
 
     handleComplete = id => {
@@ -119,11 +87,24 @@ class PaymentFormScreenTablet extends React.Component {
         }, {
             defaultMessage: false
         }, response => {
-            this.props.navigation.navigate('TablesSrc')
+            if (!!this.props?.isSplitting) {
+                if (this.props?.parentOrder?.lineItems.length !== 0) {
+                    this.props.navigation.navigate('SpiltBillScreen', {
+                        order: this.props?.parentOrder
+                    })
+                } else {
+                    this.context?.saveSplitParentOrderId(null)
+                    handleDelete(this.props?.parentOrder?.orderId, () => NavigationService.navigate('TablesSrc'))
+                }
+
+            } else {
+                this.context?.saveSplitParentOrderId(null)
+                this.props.navigation.navigate('TablesSrc')
+            }
         }).then()
     }
 
-    handleSubmit = () => {
+    handleSubmit = (autoComplete = false, cash = 0) => {
         const transactionObj = {
             orderId: this.props.order.orderId,
             paymentMethod: this.state.selectedPayLabel,
@@ -132,7 +113,7 @@ class PaymentFormScreenTablet extends React.Component {
             paymentDetails: {}
         }
         if (this.state.selectedPayLabel === 'CASH') {
-            transactionObj.paymentDetails['CASH'] = this.state.keyboardResult
+            transactionObj.paymentDetails['CASH'] = autoComplete ? cash : this.state.keyboardResult
         }
         if (this.state.selectedPayLabel === 'CARD') {
             transactionObj.paymentDetails['CARD_TYPE'] = this.state.selectedCardLabel
@@ -155,7 +136,9 @@ class PaymentFormScreenTablet extends React.Component {
             response.json().then(data => {
                 this.props.navigation.navigate('CheckoutComplete', {
                     transactionResponse: data,
-                    onSubmit: this.handleComplete
+                    onSubmit: this.handleComplete,
+                    isSplitting: this.props?.isSplitting ?? false,
+                    parentOrder: this.props?.parentOrder ?? null,
                 })
             })
         }).then()
@@ -192,6 +175,11 @@ class PaymentFormScreenTablet extends React.Component {
                     <ScreenHeader backNavigation={true}
                         parentFullScreen={true}
                         title={t('payment.paymentTitle')}
+                    />
+                    <NavigationEvents
+                        onWillFocus={async () => {
+                            await this.initScreen()
+                        }}
                     />
                     <PaymentDiscountModal
                         modalVisible={this.state.modalVisible}
@@ -500,7 +488,22 @@ class PaymentFormScreenTablet extends React.Component {
                                                 )
                                             }
                                             else {
-                                                this.handleSubmit()
+                                                if (this.state.selectedPayLabel === 'CASH' && (order.orderTotal - this.state.keyboardResult) > 0) {
+                                                    Alert.alert(
+                                                        `${t('payment.checkAutoComplete')}`,
+                                                        ` `,
+                                                        [
+                                                            {text: `${t('action.yes')}`, onPress: () => this.handleSubmit(true, order.orderTotal)},
+                                                            {
+                                                                text: `${t('action.no')}`,
+                                                                onPress: () => console.log('Cancelled'),
+                                                                style: 'cancel'
+                                                            }
+                                                        ]
+                                                    )
+                                                }
+                                                else
+                                                    this.handleSubmit(false)
                                             }
                                         }}
                                         style={styles.flexButton}
@@ -524,8 +527,8 @@ const mapStateToProps = (state, props) => ({
     order: state.order.data,
 })
 
-const mapDispatchToProps = dispatch => ({
-    getOrder: id => dispatch(getOrder(id)),
+const mapDispatchToProps = (dispatch, props) => ({
+    getOrder: () => dispatch(getOrder(props.order.orderId)),
     getfetchglobalOrderOffers: () => dispatch(getfetchglobalOrderOffers())
 })
 

@@ -43,3 +43,31 @@ export const MainActionButton = (props) => {
     )
 }
 
+export const SecondActionButton = (props) => {
+
+    return (
+        <TouchableOpacity
+            onPress={props?.onPress ?? (() => console.warn('no onPress'))}
+            style={props?.containerStyle}
+        >
+            <Text style={props?.style ?? [styles.bottomActionButton, styles.secondActionButton]}>
+                {props?.title ?? 'Submit'}
+            </Text>
+        </TouchableOpacity>
+    )
+}
+
+export const MainActionFlexButton = (props) => {
+
+    return (
+        <TouchableOpacity
+            onPress={props?.onPress ?? (() => console.warn('no onPress'))}
+            style={styles.flexButton}
+        >
+            <Text style={styles.flexButtonText}>
+                {props?.title ?? 'Submit'}
+            </Text>
+        </TouchableOpacity>
+    )
+}
+

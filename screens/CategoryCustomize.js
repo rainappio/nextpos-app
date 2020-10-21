@@ -40,6 +40,21 @@ class CategoryCustomize extends React.Component {
 
   }
 
+  handleDelete = () => {
+    const labelId = this.props.navigation.state.params.labelId
+
+    dispatchFetchRequest(api.productLabel.delete(labelId), {
+      method: 'DELETE',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }, response => {
+      this.props.navigation.navigate('ProductsOverview')
+    }).then()
+  }
+
   handleEditCancel = () => {
     this.props.clearLabel()
     this.props.getProducts()
@@ -59,11 +74,11 @@ class CategoryCustomize extends React.Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveError) {
       return (
-        <BackendErrorScreen/>
+        <BackendErrorScreen />
       )
     } else if (label !== undefined && Object.entries(label).length === 0) {
       return (
@@ -82,6 +97,7 @@ class CategoryCustomize extends React.Component {
         <CategoryCustomizeScreen
           isEditForm={true}
           onSubmit={this.handleSubmit}
+          handleDelete={this.handleDelete}
           navigation={navigation}
           labelName={navigation.state.params.labelName}
           initialValues={label}
