@@ -52,9 +52,8 @@ class EinvoiceEditScreen extends React.Component {
         }
     }
 
-    componentDidMount() {
-
-
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextState !== this.state;
     }
 
 
