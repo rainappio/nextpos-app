@@ -148,7 +148,7 @@ class SalesCharts extends React.Component {
       haveError,
       haveSDData
     } = this.props
-    const { t } = this.context
+    const {t} = this.context
     const containSalesData = haveData && getrangedSalesReport.salesByRange !== undefined
 
     let rangedSalesData = {}
@@ -211,8 +211,8 @@ class SalesCharts extends React.Component {
                 <StyledText>{salesData.name}</StyledText>
               </TouchableOpacity>
             ) : (
-              <StyledText>{salesData.name}</StyledText>
-            )}
+                <StyledText>{salesData.name}</StyledText>
+              )}
           </View>
 
           <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
@@ -232,7 +232,7 @@ class SalesCharts extends React.Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveError) {
       return <BackendErrorScreen />
@@ -240,12 +240,12 @@ class SalesCharts extends React.Component {
     } else if (!containSalesData) {
       return (
         <View style={[styles.container]}>
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <ScreenHeader backNavigation={true}
-                          title={t('salesDashboardTitle')}
+              title={t('salesDashboardTitle')}
             />
           </View>
-          <Text style={{ flex: 3, alignSelf: 'center' }}>
+          <Text style={{flex: 3, alignSelf: 'center'}}>
             {t('noSalesData')}
           </Text>
         </View>
@@ -255,127 +255,127 @@ class SalesCharts extends React.Component {
     return (
       <ThemeScrollView>
         <View style={styles.fullWidthScreen}>
-        <ProductsRanking
-          isShow={this.state.showProductsRanking}
-          toggleProductsRanking={this.toggleProductsRankingModal}
-          filteredRankingData={salesRankingReport.salesByProducts}
-        />
+          <ProductsRanking
+            isShow={this.state.showProductsRanking}
+            toggleProductsRanking={this.toggleProductsRankingModal}
+            filteredRankingData={salesRankingReport.salesByProducts}
+          />
 
-        <ScreenHeader backNavigation={true}
-                      parentFullScreen={true}
-                      title={t('salesDashboardTitle')}
-        />
+          <ScreenHeader backNavigation={true}
+            parentFullScreen={true}
+            title={t('salesDashboardTitle')}
+          />
 
-        <View>
-          <OrderFilterForm
-            onSubmit={this.handleFilterSalesChart}
-            initialValues={{
-              dateRange: this.state.selectedRangeType,
-              fromDate: new Date(getrangedSalesReport.dateRange.zonedFromDate),
-              toDate: new Date(getrangedSalesReport.dateRange.zonedToDate)
-            }} />
-        </View>
-
-        <View style={styles.tableRowContainerWithBorder}>
-          <View style={styles.tableCellView}>
-            <StyledText style={styles.tableCellText}>{t('salesTotal')}</StyledText>
+          <View>
+            <OrderFilterForm
+              onSubmit={this.handleFilterSalesChart}
+              initialValues={{
+                dateRange: this.state.selectedRangeType,
+                fromDate: new Date(getrangedSalesReport.dateRange.zonedFromDate),
+                toDate: new Date(getrangedSalesReport.dateRange.zonedToDate)
+              }} />
           </View>
-          <View style={[styles.tableCellView, styles.justifyRight]}>
-            <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.salesTotal)}</StyledText>
-          </View>
-          {/*<Chart
+
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={styles.tableCellView}>
+              <StyledText style={styles.tableCellText}>{t('salesTotal')}</StyledText>
+            </View>
+            <View style={[styles.tableCellView, styles.justifyRight]}>
+              <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.salesTotal)}</StyledText>
+            </View>
+            {/*<Chart
             data={Object.keys(filteredRangedSalesData).length !== 0 ? filteredRangedSalesData : rangedSalesData}
             width={Dimensions.get('window').width * 2}
             props={{
               yAxisLabel: '$'
             }}
           />*/}
-        </View>
-
-        <View style={styles.tableRowContainerWithBorder}>
-          <View style={styles.tableCellView}>
-            <StyledText style={styles.tableCellText}>{t('serviceChargeTotal')}</StyledText>
-          </View>
-          <View style={[styles.tableCellView, styles.justifyRight]}>
-            <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.serviceChargeTotal)}</StyledText>
-          </View>
-        </View>
-
-        <View style={styles.tableRowContainerWithBorder}>
-          <View style={[styles.tableCellView]}>
-            <StyledText style={styles.tableCellText}>{t('discountTotal')}</StyledText>
-          </View>
-          <View style={[styles.tableCellView, styles.justifyRight]}>
-            <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.discountTotal)}</StyledText>
-          </View>
-        </View>
-
-        <View style={styles.sectionContainer}>
-          <RenderTable reportData={rangedSalesData} isCurrency={true}/>
-        </View>
-
-        <View style={styles.sectionContainer}>
-          <View style={styles.sectionTitleContainer}>
-            <Text style={styles.screenSubTitle}>
-              {t('salesRankingTitle')}
-            </Text>
-          </View>
-          <View style={[styles.sectionContainer, styles.dynamicHorizontalPadding(10)]}>
-            <SegmentedControl
-              selectedIndex={this.state.selectedRankingFilter}
-              input={{
-                onChange: this.handleRankingFilterChange
-              }}
-              values={[t('rankingFilter.product'), t('rankingFilter.label')]}
-            />
           </View>
 
-          <View style={{marginBottom: 20}}>
-            <View style={styles.sectionBar}>
-              <View style={[styles.quarter_width, styles.tableCellView]}>
-                <Text style={[styles.sectionBarTextSmall]}>{t('order.product')}</Text>
-              </View>
-
-              <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                <Text style={styles.sectionBarTextSmall}>{t('quantity')}</Text>
-              </View>
-
-              <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                <Text style={styles.sectionBarTextSmall}>{t('amount')}</Text>
-              </View>
-
-              <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                <Text style={styles.sectionBarTextSmall}>{t('percentage')}</Text>
-              </View>
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={styles.tableCellView}>
+              <StyledText style={styles.tableCellText}>{t('serviceChargeTotal')}</StyledText>
             </View>
-            <FlatList
-              data={rankingData}
-              renderItem={({item}) => {
-                return <Item salesData={item}/>
-              }}
-              ListEmptyComponent={() => {
-                return (
-                  <Text style={[styles.messageBlock, styles.orange_color]}>{t('noSalesData')}</Text>
-                )
-              }}
-              keyExtractor={item => item.id}
-            />
+            <View style={[styles.tableCellView, styles.justifyRight]}>
+              <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.serviceChargeTotal)}</StyledText>
+            </View>
           </View>
-        </View>
 
-        <View style={styles.sectionContainer}>
-          <Text style={styles.screenSubTitle}>
-            {t('salesDistributionTitle')}
-          </Text>
-          {haveSDData && (
-            <View>
-              <RenderTable
-                reportData={salesDistributionData}
-                isCurrency={true}
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView]}>
+              <StyledText style={styles.tableCellText}>{t('discountTotal')}</StyledText>
+            </View>
+            <View style={[styles.tableCellView, styles.justifyRight]}>
+              <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.discountTotal)}</StyledText>
+            </View>
+          </View>
+
+          <View style={styles.sectionContainer}>
+            <RenderTable reportData={rangedSalesData} isCurrency={true} />
+          </View>
+
+          <View style={styles.sectionContainer}>
+            <View style={styles.sectionTitleContainer}>
+              <Text style={styles.screenSubTitle}>
+                {t('salesRankingTitle')}
+              </Text>
+            </View>
+            <View style={[styles.sectionContainer, styles.dynamicHorizontalPadding(10)]}>
+              <SegmentedControl
+                selectedIndex={this.state.selectedRankingFilter}
+                input={{
+                  onChange: this.handleRankingFilterChange
+                }}
+                values={[t('rankingFilter.product'), t('rankingFilter.label')]}
               />
             </View>
-          )}
-        </View>
+
+            <View style={{marginBottom: 20}}>
+              <View style={styles.sectionBar}>
+                <View style={[styles.quarter_width, styles.tableCellView]}>
+                  <Text style={[styles.sectionBarTextSmall]}>{t('order.product')}</Text>
+                </View>
+
+                <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                  <Text style={styles.sectionBarTextSmall}>{t('quantity')}</Text>
+                </View>
+
+                <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                  <Text style={styles.sectionBarTextSmall}>{t('amount')}</Text>
+                </View>
+
+                <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                  <Text style={styles.sectionBarTextSmall}>{t('percentage')}</Text>
+                </View>
+              </View>
+              <FlatList
+                data={rankingData}
+                renderItem={({item}) => {
+                  return <Item salesData={item} />
+                }}
+                ListEmptyComponent={() => {
+                  return (
+                    <Text style={[styles.messageBlock, styles.orange_color]}>{t('noSalesData')}</Text>
+                  )
+                }}
+                keyExtractor={item => item.id}
+              />
+            </View>
+          </View>
+
+          <View style={styles.sectionContainer}>
+            <Text style={styles.screenSubTitle}>
+              {t('salesDistributionTitle')}
+            </Text>
+            {haveSDData && (
+              <View>
+                <RenderTable
+                  reportData={salesDistributionData}
+                  isCurrency={true}
+                />
+              </View>
+            )}
+          </View>
         </View>
       </ThemeScrollView>
     )
@@ -409,13 +409,13 @@ class ProductsRanking extends React.Component {
   static contextType = LocaleContext
 
   render() {
-    const { isShow, toggleProductsRanking, filteredRankingData } = this.props
-    const { t } = this.context
+    const {isShow, toggleProductsRanking, filteredRankingData} = this.props
+    const {t} = this.context
 
     return (
       <View>
         <Modal transparent={true}
-               visible={isShow}
+          visible={isShow}
         >
           <View style={[styles.container, {flex: 1, backgroundColor: mainThemeColor, borderColor: 'red', borderRadius: 20, opacity: 0.95}]}>
             <View style={[styles.sectionContainer, {flex: 1}]}>
@@ -423,59 +423,59 @@ class ProductsRanking extends React.Component {
             </View>
 
             <View style={{flex: 4}}>
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.quarter_width, styles.tableCellView]}>
-                <Text style={styles.tableCellWhiteText}>{t('product')}</Text>
-              </View>
+              <View style={styles.tableRowContainerWithBorder}>
+                <View style={[styles.quarter_width, styles.tableCellView]}>
+                  <Text style={styles.tableCellWhiteText}>{t('order.product')}</Text>
+                </View>
 
-              <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                <Text style={styles.tableCellWhiteText}>{t('quantity')}</Text>
-              </View>
+                <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                  <Text style={styles.tableCellWhiteText}>{t('quantity')}</Text>
+                </View>
 
-              <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                <Text style={styles.tableCellWhiteText}>{t('amount')}</Text>
-              </View>
+                <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                  <Text style={styles.tableCellWhiteText}>{t('amount')}</Text>
+                </View>
 
-              <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                <Text style={styles.tableCellWhiteText}>{t('percentage')}</Text>
+                <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                  <Text style={styles.tableCellWhiteText}>{t('percentage')}</Text>
+                </View>
               </View>
-            </View>
-            <FlatList
-              data={filteredRankingData}
-              renderItem={({item}) => {
-                const salesData = item
+              <FlatList
+                data={filteredRankingData}
+                renderItem={({item}) => {
+                  const salesData = item
 
-                return (
-                  <View
-                    style={[styles.tableRowContainer]}
-                    key={salesData.id}
-                  >
-                    <View style={[styles.quarter_width, styles.tableCellView]}>
-                      <Text style={styles.tableCellWhiteText}>{salesData.productName}</Text>
+                  return (
+                    <View
+                      style={[styles.tableRowContainer]}
+                      key={salesData.id}
+                    >
+                      <View style={[styles.quarter_width, styles.tableCellView]}>
+                        <Text style={styles.tableCellWhiteText}>{salesData.productName}</Text>
+                      </View>
+
+                      <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                        <Text style={styles.tableCellWhiteText}>{salesData.salesQuantity}</Text>
+                      </View>
+
+                      <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                        <Text style={styles.tableCellWhiteText}>{formatCurrency(salesData.productSales)}</Text>
+                      </View>
+
+                      <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                        <Text style={styles.tableCellWhiteText}>{salesData.percentage}%</Text>
+                      </View>
                     </View>
 
-                    <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                      <Text style={styles.tableCellWhiteText}>{salesData.salesQuantity}</Text>
-                    </View>
-
-                    <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                      <Text style={styles.tableCellWhiteText}>{formatCurrency(salesData.productSales)}</Text>
-                    </View>
-
-                    <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                      <Text style={styles.tableCellWhiteText}>{salesData.percentage}%</Text>
-                    </View>
-                  </View>
-
-                )
-              }}
-              ListEmptyComponent={() => {
-                return (
-                  <Text style={[styles.messageBlock, styles.orange_color]}>{t('noSalesData')}</Text>
-                )
-              }}
-              keyExtractor={item => item.id}
-            />
+                  )
+                }}
+                ListEmptyComponent={() => {
+                  return (
+                    <Text style={[styles.messageBlock, styles.orange_color]}>{t('noSalesData')}</Text>
+                  )
+                }}
+                keyExtractor={item => item.id}
+              />
             </View>
 
             <View style={styles.bottom}>

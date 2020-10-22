@@ -12,7 +12,7 @@ import {LocaleContext} from '../locales/LocaleContext'
 import {CheckBox, Tooltip} from 'react-native-elements'
 import ScreenHeader from "../components/ScreenHeader";
 import OrderTopInfo from "./OrderTopInfo";
-import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer, handleQuickCheckout, revertSplitOrder} from "../helpers/orderActions";
+import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer, handleQuickCheckout, revertSplitOrder, handlePrintWorkingOrder, handlePrintOrderDetails} from "../helpers/orderActions";
 import NavigationService from "../navigation/NavigationService";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
@@ -53,7 +53,6 @@ class OrdersSummaryRow extends React.Component {
         deliverAllLineItems: 'Confirm to deliver all line items',
         lineItemCountCheck: 'At least one item is needed to submit an order.',
         submitOrder: 'Submit',
-        quickCheckoutPrint: 'Print',
         not: 'don\'t',
         quickCheckout: 'Quick checkout',
         backToTables: 'Back to Tables',
@@ -90,7 +89,6 @@ class OrdersSummaryRow extends React.Component {
         deliverAllLineItems: '確認所有品項送餐',
         lineItemCountCheck: '請加一個以上的產品到訂單裡.',
         submitOrder: '送單',
-        quickCheckoutPrint: '出單',
         not: '不',
         quickCheckout: '快速結帳',
         backToTables: '回到座位區',
@@ -104,7 +102,6 @@ class OrdersSummaryRow extends React.Component {
 
     this.state = {
       orderLineItems: {},
-      quickCheckoutPrint: true,
     }
 
     console.debug(`order summary order id: ${this.props.order.orderId}`)
@@ -202,7 +199,7 @@ class OrdersSummaryRow extends React.Component {
                 withCredentials: true,
                 credentials: 'include',
                 headers: {
-                  'Content-Type': 'application/json',
+                  'Content-Type': 'multipart/form-data',
                 },
                 body: formData
               },
@@ -428,6 +425,16 @@ class OrdersSummaryRow extends React.Component {
           <View>
             <View style={[styles.tableRowContainerWithBorder]}>
               <View style={[styles.tableCellView, {flex: 1}]}>
+                <StyledText>{t('order.subtotal')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <StyledText>
+                  ${order.total.amountWithTax}
+                </StyledText>
+              </View>
+            </View>
+            <View style={[styles.tableRowContainerWithBorder]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
                 <StyledText>{t('order.discount')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
@@ -476,58 +483,70 @@ class OrdersSummaryRow extends React.Component {
             </TouchableOpacity>
           )}
 
-          {['OPEN', 'IN_PROCESS'].includes(order.state) && (
-            <View>
-              <TouchableOpacity
-                onPress={() =>
-                  order.lineItems.length === 0
-                    ? warningMessage(t('lineItemCountCheck'))
-                    : handleQuickCheckout(order, this.state.quickCheckoutPrint)
-                }
-                style={{marginRight: '20%'}}
-              >
-                <View style={[styles.bottomActionButton, styles.actionButton, {width: '125%'}]}>
-                  <Text style={{
-                    textAlign: 'center',
-                    fontSize: 16, color: '#fff'
-                  }}>
-                    {t('quickCheckout')}
-                  </Text>
-                </View>
-
-              </TouchableOpacity>
-              <View style={{position: 'absolute', right: 0, top: 0, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={[styles.flexButtonText, {fontSize: 14}]}>
-                  {!this.state.quickCheckoutPrint && t('not')}{t('quickCheckoutPrint')}
-                </Text>
-                <Switch
-                  //style={{transform: [{scaleX: .7}, {scaleY: .7}]}}
-                  trackColor={{false: "#767577", true: "#1da1f2"}}
-                  thumbColor={this.state.quickCheckoutPrint ? "#f4f3f4" : "#f4f3f4"}
-                  ios_backgroundColor="#3e3e3e"
-                  onValueChange={() => this.setState({quickCheckoutPrint: !this.state.quickCheckoutPrint})}
-                  value={this.state.quickCheckoutPrint}
-                />
-              </View>
-            </View>
-          )}
-
-          {!['SETTLED', 'REFUNDED'].includes(order.state) && (
-            <DeleteBtn
-              handleDeleteAction={() => handleDelete(order.orderId, () => NavigationService.navigate('TablesSrc'))}
+          {order.state === 'OPEN' && (
+            <SecondActionButton
+              onPress={() =>
+                order.lineItems.length === 0
+                  ? warningMessage(t('lineItemCountCheck'))
+                  : Alert.alert(
+                    `${t('quickCheckoutPrint')}`,
+                    ``,
+                    [
+                      {
+                        text: `${this.context.t('action.yes')}`,
+                        onPress: async () => {
+                          await handleQuickCheckout(order, true)
+                        }
+                      },
+                      {
+                        text: `${this.context.t('action.no')}`,
+                        onPress: async () => await handleQuickCheckout(order, false),
+                        style: 'cancel'
+                      }
+                    ]
+                  )
+              }
+              title={t('quickCheckout')}
             />
           )}
-
-          {["IN_PROCESS"].includes(order.state) && (
-            <TouchableOpacity
-              onPress={() => {
-                this.handleDeliver(order.orderId)
-              }}
-            >
-              <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('deliverOrder')}</Text>
-            </TouchableOpacity>
+          {order.state === 'IN_PROCESS' && (
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 1, marginRight: 10}}>
+                <SecondActionButton
+                  onPress={() =>
+                    order.lineItems.length === 0
+                      ? warningMessage(t('lineItemCountCheck'))
+                      : Alert.alert(
+                        `${t('quickCheckoutPrint')}`,
+                        ``,
+                        [
+                          {
+                            text: `${this.context.t('action.yes')}`,
+                            onPress: async () => {
+                              await handleQuickCheckout(order, true)
+                            }
+                          },
+                          {
+                            text: `${this.context.t('action.no')}`,
+                            onPress: async () => await handleQuickCheckout(order, false),
+                            style: 'cancel'
+                          }
+                        ]
+                      )
+                  }
+                  title={t('quickCheckout')}
+                /></View>
+              <View style={{flex: 1}}>
+                <SecondActionButton
+                  onPress={() => {
+                    this.handleDeliver(order.orderId)
+                  }}
+                  title={t('deliverOrder')}
+                /></View>
+            </View>
 
           )}
+
 
           {order.state === 'DELIVERED' && (
             <View style={{flexDirection: 'row'}}>
@@ -582,7 +601,29 @@ class OrdersSummaryRow extends React.Component {
             </View>
 
           )}
+          {!['OPEN'].includes(order.state) && (
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 1, marginRight: 10}}>
+                <SecondActionButton
+                  onPress={() =>
+                    order.lineItems.length === 0
+                      ? warningMessage(t('lineItemCountCheck'))
+                      : handlePrintWorkingOrder(order.orderId)
+                  }
+                  title={t('printWorkingOrder')}
+                /></View>
+              <View style={{flex: 1}}>
+                <SecondActionButton
+                  onPress={() =>
+                    order.lineItems.length === 0
+                      ? warningMessage(t('lineItemCountCheck'))
+                      : handlePrintOrderDetails(order.orderId)
+                  }
+                  title={t('printOrderDetails')}
+                /></View>
+            </View>
 
+          )}
 
           {order.state === 'SETTLED' && (
             <TouchableOpacity
@@ -590,6 +631,11 @@ class OrdersSummaryRow extends React.Component {
             >
               <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('completeOrder')}</Text>
             </TouchableOpacity>
+          )}
+          {!['SETTLED', 'REFUNDED'].includes(order.state) && (
+            <DeleteBtn
+              handleDeleteAction={() => handleDelete(order.orderId, () => NavigationService.navigate('TablesSrc'))}
+            />
           )}
         </View>
       </View>

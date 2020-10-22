@@ -113,7 +113,69 @@ export const handleOrderSubmit = id => {
   ).then()
 }
 
-export const handleQuickCheckout = (order, print) => {
+export const handlePrintWorkingOrder = (orderId) => {
+  dispatchFetchRequestWithOption(
+    api.order.printWorkingOrder(orderId),
+    {
+      method: 'GET',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }, {
+    defaultMessage: false
+  }, response => {
+    response.json().then(data => {
+      data.map((printerInstructions) => {
+        printerInstructions?.ipAddresses?.map((ipAddresses) => {
+          for (let i = 0; i < printerInstructions.noOfPrintCopies; i++) {
+            printMessage(printerInstructions.printInstruction, ipAddresses, () => {
+              successMessage(i18n.t('printerSuccess'))
+
+            }, () => {
+              warningMessage(i18n.t('printerWarning'))
+            }
+            )
+          }
+        })
+      })
+    }).catch((e) => console.log(e))
+  }).then()
+}
+
+export const handlePrintOrderDetails = (orderId) => {
+  dispatchFetchRequestWithOption(
+    api.order.printOrderDetails(orderId),
+    {
+      method: 'GET',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }, {
+    defaultMessage: false
+  }, response => {
+    response.json().then(printerInstructions => {
+      console.log('handlePrintOrderDetails', printerInstructions)
+      printerInstructions?.ipAddresses?.map((ipAddresses) => {
+        for (let i = 0; i < printerInstructions.noOfPrintCopies; i++) {
+          printMessage(printerInstructions.printInstruction, ipAddresses, () => {
+            successMessage(i18n.t('printerSuccess'))
+
+          }, () => {
+            warningMessage(i18n.t('printerWarning'))
+          }
+          )
+        }
+      })
+
+    }).catch((e) => console.log(e))
+  }).then()
+}
+
+export const handleQuickCheckout = async (order, print) => {
   const formData = new FormData()
   formData.append('print', print)
 

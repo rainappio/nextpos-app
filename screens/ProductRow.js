@@ -2,7 +2,7 @@ import React from 'react'
 import {Dimensions, FlatList, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
 import DraggableFlatList from "react-native-draggable-flatlist";
-import PopUp from '../components/PopUp'
+import {CustomPopUp} from '../components/PopUp'
 import {getLables, getProducts} from '../actions'
 import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -134,7 +134,7 @@ class ProductRow extends React.Component {
                 }}
               />
             )}
-            <AntDesignIcon name={this.state.selectedToggleItems.get(item.id) ? 'up' : 'down'} size={22} color="#ccc"/>
+            <AntDesignIcon name={this.state.selectedToggleItems.get(item.id) ? 'up' : 'down'} size={22} color="#ccc" />
           </View>
         </View>
       </TouchableOpacity>
@@ -180,7 +180,7 @@ class ProductRow extends React.Component {
                           data.pinned
                             ? mainThemeColor
                             : '#ccc'}
-                        style={{transform: [{rotateY: '180deg'}]}}/>
+                        style={{transform: [{rotateY: '180deg'}]}} />
                     }
                   </TouchableOpacity>
                 </View>
@@ -264,37 +264,36 @@ class ProductRow extends React.Component {
       <ThemeContainer>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader backNavigation={true}
-                        title={t('productListTitle')}
-                        parentFullScreen={true}
-                        rightComponent={
-                          <PopUp
-                            navigation={navigation}
-                            toRoute1={'Category'}
-                            toRoute2={'Product'}
-                            textForRoute1={t('newItem.category')}
-                            textForRoute2={t('newItem.product')}
-                          />}
+            title={t('productListTitle')}
+            parentFullScreen={true}
+            rightComponent={
+              <CustomPopUp
+                navigation={navigation}
+                toRoute={['Category', 'Product', 'Option']}
+                textForRoute={[t('newItem.category'), t('newItem.product'), t('newItem.productOption')]}
+                params={[{}, {}, {customRoute: this.props.navigation.state.routeName}]}
+              />}
           />
           <View>
             <SearchBar placeholder={t('searchPrompt')}
-                       onChangeText={this.searchProduct}
-                       onClear={() => {
-                         this.setState({searchResults: []})
-                       }}
-                       value={this.state.searchKeyword}
-                       showLoading={this.state.searching}
-                       lightTheme={false}
-                       // reset the container style.
-                       containerStyle={{
-                         padding: 4,
-                         borderRadius: 0,
-                         borderWidth: 0,
-                         borderTopWidth: 0,
-                         borderBottomWidth: 0,
-                         backgroundColor: mainThemeColor
-                       }}
-                       inputStyle={{backgroundColor: themeStyle.backgroundColor}}
-                       inputContainerStyle={{borderRadius: 0, backgroundColor: themeStyle.backgroundColor}}
+              onChangeText={this.searchProduct}
+              onClear={() => {
+                this.setState({searchResults: []})
+              }}
+              value={this.state.searchKeyword}
+              showLoading={this.state.searching}
+              lightTheme={false}
+              // reset the container style.
+              containerStyle={{
+                padding: 4,
+                borderRadius: 0,
+                borderWidth: 0,
+                borderTopWidth: 0,
+                borderBottomWidth: 0,
+                backgroundColor: mainThemeColor
+              }}
+              inputStyle={{backgroundColor: themeStyle.backgroundColor}}
+              inputContainerStyle={{borderRadius: 0, backgroundColor: themeStyle.backgroundColor}}
             />
             <FlatList
               style={{maxHeight: Dimensions.get('window').height / 3}}
@@ -329,7 +328,7 @@ class ProductRow extends React.Component {
               onDragEnd={(data) => this.handleReArrange(data)}
               initialNumToRender={10}
               ListHeaderComponent={
-                <View style={[themeStyle, {borderTopWidth: 0.4}]}/>
+                <View style={[themeStyle, {borderTopWidth: 0.4}]} />
               }
             />
           </View>

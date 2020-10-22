@@ -17,6 +17,7 @@ import {StyledText} from "../components/StyledText";
 import ThemeToggleButton from "../themes/ThemeToggleButton";
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import {number} from 'prop-types'
+import DeleteBtn from '../components/DeleteBtn'
 
 class EinvoiceEditScreen extends React.Component {
     static navigationOptions = {
@@ -146,6 +147,24 @@ class EinvoiceEditScreen extends React.Component {
 
         }
 
+    }
+    handleDelete = async () => {
+        await dispatchFetchRequest(
+            api.eInvoice.delete(this.state.data?.ubn, this.state.data?.rangeIdentifier),
+            {
+                method: 'DELETE',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            },
+            response => {
+
+            }
+        ).then()
+        await this.props.navigation?.state?.params?.refreshScreen()
+        await this.props.navigation.goBack()
     }
 
     addForm = () => {
@@ -403,6 +422,7 @@ class EinvoiceEditScreen extends React.Component {
                                 {t('action.cancel')}
                             </Text>
                         </TouchableOpacity>
+                        {!!this.state.data && <DeleteBtn handleDeleteAction={() => this.handleDelete()} />}
                     </View>
                 </View>
             </ThemeContainer>

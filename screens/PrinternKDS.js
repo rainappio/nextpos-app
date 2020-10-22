@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {Text, TouchableOpacity, View} from 'react-native'
 import {SwipeListView} from 'react-native-swipe-list-view'
 import {getPrinters, getWorkingAreas} from '../actions'
-import PopUp from '../components/PopUp'
+import {PopUp} from '../components/PopUp'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
@@ -59,11 +59,11 @@ class PrinternKDS extends React.Component {
 
     if (loading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveError) {
       return (
-        <BackendErrorScreen/>
+        <BackendErrorScreen />
       )
     }
     return (
@@ -71,16 +71,16 @@ class PrinternKDS extends React.Component {
         <View>
           <View style={[styles.container]}>
             <ScreenHeader title={t('settings.workingArea')}
-                          rightComponent={
-                            <PopUp
-                              navigation={navigation}
-                              toRoute1={'PrinterAdd'}
-                              toRoute2={'WorkingAreaAdd'}
-                              textForRoute1={t('newItem.printer')}
-                              textForRoute2={t('newItem.workingArea')}
-                              dataArr={printers}
-                            />
-                          }
+              rightComponent={
+                <PopUp
+                  navigation={navigation}
+                  toRoute1={'PrinterAdd'}
+                  toRoute2={'WorkingAreaAdd'}
+                  textForRoute1={t('newItem.printer')}
+                  textForRoute2={t('newItem.workingArea')}
+                  dataArr={printers}
+                />
+              }
             />
           </View>
 
