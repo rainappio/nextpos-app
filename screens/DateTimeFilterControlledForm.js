@@ -131,11 +131,11 @@ class DateTimeFilterControlledForm extends React.Component {
 
       if (this.state.mode === 'date') {
         const currentDate = selectedDate || new Date();
-        this.setState({ date: currentDate })
+        this.setState({date: currentDate})
         this.showDatePicker()
       } else {
         const currentTime = selectedDate || new Date();
-        this.setState({ time: currentTime })
+        this.setState({time: currentTime})
         this.showTimePicker()
       }
     } else {
@@ -145,11 +145,11 @@ class DateTimeFilterControlledForm extends React.Component {
 
       if (this.state.mode === 'date') {
         const currentDate = selectedDate || new Date();
-        this.setState({ todate: currentDate })
+        this.setState({todate: currentDate})
         this.showDatePicker()
       } else {
         const currentTime = selectedDate || new Date();
-        this.setState({ totime: currentTime })
+        this.setState({totime: currentTime})
         this.showTimePicker()
       }
     }
@@ -157,7 +157,7 @@ class DateTimeFilterControlledForm extends React.Component {
 
   handleOrderSearchSimpleForm = () => {
     console.log('handleOrderSearchSimpleForm hit')
-    const { date, time, todate, totime, dateRange, shiftId, searchFilter } = this.state;
+    const {date, time, todate, totime, dateRange, shiftId, searchFilter} = this.state;
     const pickRange = searchFilter.dateRange != null ? searchFilter.dateRange : 'SHIFT'
     const pickshiftId = searchFilter.shiftId != null ? searchFilter.shiftId : null
     const fromDate = moment(date).format('YYYY-MM-DD') + 'T' + moment(time).format('HH:mm:ss');
@@ -180,9 +180,9 @@ class DateTimeFilterControlledForm extends React.Component {
   //# dateTime picking
 
   render() {
-    const { handleSubmit, handlegetDate, showAndroidDateTimeOnly, startDate, endDate } = this.props
-    const { t } = this.context
-    const { date, time } = this.state;
+    const {handleSubmit, handlegetDate, showAndroidDateTimeOnly, startDate, endDate} = this.props
+    const {t} = this.context
+    const {date, time} = this.state;
 
     return (
       <View>
@@ -190,14 +190,14 @@ class DateTimeFilterControlledForm extends React.Component {
           !showAndroidDateTimeOnly
             ?
             <View style={[styles.tableRowContainer]}>
-              <View style={{ flex: 3, marginRight: 5 }}>
+              <View style={{flex: 3, marginRight: 5}}>
                 <RNPickerSelect
                   items={[
-                    { label: t('dateRange.RANGE'), value: 'RANGE' },
-                    { label: t('dateRange.SHIFT'), value: 'SHIFT' },
-                    { label: t('dateRange.TODAY'), value: 'TODAY' },
-                    { label: t('dateRange.WEEK'), value: 'WEEK' },
-                    { label: t('dateRange.MONTH'), value: 'MONTH' }
+                    {label: t('dateRange.RANGE'), value: 'RANGE'},
+                    {label: t('dateRange.SHIFT'), value: 'SHIFT'},
+                    {label: t('dateRange.TODAY'), value: 'TODAY'},
+                    {label: t('dateRange.WEEK'), value: 'WEEK'},
+                    {label: t('dateRange.MONTH'), value: 'MONTH'}
                   ]}
                   value={this.state.searchFilter.dateRange}
                   useNativeAndroidPickerStyle={false}
@@ -212,13 +212,13 @@ class DateTimeFilterControlledForm extends React.Component {
                   style={pickerSelectStyles}
                   Icon={() => {
                     return (
-                      <Icon name='md-arrow-dropdown' size={30} style={{ position: 'absolute', top: -9, right: 0, borderWidth: 0 }} />
+                      <Icon name='md-arrow-dropdown' size={30} style={{position: 'absolute', top: -9, right: 0, borderWidth: 0}} />
                     )
                     //return <Chevron size={1.5} color="gray" />;
                   }}
                 />
               </View>
-              <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+              <View style={{flex: 1, justifyContent: 'flex-end'}}>
                 <TouchableOpacity
                   onPress={this.handleOrderSearchSimpleForm}
                 >
@@ -239,9 +239,9 @@ class DateTimeFilterControlledForm extends React.Component {
         {/* #datetime picking */}
         <View style={[styles.sectionContainer]}>
           <View style={[styles.tableRowContainer]}>
-            <View style={[styles.tableCellView, { flex: 1 }]}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
               <TouchableOpacity onPress={() => this.showDatepicker('from')} style={styles.datetimeBorder}>
-                <Text style={{ marginRight: 8, fontSize: 13 }}>
+                <Text style={{marginRight: 8, fontSize: 13}}>
                   <FontAwesomeIcon
                     name="calendar"
                     size={20}
@@ -253,7 +253,7 @@ class DateTimeFilterControlledForm extends React.Component {
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => this.showDatepicker('to')} style={styles.datetimeBorder}>
-                <Text style={{ fontSize: 13 }}>
+                <Text style={{fontSize: 13}}>
                   <FontAwesomeIcon
                     name="calendar"
                     size={20}

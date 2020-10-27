@@ -13,18 +13,18 @@ class RenderDatePicker extends Component {
 
 	render() {
 		const {
-			input: { onBlur, onChange, onFocus, value },
+			input: {onBlur, onChange, onFocus, value},
 			placeholder,
-			meta: { error, toched, vali5d },
+			meta: {error, toched, vali5d},
 			isShow,
 			showDatepicker,
 			readonly,
-      themeStyle,
+			themeStyle,
 			...rest
 		} = this.props
-		const { t, locale } = this.context
+		const {t, locale} = this.context
 
-    const timezone = TimeZoneService.getTimeZone()
+		const timezone = TimeZoneService.getTimeZone()
 		const i18nMoment = moment(value).tz(timezone);
 
 		if (locale === 'zh-Hant-TW') {
@@ -36,12 +36,12 @@ class RenderDatePicker extends Component {
 		const fontColor = readonly ? '#c5c5c5' : themeStyle.color
 
 		return (
-			<View style={{ flex: 1 }}>
+			<View style={{flex: 1}}>
 				<View>
-					<Modal transparent={true}
+					{Platform.OS === 'ios' ? <Modal transparent={true}
 						visible={isShow}
 					>
-						<View style={{ flex: 1, backgroundColor: '#c5c5c5', justifyContent: 'center', alignContent: 'center' }}>
+						<View style={{flex: 1, backgroundColor: '#c5c5c5', justifyContent: 'center', alignContent: 'center'}}>
 							<Text style={styles.screenTitle}>{t('datetimeRange.pickerTitle')}</Text>
 
 							<RNDateTimePicker
@@ -53,7 +53,7 @@ class RenderDatePicker extends Component {
 								onChange={(e, selectedDate) => {
 									console.log(`on change date: ${selectedDate} ${e.nativeEvent.timestamp}`)
 
-									onChange(new Date(e.nativeEvent.timestamp))
+									onChange(new Date(e.nativeEvent?.timestamp ?? value))
 								}}
 							/>
 							<TouchableOpacity
@@ -64,35 +64,50 @@ class RenderDatePicker extends Component {
 								<Text style={[styles.bottomActionButton, styles.actionButton]}>{t('datetimeRange.select')}</Text>
 							</TouchableOpacity>
 						</View>
-					</Modal>
+					</Modal> :
+						isShow && <RNDateTimePicker
+							testID="dateTimePicker"
+							value={value}
+							mode={"date"}
+							is24Hour={true}
+							display="calendar"
+							onChange={(e, selectedDate) => {
+								console.log(`on change date: ${selectedDate} ${e.nativeEvent.timestamp}`)
+								showDatepicker();
+								onChange(new Date(e.nativeEvent?.timestamp ?? value))
+
+							}}
+						/>
+					}
+
 				</View>
 				<View>
 					<View style={[styles.flex_dir_row, styles.jc_alignIem_center]}>
 						<View style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              borderWidth: 1,
-              borderColor: '#c5c5c5',
-              paddingVertical: 10,
-              paddingHorizontal: 5,
-              borderRadius: 4
-            }}>
-              <FontAwesomeIcon
-                name="calendar"
-                size={24}
-                style={[styles.orange_color]}
-              />
-              <Text onPress={(e) => {
-                if (!readonly) {
-                  showDatepicker()
-                }
-              }}
-                    style={{fontSize: 11, color: fontColor, marginLeft: 5}}
-              >
-                {i18nMoment.tz(timezone).format("YYYY-MM-DD HH:mm A")}
-              </Text>
-            </View>
+							flex: 1,
+							flexDirection: 'row',
+							alignItems: 'center',
+							borderWidth: 1,
+							borderColor: '#c5c5c5',
+							paddingVertical: 10,
+							paddingHorizontal: 5,
+							borderRadius: 4
+						}}>
+							<FontAwesomeIcon
+								name="calendar"
+								size={24}
+								style={[styles.orange_color]}
+							/>
+							<Text onPress={(e) => {
+								if (!readonly) {
+									showDatepicker()
+								}
+							}}
+								style={{fontSize: 11, color: fontColor, marginLeft: 5}}
+							>
+								{i18nMoment.tz(timezone).format("YYYY-MM-DD HH:mm A")}
+							</Text>
+						</View>
 					</View>
 				</View>
 			</View>

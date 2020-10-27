@@ -84,7 +84,7 @@ const zh = {
     orderId: '訂單號碼',
     date: '日期',
     orderStatusLong: '訂單狀態',
-    orderStatus: '狀態',
+    orderStatus: '訂單狀態',
     noOrder: '沒有資料',
 
     orderDetailsTitle: '訂單內容',
@@ -120,7 +120,9 @@ const zh = {
     deleted: '訂單刪除',
     copied: '複製訂單成功',
     free: '招待成功',
-    cancelFree: '取消招待成功'
+    cancelFree: '取消招待成功',
+    mergeOrderTitle: '併桌付款',
+    mergeOrderMsg: '是否執行品項合併',
   },
   orderState: {
     OPEN: '已開單',
@@ -130,6 +132,7 @@ const zh = {
     REFUNDED: '已退款',
     COMPLETED: '完成',
     DELETED: '刪單',
+    CANCELLED: '作廢',
     OTHERS: '空桌'
   },
   orderLog: {
@@ -145,6 +148,15 @@ const zh = {
     removeOrderDiscount: '移除折扣',
     copyOrder: '複製訂單',
     deleteOrder: '刪除訂單'
+  },
+  invoiceStatus: {
+    invoiceStatus: '發票狀態',
+    CREATED: '開立',
+    MIG_CREATED: '準備上傳',
+    PROCESSED: '開立成功',
+    CANCELLED: '作廢成功',
+    VOID: '註銷成功',
+    cancelInvoice: '發票作廢'
   },
   payment: {
     cashPayment: '現金',
@@ -301,6 +313,11 @@ const zh = {
   printWorkingOrder: '列印工作單',
   printOrderDetails: '列印明細',
   quickCheckoutPrint: '是否列印工作單?',
+  orderFilterForm: {
+    searchByDateAndTable: '以日期和桌位搜尋',
+    searchByInvoice: '以發票號碼搜尋',
+    tablePlaceholder: '請輸入桌位'
+  }
 }
 
 export default zh

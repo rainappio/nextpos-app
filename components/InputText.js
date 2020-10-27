@@ -20,7 +20,7 @@ const InputText = ({
   },
   meta: {error, touched, valid},
   height, alignLeft, extraStyle, defaultValue,
-  themeStyle,
+  themeStyle, complexTheme,
   ...rest
 }) => (
     <View style={[styles.flex(1)]}>
@@ -35,7 +35,7 @@ const InputText = ({
         editable={editable}
         autoCapitalize={autoCapitalize}
         placeholder={defaultValue ?? null}
-        placeholderTextColor={themeStyle.color}
+        placeholderTextColor={complexTheme.invalid.color}
         inputAccessoryViewID={name}
         {...rest}
         style={[

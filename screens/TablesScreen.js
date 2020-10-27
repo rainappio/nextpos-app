@@ -1,4 +1,4 @@
-import React, {Component, useContext} from 'react'
+import React, {Component, useContext, useState, useEffect} from 'react'
 import {Animated, PanResponder, FlatList, RefreshControl, Text, TouchableOpacity, View, Dimensions, KeyboardAvoidingView} from 'react-native'
 import {connect} from 'react-redux'
 import AddBtn from '../components/AddBtn'
@@ -8,7 +8,7 @@ import {getfetchOrderInflights, getMostRecentShiftStatus, getShiftStatus, getTab
 import styles, {mainThemeColor} from '../styles'
 import {successMessage} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
-import {handleDelete, handleOrderSubmit} from '../helpers/orderActions'
+import {handleDelete, handleOrderSubmit, handleCreateOrderSet, handleDeleteOrderSet} from '../helpers/orderActions'
 import {NavigationEvents} from "react-navigation";
 import {handleOpenShift} from "../helpers/shiftActions";
 import {getCurrentClient} from "../actions/client";
@@ -28,7 +28,7 @@ import TimeAgo from 'javascript-time-ago';
 import {getTimeDifference} from '../actions';
 import en from 'javascript-time-ago/locale/en';
 import NewOrderModal from './NewOrderModal';
-import {getInitialTablePosition, getTablePosition} from "../helpers/tableAction";
+import {getInitialTablePosition, getTablePosition, getSetPosition} from "../helpers/tableAction";
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -53,7 +53,9 @@ class TablesScreen extends React.Component {
       isTablet: context?.isTablet,
       themeStyle: context?.themeStyle,
       modalVisible: false,
-      orderModalData: {}
+      orderModalData: {},
+      screenMode: 'normal',
+      selectedOrderId: [],
     }
   }
 
@@ -90,6 +92,8 @@ class TablesScreen extends React.Component {
         tableCapacity: 'Tables',
         availableSeats: 'Vacant',
         availableTables: 'Vacant',
+        joinTable: 'Join Table',
+        joinTableMode: 'Join Table Mode'
       },
       zh: {
         noTableLayout: '需要創建至少一個桌面跟一個桌位.',
@@ -107,6 +111,8 @@ class TablesScreen extends React.Component {
         tableCapacity: '總桌數',
         availableSeats: '空位',
         availableTables: '空桌',
+        joinTable: '併桌',
+        joinTableMode: '併桌模式'
       }
     })
   }
@@ -135,6 +141,36 @@ class TablesScreen extends React.Component {
     })
   }
 
+  handleSelectTable = (orderId) => {
+    let selectedOrderIdArr = [...this.state?.selectedOrderId]
+    const index = selectedOrderIdArr?.indexOf(orderId)
+    if (index === -1) {
+      selectedOrderIdArr.push(orderId)
+      this.setState({selectedOrderId: selectedOrderIdArr})
+    } else {
+      selectedOrderIdArr.splice(index, 1)
+      this.setState({selectedOrderId: selectedOrderIdArr})
+    }
+  }
+  handleCreateOrderSet = async () => {
+    console.log('handleCreateOrderSet', this.state?.selectedOrderId)
+    await handleCreateOrderSet(this.state?.selectedOrderId)
+    this.props.getfetchOrderInflights()
+    this.setState({
+      screenMode: 'normal', selectedOrderId: [], tableWidth: null,
+      tableHeight: null,
+    })
+  }
+
+  handleDeleteOrderSet = async (setId) => {
+    await handleDeleteOrderSet(setId)
+    this.props.getfetchOrderInflights()
+    this.setState({
+      screenMode: 'normal', tableWidth: null,
+      tableHeight: null,
+    })
+  }
+
   render() {
     const {
       navigation,
@@ -146,7 +182,8 @@ class TablesScreen extends React.Component {
       recentShift,
       ordersInflight,
       availableTables,
-      themeStyle
+      themeStyle,
+      orderSets
     } = this.props
     const {t} = this.context
 
@@ -293,14 +330,14 @@ class TablesScreen extends React.Component {
 
             <View style={styles.fullWidthScreen}>
               <ScreenHeader backNavigation={false}
-                title={t('menu.tables')}
+                title={t(`${this.state?.screenMode === 'normal' ? 'menu.tables' : 'joinTableMode'}`)}
                 parentFullScreen={true}
                 rightComponent={
-                  <AddBtn
+                  this.state?.screenMode === 'normal' ? <AddBtn
                     onPress={() =>
                       this.props.navigation.navigate('OrderStart')
                     }
-                  />
+                  /> : null
                 }
               />
 
@@ -317,11 +354,12 @@ class TablesScreen extends React.Component {
                 data={this.state.orderModalData} />
               <View style={[styles.container, {marginTop: 0, marginBottom: 10, justifyContent: 'flex-start', }]}>
                 {/* table page button */}
-                <View style={{flexDirection: 'row', width: '100%'}}>
+                {this.state?.screenMode === 'normal' && <View style={{flexDirection: 'row', width: '100%'}}>
                   {tablelayouts?.map((tblLayout, index) => {
                     return (<TouchableOpacity
+                      disabled={this.state?.screenMode === 'joinTable'}
                       style={{
-                        borderColor: this.state.themeStyle.color,
+                        borderColor: mainThemeColor,
                         borderWidth: 0.5,
                         borderBottomWidth: 0,
                         padding: 4,
@@ -359,8 +397,9 @@ class TablesScreen extends React.Component {
                   })}
                   <View style={{flex: 1, }}>
                     <TouchableOpacity
+                      disabled={this.state?.screenMode === 'joinTable'}
                       style={{
-                        borderColor: this.state.themeStyle.color,
+                        borderColor: mainThemeColor,
                         borderWidth: 0.5,
                         borderBottomWidth: 0,
                         padding: 4,
@@ -380,7 +419,7 @@ class TablesScreen extends React.Component {
                     </TouchableOpacity>
                   </View>
 
-                </View>
+                </View>}
                 {/* table */}
                 {this.state.tableIndex >= 0 &&
                   <View style={[styles.ballContainer, {flex: 7}]}>
@@ -404,7 +443,18 @@ class TablesScreen extends React.Component {
                         <StyledText>{t('orderState.SETTLED')}</StyledText>
 
                       </View>
-
+                      {orderSets?.results?.map((item) => {
+                        return (this.state?.tableWidth && tablelayouts[this.state.tableIndex]?.id === item?.tableLayoutId &&
+                          <TableSet
+                            item={item}
+                            tableWidth={this.state?.tableWidth ?? this.state?.windowWidth}
+                            tableHeight={this.state?.tableHeight ?? this.state?.windowHeight}
+                            onPress={(setId) => {this.handleDeleteOrderSet(setId)}}
+                            screenMode={this.state?.screenMode}
+                          />
+                        )
+                      })
+                      }
                       {
                         tablelayouts[this.state.tableIndex]?.tables?.map((table, index) => {
                           return (this.state?.tableWidth && <Draggable
@@ -418,22 +468,37 @@ class TablesScreen extends React.Component {
                             tableHeight={this.state?.tableHeight ?? this.state?.windowHeight}
                             orders={ordersInflight}
                             openOrderModal={(item) => {
-                              console.log("item", item)
-                              this.setState({
-                                modalVisible: true,
-                                orderModalData: item
-                              })
+                              if (this.state?.screenMode === 'joinTable') {
+                                console.log('item1', item)
+                              } else {
+                                this.setState({
+                                  modalVisible: true,
+                                  orderModalData: item
+                                })
+                              }
+
                             }}
                             gotoOrderDetail={(order) => {
-                              //console.log("gotoOrderDetail", order);
-                              navigation.navigate('OrderFormII', {
-                                orderId: order.orderId,
-                                orderState: order.state
-                              })
+                              if (this.state?.screenMode === 'joinTable') {
+                                console.log('item2', order)
+                                this.handleSelectTable(order?.orderId)
+                              } else {
+                                let orderSetData = orderSets?.results?.find((orderSetsItem) => {
+                                  return orderSetsItem?.linkedOrders?.some((ordersItem) => {return ordersItem?.orderId === order.orderId})
+                                })
+                                console.log('orderSetData', orderSetData)
+                                navigation.navigate('OrderFormII', {
+                                  orderId: order.orderId,
+                                  orderState: order.state,
+                                  orderSetData: orderSetData
+                                })
+                              }
+
                             }}
                           />)
                         })
                       }
+
                     </View>
                   </View>}
                 {this.state.tableIndex === -1 &&
@@ -465,13 +530,37 @@ class TablesScreen extends React.Component {
                 }
               </View>
 
-              <View style={{...styles.bottomButtonContainerWithoutFlex, marginTop: 0}}>
-                <TouchableOpacity onPress={() => navigation.navigate('OrderDisplayScreen')}>
-                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              {this.state?.screenMode === 'normal' && <View style={{...styles.bottomButtonContainerWithoutFlex, marginTop: 0, flexDirection: 'row'}}>
+                {this.state.tableIndex !== -1 && <TouchableOpacity onPress={() => this.setState({
+                  screenMode: 'joinTable',
+                  tableWidth: null,
+                  tableHeight: null,
+                })} style={{flex: 1, marginRight: 8}}>
+                  <Text style={[styles.bottomActionButton, styles.actionButton, {flex: 1}]}>
+                    {t('joinTable')}
+                  </Text>
+                </TouchableOpacity>}
+                <TouchableOpacity onPress={() => navigation.navigate('OrderDisplayScreen')} style={{flex: 1}}>
+                  <Text style={[styles.bottomActionButton, styles.actionButton, {flex: 1}]}>
                     {t('menu.orderDisplay')}
                   </Text>
                 </TouchableOpacity>
-              </View>
+              </View>}
+              {this.state?.screenMode === 'joinTable' && <View style={{...styles.bottomButtonContainerWithoutFlex, marginTop: 0, flexDirection: 'row'}}>
+                <TouchableOpacity onPress={() => this.setState({
+                  screenMode: 'normal', tableWidth: null,
+                  tableHeight: null,
+                })} style={{flex: 1, marginRight: 8}}>
+                  <Text style={[styles.bottomActionButton, styles.secondActionButton, {flex: 1}]}>
+                    {t('action.cancel')}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.handleCreateOrderSet()} style={{flex: 1}}>
+                  <Text style={[styles.bottomActionButton, styles.actionButton, {flex: 1}]}>
+                    {t('action.save')}
+                  </Text>
+                </TouchableOpacity>
+              </View>}
             </View>
           </ThemeScrollView >
         )
@@ -598,6 +687,7 @@ class TablesScreen extends React.Component {
 const mapStateToProps = state => ({
   tablelayouts: state.tablelayouts.data.tableLayouts,
   ordersInflight: state.ordersinflight.data.orders,
+  orderSets: state.ordersinflight.data?.setData,
   haveData: state.ordersinflight.haveData && state.tablelayouts.haveData,
   haveError: state.ordersinflight.haveError || state.tablelayouts.haveError,
   isLoading: state.ordersinflight.loading || state.tablelayouts.loading,
@@ -630,11 +720,10 @@ export default enhance(TablesScreen)
 class Draggable extends Component {
   constructor(props) {
     super(props);
-    console.log(JSON.stringify(props));
     this.state = {
       dropAreaValues: null,
       pan: new Animated.ValueXY(),
-      opacity: new Animated.Value(1)
+      opacity: new Animated.Value(1),
     };
   }
 
@@ -778,3 +867,61 @@ class Draggable extends Component {
 }
 
 //https://snack.expo.io/@yoobidev/draggable-component
+
+
+class TableSet extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dropAreaValues: null,
+      pan: new Animated.ValueXY(),
+      opacity: new Animated.Value(1),
+      setWidth: 100,
+      setHeight: 100,
+    };
+  }
+  componentDidMount() {
+    const windowWidth = this.props.tableWidth;
+    const windowHeight = this.props.tableHeight;
+    let minX = windowWidth
+    let minY = windowHeight
+    let maxX = 0
+    let maxY = 0
+    this.props?.item?.linkedOrders?.forEach((item) => {
+      if (item.screenPosition.x * windowWidth < minX)
+        minX = item.screenPosition.x * windowWidth
+      if (item.screenPosition.y * windowHeight < minY)
+        minY = item.screenPosition.y * windowHeight
+      if (item.screenPosition.x * windowWidth > maxX)
+        maxX = item.screenPosition.x * windowWidth
+      if (item.screenPosition.y * windowHeight > maxY)
+        maxY = item.screenPosition.y * windowHeight
+    })
+    this.state.pan.setValue({x: minX, y: minY})
+
+    this.setState({setWidth: maxX - minX + 100})
+
+    this.setState({setHeight: maxY - minY + 100})
+
+  }
+
+
+
+  render() {
+    const panStyle = {
+      transform: this.state.pan.getTranslateTransform()
+    }
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          if (this.props?.screenMode === 'joinTable')
+            this.props?.onPress(this.props?.item?.id)
+        }}
+        style={[panStyle, {position: 'absolute', alignItems: 'center', justifyContent: 'center', backgroundColor: '#80808080', borderRadius: 25, width: this.state.setWidth, height: this.state.setHeight}]}>
+        {this.props?.screenMode === 'joinTable' && <FontAwesomeIcon name={'remove'} color={'red'} size={30} />}
+      </TouchableOpacity>
+    );
+  }
+
+}
+

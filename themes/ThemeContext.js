@@ -29,6 +29,9 @@ export const complexTheme = {
     },
     shade: {
       backgroundColor: '#f5f5f5'
+    },
+    invalid: {
+      color: '#727272'
     }
   },
   dark: {
@@ -38,6 +41,9 @@ export const complexTheme = {
     },
     shade: {
       backgroundColor: '#4a4747'
+    },
+    invalid: {
+      color: '#969696'
     }
   }
 }

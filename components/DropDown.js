@@ -20,8 +20,8 @@ class DropDown extends Component {
 
     return (
       <View style={{flex: 1}}>
-        <RNPickerSelect
-          placeholder={placeholder ?? ''}
+        {<RNPickerSelect
+          placeholder={placeholder ?? {}}
           items={options}
           onValueChange={value => onChange(value)}
           value={value}
@@ -33,7 +33,7 @@ class DropDown extends Component {
               <Icon name='md-arrow-dropdown' size={30} color={color} style={{position: 'absolute', top: -9, right: 0, borderWidth: 0}} />
             )
           }}
-        />
+        />}
         {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
       </View>
     )
@@ -56,7 +56,7 @@ const pickerSelectStyles = (color) => {
       paddingHorizontal: 10,
       paddingVertical: 8,
       borderWidth: 0.5,
-      borderColor: 'purple',
+      borderColor: '#ddd',
       borderRadius: 8,
       color: color
     },

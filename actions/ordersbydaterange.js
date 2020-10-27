@@ -1,4 +1,4 @@
-import { api, dispatchFetchRequest } from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 export const FETCH_ORDERS_BY_DATE_RANGE = 'FETCH_ORDERS_BY_DATE_RANGE'
 export const FETCH_ORDERS_BY_DATE_RANGE_SUCCESS =
   'FETCH_ORDERS_BY_DATE_RANGE_SUCCESS'
@@ -19,12 +19,12 @@ export const fetchOrdersByDateRangeFailure = error => ({
   error
 })
 
-export const getOrdersByDateRange = (dateRange, shiftId, fromDate, toDate) => {
+export const getOrdersByDateRange = (dateRange, shiftId, fromDate, toDate, tableName) => {
   return dispatch => {
     dispatch(fetchOrdersByDateRange())
 
     dispatchFetchRequest(
-      api.order.getOrdersByDateAndRange(dateRange, shiftId, fromDate, toDate),
+      api.order.getOrdersByDateAndRange(dateRange, shiftId, fromDate, toDate, tableName),
       {
         method: 'GET',
         withCredentials: true,
@@ -38,6 +38,29 @@ export const getOrdersByDateRange = (dateRange, shiftId, fromDate, toDate) => {
       },
       response => {
         dispatch(fetchOrdersByDateRangeFailure(response))
+      }
+    ).then()
+  }
+}
+
+export const getOrdersByInvoiceNumber = (num) => {
+  return dispatch => {
+    dispatch(fetchOrdersByDateRange())
+    dispatchFetchRequest(
+      api.order.getOrdersByInvoiceNumber(num),
+      {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {}
+      },
+      response => {
+        response.json().then(data => {
+          dispatch(fetchOrdersByDateRangeSuccess({orders: [data]}))
+        })
+      },
+      response => {
+        dispatch(fetchOrdersByDateRangeSuccess({orders: []}))
       }
     ).then()
   }

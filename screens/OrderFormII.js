@@ -377,6 +377,24 @@ class OrderFormII extends React.Component {
     }).then()
   }
 
+  handleMergeOrder = (setid, orderId) => {
+    dispatchFetchRequest(api.order.mergeOrderSet(setid), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({orderId: orderId})
+    }, response => {
+      response.json().then(data => {
+        this.props.getOrder(this.props.order.orderId)
+      })
+    }).then(() => this.props.navigation.navigate('Payment', {
+      order: this.props.order
+    }))
+  }
+
 
 
   render() {
@@ -471,7 +489,6 @@ class OrderFormII extends React.Component {
 
                       {(this.state?.selectedLabel === 'pinned' && map.get('pinned') !== undefined && map.get('pinned')?.length > 0) ?
                         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get('pinned').map(prd => {
-                          console.log('prd', prd)
                           return (
 
                             <TouchableOpacity style={[{width: '22%', backgroundColor: 'green', marginLeft: '3%', marginBottom: '3%', borderRadius: 10}, reverseThemeStyle]}
@@ -799,9 +816,27 @@ class OrderFormII extends React.Component {
                             onPress={() =>
                               order.lineItems.length === 0
                                 ? warningMessage(t('lineItemCountCheck'))
-                                : this.props.navigation.navigate('Payment', {
-                                  order: order
-                                })
+                                : (!!this.props.navigation.state.params?.orderSetData && this.props.navigation.state.params?.orderSetData?.status !== 'MERGED')
+                                  ? Alert.alert(
+                                    `${this.context.t('order.mergeOrderTitle')}`,
+                                    `${this.context.t('order.mergeOrderMsg')}`,
+                                    [
+                                      {
+                                        text: `${this.context.t('action.yes')}`,
+                                        onPress: () => {
+                                          this.handleMergeOrder(this.props.navigation.state.params?.orderSetData?.id, order.orderId)
+                                        }
+                                      },
+                                      {
+                                        text: `${this.context.t('action.no')}`,
+                                        onPress: () => console.log('Cancelled'),
+                                        style: 'cancel'
+                                      }
+                                    ]
+                                  )
+                                  : this.props.navigation.navigate('Payment', {
+                                    order: order
+                                  })
                             }
                             style={styles.flexButton}
                           >
@@ -848,7 +883,7 @@ class OrderFormII extends React.Component {
 
                         <View style={{flex: 1, marginLeft: 5}}>
                           <TouchableOpacity
-                            onPress={() => this.handleComplete(order.orderId)}
+                            onPress={() => this.handleComplete(this.props.navigation.state.params?.orderSetData?.mainOrderId ?? order.orderId)}
                             style={styles.flexButtonSecondAction}
                           >
                             <Text style={styles.flexButtonSecondActionText}>{t('completeOrder')}</Text>

@@ -2,7 +2,7 @@ import React from 'react'
 import {FlatList, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
-import {formatDate, getOrdersByDateRange} from '../actions'
+import {formatDate, getOrdersByDateRange, getOrdersByInvoiceNumber} from '../actions'
 import {ListItem} from 'react-native-elements'
 import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -31,10 +31,13 @@ class OrdersScreen extends React.Component {
     this.state = {
       scrollPosition: 0,
       searchFilter: {
+        searchTypeIndex: 0,
+        tableName: null,
         dateRange: 'SHIFT',
         shiftId: null,
         fromDate: new Date(),
-        toDate: new Date()
+        toDate: new Date(),
+        invoiceNumber: null
       }
     }
   }
@@ -53,23 +56,38 @@ class OrdersScreen extends React.Component {
   keyExtractor = (order, index) => index.toString()
 
   handleOrderSearch = values => {
-    const dateRange = values.dateRange != null ? values.dateRange : 'SHIFT'
-    const shiftId = values.shiftId != null ? values.shiftId : null
-    const fromDate = moment(values.fromDate).format("YYYY-MM-DDTHH:mm:ss")
-    const toDate = moment(values.toDate).format("YYYY-MM-DDTHH:mm:ss")
+    const searchTypeIndex = values?.searchTypeIndex ?? 0
+    if (searchTypeIndex === 0) {
+      const tableName = values?.tableName ?? null
+      const dateRange = values.dateRange != null ? values.dateRange : 'SHIFT'
+      const shiftId = values.shiftId != null ? values.shiftId : null
+      const fromDate = moment(values.fromDate).format("YYYY-MM-DDTHH:mm:ss")
+      const toDate = moment(values.toDate).format("YYYY-MM-DDTHH:mm:ss")
 
-    this.setState({
-      searchFilter: {
-        dateRange: dateRange,
-        shiftId: shiftId,
-        fromDate: values.fromDate,
-        toDate: values.toDate
-      }
-    })
+      this.setState({
+        searchFilter: {
+          ...this.state.searchFilter,
+          searchTypeIndex: searchTypeIndex,
+          tableName: tableName,
+          dateRange: dateRange,
+          shiftId: shiftId,
+          fromDate: values.fromDate,
+          toDate: values.toDate
+        }
+      })
 
-    console.log(`Order screen selected dates - from: ${fromDate} to: ${toDate}`)
-
-    this.props.getOrdersByDateRange(dateRange, shiftId, fromDate, toDate)
+      this.props.getOrdersByDateRange(dateRange, shiftId, fromDate, toDate, tableName)
+    } else {
+      const invoiceNumber = values?.invoiceNumber ?? null
+      this.setState({
+        searchFilter: {
+          ...this.state.searchFilter,
+          searchTypeIndex: searchTypeIndex,
+          invoiceNumber: invoiceNumber
+        }
+      })
+      this.props.getOrdersByInvoiceNumber(invoiceNumber)
+    }
   }
 
   renderItem = ({item}) => (
@@ -119,11 +137,11 @@ class OrdersScreen extends React.Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveError) {
       return (
-        <BackendErrorScreen/>
+        <BackendErrorScreen />
       )
     } else if (haveData) {
       return (
@@ -131,17 +149,24 @@ class OrdersScreen extends React.Component {
           <View style={[styles.fullWidthScreen]}>
             <NavigationEvents
               onWillFocus={() => {
-                const shiftId = this.props.navigation.getParam('shiftId')
-                const dateRangeToUse = shiftId != null ? 'SHIFT' : this.state.searchFilter.dateRange
+                if (this.state?.searchFilter?.searchTypeIndex === 0) {
+                  const shiftId = this.props.navigation.getParam('shiftId')
+                  const dateRangeToUse = shiftId != null ? 'SHIFT' : this.state.searchFilter.dateRange
 
-                this.handleOrderSearch({
-                  dateRange: dateRangeToUse,
-                  shiftId: shiftId,
-                  fromDate: this.state.searchFilter.fromDate,
-                  toDate: this.state.searchFilter.toDate
-                })
+                  this.handleOrderSearch({
+                    dateRange: dateRangeToUse,
+                    shiftId: shiftId,
+                    fromDate: this.state.searchFilter.fromDate,
+                    toDate: this.state.searchFilter.toDate,
+                    searchTypeIndex: this.state.searchFilter.searchTypeIndex,
+                    tableName: this.state.searchFilter.tableName,
+                  })
 
-                this.props.navigation.setParams({shiftId: undefined})
+                  this.props.navigation.setParams({shiftId: undefined})
+                } else {
+                  this.props.getOrdersByInvoiceNumber(this.state?.searchFilter?.invoiceNumber ?? '')
+                }
+
 
                 // To prevent FlatList scrolls to top automatically,
                 // we have to delay scroll to the original position
@@ -155,36 +180,30 @@ class OrdersScreen extends React.Component {
               }}
             />
             <ScreenHeader backNavigation={false}
-                          parentFullScreen={true}
-                          title={t('order.ordersTitle')}
-                          rightComponent={
-                            <TouchableOpacity
-                              onPress={() => {
-                                this.handleOrderSearch({})
-                              }}
-                            >
-                              <Icon name="md-refresh" size={32} color={mainThemeColor}/>
-                            </TouchableOpacity>
-                          }
+              parentFullScreen={true}
+              title={t('order.ordersTitle')}
+              rightComponent={
+                <TouchableOpacity
+                  onPress={() => {
+                    this.handleOrderSearch({})
+                  }}
+                >
+                  <Icon name="md-refresh" size={32} color={mainThemeColor} />
+                </TouchableOpacity>
+              }
             />
 
-            <View style={{flex: 1}}>
-              {
-                Platform.OS === 'ios'
-                  ?
-                  <OrderFilterForm
-                    onSubmit={this.handleOrderSearch}
-                    initialValues={{
-                      dateRange: this.state.searchFilter.dateRange,
-                      fromDate: new Date(dateRange.zonedFromDate),
-                      toDate: new Date(dateRange.zonedToDate)
-                    }}/>
-                  :
-                  <DateTimeFilterControlledForm
-                    fromDate={new Date(dateRange.zonedFromDate)}
-                    toDate={new Date(dateRange.zonedToDate)}
-                  />
-              }
+            <View >
+              <OrderFilterForm
+                onSubmit={this.handleOrderSearch}
+                initialValues={{
+                  searchTypeIndex: this.state.searchFilter.searchTypeIndex,
+                  tableName: this.state.searchFilter.tableName,
+                  dateRange: this.state.searchFilter.dateRange,
+                  fromDate: new Date(dateRange?.zonedFromDate ?? new Date()),
+                  toDate: new Date(dateRange?.zonedToDate ?? new Date()),
+                  invoiceNumber: this.state.searchFilter?.invoiceNumber,
+                }} />
             </View>
 
             <View style={{flex: 3}}>
@@ -252,7 +271,8 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getOrdersByDateRange: (dateRange, shiftId, fromDate, toDate) => dispatch(getOrdersByDateRange(dateRange, shiftId, fromDate, toDate))
+  getOrdersByDateRange: (dateRange, shiftId, fromDate, toDate, tableName) => dispatch(getOrdersByDateRange(dateRange, shiftId, fromDate, toDate, tableName)),
+  getOrdersByInvoiceNumber: (invoiceNumber) => dispatch(getOrdersByInvoiceNumber(invoiceNumber))
 })
 
 const enhance = compose(
