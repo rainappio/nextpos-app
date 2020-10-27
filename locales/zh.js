@@ -40,7 +40,8 @@ const zh = {
     product: '產品',
     category: '分類',
     printer: '出單機',
-    workingArea: '工作區'
+    workingArea: '工作區',
+    productOption: '產品註記',
   },
   action: {
     ok: '好',
@@ -263,6 +264,7 @@ const zh = {
       categoryInUse: '此分類正在使用中',
       workingAreaInUse: '此工作區正在使用中',
       printerHasWorkingArea: '此出單機有使用中的工作區',
+      optionInUse: '此註記正在使用中',
     }
   },
   eInvoice: {
@@ -295,6 +297,10 @@ const zh = {
     parentOrder: '原單',
     splitOrder: '子單'
   },
+  productOption: '產品註記',
+  printWorkingOrder: '列印工作單',
+  printOrderDetails: '列印明細',
+  quickCheckoutPrint: '是否列印工作單?',
 }
 
 export default zh

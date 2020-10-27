@@ -34,6 +34,8 @@ class OptionFormScreen extends React.Component {
         productOptionTitle: 'Product Option',
         optionName: 'Option Name',
         required: 'Required',
+        usedByProducts: 'Used by the following products',
+        usedByProductLabels: 'Used by the following categorys',
         multiple: 'Multiple',
         values: 'Option Values',
         value: 'Option Value',
@@ -43,6 +45,8 @@ class OptionFormScreen extends React.Component {
         productOptionTitle: '產品註記',
         optionName: '註記名稱',
         required: '必填',
+        usedByProducts: '已被以下產品使用中',
+        usedByProductLabels: '已被以下產品分類使用中',
         multiple: '可複選',
         values: '註記設定值',
         value: '註記值',
@@ -166,6 +170,35 @@ class OptionFormScreen extends React.Component {
               label={t('values')}
             />
           </View>
+
+          {initialValues !== undefined && initialValues?.usedByProducts != null && initialValues?.usedByProducts?.length > 0 && (
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView]}>
+                <StyledText style={styles.fieldTitle}>{t('usedByProducts')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end', flexWrap: 'wrap'}]}>
+                {initialValues?.usedByProducts?.map((item, index, array) => {
+                  return (
+                    <StyledText style={styles.fieldTitle}>{item?.name}{(index < array?.length - 1) && ', '}</StyledText>
+                  )
+                })}
+              </View>
+            </View>
+          )}
+          {initialValues !== undefined && initialValues?.usedByProductLabels != null && initialValues?.usedByProductLabels?.length > 0 && (
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView]}>
+                <StyledText style={styles.fieldTitle}>{t('usedByProductLabels')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end', flexWrap: 'wrap'}]}>
+                {initialValues?.usedByProductLabels?.map((item, index, array) => {
+                  return (
+                    <StyledText style={styles.fieldTitle}>{item?.name}{(index < array?.length - 1) && ', '}</StyledText>
+                  )
+                })}
+              </View>
+            </View>
+          )}
 
           <View style={[styles.bottom, styles.horizontalMargin]}>
             <TouchableOpacity onPress={handleSubmit}>

@@ -9,6 +9,7 @@ import {LocaleContext} from "../locales/LocaleContext";
 import {storage} from "../constants/Backend";
 import {StyledText} from "../components/StyledText";
 import {ThemeContainer} from "../components/ThemeContainer";
+import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -54,7 +55,7 @@ class LoginScreen extends React.Component {
     const {t} = this.context
 
     return (
-      <ThemeContainer>
+      <ThemeKeyboardAwareScrollView>
         <View style={styles.container}>
           <View style={{flex: 1}}>
             <View>
@@ -128,7 +129,7 @@ class LoginScreen extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-      </ThemeContainer>
+      </ThemeKeyboardAwareScrollView>
     )
   }
 }

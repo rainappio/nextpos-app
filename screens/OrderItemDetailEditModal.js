@@ -2,6 +2,7 @@ import React, {useState, useEffect, Component} from "react";
 import {Field, reduxForm} from 'redux-form'
 import {connect} from 'react-redux'
 import {Alert, StyleSheet, Text, TouchableHighlight, View, TouchableOpacity, KeyboardAvoidingView} from "react-native";
+import {Accordion, List} from '@ant-design/react-native'
 import RenderStepper from '../components/RenderStepper'
 import {isCountZero, isRequired} from '../validators'
 import styles, {mainThemeColor} from '../styles'
@@ -31,7 +32,6 @@ const OrderItemDetailEditModal = (props) => {
 
     useEffect(() => {
         setModalVisible(props?.modalVisible ?? false);
-        console.log("NewOrderModal", JSON.stringify(props?.data));
     }, [props?.modalVisible]);
 
     const handleSubmit = values => {
@@ -128,7 +128,6 @@ class ConnectedOrderItemOptionsBase extends React.Component {
 
     handleSubmit = values => {
         const orderId = this.props.navigation.state.params.orderId
-        console.log("handleSubmit", values)
 
         const updatedOptions = []
         !!values?.productOptions && values.productOptions.map(option => {
@@ -157,7 +156,6 @@ class ConnectedOrderItemOptionsBase extends React.Component {
             productDiscount: values.lineItemDiscount.productDiscount,
             discountValue: values.lineItemDiscount.discount
         }
-        console.log("lineItemRequest", lineItemRequest)
 
         dispatchFetchRequest(
             api.order.newLineItem(orderId),
@@ -244,7 +242,6 @@ class ConnectedOrderItemOptionsBase extends React.Component {
             ...this.props?.modalData,
             lineItemDiscount: lineItemDiscount
         }
-        console.log(initialValues, this.props?.modalData)
 
         if (initialValues.appliedOfferInfo != null) {
             let overrideDiscount = initialValues.appliedOfferInfo.overrideDiscount
@@ -259,7 +256,6 @@ class ConnectedOrderItemOptionsBase extends React.Component {
                 discount: overrideDiscount
             }
         }
-        console.log(initialValues)
 
         if (isLoading) {
             return (
@@ -339,193 +335,240 @@ class OrderItemOptions extends React.Component {
                 lineItemDiscount: '品項折扣'
             }
         })
+        this.state = {
+            optionActiveSections: [],
+            generalActiveSections: []
+        }
+    }
+
+    // keep for future reference
+    // invalidCallBack = (index) => {
+    //     let oldActiveSectionsArr = [...this.state.activeSections]
+    //     let oldActiveSectionsSet = new Set(oldActiveSectionsArr)
+    //     oldActiveSectionsSet.add(index)
+    //     let newActiveSectionsArr = Array.from(oldActiveSectionsSet)
+    //     this.setState({activeSections: newActiveSectionsArr})
+    // }
+
+    componentDidMount() {
+        if (!!this.props?.product?.productOptions) {
+            let activeSectionsArr = this.props?.product?.productOptions?.map((prdOption, optionIndex) => {
+                if (prdOption?.required)
+                    return optionIndex
+            })?.filter((item) => {return !!item})
+            this.setState({optionActiveSections: activeSectionsArr})
+        }
     }
 
     render() {
         const {product, globalProductOffers} = this.props
-        const {t} = this.context
+        const {t, themeStyle} = this.context
 
         const hasProductOptions = product.productOptions != null && product.productOptions.length > 0
         const lastOptionIndex = product.productOptions != null ? product.productOptions.length : 0
 
         return (
-            <View >
-                <ThemeScrollView >
-                    <View>
-                        <ScreenHeader backNavigation={true}
-                            parentFullScreen={true}
-                            title={`${product.name} ($${product.price})`}
-                            backAction={() => {this.props.goBack()}}
-                        />
+            <View style={[themeStyle, {height: '100%'}]}>
+                <ScreenHeader backNavigation={true}
+                    parentFullScreen={true}
+                    title={`${product.name} ($${product.price})`}
+                    backAction={() => {this.props.goBack()}}
+                />
+                <View style={{flex: 9}}>
+                    <ThemeScrollView >
+                        <View >
 
-                        {hasProductOptions && (
-                            <View style={[styles.sectionTitleContainer]}>
-                                <StyledText style={styles.sectionTitleText}>
-                                    {t('productOptions')}
-                                </StyledText>
-                            </View>
-                        )}
 
-                        {product.productOptions !== undefined &&
-                            product.productOptions.map((prdOption, optionIndex) => {
-                                const requiredOption = prdOption.required
+                            {hasProductOptions && (
+                                <View style={[styles.sectionTitleContainer]}>
+                                    <StyledText style={styles.sectionTitleText}>
+                                        {t('productOptions')}
+                                    </StyledText>
+                                </View>
+                            )}
 
-                                var ArrForTrueState = []
-                                prdOption.optionValues.map((optVal, x) => {
-                                    ArrForTrueState.push({
-                                        optionName: prdOption.optionName,
-                                        optionValue: optVal.value,
-                                        optionPrice: optVal.price,
-                                        id: prdOption.versionId + x
-                                    })
-                                })
+                            {product.productOptions !== undefined &&
+                                <Accordion
+                                    onChange={(activeSections) => this.setState({optionActiveSections: activeSections})}
+                                    expandMultiple={true}
+                                    activeSections={this.state.optionActiveSections}
+                                >
+                                    {product.productOptions.map((prdOption, optionIndex) => {
+                                        const requiredOption = prdOption.required
 
-                                return (
-                                    <View
-                                        key={prdOption.versionId}
-                                        style={styles.sectionContainer}
-                                    >
-                                        <View style={styles.sectionTitleContainer}>
-                                            <StyledText style={[styles.sectionTitleText]}>
-                                                {prdOption.optionName}
-                                            </StyledText>
-                                        </View>
+                                        var arrForTrueState = []
+                                        prdOption.optionValues.map((optVal, x) => {
+                                            arrForTrueState.push({
+                                                optionName: prdOption.optionName,
+                                                optionValue: optVal.value,
+                                                optionPrice: optVal.price,
+                                                id: prdOption.versionId + x
+                                            })
+                                        })
 
-                                        {prdOption.multipleChoice === false ? (
-                                            <View>
-                                                {prdOption.optionValues.map((optVal, ix) => {
-                                                    let optionObj = {}
-                                                    optionObj['optionName'] = prdOption.optionName
-                                                    optionObj['optionValue'] = optVal.value
-                                                    optionObj['optionPrice'] = optVal.price
-                                                    optionObj['id'] = prdOption.id
+                                        return (
+                                            <Accordion.Panel
+                                                header={<View style={styles.listPanel}>
+                                                    <StyledText style={styles.listPanelText}>{prdOption.optionName}</StyledText>
+                                                </View>}
+                                            >
+                                                <View
+                                                    key={prdOption.versionId}
+                                                    style={styles.sectionContainer}
+                                                >
 
-                                                    return (
-                                                        <View key={prdOption.id + ix}>
-                                                            <Field
-                                                                name={`productOptions[${optionIndex}]`}
-                                                                component={RadioItemObjPick}
-                                                                customValueOrder={optionObj}
-                                                                optionName={optVal.value}
-                                                                onCheck={(currentVal, fieldVal) => {
-                                                                    return fieldVal !== undefined && currentVal.optionValue === fieldVal.optionValue
-                                                                }}
-                                                                validate={requiredOption ? isRequired : null}
-                                                            />
+
+                                                    {prdOption.multipleChoice === false ? (
+                                                        <View>
+                                                            {prdOption.optionValues.map((optVal, ix) => {
+                                                                let optionObj = {}
+                                                                optionObj['optionName'] = prdOption.optionName
+                                                                optionObj['optionValue'] = optVal.value
+                                                                optionObj['optionPrice'] = optVal.price
+                                                                optionObj['id'] = prdOption.id
+
+                                                                return (
+                                                                    <View key={prdOption.id + ix}>
+                                                                        <Field
+                                                                            name={`productOptions[${optionIndex}]`}
+                                                                            component={RadioItemObjPick}
+                                                                            customValueOrder={optionObj}
+                                                                            optionName={optVal.value}
+                                                                            onCheck={(currentVal, fieldVal) => {
+                                                                                return fieldVal !== undefined && currentVal.optionValue === fieldVal.optionValue
+                                                                            }}
+                                                                            validate={requiredOption ? isRequired : null}
+                                                                        />
+                                                                    </View>
+                                                                )
+                                                            })}
                                                         </View>
-                                                    )
-                                                })}
+                                                    ) : (
+                                                            <View>
+                                                                <Field
+                                                                    name={`productOptions[${optionIndex}]`}
+                                                                    component={CheckBoxGroupObjPick}
+                                                                    customarr={arrForTrueState}
+                                                                    validate={requiredOption ? isRequired : null}
+                                                                />
+                                                            </View>
+                                                        )}
+                                                </View>
+                                            </Accordion.Panel>
+                                        )
+                                    })}</Accordion>}
+                            <Accordion
+                                onChange={(activeSections) => this.setState({generalActiveSections: activeSections})}
+                                expandMultiple={true}
+                                activeSections={this.state.generalActiveSections}
+                            >
+                                <Accordion.Panel
+                                    header={<View style={[styles.sectionTitleContainer, {flex: 1}]}>
+                                        <StyledText style={[styles.sectionTitleText]}>
+                                            {t('freeTextProductOption')}
+                                        </StyledText>
+                                    </View>}
+                                >
+                                    <View>
+                                        <View style={[styles.tableRowContainerWithBorder]}>
+                                            <View style={[{flex: 1}]}>
+                                                <Field
+                                                    name={`productOptions[${lastOptionIndex}]`}
+                                                    component={InputText}
+                                                    placeholder={t('freeTextProductOption')}
+                                                    alignLeft={true}
+                                                    format={(value, name) => {
+                                                        return value != null ? String(value.optionValue) : ''
+                                                    }}
+                                                    normalize={value => {
+                                                        return {
+                                                            optionName: t('freeTextProductOption'),
+                                                            optionValue: value
+                                                        }
+                                                    }}
+                                                />
                                             </View>
-                                        ) : (
-                                                <View>
+                                        </View>
+                                        <View style={[styles.tableRowContainerWithBorder]}>
+                                            <View style={[{flex: 1}]}>
+                                                <Field
+                                                    name={`overridePrice`}
+                                                    component={InputText}
+                                                    placeholder={t('overridePrice')}
+                                                    keyboardType='numeric'
+                                                    alignLeft={true}
+                                                />
+                                            </View>
+                                        </View>
+                                    </View>
+                                </Accordion.Panel>
+
+                                <Accordion.Panel
+                                    header={<View style={[styles.sectionTitleContainer, {flex: 1}]}>
+                                        <StyledText style={[styles.sectionTitleText]}>
+                                            {t('lineItemDiscount')}
+                                        </StyledText>
+                                    </View>}
+                                >
+                                    <View>
+                                        <View style={styles.sectionContainer}>
+                                            {globalProductOffers != null && globalProductOffers.map(offer => (
+                                                <View key={offer.offerId}>
                                                     <Field
-                                                        name={`productOptions[${optionIndex}]`}
-                                                        component={CheckBoxGroupObjPick}
-                                                        customarr={ArrForTrueState}
-                                                        validate={requiredOption ? isRequired : null}
+                                                        name="lineItemDiscount"
+                                                        component={RenderCheckBox}
+                                                        customValue={{
+                                                            offerId: offer.offerId,
+                                                            productDiscount: offer.offerId,
+                                                            discount: offer.discountValue
+                                                        }}
+                                                        optionName={offer.offerName}
+                                                        defaultValueDisplay={(customValue, value) => String(customValue.productDiscount === value.productDiscount ? value.discount : 0)}
                                                     />
                                                 </View>
-                                            )}
+                                            ))}
+                                        </View>
                                     </View>
-                                )
-                            })}
+                                </Accordion.Panel>
 
-                        <View style={styles.sectionTitleContainer}>
-                            <StyledText style={[styles.sectionTitleText]}>
-                                {t('freeTextProductOption')}
-                            </StyledText>
-                        </View>
+                            </Accordion>
 
-                        <View style={[styles.tableRowContainerWithBorder]}>
-                            <View style={[{flex: 1}]}>
+                            <View style={styles.tableRowContainerWithBorder}>
                                 <Field
-                                    name={`productOptions[${lastOptionIndex}]`}
-                                    component={InputText}
-                                    placeholder={t('freeTextProductOption')}
-                                    alignLeft={true}
-                                    format={(value, name) => {
-                                        return value != null ? String(value.optionValue) : ''
-                                    }}
-                                    normalize={value => {
-                                        return {
-                                            optionName: t('freeTextProductOption'),
-                                            optionValue: value
-                                        }
-                                    }}
+                                    name="quantity"
+                                    component={RenderStepper}
+                                    optionName={t('quantity')}
+                                    validate={[isRequired, isCountZero]}
                                 />
                             </View>
-                        </View>
-
-                        <View style={[styles.tableRowContainerWithBorder]}>
-                            <View style={[{flex: 1}]}>
-                                <Field
-                                    name={`overridePrice`}
-                                    component={InputText}
-                                    placeholder={t('overridePrice')}
-                                    keyboardType='numeric'
-                                    alignLeft={true}
-                                />
-                            </View>
-                        </View>
-
-                        <View style={styles.sectionTitleContainer}>
-                            <StyledText style={[styles.sectionTitleText]}>
-                                {t('lineItemDiscount')}
-                            </StyledText>
-                        </View>
-
-                        <View style={styles.sectionContainer}>
-                            {globalProductOffers != null && globalProductOffers.map(offer => (
-                                <View key={offer.offerId}>
-                                    <Field
-                                        name="lineItemDiscount"
-                                        component={RenderCheckBox}
-                                        customValue={{
-                                            offerId: offer.offerId,
-                                            productDiscount: offer.offerId,
-                                            discount: offer.discountValue
-                                        }}
-                                        optionName={offer.offerName}
-                                        defaultValueDisplay={(customValue, value) => String(customValue.productDiscount === value.productDiscount ? value.discount : 0)}
-                                    />
-                                </View>
-                            ))}
-                        </View>
-
-                        <View style={styles.tableRowContainerWithBorder}>
-                            <Field
-                                name="quantity"
-                                component={RenderStepper}
-                                optionName={t('quantity')}
-                                validate={[isRequired, isCountZero]}
-                            />
-                        </View>
-
-                        <View style={[styles.bottom, styles.dynamicVerticalPadding(20), styles.horizontalMargin, {flexDirection: 'row'}]}>
-                            <View style={{flex: 1, marginHorizontal: 5}}>
-                                <TouchableOpacity
-                                    onPress={(value) => {
-                                        console.log("goBack", value)
-                                        this.props.goBack()
-                                    }}
-                                >
-                                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{flex: 1, marginHorizontal: 5}}>
-                                <TouchableOpacity
-                                    onPress={this.props.handleSubmit}
-                                >
-                                    <Text style={[[styles.bottomActionButton, styles.actionButton]]}>
-                                        {t('action.save')}
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
 
 
                         </View>
+                    </ThemeScrollView>
+                </View>
+                <View style={[styles.bottom, styles.dynamicVerticalPadding(20), styles.horizontalMargin, {flexDirection: 'row', alignSelf: 'flex-end', flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end'}]}>
+                    <View style={{flex: 1, marginHorizontal: 5}}>
+                        <TouchableOpacity
+                            onPress={(value) => {
+                                console.log("goBack", value)
+                                this.props.goBack()
+                            }}
+                        >
+                            <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                        </TouchableOpacity>
                     </View>
-                </ThemeScrollView>
+                    <View style={{flex: 1, marginHorizontal: 5}}>
+                        <TouchableOpacity
+                            onPress={this.props.handleSubmit}
+                        >
+                            <Text style={[[styles.bottomActionButton, styles.actionButton]]}>
+                                {t('action.save')}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+
+
+                </View>
             </View>
         )
     }

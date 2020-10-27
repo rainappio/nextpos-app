@@ -59,15 +59,7 @@ class CategoryCustomizeScreen extends React.Component {
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader parentFullScreen={true}
             title={t('categoryTitle')}
-            rightComponent={
-              <AddBtn
-                onPress={() =>
-                  this.props.navigation.navigate('Option', {
-                    customRoute: this.props.navigation.state.routeName
-                  })
-                }
-              />
-            }
+
           />
 
           <View style={styles.tableRowContainerWithBorder}>

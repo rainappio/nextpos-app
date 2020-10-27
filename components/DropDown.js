@@ -21,7 +21,7 @@ class DropDown extends Component {
     return (
       <View style={{flex: 1}}>
         <RNPickerSelect
-          placeholder={placeholder}
+          placeholder={placeholder ?? ''}
           items={options}
           onValueChange={value => onChange(value)}
           value={value}

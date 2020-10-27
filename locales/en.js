@@ -40,7 +40,8 @@ const en = {
     product: 'Product',
     category: 'Category',
     printer: 'Printer',
-    workingArea: 'Working Area'
+    workingArea: 'Working Area',
+    productOption: 'Product Option',
   },
   action: {
     ok: 'OK',
@@ -261,6 +262,7 @@ const en = {
       categoryInUse: 'This category is already in use',
       workingAreaInUse: 'This working area is already in use',
       printerHasWorkingArea: 'This printer is used by working area',
+      optionInUse: 'This option is already in use',
     }
   },
   eInvoice: {
@@ -293,6 +295,10 @@ const en = {
     parentOrder: 'Original Bill',
     splitOrder: 'Split Bill'
   },
+  productOption: 'Product Option',
+  printWorkingOrder: 'Print work order',
+  printOrderDetails: 'Print order details',
+  quickCheckoutPrint: 'Print work order?',
 }
 
 export default en
