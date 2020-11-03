@@ -1,4 +1,5 @@
 import TimeZoneService from "../helpers/TimeZoneService";
+import {Platform} from 'react-native';
 
 const timezone = TimeZoneService.getTimeZone()
 
@@ -37,10 +38,7 @@ export const formatDate = (date) => {
     return undefined
   }
 
-  let plusIndex = (date.lastIndexOf('+') === -1 ? date.length : date.lastIndexOf('+'))
-  const dateMillis = Date.parse(date)
-  //const dateMillis = Date.parse(date.slice(0, plusIndex))
-  const dateObj = new Date(dateMillis)
+  const dateObj = useDateObj(date)
 
   return dateObj.toLocaleString('en-TW', {
     dateStyle: 'long',
@@ -55,10 +53,7 @@ export const formatDateOnly = date => {
     return undefined
   }
 
-  let plusIndex = (date.lastIndexOf('+') === -1 ? date.length : date.lastIndexOf('+'))
-  //const dateMillis = Date.parse(date.slice(0, plusIndex))
-  const dateMillis = Date.parse(date)
-  const dateObj = new Date(dateMillis)
+  const dateObj = useDateObj(date)
   return dateObj.toLocaleDateString('en-TW', {
     dateStyle: 'long',
     //timeZone: timezone
@@ -71,10 +66,7 @@ export const formatTime = date => {
     return undefined
   }
 
-  let plusIndex = (date.lastIndexOf('+') === -1 ? date.length : date.lastIndexOf('+'))
-  //const dateMillis = Date.parse(date.slice(0, plusIndex))
-  const dateMillis = Date.parse(date)
-  const dateObj = new Date(dateMillis)
+  const dateObj = useDateObj(date)
   return dateObj.toLocaleTimeString('en-TW', {
     dateStyle: 'long',
     //timeZone: timezone
@@ -82,11 +74,7 @@ export const formatTime = date => {
 }
 
 export const getTimeDifference = date => {
-  let plusIndex = (date.lastIndexOf('+') === -1 ? date.length : date.lastIndexOf('+'))
-  //ios 13 use this parse method,but new method can work both ios 13 and ios 14
-  //const dateMillis = Date.parse(date.slice(0, plusIndex))
-  const dateMillis = Date.parse(date)
-  const dateObj = new Date(dateMillis)
+  const dateObj = useDateObj(date)
 
   return Date.now() - dateObj
 }
@@ -107,4 +95,17 @@ export const formatCurrency = number => {
 
 export function calculatePercentage(Amount, percent) {
   return (Amount * percent) / 100
+}
+
+
+const useDateObj = (date) => {
+  let plusIndex = (date.lastIndexOf('+') === -1 ? date.length : date.lastIndexOf('+'))
+  const majorVersionIOS = parseInt(Platform.Version, 10)
+  let dateParseStr = date.slice(0, plusIndex)
+  if (majorVersionIOS >= 14) {
+    dateParseStr += 'Z'
+  }
+  const dateMillis = Date.parse(dateParseStr)
+  const dateObj = new Date(dateMillis)
+  return dateObj
 }
