@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequestWithOption, successMessage, warningMessage} from "../constants/Backend";
+import {api, dispatchFetchRequestWithOption, successMessage, warningMessage, dispatchFetchRequest} from "../constants/Backend";
 import NavigationService from "../navigation/NavigationService";
 import {Image} from "react-native";
 import images from "../assets/images";
@@ -44,6 +44,12 @@ export const renderOrderState = state => {
     case 'DELETED':
       return <MCIcon
         name={'delete'}
+        size={25}
+        style={styles.iconStyle}
+      />
+    case 'CANCELLED':
+      return <MCIcon
+        name={'file-cancel'}
         size={25}
         style={styles.iconStyle}
       />
@@ -241,6 +247,29 @@ export const handleDelete = (id, callback) => {
   ).then()
 }
 
+export const handleCancelInvoice = (id, callback) => {
+  console.log(id, callback)
+  dispatchFetchRequestWithOption(
+    api.order.cancelInvoice(id),
+    {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }, {
+    defaultMessage: false
+  },
+    response => {
+      console.log('callBack', response.url)
+      if (callback != null) {
+        callback()
+      }
+    }
+  ).then()
+}
+
 export const revertSplitOrder = async (sourceOrderId, splitOrderId) => {
   const formData = new FormData()
   formData.append('sourceOrderId', sourceOrderId)
@@ -257,4 +286,35 @@ export const revertSplitOrder = async (sourceOrderId, splitOrderId) => {
   }, response => {
 
   }).then()
+}
+
+export const handleCreateOrderSet = async (orderIds) => {
+
+  dispatchFetchRequest(api.order.getAllOrderSets, {
+    method: 'POST',
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({orderIds: orderIds})
+  },
+    response => {
+
+    }).then()
+}
+
+export const handleDeleteOrderSet = async (setId) => {
+
+  dispatchFetchRequest(api.order.deleteOrderSet(setId), {
+    method: 'DELETE',
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  },
+    response => {
+
+    }).then()
 }

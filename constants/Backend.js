@@ -176,9 +176,19 @@ export const api = {
       return `${apiRoot}/orders/${orderId}/copy`
     },
     inflightOrders: `${apiRoot}/orders/inflight`,
+    getAllOrderSets: `${apiRoot}/ordersets`,
+    deleteOrderSet: setId => {
+      return `${apiRoot}/ordersets/${setId}`
+    },
+    mergeOrderSet: setId => {
+      return `${apiRoot}/ordersets/${setId}/merge`
+    },
     getGlobalOrderOffers: `${apiRoot}/offers/globalOrderOffers`,
     getGlobalProductOffers: `${apiRoot}/offers/globalProductOffers`,
-    getOrdersByDateAndRange: (dateRange, shiftId, fromDate, toDate) => {
+    cancelInvoice: (id) => {
+      return `${apiRoot}/orders/transactions/${id}/cancel`
+    },
+    getOrdersByDateAndRange: (dateRange, shiftId, fromDate, toDate, tableName) => {
       let params = ''
 
       if (dateRange != null) {
@@ -193,7 +203,14 @@ export const api = {
         params += `&fromDate=${fromDate}&toDate=${toDate}`
       }
 
+      if (tableName != null) {
+        params += `&table=${tableName}`
+      }
+
       return `${apiRoot}/orders?${params}`
+    },
+    getOrdersByInvoiceNumber: (num) => {
+      return `${apiRoot}/orders/search?invoiceNumber=${num}`
     },
     getOffers: `${apiRoot}/offers`,
     getOrderOfferById: offerId => {

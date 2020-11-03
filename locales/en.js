@@ -84,7 +84,7 @@ const en = {
     orderId: 'Order Id',
     date: 'Date',
     orderStatusLong: 'Order Status',
-    orderStatus: 'Status',
+    orderStatus: 'Order status',
     noOrder: 'No Order',
 
     orderDetailsTitle: 'Order Details',
@@ -119,8 +119,10 @@ const en = {
     submitted: 'Order Submitted',
     deleted: 'Order Deleted',
     copied: 'Order Copied',
-    free: 'price is updated',
-    cancelFree: 'price is updated'
+    free: 'Price is updated',
+    cancelFree: 'Price is updated',
+    mergeOrderTitle: 'Merge Order',
+    mergeOrderMsg: 'Proceed with merging order line items?',
   },
   orderState: {
     OPEN: 'Open',
@@ -130,6 +132,7 @@ const en = {
     REFUNDED: 'Refunded',
     COMPLETED: 'Completed',
     DELETED: 'Deleted',
+    CANCELLED: 'Cancelled',
     OTHERS: 'Empty'
   },
   orderLog: {
@@ -145,6 +148,15 @@ const en = {
     removeOrderDiscount: 'Remove Order Discount',
     copyOrder: 'Copy Order',
     deleteOrder: 'Delete Order'
+  },
+  invoiceStatus: {
+    invoiceStatus: 'Invoice status',
+    CREATED: 'Created',
+    MIG_CREATED: 'Uploading',
+    PROCESSED: 'Processed',
+    CANCELLED: 'Cancelled',
+    VOID: 'Void',
+    cancelInvoice: 'Cancel invoice'
   },
   payment: {
     cashPayment: 'Cash',
@@ -299,6 +311,11 @@ const en = {
   printWorkingOrder: 'Print work order',
   printOrderDetails: 'Print order details',
   quickCheckoutPrint: 'Print work order?',
+  orderFilterForm: {
+    searchByDateAndTable: 'Search by date and table name',
+    searchByInvoice: 'Search by invoice number',
+    tablePlaceholder: 'Enter table name'
+  }
 }
 
 export default en

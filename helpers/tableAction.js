@@ -14,3 +14,8 @@ export const getTablePosition = (table, windowWidth, windowHeight) => {
 
     return {x: Number(table.position.x * windowWidth), y: Number(table.position.y * windowHeight)}
 }
+
+export const getSetPosition = (screenPosition, windowWidth, windowHeight) => {
+
+    return {x: Number(screenPosition.x * windowWidth), y: Number(screenPosition.y * windowHeight)}
+}

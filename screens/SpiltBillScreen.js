@@ -388,6 +388,7 @@ class SpiltBillScreen extends React.Component {
                                                             onPress={() => {
                                                                 if (!!this.state?.splitOrderData && this.state?.splitOrderData?.lineItems?.length > 0) {
                                                                     console.log('onPress', order)
+                                                                    this.props.getOrder(this.state.splitOrderData.orderId)
                                                                     this.props.navigation.navigate('Payment', {
                                                                         order: this.state.splitOrderData,
                                                                         isSplitting: true,
@@ -701,6 +702,7 @@ class SpiltBillScreen extends React.Component {
                                         onPress={() => {
                                             if (!!this.state?.splitOrderData && this.state?.splitOrderData?.lineItems?.length > 0) {
                                                 console.log('onPress', order)
+                                                this.props.getOrder(this.state.splitOrderData.orderId)
                                                 this.props.navigation.navigate('Payment', {
                                                     order: this.state.splitOrderData,
                                                     isSplitting: true,
@@ -738,7 +740,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch,
     getLables: () => dispatch(getLables()),
     getProducts: () => dispatch(getProducts()),
-    getOrder: () => dispatch(getOrder(props.navigation.state.params?.order?.orderId)),
+    getOrder: (orderId) => dispatch(getOrder(orderId ?? props.navigation.state.params?.order?.orderId)),
     getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
     getOrdersByDateRange: () => dispatch(getOrdersByDateRange()),
     clearOrder: () => dispatch(clearOrder(props.navigation.state.params.orderId)),

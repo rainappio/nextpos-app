@@ -6,7 +6,7 @@ import {withContext} from "../helpers/contextHelper";
 
 const SegmentedControl = props => {
   const {
-    input: {onChange},
+    input: {onChange, value},
     values,
     selectedIndex,
     vertical,
@@ -38,7 +38,7 @@ const SegmentedControl = props => {
     <View>
       <SegmentedControlTab
         values={values}
-        selectedIndex={selectedIndex}
+        selectedIndex={selectedIndex ?? value}
         onTabPress={onChange}
         {...(vertical ? verticalStyleProps : horizontalStyleProps)}
         {...rest}
