@@ -38,7 +38,8 @@ export const formatDate = (date) => {
   }
 
   let plusIndex = (date.lastIndexOf('+') === -1 ? date.length : date.lastIndexOf('+'))
-  const dateMillis = Date.parse(date.slice(0, plusIndex))
+  const dateMillis = Date.parse(date)
+  //const dateMillis = Date.parse(date.slice(0, plusIndex))
   const dateObj = new Date(dateMillis)
 
   return dateObj.toLocaleString('en-TW', {
@@ -55,7 +56,8 @@ export const formatDateOnly = date => {
   }
 
   let plusIndex = (date.lastIndexOf('+') === -1 ? date.length : date.lastIndexOf('+'))
-  const dateMillis = Date.parse(date.slice(0, plusIndex))
+  //const dateMillis = Date.parse(date.slice(0, plusIndex))
+  const dateMillis = Date.parse(date)
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleDateString('en-TW', {
     dateStyle: 'long',
@@ -70,7 +72,8 @@ export const formatTime = date => {
   }
 
   let plusIndex = (date.lastIndexOf('+') === -1 ? date.length : date.lastIndexOf('+'))
-  const dateMillis = Date.parse(date.slice(0, plusIndex))
+  //const dateMillis = Date.parse(date.slice(0, plusIndex))
+  const dateMillis = Date.parse(date)
   const dateObj = new Date(dateMillis)
   return dateObj.toLocaleTimeString('en-TW', {
     dateStyle: 'long',
@@ -80,7 +83,9 @@ export const formatTime = date => {
 
 export const getTimeDifference = date => {
   let plusIndex = (date.lastIndexOf('+') === -1 ? date.length : date.lastIndexOf('+'))
-  const dateMillis = Date.parse(date.slice(0, plusIndex))
+  //ios 13 use this parse method,but new method can work both ios 13 and ios 14
+  //const dateMillis = Date.parse(date.slice(0, plusIndex))
+  const dateMillis = Date.parse(date)
   const dateObj = new Date(dateMillis)
 
   return Date.now() - dateObj

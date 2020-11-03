@@ -305,7 +305,7 @@ class OrderDetail extends React.Component {
             </View>
             {order?.transactions?.map((item, index) => {
               return (
-                <View style={styles.tableRowContainerWithBorder} key={index}>
+                item?.invoiceStatus && <View style={styles.tableRowContainerWithBorder} key={index}>
                   <View style={[styles.tableCellView, {flex: 1}]}>
                     <StyledText>{t('invoiceStatus.invoiceStatus')}</StyledText>
                   </View>
