@@ -418,6 +418,13 @@ export const api = {
     },
     checkEligibility: `${apiRoot}/einvoices/checkEligibility`,
     generateAESKey: `${apiRoot}/clients/me/aeskey`,
+  },
+  subscription: {
+    getStatus: `${apiRoot}/clientstatus/me`,
+    getAllPlans: (country) => {
+      return `${apiRoot}/admin/subscriptionPlans?country=${country}`
+    },
+    selectPlan: `${apiRoot}/clientSubscriptions`,
   }
 }
 

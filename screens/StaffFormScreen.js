@@ -84,6 +84,9 @@ class StaffFormScreen extends React.Component {
       }
     })
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState !== this.state;
+  }
 
   handleDelete = values => {
     dispatchFetchRequest(

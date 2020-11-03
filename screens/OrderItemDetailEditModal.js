@@ -355,7 +355,7 @@ class OrderItemOptions extends React.Component {
             let activeSectionsArr = this.props?.product?.productOptions?.map((prdOption, optionIndex) => {
                 if (prdOption?.required)
                     return optionIndex
-            })?.filter((item) => {return !!item})
+            })?.filter((item) => {return item !== undefined})
             this.setState({optionActiveSections: activeSectionsArr})
         }
     }

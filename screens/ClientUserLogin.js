@@ -36,7 +36,6 @@ class ClientUserLogin extends React.Component {
     })
 
     if (response.status === 400) {
-      this.props.navigation.navigate('ClientUsers')
       warningMessage(this.context.t('errors.loginFailed'))
     } else {
       const res = await response.json()
@@ -53,8 +52,8 @@ class ClientUserLogin extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
-    const { clientusersName, displayName, defaultUser } = this.props.navigation.state.params
+    const {navigation} = this.props
+    const {clientusersName, displayName, defaultUser} = this.props.navigation.state.params
     return (
       <ClientUserLoginForm
         initialValues={{username: clientusersName}}

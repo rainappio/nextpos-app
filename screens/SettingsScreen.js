@@ -3,6 +3,7 @@ import {ScrollView, View} from 'react-native'
 import {Pages} from 'react-native-pages'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {default as MaterialIcon} from 'react-native-vector-icons/MaterialIcons'
+import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import styles, {mainThemeColor} from '../styles'
@@ -165,7 +166,7 @@ class SettingsScreen extends React.Component {
                     }
                   />
                 </View>
-                <View style={[styles.menuContainer, {width: '50%'}]}>
+                <View style={[styles.menuContainer]}>
                   <MenuButton
                     onPress={() => this.props.navigation.navigate('EinvoiceStatusScreen')}
                     title={t('settings.eInvoice')}
@@ -177,8 +178,18 @@ class SettingsScreen extends React.Component {
                       />
                     }
                   />
-                  <View style={styles.dynamicHorizontalPadding(8)} />
-
+                  <View style={styles.dynamicHorizontalPadding(6)} />
+                  <MenuButton
+                    onPress={() => this.props.navigation.navigate('SubscriptionScreen')}
+                    title={t('settings.subscription')}
+                    icon={
+                      <MCIcon
+                        name="professional-hexagon"
+                        size={40}
+                        style={[styles.buttonIconStyle]}
+                      />
+                    }
+                  />
                 </View>
               </View>
             </ScrollView>

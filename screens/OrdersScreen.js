@@ -49,7 +49,7 @@ class OrdersScreen extends React.Component {
   upButtonHandler = () => {
     //OnCLick of Up button we scrolled the list to top
     if (this.ListView_Ref != null) {
-      this.ListView_Ref.scrollToOffset({offset: 0, animated: true})
+      this.ListView_Ref?.scrollToOffset({offset: 0, animated: true})
     }
   }
 
@@ -174,7 +174,7 @@ class OrdersScreen extends React.Component {
 
                 if (this.ListView_Ref != null) {
                   setTimeout(() => {
-                    this.ListView_Ref.scrollToOffset({offset, animated: false})
+                    this.ListView_Ref?.scrollToOffset({offset, animated: false})
                   }, 800)
                 }
               }}

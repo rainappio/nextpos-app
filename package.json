@@ -69,6 +69,7 @@
     "react-native-shapes": "^0.1.0",
     "react-native-smooth-pincode-input": "^1.0.7",
     "react-native-sortable-list": "0.0.24",
+    "react-native-step-indicator": "^1.0.3",
     "react-native-svg": "12.1.0",
     "react-native-swipe-list-view": "^2.5.0",
     "react-native-table-component": "^1.2.1",

@@ -3,7 +3,7 @@ import {reduxForm, Field} from 'redux-form'
 import {Alert, ScrollView, Text, TouchableOpacity, View, Switch} from 'react-native'
 import {connect} from 'react-redux'
 import {Accordion, List} from '@ant-design/react-native'
-import {getLables, getProducts, clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange} from '../actions'
+import {getLables, getProducts, clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange, getTimeDifference} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -26,6 +26,8 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import {SecondActionButton} from "../components/ActionButtons";
 import {printMessage} from "../helpers/printerActions";
 import DropDown from "../components/DropDown";
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en';
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
@@ -417,6 +419,9 @@ class OrderFormII extends React.Component {
     order.lineItems !== undefined && order.lineItems.map(lineItem => {
       totalQuantity += lineItem.quantity
     })
+
+    TimeAgo.addLocale(en)
+    const timeAgo = new TimeAgo()
 
     if (isLoading) {
       return (
@@ -944,6 +949,11 @@ class OrderFormII extends React.Component {
                                     <StyledText style={[{...reverseThemeStyle, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price}</StyledText>
                                     {!!item?.options && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
                                     {!!item?.appliedOfferInfo && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
+                                  </View>
+                                  <View style={{position: 'absolute', bottom: 10, left: 10}}>
+                                    <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>
+                                      {timeAgo.format(Date.now() - getTimeDifference(item?.createdDate), {flavour: 'narrow'})}
+                                    </StyledText>
                                   </View>
                                   <View style={{flexDirection: 'column', flex: 1, paddingRight: '3%', justifyContent: 'space-around', height: '100%', alignItems: 'flex-end', borderLeftWidth: 1}} >
                                     {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && <TouchableOpacity

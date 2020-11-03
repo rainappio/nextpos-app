@@ -1,4 +1,4 @@
-import { api, dispatchFetchRequest } from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 
 export const FETCH_CLIENT = 'FETCH_CLIENT'
 export const FETCH_CLIENT_SUCCESS = 'FETCH_CLIENT_SUCCESS'
@@ -33,7 +33,18 @@ export const getCurrentClient = () => {
       },
       response => {
         response.json().then(data => {
-          dispatch(fetchClientSuccess(data))
+          dispatchFetchRequest(api.subscription.getStatus, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+          }, response => {
+            response.json().then(data2 => {
+              dispatch(fetchClientSuccess({...data, localClientStatus: data2}))
+            })
+          }).then()
         })
       },
       response => {

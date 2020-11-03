@@ -87,6 +87,7 @@ import TabBarBottom from "react-navigation-tabs/src/views/BottomTabBar";
 import OrderDisplayScreen from "../screens/OrderDisplayScreen";
 import ResetClientPassword from "../screens/ResetClientPassword";
 import SpiltBillScreen from "../screens/SpiltBillScreen";
+import SubscriptionScreen from '../screens/SubscriptionScreen'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -119,8 +120,6 @@ const Settings = createStackNavigator({
   OptionEdit: OptionEdit,
   Category: Category,
   CategoryCustomize: CategoryCustomize,
-  ClientUsers: ClientUsers,
-  ClientUserLoginS: ClientUserLogin,
   LoginSuccess: LoginSuccessScreen,
   PrinternKDS: PrinternKDS,
   PrinterAdd: PrinterAdd,
@@ -149,7 +148,8 @@ const Settings = createStackNavigator({
   EinvoiceEditScreen: EinvoiceEditScreen,
   NewOffer: NewOffer,
   EditOffer: EditOffer,
-  ProductsOverviewforOffer: ProductsOverviewforOffer
+  ProductsOverviewforOffer: ProductsOverviewforOffer,
+  SubscriptionScreen: SubscriptionScreen
 
 })
 Settings.navigationOptions = ({screenProps: {t}}) => ({
@@ -305,6 +305,8 @@ const tabBar = createBottomTabNavigator({
 
 export default createSwitchNavigator({
   Home: HomeScreen,
+  ClientUsers: ClientUsers,
+  ClientUserLogin: ClientUserLogin,
   Intro: IntroAppScreen,
   CreateAcc: CreateAccScreen,
   Login: Login,
