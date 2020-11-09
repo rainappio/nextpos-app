@@ -6,6 +6,7 @@ const en = {
   password: 'Password',
   confirmPassword: 'Confirm Password',
   logout: 'Logout',
+  changeUser: 'Change User',
   refreshed: 'Refreshed',
   general: {
     noData: 'No data'
@@ -33,7 +34,8 @@ const en = {
     announcements: 'Announcements',
     manageOffers: 'Manage Offers',
     preferences: 'Preferences',
-    eInvoice: 'E-invoice'
+    eInvoice: 'E-invoice',
+    subscription: 'Subscription'
   },
   newItem: {
     new: 'New',
@@ -127,6 +129,7 @@ const en = {
   orderState: {
     OPEN: 'Open',
     IN_PROCESS: 'In Process',
+    OVERDUE: 'Overdue',
     DELIVERED: 'Delivered',
     SETTLED: 'Settled',
     REFUNDED: 'Refunded',
@@ -315,7 +318,24 @@ const en = {
     searchByDateAndTable: 'Search by date and table name',
     searchByInvoice: 'Search by invoice number',
     tablePlaceholder: 'Enter table name'
-  }
+  },
+  subscription: {
+    submitted: 'Submitted',
+    activated: 'Activated',
+    currentPlan: 'Current Plan',
+    status: 'Status',
+    select: 'Select',
+    statusCode: {
+      SUBMITTED: 'Submitted',
+      ACTIVE: 'Activated',
+      ACTIVE_LAPSING: 'Active (Ending Subscription)',
+      INACTIVE: 'Inactive',
+      EXPIRED: 'Expired',
+    },
+    planCode: {
+      FREE: 'Free'
+    }
+  },
 }
 
 export default en

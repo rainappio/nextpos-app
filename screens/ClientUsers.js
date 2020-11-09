@@ -17,7 +17,13 @@ class ClientUsers extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    context.localize({
+
+
+  }
+
+  componentDidMount() {
+    this.props.getClientUsrs()
+    this.context.localize({
       en: {
         clientUsersTitle: 'Client Users'
       },
@@ -25,11 +31,6 @@ class ClientUsers extends React.Component {
         clientUsersTitle: '選擇使用者'
       }
     })
-
-  }
-
-  componentDidMount() {
-    this.props.getClientUsrs()
   }
 
   async handleDefaultUserLogout(navigation) {
@@ -46,20 +47,19 @@ class ClientUsers extends React.Component {
   render() {
     const {clientusers, navigation} = this.props
     const {t} = this.context
-
     return (
       <ThemeContainer>
         <View style={[styles.fullWidthScreen]}>
-          <ScreenHeader backNavigation={true}
-                        parentFullScreen={true}
-                        title={t('clientUsersTitle')}
-                        rightComponent={
-                          <TouchableOpacity onPress={() => this.handleDefaultUserLogout(navigation)}>
-                            <Text style={styles.sectionBarText}>
-                              {t('logout')}
-                            </Text>
-                          </TouchableOpacity>
-                        }
+          <ScreenHeader backNavigation={!!navigation?.actions?.pop}
+            parentFullScreen={true}
+            title={t('clientUsersTitle')}
+            rightComponent={
+              <TouchableOpacity onPress={() => this.handleDefaultUserLogout(navigation)}>
+                <Text style={styles.sectionBarText}>
+                  {t('logout')}
+                </Text>
+              </TouchableOpacity>
+            }
           />
 
           <View style={[styles.horizontalMargin, {marginTop: 80}]}>

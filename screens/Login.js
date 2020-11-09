@@ -16,6 +16,9 @@ class Login extends React.Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      loginSuccess: false
+    }
   }
 
   handleLoginAs = async () => {
@@ -72,7 +75,7 @@ class Login extends React.Component {
 
       await AsyncStorage.setItem('token', JSON.stringify(res))
       this.props.dispatch(doLoggedIn(res.access_token))
-      this.props.navigation.navigate('LoginSuccess')
+      this.props.navigation.navigate('ClientUsers')
     }
 
     return response
@@ -83,6 +86,7 @@ class Login extends React.Component {
       <LoginScreen
         onSubmit={this.handleSubmit}
         handleLoginAs={this.handleLoginAs}
+        loginSuccess={this.state.loginSuccess}
       />
     )
   }

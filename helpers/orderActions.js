@@ -262,7 +262,7 @@ export const handleCancelInvoice = (id, callback) => {
     defaultMessage: false
   },
     response => {
-      console.log('callBack', response.url)
+      successMessage(i18n.t('invoiceStatus.CANCELLED'))
       if (callback != null) {
         callback()
       }

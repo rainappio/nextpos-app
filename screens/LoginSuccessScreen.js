@@ -39,15 +39,10 @@ class LoginSuccessScreen extends React.Component {
       loggedIn: null,
       tokenExpiry: null,
     }
+
   }
 
-  async handleClientUserLogout(navigation) {
-    try {
-      navigation.navigate('ClientUsers')
-    } catch (err) {
-      console.log(`The error is: ${err}`)
-    }
-  }
+
 
   /**
    * Navigation lifecycle reference:
@@ -102,23 +97,23 @@ class LoginSuccessScreen extends React.Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveError) {
-      return <BackendErrorScreen/>
+      return <BackendErrorScreen />
     }
 
     return (
       <ThemeScrollView>
         <NavigationEvents
           onWillFocus={() => {
-            this.loadUserInfo().then()
+            this.loadUserInfo()
           }}
         />
         <HiddenMenu
           ref={this.hiddenMenu}
           navigation={navigation}
-          handleClientUserLogout={this.handleClientUserLogout}
+
         />
 
         <View style={[styles.fullWidthScreen]}>
@@ -155,9 +150,9 @@ class LoginSuccessScreen extends React.Component {
             </StyledText>
           </View>
 
-          <View>
+          <View style={{flexDirection: 'row'}}>
             {shiftStatus === 'ACTIVE' && (
-              <View style={styles.menuContainer}>
+              <View style={[styles.menuContainer, {flex: 1}]}>
                 <MenuButton
                   onPress={() => {
                     this.props.navigation.navigate('OrderStart', {
@@ -172,11 +167,11 @@ class LoginSuccessScreen extends React.Component {
                       size={40}
                       style={[styles.buttonIconStyle]}
                     />
-                  }/>
+                  } />
               </View>
             )}
 
-            <View style={[styles.menuContainer]}>
+            <View style={[styles.menuContainer, {flex: 1}]}>
               <MenuButton
                 onPress={() =>
                   this.props.navigation.navigate('ClockIn', {
@@ -189,18 +184,8 @@ class LoginSuccessScreen extends React.Component {
                     size={40}
                     style={[styles.buttonIconStyle]}
                   />
-                }/>
-              <View style={styles.dynamicHorizontalPadding(6)}/>
-              <MenuButton
-                onPress={() => this.props.navigation.navigate('ClientUsers')}
-                title={t('menu.clientUsers')}
-                icon={
-                  <Icon
-                    name="ios-log-out"
-                    size={40}
-                    style={[styles.buttonIconStyle]}
-                  />
-                }/>
+                } />
+
             </View>
           </View>
 
@@ -224,9 +209,9 @@ class LoginSuccessScreen extends React.Component {
                   </View>
 
                   <View style={styles.markdownContainer}>
-                  <Markdown style={themeStyle}>
-                    {getannoc.markdownContent}
-                  </Markdown>
+                    <Markdown style={themeStyle}>
+                      {getannoc.markdownContent}
+                    </Markdown>
                   </View>
                 </View>
               )
@@ -336,11 +321,11 @@ export class HiddenMenu extends React.Component {
               ]}
               onPress={() => {
                 this.toggleMenu()
-                this.props.handleClientUserLogout(this.props.navigation)
+                this.props.navigation.navigate('ClientUsers')
               }}
             >
               <Text style={complexTheme[theme].overlay}>
-                {t('logout')}
+                {t('changeUser')}
               </Text>
             </TouchableOpacity>
           </View>

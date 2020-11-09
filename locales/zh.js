@@ -6,6 +6,7 @@ const zh = {
   password: '密碼',
   confirmPassword: '確認密碼',
   logout: '登出',
+  changeUser: '切換使用者',
   refreshed: '已重新刷新',
   general: {
     noData: '沒有資料'
@@ -33,7 +34,8 @@ const zh = {
     announcements: '公告',
     manageOffers: '促銷管理',
     preferences: '喜好設定',
-    eInvoice: '電子發票'
+    eInvoice: '電子發票',
+    subscription: '訂閱'
   },
   newItem: {
     new: '新增',
@@ -127,6 +129,7 @@ const zh = {
   orderState: {
     OPEN: '已開單',
     IN_PROCESS: '準備中',
+    OVERDUE: '逾時',
     DELIVERED: '已送餐',
     SETTLED: '已付款',
     REFUNDED: '已退款',
@@ -317,7 +320,24 @@ const zh = {
     searchByDateAndTable: '以日期和桌位搜尋',
     searchByInvoice: '以發票號碼搜尋',
     tablePlaceholder: '請輸入桌位'
-  }
+  },
+  subscription: {
+    submitted: '已送出',
+    activated: '已生效',
+    currentPlan: '當前方案',
+    status: '狀態',
+    select: '選擇',
+    statusCode: {
+      SUBMITTED: '已送出',
+      ACTIVE: '使用中',
+      ACTIVE_LAPSING: '使用中(不續訂)',
+      INACTIVE: '已失效',
+      EXPIRED: '尚未選擇方案',
+    },
+    planCode: {
+      FREE: '免費'
+    }
+  },
 }
 
 export default zh

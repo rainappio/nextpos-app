@@ -24,6 +24,7 @@ import {withAnchorPoint} from 'react-native-anchor-point';
 import * as Device from 'expo-device';
 import {style} from 'd3';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import TimeAgo from 'javascript-time-ago';
 import {getTimeDifference} from '../actions';
 import en from 'javascript-time-ago/locale/en';
@@ -431,15 +432,17 @@ class TablesScreen extends React.Component {
                       })
                     }} style={{width: '100%', height: '100%', alignSelf: 'center', flexWrap: 'wrap'}}>
                       <View style={{justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, right: 0, flexDirection: 'row'}}>
-                        <View style={{backgroundColor: '#BFBFBF', borderColor: mainThemeColor, borderWidth: 2, height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#fff', borderColor: '#BFBFBF', borderWidth: 2, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.OTHERS')}</StyledText>
-                        <View style={{backgroundColor: '#F8CBAD', height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: mainThemeColor, borderColor: '#BFBFBF', borderWidth: 2, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.OPEN')}</StyledText>
-                        <View style={{backgroundColor: '#FFE699', height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#ffc818', borderRadius: 12, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.IN_PROCESS')}</StyledText>
-                        <View style={{backgroundColor: '#8FAADC', height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: 'red', borderRadius: 12, height: 12, width: 12, margin: 6}}></View>
+                        <StyledText>{t('orderState.OVERDUE')}</StyledText>
+                        <View style={{backgroundColor: '#86bf20', borderRadius: 12, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.DELIVERED')}</StyledText>
-                        <View style={{backgroundColor: '#ADD395', height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#86bf20', height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.SETTLED')}</StyledText>
 
                       </View>
@@ -458,10 +461,10 @@ class TablesScreen extends React.Component {
                       {
                         tablelayouts[this.state.tableIndex]?.tables?.map((table, index) => {
                           return (this.state?.tableWidth && <Draggable
-                            borderColor={themeStyle.color === '#f1f1f1' ? '#fff' : mainThemeColor}
+                            borderColor={themeStyle.color === '#f1f1f1' ? '#BFBFBF' : '#BFBFBF'}
                             table={table}
                             key={table.tableId}
-                            layoutId={1}
+                            layoutId={tablelayouts[this.state.tableIndex]?.id}
                             index={index}
                             getTableLayout={this.props.getTableLayout}
                             tableWidth={this.state?.tableWidth ?? this.state?.windowWidth}
@@ -771,19 +774,21 @@ class Draggable extends Component {
     const panStyle = {
       transform: this.state.pan.getTranslateTransform()
     }
+    const tableOrder = this.props?.orders[`${layoutId}`]?.find((item) => {return item?.tableId === table.tableId})
+    const tableStatus = tableOrder?.state
+    console.log('tableStatus', this.props?.orders[`${layoutId}`])
     return (
       <View >
         {
           table.position !== null
             ?
             <View>
-
               <TouchableOpacity
                 onPress={() => {
-                  if (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state) {
+                  if (!!tableStatus) {
                     this.props?.gotoOrderDetail({
-                      orderId: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.orderId,
-                      state: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state
+                      orderId: tableOrder?.orderId,
+                      state: tableStatus
                     })
                   } else {
                     openOrderModal({
@@ -792,21 +797,26 @@ class Draggable extends Component {
                     });
                   }
                 }}
-                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#BFBFBF', borderColor: borderColor, borderWidth: 3}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
+                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: borderColor, borderWidth: 3}, (!!tableStatus &&
                 {
 
-                  backgroundColor: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'OPEN' ? '#F8CBAD'
-                    : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'IN_PROCESS' ? '#FFE699'
-                      : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'DELIVERED' ? '#8FAADC'
-                        : '#ADD395'
+                  backgroundColor: tableStatus == 'OPEN' ? mainThemeColor
+                    : tableStatus == 'IN_PROCESS' ? mainThemeColor
+                      : tableStatus == 'DELIVERED' ? mainThemeColor
+                        : '#86bf20'
                 })]}>
+                {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: tableOrder?.itemNeedAttention ? 'red' : '#ffc818'}}></View>}
+                {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
                 <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
-                <Text style={{color: '#000', textAlign: 'center', }}>{`${this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.customerCount ?? 0}/${table.capacity}`}</Text>
-                {!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime &&
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Ionicons name={'ios-people'} color={'black'} size={20} />
+                  <Text style={{color: '#000', textAlign: 'center', }}>{` ${tableOrder?.customerCount ?? 0}(${table.capacity})`}</Text>
+                </View>
+                {!!tableOrder?.createdTime &&
                   <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
-                    <FontAwesomeIcon name={'clock-o'} color={getTimeDifference(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime) < 30 * 60 * 1000 ? mainThemeColor : 'red'} size={20} />
+                    <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? 'red' : 'black'} size={20} />
                     <StyledText style={{marginLeft: 2, color: '#000'}}>
-                      {timeAgo.format(Date.now() - getTimeDifference(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime), 'time')}
+                      {timeAgo.format(Date.now() - getTimeDifference(tableOrder?.createdTime), {flavour: 'tiny'})}
                     </StyledText>
                   </View>}
               </TouchableOpacity>
@@ -817,10 +827,10 @@ class Draggable extends Component {
 
               <TouchableOpacity
                 onPress={() => {
-                  if (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state) {
+                  if (!!tableStatus) {
                     this.props?.gotoOrderDetail({
-                      orderId: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.orderId,
-                      state: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state
+                      orderId: tableOrder?.orderId,
+                      state: tableStatus
                     })
                   } else {
                     openOrderModal({
@@ -829,23 +839,28 @@ class Draggable extends Component {
                     });
                   }
 
-                  console.log(table, JSON.stringify(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})))
+                  console.log(table, JSON.stringify(tableOrder))
                 }}
-                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#BFBFBF', borderColor: borderColor, borderWidth: 3}, (!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state &&
+                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: borderColor, borderWidth: 3}, (!!tableStatus &&
                 {
 
-                  backgroundColor: this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'OPEN' ? '#F8CBAD'
-                    : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'IN_PROCESS' ? '#FFE699'
-                      : this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.state == 'DELIVERED' ? '#8FAADC'
-                        : '#ADD395'
+                  backgroundColor: tableStatus == 'OPEN' ? mainThemeColor
+                    : tableStatus == 'IN_PROCESS' ? mainThemeColor
+                      : tableStatus == 'DELIVERED' ? mainThemeColor
+                        : '#86bf20'
                 })]}>
+                {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#ffc818'}}></View>}
+                {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
                 <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
-                <Text style={{color: '#000', textAlign: 'center', }}>{`${this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.customerCount ?? 0}/${table.capacity}`}</Text>
-                {!!this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime &&
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Ionicons name={'ios-people'} color={'black'} size={20} />
+                  <Text style={{color: '#000', textAlign: 'center', }}>{` ${tableOrder?.customerCount ?? 0}(${table.capacity})`}</Text>
+                </View>
+                {!!tableOrder?.createdTime &&
                   <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
-                    <FontAwesomeIcon name={'clock-o'} color={getTimeDifference(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime) < 30 * 60 * 1000 ? mainThemeColor : 'red'} size={20} />
+                    <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? 'red' : 'black'} size={20} />
                     <StyledText style={{marginLeft: 2, color: '#000'}}>
-                      {timeAgo.format(Date.now() - getTimeDifference(this.props?.orders[`${table.tableId?.slice(0, -2)}`]?.find((item) => {return item?.tableName === table.tableName})?.createdTime), 'time')}
+                      {timeAgo.format(Date.now() - getTimeDifference(tableOrder?.createdTime), {flavour: 'tiny'})}
                     </StyledText>
                   </View>}
               </TouchableOpacity>
@@ -888,13 +903,13 @@ class TableSet extends Component {
     let maxX = 0
     let maxY = 0
     this.props?.item?.linkedOrders?.forEach((item) => {
-      if (item.screenPosition.x * windowWidth < minX)
+      if (item?.screenPosition?.x * windowWidth < minX)
         minX = item.screenPosition.x * windowWidth
-      if (item.screenPosition.y * windowHeight < minY)
+      if (item?.screenPosition?.y * windowHeight < minY)
         minY = item.screenPosition.y * windowHeight
-      if (item.screenPosition.x * windowWidth > maxX)
+      if (item?.screenPosition?.x * windowWidth > maxX)
         maxX = item.screenPosition.x * windowWidth
-      if (item.screenPosition.y * windowHeight > maxY)
+      if (item?.screenPosition?.y * windowHeight > maxY)
         maxY = item.screenPosition.y * windowHeight
     })
     this.state.pan.setValue({x: minX, y: minY})
