@@ -182,6 +182,9 @@ const zh = {
     discountOptions: '折扣選項',
     checkTaxIDNumber: '請輸入正確的統一編號',
     checkAutoComplete: '輸入的現金金額小於訂單總金額，請問您想要自動補差額嗎？',
+    checkCarrierId: '格式錯誤，請重新掃描',
+    carrierId: '手機條碼',
+    checkPrintInvoice: '是否要列印電子發票'
   },
   timecard: {
     hours: '小時',
@@ -338,6 +341,7 @@ const zh = {
       FREE: '免費'
     }
   },
+  empty: '空',
 }
 
 export default zh

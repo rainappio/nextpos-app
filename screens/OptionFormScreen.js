@@ -13,6 +13,7 @@ import ScreenHeader from "../components/ScreenHeader";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
 import {WhiteSpace} from "@ant-design/react-native";
+import {backAction} from '../helpers/backActions'
 
 class OptionFormScreen extends React.Component {
   static navigationOptions = {
@@ -132,6 +133,7 @@ class OptionFormScreen extends React.Component {
       <ThemeKeyboardAwareScrollView>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader parentFullScreen={true}
+            backAction={() => backAction(this.props.navigation)}
             title={t('productOptionTitle')} />
 
           <View>

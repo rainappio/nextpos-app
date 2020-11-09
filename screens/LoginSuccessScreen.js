@@ -1,11 +1,10 @@
 import React from 'react'
 import {Image, Modal, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
-import Icon from 'react-native-vector-icons/Ionicons'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import {doLogout, formatDateObj, getAnnouncements, getClientUsr, getCurrentClient, getShiftStatus} from '../actions'
+import {doLogout, formatDateObj, getAnnouncements, getClientUsr, getCurrentClient, getShiftStatus, getPrinters} from '../actions'
 import styles, {mainThemeColor} from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
 import {NavigationEvents} from 'react-navigation'
@@ -54,13 +53,29 @@ class LoginSuccessScreen extends React.Component {
         welcome: 'Welcome,',
         loggedIn: 'Logged in at',
         quickOrder: 'Quick Order',
-        ownerRemark: '\'s Owner'
+        ownerRemark: '\'s Owner',
+        clientStatusTitle: 'Please complete the following settings',
+        addTableLayout: 'Add Table Layout',
+        addCategory: 'Add Category',
+        addElectronicInvoice: 'Add Electronic Invoice',
+        addPrinter: 'Add Printer',
+        addProduct: 'Add Product',
+        addTable: 'Add Table',
+        addWorkingArea: 'Add Working Area',
       },
       zh: {
         welcome: '歡迎,',
         loggedIn: '登入時間:',
         quickOrder: '快速訂單',
-        ownerRemark: '老闆'
+        ownerRemark: '老闆',
+        clientStatusTitle: '請完成下列設定',
+        addTableLayout: '新增樓面',
+        addCategory: '新增產品分類',
+        addElectronicInvoice: '新增電子發票',
+        addPrinter: '新增出單機',
+        addProduct: '新增產品',
+        addTable: '新增桌位',
+        addWorkingArea: '新增工作區',
       }
     })
     // <NavigationEvent> component in the render function takes care of loading user info.
@@ -90,10 +105,13 @@ class LoginSuccessScreen extends React.Component {
       haveError,
       getannouncements,
       shiftStatus,
-      themeStyle
+      themeStyle,
+      client,
+      printers = [],
     } = this.props
     const {t} = this.context
     const {username, loggedIn, tokenExpiry} = this.state
+    console.log('localClientStatus', client?.localClientStatus)
 
     if (isLoading) {
       return (
@@ -188,8 +206,101 @@ class LoginSuccessScreen extends React.Component {
 
             </View>
           </View>
-
           <View style={[styles.flex(2), {margin: 10}]}>
+            {(client?.localClientStatus?.noCategory
+              || client?.localClientStatus?.noTableLayout
+              || client?.localClientStatus?.noElectronicInvoice
+              || client?.localClientStatus?.noPrinter
+              || client?.localClientStatus?.noProduct
+              || client?.localClientStatus?.noTable
+              || client?.localClientStatus?.noWorkingArea) &&
+              <View style={[styles.sectionContainer, styles.withBottomBorder, {alignItems: 'center'}]}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <StyledText style={[styles.announcementTitle]}>
+                    {t('clientStatusTitle')}
+                  </StyledText>
+                </View>
+
+                {client?.localClientStatus?.noTableLayout &&
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('TableLayoutAdd')}>
+                    <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
+                      {t('addTableLayout')}
+                    </StyledText>
+                    <IonIcon
+                      name={'ios-arrow-dropright-circle'}
+                      size={32}
+                      color={mainThemeColor}
+                    />
+                  </TouchableOpacity>}
+                {client?.localClientStatus?.noTable &&
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('TableLayouts')}>
+                    <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
+                      {t('addTable')}
+                    </StyledText>
+                    <IonIcon
+                      name={'ios-arrow-dropright-circle'}
+                      size={32}
+                      color={mainThemeColor}
+                    />
+                  </TouchableOpacity>}
+                {client?.localClientStatus?.noCategory &&
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('Category')}>
+                    <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
+                      {t('addCategory')}
+                    </StyledText>
+                    <IonIcon
+                      name={'ios-arrow-dropright-circle'}
+                      size={32}
+                      color={mainThemeColor}
+                    />
+                  </TouchableOpacity>}
+                {client?.localClientStatus?.noProduct &&
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('Product')}>
+                    <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
+                      {t('addProduct')}
+                    </StyledText>
+                    <IonIcon
+                      name={'ios-arrow-dropright-circle'}
+                      size={32}
+                      color={mainThemeColor}
+                    />
+                  </TouchableOpacity>}
+                {client?.localClientStatus?.noElectronicInvoice &&
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('EinvoiceStatusScreen')}>
+                    <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
+                      {t('addElectronicInvoice')}
+                    </StyledText>
+                    <IonIcon
+                      name={'ios-arrow-dropright-circle'}
+                      size={32}
+                      color={mainThemeColor}
+                    />
+                  </TouchableOpacity>}
+                {client?.localClientStatus?.noPrinter &&
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('PrinterAdd')}>
+                    <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
+                      {t('addPrinter')}
+                    </StyledText>
+                    <IonIcon
+                      name={'ios-arrow-dropright-circle'}
+                      size={32}
+                      color={mainThemeColor}
+                    />
+                  </TouchableOpacity>}
+                {client?.localClientStatus?.noWorkingArea &&
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('WorkingAreaAdd', {dataArr: printers})}>
+                    <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
+                      {t('addWorkingArea')}
+                    </StyledText>
+                    <IonIcon
+                      name={'ios-arrow-dropright-circle'}
+                      size={32}
+                      color={mainThemeColor}
+                    />
+                  </TouchableOpacity>}
+
+
+              </View>}
             {
               getannouncements.results !== undefined &&
               getannouncements.results.map(getannoc =>
@@ -230,7 +341,9 @@ const mapStateToProps = state => ({
   haveError: state.clientuser.haveError,
   isLoading: state.clientuser.loading,
   getannouncements: state.announcements.data,
-  shiftStatus: state.shift.data.shiftStatus
+  shiftStatus: state.shift.data.shiftStatus,
+  client: state.client.data,
+  printers: state.printers.data.printers,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -241,7 +354,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(doLogout())
   },
   getAnnouncements: () => dispatch(getAnnouncements()),
-  getShiftStatus: () => dispatch(getShiftStatus())
+  getShiftStatus: () => dispatch(getShiftStatus()),
+  getPrinters: () => dispatch(getPrinters()),
 })
 
 const enhance = compose(

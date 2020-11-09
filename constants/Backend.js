@@ -105,6 +105,9 @@ export const api = {
     sortPrdList: prdLabelId => {
       return `${apiRoot}/labels/${prdLabelId}/order`
     },
+    changeProductLabel: prdId => {
+      return `${apiRoot}/products/${prdId}/label`
+    },
     delete: prdLabelId => {
       return `${apiRoot}/labels/${prdLabelId}`
     },

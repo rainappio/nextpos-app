@@ -35,7 +35,13 @@ class OrderTopInfo extends Component {
             </View>
 
             <View style={[styles.tableCellView, {width: '20%'}]}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => {
+                const originScreen = this.props.navigation.state.routeName
+                const updateOrderRoute = (originScreen === 'OrdersSummary' || originScreen === 'OrderFormII') ? 'UpdateOrder' : 'UpdateOrderFromOrderDetail'
+                this.props.navigation.navigate(updateOrderRoute, {
+                  order: order
+                })
+              }}>
                 <View>
                   <FontAwesomeIcon
                     name="user"
@@ -111,7 +117,7 @@ class OrderTopInfo extends Component {
               <TouchableOpacity
                 onPress={() => {
                   const originScreen = this.props.navigation.state.routeName
-                  const updateOrderRoute = originScreen === 'OrdersSummary' ? 'UpdateOrder' : 'UpdateOrderFromOrderDetail'
+                  const updateOrderRoute = (originScreen === 'OrdersSummary' || originScreen === 'OrderFormII') ? 'UpdateOrder' : 'UpdateOrderFromOrderDetail'
                   this.props.navigation.navigate(updateOrderRoute, {
                     order: order
                   })
