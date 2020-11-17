@@ -20,6 +20,9 @@ import {isGuiNumberValid} from 'taiwan-id-validator2'
 import {handleDelete} from "../helpers/orderActions";
 import NavigationService from "../navigation/NavigationService";
 import {NavigationEvents} from 'react-navigation'
+import {ScanView} from '../components/scanView'
+import InputText from '../components/InputText'
+import {isRequired} from '../validators'
 
 class PaymentFormScreenTablet extends React.Component {
     static navigationOptions = {
@@ -39,11 +42,14 @@ class PaymentFormScreenTablet extends React.Component {
             selectedCardLabel: 'OTHER',
             haveTaxIDNumber: false,
             openTaxIDNumberKeyBoard: false,
+            haveCarrierId: false,
+            openScanView: false,
             openDiscountKeyBoard: false,
             modalVisible: false,
             modalData: props.order,
             orderLineItems: {},
             waiveServiceCharge: this.props.order?.serviceCharge === 0,
+            carrierId: '123',
         }
     }
 
@@ -104,13 +110,23 @@ class PaymentFormScreenTablet extends React.Component {
         }).then()
     }
 
-    handleSubmit = (autoComplete = false, cash = 0) => {
+    handleScanSuccess = (data) => {
+        this.props?.change(`carrierId`, data)
+        this.setState({openScanView: false})
+    }
+
+    handleSubmit = (values, autoComplete = false, cash = 0) => {
         const transactionObj = {
             orderId: this.props.order.orderId,
             paymentMethod: this.state.selectedPayLabel,
             billType: 'SINGLE',
             taxIdNumber: this.state.taxIDNumberKeyBoardResult.join(''),
-            paymentDetails: {}
+            paymentDetails: {},
+            printMark: true
+        }
+        if (!!values?.carrierId && this.state?.haveCarrierId) {
+            transactionObj.carrierType = 'MOBILE'
+            transactionObj.carrierId = values?.carrierId
         }
         if (this.state.selectedPayLabel === 'CASH') {
             transactionObj.paymentDetails['CASH'] = autoComplete ? cash : this.state.keyboardResult
@@ -120,28 +136,58 @@ class PaymentFormScreenTablet extends React.Component {
             transactionObj.paymentDetails['LAST_FOUR_DIGITS'] = this.state.cardKeyboardResult.join('')
         }
 
-        dispatchFetchRequestWithOption(api.payment.charge, {
-            method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(transactionObj)
-        }, {
-            defaultMessage: false
-        }, response => {
-            successMessage(this.context.t('payment.charged'))
 
-            response.json().then(data => {
-                this.props.navigation.navigate('CheckoutComplete', {
-                    transactionResponse: data,
-                    onSubmit: this.handleComplete,
-                    isSplitting: this.props?.isSplitting ?? false,
-                    parentOrder: this.props?.parentOrder ?? null,
+        if (this.state?.haveCarrierId && this.state?.haveTaxIDNumber) {
+            Alert.alert(
+                ``,
+                `${this.context.t('payment.checkPrintInvoice')}`,
+                [
+                    {
+                        text: `${this.context.t('action.yes')}`,
+                        onPress: () => {
+                            transactionObj.printMark = true
+                            fetchApi(transactionObj)
+                        }
+                    },
+                    {
+                        text: `${this.context.t('action.no')}`,
+                        onPress: () => {
+                            transactionObj.printMark = false
+                            fetchApi(transactionObj)
+                        },
+                        style: 'cancel'
+                    }
+                ]
+            )
+        } else {
+            fetchApi(transactionObj)
+        }
+        const fetchApi = (transactionObj) => {
+            console.log('transactionObj', transactionObj)
+            dispatchFetchRequestWithOption(api.payment.charge, {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(transactionObj)
+            }, {
+                defaultMessage: false
+            }, response => {
+                successMessage(this.context.t('payment.charged'))
+
+                response.json().then(data => {
+                    this.props.navigation.navigate('CheckoutComplete', {
+                        transactionResponse: data,
+                        onSubmit: this.handleComplete,
+                        isSplitting: this.props?.isSplitting ?? false,
+                        parentOrder: this.props?.parentOrder ?? null,
+                    })
                 })
-            })
-        }).then()
+            }).then()
+        }
+
     }
 
     handleServiceChargePress = async (waiveServiceCharge) => {
@@ -168,7 +214,7 @@ class PaymentFormScreenTablet extends React.Component {
     render() {
         const {navigation, handleSubmit, globalorderoffers, order} = this.props
         const {t, themeStyle} = this.context
-        console.log('globalorderoffers render2', themeStyle)
+        console.log('globalorderoffers render2', this.props?.form)
         return (
             <ThemeContainer>
                 <View style={[styles.fullWidthScreen]}>
@@ -224,6 +270,14 @@ class PaymentFormScreenTablet extends React.Component {
                                         </TouchableOpacity>
                                     </View>
                                     <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
+                                        <TouchableOpacity style={[(this.state.haveCarrierId ? styles.selectedLabel : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {this.setState({openDiscountKeyBoard: false, haveCarrierId: !this.state.haveCarrierId, openScanView: false})}}>
+                                            <View style={styles.listPanel}>
+                                                <StyledText style={styles.listPanelText}>{t('payment.carrierId')}</StyledText>
+                                            </View>
+                                            {this.state.haveCarrierId && <Icon style={{marginRight: 10}} name="times-circle" size={20} color='#f75336' />}
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
                                         <TouchableOpacity style={[(this.state.waiveServiceCharge ? styles.selectedLabel : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {this.handleServiceChargePress(this.state.waiveServiceCharge)}}>
                                             <View style={styles.listPanel}>
                                                 <StyledText style={styles.listPanelText}>{t('payment.waiveServiceCharge')}</StyledText>
@@ -235,7 +289,7 @@ class PaymentFormScreenTablet extends React.Component {
                             </View>
                             {/* mid content */}
                             <View style={{flex: 2}}>
-                                <ScrollView style={{flex: 1}}>
+                                <ThemeKeyboardAwareScrollView style={{flex: 1}}>
                                     <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
                                         <View style={[styles.tableCellView, {flex: 1}]}>
                                             <StyledText>{t('order.subtotal')}</StyledText>
@@ -436,35 +490,64 @@ class PaymentFormScreenTablet extends React.Component {
                                                 </View>}
                                         </TouchableOpacity>
                                     </View>}
-                                </ScrollView>
+                                    {this.state.haveCarrierId &&
+                                        <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                                            <View style={[styles.tableCellView, {flex: 1}]}>
+                                                <StyledText>{t('payment.carrierId')}</StyledText>
+                                            </View>
+
+                                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                                <Field
+                                                    name={`carrierId`}
+                                                    component={InputText}
+                                                    validate={[isRequired]}
+                                                />
+                                                <TouchableOpacity style={{minWidth: 64, alignItems: 'center', }}
+                                                    onPress={() => {
+                                                        this.setState({
+                                                            openScanView: !this.state.openScanView
+                                                        })
+                                                    }}
+                                                >
+                                                    <Icon style={{marginLeft: 10}} name="camera" size={24} color={mainThemeColor} />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    }
+                                </ThemeKeyboardAwareScrollView>
                             </View>
                         </View>
                         {/* keyboard */}
                         <View style={{flex: 1}}>
-                            {this.state.openTaxIDNumberKeyBoard || this.state.openDiscountKeyBoard || <View style={{flex: 7}}>
-                                {this.state.selectedPayLabel === 'CASH' ? <MoneyKeyboard
-                                    initialValue={0}
-                                    value={this.state.keyboardResult}
-                                    getResult={(result) => {this.setState({keyboardResult: result})}} />
-                                    : <CardFourNumberKeyboard
-                                        initialValue={['0', '1', '2', '3']}
-                                        value={this.state.cardKeyboardResult}
-                                        getResult={(result) => {this.setState({cardKeyboardResult: result})}} />}
+                            {!this.state.openScanView && <View style={{flex: 7}}>
+                                {this.state.openTaxIDNumberKeyBoard || this.state.openDiscountKeyBoard || <View style={{flex: 7}}>
+                                    {this.state.selectedPayLabel === 'CASH' ? <MoneyKeyboard
+                                        initialValue={0}
+                                        value={this.state.keyboardResult}
+                                        getResult={(result) => {this.setState({keyboardResult: result})}} />
+                                        : <CardFourNumberKeyboard
+                                            initialValue={['0', '1', '2', '3']}
+                                            value={this.state.cardKeyboardResult}
+                                            getResult={(result) => {this.setState({cardKeyboardResult: result})}} />}
+                                </View>}
+                                {this.state.openTaxIDNumberKeyBoard && <View style={{flex: 7}}>
+                                    <CustomTitleAndDigitKeyboard
+                                        title={t('payment.enterTaxIDNumber')}
+                                        digit={8}
+                                        value={this.state.taxIDNumberKeyBoardResult}
+                                        getResult={(result) => {this.setState({taxIDNumberKeyBoardResult: result})}} />
+                                </View>}
+                                {this.state.openDiscountKeyBoard && <View style={{flex: 7}}>
+                                    <DiscountKeyboard
+                                        globalorderoffers={globalorderoffers}
+                                        title={t('payment.discountOptions')}
+                                        okPress={this.refreshOrder}
+                                        order={order}
+                                    />
+                                </View>}
                             </View>}
-                            {this.state.openTaxIDNumberKeyBoard && <View style={{flex: 7}}>
-                                <CustomTitleAndDigitKeyboard
-                                    title={t('payment.enterTaxIDNumber')}
-                                    digit={8}
-                                    value={this.state.taxIDNumberKeyBoardResult}
-                                    getResult={(result) => {this.setState({taxIDNumberKeyBoardResult: result})}} />
-                            </View>}
-                            {this.state.openDiscountKeyBoard && <View style={{flex: 7}}>
-                                <DiscountKeyboard
-                                    globalorderoffers={globalorderoffers}
-                                    title={t('payment.discountOptions')}
-                                    okPress={this.refreshOrder}
-                                    order={order}
-                                />
+                            {this.state.openScanView && <View style={{flex: 7}}>
+                                <ScanView successCallback={(data) => {this.handleScanSuccess(data)}} />
                             </View>}
                             <View style={{flex: 1, flexDirection: 'row', padding: '3%'}}>
                                 <View style={{flex: 1, marginHorizontal: 5}}>
@@ -477,7 +560,7 @@ class PaymentFormScreenTablet extends React.Component {
                                 </View>
                                 <View style={{flex: 1, marginHorizontal: 5}}>
                                     <TouchableOpacity
-                                        onPress={() => {
+                                        onPress={handleSubmit(data => {
                                             if (this.state.haveTaxIDNumber && !isGuiNumberValid(this.state.taxIDNumberKeyBoardResult.join(''))) {
                                                 Alert.alert(
                                                     `${t('payment.checkTaxIDNumber')}`,
@@ -493,7 +576,7 @@ class PaymentFormScreenTablet extends React.Component {
                                                         `${t('payment.checkAutoComplete')}`,
                                                         ` `,
                                                         [
-                                                            {text: `${t('action.yes')}`, onPress: () => this.handleSubmit(true, order.orderTotal)},
+                                                            {text: `${t('action.yes')}`, onPress: () => this.handleSubmit(data, true, order.orderTotal)},
                                                             {
                                                                 text: `${t('action.no')}`,
                                                                 onPress: () => console.log('Cancelled'),
@@ -503,9 +586,9 @@ class PaymentFormScreenTablet extends React.Component {
                                                     )
                                                 }
                                                 else
-                                                    this.handleSubmit(false)
+                                                    this.handleSubmit(data, false)
                                             }
-                                        }}
+                                        })}
                                         style={styles.flexButton}
                                     >
                                         <Text style={styles.flexButtonText}>
@@ -537,7 +620,7 @@ export default connect(
     mapDispatchToProps
 )(
     reduxForm({
-        form: 'paymentForm',
+        form: 'paymentFormTablet',
         enableReinitialize: true
     })(PaymentFormScreenTablet)
 )

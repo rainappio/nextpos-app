@@ -28,6 +28,7 @@ import {printMessage} from "../helpers/printerActions";
 import DropDown from "../components/DropDown";
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
+import {NavigationEvents} from "react-navigation";
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
@@ -443,6 +444,11 @@ class OrderFormII extends React.Component {
         return (
           <ThemeContainer>
             <View style={{...styles.fullWidthScreen, marginBottom: 0}}>
+              <NavigationEvents
+                onWillFocus={() => {
+                  this.props.getOrder()
+                }}
+              />
               <ScreenHeader backNavigation={true}
                 parentFullScreen={true}
                 title={t('newOrderTitle')}
@@ -990,7 +996,7 @@ class OrderFormII extends React.Component {
                   </View>
                   <View style={{flex: 1, marginVertical: 5, justifyContent: 'space-between'}}>
 
-                    <StyledText style={{textAlign: 'right'}}>{t('order.subtotal')} ${order.total.amountWithTax}</StyledText>
+                    <StyledText style={{textAlign: 'right'}}>{t('order.subtotal')} ${order?.total?.amountWithTax}</StyledText>
                     <StyledText style={{textAlign: 'right'}}>{t('order.discount')} ${order.discount}</StyledText>
                     <StyledText style={{textAlign: 'right'}}>{t('order.serviceCharge')} ${order.serviceCharge}</StyledText>
 
@@ -1048,6 +1054,22 @@ class OrderFormII extends React.Component {
                             containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
                           />
                         ))}
+                      {map.get('pinned') !== undefined &&
+                        map.get('pinned').length === 0 && (
+                          <ListItem
+                            title={
+                              <View style={[styles.tableRowContainer]}>
+                                <View style={[styles.tableCellView, styles.flex(1)]}>
+                                  <StyledText>({t('empty')})</StyledText>
+
+                                </View>
+
+                              </View>
+                            }
+                            bottomDivider
+                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                          />
+                        )}
                     </List>
                   </Accordion.Panel>
 
@@ -1076,6 +1098,22 @@ class OrderFormII extends React.Component {
                             containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
                           />
                         ))}
+                        {map.get(lbl.label) !== undefined &&
+                          map.get(lbl.label).length === 0 && (
+                            <ListItem
+                              title={
+                                <View style={[styles.tableRowContainer]}>
+                                  <View style={[styles.tableCellView, styles.flex(1)]}>
+                                    <StyledText>({t('empty')})</StyledText>
+
+                                  </View>
+
+                                </View>
+                              }
+                              bottomDivider
+                              containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                            />
+                          )}
                       </List>
                     </Accordion.Panel>
                   ))}
@@ -1104,6 +1142,21 @@ class OrderFormII extends React.Component {
                             containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
                           />
                         ))}
+                      {(map.get('ungrouped') === undefined || map.get('ungrouped').length === 0) && (
+                        <ListItem
+                          title={
+                            <View style={[styles.tableRowContainer]}>
+                              <View style={[styles.tableCellView, styles.flex(1)]}>
+                                <StyledText>({t('empty')})</StyledText>
+
+                              </View>
+
+                            </View>
+                          }
+                          bottomDivider
+                          containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                        />
+                      )}
                     </List>
                   </Accordion.Panel>
                 </Accordion>

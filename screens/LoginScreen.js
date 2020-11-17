@@ -186,20 +186,24 @@ class LoginScreen extends React.Component {
 
               <StyledText style={styles.welcomeText}>{t('loginTitle')}</StyledText>
 
-              <Field
-                name="username"
-                component={InputText}
-                validate={[isRequired, isEmail]}
-                placeholder={t('email')}
-                autoCapitalize="none"
-              />
-              <Field
-                name="masterPassword"
-                component={InputText}
-                validate={isRequired}
-                placeholder={t('password')}
-                secureTextEntry={true}
-              />
+              <View>
+                <View style={{marginBottom: 16}}>
+                  <Field
+                    name="username"
+                    component={InputText}
+                    validate={[isRequired, isEmail]}
+                    placeholder={t('email')}
+                    autoCapitalize="none"
+                  />
+                </View>
+                <Field
+                  name="masterPassword"
+                  component={InputText}
+                  validate={isRequired}
+                  placeholder={t('password')}
+                  secureTextEntry={true}
+                />
+              </View>
             </View>
 
             <View style={styles.flex(1)}>

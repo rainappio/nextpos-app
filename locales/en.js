@@ -182,6 +182,9 @@ const en = {
     discountOptions: 'Discount Options',
     checkTaxIDNumber: 'Enter Correct Tax ID Number',
     checkAutoComplete: 'Entered cash amount is less than the settling amount. Do you want to make up the difference automatically?',
+    checkCarrierId: 'Mobile carrier format is incorrect, please rescan.',
+    carrierId: 'Mobile Carrier',
+    checkPrintInvoice: 'Print electronic invoice?'
   },
   timecard: {
     hours: 'Hour(s)',
@@ -336,6 +339,7 @@ const en = {
       FREE: 'Free'
     }
   },
+  empty: 'Empty',
 }
 
 export default en

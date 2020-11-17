@@ -102,8 +102,13 @@ class PaymentOrder extends React.Component {
       orderId: this.props.navigation.state.params.orderId,
       paymentMethod: values.paymentMethod,
       billType: 'SINGLE',
-      //taxIdNumber
-      paymentDetails: {}
+      taxIdNumber: values?.taxIdNumber ?? null,
+      paymentDetails: {},
+      printMark: true
+    }
+    if (!!values?.carrierId) {
+      transactionObj.carrierType = 'MOBILE'
+      transactionObj.carrierId = values?.carrierId
     }
     if (values.paymentMethod === 'CASH') {
       transactionObj.paymentDetails['CASH'] = autoComplete ? cash : values.cash
@@ -113,28 +118,57 @@ class PaymentOrder extends React.Component {
       transactionObj.paymentDetails['LAST_FOUR_DIGITS'] = values.cardNumber
     }
 
-    dispatchFetchRequestWithOption(api.payment.charge, {
-      method: 'POST',
-      withCredentials: true,
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(transactionObj)
-    }, {
-      defaultMessage: false
-    }, response => {
-      successMessage(this.context.t('charged'))
+    if (!!values?.carrierId && !!values?.taxIdNumber) {
+      Alert.alert(
+        ``,
+        `${this.context.t('payment.checkPrintInvoice')}`,
+        [
+          {
+            text: `${this.context.t('action.yes')}`,
+            onPress: () => {
+              transactionObj.printMark = true
+              fetchApi(transactionObj)
+            }
+          },
+          {
+            text: `${this.context.t('action.no')}`,
+            onPress: () => {
+              transactionObj.printMark = false
+              fetchApi(transactionObj)
+            },
+            style: 'cancel'
+          }
+        ]
+      )
+    } else {
+      fetchApi(transactionObj)
+    }
+    const fetchApi = (transactionObj) => {
+      dispatchFetchRequestWithOption(api.payment.charge, {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(transactionObj)
+      }, {
+        defaultMessage: false
+      }, response => {
+        successMessage(this.context.t('charged'))
 
-      response.json().then(data => {
-        this.props.navigation.navigate('CheckoutComplete', {
-          transactionResponse: data,
-          onSubmit: this.handleComplete,
-          isSplitting: this.props.navigation.state.params?.isSplitting ?? false,
-          parentOrder: this.props.navigation.state.params?.parentOrder ?? null,
+        response.json().then(data => {
+          this.props.navigation.navigate('CheckoutComplete', {
+            transactionResponse: data,
+            onSubmit: this.handleComplete,
+            isSplitting: this.props.navigation.state.params?.isSplitting ?? false,
+            parentOrder: this.props.navigation.state.params?.parentOrder ?? null,
+          })
         })
-      })
-    }).then()
+      }).then()
+    }
+
+
   }
 
   render() {

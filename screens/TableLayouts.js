@@ -75,7 +75,7 @@ class TableLayouts extends React.Component {
 
     if (loading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     }
     return (
@@ -88,12 +88,12 @@ class TableLayouts extends React.Component {
         <View>
           <View style={[styles.container]}>
             <ScreenHeader backNavigation={true}
-                          title={t('settings.tableLayouts')}
-                          rightComponent={
-                            <AddBtn
-                              onPress={() => this.props.navigation.navigate('TableLayoutAdd')}
-                            />
-                          }
+              title={t('settings.tableLayouts')}
+              rightComponent={
+                <AddBtn
+                  onPress={() => this.props.navigation.navigate('TableLayoutAdd')}
+                />
+              }
             />
           </View>
 
@@ -135,6 +135,22 @@ class TableLayouts extends React.Component {
                       containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor},]}
                     />
                   ))}
+                  {tblLayout.tables.length === 0 && (
+                    <ListItem
+                      title={
+                        <View style={[styles.tableRowContainer]}>
+                          <View style={[styles.tableCellView]}>
+                            <StyledText>({t('empty')})</StyledText>
+                          </View>
+                        </View>
+                      }
+                      onPress={() => {
+
+                      }}
+                      bottomDivider
+                      containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor},]}
+                    />
+                  )}
                 </List>
               </Accordion.Panel>
             ))}

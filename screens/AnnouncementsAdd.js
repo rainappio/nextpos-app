@@ -9,6 +9,7 @@ import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import ScreenHeader from "../components/ScreenHeader";
 import {ThemeScrollView} from "../components/ThemeScrollView";
+import {backAction} from '../helpers/backActions'
 
 class AnnouncementsAdd extends React.Component {
   static navigationOptions = {
@@ -36,14 +37,15 @@ class AnnouncementsAdd extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
-    const { t } = this.context
+    const {navigation} = this.props
+    const {t} = this.context
 
     return (
       <ThemeScrollView>
         <DismissKeyboard>
           <View style={styles.container}>
-            <ScreenHeader title={t('newAnnouncementTitle')}/>
+            <ScreenHeader title={t('newAnnouncementTitle')}
+              backAction={() => backAction(this.props.navigation)} />
 
             <AnnouncementsForm
               onSubmit={this.handleSubmit}

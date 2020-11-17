@@ -1,6 +1,6 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {Text, TouchableOpacity, View} from 'react-native'
+import {Text, TouchableOpacity, View, Alert} from 'react-native'
 import InputText from '../components/InputText'
 import AddBtn from '../components/AddBtn'
 import RNSwitch from '../components/RNSwitch'
@@ -12,6 +12,7 @@ import RadioItemObjPick from "../components/RadioItemObjPick";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import DeleteBtn from '../components/DeleteBtn'
+import {backAction} from '../helpers/backActions'
 
 class CategoryCustomizeScreen extends React.Component {
   static navigationOptions = {
@@ -59,7 +60,7 @@ class CategoryCustomizeScreen extends React.Component {
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader parentFullScreen={true}
             title={t('categoryTitle')}
-
+            backAction={() => backAction(this.props.navigation)}
           />
 
           <View style={styles.tableRowContainerWithBorder}>

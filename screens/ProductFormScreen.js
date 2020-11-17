@@ -15,6 +15,7 @@ import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScro
 import {StyledText} from "../components/StyledText";
 import ItemList from "../components/ItemList";
 import ProductSelector from "./ProductSelector";
+import {backAction} from '../helpers/backActions'
 
 class ProductFormScreen extends React.Component {
   static navigationOptions = {
@@ -79,16 +80,17 @@ class ProductFormScreen extends React.Component {
       <ThemeKeyboardAwareScrollView>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader parentFullScreen={true}
-                        title={isEditForm ? t('editProduct') : t('newProduct')}
-                        rightComponent={
-                          <AddBtn
-                            onPress={() =>
-                              this.props.navigation.navigate('Option', {
-                                customRoute: this.props.navigation.state.routeName
-                              })
-                            }
-                          />
-                        }
+            title={isEditForm ? t('editProduct') : t('newProduct')}
+            backAction={() => backAction(this.props.navigation)}
+            rightComponent={
+              <AddBtn
+                onPress={() =>
+                  this.props.navigation.navigate('Option', {
+                    customRoute: this.props.navigation.state.routeName
+                  })
+                }
+              />
+            }
           />
 
           <View style={styles.tableRowContainerWithBorder}>
@@ -212,19 +214,19 @@ class ProductFormScreen extends React.Component {
                   <StyledText style={styles.sectionTitleText}>{t('workingArea')}</StyledText>
                 </View>
                 {workingareas !== undefined &&
-                workingareas.map(workarea => (
-                  <View key={workarea.id}>
-                    <Field
-                      name='workingAreaId'
-                      component={RadioItemObjPick}
-                      customValueOrder={workarea.id}
-                      optionName={workarea.name}
-                      onCheck={(currentVal, fieldVal) => {
-                        return fieldVal !== undefined && currentVal === fieldVal
-                      }}
-                    />
-                  </View>
-                ))}
+                  workingareas.map(workarea => (
+                    <View key={workarea.id}>
+                      <Field
+                        name='workingAreaId'
+                        component={RadioItemObjPick}
+                        customValueOrder={workarea.id}
+                        optionName={workarea.name}
+                        onCheck={(currentVal, fieldVal) => {
+                          return fieldVal !== undefined && currentVal === fieldVal
+                        }}
+                      />
+                    </View>
+                  ))}
               </View>
             </View>
           )}
@@ -264,21 +266,21 @@ class ProductFormScreen extends React.Component {
                     {t('action.cancel')}
                   </Text>
                 </TouchableOpacity>
-                <DeleteBtn handleDeleteAction={handleDeleteProduct}/>
+                <DeleteBtn handleDeleteAction={handleDeleteProduct} />
               </View>
             ) : (
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate('ProductsOverview')
-                }
-              >
-                <Text
-                  style={[styles.bottomActionButton, styles.cancelButton]}
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('ProductsOverview')
+                  }
                 >
-                  {t('action.cancel')}
-                </Text>
-              </TouchableOpacity>
-            )}
+                  <Text
+                    style={[styles.bottomActionButton, styles.cancelButton]}
+                  >
+                    {t('action.cancel')}
+                  </Text>
+                </TouchableOpacity>
+              )}
           </View>
         </View>
       </ThemeKeyboardAwareScrollView>

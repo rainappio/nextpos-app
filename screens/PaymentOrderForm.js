@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {connect} from 'react-redux'
 import {Field, reduxForm} from 'redux-form'
 import {Text, TouchableOpacity, View} from 'react-native'
@@ -11,6 +11,8 @@ import DropDown from '../components/DropDown'
 import ScreenHeader from "../components/ScreenHeader";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {ScanView} from '../components/scanView'
 
 class PaymentOrderForm extends React.Component {
   static navigationOptions = {
@@ -80,8 +82,14 @@ class PaymentOrderForm extends React.Component {
     const {paymentsTypes, selectedPaymentType, paymentsTypeslbl, handlePaymentTypeSelection} = this.props
 
     const TaxInputAndBottomBtns = (props) => {
+      const [openScanView, setOpenScanView] = useState(false);
+
+      const handleScanSuccess = (data) => {
+        props?.change(`carrierId`, data)
+        setOpenScanView(false)
+      }
       return (
-        <View>
+        <View >
           <View style={styles.fieldContainer}>
             <View style={{flex: 2}}>
               <StyledText style={styles.fieldTitle}>{t('taxIDNumber')}</StyledText>
@@ -97,6 +105,31 @@ class PaymentOrderForm extends React.Component {
             </View>
           </View>
 
+          <View style={styles.fieldContainer}>
+            <View style={{flex: 2}}>
+              <StyledText style={styles.fieldTitle}>{t('payment.carrierId')}</StyledText>
+            </View>
+            <View style={{flex: 2}}>
+              <Field
+                name="carrierId"
+                component={InputText}
+                placeholder={t('payment.carrierId')}
+                extraStyle={{textAlign: 'left'}}
+              />
+            </View>
+            <View style={{flex: 1}}>
+              <TouchableOpacity style={{alignItems: 'center', }}
+                onPress={() => {
+                  setOpenScanView(!openScanView)
+                }}
+              >
+                <Icon style={{marginLeft: 10}} name="camera" size={24} color={mainThemeColor} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          {openScanView && <View style={{flexDirection: 'column'}}>
+            <ScanView successCallback={(data) => {handleScanSuccess(data)}} style={{height: 320, width: '100%'}} />
+          </View>}
           <View style={styles.bottom}>
             <TouchableOpacity onPress={() => props.handleSubmit()}>
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
@@ -285,6 +318,7 @@ class PaymentOrderForm extends React.Component {
             <TaxInputAndBottomBtns
               handleSubmit={handleSubmit}
               navigation={this.props.navigation}
+              change={this.props?.change}
             />
 
           </View>
