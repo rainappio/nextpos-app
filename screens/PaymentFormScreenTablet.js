@@ -146,48 +146,48 @@ class PaymentFormScreenTablet extends React.Component {
                         text: `${this.context.t('action.yes')}`,
                         onPress: () => {
                             transactionObj.printMark = true
-                            fetchApi(transactionObj)
+                            this.fetchApi(transactionObj)
                         }
                     },
                     {
                         text: `${this.context.t('action.no')}`,
                         onPress: () => {
                             transactionObj.printMark = false
-                            fetchApi(transactionObj)
+                            this.fetchApi(transactionObj)
                         },
                         style: 'cancel'
                     }
                 ]
             )
         } else {
-            fetchApi(transactionObj)
+            this.fetchApi(transactionObj)
         }
-        const fetchApi = (transactionObj) => {
-            console.log('transactionObj', transactionObj)
-            dispatchFetchRequestWithOption(api.payment.charge, {
-                method: 'POST',
-                withCredentials: true,
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(transactionObj)
-            }, {
-                defaultMessage: false
-            }, response => {
-                successMessage(this.context.t('payment.charged'))
+    }
 
-                response.json().then(data => {
-                    this.props.navigation.navigate('CheckoutComplete', {
-                        transactionResponse: data,
-                        onSubmit: this.handleComplete,
-                        isSplitting: this.props?.isSplitting ?? false,
-                        parentOrder: this.props?.parentOrder ?? null,
-                    })
+    fetchApi = (transactionObj) => {
+        console.log('transactionObj', transactionObj)
+        dispatchFetchRequestWithOption(api.payment.charge, {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(transactionObj)
+        }, {
+            defaultMessage: false
+        }, response => {
+            successMessage(this.context.t('payment.charged'))
+
+            response.json().then(data => {
+                this.props.navigation.navigate('CheckoutComplete', {
+                    transactionResponse: data,
+                    onSubmit: this.handleComplete,
+                    isSplitting: this.props?.isSplitting ?? false,
+                    parentOrder: this.props?.parentOrder ?? null,
                 })
-            }).then()
-        }
-
+            })
+        }).then()
     }
 
     handleServiceChargePress = async (waiveServiceCharge) => {
