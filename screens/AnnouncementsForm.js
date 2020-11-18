@@ -1,19 +1,29 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {Text, TouchableOpacity, View} from 'react-native'
+import {Text, TouchableOpacity, View, Platform} from 'react-native'
 import DeleteBtn from '../components/DeleteBtn'
 import InputText from '../components/InputText'
 import RenderPureCheckBox from '../components/rn-elements/PureCheckBox'
 import {isRequired} from '../validators'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import {withContext} from "../helpers/contextHelper";
+import DropDownPicker from 'react-native-dropdown-picker';
+import Icon from 'react-native-vector-icons/Feather';
+import IonIcon from 'react-native-vector-icons/Ionicons'
+import IconDropDown from '../components/IconDropDown'
 
 class AnnouncementsForm extends React.Component {
   static navigationOptions = {
     header: null
   }
   static contextType = LocaleContext
+  constructor(props, context) {
+    super(props, context)
+    this.state = {
+      titleIcon: props?.initialValues?.titleIcon ?? 'ios-attach'
+    }
+  }
 
   componentDidMount() {
     this.context.localize({
@@ -42,27 +52,43 @@ class AnnouncementsForm extends React.Component {
       themeStyle
     } = this.props
 
-    const { t } = this.context
+    const {t} = this.context
 
     const iconsArr = [
-      { label: 'ios-attach', value: 'ios-attach' },
-      { label: 'ios-paper', value: 'ios-paper' },
-      { label: 'ios-notifications', value: 'ios-notifications' },
-      { label: 'md-text', value: 'md-text' },
-      { label: 'md-today', value: 'md-today' }
+      {label: 'ios-attach', value: 'ios-attach'},
+      {label: 'ios-paper', value: 'ios-paper'},
+      {label: 'ios-notifications', value: 'ios-notifications'},
+      {label: 'md-text', value: 'md-text'},
+      {label: 'md-today', value: 'md-today'}
     ]
 
     return (
-      <View>
-        <Field
-          component={InputText}
-          name="title"
-          placeholder={t('announcementTitle')}
-          validate={isRequired}
-          alignLeft={true}
-        />
+      <View style={{flex: 1}}>
+        <View style={{
+          flexDirection: 'row', ...(Platform.OS !== 'android' && {
+            zIndex: 10
+          })
+        }}>
+          <View style={{width: 50, height: 50, marginRight: 8}}>
+            <Field
+              component={IconDropDown}
+              name="titleIcon"
+              isEdit={isEdit}
+            />
+          </View>
+          <View style={{flex: 1, height: '100%'}}>
+            <Field
+              component={InputText}
+              name="title"
+              placeholder={t('announcementTitle')}
+              validate={isRequired}
+              alignLeft={true}
+              extraStyle={{height: '100%'}}
+            />
+          </View>
+        </View>
 
-        <View style={[styles.textAreaContainer, themeStyle, styles.withBorder ]}>
+        <View style={[styles.textAreaContainer, themeStyle, styles.withBorder, {height: 250}]}>
           <Field
             component={InputText}
             name="markdownContent"
@@ -73,21 +99,6 @@ class AnnouncementsForm extends React.Component {
             alignLeft={true}
             extraStyle={styles.withoutBorder}
           />
-        </View>
-
-        <View>
-        {iconsArr.map((icon, ix) => (
-          <View key={ix}>
-            <Field
-              name="titleIcon"
-              component={RenderPureCheckBox}
-              isIconAsTitle={true}
-              customValue={icon.value}
-              optionName={icon.label}
-              validate={isRequired}
-            />
-          </View>
-        ))}
         </View>
 
         <View style={styles.bottom}>
@@ -104,19 +115,19 @@ class AnnouncementsForm extends React.Component {
               </Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Announcements')}
-            >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                {t('action.cancel')}
-              </Text>
-            </TouchableOpacity>
-          )}
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Announcements')}
+              >
+                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                  {t('action.cancel')}
+                </Text>
+              </TouchableOpacity>
+            )}
 
           {initialValues !== undefined && initialValues.id != null && (
             <DeleteBtn
               handleDeleteAction={handleDelete}
-              params={{ id: initialValues.id }}
+              params={{id: initialValues.id}}
             />
           )}
         </View>

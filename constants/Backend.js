@@ -94,6 +94,9 @@ export const api = {
     },
     togglePin: id => {
       return `${apiRoot}/products/${id}/togglePin`
+    },
+    toggleOutOfStock: id => {
+      return `${apiRoot}/products/${id}/toggleOutOfStock`
     }
   },
   productLabel: {
