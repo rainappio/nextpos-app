@@ -98,6 +98,31 @@ class PaymentOrder extends React.Component {
     }
   }
   handleSubmit = (values, autoComplete = false, cash = 0) => {
+
+    const fetchApi = (transactionObj) => {
+      dispatchFetchRequestWithOption(api.payment.charge, {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(transactionObj)
+      }, {
+        defaultMessage: false
+      }, response => {
+        successMessage(this.context.t('charged'))
+
+        response.json().then(data => {
+          this.props.navigation.navigate('CheckoutComplete', {
+            transactionResponse: data,
+            onSubmit: this.handleComplete,
+            isSplitting: this.props.navigation.state.params?.isSplitting ?? false,
+            parentOrder: this.props.navigation.state.params?.parentOrder ?? null,
+          })
+        })
+      }).then()
+    }
     const transactionObj = {
       orderId: this.props.navigation.state.params.orderId,
       paymentMethod: values.paymentMethod,
@@ -143,30 +168,7 @@ class PaymentOrder extends React.Component {
     } else {
       fetchApi(transactionObj)
     }
-    const fetchApi = (transactionObj) => {
-      dispatchFetchRequestWithOption(api.payment.charge, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(transactionObj)
-      }, {
-        defaultMessage: false
-      }, response => {
-        successMessage(this.context.t('charged'))
 
-        response.json().then(data => {
-          this.props.navigation.navigate('CheckoutComplete', {
-            transactionResponse: data,
-            onSubmit: this.handleComplete,
-            isSplitting: this.props.navigation.state.params?.isSplitting ?? false,
-            parentOrder: this.props.navigation.state.params?.parentOrder ?? null,
-          })
-        })
-      }).then()
-    }
 
 
   }
