@@ -33,63 +33,115 @@ class OrderItem extends React.PureComponent {
       timeDisplayColor = timeDifference < thirtyMinutes ? mainThemeColor : 'red'
     }
 
-    return (
-      <View style={[styles.tableRowContainerWithBorder]}>
-        <TouchableOpacity
-          style={[{flexDirection: 'row', flex: 9, marginLeft: 3}]}
-          key={order.orderId}
-          onPress={() => {
-            if (isTablet) {
-              navigation.navigate('OrderFormII', {
-                orderId: order.orderId,
-                orderState: order.state
-              })
-            } else {
-              navigation.navigate('OrdersSummary', {
-                orderId: order.orderId,
-                onSubmit: handleOrderSubmit,
-                handleDelete: handleDelete,
-                orderState: order.state
-              })
+    if (!!order?.tables) {
+      return (
+        <>
+          {order.tables.map((table) => {
+            return (
+              <View style={[styles.tableRowContainerWithBorder]}>
+                <TouchableOpacity
+                  style={[{flexDirection: 'row', flex: 9, marginLeft: 3}]}
+                  key={order.orderId}
+                  onPress={() => {
+                    if (isTablet) {
+                      navigation.navigate('OrderFormII', {
+                        orderId: order.orderId,
+                        orderState: order.state
+                      })
+                    } else {
+                      navigation.navigate('OrdersSummary', {
+                        orderId: order.orderId,
+                        onSubmit: handleOrderSubmit,
+                        handleDelete: handleDelete,
+                        orderState: order.state
+                      })
+                    }
+
+                  }
+                  }
+                >
+                  <View style={[styles.tableCellView, {flex: 5}]}>
+                    <StyledText>{order.orderType === 'IN_STORE' ? table.tableName : t('order.takeOut')} ({order.serialId})</StyledText>
+                  </View>
+
+                  <View style={[styles.tableCellView, {flex: 2}]}>
+                    <StyledText>
+                      ${order.orderTotal}
+                    </StyledText>
+                  </View>
+
+                  <View style={[styles.tableCellView, {flex: 3}]}>
+                    <FontAwesomeIcon name={'clock-o'} color={timeDisplayColor} size={20} />
+                    <StyledText style={{marginLeft: 2}}>
+                      {timeAgo.format(Date.now() - timeDifference, 'time')}
+                    </StyledText>
+                  </View>
+                </TouchableOpacity>
+
+                <View style={[styles.tableCellView, {justifyContent: 'center', flex: 1}]}>
+                  <Tooltip popover={<Text>{this.context.t(`orderState.${order.state}`)}</Text>}
+                    backgroundColor={mainThemeColor}
+                  >
+                    {renderOrderState(order.state)}
+                  </Tooltip>
+                </View>
+              </View>
+            )
+          })}
+        </>
+      )
+    } else {
+      return (
+        <View style={[styles.tableRowContainerWithBorder]}>
+          <TouchableOpacity
+            style={[{flexDirection: 'row', flex: 9, marginLeft: 3}]}
+            key={order.orderId}
+            onPress={() => {
+              if (isTablet) {
+                navigation.navigate('OrderFormII', {
+                  orderId: order.orderId,
+                  orderState: order.state
+                })
+              } else {
+                navigation.navigate('OrdersSummary', {
+                  orderId: order.orderId,
+                  onSubmit: handleOrderSubmit,
+                  handleDelete: handleDelete,
+                  orderState: order.state
+                })
+              }
+
             }
-
-          }
-          }
-        >
-          <View style={[styles.tableCellView, {flex: 5}]}>
-            <StyledText>{order.orderType === 'IN_STORE' ? order.tableName : t('order.takeOut')} ({order.serialId})</StyledText>
-          </View>
-
-          {/*<View style={[styles.tableCellView, {flex: 1}]}>
-            <FontAwesomeIcon name={'user'} color="#ccc" size={20}/>
-            <Text style={{marginLeft: 5}}>
-              {order.customerCount}
-            </Text>
-          </View>*/}
-
-          <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText>
-              ${order.orderTotal}
-            </StyledText>
-          </View>
-
-          <View style={[styles.tableCellView, {flex: 3}]}>
-            <FontAwesomeIcon name={'clock-o'} color={timeDisplayColor} size={20} />
-            <StyledText style={{marginLeft: 2}}>
-              {timeAgo.format(Date.now() - timeDifference, 'time')}
-            </StyledText>
-          </View>
-        </TouchableOpacity>
-
-        <View style={[styles.tableCellView, {justifyContent: 'center', flex: 1}]}>
-          <Tooltip popover={<Text>{this.context.t(`orderState.${order.state}`)}</Text>}
-            backgroundColor={mainThemeColor}
+            }
           >
-            {renderOrderState(order.state)}
-          </Tooltip>
+            <View style={[styles.tableCellView, {flex: 5}]}>
+              <StyledText>{order.orderType === 'IN_STORE' ? order.tableName : t('order.takeOut')} ({order.serialId})</StyledText>
+            </View>
+
+            <View style={[styles.tableCellView, {flex: 2}]}>
+              <StyledText>
+                ${order.orderTotal}
+              </StyledText>
+            </View>
+
+            <View style={[styles.tableCellView, {flex: 3}]}>
+              <FontAwesomeIcon name={'clock-o'} color={timeDisplayColor} size={20} />
+              <StyledText style={{marginLeft: 2}}>
+                {timeAgo.format(Date.now() - timeDifference, 'time')}
+              </StyledText>
+            </View>
+          </TouchableOpacity>
+
+          <View style={[styles.tableCellView, {justifyContent: 'center', flex: 1}]}>
+            <Tooltip popover={<Text>{this.context.t(`orderState.${order.state}`)}</Text>}
+              backgroundColor={mainThemeColor}
+            >
+              {renderOrderState(order.state)}
+            </Tooltip>
+          </View>
         </View>
-      </View>
-    )
+      )
+    }
   }
 }
 

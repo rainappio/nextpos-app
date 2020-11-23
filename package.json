@@ -22,6 +22,7 @@
     "d3": "^5.15.1",
     "expo": "^38.0.0",
     "expo-asset": "~8.1.7",
+    "expo-barcode-scanner": "~8.2.1",
     "expo-constants": "~9.1.1",
     "expo-device": "~2.2.1",
     "expo-font": "~8.2.1",
@@ -48,6 +49,7 @@
     "react-native-draggable": "^3.3.0",
     "react-native-draggable-flatlist": "^2.3.6",
     "react-native-dropdown-menu": "^2.0.0",
+    "react-native-dropdown-picker": "^3.7.1",
     "react-native-elements": "^1.2.7",
     "react-native-flash-message": "^0.1.15",
     "react-native-gesture-handler": "~1.6.0",
@@ -87,8 +89,7 @@
     "redux-thunk": "^2.3.0",
     "sentry-expo": "^2.0.3",
     "taiwan-id-validator2": "^0.2.0",
-    "validator": "^11.1.0",
-    "expo-barcode-scanner": "~8.2.1"
+    "validator": "^11.1.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^8.2.3",

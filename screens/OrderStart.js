@@ -21,10 +21,10 @@ class OrderStart extends React.Component {
   }
 
   handleSubmit = values => {
-    console.log("handleSubmit", JSON.stringify(values))
+
     const createOrder = {}
     createOrder.orderType = values.orderType
-    createOrder.tableId = values.tableId
+    createOrder.tableIds = values?.tableIds
     createOrder.demographicData = {
       male: values.male,
       female: values.female,

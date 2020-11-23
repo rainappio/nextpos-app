@@ -8,7 +8,7 @@ import AnnouncementsForm from './AnnouncementsForm'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import ScreenHeader from "../components/ScreenHeader";
-import {ThemeScrollView} from "../components/ThemeScrollView";
+import {ThemeContainer} from "../components/ThemeContainer";
 import {backAction} from '../helpers/backActions'
 
 class AnnouncementsAdd extends React.Component {
@@ -41,9 +41,9 @@ class AnnouncementsAdd extends React.Component {
     const {t} = this.context
 
     return (
-      <ThemeScrollView>
+      <ThemeContainer>
         <DismissKeyboard>
-          <View style={styles.container}>
+          <View style={{...styles.fullWidthScreen, marginLeft: 15, marginRight: 15, }}>
             <ScreenHeader title={t('newAnnouncementTitle')}
               backAction={() => backAction(this.props.navigation)} />
 
@@ -53,7 +53,7 @@ class AnnouncementsAdd extends React.Component {
             />
           </View>
         </DismissKeyboard>
-      </ThemeScrollView>
+      </ThemeContainer>
     )
   }
 }

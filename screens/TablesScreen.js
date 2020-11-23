@@ -4,9 +4,9 @@ import {connect} from 'react-redux'
 import AddBtn from '../components/AddBtn'
 import OrderStart from './OrderStart'
 import OrderItem from './OrderItem'
-import {getfetchOrderInflights, getMostRecentShiftStatus, getShiftStatus, getTableLayouts, getTablesAvailable, } from '../actions'
+import {getfetchOrderInflights, getMostRecentShiftStatus, getShiftStatus, getTableLayouts, getTablesAvailable, getTableLayout} from '../actions'
 import styles, {mainThemeColor} from '../styles'
-import {successMessage} from '../constants/Backend'
+import {successMessage, api, dispatchFetchRequest} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {handleDelete, handleOrderSubmit, handleCreateOrderSet, handleDeleteOrderSet} from '../helpers/orderActions'
 import {NavigationEvents} from "react-navigation";
@@ -188,6 +188,7 @@ class TablesScreen extends React.Component {
     } = this.props
     const {t} = this.context
 
+
     if (isLoading) {
       return (
         <LoadingScreen />
@@ -314,13 +315,8 @@ class TablesScreen extends React.Component {
       /*tablet render*/
       if (this?.state?.isTablet) {
         return (
-          <ThemeScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.refreshing}
-                onRefresh={this.onRefresh}
-              />
-            }
+          <ThemeContainer
+
           >
             <NavigationEvents
               onWillFocus={async () => {
@@ -329,7 +325,7 @@ class TablesScreen extends React.Component {
               }}
             />
 
-            <View style={styles.fullWidthScreen}>
+            <View style={[styles.fullWidthScreen]}>
               <ScreenHeader backNavigation={false}
                 title={t(`${this.state?.screenMode === 'normal' ? 'menu.tables' : 'joinTableMode'}`)}
                 parentFullScreen={true}
@@ -355,7 +351,7 @@ class TablesScreen extends React.Component {
                 data={this.state.orderModalData} />
               <View style={[styles.container, {marginTop: 0, marginBottom: 10, justifyContent: 'flex-start', }]}>
                 {/* table page button */}
-                {this.state?.screenMode === 'normal' && <View style={{flexDirection: 'row', width: '100%'}}>
+                {this.state?.screenMode === 'normal' && <View style={{flexDirection: 'row', width: '100%', minHeight: 80}}>
                   {tablelayouts?.map((tblLayout, index) => {
                     return (<TouchableOpacity
                       disabled={this.state?.screenMode === 'joinTable'}
@@ -423,7 +419,7 @@ class TablesScreen extends React.Component {
                 </View>}
                 {/* table */}
                 {this.state.tableIndex >= 0 &&
-                  <View style={[styles.ballContainer, {flex: 7}]}>
+                  <View style={[styles.ballContainer, {flex: 6}]}>
                     <View onLayout={(event) => {
                       let {x, y, width, height} = event.nativeEvent.layout;
                       this.setState({
@@ -460,7 +456,15 @@ class TablesScreen extends React.Component {
                       }
                       {
                         tablelayouts[this.state.tableIndex]?.tables?.map((table, index) => {
+                          let positionArr = tablelayouts[this.state.tableIndex]?.tables?.map((table, index) => {
+                            if (table.position != null) {
+                              return {...getTablePosition(table, this.state?.tableWidth ?? this.state?.windowWidth, this.state?.tableHeight ?? this.state?.windowHeight), tableId: table?.tableId, tableData: table}
+                            } else {
+                              return {...getInitialTablePosition(index, this.state?.tableHeight ?? this.state?.windowHeight), tableId: table?.tableId, tableData: table}
+                            }
+                          })
                           return (this.state?.tableWidth && <Draggable
+                            screenMode={this.state?.screenMode}
                             borderColor={themeStyle.color === '#f1f1f1' ? '#BFBFBF' : '#BFBFBF'}
                             table={table}
                             key={table.tableId}
@@ -469,7 +473,9 @@ class TablesScreen extends React.Component {
                             getTableLayout={this.props.getTableLayout}
                             tableWidth={this.state?.tableWidth ?? this.state?.windowWidth}
                             tableHeight={this.state?.tableHeight ?? this.state?.windowHeight}
+                            positionArr={positionArr}
                             orders={ordersInflight}
+                            onRefresh={this.onRefresh}
                             openOrderModal={(item) => {
                               if (this.state?.screenMode === 'joinTable') {
                                 console.log('item1', item)
@@ -505,7 +511,7 @@ class TablesScreen extends React.Component {
                     </View>
                   </View>}
                 {this.state.tableIndex === -1 &&
-                  <View style={styles.mgrbtn20} key='noLayout'>
+                  <View style={[styles.mgrbtn20, {flex: 6}]} key='noLayout'>
                     <View style={[styles.sectionBar, {flex: 1, justifyContent: 'flex-start', paddingVertical: 0, }]}>
 
                     </View>
@@ -533,7 +539,7 @@ class TablesScreen extends React.Component {
                 }
               </View>
 
-              {this.state?.screenMode === 'normal' && <View style={{...styles.bottomButtonContainerWithoutFlex, marginTop: 0, flexDirection: 'row'}}>
+              {this.state?.screenMode === 'normal' && <View style={{...styles.bottomButtonContainerWithoutFlex, marginTop: 0, flexDirection: 'row', minHeight: 48}}>
                 {this.state.tableIndex !== -1 && <TouchableOpacity onPress={() => this.setState({
                   screenMode: 'joinTable',
                   tableWidth: null,
@@ -549,7 +555,7 @@ class TablesScreen extends React.Component {
                   </Text>
                 </TouchableOpacity>
               </View>}
-              {this.state?.screenMode === 'joinTable' && <View style={{...styles.bottomButtonContainerWithoutFlex, marginTop: 0, flexDirection: 'row'}}>
+              {this.state?.screenMode === 'joinTable' && <View style={{...styles.bottomButtonContainerWithoutFlex, marginTop: 0, flexDirection: 'row', minHeight: 48}}>
                 <TouchableOpacity onPress={() => this.setState({
                   screenMode: 'normal', tableWidth: null,
                   tableHeight: null,
@@ -565,7 +571,7 @@ class TablesScreen extends React.Component {
                 </TouchableOpacity>
               </View>}
             </View>
-          </ThemeScrollView >
+          </ThemeContainer >
         )
       }
       /*phone render */
@@ -711,7 +717,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   getShiftStatus: () => dispatch(getShiftStatus()),
   getMostRecentShiftStatus: () => dispatch(getMostRecentShiftStatus()),
   getAvailableTables: () => dispatch(getTablesAvailable()),
-  getCurrentClient: () => dispatch(getCurrentClient())
+  getCurrentClient: () => dispatch(getCurrentClient()),
+  getTableLayout: (id) => dispatch(getTableLayout(id))
 })
 
 const enhance = compose(
@@ -726,23 +733,88 @@ class Draggable extends Component {
     this.state = {
       dropAreaValues: null,
       pan: new Animated.ValueXY(),
+      panUnder: new Animated.ValueXY(),
       opacity: new Animated.Value(1),
+      isDraggable: false,
+      tableOrder: props?.orders[`${props?.layoutId}`]?.find((item) => {return (item?.tableId === props?.table?.tableId || item?.tables?.some((table) => table?.tableId === props?.table?.tableId))}),
+      isSelected: false
     };
   }
 
   componentDidMount() {
+    this.initPosition()
+  }
+
+  initPosition = () => {
     const windowWidth = this.props.tableWidth;
     const windowHeight = this.props.tableHeight;
     if (this.props.table.position != null) {
       this.state.pan.setValue(getTablePosition(this.props.table, windowWidth, windowHeight))
+      this.state.panUnder.setValue(getTablePosition(this.props.table, windowWidth, windowHeight))
     } else {
       this.state.pan.setValue(getInitialTablePosition(this.props.index, windowHeight))
+      this.state.panUnder.setValue(getInitialTablePosition(this.props.index, windowHeight))
     }
+  }
+
+  handleDragEnd = (pan) => {
+    let positionArr = this.props.positionArr
+    positionArr?.every((table) => {
+      if ((pan.x?._value >= (table?.x - 50)) && (pan.x?._value <= (table?.x + 50)) && (pan.y?._value >= (table?.y - 50)) && (pan.y?._value <= (table?.y + 50))) {
+        let toTable = this.props?.orders[`${this.props?.layoutId}`]?.find((item) => {return (item?.tableId === table?.tableId || item?.tables?.some((tableItem) => tableItem?.tableId === table?.tableId))})
+
+        if (!toTable) {
+          this.handleChangeTable(table, this.state.tableOrder)
+        }
+        return false
+      } else {
+        return true
+      }
+    })
+
+  }
+
+  handleChangeTable = (table, values) => {
+    const updateOrder = {}
+    updateOrder.orderType = values.orderType
+    if (values?.tables?.length > 1) {
+      let array = [...values?.tables]
+      let removeTable = null
+      array?.forEach((item, index) => {
+        if (item?.tableId === this.props.table?.tableId)
+          removeTable = index
+      })
+      if (removeTable !== null) {
+        array.splice(removeTable, 1);
+      }
+      updateOrder.tableIds = array?.map((item) => item?.tableId)
+    }
+    updateOrder.tableId = table.tableId
+
+
+    dispatchFetchRequest(api.order.update(values.orderId), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updateOrder)
+    },
+      response => {
+        response.json().then(data => {
+          this.props?.onRefresh()
+        })
+      }).then()
   }
 
   UNSAFE_componentWillMount() {
     this.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onStartShouldSetPanResponder: (evt, gestureState) => this.state.isDraggable,
+      //onStartShouldSetPanResponderCapture: (evt, gestureState) => this.state.isDraggable,
+      onMoveShouldSetPanResponder: () => this.state.isDraggable,
+      // onMoveShouldSetPanResponderCapture: (evt, gestureState) =>
+      //   this.state.isDraggable,
       onPanResponderGrant: (e, gesture) => {
         this.state.pan.setOffset({
           x: this.state.pan.x._value,
@@ -752,130 +824,215 @@ class Draggable extends Component {
       },
       onPanResponderMove: Animated.event([
         null, {dx: this.state.pan.x, dy: this.state.pan.y}
-      ]),
+      ], {useNativeDriver: false}),
       onPanResponderRelease: (e, gesture) => {
         this.state.pan.flattenOffset();
         console.log(`on release: ${JSON.stringify(this.state.pan)}`)
-
-
-        Animated.timing(this.state.opacity, {
-          toValue: 0,
-          duration: 1000
-        }).start();
-
+        this.handleDragEnd(this.state.pan)
+        this.setState({isDraggable: false})
+        this.initPosition()
       }
     });
   }
 
-  renderDraggable(layoutId, table, orders, openOrderModal, index, borderColor) {
+
+  handleFlashBorder = (count = 0) => {
+    let isSelected = this.state.isSelected
+    if (isSelected && count < 20) {
+      Animated.timing(this.state.opacity, {
+        toValue: this.state.opacity?._value === 0.5 ? 1 : 0.5,
+        duration: 500
+      }).start(() => {
+        this.handleFlashBorder(count + 1)
+      })
+    } else {
+      this.setState({opacity: new Animated.Value(1)})
+    }
+  }
+
+
+  renderDraggable(layoutId, table, orders, openOrderModal, index, borderColor, positionArr, screenMode) {
     TimeAgo.addLocale(en)
     const timeAgo = new TimeAgo()
 
     const panStyle = {
       transform: this.state.pan.getTranslateTransform()
     }
-    const tableOrder = this.props?.orders[`${layoutId}`]?.find((item) => {return item?.tableId === table.tableId})
+    const panStyleUnder = {
+      transform: this.state.panUnder.getTranslateTransform()
+    }
+    const tableOrder = this.state.tableOrder
     const tableStatus = tableOrder?.state
-    console.log('tableStatus', this.props?.orders[`${layoutId}`])
+    const selectedStyle = {
+      borderColor: `rgba(255, 0, 0, ${this.state.opacity?._value})`
+    }
     return (
       <View >
         {
           table.position !== null
             ?
-            <View>
-              <TouchableOpacity
-                onPress={() => {
-                  if (!!tableStatus) {
-                    this.props?.gotoOrderDetail({
-                      orderId: tableOrder?.orderId,
-                      state: tableStatus
-                    })
-                  } else {
-                    openOrderModal({
-                      table: table,
-                      order: orders
-                    });
-                  }
-                }}
-                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: borderColor, borderWidth: 3}, (!!tableStatus &&
-                {
+            <>
+              <Animated.View {...this.panResponder.panHandlers} style={{zIndex: 1000, opacity: this.state.opacity}}>
+                <TouchableOpacity
 
-                  backgroundColor: tableStatus == 'OPEN' ? mainThemeColor
-                    : tableStatus == 'IN_PROCESS' ? mainThemeColor
-                      : tableStatus == 'DELIVERED' ? mainThemeColor
-                        : '#86bf20'
-                })]}>
-                {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: tableOrder?.itemNeedAttention ? 'red' : '#ffc818'}}></View>}
-                {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
-                <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Ionicons name={'ios-people'} color={'black'} size={20} />
-                  <Text style={{color: '#000', textAlign: 'center', }}>{` ${tableOrder?.customerCount ?? 0}(${table.capacity})`}</Text>
-                </View>
-                {!!tableOrder?.createdTime &&
-                  <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
-                    <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? 'red' : 'black'} size={20} />
-                    <StyledText style={{marginLeft: 2, color: '#000'}}>
-                      {timeAgo.format(Date.now() - getTimeDifference(tableOrder?.createdTime), {flavour: 'tiny'})}
-                    </StyledText>
-                  </View>}
-              </TouchableOpacity>
+                  onPress={() => {
+                    if (!!tableStatus) {
+                      if (screenMode === 'joinTable') {
+                        this.state.isSelected ? this.setState({isSelected: false}) : this.setState({isSelected: true}, () => this.handleFlashBorder())
+                      }
+                      this.props?.gotoOrderDetail({
+                        orderId: tableOrder?.orderId,
+                        state: tableStatus
+                      })
+                    } else {
+                      openOrderModal({
+                        table: table,
+                        order: orders
+                      });
+                    }
+                  }}
+                  onLongPress={() => tableStatus && screenMode !== 'joinTable' && this.setState({isDraggable: true})}
+                  style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: borderColor, borderWidth: 3}, (!!tableStatus &&
+                  {
 
-            </View>
+                    backgroundColor: tableStatus == 'OPEN' ? mainThemeColor
+                      : tableStatus == 'IN_PROCESS' ? mainThemeColor
+                        : tableStatus == 'DELIVERED' ? mainThemeColor
+                          : '#86bf20'
+                  }), (this.state.isSelected && {borderColor: `rgba(255, 0, 0, 0.5)`})]}>
+                  {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: tableOrder?.itemNeedAttention ? 'red' : '#ffc818'}}></View>}
+                  {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
+                  <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Ionicons name={'ios-people'} color={'black'} size={20} />
+                    <Text style={{color: '#000', textAlign: 'center', }}>{` ${tableOrder?.customerCount ?? 0}(${table.capacity})`}</Text>
+                  </View>
+                  {!!tableOrder?.createdTime &&
+                    <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
+                      <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? 'red' : 'black'} size={20} />
+                      <StyledText style={{marginLeft: 2, color: '#000'}}>
+                        {timeAgo.format(Date.now() - getTimeDifference(tableOrder?.createdTime), {flavour: 'tiny'})}
+                      </StyledText>
+                    </View>}
+                </TouchableOpacity>
+
+              </Animated.View>
+
+              {this.state.isDraggable && <View >
+                <TouchableOpacity
+
+
+                  style={[panStyleUnder, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: borderColor, borderWidth: 3}, (!!tableStatus &&
+                  {
+
+                    backgroundColor: tableStatus == 'OPEN' ? mainThemeColor
+                      : tableStatus == 'IN_PROCESS' ? mainThemeColor
+                        : tableStatus == 'DELIVERED' ? mainThemeColor
+                          : '#86bf20'
+                  })]}>
+                  {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: tableOrder?.itemNeedAttention ? 'red' : '#ffc818'}}></View>}
+                  {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
+                  <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}123</Text>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Ionicons name={'ios-people'} color={'black'} size={20} />
+                    <Text style={{color: '#000', textAlign: 'center', }}>{` ${tableOrder?.customerCount ?? 0}(${table.capacity})`}</Text>
+                  </View>
+                  {!!tableOrder?.createdTime &&
+                    <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
+                      <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? 'red' : 'black'} size={20} />
+                      <StyledText style={{marginLeft: 2, color: '#000'}}>
+                        {timeAgo.format(Date.now() - getTimeDifference(tableOrder?.createdTime), {flavour: 'tiny'})}
+                      </StyledText>
+                    </View>}
+                </TouchableOpacity>
+
+              </View>}
+            </>
             :
-            <View >
+            <>
+              <Animated.View {...this.panResponder.panHandlers} style={{zIndex: 1000}}>
 
-              <TouchableOpacity
-                onPress={() => {
-                  if (!!tableStatus) {
-                    this.props?.gotoOrderDetail({
-                      orderId: tableOrder?.orderId,
-                      state: tableStatus
-                    })
-                  } else {
-                    openOrderModal({
-                      table: table,
-                      order: orders
-                    });
-                  }
+                <TouchableOpacity
+                  onPress={() => {
+                    if (!!tableStatus) {
+                      this.props?.gotoOrderDetail({
+                        orderId: tableOrder?.orderId,
+                        state: tableStatus
+                      })
+                    } else {
+                      openOrderModal({
+                        table: table,
+                        order: orders
+                      });
+                    }
+                  }}
+                  onLongPress={() => tableStatus && screenMode !== 'joinTable' && this.setState({isDraggable: true})}
+                  style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: borderColor, borderWidth: 3}, (!!tableStatus &&
+                  {
 
-                  console.log(table, JSON.stringify(tableOrder))
-                }}
-                style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: borderColor, borderWidth: 3}, (!!tableStatus &&
-                {
+                    backgroundColor: tableStatus == 'OPEN' ? mainThemeColor
+                      : tableStatus == 'IN_PROCESS' ? mainThemeColor
+                        : tableStatus == 'DELIVERED' ? mainThemeColor
+                          : '#86bf20'
+                  })]}>
+                  {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#ffc818'}}></View>}
+                  {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
+                  <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Ionicons name={'ios-people'} color={'black'} size={20} />
+                    <Text style={{color: '#000', textAlign: 'center', }}>{` ${tableOrder?.customerCount ?? 0}(${table.capacity})`}</Text>
+                  </View>
+                  {!!tableOrder?.createdTime &&
+                    <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
+                      <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? 'red' : 'black'} size={20} />
+                      <StyledText style={{marginLeft: 2, color: '#000'}}>
+                        {timeAgo.format(Date.now() - getTimeDifference(tableOrder?.createdTime), {flavour: 'tiny'})}
+                      </StyledText>
+                    </View>}
+                </TouchableOpacity>
 
-                  backgroundColor: tableStatus == 'OPEN' ? mainThemeColor
-                    : tableStatus == 'IN_PROCESS' ? mainThemeColor
-                      : tableStatus == 'DELIVERED' ? mainThemeColor
-                        : '#86bf20'
-                })]}>
-                {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#ffc818'}}></View>}
-                {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
-                <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Ionicons name={'ios-people'} color={'black'} size={20} />
-                  <Text style={{color: '#000', textAlign: 'center', }}>{` ${tableOrder?.customerCount ?? 0}(${table.capacity})`}</Text>
-                </View>
-                {!!tableOrder?.createdTime &&
-                  <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
-                    <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? 'red' : 'black'} size={20} />
-                    <StyledText style={{marginLeft: 2, color: '#000'}}>
-                      {timeAgo.format(Date.now() - getTimeDifference(tableOrder?.createdTime), {flavour: 'tiny'})}
-                    </StyledText>
-                  </View>}
-              </TouchableOpacity>
+              </Animated.View>
 
-            </View>
+              {this.state.isDraggable && <View >
+
+                <TouchableOpacity
+
+                  style={[panStyleUnder, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: borderColor, borderWidth: 3}, (!!tableStatus &&
+                  {
+
+                    backgroundColor: tableStatus == 'OPEN' ? mainThemeColor
+                      : tableStatus == 'IN_PROCESS' ? mainThemeColor
+                        : tableStatus == 'DELIVERED' ? mainThemeColor
+                          : '#86bf20'
+                  })]}>
+                  {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#ffc818'}}></View>}
+                  {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
+                  <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Ionicons name={'ios-people'} color={'black'} size={20} />
+                    <Text style={{color: '#000', textAlign: 'center', }}>{` ${tableOrder?.customerCount ?? 0}(${table.capacity})`}</Text>
+                  </View>
+                  {!!tableOrder?.createdTime &&
+                    <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
+                      <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? 'red' : 'black'} size={20} />
+                      <StyledText style={{marginLeft: 2, color: '#000'}}>
+                        {timeAgo.format(Date.now() - getTimeDifference(tableOrder?.createdTime), {flavour: 'tiny'})}
+                      </StyledText>
+                    </View>}
+                </TouchableOpacity>
+
+              </View>}
+            </>
         }
       </View>
     );
   }
 
   render() {
-    const {table, layoutId, orders, openOrderModal, index, borderColor} = this.props
+    const {table, layoutId, orders, openOrderModal, index, borderColor, positionArr, screenMode} = this.props
     return (
       <View style={{alignItems: "flex-start", borderWidth: 0, marginBottom: 0}} ref='self'>
-        {this.renderDraggable(layoutId, table, orders, openOrderModal, index, borderColor)}
+        {this.renderDraggable(layoutId, table, orders, openOrderModal, index, borderColor, positionArr, screenMode)}
       </View>
     );
   }

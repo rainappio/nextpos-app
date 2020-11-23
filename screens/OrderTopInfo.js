@@ -29,7 +29,7 @@ class OrderTopInfo extends Component {
             <View style={[styles.tableCellView, {width: '20%'}]}>
               <View>
                 <Text style={[styles.primaryText]}>
-                  {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
+                  {order.orderType === 'IN_STORE' ? (!!order?.tables ? order?.tables?.map((table) => table?.displayName)?.join(',') : order.tableDisplayName) : t('order.takeOut')}
                 </Text>
               </View>
             </View>
@@ -108,7 +108,7 @@ class OrderTopInfo extends Component {
             <View style={[styles.tableCellView, {width: '35%'}]}>
               <View>
                 <Text style={[styles.primaryText]}>
-                  {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
+                  {order.orderType === 'IN_STORE' ? (!!order?.tables ? order?.tables?.map((table) => table?.displayName)?.join(',') : order.tableDisplayName) : t('order.takeOut')}
                 </Text>
               </View>
             </View>

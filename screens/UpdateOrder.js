@@ -23,7 +23,7 @@ class UpdateOrder extends React.Component {
   handleSubmit = values => {
     const updateOrder = {}
     updateOrder.orderType = values.orderType
-    updateOrder.tableId = values.tableId
+    updateOrder.tableIds = values?.tableIds
     updateOrder.demographicData = {
       male: values.male,
       female: values.female,
@@ -33,14 +33,14 @@ class UpdateOrder extends React.Component {
     }
 
     dispatchFetchRequest(api.order.update(values.orderId), {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updateOrder)
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify(updateOrder)
+    },
       response => {
         response.json().then(data => {
           this.props.navigation.pop(1)
@@ -49,13 +49,13 @@ class UpdateOrder extends React.Component {
   }
 
   render() {
-    const { navigation, isLoading, haveData, availableTables, tableLayouts } = this.props
+    const {navigation, isLoading, haveData, availableTables, tableLayouts} = this.props
     const order = this.props.navigation.getParam('order')
 
     const initialValues = {
       orderId: order.orderId,
       orderType: order.orderType,
-      tableId: order.tableInfo != null ? order.tableInfo.tableId : null,
+      tableIds: order.tableInfo != null ? order?.tables?.map((table) => table?.tableId) : null,
       ageGroup: order.demographicData != null ? order.demographicData.ageGroup : null,
       visitFrequency: order.demographicData != null ? order.demographicData.visitFrequency : null,
       male: order.demographicData != null ? order.demographicData.male : 0,
@@ -69,7 +69,7 @@ class UpdateOrder extends React.Component {
       const availableTableIds = availableTables[layout.id] != null ? availableTables[layout.id].map(t => t.tableId) : []
 
       const tables = layout.tables.filter(table => {
-        return availableTableIds.includes(table.tableId) || table.tableId === initialValues.tableId
+        return availableTableIds.includes(table.tableId) || table.tableId === initialValues.tableId || initialValues.tableIds.includes(table.tableId)
       })
 
       if (tables != null && tables.length > 0) {
@@ -79,7 +79,7 @@ class UpdateOrder extends React.Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else {
       return (

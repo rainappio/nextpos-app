@@ -478,9 +478,6 @@ class ProductRow extends React.Component {
                 }
                 this.setState({labelDragged: false, productDragged: false})
               }}
-              onRelease={() => {
-                this.setState({labelDragged: false, productDragged: false})
-              }}
               onDragBegin={(index) => {
                 if (labelIndexArr.includes(index) || resultArr?.[index]?.id === 'ungrouped') {
                   console.log('drag')
@@ -490,9 +487,7 @@ class ProductRow extends React.Component {
                 }
               }}
               layoutInvalidationKey={this.state.labelDragged || this.state.productDragged}
-              ListHeaderComponent={
-                <View style={[themeStyle]} />
-              }
+
             />
 
           </View>
