@@ -530,7 +530,7 @@ class OrderFormII extends React.Component {
                   </ScrollView>
                 </View>
                 {/* item box */}
-                <View style={styles.orderItemBox}>
+                <View style={[styles.orderItemBox, {borderRightWidth: 2, borderLeftWidth: 2, borderColor: '#b7b7b780'}]}>
                   <View style={{flex: 4}}>
                     <ScrollView style={{flex: 1}}>
 

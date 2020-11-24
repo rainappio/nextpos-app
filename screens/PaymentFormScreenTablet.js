@@ -288,7 +288,7 @@ class PaymentFormScreenTablet extends React.Component {
                                 </ScrollView>
                             </View>
                             {/* mid content */}
-                            <View style={{flex: 2}}>
+                            <View style={{flex: 2, borderRightWidth: 2, borderLeftWidth: 2, borderColor: '#b7b7b780', paddingHorizontal: 8}}>
                                 <ThemeKeyboardAwareScrollView style={{flex: 1}}>
                                     <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
                                         <View style={[styles.tableCellView, {flex: 1}]}>

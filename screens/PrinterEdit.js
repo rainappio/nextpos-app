@@ -37,7 +37,7 @@ class PrinterEdit extends React.Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(values)
+      body: JSON.stringify({...values, serviceTypes: [values?.serviceType]})
     }, response => {
       this.props.navigation.navigate('PrinternKDS')
       this.props.getWorkingAreas()

@@ -111,6 +111,8 @@ class SettingsScreen extends React.Component {
                   }
                 />
               </View>
+
+
             </View>
 
             <ScrollView>
@@ -190,6 +192,21 @@ class SettingsScreen extends React.Component {
                       />
                     }
                   />
+                </View>
+                <View style={[styles.menuContainer]}>
+                  <MenuButton
+                    onPress={() => this.props.navigation.navigate('RostersScreen')}
+                    title={t('settings.roster')}
+                    icon={
+                      <FontAwesome5Icon
+                        name="business-time"
+                        size={40}
+                        style={[styles.buttonIconStyle]}
+                      />
+                    }
+                  />
+                  <View style={styles.dynamicHorizontalPadding(6)} />
+                  <View style={{flex: 1}}></View>
                 </View>
               </View>
             </ScrollView>

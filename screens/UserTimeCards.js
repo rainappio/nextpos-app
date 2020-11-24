@@ -53,19 +53,19 @@ class UserTimeCards extends React.Component {
 
     Item = ({timecard}) => {
       const active = timecard.timeCardStatus === 'ACTIVE'
+      console.log('timecard', timecard)
 
       return (
         <TouchableOpacity
           style={styles.tableRowContainerWithBorder}
-          onPress={() => {
-            this.props.navigation.navigate('UserTimeCardDetail', {
-              timecardId: timecard.id
-            })
-          }}
+
         >
-          <View style={[styles.tableCellView, {flex: 1}]}>
+          <View style={[styles.tableCellView, {flex: 1, flexDirection: 'column', alignItems: 'flex-start'}]}>
             <StyledText style={{fontWeight: active ? 'bold' : 'normal'}}>
               {formatDate(timecard.clockIn)}
+            </StyledText>
+            <StyledText style={{fontWeight: active ? 'bold' : 'normal'}}>
+              {formatDate(timecard.clockOut)}
             </StyledText>
           </View>
 
@@ -80,15 +80,15 @@ class UserTimeCards extends React.Component {
 
     if (loading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     }
     return (
       <ThemeScrollView>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={true}
-                        parentFullScreen={true}
-                        title={t('userTimeCardTitle')}
+            parentFullScreen={true}
+            title={t('userTimeCardTitle')}
           />
 
           <View>

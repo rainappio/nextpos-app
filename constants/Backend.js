@@ -31,7 +31,8 @@ export const api = {
   client: {
     get: `${apiRoot}/clients/me`,
     new: `${apiRoot}/clients`,
-    update: `${apiRoot}/clients/me`
+    update: `${apiRoot}/clients/me`,
+    info: `${apiRoot}/clients/me/info`,
   },
   clientUser: {
     new: `${apiRoot}/clients/me/users`,
@@ -431,6 +432,34 @@ export const api = {
       return `${apiRoot}/admin/subscriptionPlans?country=${country}`
     },
     selectPlan: `${apiRoot}/clientSubscriptions`,
+  },
+  roster: {
+    getAllPlans: `${apiRoot}/rosterPlans`,
+    getPlan: (id) => {
+      return `${apiRoot}/rosterPlans/${id}`
+    },
+    createPlan: `${apiRoot}/rosterPlans`,
+    deletePlan: (id) => {
+      return `${apiRoot}/rosterPlans/${id}`
+    },
+    createEntry: (id) => {
+      return `${apiRoot}/rosterPlans/${id}/entries`
+    },
+    deleteEntry: (pid, eid) => {
+      return `${apiRoot}/rosterPlans/${pid}/entries/${eid}`
+    },
+    createEvents: (id) => {
+      return `${apiRoot}/rosterPlans/${id}/events`
+    },
+    getEvents: (id) => {
+      return `${apiRoot}/rosterPlans/${id}/events`
+    },
+    getEventsById: (pid, eid) => {
+      return `${apiRoot}/rosterPlans/${pid}/events/${eid}`
+    },
+    deleteEvents: (id) => {
+      return `${apiRoot}/rosterPlans/${id}/events`
+    },
   }
 }
 

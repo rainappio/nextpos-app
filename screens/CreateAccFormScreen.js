@@ -10,6 +10,8 @@ import {LocaleContext} from '../locales/LocaleContext'
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
 import {ThemeScrollView} from "../components/ThemeScrollView";
+import SegmentedControl from "../components/SegmentedControl";
+import DropDown from "../components/DropDown";
 
 class CreateAccFormScreen extends React.Component {
   static navigationOptions = {
@@ -19,7 +21,17 @@ class CreateAccFormScreen extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    //this.state = {pwd: ''};
+    this.state = {
+      operationStatus: [context.t('Preparing'), context.t('Opened')],
+      operationStatusIndex: null,
+      leadSource: [
+        {label: context.t('leadSourceLabel.internetKeywords'), value: context.t('leadSourceLabel.internetKeywords')},
+        {label: context.t('leadSourceLabel.socialMedia'), value: context.t('leadSourceLabel.socialMedia')},
+        {label: context.t('leadSourceLabel.introductionByOthers'), value: context.t('leadSourceLabel.introductionByOthers')},
+        {label: context.t('leadSourceLabel.others'), value: context.t('leadSourceLabel.others')},
+      ],
+      leadSourceSelected: null,
+    }
   }
 
   viewPrivacyPolicy = (url) => {
@@ -34,60 +46,147 @@ class CreateAccFormScreen extends React.Component {
 
   render() {
     const {handleSubmit} = this.props
-    const {t} = this.context
+    const {t, isTablet} = this.context
 
     return (
       <ThemeContainer>
         <KeyboardAvoidingView style={styles.container} behavior="height">
           <ThemeScrollView style={{flex: 1}}>
-            <View style={{...styles.flex(3), minHeight: 200}}>
-              <View>
-                <Image
-                  source={
-                    __DEV__
-                      ? require('../assets/images/logo.png')
-                      : require('../assets/images/logo.png')
-                  }
-                  style={styles.welcomeImage}
+            <View>
+              <Image
+                source={
+                  __DEV__
+                    ? require('../assets/images/logo.png')
+                    : require('../assets/images/logo.png')
+                }
+                style={styles.welcomeImage}
+              />
+            </View>
+            <View style={{...styles.flex(3), minHeight: 200, paddingHorizontal: isTablet ? '15%' : 0}}>
+
+              <StyledText style={styles.welcomeText}>Let's Get Started!</StyledText>
+              <View style={{paddingVertical: 5}}>
+                <Field
+                  name="clientName"
+                  component={InputText}
+                  placeholder={t('clientName')}
+                  secureTextEntry={false}
+                  validate={isRequired}
+                />
+              </View>
+              <View style={{paddingVertical: 5}}>
+                <Field
+                  name="username"
+                  component={InputText}
+                  validate={[isRequired, isEmail]}
+                  placeholder={t('email')}
+                  secureTextEntry={false}
+                  autoCapitalize="none"
+                />
+              </View>
+              <View style={{paddingVertical: 5}}>
+                <Field
+                  name="masterPassword"
+                  component={InputText}
+                  validate={[isRequired, isvalidPassword]}
+                  placeholder={t('password')}
+                  secureTextEntry={true}
+                />
+              </View>
+              <View style={{paddingVertical: 5}}>
+                <Field
+                  name="confirmPassword"
+                  component={InputText}
+                  validate={[isRequired, isconfirmPassword]}
+                  placeholder={t('confirmPassword')}
+                  secureTextEntry={true}
+
                 />
               </View>
 
-              <StyledText style={styles.welcomeText}>Let's Get Started!</StyledText>
+              <StyledText style={[styles.text, {textAlign: 'center', }]}>
+                {t('details')}
+              </StyledText>
+              <View style={{paddingVertical: 5}}>
+                <Field
+                  name="ownerName"
+                  component={InputText}
+                  placeholder={t('ownerName')}
+                  secureTextEntry={false}
+                  validate={isRequired}
+                />
+              </View>
+              <View style={{paddingVertical: 5}}>
+
+                <Field
+                  name="contactNumber"
+                  component={InputText}
+                  validate={[isRequired]}
+                  placeholder={t('contactNumber')}
+                  secureTextEntry={false}
+                />
+              </View>
+              <View style={{paddingVertical: 5}}>
+                <Field
+                  name="contactAddress"
+                  component={InputText}
+                  validate={[isRequired]}
+                  placeholder={t('contactAddress')}
+                  secureTextEntry={false}
+                />
+              </View>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <StyledText style={{marginRight: 16}}>
+                  {t('operationStatus')}
+                </StyledText>
+                <View style={{flexDirection: 'column', flex: 1, maxWidth: 640, paddingVertical: 10, }}>
+                  <Field
+                    name="operationStatus"
+                    component={SegmentedControl}
+                    selectedIndex={this.state.operationStatusIndex}
+                    onChange={(index) => this.setState({operationStatusIndex: index})}
+                    values={this.state.operationStatus}
+                    validate={[isRequired]}
+                  />
+                </View>
+              </View>
+
+              <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <StyledText style={{marginRight: 16}}>
+                  {t('leadSource')}
+                </StyledText>
+                <View style={{flexDirection: 'column', flex: 1, maxWidth: 640, paddingVertical: 10, }}>
+                  <Field
+                    name="leadSource"
+                    component={DropDown}
+                    options={this.state.leadSource}
+                    placeholder={{value: null, label: ``}}
+                    onChange={(value) => {
+                      this.setState({
+                        leadSourceSelected: value
+                      })
+                    }}
+                  //validate={[(value, allValues, props, name) => console.log('allValues', allValues), isRequired]}
+                  />
+                </View>
+              </View>
+
+              {this.state?.leadSourceSelected === t('leadSourceLabel.others') &&
+                <View style={{paddingVertical: 5}}>
+                  <Field
+                    name="leadSourceText"
+                    component={InputText}
+                    //validate={[isRequired]}
+                    placeholder={t('leadSource')}
+                    secureTextEntry={false}
+                  /></View>}
 
               <Field
-                name="clientName"
+                name="requirements"
                 component={InputText}
-                placeholder={t('clientName')}
+                placeholder={t('requirements')}
                 secureTextEntry={false}
-                validate={isRequired}
               />
-
-              <Field
-                name="username"
-                component={InputText}
-                validate={[isRequired, isEmail]}
-                placeholder={t('email')}
-                secureTextEntry={false}
-                autoCapitalize="none"
-              />
-              <Field
-                name="masterPassword"
-                component={InputText}
-                validate={[isRequired, isvalidPassword]}
-                placeholder={t('password')}
-                secureTextEntry={true}
-              />
-              <Field
-                name="confirmPassword"
-                component={InputText}
-                validate={[isRequired, isconfirmPassword]}
-                placeholder={t('confirmPassword')}
-                secureTextEntry={true}
-
-              />
-
-
-
               <StyledText style={styles.text}>
                 {t('privacyAgreement')}
               </StyledText>
@@ -96,9 +195,35 @@ class CreateAccFormScreen extends React.Component {
                   {t('viewPrivacy')}
                 </StyledText>
               </TouchableOpacity>
+
             </View>
 
-            <View style={[styles.bottom]}>
+            {isTablet && <View style={{
+              flex: 1,
+              justifyContent: 'center',
+              marginTop: 10,
+              marginBottom: 10,
+              flexDirection: 'row',
+              paddingHorizontal: '25%',
+              height: 72
+            }}>
+
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Intro')}
+                style={[styles.flexButtonSecondAction, {marginRight: 5}]}
+              >
+                <Text style={styles.flexButtonSecondActionText}>
+                  {t('action.cancel')}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleSubmit} style={[styles.flexButton, , {marginLeft: 5}]}>
+                <Text style={styles.flexButtonText}>
+                  {t('signUp')}
+                </Text>
+              </TouchableOpacity>
+            </View>}
+
+            {isTablet || <View style={[styles.bottom]}>
               <TouchableOpacity onPress={handleSubmit}>
                 <Text style={[styles.bottomActionButton, styles.actionButton]}>
                   {t('signUp')}
@@ -111,7 +236,7 @@ class CreateAccFormScreen extends React.Component {
                   {t('action.cancel')}
                 </Text>
               </TouchableOpacity>
-            </View>
+            </View>}
           </ThemeScrollView>
         </KeyboardAvoidingView>
       </ThemeContainer>

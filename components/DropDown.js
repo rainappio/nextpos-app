@@ -6,6 +6,10 @@ import styles from '../styles'
 import {withContext} from "../helpers/contextHelper";
 
 class DropDown extends Component {
+
+  componentDidMount() {
+    !!this.props?.defaultValue && this.props?.input?.onChange(this.props?.defaultValue)
+  }
   render() {
     const {
       input: {onChange, value, ...inputProps},
@@ -13,7 +17,9 @@ class DropDown extends Component {
       meta: {error, touched, valid},
       options,
       placeholder,
-      themeStyle
+      themeStyle,
+      defaultValue,
+      disabled,
     } = this.props
 
     const color = themeStyle.color
@@ -21,6 +27,7 @@ class DropDown extends Component {
     return (
       <View style={{flex: 1}}>
         {<RNPickerSelect
+          disabled={disabled ?? false}
           placeholder={placeholder ?? {}}
           items={options}
           onValueChange={value => onChange(value)}
