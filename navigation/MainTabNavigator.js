@@ -88,6 +88,9 @@ import OrderDisplayScreen from "../screens/OrderDisplayScreen";
 import ResetClientPassword from "../screens/ResetClientPassword";
 import SpiltBillScreen from "../screens/SpiltBillScreen";
 import SubscriptionScreen from '../screens/SubscriptionScreen'
+import RostersScreen from '../screens/RostersScreen'
+import RostersFormScreen from '../screens/RostersFormScreen'
+import CalendarScreen from '../screens/CalendarScreen'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -149,8 +152,9 @@ const Settings = createStackNavigator({
   NewOffer: NewOffer,
   EditOffer: EditOffer,
   ProductsOverviewforOffer: ProductsOverviewforOffer,
-  SubscriptionScreen: SubscriptionScreen
-
+  SubscriptionScreen: SubscriptionScreen,
+  RostersScreen: RostersScreen,
+  RostersFormScreen: RostersFormScreen
 })
 Settings.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.settings'),
@@ -220,12 +224,18 @@ const Reports = createStackNavigator({
 Reports.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.reporting'),
   tabBarIcon: ({focused}) => (
-    <FontAwesomeIcon
-      focused={focused}
-      name="bar-chart"
-      size={32}
-      color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
-    />
+    <TabBarIcon focused={focused} name="ios-stats" />
+  )
+})
+
+const Rosters = createStackNavigator({
+  CalendarScreen: CalendarScreen,
+
+})
+Rosters.navigationOptions = ({screenProps: {t}}) => ({
+  title: t('menu.reporting'),
+  tabBarIcon: ({focused}) => (
+    <TabBarIcon focused={focused} name="md-calendar" />
   )
 })
 
@@ -258,6 +268,9 @@ const tabBar = createBottomTabNavigator({
   },
   Reports: {
     screen: Reports
+  },
+  Rosters: {
+    screen: Rosters
   },
   Settings: {
     screen: Settings

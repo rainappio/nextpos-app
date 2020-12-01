@@ -109,3 +109,23 @@ const useDateObj = (date) => {
   const dateObj = new Date(dateMillis)
   return dateObj
 }
+
+export const normalizeTimeString = time => {
+  if (!!time) {
+    let d = new Date()
+
+    let [hours, minutes, seconds] = time.split(':')
+
+
+    d.setHours(+hours)
+    d.setMinutes(minutes)
+    d.setSeconds(seconds)
+
+    let date = new Date(d)
+
+    return date
+  } else {
+    return new Date()
+  }
+}
+
