@@ -83,7 +83,7 @@ class CustomerStats extends React.Component {
         femaleCount: '女生',
         kidCount: '小孩',
         customerCountTitle: '來客數量',
-        averageSpendingTitle: '客單數',
+        averageSpendingTitle: '客單價',
 
       }
     })
@@ -184,17 +184,17 @@ class CustomerStats extends React.Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveError) {
-      return <BackendErrorScreen/>
+      return <BackendErrorScreen />
 
     } else if (!haveData && !haveCCData) {
       return (
         <View style={[styles.container]}>
           <View style={{flex: 1}}>
             <ScreenHeader backNavigation={true}
-                          title={t('salesDashboardTitle')}
+              title={t('salesDashboardTitle')}
             />
           </View>
           <Text style={{flex: 3, alignSelf: 'center'}}>
@@ -208,8 +208,8 @@ class CustomerStats extends React.Component {
       <ThemeScrollView>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader backNavigation={true}
-                        parentFullScreen={true}
-                        title={t('customerStatsTitle')}
+            parentFullScreen={true}
+            title={t('customerStatsTitle')}
           />
 
 
@@ -236,7 +236,7 @@ class CustomerStats extends React.Component {
                 <Text style={styles.screenSubTitle}>
                   {t('orderTraffic')}
                 </Text>
-                <SvgBarChart data={filteredCustomerTrafficData} legend='Order Count' round={maxValue}/>
+                <SvgBarChart data={filteredCustomerTrafficData} legend='Order Count' round={maxValue} />
               </View>
 
               <View style={styles.verticalPadding}>

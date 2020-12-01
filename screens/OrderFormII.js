@@ -538,7 +538,7 @@ class OrderFormII extends React.Component {
                         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get('pinned').map(prd => {
                           return (
 
-                            <TouchableOpacity style={[{width: '22%', backgroundColor: 'green', marginLeft: '3%', marginBottom: '3%', borderRadius: 10}, reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'gray'})]}
+                            <TouchableOpacity style={[{width: '22%', borderWidth: 1, marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'gray'})]}
                               onPress={() => prd?.outOfStock ? this.handleItemOutOfStock(prd.id, prd?.outOfStock) : this.addItemToOrder(prd.id)}
                               onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}>
                               <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
@@ -556,7 +556,7 @@ class OrderFormII extends React.Component {
                       {(this.state?.selectedLabel === 'ungrouped' && map.get('ungrouped') !== undefined && map.get('ungrouped')?.length > 0) ?
                         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get('ungrouped').map(prd => (
 
-                          <TouchableOpacity style={[{width: '22%', backgroundColor: 'green', marginLeft: '3%', marginBottom: '3%', borderRadius: 10}, reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'gray'})]}
+                          <TouchableOpacity style={[{width: '22%', borderWidth: 1, marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'gray'})]}
                             onPress={() => prd?.outOfStock ? this.handleItemOutOfStock(prd.id, prd?.outOfStock) : this.addItemToOrder(prd.id)}
                             onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}>
                             <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
@@ -577,7 +577,7 @@ class OrderFormII extends React.Component {
                               {(map.get(lbl.label) !== undefined && map.get(lbl.label)?.length > 0) ?
                                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get(lbl.label).map(prd => {
                                   return (
-                                    <TouchableOpacity style={[{width: '22%', marginLeft: '3%', marginBottom: '3%', borderRadius: 10}, reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'gray'})]}
+                                    <TouchableOpacity style={[{width: '22%', marginLeft: '2%', marginBottom: '2%', borderRadius: 10, borderWidth: 1}, reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'gray'})]}
                                       onPress={() => prd?.outOfStock ? this.handleItemOutOfStock(prd.id, prd?.outOfStock) : this.addItemToOrder(prd.id)}
                                       onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}
                                     >
@@ -999,16 +999,16 @@ class OrderFormII extends React.Component {
                                 </View>
                               </View>
 
-                              <TouchableOpacity style={[reverseThemeStyle, {marginBottom: '3%', borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
+                              <TouchableOpacity style={[reverseThemeStyle, {marginBottom: '3%', borderRadius: 10, borderWidth: 1}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
                                 activeOpacity={0.8}
                                 onPress={() => {this.editItem(item.productId, item)}}>
-                                <View style={{aspectRatio: 1.5, alignItems: 'center', flexDirection: 'row'}}>
-                                  <View style={{flex: 2.5, flexDirection: 'column', paddingLeft: '3%'}}>
+                                <View style={{aspectRatio: 2, alignItems: 'flex-start', flexDirection: 'row'}}>
+                                  <View style={{flex: 2.5, flexDirection: 'column', paddingLeft: '3%', paddingTop: '3%'}}>
                                     <StyledText style={[{...reverseThemeStyle, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price}</StyledText>
                                     {!!item?.options && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
                                     {!!item?.appliedOfferInfo && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
                                   </View>
-                                  <View style={{position: 'absolute', bottom: 10, left: 10}}>
+                                  <View style={{position: 'absolute', bottom: '3%', left: '3%'}}>
                                     <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>
                                       {timeAgo.format(Date.now() - getTimeDifference(item?.createdDate), {flavour: 'narrow'})}
                                     </StyledText>
@@ -1047,13 +1047,22 @@ class OrderFormII extends React.Component {
                     </ScrollView>
                   </View>
                   <View style={{flex: 1, marginVertical: 5, justifyContent: 'space-between'}}>
-
-                    <StyledText style={{textAlign: 'right'}}>{t('order.subtotal')} ${order?.total?.amountWithTax}</StyledText>
-                    <StyledText style={{textAlign: 'right'}}>{t('order.discount')} ${order.discount}</StyledText>
-                    <StyledText style={{textAlign: 'right'}}>{t('order.serviceCharge')} ${order.serviceCharge}</StyledText>
-
-                    <StyledText style={{textAlign: 'right'}}>{t('order.total')} ${order.orderTotal}</StyledText>
-
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                      <StyledText >{t('order.subtotal')}</StyledText>
+                      <StyledText >${order?.total?.amountWithTax}</StyledText>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                      <StyledText >{t('order.discount')}</StyledText>
+                      <StyledText >${order?.discount}</StyledText>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                      <StyledText >{t('order.serviceCharge')}</StyledText>
+                      <StyledText >${order?.serviceCharge}</StyledText>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                      <StyledText >{t('order.total')}</StyledText>
+                      <StyledText >${order?.orderTotal}</StyledText>
+                    </View>
 
                   </View>
                 </View>

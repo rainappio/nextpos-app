@@ -1,6 +1,6 @@
 const zh = {
   login: '登入',
-  clientName: '商業名稱',
+  clientName: '店名/公司名',
   email: '電子郵件',
   passcode: '六位數代碼',
   password: '密碼',
@@ -372,6 +372,32 @@ const zh = {
     planCode: {
       FREE: '免費'
     }
+  },
+  calendarEvent: {
+    screenTitle: '排程管理',
+    month: '月',
+    week: '週',
+    status: {
+      PLANNED: '已排程',
+      ALLOCATED: '已分配',
+      ATTENDED: '已完成',
+      CANCELLED: '已取消'
+    },
+    startTime: '開始時間',
+    endTime: '結束時間',
+    eventResources: '配置',
+    assign: '分配',
+    remove: '移除分配',
+  },
+  membership: {
+    searchNullMsg: '查無此人，是否註冊會員?',
+    creatSuccessMsg: '註冊成功',
+    bindSuccessMsg: '綁定成功',
+    name: '姓名',
+    phoneNumber: '聯絡電話',
+    bind: '綁定會員',
+    membershipAccount: '會員帳號',
+    enterMembershipAccount: '請輸入會員帳號',
   },
   empty: '空',
 }

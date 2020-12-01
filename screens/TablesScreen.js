@@ -187,6 +187,7 @@ class TablesScreen extends React.Component {
       orderSets
     } = this.props
     const {t} = this.context
+    console.log('orderSets', orderSets)
 
 
     if (isLoading) {
@@ -512,29 +513,34 @@ class TablesScreen extends React.Component {
                   </View>}
                 {this.state.tableIndex === -1 &&
                   <View style={[styles.mgrbtn20, {flex: 6}]} key='noLayout'>
-                    <View style={[styles.sectionBar, {flex: 1, justifyContent: 'flex-start', paddingVertical: 0, }]}>
+                    <View style={[styles.sectionBar, {justifyContent: 'flex-start', paddingVertical: 0, }]}>
 
                     </View>
-                    <FlatList
-                      data={ordersInflight['NO_LAYOUT']}
-                      renderItem={({item}) => {
-                        return (
-                          <OrderItem
-                            order={item}
-                            navigation={navigation}
-                            handleOrderSubmit={handleOrderSubmit}
-                            handleDelete={handleDelete}
-                            key={item.orderId}
-                          />
-                        )
-                      }}
-                      ListEmptyComponent={
-                        <View>
-                          <StyledText style={styles.messageBlock}>{t('noInflightOrders')}</StyledText>
-                        </View>
-                      }
-                      keyExtractor={(item, idx) => item.orderId}
-                    />
+                    <View style={{flex: 1}}>
+                      <FlatList
+                        data={ordersInflight['NO_LAYOUT']}
+                        renderItem={({item}) => {
+                          console.log('NO_LAYOUT')
+                          return (
+                            <View style={{flex: 1}}>
+                              <OrderItem
+                                order={item}
+                                navigation={navigation}
+                                handleOrderSubmit={handleOrderSubmit}
+                                handleDelete={handleDelete}
+                                key={item.orderId}
+                              />
+                            </View>
+                          )
+                        }}
+                        ListEmptyComponent={
+                          <View>
+                            <StyledText style={styles.messageBlock}>{t('noInflightOrders')}</StyledText>
+                          </View>
+                        }
+                        keyExtractor={(item, idx) => item.orderId}
+                      />
+                    </View>
                   </View>
                 }
               </View>
@@ -557,7 +563,7 @@ class TablesScreen extends React.Component {
               </View>}
               {this.state?.screenMode === 'joinTable' && <View style={{...styles.bottomButtonContainerWithoutFlex, marginTop: 0, flexDirection: 'row', minHeight: 48}}>
                 <TouchableOpacity onPress={() => this.setState({
-                  screenMode: 'normal', tableWidth: null,
+                  screenMode: 'normal', selectedOrderId: [], tableWidth: null,
                   tableHeight: null,
                 })} style={{flex: 1, marginRight: 8}}>
                   <Text style={[styles.bottomActionButton, styles.secondActionButton, {flex: 1}]}>
@@ -950,11 +956,15 @@ class Draggable extends Component {
             </>
             :
             <>
-              <Animated.View {...this.panResponder.panHandlers} style={{zIndex: 1000}}>
+              <Animated.View {...this.panResponder.panHandlers} style={{zIndex: 1000, opacity: this.state.opacity}}>
 
                 <TouchableOpacity
                   onPress={() => {
+
                     if (!!tableStatus) {
+                      if (screenMode === 'joinTable') {
+                        this.state.isSelected ? this.setState({isSelected: false}) : this.setState({isSelected: true}, () => this.handleFlashBorder())
+                      }
                       this.props?.gotoOrderDetail({
                         orderId: tableOrder?.orderId,
                         state: tableStatus

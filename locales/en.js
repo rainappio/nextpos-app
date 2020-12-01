@@ -371,6 +371,32 @@ const en = {
       FREE: 'Free'
     }
   },
+  calendarEvent: {
+    screenTitle: 'Events List',
+    month: 'Month',
+    week: 'Week',
+    status: {
+      PLANNED: 'Planned',
+      ALLOCATED: 'Allocated',
+      ATTENDED: 'Attended',
+      CANCELLED: 'Canaelled'
+    },
+    startTime: 'Start Time',
+    endTime: 'End Time',
+    eventResources: 'Resources',
+    assign: 'Assign',
+    remove: 'Remove',
+  },
+  membership: {
+    searchNullMsg: 'Can\'t find membership. Sign up?',
+    creatSuccessMsg: 'New membership created.',
+    bindSuccessMsg: 'Membership is added to the order.',
+    name: 'Name',
+    phoneNumber: 'Phone Number',
+    bind: 'Bind Membership',
+    membershipAccount: 'Membership',
+    enterMembershipAccount: 'Enter Phone Number',
+  },
   empty: 'Empty',
 }
 

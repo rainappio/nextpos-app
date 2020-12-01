@@ -1,7 +1,7 @@
 import React from 'react'
-import {View, Text, ScrollView, TouchableOpacity} from 'react-native'
+import {View, Text, ScrollView, TouchableOpacity, Alert} from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import Icon from 'react-native-vector-icons/Ionicons'
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
@@ -9,11 +9,13 @@ import MenuButton from "../components/MenuButton";
 import {withContext} from "../helpers/contextHelper";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {ThemeContainer} from "../components/ThemeContainer";
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import {NavigationEvents} from 'react-navigation'
 import TimeZoneService from "../helpers/TimeZoneService";
 import moment from "moment-timezone";
+import {StyledText} from '../components/StyledText'
+import {RenderAgenda} from "../components/Calendars";
 
 class CalendarScreen extends React.Component {
     static navigationOptions = {
@@ -26,7 +28,18 @@ class CalendarScreen extends React.Component {
         this.state = {
             isLoading: true,
             rosterPlansData: [],
+            calendarMode: 'month',
+            selectedDate: null
         }
+        LocaleConfig.locales['zh-Hant-TW'] = {
+            monthNames: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+            monthNamesShort: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+            dayNames: ['週日', '週一', '週二', '週三', '週四', '週五', '週六'],
+            dayNamesShort: ['週日', '週一', '週二', '週三', '週四', '週五', '週六'],
+            today: '今日'
+        }
+        if (this.context?.locale === 'zh-Hant-TW' || this.context?.locale === 'zh-TW')
+            LocaleConfig.defaultLocale = 'zh-Hant-TW'
     }
 
     componentDidMount() {
@@ -77,10 +90,22 @@ class CalendarScreen extends React.Component {
 
     }
 
+    handleChangeCalendarMode = (date = null) => {
+        this.refreshScreen()
+        if (this.state.calendarMode === 'month')
+            this.setState({calendarMode: 'week', selectedDate: date})
+        else
+            this.setState({calendarMode: 'month', selectedDate: date})
+    }
+
+
+
     render() {
         const {themeStyle} = this.props
         const {t} = this.context
         const timezone = TimeZoneService.getTimeZone()
+
+
 
         return (
             <ThemeContainer>
@@ -92,54 +117,41 @@ class CalendarScreen extends React.Component {
                 <View style={styles.fullWidthScreen}>
                     <ScreenHeader backNavigation={false}
                         parentFullScreen={true}
-                        title={t('settings.roster')}
+                        title={t('calendarEvent.screenTitle')}
+                        rightComponent={
+                            <TouchableOpacity
+                                hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
+                                onPress={() => {this.handleChangeCalendarMode()}}
+                                style={{borderWidth: 1, borderColor: mainThemeColor, padding: 5, margin: -5, borderRadius: 5}}
+                            >
+                                <View style={{height: 28, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                    <Text style={[styles.screenTitle, {fontSize: 20}]}>{t(`calendarEvent.${this.state.calendarMode}`)}</Text>
+                                    <MCIcon name={this.state.calendarMode === 'month' ? 'calendar-month' : 'calendar-week'}
+                                        size={28} color={mainThemeColor} />
+                                </View>
+                            </TouchableOpacity>
+                        }
                     />
 
-                    {this.state.isLoading || <View style={[styles.flex(1), {marginHorizontal: 13}]}>
+                    {this.state.isLoading || this.state.calendarMode === 'month' && <View style={[styles.flex(1), {marginHorizontal: 13}]}>
 
                         <Calendar
-                            // Initially visible month. Default = Date()
-                            //current={'2020-11-27'}
-                            // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-                            minDate={'2012-05-10'}
-                            // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-                            maxDate={'2100-05-30'}
-                            // Handler which gets executed on day press. Default = undefined
+                            current={this.state?.selectedDate}
+
                             onDayPress={(day) => {console.log('selected day', day)}}
-                            // Handler which gets executed on day long press. Default = undefined
                             onDayLongPress={(day) => {console.log('selected day', day)}}
-                            // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
                             monthFormat={'yyyy MM'}
-                            // Handler which gets executed when visible month changes in calendar. Default = undefined
                             onMonthChange={(month) => {console.log('month changed', month)}}
-                            // Hide month navigation arrows. Default = false
-                            //hideArrows={true}
-                            // Replace default arrows with custom ones (direction can be 'left' or 'right')
-                            //renderArrow={(direction) => (<Arrow />)}
-                            // Do not show days of other months in month page. Default = false
                             hideExtraDays={false}
-                            // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
-                            // day from another month that is visible in calendar page. Default = false
                             disableMonthChange={true}
-                            // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
                             firstDay={1}
-                            // Hide day names. Default = false
                             hideDayNames={false}
-                            // Show week numbers to the left. Default = false
                             showWeekNumbers={false}
-                            // Handler which gets executed when press arrow icon left. It receive a callback can go back month
                             onPressArrowLeft={subtractMonth => subtractMonth()}
-                            // Handler which gets executed when press arrow icon right. It receive a callback can go next month
                             onPressArrowRight={addMonth => addMonth()}
-                            // Disable left arrow. Default = false
                             disableArrowLeft={false}
-                            // Disable right arrow. Default = false
                             disableArrowRight={false}
-                            // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
                             disableAllTouchEventsForDisabledDays={true}
-                            // Replace default month and year title with custom one. the function receive a date as parameter.
-                            //renderHeader={(date) => {/*Return JSX*/}}
-                            // Enable the option to swipe between months. Default = false
                             enableSwipeMonths={false}
                             style={{
                                 borderWidth: 1,
@@ -166,15 +178,18 @@ class CalendarScreen extends React.Component {
                                 }
                             }}
                             dayComponent={({date, state}) => {
-
-                                let isToday = new Date().toISOString().slice(0, 10) === date.dateString
+                                let today = moment(new Date()).tz(timezone).format("YYYY-MM-DD")
+                                let isToday = today === date.dateString
                                 let task = !!this.state?.rosterEvents
                                     ? this.state?.rosterEvents?.filter((event) => {
                                         return moment(event?.startTime ?? new Date()).tz(timezone).format("YYYY-MM-DD") === date.dateString
                                     })
                                     : []
                                 return (
-                                    <TouchableOpacity style={{flex: 1, width: '100%'}}>
+                                    <TouchableOpacity
+                                        style={{flex: 1, width: '100%'}}
+                                        onPress={() => {this.handleChangeCalendarMode(date.dateString)}}
+                                    >
                                         <View style={{flex: 1}}>
                                             <View style={{flex: 1, justifyContent: 'center'}}>
                                                 <Text style={{
@@ -188,7 +203,6 @@ class CalendarScreen extends React.Component {
                                                 <ScrollView style={{flex: 1}}>
                                                     {task?.map((event) => {
                                                         const i18nMomentFrom = moment(event?.startTime ?? new Date()).tz(timezone).format("HH:mm A");
-                                                        console.log('i18nMomentFrom', moment(event?.startTime ?? new Date()).tz(timezone).format("YYYY-MM-DD"))
                                                         return (
                                                             <View
                                                                 onStartShouldSetResponder={() => true}
@@ -213,6 +227,11 @@ class CalendarScreen extends React.Component {
 
                         />
 
+                    </View>}
+
+                    {this.state.isLoading || this.state.calendarMode === 'week' && <View style={[styles.flex(1), {marginHorizontal: 13}]}>
+
+                        <RenderAgenda events={this.state?.rosterEvents} selectedDate={this.state?.selectedDate} />
                     </View>}
                 </View>
             </ThemeContainer>

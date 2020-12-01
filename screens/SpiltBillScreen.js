@@ -221,7 +221,7 @@ class SpiltBillScreen extends React.Component {
                                         {order?.lineItems?.length > 0 ?
                                             order?.lineItems?.map((item, index) => {
                                                 return (
-                                                    <TouchableOpacity style={[reverseThemeStyle, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
+                                                    <TouchableOpacity style={[reverseThemeStyle, {marginBottom: 16, borderRadius: 10, borderWidth: 1}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
                                                         activeOpacity={0.8}
                                                         onPress={() => {this.addItem(item)}}>
                                                         <View style={{aspectRatio: 3, alignItems: 'center', flexDirection: 'row'}}>
@@ -263,13 +263,22 @@ class SpiltBillScreen extends React.Component {
                                     </ScrollView>
                                 </View>
                                 <View style={{flex: 1, marginVertical: 5, justifyContent: 'space-between'}}>
-
-
-                                    <StyledText style={{textAlign: 'left'}}>{t('order.discount')} ${order.discount}</StyledText>
-                                    <StyledText style={{textAlign: 'left'}}>{t('order.serviceCharge')} ${order.serviceCharge}</StyledText>
-
-                                    <StyledText style={{textAlign: 'left'}}>{t('order.total')} ${order.orderTotal}</StyledText>
-
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                        <StyledText >{t('order.subtotal')}</StyledText>
+                                        <StyledText >${order?.total?.amountWithTax}</StyledText>
+                                    </View>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                        <StyledText >{t('order.discount')}</StyledText>
+                                        <StyledText >${order?.discount}</StyledText>
+                                    </View>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                        <StyledText >{t('order.serviceCharge')}</StyledText>
+                                        <StyledText >${order?.serviceCharge}</StyledText>
+                                    </View>
+                                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                        <StyledText >{t('order.total')}</StyledText>
+                                        <StyledText >${order?.orderTotal}</StyledText>
+                                    </View>
 
                                 </View>
                             </View>
@@ -305,7 +314,7 @@ class SpiltBillScreen extends React.Component {
 
 
 
-                                                                <TouchableOpacity style={[reverseThemeStyle, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
+                                                                <TouchableOpacity style={[reverseThemeStyle, {marginBottom: 16, borderRadius: 10, borderWidth: 1}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
                                                                     activeOpacity={0.8}
                                                                     onPress={() => {this.deleteItem(item)}}>
                                                                     <View style={{aspectRatio: 6, alignItems: 'center', flexDirection: 'row'}}>
@@ -347,17 +356,27 @@ class SpiltBillScreen extends React.Component {
                                                 </ScrollView>
                                             </View>
                                             <View style={{flex: 1, marginVertical: 5, flexDirection: 'row'}}>
+
                                                 <View style={{flex: 1, justifyContent: 'space-between'}}>
-
-
-                                                    <StyledText style={{textAlign: 'left'}}>{t('order.discount')} ${this.state.splitOrderData.discount}</StyledText>
-                                                    <StyledText style={{textAlign: 'left'}}>{t('order.serviceCharge')} ${this.state.splitOrderData.serviceCharge}</StyledText>
-
-                                                    <StyledText style={{textAlign: 'left'}}>{t('order.total')} ${this.state.splitOrderData.orderTotal}</StyledText>
-
+                                                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                                        <StyledText >{t('order.subtotal')}</StyledText>
+                                                        <StyledText >${this.state.splitOrderData?.total?.amountWithTax}</StyledText>
+                                                    </View>
+                                                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                                        <StyledText >{t('order.discount')}</StyledText>
+                                                        <StyledText >${this.state.splitOrderData?.discount}</StyledText>
+                                                    </View>
+                                                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                                        <StyledText >{t('order.serviceCharge')}</StyledText>
+                                                        <StyledText >${this.state.splitOrderData?.serviceCharge}</StyledText>
+                                                    </View>
+                                                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                                        <StyledText >{t('order.total')}</StyledText>
+                                                        <StyledText >${this.state.splitOrderData?.orderTotal}</StyledText>
+                                                    </View>
 
                                                 </View>
-                                                <View style={{flex: 3, justifyContent: 'space-between', flexDirection: 'row'}}>
+                                                <View style={{flex: 3, justifyContent: 'space-between', flexDirection: 'row', marginLeft: 10}}>
 
                                                     <DeleteBtn
                                                         text={t('action.cancel')}

@@ -91,6 +91,7 @@ import SubscriptionScreen from '../screens/SubscriptionScreen'
 import RostersScreen from '../screens/RostersScreen'
 import RostersFormScreen from '../screens/RostersFormScreen'
 import CalendarScreen from '../screens/CalendarScreen'
+import CalendarEventScreen from '../screens/CalendarEventScreen'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -230,6 +231,7 @@ Reports.navigationOptions = ({screenProps: {t}}) => ({
 
 const Rosters = createStackNavigator({
   CalendarScreen: CalendarScreen,
+  CalendarEventScreen: CalendarEventScreen,
 
 })
 Rosters.navigationOptions = ({screenProps: {t}}) => ({

@@ -33,7 +33,7 @@ class OrderItem extends React.PureComponent {
       timeDisplayColor = timeDifference < thirtyMinutes ? mainThemeColor : 'red'
     }
 
-    if (!!order?.tables) {
+    if (!!order?.tables && order?.tables?.length > 0) {
       return (
         <>
           {order.tables.map((table) => {

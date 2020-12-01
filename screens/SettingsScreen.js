@@ -31,7 +31,7 @@ class SettingsScreen extends React.Component {
 
 
           <Pages indicatorColor={mainThemeColor}>
-            <View>
+            <View style={{flex: 1, paddingBottom: 16}}>
               <View style={[styles.menuContainer]}>
                 <MenuButton
                   onPress={() => this.props.navigation.navigate('Account')}
@@ -88,6 +88,73 @@ class SettingsScreen extends React.Component {
 
               <View style={[styles.menuContainer]}>
                 <MenuButton
+                  onPress={() => this.props.navigation.navigate('Announcements')}
+                  title={t('settings.announcements')}
+                  icon={
+                    <FontAwesomeIcon
+                      name="commenting"
+                      size={40}
+                      style={[styles.buttonIconStyle]}
+                    />
+                  }
+                />
+                <View style={styles.dynamicHorizontalPadding(6)} />
+                <MenuButton
+                  onPress={() => this.props.navigation.navigate('ShiftClose')}
+                  title={t('settings.manageShifts')}
+                  icon={
+                    <Icon
+                      name="md-book"
+                      size={40}
+                      style={[styles.buttonIconStyle]}
+                    />
+                  }
+                />
+              </View>
+              <View style={[styles.menuContainer]}>
+                <MenuButton
+                  onPress={() => this.props.navigation.navigate('RostersScreen')}
+                  title={t('settings.roster')}
+                  icon={
+                    <FontAwesome5Icon
+                      name="business-time"
+                      size={40}
+                      style={[styles.buttonIconStyle]}
+                    />
+                  }
+                />
+                <View style={styles.dynamicHorizontalPadding(6)} />
+                <MenuButton
+                  onPress={() => this.props.navigation.navigate('ManageOffers')}
+                  title={t('settings.manageOffers')}
+                  icon={
+                    <FontAwesomeIcon
+                      name="sun-o"
+                      size={40}
+                      style={[styles.buttonIconStyle]}
+                    />
+                  }
+                />
+              </View>
+
+
+            </View>
+
+            <View style={{flex: 1, paddingBottom: 10}}>
+              <View style={[styles.menuContainer]}>
+                <MenuButton
+                  onPress={() => this.props.navigation.navigate('TableLayouts')}
+                  title={t('settings.tableLayouts')}
+                  icon={
+                    <MaterialIcon
+                      name="event-seat"
+                      size={40}
+                      style={[styles.buttonIconStyle]}
+                    />
+                  }
+                />
+                <View style={styles.dynamicHorizontalPadding(6)} />
+                <MenuButton
                   onPress={() => this.props.navigation.navigate('PrinternKDS')}
                   title={t('settings.workingArea')}
                   icon={
@@ -98,7 +165,35 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
+              </View>
+
+              <View style={[styles.menuContainer]}>
+                <MenuButton
+                  onPress={() => this.props.navigation.navigate('EinvoiceStatusScreen')}
+                  title={t('settings.eInvoice')}
+                  icon={
+                    <FontAwesome5Icon
+                      name="file-invoice-dollar"
+                      size={40}
+                      style={[styles.buttonIconStyle]}
+                    />
+                  }
+                />
                 <View style={styles.dynamicHorizontalPadding(6)} />
+                <MenuButton
+                  onPress={() => this.props.navigation.navigate('SubscriptionScreen')}
+                  title={t('settings.subscription')}
+                  icon={
+                    <MCIcon
+                      name="professional-hexagon"
+                      size={40}
+                      style={[styles.buttonIconStyle]}
+                    />
+                  }
+                />
+              </View>
+
+              <View style={[styles.menuContainer]}>
                 <MenuButton
                   onPress={() => changeLanguage()}
                   title={t('settings.language')}
@@ -110,106 +205,16 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
+                <View style={styles.dynamicHorizontalPadding(6)} />
+                <View style={{flex: 1}}></View>
               </View>
 
-
+              <View style={[styles.menuContainer]}>
+                <View style={{flex: 1}}></View>
+                <View style={styles.dynamicHorizontalPadding(6)} />
+                <View style={{flex: 1}}></View>
+              </View>
             </View>
-
-            <ScrollView>
-              <View>
-                <View style={[styles.menuContainer]}>
-                  <MenuButton
-                    onPress={() => this.props.navigation.navigate('TableLayouts')}
-                    title={t('settings.tableLayouts')}
-                    icon={
-                      <MaterialIcon
-                        name="event-seat"
-                        size={40}
-                        style={[styles.buttonIconStyle]}
-                      />
-                    }
-                  />
-                  <View style={styles.dynamicHorizontalPadding(6)} />
-                  <MenuButton
-                    onPress={() => this.props.navigation.navigate('ShiftClose')}
-                    title={t('settings.manageShifts')}
-                    icon={
-                      <Icon
-                        name="md-book"
-                        size={40}
-                        style={[styles.buttonIconStyle]}
-                      />
-                    }
-                  />
-                </View>
-
-                <View style={[styles.menuContainer]}>
-                  <MenuButton
-                    onPress={() => this.props.navigation.navigate('Announcements')}
-                    title={t('settings.announcements')}
-                    icon={
-                      <FontAwesomeIcon
-                        name="commenting"
-                        size={40}
-                        style={[styles.buttonIconStyle]}
-                      />
-                    }
-                  />
-                  <View style={styles.dynamicHorizontalPadding(6)} />
-                  <MenuButton
-                    onPress={() => this.props.navigation.navigate('ManageOffers')}
-                    title={t('settings.manageOffers')}
-                    icon={
-                      <FontAwesomeIcon
-                        name="sun-o"
-                        size={40}
-                        style={[styles.buttonIconStyle]}
-                      />
-                    }
-                  />
-                </View>
-                <View style={[styles.menuContainer]}>
-                  <MenuButton
-                    onPress={() => this.props.navigation.navigate('EinvoiceStatusScreen')}
-                    title={t('settings.eInvoice')}
-                    icon={
-                      <FontAwesome5Icon
-                        name="file-invoice-dollar"
-                        size={40}
-                        style={[styles.buttonIconStyle]}
-                      />
-                    }
-                  />
-                  <View style={styles.dynamicHorizontalPadding(6)} />
-                  <MenuButton
-                    onPress={() => this.props.navigation.navigate('SubscriptionScreen')}
-                    title={t('settings.subscription')}
-                    icon={
-                      <MCIcon
-                        name="professional-hexagon"
-                        size={40}
-                        style={[styles.buttonIconStyle]}
-                      />
-                    }
-                  />
-                </View>
-                <View style={[styles.menuContainer]}>
-                  <MenuButton
-                    onPress={() => this.props.navigation.navigate('RostersScreen')}
-                    title={t('settings.roster')}
-                    icon={
-                      <FontAwesome5Icon
-                        name="business-time"
-                        size={40}
-                        style={[styles.buttonIconStyle]}
-                      />
-                    }
-                  />
-                  <View style={styles.dynamicHorizontalPadding(6)} />
-                  <View style={{flex: 1}}></View>
-                </View>
-              </View>
-            </ScrollView>
           </Pages>
         </View>
       </ThemeContainer>
@@ -218,3 +223,4 @@ class SettingsScreen extends React.Component {
 }
 
 export default SettingsScreen
+

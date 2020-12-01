@@ -51,7 +51,8 @@ export default StyleSheet.create({
     justifyContent: 'center',
     marginTop: 8,
     marginBottom: 5,
-    marginLeft: 10
+    marginLeft: 10,
+    marginRight: 5
   },
   rootInput: {
     paddingVertical: 10,
@@ -348,6 +349,7 @@ export default StyleSheet.create({
     fontWeight: 'bold'
   },
   menuContainer: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -366,7 +368,7 @@ export default StyleSheet.create({
   },
   mainSquareButton: {
     //margin: 10,
-    //flex: 1,
+    flex: 1,
     height: 140,
     backgroundColor: '#f5f5f5',
     justifyContent: 'center',
