@@ -5,7 +5,7 @@ import {isRequired} from '../validators'
 import InputText from '../components/InputText'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
-import RenderRadioBtn from '../components/RadioItem'
+import {RenderRadioBtnMulti} from '../components/RadioItem'
 import {printMessage} from "../helpers/printerActions";
 import {connect} from "react-redux";
 import {successMessage, warningMessage} from "../constants/Backend";
@@ -103,21 +103,19 @@ class PrinterForm extends React.Component {
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <Field
-              name="serviceType"
-              component={RenderRadioBtn}
+              name="serviceTypes"
+              component={RenderRadioBtnMulti}
               customValue="WORKING_AREA"
               optionName={t('serviceType.workingArea')}
-              validate={isRequired}
             />
           </View>
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <Field
-              name="serviceType"
-              component={RenderRadioBtn}
+              name="serviceTypes"
+              component={RenderRadioBtnMulti}
               customValue="CHECKOUT"
               optionName={t('serviceType.checkout')}
-              validate={isRequired}
             />
           </View>
         </View>

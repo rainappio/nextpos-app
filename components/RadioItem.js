@@ -28,3 +28,40 @@ export default class RenderRadioBtn extends React.Component {
     )
   }
 }
+
+export class RenderRadioBtnMulti extends React.Component {
+  render() {
+    const {
+      input: {onBlur, onChange, onFocus, value},
+      customValue,
+      optionName,
+      meta: {error, toched, valid},
+      ...rest
+    } = this.props
+    console.log('customValue', customValue, value)
+    const checked = Array.isArray(value) && value?.some((item) => item === customValue)
+
+    return (
+      <View style={styles.flex(1)}>
+        <Radio
+          key={customValue}
+          onChange={() => {
+            if (checked) {
+              let typeSet = new Set(value)
+              typeSet.delete(customValue)
+              onChange([...typeSet])
+            } else {
+              let typeSet = new Set(value)
+              typeSet.add(customValue)
+              onChange([...typeSet])
+            }
+          }}
+          checked={checked}
+          style={{position: 'absolute', right: 0}}
+        >
+          <StyledText style={styles.textBold}>{optionName}</StyledText>
+        </Radio>
+      </View>
+    )
+  }
+}

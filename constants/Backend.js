@@ -3,6 +3,7 @@ import {showMessage} from 'react-native-flash-message'
 import * as Sentry from 'sentry-expo';
 import NavigationService from "../navigation/NavigationService";
 import i18n from 'i18n-js'
+import {order} from '../assets/images';
 
 export const storage = {
   clientAccessToken: 'token',
@@ -460,7 +461,28 @@ export const api = {
     deleteEvents: (id) => {
       return `${apiRoot}/rosterPlans/${id}/events`
     },
-  }
+    assign: (pid, eid) => {
+      return `${apiRoot}/rosterPlans/${pid}/events/${eid}/assign`
+    },
+    remove: (pid, eid) => {
+      return `${apiRoot}/rosterPlans/${pid}/events/${eid}/remove`
+    },
+  },
+  membership: {
+    get: (id) => {
+      return `${apiRoot}/memberships/${id}`
+    },
+    update: (id) => {
+      return `${apiRoot}/memberships/${id}`
+    },
+    creat: `${apiRoot}/memberships`,
+    getByPhone: (num) => {
+      return `${apiRoot}/memberships?phoneNumber=${num}`
+    },
+    updateOrderMembership: (orderId) => {
+      return `${apiRoot}/orders/${orderId}/membership`
+    },
+  },
 }
 
 export const getToken = async () => {

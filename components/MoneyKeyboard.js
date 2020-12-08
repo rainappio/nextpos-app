@@ -497,7 +497,7 @@ export const CustomTitleAndDigitKeyboard = (props) => {
     const localeContext = useContext(LocaleContext);
 
     const [Output, setOutput] = useState(props?.initialValue ?? ['', '', '', '']);
-    const [Index, setIndex] = useState(0);
+    const [Index, setIndex] = useState(props?.value ? props?.value?.length : 0);
     const [Digit, setDigit] = useState(props?.digit ?? 8);
 
     useEffect(() => {

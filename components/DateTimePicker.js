@@ -187,7 +187,7 @@ class RenderTimePickerBase extends Component {
 							value={!!value ? value : new Date()}
 							mode={mode ?? "time"}
 							is24Hour={true}
-							display="calendar"
+							display="default"
 							onChange={(e, selectedDate) => {
 								console.log(`on change date: ${selectedDate} ${e.nativeEvent.timestamp}`)
 								showDatepicker();

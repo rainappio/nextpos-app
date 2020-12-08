@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Field, reduxForm} from 'redux-form'
-import {Text, TouchableOpacity, View, ScrollView, Alert} from 'react-native'
+import {Text, TouchableOpacity, View, ScrollView, Alert, KeyboardAvoidingView} from 'react-native'
 import {formatCurrency, getfetchglobalOrderOffers, getOrder} from '../actions'
 import RenderCheckBox from '../components/rn-elements/CheckBox'
 import styles, {mainThemeColor} from '../styles'
@@ -23,6 +23,7 @@ import {NavigationEvents} from 'react-navigation'
 import {ScanView} from '../components/scanView'
 import InputText from '../components/InputText'
 import {isRequired} from '../validators'
+import Modal from 'react-native-modal';
 
 class PaymentFormScreenTablet extends React.Component {
     static navigationOptions = {
@@ -37,7 +38,7 @@ class PaymentFormScreenTablet extends React.Component {
         this.state = {
             keyboardResult: 0,
             cardKeyboardResult: ['', '', '', ''],
-            taxIDNumberKeyBoardResult: ['', '', '', '', '', '', '', ''],
+            taxIDNumberKeyBoardResult: [],
             selectedPayLabel: 'CASH',
             selectedCardLabel: 'OTHER',
             haveTaxIDNumber: false,
@@ -50,6 +51,9 @@ class PaymentFormScreenTablet extends React.Component {
             orderLineItems: {},
             waiveServiceCharge: this.props.order?.serviceCharge === 0,
             carrierId: '123',
+            keyboardType: 'CASH',
+            haveBindAccount: props?.order?.membership?.phoneNumber ? true : false,
+            accountKeyBoardResult: props?.order?.membership?.phoneNumber ? props?.order?.membership?.phoneNumber?.split('') : []
         }
     }
 
@@ -61,7 +65,7 @@ class PaymentFormScreenTablet extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (this.props?.order !== prevProps?.order) {
-            this.setState({openDiscountKeyBoard: false, waiveServiceCharge: this.props.order?.serviceCharge === 0})
+            this.setState({openDiscountKeyBoard: false, waiveServiceCharge: this.props.order?.serviceCharge === 0, accountKeyBoardResult: this.props?.order?.membership?.phoneNumber ? this.props?.order?.membership?.phoneNumber?.split('') : []})
         }
     }
 
@@ -209,7 +213,156 @@ class PaymentFormScreenTablet extends React.Component {
         this.setState({waiveServiceCharge: !waiveServiceCharge})
     }
 
+    handleSearchAccount = (acc, orderId) => {
+        if (acc === '') {
+            Alert.alert(
+                ``,
+                `${this.context.t(`membership.searchNullMsg`)}`,
+                [
+                    {
+                        text: `${this.context.t('action.yes')}`,
+                        onPress: () => {
+                            this.setState({modalVisible: true})
+                        }
+                    },
+                    {
+                        text: `${this.context.t('action.no')}`,
+                        onPress: () => {},
+                        style: 'cancel'
+                    }
+                ]
+            )
+        }
+        else {
+            dispatchFetchRequestWithOption(api.membership.getByPhone(acc), {
+                method: 'GET',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {},
+            }, {
+                defaultMessage: false
+            }, response => {
+                response.json().then(data => {
+                    console.log('res', data)
+                    if (data?.results?.length > 0) {
+                        dispatchFetchRequestWithOption(api.membership.updateOrderMembership(orderId), {
+                            method: 'POST',
+                            withCredentials: true,
+                            credentials: 'include',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({membershipId: data?.results[0]?.id})
+                        }, {
+                            defaultMessage: false
+                        }, response => {
+                            response.json().then(data2 => {
+                                Alert.alert(
+                                    ``,
+                                    `${data?.results[0]?.phoneNumber} ${this.context.t(`membership.bindSuccessMsg`)}`,
+                                    [
+                                        {
+                                            text: `${this.context.t('action.yes')}`,
+                                            onPress: () => {
+                                                this.refreshOrder()
+                                            }
+                                        },
 
+                                    ]
+                                )
+
+                            })
+                        }).then()
+
+                    } else {
+                        Alert.alert(
+                            ``,
+                            `${this.context.t(`membership.searchNullMsg`)}`,
+                            [
+                                {
+                                    text: `${this.context.t('action.yes')}`,
+                                    onPress: () => {
+                                        this.props?.change(`phoneNumber`, acc)
+                                        this.setState({modalVisible: true})
+                                    }
+                                },
+                                {
+                                    text: `${this.context.t('action.no')}`,
+                                    onPress: () => {},
+                                    style: 'cancel'
+                                }
+                            ]
+                        )
+                    }
+                })
+            }).then()
+        }
+
+    }
+
+    handleCreatMember = (values, orderId) => {
+        let request = {
+            name: values?.name,
+            phoneNumber: values?.phoneNumber,
+        }
+        dispatchFetchRequestWithOption(api.membership.creat, {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(request)
+        }, {
+            defaultMessage: false
+        }, response => {
+            response.json().then(data => {
+                console.log('handleCreatMember', data)
+                dispatchFetchRequestWithOption(api.membership.updateOrderMembership(orderId), {
+                    method: 'POST',
+                    withCredentials: true,
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({membershipId: data?.id})
+                }, {
+                    defaultMessage: false
+                }, response => {
+                    Alert.alert(
+                        ``,
+                        `${data?.phoneNumber} ${this.context.t(`membership.bindSuccessMsg`)}`,
+                        [
+                            {
+                                text: `${this.context.t('action.yes')}`,
+                                onPress: () => {
+                                    this.setState({modalVisible: false})
+                                    this.refreshOrder()
+                                }
+                            },
+
+                        ]
+                    )
+                }).then()
+            })
+        }).then()
+    }
+
+    handleUpdateOrderMembership = (orderId, id = '') => {
+        dispatchFetchRequestWithOption(api.membership.updateOrderMembership(orderId), {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({membershipId: id})
+        }, {
+            defaultMessage: false
+        }, response => {
+            response.json().then(data => console.log('handleUpdateOrderMembership', JSON.stringify(data)))
+        }).then(() => this.refreshOrder())
+    }
 
     render() {
         const {navigation, handleSubmit, globalorderoffers, order} = this.props
@@ -227,42 +380,93 @@ class PaymentFormScreenTablet extends React.Component {
                             await this.initScreen()
                         }}
                     />
-                    <PaymentDiscountModal
-                        modalVisible={this.state.modalVisible}
-                        submitOrder={(orderId) => {
-                            this.setState({modalVisible: false});
-                            this.props.navigation.navigate('OrderFormII', {
-                                orderId: orderId
-                            })
-                        }}
-                        closeModal={() => {this.setState({modalVisible: false}); getOrder(order.orderId)}}
-                        handleSubmit={this.refreshOrder}
-                        data={order}
-                        globalorderoffers={globalorderoffers}
-                        navigation={this.props.navigation}
-                        prdId={this.state?.prdId}
-                        isEditLineItem={this.state?.isEditLineItem ?? false} />
+                    <Modal
+                        isVisible={this.state.modalVisible}
+                        backdropOpacity={0.7}
+                    >
+                        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={-80} style={{flex: 1, justifyContent: 'center'}}>
+                            <View style={{
+                                borderRadius: 10,
+                                width: '80%',
+                                paddingTop: 20,
+                                paddingHorizontal: 20,
+                                minHeight: 200,
+                                borderWidth: 5,
+                                borderColor: mainThemeColor,
+                                justifyContent: 'center',
+                                alignSelf: 'center',
+                            }}>
+                                <View style={{flex: 1}}>
+                                    <View style={{flex: 1, }}>
+                                        <Field
+                                            name="name"
+                                            component={InputText}
+                                            placeholder={t(`membership.name`)}
+                                            secureTextEntry={false}
+                                            validate={isRequired}
+                                        />
+                                    </View>
+                                    <View style={{flex: 1, }}>
+                                        <Field
+                                            name="phoneNumber"
+                                            component={InputText}
+                                            placeholder={t(`membership.phoneNumber`)}
+                                            secureTextEntry={false}
+                                            validate={isRequired}
+                                        />
+                                    </View>
+                                    <View style={[{flexDirection: 'row', alignSelf: 'flex-end', flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end'}]}>
+                                        <View style={{flex: 1, marginHorizontal: 5}}>
+                                            <TouchableOpacity
+                                                onPress={() => {
+                                                    this.setState({modalVisible: false})
+                                                }}
+                                            >
+                                                <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={{flex: 1, marginHorizontal: 5}}>
+                                            <TouchableOpacity
+                                                onPress={handleSubmit(data => {
+
+                                                    this.handleCreatMember(data, order?.orderId)
+                                                })}
+                                            >
+                                                <Text style={[[styles.bottomActionButton, styles.actionButton]]}>
+                                                    {t('action.save')}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+
+
+                                    </View>
+                                </View>
+
+
+                            </View>
+                        </KeyboardAvoidingView>
+                    </Modal>
                     <View style={{flexDirection: 'row', flex: 1}}>
                         <View style={[styles.orderItemSideBar, themeStyle, {flex: 2, flexDirection: 'row', }]}>
                             {/* left list */}
                             <View style={{flex: 1}}>
                                 <ScrollView style={{flex: 1}}>
                                     <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
-                                        <TouchableOpacity style={[(this.state.selectedPayLabel === 'CASH' ? styles.selectedLabel : null), {flex: 1}]} onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'CASH', openTaxIDNumberKeyBoard: false, cardKeyboardResult: ['', '', '', ''], selectedCardLabel: 'OTHER', })}}>
+                                        <TouchableOpacity style={[(this.state.selectedPayLabel === 'CASH' ? styles.selectedLabel : null), {flex: 1}]} onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'CASH', openTaxIDNumberKeyBoard: false, cardKeyboardResult: ['', '', '', ''], selectedCardLabel: 'OTHER', keyboardType: 'CASH'})}}>
                                             <View style={styles.listPanel}>
                                                 <StyledText style={styles.listPanelText}>{t('payment.cashPayment')}</StyledText>
                                             </View>
                                         </TouchableOpacity>
                                     </View>
                                     <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
-                                        <TouchableOpacity style={[(this.state.selectedPayLabel === 'CARD' ? styles.selectedLabel : null), {flex: 1}]} onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'CARD', keyboardResult: 0, openTaxIDNumberKeyBoard: false})}}>
+                                        <TouchableOpacity style={[(this.state.selectedPayLabel === 'CARD' ? styles.selectedLabel : null), {flex: 1}]} onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'CARD', keyboardResult: 0, openTaxIDNumberKeyBoard: false, keyboardType: 'CARD'})}}>
                                             <View style={styles.listPanel}>
                                                 <StyledText style={styles.listPanelText}>{t('payment.cardPayment')}</StyledText>
                                             </View>
                                         </TouchableOpacity>
                                     </View>
                                     <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
-                                        <TouchableOpacity style={[(this.state.haveTaxIDNumber ? styles.selectedLabel : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {this.setState({openDiscountKeyBoard: false, haveTaxIDNumber: !this.state.haveTaxIDNumber, openTaxIDNumberKeyBoard: !this.state.haveTaxIDNumber})}}>
+                                        <TouchableOpacity style={[(this.state.haveTaxIDNumber ? styles.selectedLabel : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {this.setState({openDiscountKeyBoard: false, haveTaxIDNumber: !this.state.haveTaxIDNumber, openTaxIDNumberKeyBoard: !this.state.haveTaxIDNumber, keyboardType: this.state.haveTaxIDNumber ? this.state.selectedPayLabel : 'TAXID'})}}>
                                             <View style={styles.listPanel}>
                                                 <StyledText style={styles.listPanelText}>{t('payment.taxIDNumber')}</StyledText>
                                             </View>
@@ -285,6 +489,18 @@ class PaymentFormScreenTablet extends React.Component {
                                             {this.state.waiveServiceCharge && <Icon style={{marginRight: 10}} name="times-circle" size={20} color='#f75336' />}
                                         </TouchableOpacity>
                                     </View>
+
+                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
+                                        <TouchableOpacity style={[(this.state.haveBindAccount ? styles.selectedLabel : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {
+                                            this.state.haveBindAccount && this.handleUpdateOrderMembership(order?.orderId)
+                                            this.setState({haveBindAccount: !this.state.haveBindAccount, keyboardType: 'ACCOUNT'})
+                                        }}>
+                                            <View style={styles.listPanel}>
+                                                <StyledText style={styles.listPanelText}>{t(`membership.bind`)}</StyledText>
+                                            </View>
+                                            {this.state.haveBindAccount && <Icon style={{marginRight: 10}} name="times-circle" size={20} color='#f75336' />}
+                                        </TouchableOpacity>
+                                    </View>
                                 </ScrollView>
                             </View>
                             {/* mid content */}
@@ -301,7 +517,7 @@ class PaymentFormScreenTablet extends React.Component {
                                             </StyledText>
                                         </View>
                                     </View>
-                                    <TouchableOpacity onPress={() => {this.setState({openDiscountKeyBoard: !this.state.openDiscountKeyBoard, openTaxIDNumberKeyBoard: false})}} style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                                    <TouchableOpacity onPress={() => {this.setState({openDiscountKeyBoard: !this.state.openDiscountKeyBoard, openTaxIDNumberKeyBoard: false, keyboardType: 'DISCOUNT'})}} style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
                                         <View style={[styles.tableCellView, {flex: 1}]}>
                                             <StyledText>{t('order.discount')}</StyledText>
                                             <Icon style={{marginLeft: 10}} name="edit" size={20} color={mainThemeColor} />
@@ -327,19 +543,9 @@ class PaymentFormScreenTablet extends React.Component {
                                         </View>
                                     </View>
 
-                                    <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
-                                        <View style={[styles.tableCellView, {flex: 1}]}>
-                                            <StyledText>{t('order.total')}</StyledText>
-                                        </View>
 
-                                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                                            <StyledText style={styles.tableCellText}>
-                                                {formatCurrency(order.orderTotal)}
-                                            </StyledText>
-                                        </View>
-                                    </View>
                                     {this.state.selectedPayLabel === 'CASH' && <View>
-                                        <TouchableOpacity onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'CASH', openTaxIDNumberKeyBoard: false, cardKeyboardResult: ['', '', '', ''], selectedCardLabel: 'OTHER', })}} style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                                        <TouchableOpacity onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'CASH', openTaxIDNumberKeyBoard: false, cardKeyboardResult: ['', '', '', ''], selectedCardLabel: 'OTHER', keyboardType: 'CASH'})}} style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
                                             <View style={[styles.tableCellView, {flex: 1}]}>
                                                 <StyledText>{t('payment.paid')}</StyledText>
                                                 <Icon style={{marginLeft: 10}} name="edit" size={20} color={mainThemeColor} />
@@ -377,7 +583,7 @@ class PaymentFormScreenTablet extends React.Component {
                                         </View>
                                     </View>}
                                     {this.state.selectedPayLabel === 'CARD' && <View>
-                                        <TouchableOpacity onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'CARD', keyboardResult: 0, openTaxIDNumberKeyBoard: false})}} style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                                        <TouchableOpacity onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'CARD', keyboardResult: 0, openTaxIDNumberKeyBoard: false, keyboardType: 'CARD'})}} style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
                                             <View style={[styles.tableCellView, {flex: 1}]}>
                                                 <StyledText>{t('payment.CardNo')}</StyledText>
                                                 <Icon style={{marginLeft: 10}} name="edit" size={20} color={mainThemeColor} />
@@ -434,7 +640,7 @@ class PaymentFormScreenTablet extends React.Component {
 
                                     </View>}
                                     {this.state.haveTaxIDNumber && <View>
-                                        <TouchableOpacity onPress={() => {this.setState({openTaxIDNumberKeyBoard: true})}} style={[styles.tableRowContainerWithBorder, styles.verticalPadding, {flexDirection: 'column'}]}>
+                                        <TouchableOpacity onPress={() => {this.setState({openTaxIDNumberKeyBoard: true, keyboardType: 'TAXID'})}} style={[styles.tableRowContainerWithBorder, styles.verticalPadding, {flexDirection: 'column'}]}>
                                             <View style={{flexDirection: 'row'}}>
                                                 <View style={[styles.tableCellView, {flex: 1}]}>
                                                     <StyledText>{t('payment.taxIDNumber')}</StyledText>
@@ -500,7 +706,7 @@ class PaymentFormScreenTablet extends React.Component {
                                                 <Field
                                                     name={`carrierId`}
                                                     component={InputText}
-                                                    validate={[isRequired]}
+                                                    validate={this.state.modalVisible ? undefined : [isRequired]}
                                                 />
                                                 <TouchableOpacity style={{minWidth: 64, alignItems: 'center', }}
                                                     onPress={() => {
@@ -514,37 +720,66 @@ class PaymentFormScreenTablet extends React.Component {
                                             </View>
                                         </View>
                                     }
+
+                                    {this.state.haveBindAccount &&
+                                        <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                                            <View style={[styles.tableCellView, {flex: 1}]}>
+                                                <StyledText>{t(`membership.membershipAccount`)}</StyledText>
+                                            </View>
+
+                                            <TouchableOpacity style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end', borderWidth: 1, padding: 5}, themeStyle]}
+                                                onPress={() => this.setState({keyboardType: 'ACCOUNT'})}>
+                                                <StyledText>{this.state.accountKeyBoardResult?.join('')}</StyledText>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity style={{minWidth: 64, alignItems: 'center', }}
+                                                onPress={() => this.handleSearchAccount(this.state.accountKeyBoardResult?.join(''), order?.orderId)}
+                                            >
+                                                <Icon style={{marginLeft: 10}} name="search" size={24} color={mainThemeColor} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    }
+
                                 </ThemeKeyboardAwareScrollView>
+                                <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding, {borderBottomWidth: 0}]}>
+                                    <View style={[styles.tableCellView, {flex: 1}]}>
+                                        <StyledText>{t('order.total')}</StyledText>
+                                    </View>
+
+                                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                        <StyledText style={styles.tableCellText}>
+                                            {formatCurrency(order.orderTotal)}
+                                        </StyledText>
+                                    </View>
+                                </View>
                             </View>
                         </View>
                         {/* keyboard */}
                         <View style={{flex: 1}}>
-                            {!this.state.openScanView && <View style={{flex: 7}}>
-                                {this.state.openTaxIDNumberKeyBoard || this.state.openDiscountKeyBoard || <View style={{flex: 7}}>
-                                    {this.state.selectedPayLabel === 'CASH' ? <MoneyKeyboard
-                                        initialValue={0}
-                                        value={this.state.keyboardResult}
-                                        getResult={(result) => {this.setState({keyboardResult: result})}} />
-                                        : <CardFourNumberKeyboard
-                                            initialValue={['0', '1', '2', '3']}
-                                            value={this.state.cardKeyboardResult}
-                                            getResult={(result) => {this.setState({cardKeyboardResult: result})}} />}
-                                </View>}
-                                {this.state.openTaxIDNumberKeyBoard && <View style={{flex: 7}}>
-                                    <CustomTitleAndDigitKeyboard
-                                        title={t('payment.enterTaxIDNumber')}
-                                        digit={8}
-                                        value={this.state.taxIDNumberKeyBoardResult}
-                                        getResult={(result) => {this.setState({taxIDNumberKeyBoardResult: result})}} />
-                                </View>}
-                                {this.state.openDiscountKeyBoard && <View style={{flex: 7}}>
-                                    <DiscountKeyboard
-                                        globalorderoffers={globalorderoffers}
-                                        title={t('payment.discountOptions')}
-                                        okPress={this.refreshOrder}
-                                        order={order}
-                                    />
-                                </View>}
+                            {!this.state.openScanView && <View style={{flex: 7, }}>
+                                {this.state.keyboardType === 'CASH' && <MoneyKeyboard
+                                    initialValue={0}
+                                    value={this.state.keyboardResult}
+                                    getResult={(result) => {this.setState({keyboardResult: result})}} />}
+                                {this.state.keyboardType === 'CARD' && <CardFourNumberKeyboard
+                                    initialValue={['0', '1', '2', '3']}
+                                    value={this.state.cardKeyboardResult}
+                                    getResult={(result) => {this.setState({cardKeyboardResult: result})}} />}
+                                {this.state.keyboardType === 'TAXID' && <CustomTitleAndDigitKeyboard
+                                    title={t('payment.enterTaxIDNumber')}
+                                    digit={8}
+                                    value={this.state.taxIDNumberKeyBoardResult}
+                                    getResult={(result) => {this.setState({taxIDNumberKeyBoardResult: result})}} />}
+                                {this.state.keyboardType === 'DISCOUNT' && <DiscountKeyboard
+                                    globalorderoffers={globalorderoffers}
+                                    title={t('payment.discountOptions')}
+                                    okPress={this.refreshOrder}
+                                    order={order}
+                                />}
+                                {this.state.keyboardType === 'ACCOUNT' && <CustomTitleAndDigitKeyboard
+                                    title={t(`membership.enterMembershipAccount`)}
+                                    digit={100}
+                                    value={this.state.accountKeyBoardResult}
+                                    getResult={(result) => {this.setState({accountKeyBoardResult: result})}} />}
                             </View>}
                             {this.state.openScanView && <View style={{flex: 7}}>
                                 <ScanView successCallback={(data) => {this.handleScanSuccess(data)}} />

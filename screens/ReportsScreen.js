@@ -8,6 +8,7 @@ import ScreenHeader from "../components/ScreenHeader";
 import MenuButton from "../components/MenuButton";
 import {withContext} from "../helpers/contextHelper";
 import {ThemeScrollView} from "../components/ThemeScrollView";
+import {ThemeContainer} from "../components/ThemeContainer";
 
 class ReportsScreen extends React.Component {
   static navigationOptions = {
@@ -41,11 +42,11 @@ class ReportsScreen extends React.Component {
     const {t} = this.context
 
     return (
-      <ThemeScrollView>
+      <ThemeContainer>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={false}
-                        parentFullScreen={true}
-                        title={t('menu.reporting')}
+            parentFullScreen={true}
+            title={t('menu.reporting')}
           />
 
           <View style={[styles.flex(1)]}>
@@ -59,8 +60,8 @@ class ReportsScreen extends React.Component {
                     size={40}
                     style={[styles.buttonIconStyle]}
                   />
-                }/>
-              <View style={styles.dynamicHorizontalPadding(6)}/>
+                } />
+              <View style={styles.dynamicHorizontalPadding(6)} />
               <MenuButton
                 onPress={() => this.props.navigation.navigate('StaffTimeCard')}
                 title={t('staffTimeCardReport')}
@@ -70,7 +71,7 @@ class ReportsScreen extends React.Component {
                     size={40}
                     style={[styles.buttonIconStyle]}
                   />
-                }/>
+                } />
             </View>
 
             <View style={[styles.menuContainer]}>
@@ -83,8 +84,8 @@ class ReportsScreen extends React.Component {
                     size={40}
                     style={[styles.buttonIconStyle]}
                   />
-                }/>
-              <View style={styles.dynamicHorizontalPadding(6)}/>
+                } />
+              <View style={styles.dynamicHorizontalPadding(6)} />
               <MenuButton
                 onPress={() => this.props.navigation.navigate('ShiftHistory')}
                 title={t('shiftHistory')}
@@ -94,11 +95,21 @@ class ReportsScreen extends React.Component {
                     size={40}
                     style={[styles.buttonIconStyle]}
                   />
-                }/>
+                } />
+            </View>
+            <View style={[styles.menuContainer]}>
+              <View style={{flex: 1}}></View>
+              <View style={styles.dynamicHorizontalPadding(6)} />
+              <View style={{flex: 1}}></View>
+            </View>
+            <View style={[styles.menuContainer]}>
+              <View style={{flex: 1}}></View>
+              <View style={styles.dynamicHorizontalPadding(6)} />
+              <View style={{flex: 1}}></View>
             </View>
           </View>
         </View>
-      </ThemeScrollView>
+      </ThemeContainer>
     )
   }
 }

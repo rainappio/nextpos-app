@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from 'react-redux'
 import {Animated, PanResponder, Text, TouchableOpacity, View, Dimensions} from "react-native";
 import ScreenHeader from "../components/ScreenHeader";
-import {api, dispatchFetchRequest} from '../constants/Backend'
+import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {getTableLayout} from '../actions'
 import styles from '../styles'
 import LoadingScreen from "./LoadingScreen";
@@ -147,7 +147,8 @@ class Draggable extends Component {
     this.state = {
       dropAreaValues: null,
       pan: new Animated.ValueXY(),
-      opacity: new Animated.Value(1)
+      opacity: new Animated.Value(1),
+      isInit: false
     };
   }
 
@@ -158,8 +159,30 @@ class Draggable extends Component {
       this.state.pan.setValue(getTablePosition(this.props.table, windowWidth, windowHeight))
     } else {
       this.state.pan.setValue(getInitialTablePosition(this.props.index, windowHeight))
+      const layoutId = this.props.layoutId;
+      const tableId = this.props.table.tableId;
+      const numberX = getInitialTablePosition(this.props.index, windowHeight).x;
+      const numberY = getInitialTablePosition(this.props.index, windowHeight).y;
+
+      dispatchFetchRequestWithOption(api.tablelayout.updateTablePosition(layoutId, tableId), {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({x: numberX / windowWidth, y: numberY / windowHeight})
+      }, {
+        defaultMessage: false
+      }, response => {
+        this.props.getTableLayout(layoutId)
+      }).then()
     }
+
+
   }
+
+
 
   UNSAFE_componentWillMount() {
     this.panResponder = PanResponder.create({

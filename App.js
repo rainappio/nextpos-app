@@ -152,7 +152,7 @@ export default class App extends React.Component {
   componentDidMount() {
     getTheme().then(async (theme) => {
       const themeStyle = theme === 'light' ? themes.light : themes.dark
-      const reverseThemeStyle = theme === 'light' ? themes.dark : themes.light
+      const reverseThemeStyle = theme === 'light' ? {...themes.light, borderColor: 'black'} : themes.light
       const isTablet = await Device.getDeviceTypeAsync();// 1=PHONE 2=TABLET
       this.changeScreenOrientation(isTablet);
       this.setState({
@@ -227,12 +227,13 @@ export default class App extends React.Component {
   toggleTheme = () => {
     const theme = this.state.theme === 'light' ? 'dark' : 'light'
     const themeStyleToChange = this.state.themeStyle === themes.dark ? themes.light : themes.dark
+    const reverseThemeStyle = theme === 'light' ? {...themes.light, borderColor: 'black'} : themes.light
     storeTheme(theme).then()
 
     this.setState({
       theme: theme,
       themeStyle: themeStyleToChange,
-      reverseThemeStyle: this.state.themeStyle,
+      reverseThemeStyle: reverseThemeStyle,
       complexTheme: complexTheme[theme]
     })
   }
