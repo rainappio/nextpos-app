@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux'
 import {Field, reduxForm} from 'redux-form'
-import {Text, TouchableOpacity, View} from 'react-native'
+import {Text, TouchableOpacity, View, Alert} from 'react-native'
 import {formatCurrency} from '../actions'
 import InputText from '../components/InputText'
 import styles, {mainThemeColor} from '../styles'
@@ -13,6 +13,9 @@ import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScro
 import {StyledText} from "../components/StyledText";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {ScanView} from '../components/scanView'
+import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
+import Modal from 'react-native-modal';
+import {isRequired} from '../validators'
 
 class PaymentOrderForm extends React.Component {
   static navigationOptions = {
@@ -49,6 +52,147 @@ class PaymentOrderForm extends React.Component {
         charged: '付款成功'
       }
     })
+
+    this.state = {
+      openScanView: false,
+      modalVisible: false,
+    }
+  }
+
+  handleCreateMember = (values, orderId) => {
+    let request = {
+      name: values?.name,
+      phoneNumber: values?.phoneNumber,
+    }
+    dispatchFetchRequestWithOption(api.membership.creat, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request)
+    }, {
+      defaultMessage: false
+    }, response => {
+      response.json().then(data => {
+        dispatchFetchRequestWithOption(api.membership.updateOrderMembership(orderId), {
+          method: 'POST',
+          withCredentials: true,
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({membershipId: data?.id})
+        }, {
+          defaultMessage: false
+        }, response => {
+          Alert.alert(
+            ``,
+            `${data?.phoneNumber} ${this.context.t(`membership.bindSuccessMsg`)}`,
+            [
+              {
+                text: `${this.context.t('action.yes')}`,
+                onPress: () => {
+                  this.setState({modalVisible: false})
+
+                }
+              },
+
+            ]
+          )
+        }).then()
+      })
+    }).then()
+  }
+
+  handleScanSuccess = (data) => {
+    this.props?.change(`carrierId`, data)
+    this.setState({openScanView: false})
+  }
+
+  handleSearchAccount = (acc, orderId) => {
+    if (acc === '') {
+      Alert.alert(
+        ``,
+        `${this.context.t(`membership.searchNullMsg`)}`,
+        [
+          {
+            text: `${this.context.t('action.yes')}`,
+            onPress: () => {
+              this.setState({modalVisible: true})
+            }
+          },
+          {
+            text: `${this.context.t('action.no')}`,
+            onPress: () => {},
+            style: 'cancel'
+          }
+        ]
+      )
+    }
+    else {
+      dispatchFetchRequestWithOption(api.membership.getByPhone(acc), {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {},
+      }, {
+        defaultMessage: false
+      }, response => {
+        response.json().then(data => {
+          if (data?.results?.length > 0) {
+            dispatchFetchRequestWithOption(api.membership.updateOrderMembership(orderId), {
+              method: 'POST',
+              withCredentials: true,
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({membershipId: data?.results[0]?.id})
+            }, {
+              defaultMessage: false
+            }, response => {
+              response.json().then(data2 => {
+                Alert.alert(
+                  ``,
+                  `${data?.results[0]?.phoneNumber} ${this.context.t(`membership.bindSuccessMsg`)}`,
+                  [
+                    {
+                      text: `${this.context.t('action.yes')}`,
+                      onPress: () => {}
+                    },
+
+                  ]
+                )
+
+              })
+            }).then()
+
+          } else {
+            Alert.alert(
+              ``,
+              `${this.context.t(`membership.searchNullMsg`)}`,
+              [
+                {
+                  text: `${this.context.t('action.yes')}`,
+                  onPress: () => {
+                    this.props?.change(`phoneNumber`, acc)
+                    this.setState({modalVisible: true})
+                  }
+                },
+                {
+                  text: `${this.context.t('action.no')}`,
+                  onPress: () => {},
+                  style: 'cancel'
+                }
+              ]
+            )
+          }
+        })
+      }).then()
+    }
+
   }
 
   render() {
@@ -82,54 +226,15 @@ class PaymentOrderForm extends React.Component {
     const {paymentsTypes, selectedPaymentType, paymentsTypeslbl, handlePaymentTypeSelection} = this.props
 
     const TaxInputAndBottomBtns = (props) => {
-      const [openScanView, setOpenScanView] = useState(false);
 
-      const handleScanSuccess = (data) => {
-        props?.change(`carrierId`, data)
-        setOpenScanView(false)
-      }
+
+
+
       return (
         <View >
-          <View style={styles.fieldContainer}>
-            <View style={{flex: 2}}>
-              <StyledText style={styles.fieldTitle}>{t('taxIDNumber')}</StyledText>
-            </View>
-            <View style={{flex: 3}}>
-              <Field
-                name="taxIdNumber"
-                component={InputText}
-                placeholder={t('enterTaxIDNumber')}
-                keyboardType={'numeric'}
-                extraStyle={{textAlign: 'left'}}
-              />
-            </View>
-          </View>
 
-          <View style={styles.fieldContainer}>
-            <View style={{flex: 2}}>
-              <StyledText style={styles.fieldTitle}>{t('payment.carrierId')}</StyledText>
-            </View>
-            <View style={{flex: 2}}>
-              <Field
-                name="carrierId"
-                component={InputText}
-                placeholder={t('payment.carrierId')}
-                extraStyle={{textAlign: 'left'}}
-              />
-            </View>
-            <View style={{flex: 1}}>
-              <TouchableOpacity style={{alignItems: 'center', }}
-                onPress={() => {
-                  setOpenScanView(!openScanView)
-                }}
-              >
-                <Icon style={{marginLeft: 10}} name="camera" size={24} color={mainThemeColor} />
-              </TouchableOpacity>
-            </View>
-          </View>
-          {openScanView && <View style={{flexDirection: 'column'}}>
-            <ScanView successCallback={(data) => {handleScanSuccess(data)}} style={{height: 320, width: '100%'}} />
-          </View>}
+
+
           <View style={styles.bottom}>
             <TouchableOpacity onPress={() => props.handleSubmit()}>
               <Text style={[styles.bottomActionButton, styles.actionButton]}>
@@ -158,6 +263,72 @@ class PaymentOrderForm extends React.Component {
             parentFullScreen={true}
             title={t('paymentMethodTitle')}
           />
+
+          <Modal
+            isVisible={this.state.modalVisible}
+            backdropOpacity={0.7}
+          >
+
+            <View style={{
+              borderRadius: 10,
+              width: '80%',
+              paddingTop: 20,
+              paddingHorizontal: 20,
+              minHeight: 200,
+              borderWidth: 5,
+              borderColor: mainThemeColor,
+              justifyContent: 'center',
+              alignSelf: 'center',
+            }}>
+              <View style={{flex: 1}}>
+                <View style={{flex: 1, }}>
+                  <Field
+                    name="name"
+                    component={InputText}
+                    placeholder={t(`membership.name`)}
+                    secureTextEntry={false}
+                    validate={isRequired}
+                  />
+                </View>
+                <View style={{flex: 1, }}>
+                  <Field
+                    name="phoneNumber"
+                    component={InputText}
+                    placeholder={t(`membership.phoneNumber`)}
+                    secureTextEntry={false}
+                    validate={isRequired}
+                  />
+                </View>
+                <View style={[{flexDirection: 'row', alignSelf: 'flex-end', flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end'}]}>
+                  <View style={{flex: 1, marginHorizontal: 5}}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.setState({modalVisible: false})
+                      }}
+                    >
+                      <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{flex: 1, marginHorizontal: 5}}>
+                    <TouchableOpacity
+                      onPress={handleSubmit(data => {
+
+                        this.handleCreateMember(data, order?.orderId)
+                      })}
+                    >
+                      <Text style={[[styles.bottomActionButton, styles.actionButton]]}>
+                        {t('action.save')}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+
+                </View>
+              </View>
+
+
+            </View>
+          </Modal>
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
@@ -315,10 +486,81 @@ class PaymentOrderForm extends React.Component {
               </View>
             }
 
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 2}}>
+                <StyledText style={styles.fieldTitle}>{t('taxIDNumber')}</StyledText>
+              </View>
+              <View style={{flex: 3}}>
+                <Field
+                  name="taxIdNumber"
+                  component={InputText}
+                  placeholder={t('enterTaxIDNumber')}
+                  keyboardType={'numeric'}
+                  extraStyle={{textAlign: 'left'}}
+                  secureTextEntry={false}
+                />
+              </View>
+            </View>
+
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 2}}>
+                <StyledText style={styles.fieldTitle}>{t('payment.carrierId')}</StyledText>
+              </View>
+              <View style={{flex: 2}}>
+                <Field
+                  name="carrierId"
+                  component={InputText}
+                  placeholder={t('payment.carrierId')}
+                  extraStyle={{textAlign: 'left'}}
+                />
+              </View>
+              <View style={{flex: 1}}>
+                <TouchableOpacity style={{alignItems: 'center', }}
+                  onPress={() => {
+                    this.setState({openScanView: !this.state?.openScanView})
+                  }}
+                >
+                  <Icon style={{marginLeft: 10}} name="camera" size={24} color={mainThemeColor} />
+                </TouchableOpacity>
+              </View>
+            </View>
+            {this.state?.openScanView && <View style={{flexDirection: 'column'}}>
+              <ScanView successCallback={(data) => {this.handleScanSuccess(data)}} style={{height: 320, width: '100%'}} />
+            </View>}
+
+
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 2}}>
+                <StyledText style={styles.fieldTitle}>{t(`membership.membershipAccount`)}</StyledText>
+              </View>
+              <View style={{flex: 2}}>
+                <Field
+                  name="phoneNumber"
+                  component={InputText}
+                  placeholder={t(`membership.membershipAccount`)}
+                  extraStyle={{textAlign: 'left'}}
+
+                />
+              </View>
+              <View style={{flex: 1}}>
+                <TouchableOpacity style={{alignItems: 'center', }}
+                  onPress={() => {
+                    this.props?.change(`phoneNumber`, (fieldValue) => {
+                      this.handleSearchAccount(fieldValue, this.props?.order?.orderId)
+                      return fieldValue
+                    })
+                  }}
+                >
+                  <Icon style={{marginLeft: 10}} name="search" size={24} color={mainThemeColor} />
+                </TouchableOpacity>
+              </View>
+            </View>
+
             <TaxInputAndBottomBtns
               handleSubmit={handleSubmit}
               navigation={this.props.navigation}
               change={this.props?.change}
+              order={order}
             />
 
           </View>
@@ -331,7 +573,8 @@ class PaymentOrderForm extends React.Component {
 const mapStateToProps = (state, props) => ({
   initialValues: {
     cash: '' + props.dynamicTotal,
-    paymentMethod: props.selectedPaymentType === 0 ? 'CASH' : 'CARD'
+    paymentMethod: props.selectedPaymentType === 0 ? 'CASH' : 'CARD',
+    phoneNumber: props?.order?.membership?.phoneNumber ?? undefined
   }
 })
 

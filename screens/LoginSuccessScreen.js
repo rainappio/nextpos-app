@@ -111,7 +111,6 @@ class LoginSuccessScreen extends React.Component {
     } = this.props
     const {t} = this.context
     const {username, loggedIn, tokenExpiry} = this.state
-    console.log('localClientStatus', client?.localClientStatus)
 
     if (isLoading) {
       return (

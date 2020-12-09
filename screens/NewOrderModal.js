@@ -55,7 +55,6 @@ const NewOrderModal = (props) => {
             isVisible={modalVisible}
             backdropOpacity={0.7}
             onBackdropPress={() => {props.closeModal()}}
-            useNativeDriver
         >
 
             <OrderForm

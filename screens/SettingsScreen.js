@@ -140,8 +140,20 @@ class SettingsScreen extends React.Component {
 
             </View>
 
-            <View style={{flex: 1, paddingBottom: 10}}>
+            <View style={{flex: 1, paddingBottom: 16}}>
               <View style={[styles.menuContainer]}>
+                <MenuButton
+                  onPress={() => this.props.navigation.navigate('MemberScreen')}
+                  title={t('settings.member')}
+                  icon={
+                    <FontAwesome5Icon
+                      name="user-cog"
+                      size={40}
+                      style={[styles.buttonIconStyle]}
+                    />
+                  }
+                />
+                <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
                   onPress={() => this.props.navigation.navigate('TableLayouts')}
                   title={t('settings.tableLayouts')}
@@ -153,7 +165,8 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
-                <View style={styles.dynamicHorizontalPadding(6)} />
+              </View>
+              <View style={[styles.menuContainer]}>
                 <MenuButton
                   onPress={() => this.props.navigation.navigate('PrinternKDS')}
                   title={t('settings.workingArea')}
@@ -165,9 +178,7 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
-              </View>
-
-              <View style={[styles.menuContainer]}>
+                <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
                   onPress={() => this.props.navigation.navigate('EinvoiceStatusScreen')}
                   title={t('settings.eInvoice')}
@@ -179,7 +190,9 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
-                <View style={styles.dynamicHorizontalPadding(6)} />
+              </View>
+
+              <View style={[styles.menuContainer]}>
                 <MenuButton
                   onPress={() => this.props.navigation.navigate('SubscriptionScreen')}
                   title={t('settings.subscription')}
@@ -191,9 +204,7 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
-              </View>
-
-              <View style={[styles.menuContainer]}>
+                <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
                   onPress={() => changeLanguage()}
                   title={t('settings.language')}
@@ -205,8 +216,6 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
-                <View style={styles.dynamicHorizontalPadding(6)} />
-                <View style={{flex: 1}}></View>
               </View>
 
               <View style={[styles.menuContainer]}>
@@ -214,6 +223,8 @@ class SettingsScreen extends React.Component {
                 <View style={styles.dynamicHorizontalPadding(6)} />
                 <View style={{flex: 1}}></View>
               </View>
+
+
             </View>
           </Pages>
         </View>

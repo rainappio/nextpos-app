@@ -37,6 +37,7 @@ const zh = {
     eInvoice: '電子發票',
     subscription: '訂閱',
     roster: '排班管理',
+    member: '會員管理'
   },
   newItem: {
     new: '新增',
@@ -306,6 +307,7 @@ const zh = {
       workingAreaInUse: '此工作區正在使用中',
       printerHasWorkingArea: '此出單機有使用中的工作區',
       optionInUse: '此註記正在使用中',
+      emptyTables: '請選擇桌位',
     }
   },
   eInvoice: {
@@ -315,7 +317,7 @@ const zh = {
     rangeFrom: '發票起號',
     rangeTo: '發票迄號',
     remainingInvoiceNumbers: '剩餘張數',
-    viewAllInvoice: '查看所有發票',
+    viewAllInvoice: '管理字軌號碼',
     ubn: '統一編號',
     setUBN: '設定統一編號',
     AES_KEY: '種子密碼',
@@ -368,6 +370,7 @@ const zh = {
       ACTIVE_LAPSING: '使用中(不續訂)',
       INACTIVE: '已失效',
       EXPIRED: '尚未選擇方案',
+      CANCELLED: '已取消'
     },
     planCode: {
       FREE: '免費'
@@ -398,6 +401,17 @@ const zh = {
     bind: '綁定會員',
     membershipAccount: '會員帳號',
     enterMembershipAccount: '請輸入會員帳號',
+  },
+  member: {
+    searchPrompt: '以聯絡電話搜尋',
+    MALE: '男',
+    FEMALE: '女',
+    name: '姓名',
+    phoneNumber: '聯絡電話',
+    gender: '性別',
+    birthday: '生日',
+    tags: '會員標籤',
+    createMember: '新增會員'
   },
   empty: '空',
 }

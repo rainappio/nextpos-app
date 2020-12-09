@@ -157,10 +157,10 @@ class OrderFormII extends React.Component {
       this.props.getOrder(this.props.navigation.state.params.orderId)
   }
 
-  PanelHeader = (labelName, labelId) => {
+  PanelHeader = (labelName, labelId, isSelected = false) => {
     return (
       <View style={styles.listPanel}>
-        <StyledText style={styles.listPanelText}>{labelName}</StyledText>
+        <StyledText style={{...styles.listPanelText, color: isSelected ? '#fff' : undefined}}>{labelName}</StyledText>
       </View>
     )
   }
@@ -507,30 +507,30 @@ class OrderFormII extends React.Component {
 
               <View style={{flexDirection: 'row', flex: 1}}>
                 {/* left list */}
-                <View style={[themeStyle, styles.orderItemSideBar]}>
+                <View style={[themeStyle, styles.orderItemSideBar, {borderColor: mainThemeColor, borderTopWidth: 1, paddingTop: 5}]}>
                   <ScrollView style={{flex: 1}}>
                     <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle,]}>
                       <TouchableOpacity style={[(this.state.selectedLabel === 'pinned' ? styles.selectedLabel : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: 'pinned'})}}>
-                        {this.PanelHeader(t('pinned'), '0')}
+                        {this.PanelHeader(t('pinned'), '0', this.state.selectedLabel === 'pinned')}
                       </TouchableOpacity>
                     </View>
 
                     {labels.map(lbl => (
                       <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle,]}>
                         <TouchableOpacity style={[(this.state.selectedLabel === lbl.label ? styles.selectedLabel : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: lbl.label})}}>
-                          {this.PanelHeader(lbl.label, '0')}
+                          {this.PanelHeader(lbl.label, '0', this.state.selectedLabel === lbl.label)}
                         </TouchableOpacity>
                       </View>
                     ))}
                     <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle,]}>
                       <TouchableOpacity style={[(this.state.selectedLabel === 'ungrouped' ? styles.selectedLabel : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: 'ungrouped'})}}>
-                        {this.PanelHeader(t('product.ungrouped'), '0')}
+                        {this.PanelHeader(t('product.ungrouped'), '0', this.state.selectedLabel === 'ungrouped')}
                       </TouchableOpacity>
                     </View>
                   </ScrollView>
                 </View>
                 {/* item box */}
-                <View style={[styles.orderItemBox, {borderRightWidth: 2, borderLeftWidth: 2, borderColor: '#b7b7b780'}]}>
+                <View style={[styles.orderItemBox, {borderRightWidth: 1, borderLeftWidth: 1, borderColor: mainThemeColor, borderTopWidth: 1, paddingTop: 5}]}>
                   <View style={{flex: 4}}>
                     <ScrollView style={{flex: 1}}>
 
@@ -538,16 +538,16 @@ class OrderFormII extends React.Component {
                         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get('pinned').map(prd => {
                           return (
 
-                            <TouchableOpacity style={[{width: '22%', borderWidth: 1, marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'gray'})]}
+                            <TouchableOpacity style={[{width: '22%', marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, {backgroundColor: '#d6d6d6'}, (prd?.outOfStock && {backgroundColor: 'gray'})]}
                               onPress={() => prd?.outOfStock ? this.handleItemOutOfStock(prd.id, prd?.outOfStock) : this.addItemToOrder(prd.id)}
                               onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}>
                               <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
                                 {prd?.outOfStock && <View style={{position: 'absolute', alignSelf: 'center'}} >
                                   <Icon name='cancel' color='white' style={[{fontSize: '100%', padding: 0, margin: 0}]} />
                                 </View>}
-                                <StyledText style={[reverseThemeStyle, {fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
-                                <StyledText style={[reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.description}</StyledText>
-                                <StyledText style={[reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>${prd.price}</StyledText>
+                                <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, {fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
+                                <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.description}</StyledText>
+                                <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>${prd.price}</StyledText>
                               </View>
                             </TouchableOpacity>
                           )
@@ -556,16 +556,16 @@ class OrderFormII extends React.Component {
                       {(this.state?.selectedLabel === 'ungrouped' && map.get('ungrouped') !== undefined && map.get('ungrouped')?.length > 0) ?
                         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get('ungrouped').map(prd => (
 
-                          <TouchableOpacity style={[{width: '22%', borderWidth: 1, marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'gray'})]}
+                          <TouchableOpacity style={[{width: '22%', marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, {backgroundColor: '#d6d6d6'}, (prd?.outOfStock && {backgroundColor: 'gray'})]}
                             onPress={() => prd?.outOfStock ? this.handleItemOutOfStock(prd.id, prd?.outOfStock) : this.addItemToOrder(prd.id)}
                             onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}>
                             <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
                               {prd?.outOfStock && <View style={{position: 'absolute', alignSelf: 'center'}} >
                                 <Icon name='cancel' color='white' style={[{fontSize: '100%', padding: 0, margin: 0}]} />
                               </View>}
-                              <StyledText style={[reverseThemeStyle, {fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
-                              <StyledText style={[reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.description}</StyledText>
-                              <StyledText style={[reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>${prd.price}</StyledText>
+                              <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, {fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
+                              <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.description}</StyledText>
+                              <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>${prd.price}</StyledText>
                             </View>
                           </TouchableOpacity>
                         ))}</View> : this.state?.selectedLabel === 'ungrouped' ? <StyledText style={{alignSelf: 'center'}}>{t('nothing')}</StyledText> : null}
@@ -577,7 +577,7 @@ class OrderFormII extends React.Component {
                               {(map.get(lbl.label) !== undefined && map.get(lbl.label)?.length > 0) ?
                                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get(lbl.label).map(prd => {
                                   return (
-                                    <TouchableOpacity style={[{width: '22%', marginLeft: '2%', marginBottom: '2%', borderRadius: 10, borderWidth: 1}, reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'gray'})]}
+                                    <TouchableOpacity style={[{width: '22%', marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, {backgroundColor: '#d6d6d6'}, (prd?.outOfStock && {backgroundColor: 'gray'})]}
                                       onPress={() => prd?.outOfStock ? this.handleItemOutOfStock(prd.id, prd?.outOfStock) : this.addItemToOrder(prd.id)}
                                       onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}
                                     >
@@ -586,9 +586,9 @@ class OrderFormII extends React.Component {
                                         {prd?.outOfStock && <View style={{position: 'absolute', alignSelf: 'center'}} >
                                           <Icon name='cancel' color='white' style={[{fontSize: '100%', padding: 0, margin: 0}]} />
                                         </View>}
-                                        <StyledText style={[reverseThemeStyle, {fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
-                                        <StyledText style={[reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.description}</StyledText>
-                                        <StyledText style={[reverseThemeStyle, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>${prd.price}</StyledText>
+                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, {fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
+                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.description}</StyledText>
+                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>${prd.price}</StyledText>
                                       </View>
                                     </TouchableOpacity>
                                   )
@@ -727,7 +727,7 @@ class OrderFormII extends React.Component {
                                 ? warningMessage(t('lineItemCountCheck'))
                                 : handleOrderSubmit(order.orderId)
                             }
-                            style={styles.flexButtonSecondAction}
+                            style={[styles.flexButtonSecondAction, {marginBottom: 3}]}
                           >
                             <Text style={styles.flexButtonSecondActionText}>
                               {t('submitOrder')}
@@ -830,7 +830,7 @@ class OrderFormII extends React.Component {
                                 ? warningMessage(t('lineItemCountCheck'))
                                 : handleOrderSubmit(order.orderId)
                             }
-                            style={styles.flexButtonSecondAction}
+                            style={[styles.flexButtonSecondAction, {marginBottom: 3}]}
                           >
                             <Text style={styles.flexButtonSecondActionText}>
                               {t('submitOrder')}
@@ -958,8 +958,8 @@ class OrderFormII extends React.Component {
                   </View>
                 </View>
 
-                <View style={styles.orderItemRightList}>
-                  <View style={{flex: 5}}>
+                <View style={[styles.orderItemRightList, {borderColor: mainThemeColor, borderTopWidth: 1, paddingTop: 5}]}>
+                  <View style={{flex: 5, borderBottomWidth: 1, borderColor: mainThemeColor, paddingLeft: 10}}>
                     <ScrollView style={{flex: 1}}>
                       {order?.lineItems?.length > 0 ?
                         order?.lineItems?.map((item, index) => {
@@ -999,21 +999,38 @@ class OrderFormII extends React.Component {
                                 </View>
                               </View>
 
-                              <TouchableOpacity style={[reverseThemeStyle, {marginBottom: '3%', borderRadius: 10, borderWidth: 1}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
+                              <TouchableOpacity style={[{backgroundColor: '#d6d6d6'}, {marginBottom: '3%', borderRadius: 8, }, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
                                 activeOpacity={0.8}
                                 onPress={() => {this.editItem(item.productId, item)}}>
                                 <View style={{aspectRatio: 2, alignItems: 'flex-start', flexDirection: 'row'}}>
                                   <View style={{flex: 2.5, flexDirection: 'column', paddingLeft: '3%', paddingTop: '3%'}}>
-                                    <StyledText style={[{...reverseThemeStyle, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price}</StyledText>
-                                    {!!item?.options && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
-                                    {!!item?.appliedOfferInfo && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
+                                    <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price}</StyledText>
+                                    {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
+                                    {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
                                   </View>
-                                  <View style={{position: 'absolute', bottom: '3%', left: '3%'}}>
-                                    <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>
+                                  <View style={{position: 'absolute', bottom: '3%', left: '3%', flexDirection: 'row'}}>
+                                    <View style={{marginRight: 5}}>
+                                      {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
+                                      {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && (
+                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
+                                      )}
+                                      {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
+                                      {item?.state === 'DELIVERED' && (
+                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
+                                      )}
+                                      {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
+                                    </View>
+                                    <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>
                                       {timeAgo.format(Date.now() - getTimeDifference(item?.createdDate), {flavour: 'narrow'})}
                                     </StyledText>
                                   </View>
-                                  <View style={{flexDirection: 'column', flex: 1, paddingRight: '3%', justifyContent: 'space-around', height: '100%', alignItems: 'flex-end', borderLeftWidth: 1}} >
+                                  <View style={{flexDirection: 'column', flex: 1, padding: '3%', justifyContent: 'space-between', height: '100%', alignItems: 'flex-end', borderLeftWidth: 1}} >
+
+                                    <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
+                                      <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{`${item.quantity}`}</StyledText>
+                                      <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>${item.lineItemSubTotal}</StyledText>
+                                    </View>
+
                                     {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && <TouchableOpacity
                                       onPress={() => {
                                         this.setState({
@@ -1021,22 +1038,10 @@ class OrderFormII extends React.Component {
                                         });
                                         this.toggleOrderLineItem(item.lineItemId);
                                       }}
+                                      style={{width: '100%', }}
                                     >
-                                      <StyledText style={{...reverseThemeStyle, padding: 5, backgroundColor: 'gray', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1}}>{t('choose')}</StyledText>
+                                      <StyledText style={{...{backgroundColor: '#d6d6d6', color: '#fff'}, padding: 5, backgroundColor: '#808080', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1, width: '100%', textAlign: 'center'}}>{t('choose')}</StyledText>
                                     </TouchableOpacity>}
-                                    <View>
-                                      {item?.state === 'OPEN' && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
-                                      {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && (
-                                        <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
-                                      )}
-                                      {item?.state === 'PREPARED' && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
-                                      {item?.state === 'DELIVERED' && (
-                                        <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
-                                      )}
-                                      {item?.state === 'SETTLED' && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
-                                    </View>
-                                    <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{`X${item.quantity}`}</StyledText>
-                                    <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.lineItemSubTotal}</StyledText>
                                   </View>
                                 </View>
                               </TouchableOpacity>
@@ -1046,7 +1051,7 @@ class OrderFormII extends React.Component {
                         : <StyledText style={{alignSelf: 'center'}}>{t('nothing')}</StyledText>}
                     </ScrollView>
                   </View>
-                  <View style={{flex: 1, marginVertical: 5, justifyContent: 'space-between'}}>
+                  <View style={{flex: 1, marginVertical: 5, justifyContent: 'space-between', paddingLeft: 10}}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                       <StyledText >{t('order.subtotal')}</StyledText>
                       <StyledText >${order?.total?.amountWithTax}</StyledText>

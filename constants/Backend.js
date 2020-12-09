@@ -467,6 +467,9 @@ export const api = {
     remove: (pid, eid) => {
       return `${apiRoot}/rosterPlans/${pid}/events/${eid}/remove`
     },
+    editResources: (pid, eid) => {
+      return `${apiRoot}/rosterPlans/${pid}/events/${eid}/resources`
+    },
   },
   membership: {
     get: (id) => {
@@ -481,6 +484,10 @@ export const api = {
     },
     updateOrderMembership: (orderId) => {
       return `${apiRoot}/orders/${orderId}/membership`
+    },
+    getMembers: `${apiRoot}/memberships`,
+    deleteById: (id) => {
+      return `${apiRoot}/memberships/${id}`
     },
   },
 }

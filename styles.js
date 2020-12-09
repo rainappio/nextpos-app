@@ -23,10 +23,10 @@ export default StyleSheet.create({
     marginBottom: 23
   },
   selectedLabel: {
-    backgroundColor: '#9f9e9e',
+    backgroundColor: mainThemeColor,
     borderRadius: 10,
     paddingLeft: 10,
-    borderWidth: 2
+    paddingVertical: 3,
   },
   childContainer: {
     flex: 1,
@@ -51,7 +51,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
     marginTop: 8,
     marginBottom: 5,
-    marginLeft: 10,
     marginRight: 5
   },
   rootInput: {

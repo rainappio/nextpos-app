@@ -54,7 +54,7 @@ class SubscriptionScreen extends React.Component {
             },
         }, response => {
             response.json().then(data => {
-                this.setState({plans: data})
+                this.setState({plans: data?.results})
             })
         }).then()
     }
@@ -102,6 +102,7 @@ class SubscriptionScreen extends React.Component {
         const {isLoading} = this.props
         const {themeStyle, t} = this.context
         const labels = [t('subscription.submitted'), t('subscription.activated')];
+        console.log('this.state?.plans', this.state?.plans)
 
         if (isLoading) {
             return (
@@ -143,7 +144,7 @@ class SubscriptionScreen extends React.Component {
                                             >
                                                 <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: mainThemeColor, paddingBottom: 15, marginBottom: 15}}>
                                                     <StyledText style={{flex: 1, textAlign: 'left'}}>{item?.planName}</StyledText>
-                                                    <StyledText style={{flex: 1, textAlign: 'right'}}>${item?.planPrices?.MONTHLY?.planMonthlyPrice}</StyledText>
+                                                    <StyledText style={{flex: 1, textAlign: 'right'}}>${item?.planPrices?.MONTHLY}</StyledText>
                                                 </View>
                                                 <View style={{flexDirection: 'row', flex: 1}}>
                                                     <View style={{flex: 2, flexDirection: 'column', paddingRight: 15}}>

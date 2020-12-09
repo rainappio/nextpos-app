@@ -10,6 +10,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import TimeZoneService from "../helpers/TimeZoneService";
 import moment from "moment-timezone";
 import {MainActionFlexButton, DeleteFlexButton} from "../components/ActionButtons";
+import UserSelectModal from "../screens/UserSelectModal";
 
 /*
    Date   : 2020-12-03
@@ -27,6 +28,7 @@ export const CalendarEvent = (props) => {
     const timezone = TimeZoneService.getTimeZone()
 
     const [event, setEvent] = useState(props?.event ?? null);
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         setEvent(props?.event ?? null)
@@ -43,6 +45,24 @@ export const CalendarEvent = (props) => {
             },
         }, response => {
             response.json().then(data => {
+                setEvent(data)
+            })
+        }).then()
+    }
+
+    const handleAssignUsers = (pid, eid, users) => {
+        console.log('handleAssignUsers', pid, eid, users)
+        dispatchFetchRequest(api.roster.editResources(pid, eid), {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({usernames: users})
+        }, response => {
+            response.json().then(data => {
+                console.log('handleAssignUses', data)
                 setEvent(data)
             })
         }).then()
@@ -65,6 +85,17 @@ export const CalendarEvent = (props) => {
 
     return (
         <View key={event?.id} style={{flexDirection: 'row', borderWidth: 1, borderRadius: 10, borderColor: mainThemeColor, margin: 10, maxWidth: 640, alignSelf: 'center', padding: 10}}>
+
+            <UserSelectModal
+                modalVisible={modalVisible}
+                submitOrder={(data) => {
+                    setModalVisible(false)
+                    handleAssignUsers(event?.eventOwner?.ownerId, event?.id, data)
+                }}
+                closeModal={() => {setModalVisible(false)}}
+                eventData={event}
+                data={props?.users} />
+
             <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1}}>
                 <FontAwesome5Icon
                     name={event?.eventType === 'ROSTER' ? "business-time" : 'utensils'}
@@ -91,16 +122,16 @@ export const CalendarEvent = (props) => {
 
             </View>
             <View style={{flexDirection: 'column', alignItems: 'stretch', justifyContent: 'center', flex: 1}}>
-                <View style={{flex: 1, minHeight: 48}}>
+                <View style={{height: 48}}>
                     <MainActionFlexButton
                         title={localeContext.t('calendarEvent.assign')}
-                        onPress={() => {handleAssign(event?.eventOwner?.ownerId, event?.id)}} />
+                        onPress={() => {props?.isManager ? setModalVisible(true) : handleAssign(event?.eventOwner?.ownerId, event?.id)}} />
                 </View>
-                <View style={{flex: 1, minHeight: 48, marginTop: 5}}>
+                {props?.isManager || <View style={{flex: 1, minHeight: 48, marginTop: 5}}>
                     <DeleteFlexButton
                         title={localeContext.t('calendarEvent.remove')}
-                        onPress={() => {handleRemove(event?.eventOwner?.ownerId, event?.id)}} />
-                </View>
+                        onPress={() => {props?.isManager ? setModalVisible(true) : handleRemove(event?.eventOwner?.ownerId, event?.id)}} />
+                </View>}
             </View>
         </View>
     );

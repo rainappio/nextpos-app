@@ -126,7 +126,7 @@ export const MoneyKeyboard = (props) => {
                     <Text >{localeContext.t('keyboardAction.clean')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleDeletePress()} style={styles.buttomButton}>
-                    <Icon name="backspace" size='50%' color="#505050" />
+                    <Icon name="backspace" size={48} color="#505050" />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleOkPress()} style={styles.buttomButton}>
                     <Text >{localeContext.t('keyboardAction.ok')}</Text>
@@ -340,7 +340,7 @@ export const DiscountKeyboard = (props) => {
                         <Text >{localeContext.t('keyboardAction.back')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleDeletePress()} style={styles.buttomButton}>
-                        <Icon name="backspace" size='50%' color="#505050" />
+                        <Icon name="backspace" size={48} color="#505050" />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleOkPress()} style={styles.buttomButton}>
                         <Text >{localeContext.t('keyboardAction.ok')}</Text>
@@ -472,7 +472,7 @@ export const CardFourNumberKeyboard = (props) => {
                         <Text>0</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleDeletePress()} style={styles.buttomButton}>
-                        <Icon name="backspace" size='50%' color="#505050" />
+                        <Icon name="backspace" size={48} color="#505050" />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -595,7 +595,7 @@ export const CustomTitleAndDigitKeyboard = (props) => {
                         <Text>0</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleDeletePress()} style={styles.buttomButton}>
-                        <Icon name="backspace" size='50%' color="#505050" />
+                        <Icon name="backspace" size={48} color="#505050" />
                     </TouchableOpacity>
                 </View>
             </View>
