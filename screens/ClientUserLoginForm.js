@@ -75,8 +75,7 @@ class ClientUserLoginForm extends React.Component {
                   </TouchableOpacity>
                 </View>
               </View>
-            ) : (isTablet ?
-              <View style={{width: 400, height: 600, alignSelf: 'center'}}>
+            ) : <View style={{maxWidth: 400, maxHeight: 600, alignSelf: 'center'}}>
                 <CardFourNumberKeyboard
                   initialValue={[]}
                   value={this.state.cardKeyboardResult}
@@ -85,19 +84,7 @@ class ClientUserLoginForm extends React.Component {
                     if (result.length === 4 && !result.some((item) => {return item === ''}))
                       this.props.onSubmit({username: clientusersName, password: result.join('')})
                   }} />
-              </View>
-              : <View style={[styles.sectionContainer, styles.flex(1)]}>
-                <Field
-                  name="password"
-                  component={PinCodeInput}
-                  onChange={val => {
-                    if (val.length === 4)
-                      this.props.onSubmit({username: clientusersName, password: val})
-                  }}
-                  customHeight={60}
-                />
-              </View>
-              )}
+              </View>}
           </View>
         </View>
       </ThemeScrollView>

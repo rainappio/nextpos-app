@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Modal, Text, TouchableOpacity, View} from 'react-native'
+import {Text, TouchableOpacity, View} from 'react-native'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 import moment from 'moment-timezone'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -7,9 +7,27 @@ import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import TimeZoneService from "../helpers/TimeZoneService";
 import {withContext} from "../helpers/contextHelper";
+import Modal from 'react-native-modal';
 
 class RenderDateTimePicker extends Component {
 	static contextType = LocaleContext
+
+	constructor(props, context) {
+		super(props, context)
+		this.state = {
+			result: !!this.props?.input?.value ? this.props?.input?.value : new Date()
+		}
+	}
+
+	handleChange = (result) => {
+		this.setState({result: result})
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if (prevProps?.isShow !== this.props?.isShow && this.props?.isShow) {
+			this.setState({result: !!this.props?.input?.value ? this.props?.input?.value : new Date()})
+		}
+	}
 
 	render() {
 		const {
@@ -38,26 +56,37 @@ class RenderDateTimePicker extends Component {
 		return (
 			<View style={{flex: 1}}>
 				<View>
-					{Platform.OS === 'ios' ? <Modal transparent={true}
-						visible={isShow}
+					{Platform.OS === 'ios' ? <Modal
+						isVisible={isShow}
+						useNativeDriver
+						hideModalContentWhileAnimating
+						animationIn='bounceIn'
+						animationOut='bounceOut'
+						onBackdropPress={() => showDatepicker()}
+						style={{
+							margin: 0, flex: 1,
+							alignItems: 'center',
+							flexDirection: 'row',
+						}}
 					>
-						<View style={{flex: 1, backgroundColor: '#c5c5c5', justifyContent: 'center', alignContent: 'center'}}>
-							<Text style={styles.screenTitle}>{t('datetimeRange.pickerTitle')}</Text>
+						<View style={{backgroundColor: 'white', borderRadius: 10, paddingHorizontal: 10}}>
 
 							<RNDateTimePicker
 								testID="dateTimePicker"
-								value={value}
+								style={{minWidth: 320}}
+								value={!!value ? this.state?.result : new Date()}
 								mode={"datetime"}
 								is24Hour={true}
 								display="inline"
 								onChange={(e, selectedDate) => {
 									console.log(`on change date: ${selectedDate} ${e.nativeEvent.timestamp}`)
 
-									onChange(new Date(e.nativeEvent?.timestamp ?? value))
+									this.handleChange(new Date(e.nativeEvent?.timestamp ?? value))
 								}}
 							/>
 							<TouchableOpacity
 								onPress={() => {
+									onChange(this.state?.result)
 									showDatepicker();
 								}}
 							>
@@ -67,7 +96,7 @@ class RenderDateTimePicker extends Component {
 					</Modal> :
 						isShow && <RNDateTimePicker
 							testID="dateTimePicker"
-							value={value}
+							value={!!value ? this.state?.result : new Date()}
 							mode={"date"}
 							is24Hour={true}
 							display="calendar"
@@ -121,11 +150,29 @@ export default withContext(RenderDateTimePicker)
 class RenderTimePickerBase extends Component {
 	static contextType = LocaleContext
 
+	constructor(props, context) {
+		super(props, context)
+		this.state = {
+			result: !!this.props?.input?.value ? this.props?.input?.value : new Date()
+		}
+	}
+
 	componentDidMount() {
 		this.props?.input?.onChange(
 			!!this.props?.input?.value ? this.props?.input?.value
 				: !!this.props?.defaultValue ? this.props?.defaultValue : new Date())
 	}
+
+	handleChange = (result) => {
+		this.setState({result: result})
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if (prevProps?.isShow !== this.props?.isShow && this.props?.isShow) {
+			this.setState({result: !!this.props?.input?.value ? this.props?.input?.value : new Date()})
+		}
+	}
+
 
 	render() {
 		const {
@@ -155,36 +202,51 @@ class RenderTimePickerBase extends Component {
 		return (
 			<View style={{flex: 1}}>
 				<View>
-					{Platform.OS === 'ios' ? <Modal transparent={true}
-						visible={isShow}
-					>
-						<View style={{flex: 1, backgroundColor: '#c5c5c5', justifyContent: 'center', alignContent: 'center'}}>
-							<Text style={styles.screenTitle}>{t('datetimeRange.pickerTitle')}</Text>
+					{Platform.OS === 'ios' ?
+						<Modal
+							isVisible={isShow}
+							useNativeDriver
+							hideModalContentWhileAnimating
+							animationIn='bounceIn'
+							animationOut='bounceOut'
+							onBackdropPress={() => showDatepicker()}
+							style={{
+								margin: 0, flex: 1,
+								alignItems: 'center',
+								flexDirection: 'row',
+							}}
+						>
 
-							<RNDateTimePicker
-								testID="dateTimePicker"
-								value={!!value ? value : new Date()}
-								mode={mode ?? "time"}
-								is24Hour={true}
-								display="inline"
-								onChange={(e, selectedDate) => {
-									console.log(`on change date: ${selectedDate} ${e.nativeEvent.timestamp}`)
 
-									onChange(new Date(e.nativeEvent?.timestamp ?? value))
-								}}
-							/>
-							<TouchableOpacity
-								onPress={() => {
-									showDatepicker();
-								}}
-							>
-								<Text style={[styles.bottomActionButton, styles.actionButton]}>{t('datetimeRange.select')}</Text>
-							</TouchableOpacity>
-						</View>
-					</Modal> :
+							<View style={{backgroundColor: 'white', borderRadius: 10, paddingHorizontal: 10}}>
+								<RNDateTimePicker
+									style={{minWidth: 320}}
+									testID="dateTimePicker"
+									value={!!value ? this.state?.result : new Date()}
+									mode={mode ?? "time"}
+									is24Hour={true}
+									display="inline"
+									onChange={(e, selectedDate) => {
+										console.log(`on change date: ${selectedDate} ${e.nativeEvent.timestamp}`)
+
+										this.handleChange(new Date(e.nativeEvent?.timestamp ?? value))
+									}}
+								/>
+								<TouchableOpacity
+									onPress={() => {
+										onChange(this.state?.result)
+										showDatepicker();
+									}}
+								>
+									<Text style={[styles.bottomActionButton, styles.actionButton]}>{t('datetimeRange.select')}</Text>
+								</TouchableOpacity>
+							</View>
+
+
+						</Modal> :
 						isShow && <RNDateTimePicker
 							testID="dateTimePicker"
-							value={!!value ? value : new Date()}
+							value={!!value ? this.state?.result : new Date()}
 							mode={mode ?? "time"}
 							is24Hour={true}
 							display="default"
@@ -230,7 +292,7 @@ class RenderTimePickerBase extends Component {
 						</TouchableOpacity>
 					</View>
 				</View>
-			</View>
+			</View >
 		)
 	}
 }
@@ -240,10 +302,27 @@ export const RenderTimePicker = withContext(RenderTimePickerBase)
 class RenderDatePickerBase extends Component {
 	static contextType = LocaleContext
 
+	constructor(props, context) {
+		super(props, context)
+		this.state = {
+			result: !!this.props?.input?.value ? this.props?.input?.value : new Date()
+		}
+	}
+
 	componentDidMount() {
 		this.props?.input?.onChange(
 			!!this.props?.input?.value ? this.props?.input?.value
 				: !!this.props?.defaultValue ? this.props?.defaultValue : new Date())
+	}
+
+	handleChange = (result) => {
+		this.setState({result: result})
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if (prevProps?.isShow !== this.props?.isShow && this.props?.isShow) {
+			this.setState({result: !!this.props?.input?.value ? this.props?.input?.value : new Date()})
+		}
 	}
 
 	render() {
@@ -274,26 +353,38 @@ class RenderDatePickerBase extends Component {
 		return (
 			<View style={{flex: 1}}>
 				<View>
-					{Platform.OS === 'ios' ? <Modal transparent={true}
-						visible={isShow}
+					{Platform.OS === 'ios' ? <Modal
+						isVisible={isShow}
+						useNativeDriver
+						hideModalContentWhileAnimating
+						animationIn='bounceIn'
+						animationOut='bounceOut'
+						onBackdropPress={() => showDatepicker()}
+						style={{
+							margin: 0, flex: 1,
+							alignItems: 'center',
+							flexDirection: 'row',
+						}}
 					>
-						<View style={{flex: 1, backgroundColor: '#c5c5c5', justifyContent: 'center', alignContent: 'center'}}>
-							<Text style={styles.screenTitle}>{t('datetimeRange.pickerTitle')}</Text>
+
+						<View style={{backgroundColor: 'white', borderRadius: 10, paddingHorizontal: 10}}>
 
 							<RNDateTimePicker
+								style={{minWidth: 320}}
 								testID="dateTimePicker"
-								value={!!value ? value : new Date()}
+								value={!!value ? this.state?.result : new Date()}
 								mode={mode ?? "date"}
 								is24Hour={true}
 								display="inline"
 								onChange={(e, selectedDate) => {
 									console.log(`on change date: ${selectedDate} ${e.nativeEvent.timestamp}`)
 
-									onChange(new Date(e.nativeEvent?.timestamp ?? value))
+									this.handleChange(new Date(e.nativeEvent?.timestamp ?? value))
 								}}
 							/>
 							<TouchableOpacity
 								onPress={() => {
+									onChange(this.state?.result)
 									showDatepicker();
 								}}
 							>
@@ -303,7 +394,7 @@ class RenderDatePickerBase extends Component {
 					</Modal> :
 						isShow && <RNDateTimePicker
 							testID="dateTimePicker"
-							value={!!value ? value : new Date()}
+							value={!!value ? this.state?.result : new Date()}
 							mode={mode ?? "date"}
 							is24Hour={true}
 							display="default"

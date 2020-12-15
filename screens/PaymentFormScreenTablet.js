@@ -383,6 +383,8 @@ class PaymentFormScreenTablet extends React.Component {
                     <Modal
                         isVisible={this.state.modalVisible}
                         backdropOpacity={0.7}
+                        useNativeDriver
+                        hideModalContentWhileAnimating
                     >
                         <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={-80} style={{flex: 1, justifyContent: 'center'}}>
                             <View style={{

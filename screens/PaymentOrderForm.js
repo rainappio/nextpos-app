@@ -267,6 +267,8 @@ class PaymentOrderForm extends React.Component {
           <Modal
             isVisible={this.state.modalVisible}
             backdropOpacity={0.7}
+            useNativeDriver
+            hideModalContentWhileAnimating
           >
 
             <View style={{

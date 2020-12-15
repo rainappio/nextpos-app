@@ -113,6 +113,7 @@ const PaymentDiscountModal = (props) => {
             backdropOpacity={0.7}
             onBackdropPress={() => props.closeModal()}
             useNativeDriver
+            hideModalContentWhileAnimating
         >
 
             <View style={{

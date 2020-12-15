@@ -204,8 +204,8 @@ class StaffFormScreen extends React.Component {
                 />
               </View>
             </View>
-
-            <View style={styles.tableRowContainerWithBorder}>
+            {/* wait api done */}
+            {/* <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, styles.flex(1)]}>
                 <StyledText style={styles.fieldTitle}>{t('roleId')}</StyledText>
               </View>
@@ -220,10 +220,10 @@ class StaffFormScreen extends React.Component {
                   fluid
                 />
               </View>
-            </View>
+            </View> */}
           </View>
-
-          <View style={styles.tableRowContainerWithBorder}>
+          {/* wait api done */}
+          {/* <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, styles.flex(1)]}>
               <StyledText style={styles.fieldTitle}>{t('editRole')}</StyledText>
             </View>
@@ -234,7 +234,7 @@ class StaffFormScreen extends React.Component {
                 onPress={() => this.props.navigation.navigate('ManageUserRole')}
               />
             </View>
-          </View>
+          </View> */}
 
           <View style={[styles.bottom, styles.horizontalMargin]}>
             <TouchableOpacity onPress={handleSubmit}>

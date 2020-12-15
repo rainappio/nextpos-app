@@ -7,7 +7,8 @@ import {
   View,
   AsyncStorage,
   YellowBox,
-  Dimensions
+  Dimensions,
+  LogBox
 } from 'react-native';
 if (Platform.OS === "android") {
   // See https://github.com/expo/expo/issues/6536 for this issue.
@@ -50,11 +51,14 @@ import * as Device from 'expo-device';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 
-YellowBox.ignoreWarnings([
+
+
+LogBox.ignoreLogs([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
   'Warning: componentWillReceiveProps',
-  'Warning: componentWillMount'
-])
+  'Warning: componentWillMount',
+  'Warning: Each child'
+]);
 
 Sentry.init({
   dsn: 'https://b5c10cbde6414c0292495c58e7b699d3@sentry.io/5174447',
