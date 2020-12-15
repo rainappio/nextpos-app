@@ -300,7 +300,7 @@ class PaymentFormScreenTablet extends React.Component {
 
     }
 
-    handleCreatMember = (values, orderId) => {
+    handleCreateMember = (values, orderId) => {
         let request = {
             name: values?.name,
             phoneNumber: values?.phoneNumber,
@@ -317,7 +317,7 @@ class PaymentFormScreenTablet extends React.Component {
             defaultMessage: false
         }, response => {
             response.json().then(data => {
-                console.log('handleCreatMember', data)
+                console.log('handleCreateMember', data)
                 dispatchFetchRequestWithOption(api.membership.updateOrderMembership(orderId), {
                     method: 'POST',
                     withCredentials: true,
@@ -429,7 +429,7 @@ class PaymentFormScreenTablet extends React.Component {
                                             <TouchableOpacity
                                                 onPress={handleSubmit(data => {
 
-                                                    this.handleCreatMember(data, order?.orderId)
+                                                    this.handleCreateMember(data, order?.orderId)
                                                 })}
                                             >
                                                 <Text style={[[styles.bottomActionButton, styles.actionButton]]}>
@@ -620,15 +620,15 @@ class PaymentFormScreenTablet extends React.Component {
 
                                             <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end', }]}>
                                                 <TouchableOpacity onPress={() => this.setState({selectedCardLabel: 'OTHER'})} style={styles.cardLabel(this.state.selectedCardLabel === 'OTHER')}>
-                                                    <Icon name="credit-card" size='25%' color={mainThemeColor} />
+                                                    <Icon name="credit-card" size={24} color={mainThemeColor} />
                                                     <StyledText>Other</StyledText>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity onPress={() => this.setState({selectedCardLabel: 'VISA'})} style={styles.cardLabel(this.state.selectedCardLabel === 'VISA')}>
-                                                    <Icon name="cc-visa" size='25%' color={mainThemeColor} />
+                                                    <Icon name="cc-visa" size={24} color={mainThemeColor} />
                                                     <StyledText>Visa</StyledText>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity onPress={() => this.setState({selectedCardLabel: 'MASTER'})} style={styles.cardLabel(this.state.selectedCardLabel === 'MASTER')}>
-                                                    <Icon name="cc-mastercard" size='25%' color={mainThemeColor} />
+                                                    <Icon name="cc-mastercard" size={24} color={mainThemeColor} />
                                                     <StyledText>MasterCard</StyledText>
                                                 </TouchableOpacity>
 

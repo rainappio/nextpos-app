@@ -216,19 +216,19 @@ class SpiltBillScreen extends React.Component {
                                         <StyledText> ({order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')})</StyledText>
                                     </View>
                                 </View>
-                                <View style={{flex: 7}}>
+                                <View style={{flex: 7, paddingRight: 16}}>
                                     <ScrollView style={{flex: 1}}>
                                         {order?.lineItems?.length > 0 ?
                                             order?.lineItems?.map((item, index) => {
                                                 return (
-                                                    <TouchableOpacity style={[reverseThemeStyle, {marginBottom: 16, borderRadius: 10, borderWidth: 1}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
+                                                    <TouchableOpacity style={[{backgroundColor: '#d6d6d6'}, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
                                                         activeOpacity={0.8}
                                                         onPress={() => {this.addItem(item)}}>
                                                         <View style={{aspectRatio: 3, alignItems: 'center', flexDirection: 'row'}}>
                                                             <View style={{flex: 2.5, flexDirection: 'column', paddingLeft: '3%'}}>
-                                                                <StyledText style={[{...reverseThemeStyle, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price} {`X${item.quantity}`}</StyledText>
-                                                                {!!item?.options && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
-                                                                {!!item?.appliedOfferInfo && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
+                                                                <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price} {`X${item.quantity}`}</StyledText>
+                                                                {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
+                                                                {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
                                                             </View>
                                                             <View style={{flexDirection: 'column', flex: 1, paddingRight: '3%', justifyContent: 'space-around', height: '100%', alignItems: 'flex-end', borderLeftWidth: 1}} >
                                                                 {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && <TouchableOpacity
@@ -239,20 +239,20 @@ class SpiltBillScreen extends React.Component {
                                                                         this.toggleOrderLineItem(item.lineItemId);
                                                                     }}
                                                                 >
-                                                                    <StyledText style={{...reverseThemeStyle, padding: 5, backgroundColor: 'gray', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1}}>{t('choose')}</StyledText>
+                                                                    <StyledText style={{...{backgroundColor: '#d6d6d6', color: '#000'}, padding: 5, backgroundColor: 'gray', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1}}>{t('choose')}</StyledText>
                                                                 </TouchableOpacity>}
                                                                 <View>
-                                                                    {item?.state === 'OPEN' && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
+                                                                    {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
                                                                     {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && (
-                                                                        <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
+                                                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
                                                                     )}
-                                                                    {item?.state === 'PREPARED' && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
+                                                                    {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
                                                                     {item?.state === 'DELIVERED' && (
-                                                                        <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
+                                                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
                                                                     )}
-                                                                    {item?.state === 'SETTLED' && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
+                                                                    {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
                                                                 </View>
-                                                                <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.lineItemSubTotal}</StyledText>
+                                                                <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.lineItemSubTotal}</StyledText>
                                                             </View>
                                                         </View>
                                                     </TouchableOpacity>
@@ -262,7 +262,7 @@ class SpiltBillScreen extends React.Component {
                                             : <StyledText style={{alignSelf: 'center'}}>{t('splitBill.nothing')}</StyledText>}
                                     </ScrollView>
                                 </View>
-                                <View style={{flex: 1, marginVertical: 5, justifyContent: 'space-between'}}>
+                                <View style={{flex: 1, marginVertical: 5, justifyContent: 'space-between', paddingRight: 16, borderTopWidth: 1, borderColor: mainThemeColor, paddingTop: 8}}>
                                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                                         <StyledText >{t('order.subtotal')}</StyledText>
                                         <StyledText >${order?.total?.amountWithTax}</StyledText>
@@ -287,12 +287,14 @@ class SpiltBillScreen extends React.Component {
                                 justifyContent: 'center',
                                 marginTop: 8,
                                 marginBottom: 5,
-                                marginLeft: 32
+                                borderLeftWidth: 1,
+                                borderColor: mainThemeColor
                             }}>
                                 <View style={{
                                     flexDirection: 'row',
                                     justifyContent: 'flex-start',
                                     alignItems: 'center',
+                                    paddingLeft: 16
                                 }}>
                                     <Text style={[styles.sectionBarText, styles.tableRowContainer, {paddingLeft: 0}]}>
                                         {t('splitBill.splitOrder')}
@@ -306,7 +308,7 @@ class SpiltBillScreen extends React.Component {
                                 <View style={{flex: 1}}>
                                     {!!this.state.splitOrderData && !!this.state.splitOrderId &&
                                         <>
-                                            <View style={{flex: 7}}>
+                                            <View style={{flex: 7, paddingLeft: 16}}>
                                                 <ScrollView style={{flex: 1}}>
                                                     {this.state.splitOrderData?.lineItems?.length > 0 ?
                                                         this.state.splitOrderData?.lineItems?.map((item, index) => {
@@ -314,14 +316,14 @@ class SpiltBillScreen extends React.Component {
 
 
 
-                                                                <TouchableOpacity style={[reverseThemeStyle, {marginBottom: 16, borderRadius: 10, borderWidth: 1}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
+                                                                <TouchableOpacity style={[{backgroundColor: '#d6d6d6', color: '#000'}, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
                                                                     activeOpacity={0.8}
                                                                     onPress={() => {this.deleteItem(item)}}>
                                                                     <View style={{aspectRatio: 6, alignItems: 'center', flexDirection: 'row'}}>
                                                                         <View style={{flex: 2.5, flexDirection: 'column', paddingLeft: '3%'}}>
-                                                                            <StyledText style={[{...reverseThemeStyle, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price} {`X${item.quantity}`}</StyledText>
-                                                                            {!!item?.options && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
-                                                                            {!!item?.appliedOfferInfo && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
+                                                                            <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price} {`X${item.quantity}`}</StyledText>
+                                                                            {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
+                                                                            {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
                                                                         </View>
                                                                         <View style={{flexDirection: 'column', flex: 1, paddingRight: '3%', justifyContent: 'space-around', height: '100%', alignItems: 'flex-end', borderLeftWidth: 1}} >
                                                                             {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && <TouchableOpacity
@@ -332,21 +334,21 @@ class SpiltBillScreen extends React.Component {
                                                                                     this.toggleOrderLineItem(item.lineItemId);
                                                                                 }}
                                                                             >
-                                                                                <StyledText style={{...reverseThemeStyle, padding: 5, backgroundColor: 'gray', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1}}>{t('choose')}</StyledText>
+                                                                                <StyledText style={{...{backgroundColor: '#d6d6d6', color: '#000'}, padding: 5, backgroundColor: 'gray', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1}}>{t('choose')}</StyledText>
                                                                             </TouchableOpacity>}
                                                                             <View>
-                                                                                {item?.state === 'OPEN' && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
+                                                                                {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
                                                                                 {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && (
-                                                                                    <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
+                                                                                    <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
                                                                                 )}
-                                                                                {item?.state === 'PREPARED' && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
+                                                                                {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
                                                                                 {item?.state === 'DELIVERED' && (
-                                                                                    <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
+                                                                                    <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
                                                                                 )}
-                                                                                {item?.state === 'SETTLED' && <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
+                                                                                {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
                                                                             </View>
 
-                                                                            <StyledText style={[reverseThemeStyle, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.lineItemSubTotal}</StyledText>
+                                                                            <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.lineItemSubTotal}</StyledText>
                                                                         </View>
                                                                     </View>
                                                                 </TouchableOpacity>
@@ -355,7 +357,7 @@ class SpiltBillScreen extends React.Component {
                                                         : <StyledText style={{alignSelf: 'center'}}>{t('splitBill.nothing')}</StyledText>}
                                                 </ScrollView>
                                             </View>
-                                            <View style={{flex: 1, marginVertical: 5, flexDirection: 'row'}}>
+                                            <View style={{flex: 1, marginVertical: 5, flexDirection: 'row', paddingLeft: 16, borderTopWidth: 1, borderColor: mainThemeColor, paddingTop: 8}}>
 
                                                 <View style={{flex: 1, justifyContent: 'space-between'}}>
                                                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>

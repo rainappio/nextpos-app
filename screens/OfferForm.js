@@ -7,7 +7,7 @@ import {LocaleContext} from "../locales/LocaleContext";
 import styles, {mainThemeColor} from "../styles";
 import RNSwitch from "../components/RNSwitch";
 import DeleteBtn from "../components/DeleteBtn";
-import RenderDatePicker from "../components/DateTimePicker";
+import RenderDateTimePicker from "../components/DateTimePicker";
 import SegmentedControl from "../components/SegmentedControl";
 import AntDesignIcon from "react-native-vector-icons/AntDesign";
 import RenderPureCheckBox from "../components/rn-elements/PureCheckBox";
@@ -138,18 +138,18 @@ class OfferForm extends React.Component {
       handleActivate,
       handleDeactivate
     } = this.props;
-    const { t } = this.context;
-    const { appliesToAllProducts, products } = this.state;
+    const {t} = this.context;
+    const {appliesToAllProducts, products} = this.state;
 
     const offerTypes = Object.keys(this.state.offerTypes).map(key => this.state.offerTypes[key].label)
 
     return (
       <View>
         <View style={styles.tableRowContainerWithBorder}>
-          <View style={[styles.tableCellView, { flex: 1 }]}>
+          <View style={[styles.tableCellView, {flex: 1}]}>
             <StyledText style={styles.fieldTitle}>{t("offerName")}</StyledText>
           </View>
-          <View style={[styles.tableCellView, styles.justifyRight, { flex: 3 }]}>
+          <View style={[styles.tableCellView, styles.justifyRight, {flex: 3}]}>
             <Field
               name="offerName"
               component={InputText}
@@ -172,7 +172,7 @@ class OfferForm extends React.Component {
         )}
 
         <View style={styles.tableRowContainerWithBorder}>
-          <View style={[styles.tableCellView, { flex: 1 }]}>
+          <View style={[styles.tableCellView, {flex: 1}]}>
             <StyledText style={styles.fieldTitle}>{t("dateBound")}</StyledText>
           </View>
           <View style={[styles.tableCellView, styles.justifyRight]}>
@@ -190,10 +190,10 @@ class OfferForm extends React.Component {
 
         {Platform.OS === "ios" ? (
           <View style={[styles.tableRowContainer]}>
-            <View style={[styles.tableCellView, { flex: 2 }]}>
+            <View style={[styles.tableCellView, {flex: 2}]}>
               <Field
                 name="startDate"
-                component={RenderDatePicker}
+                component={RenderDateTimePicker}
                 onChange={this.handlegetDate}
                 placeholder={t("order.date")}
                 isShow={this.state.from.show}
@@ -204,15 +204,15 @@ class OfferForm extends React.Component {
             <View
               style={[
                 styles.tableCellView,
-                { flex: 0.2, justifyContent: "center" }
+                {flex: 0.2, justifyContent: "center"}
               ]}
             >
               <Text>-</Text>
             </View>
-            <View style={[styles.tableCellView, { flex: 2 }]}>
+            <View style={[styles.tableCellView, {flex: 2}]}>
               <Field
                 name="endDate"
-                component={RenderDatePicker}
+                component={RenderDateTimePicker}
                 onChange={this.handlegetDate}
                 placeholder={t("order.date")}
                 isShow={this.state.to.show}
@@ -222,14 +222,14 @@ class OfferForm extends React.Component {
             </View>
           </View>
         ) : (
-          <View style={{ marginLeft: -10, marginRight: -10 }}>
-            <DateTimeFilterControlledForm
-              showAndroidDateTimeOnly={true}
-              endDate={initialValues.endDate}
-              startDate={initialValues.startDate}
-            />
-          </View>
-        )}
+            <View style={{marginLeft: -10, marginRight: -10}}>
+              <DateTimeFilterControlledForm
+                showAndroidDateTimeOnly={true}
+                endDate={initialValues.endDate}
+                startDate={initialValues.startDate}
+              />
+            </View>
+          )}
 
         <View style={[styles.sectionContainer, styles.horizontalMargin,]}>
           <View style={[styles.sectionContainer]}>
@@ -257,7 +257,7 @@ class OfferForm extends React.Component {
                   styles.tableRowContainerWithBorder,
                 ]}
               >
-                <View style={[styles.tableCellView, { flex: 3 }]}>
+                <View style={[styles.tableCellView, {flex: 3}]}>
                   <StyledText style={styles.fieldTitle}>{t("applyToAll")}</StyledText>
                 </View>
                 <View style={[styles.tableCellView, styles.justifyRight]}>
@@ -277,42 +277,42 @@ class OfferForm extends React.Component {
                     name={"pluscircle"}
                     size={22}
                     color={mainThemeColor}
-                    style={[{transform: [{rotateY: "180deg"}],}, styles.justifyRight]}
+                    style={[{transform: [{rotateY: "180deg"}], }, styles.justifyRight]}
                     onPress={() =>
                       this.props.navigation.navigate("ProductsOverviewforOffer", {
-                          isEditForm: isEditForm,
-                          updatedselectedProducts: this.state.products
-                        }
+                        isEditForm: isEditForm,
+                        updatedselectedProducts: this.state.products
+                      }
                       )
                     }
                   />
                 </View>
                 {products !== undefined &&
-                products.map(selectedProduct => (
-                  <View style={[styles.tableRowContainerWithBorder]}
-                        key={selectedProduct.productId}
-                  >
-                    <View style={[styles.tableCellView]}>
-                      <StyledText>{selectedProduct.name}</StyledText>
+                  products.map(selectedProduct => (
+                    <View style={[styles.tableRowContainerWithBorder]}
+                      key={selectedProduct.productId}
+                    >
+                      <View style={[styles.tableCellView]}>
+                        <StyledText>{selectedProduct.name}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView, styles.justifyRight]}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.removeArrayItem(selectedProduct.productId)
+                          }
+                        >
+                          <AntDesignIcon
+                            name={"closecircle"}
+                            size={22}
+                            color={"#dc3545"}
+                            style={{
+                              transform: [{rotateY: "180deg"}],
+                            }}
+                          />
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                    <View style={[styles.tableCellView, styles.justifyRight]}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          this.removeArrayItem(selectedProduct.productId)
-                        }
-                      >
-                        <AntDesignIcon
-                          name={"closecircle"}
-                          size={22}
-                          color={"#dc3545"}
-                          style={{
-                            transform: [{rotateY: "180deg"}],
-                          }}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                ))}
+                  ))}
               </View>
             )}
           </View>
@@ -347,7 +347,7 @@ class OfferForm extends React.Component {
           </View>
 
           <View style={styles.tableRowContainer}>
-            <View style={[styles.tableCellView, { flex: 1 }]}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
               <StyledText style={styles.fieldTitle}>{t("discountValue")}</StyledText>
             </View>
             <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
@@ -383,14 +383,14 @@ class OfferForm extends React.Component {
                   </Text>
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity
-                  onPress={() => handleDeactivate(initialValues.offerId)}
-                >
-                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                    {t("action.deactivate")}
-                  </Text>
-                </TouchableOpacity>
-              )}
+                  <TouchableOpacity
+                    onPress={() => handleDeactivate(initialValues.offerId)}
+                  >
+                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                      {t("action.deactivate")}
+                    </Text>
+                  </TouchableOpacity>
+                )}
             </View>
           )}
 

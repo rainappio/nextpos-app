@@ -92,6 +92,8 @@ import RostersScreen from '../screens/RostersScreen'
 import RostersFormScreen from '../screens/RostersFormScreen'
 import CalendarScreen from '../screens/CalendarScreen'
 import CalendarEventScreen from '../screens/CalendarEventScreen'
+import MemberScreen from '../screens/MemberScreen'
+import MemberFormScreen from '../screens/MemberFormScreen'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -155,7 +157,9 @@ const Settings = createStackNavigator({
   ProductsOverviewforOffer: ProductsOverviewforOffer,
   SubscriptionScreen: SubscriptionScreen,
   RostersScreen: RostersScreen,
-  RostersFormScreen: RostersFormScreen
+  RostersFormScreen: RostersFormScreen,
+  MemberScreen: MemberScreen,
+  MemberFormScreen: MemberFormScreen
 })
 Settings.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.settings'),

@@ -10,7 +10,7 @@ import ScreenHeader from "../components/ScreenHeader";
 import RenderTable from '../components/RenderTable'
 import LoadingScreen from "./LoadingScreen";
 import SegmentedControl from "../components/SegmentedControl";
-import OrderFilterForm from "./OrderFilterForm";
+import OrderFilterFormII from "./OrderFilterFormII";
 import TimeZoneService from "../helpers/TimeZoneService";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
@@ -267,7 +267,7 @@ class SalesCharts extends React.Component {
           />
 
           <View>
-            <OrderFilterForm
+            <OrderFilterFormII
               onSubmit={this.handleFilterSalesChart}
               initialValues={{
                 dateRange: this.state.selectedRangeType,

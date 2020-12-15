@@ -1,13 +1,14 @@
 import React from 'react'
 import {Text, TouchableOpacity, View} from 'react-native'
 import {Field, reduxForm} from 'redux-form'
-import RenderDatePicker from '../components/DateTimePicker'
+import RenderDateTimePicker from '../components/DateTimePicker'
 import DropDown from '../components/DropDown'
 import {LocaleContext} from '../locales/LocaleContext'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import {StyledText} from "../components/StyledText";
 import SegmentedControl from "../components/SegmentedControl";
 import InputText from '../components/InputText'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 class OrderFilterForm extends React.Component {
   static contextType = LocaleContext
@@ -17,6 +18,7 @@ class OrderFilterForm extends React.Component {
     showToDate: false,
     searchType: [this.context.t('orderFilterForm.searchByDateAndTable'), this.context.t('orderFilterForm.searchByInvoice')],
     searchTypeIndex: this.props?.initialValues?.searchTypeIndex ?? 0,
+    isFilterOpen: false,
   }
 
   // todo: shared between OrdersScreen and SalesChart that caused transitioning from SalesChart to OrdersScreen an form rendering issue.
@@ -66,17 +68,23 @@ class OrderFilterForm extends React.Component {
     return (
       <View>
         <View style={[styles.tableRowContainer]}>
-          <View style={[{flex: 1}]}>
+          <View style={[{flex: 7}]}>
             <Field
               name="searchTypeIndex"
               component={SegmentedControl}
-              onChange={(val) => this.setState({searchTypeIndex: val})}
+              onChange={(val) => this.setState({searchTypeIndex: val, isFilterOpen: true})}
               values={this.state?.searchType}
             />
+
           </View>
+          <TouchableOpacity
+            onPress={() => this.setState({isFilterOpen: !this.state.isFilterOpen})}
+            style={{width: 72, marginLeft: 10, borderColor: mainThemeColor, borderWidth: 1, borderRadius: 5, alignItems: 'center'}}>
+            <Icon name={this.state.isFilterOpen ? 'md-arrow-dropup' : 'md-arrow-dropdown'} size={30} color={mainThemeColor} style={{flex: 1, padding: 0, margin: 0}} />
+          </TouchableOpacity>
         </View>
 
-        {this.state?.searchTypeIndex === 0 && <><View style={[styles.tableRowContainer]}>
+        {this.state?.searchTypeIndex === 0 && this.state.isFilterOpen && <><View style={[styles.tableRowContainer]}>
           {isTablet && <View style={[styles.tableCellView, {flex: 2, marginRight: 5}]}>
             <Field
               name="dateRange"
@@ -98,7 +106,7 @@ class OrderFilterForm extends React.Component {
           <View style={[styles.tableCellView, {flex: 3}]}>
             <Field
               name="fromDate"
-              component={RenderDatePicker}
+              component={RenderDateTimePicker}
               onChange={this.handlegetDate}
               placeholder={t('order.fromDate')}
               isShow={this.state.showFromDate}
@@ -112,7 +120,7 @@ class OrderFilterForm extends React.Component {
           <View style={[styles.tableCellView, {flex: 3}]}>
             <Field
               name="toDate"
-              component={RenderDatePicker}
+              component={RenderDateTimePicker}
               onChange={this.handlegetDate}
               placeholder={t('order.toDate')}
               isShow={this.state.showToDate}
@@ -163,7 +171,7 @@ class OrderFilterForm extends React.Component {
             </View>
           </View></>}
 
-        {this.state?.searchTypeIndex === 1 && <>
+        {this.state?.searchTypeIndex === 1 && this.state.isFilterOpen && <>
           <View style={[styles.tableRowContainer]}>
             <View style={[styles.tableCellView, {flex: 3, marginRight: 5}]}>
               <Field

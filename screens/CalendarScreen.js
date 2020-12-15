@@ -16,6 +16,7 @@ import TimeZoneService from "../helpers/TimeZoneService";
 import moment from "moment-timezone";
 import {StyledText} from '../components/StyledText'
 import {RenderAgenda} from "../components/Calendars";
+import UserSelectModal from './UserSelectModal';
 
 class CalendarScreen extends React.Component {
     static navigationOptions = {
@@ -29,7 +30,9 @@ class CalendarScreen extends React.Component {
             isLoading: true,
             rosterPlansData: [],
             calendarMode: 'month',
-            selectedDate: null
+            selectedDate: null,
+            isManager: false,
+            users: []
         }
         LocaleConfig.locales['zh-Hant-TW'] = {
             monthNames: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
@@ -45,10 +48,14 @@ class CalendarScreen extends React.Component {
     componentDidMount() {
 
         this.getPlans()
+        this.getUser()
+        this.getUsers()
     }
 
     refreshScreen = async () => {
-        await this.getPlans()
+        this.getPlans()
+        this.getUser()
+        this.getUsers()
     }
 
     getPlans = async () => {
@@ -98,10 +105,52 @@ class CalendarScreen extends React.Component {
             this.setState({calendarMode: 'month', selectedDate: date})
     }
 
+    getUser = async () => {
+
+        this.setState({isLoading: true})
+
+        await dispatchFetchRequest(api.clientUser.get('me'), {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }, response => {
+            response.json().then(async (data) => {
+                console.log('getUser', data)
+                this.setState({isManager: data?.roles?.includes('MANAGER')})
+
+            })
+        }).then().catch(() => this.setState({isLoading: false}))
+
+    }
+
+    getUsers = async () => {
+
+        this.setState({isLoading: true})
+
+        await dispatchFetchRequest(api.clientUser.getAll, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }, response => {
+            response.json().then(async (data) => {
+                console.log('getUsers', JSON.stringify(data))
+                this.setState({users: data?.users})
+
+            })
+        }).then().catch(() => this.setState({isLoading: false}))
+
+    }
+
 
 
     render() {
-        const {themeStyle} = this.props
+        const {themeStyle, handleSubmit} = this.props
         const {t} = this.context
         const timezone = TimeZoneService.getTimeZone()
 
@@ -114,6 +163,7 @@ class CalendarScreen extends React.Component {
                         this.refreshScreen()
                     }}
                 />
+
                 <View style={styles.fullWidthScreen}>
                     <ScreenHeader backNavigation={false}
                         parentFullScreen={true}
@@ -231,7 +281,7 @@ class CalendarScreen extends React.Component {
 
                     {this.state.isLoading || this.state.calendarMode === 'week' && <View style={[styles.flex(1), {marginHorizontal: 13}]}>
 
-                        <RenderAgenda events={this.state?.rosterEvents} selectedDate={this.state?.selectedDate} />
+                        <RenderAgenda events={this.state?.rosterEvents} selectedDate={this.state?.selectedDate} isManager={this.state?.isManager} users={this.state?.users} />
                     </View>}
                 </View>
             </ThemeContainer>

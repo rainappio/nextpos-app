@@ -103,7 +103,8 @@ export class RenderAgendaBase extends Component {
                 text: {
                     color: 'black'
                 }
-            }} />
+            }} isManager={this.props?.isManager}
+                users={this.props?.users} />
         );
     }
 

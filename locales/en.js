@@ -37,6 +37,7 @@ const en = {
     eInvoice: 'E-invoice',
     subscription: 'Subscription',
     roster: 'Roster',
+    member: 'Membership'
   },
   newItem: {
     new: 'New',
@@ -304,6 +305,7 @@ const en = {
       workingAreaInUse: 'This working area is already in use',
       printerHasWorkingArea: 'This printer is used by working area',
       optionInUse: 'This option is already in use',
+      emptyTables: 'Please select tables',
     }
   },
   eInvoice: {
@@ -366,6 +368,7 @@ const en = {
       ACTIVE_LAPSING: 'Active (Ending Subscription)',
       INACTIVE: 'Inactive',
       EXPIRED: 'Expired',
+      CANCELLED: 'Cancelled'
     },
     planCode: {
       FREE: 'Free'
@@ -398,6 +401,17 @@ const en = {
     enterMembershipAccount: 'Enter Phone Number',
   },
   empty: 'Empty',
+  member: {
+    searchPrompt: 'Search By Phone Number',
+    MALE: 'Male',
+    FEMALE: 'Female',
+    name: 'Name',
+    phoneNumber: 'Phone Number',
+    gender: 'Gender',
+    birthday: 'Birthday',
+    tags: 'Tag',
+    createMember: 'Create Member'
+  },
 }
 
 export default en
