@@ -81,8 +81,10 @@ class ClientUserLoginForm extends React.Component {
                   value={this.state.cardKeyboardResult}
                   getResult={(result) => {
                     this.setState({cardKeyboardResult: result})
-                    if (result.length === 4 && !result.some((item) => {return item === ''}))
+                    if (result.length === 4 && !result.some((item) => {return item === ''})) {
                       this.props.onSubmit({username: clientusersName, password: result.join('')})
+                      this.setState({cardKeyboardResult: []})
+                    }
                   }} />
               </View>}
           </View>

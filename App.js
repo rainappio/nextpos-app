@@ -56,8 +56,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 LogBox.ignoreLogs([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
   'Warning: componentWillReceiveProps',
-  'Warning: componentWillMount',
-  'Warning: Each child'
+  'Warning: componentWillMount'
 ]);
 
 Sentry.init({

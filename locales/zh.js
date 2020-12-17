@@ -142,17 +142,21 @@ const zh = {
   },
   orderLog: {
     title: '訂單日誌',
-    updateOrder: '更新訂單資訊',
-    stateChange: '訂單狀態',
-    addOrderLineItem: '新增品項',
-    updateOrderLineItem: '更新品項',
-    deleteOrderLineItem: '刪除品項',
-    deliverLineItems: '送餐',
-    waiveServiceCharge: '抵服務費',
+    updateOrder: '訂單資訊更新',
+    updateMembership: '會員綁定',
+    stateChange: '訂單狀態改變',
+    addOrderLineItem: '品項新增',
+    updateOrderLineItem: '品項更新',
+    deleteOrderLineItem: '品項刪除',
+    deliverLineItems: '品項送出',
+    waiveServiceCharge: '服務費折免',
     applyOrderDiscount: '訂單折扣',
-    removeOrderDiscount: '移除折扣',
-    copyOrder: '複製訂單',
-    deleteOrder: '刪除訂單'
+    removeOrderDiscount: '訂單折扣移除',
+    copyOrder: '訂單複製',
+    deleteOrder: '訂單刪除',
+    prepareLineItems: '品項製作完成',
+    updateOrderLineItemPrice: '品項招待',
+    quickCheckout: '快速結帳',
   },
   invoiceStatus: {
     invoiceStatus: '發票狀態',
@@ -411,7 +415,9 @@ const zh = {
     gender: '性別',
     birthday: '生日',
     tags: '會員標籤',
-    createMember: '新增會員'
+    createMember: '新增會員',
+    recentOrders: '近期消費記錄',
+    topRankings: '消費愛好'
   },
   empty: '空',
 }

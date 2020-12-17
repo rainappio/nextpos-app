@@ -25,7 +25,10 @@ import {normalizeTimeString} from '../actions'
 import moment from 'moment-timezone'
 import TimeZoneService from "../helpers/TimeZoneService";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
-
+import {Accordion} from '@ant-design/react-native'
+import {formatDate} from '../actions'
+import Modal from 'react-native-modal';
+import OrderDetail from './OrderDetail';
 
 class MemberFormScreen extends React.Component {
     static navigationOptions = {
@@ -40,11 +43,16 @@ class MemberFormScreen extends React.Component {
         this.state = {
             data: props.navigation?.state?.params?.data ?? null,
             showDatePicker: false,
+            activeSections: [],
+            modalVisible: false,
+            modalOrderId: null,
         }
     }
 
 
-
+    onActiveSectionsChange = activeSections => {
+        this.setState({activeSections})
+    }
 
 
 
@@ -127,7 +135,7 @@ class MemberFormScreen extends React.Component {
 
 
     render() {
-        const {t} = this.context
+        const {t, themeStyle} = this.context
         const {handleSubmit} = this.props
 
 
@@ -137,7 +145,15 @@ class MemberFormScreen extends React.Component {
                 <View style={styles.container}>
                     <View style={{flex: 7, }}>
                         <ScreenHeader title={t('settings.member')} />
-
+                        <Modal
+                            isVisible={this.state.modalVisible}
+                            backdropOpacity={0.7}
+                            onBackdropPress={() => this.setState({modalVisible: false})}
+                            useNativeDriver
+                            hideModalContentWhileAnimating
+                        >
+                            <OrderDetail orderId={this.state?.modalOrderId} closeModal={() => this.setState({modalVisible: false})} />
+                        </Modal>
                         <ThemeKeyboardAwareScrollView style={{flex: 1}}>
 
                             <View style={{flex: 3, paddingHorizontal: 10, justifyContent: 'flex-start'}}>
@@ -215,6 +231,72 @@ class MemberFormScreen extends React.Component {
                                             />
                                         </View>
                                     </View>
+
+                                    {!!this.state?.data && <View style={styles.fieldContainer}>
+                                        <Accordion
+                                            onChange={this.onActiveSectionsChange}
+                                            activeSections={this.state.activeSections}
+                                            style={[styles.childContainer, {borderWidth: 0}]}
+                                            sectionContainerStyle={{
+                                                borderWidth: 1, ...themeStyle,
+                                                marginBottom: 8
+                                            }}
+                                            expandMultiple
+                                        >
+                                            <Accordion.Panel
+                                                header={<View style={[styles.sectionTitleContainer, {flex: 1}]}>
+                                                    <StyledText style={[styles.sectionTitleText]}>
+                                                        {t('member.recentOrders')}
+                                                    </StyledText>
+                                                </View>}
+                                            >
+                                                <View>
+                                                    {this.state?.data?.recentOrders?.map((order) => {
+                                                        return (
+                                                            <TouchableOpacity
+                                                                onPress={() => this.setState({modalVisible: true, modalOrderId: order?.orderId})}
+                                                                style={[styles.tableRowContainer, {borderColor: mainThemeColor, borderWidth: 1, borderRadius: 10, margin: 5}]}>
+
+                                                                <View style={[styles.tableCellView, {flex: 1}]}>
+                                                                    <StyledText>{formatDate(order.orderDate)}</StyledText>
+                                                                </View>
+                                                                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                                                    <StyledText>${order.orderTotal}</StyledText>
+                                                                </View>
+
+                                                            </TouchableOpacity>
+                                                        )
+                                                    })}
+                                                </View>
+                                            </Accordion.Panel>
+                                            <Accordion.Panel
+                                                header={<View style={[styles.sectionTitleContainer, {flex: 1}]}>
+                                                    <StyledText style={[styles.sectionTitleText]}>
+                                                        {t('member.topRankings')}
+                                                    </StyledText>
+                                                </View>}
+                                            >
+                                                <View>
+                                                    <View style={styles.sectionContainer}>
+                                                        {this.state?.data?.topRankings?.map((item) => {
+                                                            return (
+                                                                <View style={[styles.tableRowContainer]}>
+
+                                                                    <View style={[styles.tableCellView, {flex: 1}]}>
+                                                                        <StyledText>{item.productName}</StyledText>
+                                                                    </View>
+                                                                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                                                        <StyledText>x {item.quantity}</StyledText>
+                                                                    </View>
+
+                                                                </View>
+                                                            )
+                                                        })}
+                                                    </View>
+                                                </View>
+                                            </Accordion.Panel>
+                                        </Accordion>
+                                    </View>}
 
 
 

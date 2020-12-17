@@ -37,7 +37,7 @@ class OrderDetail extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getOrder(this.props.navigation.state.params.orderId)
+    this.props.getOrder(this.props?.navigation?.state?.params?.orderId ?? this.props?.orderId)
   }
 
   handleCopyOrder(order) {
@@ -121,9 +121,13 @@ class OrderDetail extends React.Component {
             onWillFocus={() => {
               this.props.getOrder()
             }}
+            onWillBlur={() => {
+              !!this.props?.orderId && this.props?.closeModal()
+            }}
           />
-          <View style={[styles.fullWidthScreen]}>
+          <View style={[styles.fullWidthScreen, (!!this.props?.orderId && {marginTop: 0})]}>
             <ScreenHeader parentFullScreen={true}
+              backAction={() => !!this.props?.orderId ? this.props?.closeModal() : this.props.navigation.goBack()}
               title={t('order.orderDetailsTitle')} />
 
             <OrderTopInfo order={order} />
@@ -348,7 +352,7 @@ class OrderDetail extends React.Component {
               )
             })}
 
-            <View style={[styles.bottom, styles.horizontalMargin]}>
+            {!!this.props?.orderId || <View style={[styles.bottom, styles.horizontalMargin]}>
               <TouchableOpacity
                 onPress={() => this.handleCopyOrder(order)}
               >
@@ -363,7 +367,7 @@ class OrderDetail extends React.Component {
                 text={t('invoiceStatus.cancelInvoice')}
                 handleDeleteAction={() => handleCancelInvoice(order?.transactions?.[0]?.transactionId, () => this.props.getOrder())}
               />}
-            </View>
+            </View>}
           </View>
         </ThemeScrollView>
       )
@@ -381,7 +385,9 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
+  getOrder: () => dispatch(getOrder(props?.navigation?.state?.params?.orderId ?? props?.orderId)),
+  orderId: props?.orderId,
+  closeModal: props?.closeModal,
 })
 
 const enhance = compose(
