@@ -212,7 +212,7 @@ class DateTimeFilterControlledForm extends React.Component {
                   style={pickerSelectStyles}
                   Icon={() => {
                     return (
-                      <Icon name='md-arrow-dropdown' size={30} style={{position: 'absolute', top: -9, right: 0, borderWidth: 0}} />
+                      <Icon name='caret-down' size={24} style={{position: 'absolute', top: -9, right: 0, borderWidth: 0}} />
                     )
                     //return <Chevron size={1.5} color="gray" />;
                   }}

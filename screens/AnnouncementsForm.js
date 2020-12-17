@@ -56,9 +56,9 @@ class AnnouncementsForm extends React.Component {
 
     const iconsArr = [
       {label: 'ios-attach', value: 'ios-attach'},
-      {label: 'ios-paper', value: 'ios-paper'},
+      {label: 'ios-newspaper', value: 'ios-newspaper'},
       {label: 'ios-notifications', value: 'ios-notifications'},
-      {label: 'md-text', value: 'md-text'},
+      {label: 'chatbox-ellipses-sharp', value: 'chatbox-ellipses-sharp'},
       {label: 'md-today', value: 'md-today'}
     ]
 

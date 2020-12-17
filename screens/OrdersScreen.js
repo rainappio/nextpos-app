@@ -246,7 +246,7 @@ class OrdersScreen extends React.Component {
                   style={styles.upButton}
                 >
                   <Icon
-                    name={'md-arrow-round-up'}
+                    name={'arrow-up'}
                     size={32}
                     style={[styles.buttonIconStyle, {marginRight: 10}]}
                   />
