@@ -104,9 +104,10 @@ const Home = createStackNavigator({
 })
 Home.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.home'),
-  tabBarIcon: ({focused}) => (
-    <TabBarIcon focused={focused} name={'md-home'} />
-  )
+
+  tabBarButtonComponent: (props) => (
+    <TabBarIcon focused={props?.focused} name={'md-home'} onPress={props?.onPress} />
+  ),
 })
 
 const Settings = createStackNavigator({
@@ -163,12 +164,10 @@ const Settings = createStackNavigator({
 })
 Settings.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.settings'),
-  tabBarIcon: ({focused}) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'}
-    />
-  )
+  tabBarButtonComponent: (props) => (
+    <TabBarIcon focused={props?.focused} name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'} onPress={props?.onPress} />
+  ),
+
 })
 
 const Tables = createStackNavigator({
@@ -188,9 +187,10 @@ const Tables = createStackNavigator({
 })
 Tables.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.tables'),
-  tabBarIcon: ({focused}) => (
-    <TabBarIcon focused={focused} name="md-people" />
-  )
+  tabBarButtonComponent: (props) => (
+    <TabBarIcon focused={props?.focused} name="md-people" onPress={props?.onPress} />
+  ),
+
 })
 
 const Orders = createStackNavigator({
@@ -201,9 +201,10 @@ const Orders = createStackNavigator({
 })
 Orders.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.orders'),
-  tabBarIcon: ({focused}) => (
-    <TabBarIcon focused={focused} name="md-document" />
-  )
+  tabBarButtonComponent: (props) => (
+    <TabBarIcon focused={props?.focused} name="md-document" onPress={props?.onPress} />
+  ),
+
 })
 
 const Reservation = createStackNavigator({
@@ -211,9 +212,10 @@ const Reservation = createStackNavigator({
 })
 Reservation.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.reservations'),
-  tabBarIcon: ({focused}) => (
-    <TabBarIcon focused={focused} name="ios-calendar" />
-  )
+  tabBarButtonComponent: (props) => (
+    <TabBarIcon focused={props?.focused} name="ios-calendar" onPress={props?.onPress} />
+  ),
+
 })
 
 const Reports = createStackNavigator({
@@ -228,9 +230,9 @@ const Reports = createStackNavigator({
 })
 Reports.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.reporting'),
-  tabBarIcon: ({focused}) => (
-    <TabBarIcon focused={focused} name="ios-stats" />
-  )
+  tabBarButtonComponent: (props) => (
+    <TabBarIcon focused={props?.focused} name="ios-stats-chart" onPress={props?.onPress} />
+  ),
 })
 
 const Rosters = createStackNavigator({
@@ -240,9 +242,9 @@ const Rosters = createStackNavigator({
 })
 Rosters.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.reporting'),
-  tabBarIcon: ({focused}) => (
-    <TabBarIcon focused={focused} name="md-calendar" />
-  )
+  tabBarButtonComponent: (props) => (
+    <TabBarIcon focused={props?.focused} name="md-calendar" onPress={props?.onPress} />
+  ),
 })
 
 const tabBar = createBottomTabNavigator({

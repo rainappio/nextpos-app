@@ -143,16 +143,20 @@ const en = {
   orderLog: {
     title: 'Order Logs',
     updateOrder: 'Update Order Info',
-    stateChange: 'Change state',
-    addOrderLineItem: 'Add Item',
-    updateOrderLineItem: 'Update Item',
-    deleteOrderLineItem: 'Delete Item',
-    deliverLineItems: 'Deliver Line Item(s)',
-    waiveServiceCharge: 'Waive Service Charge',
-    applyOrderDiscount: 'Order Discount',
-    removeOrderDiscount: 'Remove Order Discount',
-    copyOrder: 'Copy Order',
-    deleteOrder: 'Delete Order'
+    updateMembership: 'Bound Membership',
+    stateChange: 'Changed Order State',
+    addOrderLineItem: 'Added Order Item',
+    updateOrderLineItem: 'Updated Order Item',
+    deleteOrderLineItem: 'Deleted Order Item',
+    deliverLineItems: 'Delivered Order Item',
+    waiveServiceCharge: 'Waived Service Charge',
+    applyOrderDiscount: 'Applied Order Discount',
+    removeOrderDiscount: 'Removed Order Discount',
+    copyOrder: 'Copied Order',
+    deleteOrder: 'Deleted Order',
+    prepareLineItems: 'Prepared Order Item',
+    updateOrderLineItemPrice: 'Free Order Item',
+    quickCheckout: 'Quick Checkout',
   },
   invoiceStatus: {
     invoiceStatus: 'Invoice status',
@@ -410,7 +414,9 @@ const en = {
     gender: 'Gender',
     birthday: 'Birthday',
     tags: 'Tag',
-    createMember: 'Create Member'
+    createMember: 'Create Member',
+    recentOrders: 'Recent Orders',
+    topRankings: 'Favorite Items'
   },
 }
 

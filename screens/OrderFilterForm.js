@@ -80,7 +80,7 @@ class OrderFilterForm extends React.Component {
           <TouchableOpacity
             onPress={() => this.setState({isFilterOpen: !this.state.isFilterOpen})}
             style={{width: 72, marginLeft: 10, borderColor: mainThemeColor, borderWidth: 1, borderRadius: 5, alignItems: 'center'}}>
-            <Icon name={this.state.isFilterOpen ? 'md-arrow-dropup' : 'md-arrow-dropdown'} size={30} color={mainThemeColor} style={{flex: 1, padding: 0, margin: 0}} />
+            <Icon name={this.state.isFilterOpen ? 'caret-up' : 'caret-down'} size={24} color={mainThemeColor} style={{flex: 1, padding: 0, margin: 0}} />
           </TouchableOpacity>
         </View>
 

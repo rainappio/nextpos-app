@@ -33,25 +33,25 @@ class OptionFormScreen extends React.Component {
     this.context.localize({
       en: {
         productOptionTitle: 'Product Option',
-        optionName: 'Option Name',
+        optionName: 'Option Name (e.g.: Sweetness)',
         required: 'Required',
         usedByProducts: 'Used by the following products',
         usedByProductLabels: 'Used by the following categorys',
         multiple: 'Multiple',
         values: 'Option Values',
-        value: 'Option Value',
-        price: 'Option Price'
+        value: 'Option Value (e.g.: Less Sugar)',
+        price: 'Option Price (e.g.: 0)'
       },
       zh: {
         productOptionTitle: '產品註記',
-        optionName: '註記名稱',
+        optionName: '註記名稱 (如:甜度)',
         required: '必填',
         usedByProducts: '已被以下產品使用中',
         usedByProductLabels: '已被以下產品分類使用中',
         multiple: '可複選',
         values: '註記設定值',
-        value: '註記值',
-        price: '註記加價'
+        value: '註記值 (如:少糖)',
+        price: '註記加價 (如:0)'
       }
     })
   }

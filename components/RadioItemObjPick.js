@@ -3,15 +3,16 @@ import {Text, View} from 'react-native'
 import {Radio} from '@ant-design/react-native'
 import styles from '../styles'
 import {StyledText} from "./StyledText";
+import {CheckBox} from 'react-native-elements'
 
 export default class RadioItemObjPick extends React.Component {
   render() {
     const {
-      input: { onBlur, onChange, onFocus, value },
+      input: {onBlur, onChange, onFocus, value},
       customValueOrder,
       optionName,
       onCheck,
-      meta: { error, touched, valid },
+      meta: {error, touched, valid},
       ...rest
     } = this.props
     return (
@@ -20,18 +21,22 @@ export default class RadioItemObjPick extends React.Component {
           <StyledText>{optionName}</StyledText>
         </View>
         <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end', borderWidth: 0}]}>
-          <Radio
-            key={customValueOrder}
+          <CheckBox
+            containerStyle={{margin: 0, padding: 0}}
             onChange={() => onChange(customValueOrder)}
+            checkedIcon={'check-circle'}
+            uncheckedIcon={'circle'}
             checked={onCheck(value, customValueOrder)}
-            style={{ position: 'absolute', right: 10 }}
+            onPress={() => {
+              onChange(customValueOrder)
+            }}
           >
-            {/*this empty text exists to increase the radio button hit slop as the radio button reacts to the touch of the text.*/}
-            <Text style={{borderWidth: 0, paddingVertical: 10, paddingHorizontal: 100 }}/>
-            {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
-          </Radio>
+          </CheckBox>
+
+          {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
+
         </View>
-      </View>
+      </View >
     )
   }
 }

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Field} from 'redux-form'
-import {AsyncStorage, Keyboard, Modal, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native'
+import {AsyncStorage, Keyboard, Modal, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, KeyboardAvoidingView} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
 import styles, {mainThemeColor} from '../styles'
@@ -11,6 +11,8 @@ import {isvalidPassword} from "../validators";
 import ScreenHeader from "./ScreenHeader";
 import {withContext} from "../helpers/contextHelper";
 import {StyledText} from "./StyledText";
+import {CardFourNumberKeyboard} from './MoneyKeyboard'
+import {ThemeKeyboardAwareScrollView} from './ThemeKeyboardAwareScrollView'
 
 class EditPasswordPopUp extends Component {
   static contextType = LocaleContext
@@ -22,7 +24,8 @@ class EditPasswordPopUp extends Component {
       isVisible: false,
       originalPassword: null,
       newPassword: null,
-      showEnterNewPassword: !this.props.ownAccount
+      showEnterNewPassword: !this.props.ownAccount,
+      cardKeyboardResult: []
     }
 
     // https://reactjs.org/docs/handling-events.html
@@ -38,6 +41,7 @@ class EditPasswordPopUp extends Component {
         originalPassword: 'Original Password',
         enter: 'Enter',
         enterNewPassword: 'Enter New Password',
+        newPassword: 'New Password',
         incorrectPassword: 'Incorrect password',
         passwordUpdated: 'Password is updated'
       },
@@ -48,6 +52,7 @@ class EditPasswordPopUp extends Component {
         originalPassword: '原本密碼',
         enter: '輸入',
         enterNewPassword: '輸入新密碼',
+        newPassword: '新密碼',
         incorrectPassword: '密碼輸入錯誤',
         passwordUpdated: '密碼更新成功'
       }
@@ -57,6 +62,7 @@ class EditPasswordPopUp extends Component {
   toggleModal = visible => {
     this.setState({
       isVisible: visible,
+      showEnterNewPassword: !this.props.ownAccount,
     })
   }
 
@@ -153,84 +159,97 @@ class EditPasswordPopUp extends Component {
               this.toggleModal(false)
             }}
           >
-            <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
-              <TouchableWithoutFeedback>
-                <View>
-                  <ScreenHeader backNavigation={false}
-                    title={t('editPassword')} />
+            <KeyboardAvoidingView behavior='position' >
+              <View style={[styles.boxShadow, styles.popUpLayout, themeStyle, {maxWidth: 640}]}>
+                <TouchableWithoutFeedback>
+                  <View>
+                    <ScreenHeader backNavigation={false}
+                      title={t('editPassword')} />
 
-                  {this.props.ownAccount && (
-                    <View>
-                      <StyledText style={{marginBottom: 10, textAlign: 'center'}}>
-                        {t('enterOldPassword')}
-                      </StyledText>
-                      {this.props.defaultUser ? (
-                        <View style={[styles.tableRowContainer]}>
-                          <TextInput
-                            name="originalPassword"
-                            value={this.state.originalPassword}
-                            onChangeText={(value) => this.setState({originalPassword: value})}
-                            placeholder={t('originalPassword')}
-                            secureTextEntry={true}
-                            style={[styles.rootInput, {width: 200}]}
-                          />
-                          <TouchableOpacity
-                            style={{marginLeft: 10}}
-                            onPress={() => this.handleCheckPassword(this.state.originalPassword)}
-                          >
-                            <Text style={[styles.searchButton]}>{t('enter')}</Text>
-                          </TouchableOpacity>
-                        </View>
-                      ) : (
-                          <Field
-                            name="originalPassword"
-                            component={PinCodeInput}
-                            onChange={val => this.handleCheckPassword(val)}
-                            customHeight={40}
-                          />
-                        )}
-                    </View>
-                  )}
+                    {this.props.ownAccount && !this.state.showEnterNewPassword && (
+                      <View>
+                        <StyledText style={{marginBottom: 10, textAlign: 'center'}}>
+                          {t('enterOldPassword')}
+                        </StyledText>
+                        {this.props.defaultUser ? (
+                          <View style={[styles.tableRowContainer]}>
+                            <TextInput
+                              name="originalPassword"
+                              value={this.state.originalPassword}
+                              onChangeText={(value) => this.setState({originalPassword: value})}
+                              placeholder={t('originalPassword')}
+                              secureTextEntry={true}
+                              style={[styles.rootInput, styles.withBorder, themeStyle, {flex: 1}]}
+                            />
+                            <TouchableOpacity
+                              style={{marginLeft: 10}}
+                              onPress={() => this.handleCheckPassword(this.state.originalPassword)}
+                            >
+                              <Text style={[styles.searchButton]}>{t('enter')}</Text>
+                            </TouchableOpacity>
+                          </View>
+                        ) : (
 
-                  {this.state.showEnterNewPassword && (
-                    <View>
-                      <StyledText style={{marginBottom: 10, textAlign: 'center'}}>
-                        {t('enterNewPassword')}
-                      </StyledText>
-                      {this.props.defaultUser ? (
-                        <View style={styles.tableRowContainer}>
-                          <TextInput
-                            name="originalPassword"
-                            value={this.state.newPassword}
-                            onChangeText={(value) => this.setState({newPassword: value})}
-                            placeholder={t('newPassword')}
-                            secureTextEntry={true}
-                            validate={isvalidPassword}
-                            style={[styles.rootInput, {color: 'black', width: 200}]}
-                          />
-                          <TouchableOpacity
-                            style={{marginLeft: 10}}
-                            onPress={() => this.handleChangePwd(this.state.newPassword)}
-                          >
-                            <Text style={[styles.searchButton]}>{t('enter')}</Text>
-                          </TouchableOpacity>
-                        </View>
-                      ) : (
-                          <Field
-                            name="password"
-                            component={PinCodeInput}
-                            onChange={val => {
-                              if (val.length === 4)
-                                this.handleChangePwd(val)
-                            }}
-                            customHeight={40}
-                          />
-                        )}
-                    </View>
-                  )}
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
+                            <View style={{maxWidth: 400, maxHeight: 500, alignSelf: 'center'}}>
+                              <CardFourNumberKeyboard
+                                initialValue={[]}
+                                value={this.state.cardKeyboardResult}
+                                getResult={(result) => {
+                                  this.setState({cardKeyboardResult: result})
+                                  if (result.length === 4 && !result.some((item) => {return item === ''})) {
+                                    this.handleCheckPassword(result.join(''))
+                                    this.setState({cardKeyboardResult: []})
+                                  }
+                                }} />
+                            </View>
+                          )}
+                      </View>
+                    )}
+
+                    {this.state.showEnterNewPassword && (
+                      <View>
+                        <StyledText style={{marginBottom: 10, textAlign: 'center'}}>
+                          {t('enterNewPassword')}
+                        </StyledText>
+                        {this.props.defaultUser ? (
+                          <View style={styles.tableRowContainer}>
+                            <TextInput
+                              name="originalPassword"
+                              value={this.state.newPassword}
+                              onChangeText={(value) => this.setState({newPassword: value})}
+                              placeholder={t('newPassword')}
+                              secureTextEntry={true}
+                              validate={isvalidPassword}
+                              style={[styles.rootInput, styles.withBorder, themeStyle, {flex: 1}]}
+                            />
+                            <TouchableOpacity
+                              style={{marginLeft: 10}}
+                              onPress={() => this.handleChangePwd(this.state.newPassword)}
+                            >
+                              <Text style={[styles.searchButton]}>{t('enter')}</Text>
+                            </TouchableOpacity>
+                          </View>
+                        ) : (
+
+                            <View style={{maxWidth: 400, maxHeight: 500, alignSelf: 'center'}}>
+                              <CardFourNumberKeyboard
+                                initialValue={[]}
+                                value={this.state.cardKeyboardResult}
+                                getResult={(result) => {
+                                  this.setState({cardKeyboardResult: result})
+                                  if (result.length === 4 && !result.some((item) => {return item === ''})) {
+                                    this.handleChangePwd(result.join(''))
+                                    this.setState({cardKeyboardResult: []})
+                                  }
+                                }} />
+                            </View>
+                          )}
+                      </View>
+                    )}
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
+            </KeyboardAvoidingView>
           </TouchableOpacity>
         </Modal>
       </View>

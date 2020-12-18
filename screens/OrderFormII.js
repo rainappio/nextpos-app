@@ -545,7 +545,10 @@ class OrderFormII extends React.Component {
                                 {prd?.outOfStock && <View style={{position: 'absolute', alignSelf: 'center'}} >
                                   <Icon name='cancel' color='white' style={[{fontSize: '100%', padding: 0, margin: 0}]} />
                                 </View>}
-                                <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, {fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
+                                <View style={{alignItems: 'center'}}>
+                                  <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, {fontSize: 16, fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
+                                  {prd?.childProducts?.length > 0 && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>- {prd.childProducts?.map((childProduct) => childProduct?.name).join(',')}</StyledText>}
+                                </View>
                                 <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.description}</StyledText>
                                 <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>${prd.price}</StyledText>
                               </View>
@@ -563,7 +566,10 @@ class OrderFormII extends React.Component {
                               {prd?.outOfStock && <View style={{position: 'absolute', alignSelf: 'center'}} >
                                 <Icon name='cancel' color='white' style={[{fontSize: '100%', padding: 0, margin: 0}]} />
                               </View>}
-                              <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, {fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
+                              <View style={{alignItems: 'center'}}>
+                                <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, {fontSize: 16, fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
+                                {prd?.childProducts?.length > 0 && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>- {prd.childProducts?.map((childProduct) => childProduct?.name).join(',')}</StyledText>}
+                              </View>
                               <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.description}</StyledText>
                               <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>${prd.price}</StyledText>
                             </View>
@@ -586,7 +592,10 @@ class OrderFormII extends React.Component {
                                         {prd?.outOfStock && <View style={{position: 'absolute', alignSelf: 'center'}} >
                                           <Icon name='cancel' color='white' style={[{fontSize: '100%', padding: 0, margin: 0}]} />
                                         </View>}
-                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, {fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
+                                        <View style={{alignItems: 'center'}}>
+                                          <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, {fontSize: 16, fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
+                                          {prd?.childProducts?.length > 0 && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>- {prd.childProducts?.map((childProduct) => childProduct?.name).join(',')}</StyledText>}
+                                        </View>
                                         <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.description}</StyledText>
                                         <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>${prd.price}</StyledText>
                                       </View>
@@ -1005,6 +1014,7 @@ class OrderFormII extends React.Component {
                                 <View style={{aspectRatio: 2, alignItems: 'flex-start', flexDirection: 'row'}}>
                                   <View style={{flex: 2.5, flexDirection: 'column', paddingLeft: '3%', paddingTop: '3%'}}>
                                     <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price}</StyledText>
+                                    {!!item?.childProducts?.length > 0 && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}> - {item.childProducts.map((childProduct) => childProduct?.productName).join(',')}</StyledText>}
                                     {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
                                     {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
                                   </View>

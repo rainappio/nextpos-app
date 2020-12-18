@@ -21,9 +21,12 @@ import InputText from '../components/InputText'
 import {isRequired} from '../validators'
 import SegmentedControl from "../components/SegmentedControl";
 import {RenderDatePicker} from '../components/DateTimePicker'
-import {normalizeTimeString} from '../actions'
 import moment from 'moment-timezone'
 import TimeZoneService from "../helpers/TimeZoneService";
+import {Accordion} from '@ant-design/react-native'
+import {formatDate} from '../actions'
+import Modal from 'react-native-modal';
+import OrderDetail from './OrderDetail';
 
 class MemberScreen extends React.Component {
     static navigationOptions = {
@@ -42,6 +45,9 @@ class MemberScreen extends React.Component {
             searchResults: [],
             itemData: null,
             showDatePicker: false,
+            activeSections: [],
+            modalVisible: false,
+            modalOrderId: null,
         }
 
     }
@@ -78,7 +84,6 @@ class MemberScreen extends React.Component {
             },
         }, response => {
             response.json().then(data => {
-                //console.log('membersData', data)
                 this.setState({membersData: data?.results ?? [], isLoading: false})
             })
         }).then()
@@ -95,7 +100,6 @@ class MemberScreen extends React.Component {
                 headers: {}
             }, response => {
                 response.json().then(data => {
-                    console.log('searchMember', data)
                     this.setState({
                         searchResults: data.results,
                         searching: false
@@ -179,6 +183,31 @@ class MemberScreen extends React.Component {
         }).then()
     }
 
+    handleGetMember = (id) => {
+        dispatchFetchRequest(api.membership.get(id), {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {}
+        }, response => {
+            response.json().then(data => {
+                if (this.context.isTablet) {
+
+                    this.setState({screenMode: 'editForm', itemData: data})
+                }
+                else {
+                    this.props.navigation.navigate('MemberFormScreen', {
+                        data: data,
+                        refreshScreen: () => {this.refreshScreen()},
+                    })
+                }
+            })
+        }).then()
+    }
+    onActiveSectionsChange = activeSections => {
+        this.setState({activeSections})
+    }
+
 
 
     Item = (item, isSearch = false) => {
@@ -191,16 +220,8 @@ class MemberScreen extends React.Component {
                         this.props?.change(`birthday`, new Date(item?.birthday))
                         this.props?.change(`gender`, item?.gender === 'FEMALE' ? 1 : 0)
                         this.props?.change(`tags`, item?.tags?.[0])
-                        if (this.context.isTablet) {
+                        this.handleGetMember(item?.id)
 
-                            this.setState({screenMode: 'editForm', itemData: item})
-                        }
-                        else {
-                            this.props.navigation.navigate('MemberFormScreen', {
-                                data: item,
-                                refreshScreen: () => {this.refreshScreen()},
-                            })
-                        }
                     }}
                     style={{flexDirection: 'row', justifyContent: 'space-between'}}
                 >
@@ -233,6 +254,15 @@ class MemberScreen extends React.Component {
                                 parentFullScreen={true}
 
                             />
+                            <Modal
+                                isVisible={this.state.modalVisible}
+                                backdropOpacity={0.7}
+                                onBackdropPress={() => this.setState({modalVisible: false})}
+                                useNativeDriver
+                                hideModalContentWhileAnimating
+                            >
+                                <OrderDetail orderId={this.state?.modalOrderId} closeModal={() => this.setState({modalVisible: false})} />
+                            </Modal>
                             <View style={{flexDirection: 'row', flex: 1}}>
                                 <View style={{flex: 1, borderRightWidth: 1, borderColor: mainThemeColor, paddingRight: 3}}>
                                     <SearchBar placeholder={t('member.searchPrompt')}
@@ -290,7 +320,7 @@ class MemberScreen extends React.Component {
                                 </View>}
 
                                 {(this.state.screenMode === 'newForm' || this.state.screenMode === 'editForm') && <View style={{flex: 3, paddingHorizontal: 10, justifyContent: 'flex-start'}}>
-                                    <View style={{minHeight: 200, flex: 1}}>
+                                    <ThemeScrollView style={{minHeight: 200, flex: 1}}>
                                         <View style={styles.fieldContainer}>
                                             <View style={[styles.tableCellView, {flex: 1}]}>
                                                 <StyledText style={styles.fieldTitle}>{t('member.name')}</StyledText>
@@ -366,10 +396,78 @@ class MemberScreen extends React.Component {
                                             </View>
                                         </View>
 
+                                        {this.state.screenMode === 'editForm' && <View style={styles.fieldContainer}>
+                                            <Accordion
+                                                onChange={this.onActiveSectionsChange}
+                                                activeSections={this.state.activeSections}
+                                                style={[styles.childContainer, {borderWidth: 0}]}
+                                                sectionContainerStyle={{
+                                                    borderWidth: 1, ...themeStyle,
+                                                    marginBottom: 8
+                                                }}
+                                                expandMultiple
+                                            >
+                                                <Accordion.Panel
+                                                    header={<View style={[styles.sectionTitleContainer, {flex: 1}]}>
+                                                        <StyledText style={[styles.sectionTitleText]}>
+                                                            {t('member.recentOrders')}
+                                                        </StyledText>
+                                                    </View>}
+                                                >
+                                                    <View>
+
+                                                        {this.state?.itemData?.recentOrders?.map((order) => {
+                                                            return (
+                                                                <TouchableOpacity
+                                                                    onPress={() => this.setState({modalVisible: true, modalOrderId: order?.orderId})}
+                                                                    style={[styles.tableRowContainer, {borderColor: mainThemeColor, borderWidth: 1, borderRadius: 10, margin: 5}]}>
+
+                                                                    <View style={[styles.tableCellView, {flex: 1}]}>
+                                                                        <StyledText>{formatDate(order.orderDate)}</StyledText>
+                                                                    </View>
+                                                                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                                                        <StyledText>${order.orderTotal}</StyledText>
+                                                                    </View>
+
+                                                                </TouchableOpacity>
+                                                            )
+                                                        })}
+
+                                                    </View>
+                                                </Accordion.Panel>
+                                                <Accordion.Panel
+                                                    header={<View style={[styles.sectionTitleContainer, {flex: 1}]}>
+                                                        <StyledText style={[styles.sectionTitleText]}>
+                                                            {t('member.topRankings')}
+                                                        </StyledText>
+                                                    </View>}
+                                                >
+                                                    <View>
+                                                        <View style={styles.sectionContainer}>
+                                                            {this.state?.itemData?.topRankings?.map((item) => {
+                                                                return (
+                                                                    <View style={[styles.tableRowContainer]}>
+
+                                                                        <View style={[styles.tableCellView, {flex: 1}]}>
+                                                                            <StyledText>{item.productName}</StyledText>
+                                                                        </View>
+                                                                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                                                            <StyledText>x {item.quantity}</StyledText>
+                                                                        </View>
+
+                                                                    </View>
+                                                                )
+                                                            })}
+                                                        </View>
+                                                    </View>
+                                                </Accordion.Panel>
+                                            </Accordion>
+                                        </View>}
 
 
-                                    </View>
-                                    <View style={[{flex: 1, justifyContent: 'flex-end', paddingHorizontal: '20%'}]}>
+
+                                    </ThemeScrollView>
+                                    <View style={[{justifyContent: 'flex-end', paddingHorizontal: '20%'}]}>
                                         <TouchableOpacity
                                             onPress={handleSubmit(data => {
                                                 this.handleSubmit(data, this.state?.itemData?.id)
