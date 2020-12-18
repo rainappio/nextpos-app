@@ -226,7 +226,7 @@ class LoginSuccessScreen extends React.Component {
                       {t('addTableLayout')}
                     </StyledText>
                     <IonIcon
-                      name={'ios-arrow-dropright-circle'}
+                      name={'arrow-forward-circle-outline'}
                       size={32}
                       color={mainThemeColor}
                     />
@@ -237,7 +237,7 @@ class LoginSuccessScreen extends React.Component {
                       {t('addTable')}
                     </StyledText>
                     <IonIcon
-                      name={'ios-arrow-dropright-circle'}
+                      name={'arrow-forward-circle-outline'}
                       size={32}
                       color={mainThemeColor}
                     />
@@ -248,7 +248,7 @@ class LoginSuccessScreen extends React.Component {
                       {t('addCategory')}
                     </StyledText>
                     <IonIcon
-                      name={'ios-arrow-dropright-circle'}
+                      name={'arrow-forward-circle-outline'}
                       size={32}
                       color={mainThemeColor}
                     />
@@ -259,7 +259,7 @@ class LoginSuccessScreen extends React.Component {
                       {t('addProduct')}
                     </StyledText>
                     <IonIcon
-                      name={'ios-arrow-dropright-circle'}
+                      name={'arrow-forward-circle-outline'}
                       size={32}
                       color={mainThemeColor}
                     />
@@ -270,7 +270,7 @@ class LoginSuccessScreen extends React.Component {
                       {t('addElectronicInvoice')}
                     </StyledText>
                     <IonIcon
-                      name={'ios-arrow-dropright-circle'}
+                      name={'arrow-forward-circle-outline'}
                       size={32}
                       color={mainThemeColor}
                     />
@@ -281,7 +281,7 @@ class LoginSuccessScreen extends React.Component {
                       {t('addPrinter')}
                     </StyledText>
                     <IonIcon
-                      name={'ios-arrow-dropright-circle'}
+                      name={'arrow-forward-circle-outline'}
                       size={32}
                       color={mainThemeColor}
                     />
@@ -292,7 +292,7 @@ class LoginSuccessScreen extends React.Component {
                       {t('addWorkingArea')}
                     </StyledText>
                     <IonIcon
-                      name={'ios-arrow-dropright-circle'}
+                      name={'arrow-forward-circle-outline'}
                       size={32}
                       color={mainThemeColor}
                     />
