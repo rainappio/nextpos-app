@@ -67,7 +67,7 @@ Sentry.init({
 
 Sentry.setRelease(Constants.manifest.revisionId);
 
-const store = createStore(
+export const store = createStore(
   rootReducer,
   {},
   composeWithDevTools(applyMiddleware(thunk))

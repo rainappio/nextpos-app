@@ -8,6 +8,8 @@ const en = {
   logout: 'Logout',
   changeUser: 'Change User',
   refreshed: 'Refreshed',
+  privilegedAccessTitle: 'This is a premium feature',
+  premiumFeatureMsg: 'Subscribe now',
   general: {
     noData: 'No data'
   },
@@ -127,6 +129,14 @@ const en = {
     cancelFree: 'Price is updated',
     mergeOrderTitle: 'Merge Order',
     mergeOrderMsg: 'Proceed with merging order line items?',
+
+    toggleOutOfStockMsg: 'Mark as out of stock?',
+    toggleUnmarkOutOfStockMsg: 'Unmark out of stock?',
+    splitBillPopUpTitle: 'Split Bill',
+    splitByItem: 'By Item',
+    splitByHeadCount: 'By Head Count',
+    payLeftAmount: '一次付清',
+    completeOrder: 'Complete',
   },
   orderState: {
     OPEN: 'Open',
@@ -366,6 +376,8 @@ const en = {
     currentPlan: 'Current Plan',
     status: 'Status',
     select: 'Select',
+    planStartDate: 'Start Date',
+    planEndDate: 'End Date',
     statusCode: {
       SUBMITTED: 'Submitted',
       ACTIVE: 'Activated',
@@ -418,6 +430,14 @@ const en = {
     recentOrders: 'Recent Orders',
     topRankings: 'Favorite Items'
   },
+  splitBillPopUp: {
+    quantity: 'Quantity',
+    ok: 'Done'
+  },
+  salesReport: 'Sales Reports',
+  staffTimeCardReport: 'Staff Time Card',
+  customerStatsReport: 'Customer Statistics',
+  shiftHistory: 'Shift History',
 }
 
 export default en

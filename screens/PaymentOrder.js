@@ -7,6 +7,7 @@ import PaymentOrderForm from './PaymentOrderForm'
 import {LocaleContext} from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
 import {handleDelete} from "../helpers/orderActions";
+import NavigationService from "../navigation/NavigationService";
 
 class PaymentOrder extends React.Component {
   static navigationOptions = {
@@ -49,6 +50,18 @@ class PaymentOrder extends React.Component {
 
 
   handleComplete = id => {
+    if (this.props.navigation.state.params?.isSplitByHeadCount) {
+      if (!this.props.navigation.state.params?.isLastOne) {
+        this.props.navigation.navigate('SplitBillByHeadScreen', {
+          order: this.props.navigation.state.params?.parentOrder
+        })
+      } else {
+        this.context?.saveSplitParentOrderId(null)
+        handleDelete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate('TablesSrc'))
+      }
+
+      return
+    }
     const formData = new FormData()
     formData.append('action', 'COMPLETE')
 
@@ -62,7 +75,12 @@ class PaymentOrder extends React.Component {
       defaultMessage: false
     }, response => {
       if (!!this.props.navigation.state.params?.isSplitting) {
-        if (this.props.navigation.state.params?.parentOrder?.lineItems.length !== 0) {
+        if (this.props.navigation.state.params?.isSplitByHeadCount && !this.props.navigation.state.params?.isLastOne) {
+          this.props.navigation.navigate('SplitBillByHeadScreen', {
+            order: this.props.navigation.state.params?.parentOrder
+          })
+        }
+        else if (this.props.navigation.state.params?.parentOrder?.lineItems.length !== 0) {
           this.props.navigation.navigate('SpiltBillScreen', {
             order: this.props.navigation.state.params?.parentOrder
           })
@@ -80,12 +98,13 @@ class PaymentOrder extends React.Component {
 
 
   checkAutoComplete = (values) => {
-    if (values.paymentMethod === 'CASH' && values.cash < this.props?.order?.orderTotal) {
+    const totalAmount = !!this.props.navigation.state.params?.isSplitByHeadCount ? this.props.navigation.state.params?.splitAmount : this.props?.order?.orderTotal
+    if (values.paymentMethod === 'CASH' && values.cash < totalAmount) {
       Alert.alert(
         ``,
         `${this.context.t('payment.checkAutoComplete')}`,
         [
-          {text: `${this.context.t('action.yes')}`, onPress: () => this.handleSubmit(values, true, this.props?.order?.orderTotal)},
+          {text: `${this.context.t('action.yes')}`, onPress: () => this.handleSubmit(values, true, totalAmount)},
           {
             text: `${this.context.t('action.no')}`,
             onPress: () => console.log('Cancelled'),
@@ -119,14 +138,37 @@ class PaymentOrder extends React.Component {
             onSubmit: this.handleComplete,
             isSplitting: this.props.navigation.state.params?.isSplitting ?? false,
             parentOrder: this.props.navigation.state.params?.parentOrder ?? null,
+            isSplitByHeadCount: this.props.navigation.state.params?.isSplitByHeadCount ?? false,
+            splitAmount: this.props.navigation.state.params?.splitAmount ?? null,
+            isLastOne: this.props.navigation.state.params?.isLastOne ?? false,
           })
         })
       }).then()
     }
+    // const transactionObj = {
+    //   orderId: this.props.navigation.state.params.orderId,
+    //   paymentMethod: values.paymentMethod,
+    //   billType: 'SINGLE',
+    //   taxIdNumber: values?.taxIdNumber ?? null,
+    //   paymentDetails: {},
+    //   printMark: true
+    // }
+    // if (!!values?.carrierId) {
+    //   transactionObj.carrierType = 'MOBILE'
+    //   transactionObj.carrierId = values?.carrierId
+    // }
+    // if (values.paymentMethod === 'CASH') {
+    //   transactionObj.paymentDetails['CASH'] = autoComplete ? cash : values.cash
+    // }
+    // if (values.paymentMethod === 'CARD') {
+    //   transactionObj.paymentDetails['CARD_TYPE'] = values.cardType
+    //   transactionObj.paymentDetails['LAST_FOUR_DIGITS'] = values.cardNumber
+    // }
+
     const transactionObj = {
       orderId: this.props.navigation.state.params.orderId,
       paymentMethod: values.paymentMethod,
-      billType: 'SINGLE',
+      billType: this.props.navigation.state.params?.isSplitByHeadCount ? 'SPLIT' : 'SINGLE',
       taxIdNumber: values?.taxIdNumber ?? null,
       paymentDetails: {},
       printMark: true
@@ -137,10 +179,12 @@ class PaymentOrder extends React.Component {
     }
     if (values.paymentMethod === 'CASH') {
       transactionObj.paymentDetails['CASH'] = autoComplete ? cash : values.cash
+      this.props.navigation.state.params?.isSplitByHeadCount && (transactionObj.settleAmount = this.props.navigation.state.params?.splitAmount)
     }
     if (values.paymentMethod === 'CARD') {
       transactionObj.paymentDetails['CARD_TYPE'] = values.cardType
       transactionObj.paymentDetails['LAST_FOUR_DIGITS'] = values.cardNumber
+      this.props.navigation.state.params?.isSplitByHeadCount && (transactionObj.settleAmount = this.props.navigation.state.params?.splitAmount)
     }
 
     if (!!values?.carrierId && !!values?.taxIdNumber) {
@@ -196,6 +240,11 @@ class PaymentOrder extends React.Component {
           selectedPaymentType={selectedPaymentType}
           paymentsTypes={paymentsTypes}
           handlePaymentTypeSelection={this.handlePaymentTypeSelection}
+          isSplitting={this.props.navigation.state.params?.isSplitting ?? false}
+          parentOrder={this.props.navigation.state.params?.parentOrder ?? null}
+          isSplitByHeadCount={this.props.navigation.state.params?.isSplitByHeadCount ?? false}
+          splitAmount={this.props.navigation.state.params?.splitAmount ?? null}
+          isLastOne={this.props.navigation.state.params?.isLastOne ?? false}
         />
       )
     }

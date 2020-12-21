@@ -1,6 +1,7 @@
 import React from 'react'
-import {Image, Modal, Text, TouchableOpacity, View} from 'react-native'
+import {Image, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
+import {Field, reduxForm} from 'redux-form'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -8,7 +9,7 @@ import {doLogout, formatDateObj, getAnnouncements, getClientUsr, getCurrentClien
 import styles, {mainThemeColor} from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
 import {NavigationEvents} from 'react-navigation'
-import {getToken} from '../constants/Backend'
+import {getToken, api, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {Avatar} from 'react-native-elements'
 import Markdown from 'react-native-markdown-display'
@@ -20,6 +21,10 @@ import {compose} from "redux";
 import {StyledText} from "../components/StyledText";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {complexTheme} from "../themes/ThemeContext";
+import NavigationService from "../navigation/NavigationService";
+import Modal from 'react-native-modal';
+import {Pages} from 'react-native-pages'
+import {CheckBox} from 'react-native-elements'
 
 class LoginSuccessScreen extends React.Component {
   static navigationOptions = {
@@ -37,6 +42,10 @@ class LoginSuccessScreen extends React.Component {
       username: ' ',
       loggedIn: null,
       tokenExpiry: null,
+      globalAnnouncements: null,
+      modalVisible: false,
+      checkedObj: null,
+      isLoadingUserInfo: false
     }
 
   }
@@ -62,6 +71,7 @@ class LoginSuccessScreen extends React.Component {
         addProduct: 'Add Product',
         addTable: 'Add Table',
         addWorkingArea: 'Add Working Area',
+        markAsReadPrompt: 'Dismiss'
       },
       zh: {
         welcome: '歡迎,',
@@ -76,12 +86,14 @@ class LoginSuccessScreen extends React.Component {
         addProduct: '新增產品',
         addTable: '新增桌位',
         addWorkingArea: '新增工作區',
+        markAsReadPrompt: '不再顯示此公告'
       }
     })
     // <NavigationEvent> component in the render function takes care of loading user info.
   }
 
   loadUserInfo = async () => {
+    this.setState({isLoadingUserInfo: true})
     let token = await getToken()
     this.props.getCurrentClient()
     this.props.getCurrentUser(token.username)
@@ -92,8 +104,75 @@ class LoginSuccessScreen extends React.Component {
       token: token,
       username: token.username,
       loggedIn: token.loggedIn,
-      tokenExpiry: token.tokenExp
+      tokenExpiry: token.tokenExp,
     })
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps?.currentUser !== this.props?.currentUser && this.state?.isLoadingUserInfo) {
+      this.getGlobalAnnouncements()
+      this.setState({
+        isLoadingUserInfo: false
+      })
+    }
+  }
+
+  getGlobalAnnouncements = () => {
+    dispatchFetchRequestWithOption(api.announcements.getGlobal, {
+      method: 'GET',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }, {
+      defaultMessage: false
+    }, response => {
+      response.json().then(data => {
+        let globalAnnouncements = [...data?.results]
+        if (globalAnnouncements?.length > 0) {
+          let tempObj = {}
+          let tempGlobalAnnouncements = globalAnnouncements?.filter((item) => {return !(!!item?.readDevices?.[`${this.props?.client?.id}`] && item?.readDevices?.[`${this.props?.client?.id}`].includes(this.props?.currentUser?.username))})
+          tempGlobalAnnouncements?.forEach((item) => tempObj[`${item?.id}`] = false)
+          this.setState({
+            checkedObj: tempObj,
+            globalAnnouncements: tempGlobalAnnouncements,
+            modalVisible: tempGlobalAnnouncements?.length > 0
+          })
+
+        } else {
+          this.setState({
+            globalAnnouncements: globalAnnouncements,
+          })
+        }
+
+      })
+    }).then()
+  }
+
+  handleCloseModal = () => {
+    this.state?.globalAnnouncements.forEach((item) => {
+      if (this.state?.checkedObj?.[`${item?.id}`]) {
+        dispatchFetchRequestWithOption(api.announcements.markAsRead(item?.id), {
+          method: 'POST',
+          withCredentials: true,
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            clientId: this.props?.client?.id,
+            deviceId: this.props?.currentUser?.username
+          })
+        }, {
+          defaultMessage: false
+        }, response => {
+
+        }).then()
+      }
+    })
+
+    this.setState({modalVisible: false})
   }
 
   render() {
@@ -133,7 +212,63 @@ class LoginSuccessScreen extends React.Component {
 
         />
 
+
         <View style={[styles.fullWidthScreen]}>
+          <Modal
+            isVisible={this.state.modalVisible}
+            backdropOpacity={0.7}
+            onBackdropPress={() => this.handleCloseModal()}
+            useNativeDriver
+            hideModalContentWhileAnimating
+            animationIn='bounceIn'
+            animationOut='bounceOut'
+            style={{alignSelf: 'center', maxWidth: 640, width: '80%'}}
+          >
+            <View style={[themeStyle, {borderRadius: 20, flex: 0.7}]}>
+              <Pages indicatorColor={mainThemeColor}>
+                {this.state?.globalAnnouncements?.map((item) => {
+                  return (
+                    <View style={{flex: 1, paddingBottom: 18}}>
+                      <View style={{alignItems: 'center', borderColor: mainThemeColor, borderBottomWidth: 1, paddingVertical: 10, marginBottom: 10}}>
+                        <StyledText style={{fontSize: 28, color: mainThemeColor, marginHorizontal: 8}}>{item?.title}</StyledText>
+                      </View>
+
+                      <View style={{alignItems: 'center'}}>
+                        <StyledText>{item?.content}</StyledText>
+                      </View>
+
+                      <View style={{alignSelf: 'flex-end', justifyContent: 'flex-end', flex: 1, paddingRight: 20}}>
+                        <View style={[styles.tableRowContainer, {paddingHorizontal: 0}]}>
+
+                          <View style={[styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                            <View>
+                              <CheckBox
+                                checkedIcon={'check-circle'}
+                                uncheckedIcon={'circle'}
+                                checked={this.state?.checkedObj?.[`${item?.id}`]}
+                                containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                                onPress={() => {
+                                  let tempObj = {...this.state?.checkedObj}
+                                  tempObj[`${item?.id}`] = !tempObj[`${item?.id}`]
+                                  this.setState({checkedObj: tempObj})
+                                }}
+                              >
+                              </CheckBox>
+                            </View>
+
+                          </View>
+                          <View style={[styles.tableCellView,]}>
+                            <StyledText>{t('markAsReadPrompt')}</StyledText>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  )
+                })}
+              </Pages>
+            </View>
+
+          </Modal>
           <View style={[{flexDirection: 'row', marginHorizontal: 10}]}>
             <View style={{flex: 1}}>
               <Image
@@ -171,6 +306,7 @@ class LoginSuccessScreen extends React.Component {
             {shiftStatus === 'ACTIVE' && (
               <View style={[styles.menuContainer, {flex: 1}]}>
                 <MenuButton
+                  route='OrderStart'
                   onPress={() => {
                     this.props.navigation.navigate('OrderStart', {
                       handleOrderSubmit: handleOrderSubmit,
@@ -190,8 +326,9 @@ class LoginSuccessScreen extends React.Component {
 
             <View style={[styles.menuContainer, {flex: 1}]}>
               <MenuButton
+                route='ClockIn'
                 onPress={() =>
-                  this.props.navigation.navigate('ClockIn', {
+                  NavigationService?.navigateToRoute('ClockIn', {
                     authClientUserName: username
                   })}
                 title={t('menu.timecard')}
@@ -356,6 +493,10 @@ const mapDispatchToProps = dispatch => ({
   getShiftStatus: () => dispatch(getShiftStatus()),
   getPrinters: () => dispatch(getPrinters()),
 })
+
+LoginSuccessScreen = reduxForm({
+  form: 'readGlobalAnnouncementsForm'
+})(LoginSuccessScreen)
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),

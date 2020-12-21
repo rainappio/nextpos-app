@@ -131,54 +131,60 @@ class EinvoiceStatusScreen extends React.Component {
                     />
                     <View style={[styles.container, {justifyContent: 'space-around'}]}>
                         <View style={{marginBottom: 16}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginVertical: 8}}>
-                                <StyledText style={styles.messageBlock}>
-                                    {t('eInvoice.ubn')}
-                                </StyledText>
-                                <Icon
-                                    name={!!this.props?.client?.attributes?.UBN ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
-                                    size={32}
-                                    style={styles.buttonIconStyle}
-                                />
-                                {!this.props?.client?.attributes?.UBN && <View style={{marginHorizontal: 16}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 8}}>
+                                <View style={{flexDirection: 'row'}}>
+                                    <StyledText style={styles.messageBlock}>
+                                        {t('eInvoice.ubn')}
+                                    </StyledText>
+                                    <Icon
+                                        name={!!this.props?.client?.attributes?.UBN ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
+                                        size={32}
+                                        style={styles.buttonIconStyle}
+                                    />
+                                </View>
+                                {!this.props?.client?.attributes?.UBN && <View style={{marginHorizontal: 10}}>
                                     <MainActionButton title={t('eInvoice.setUBN')} onPress={() => {
                                         this.props.navigation.navigate('Store')
                                     }} />
                                 </View>}
                             </View>
-                            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', marginVertical: 8}}>
-                                <StyledText style={styles.messageBlock}>
-                                    {t('eInvoice.AES_KEY')}
-                                </StyledText>
-                                <Icon
-                                    name={!!this.props?.client?.attributes?.AES_KEY ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
-                                    size={32}
-                                    style={[styles.buttonIconStyle, {alignSelf: 'flex-start'}]}
-                                />
-                                {!this.props?.client?.attributes?.AES_KEY && <View style={{minWidth: 160, maxWidth: 320, marginLeft: 16}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginVertical: 8}}>
+                                <View style={{flexDirection: 'row'}}>
+                                    <StyledText style={styles.messageBlock}>
+                                        {t('eInvoice.AES_KEY')}
+                                    </StyledText>
+                                    <Icon
+                                        name={!!this.props?.client?.attributes?.AES_KEY ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
+                                        size={32}
+                                        style={[styles.buttonIconStyle]}
+                                    />
+                                </View>
+                                {!this.props?.client?.attributes?.AES_KEY && <View style={{marginLeft: 10, flex: 1}}>
                                     <Field
                                         name={`AES_KEY`}
                                         component={InputText}
                                         validate={[isRequired]}
                                     />
                                 </View>}
-                                {!this.props?.client?.attributes?.AES_KEY && <View style={{marginHorizontal: 16}}>
+                                {!this.props?.client?.attributes?.AES_KEY && <View style={{marginHorizontal: 10}}>
 
                                     <MainActionButton title={t('eInvoice.setAES_KEY')} onPress={handleSubmit(data => {
                                         this.handleAesKeySubmit(data)
                                     })} />
                                 </View>}
                             </View>
-                            <View style={{flexDirection: 'row', justifyContent: 'center', marginVertical: 8}}>
-                                <StyledText style={styles.messageBlock}>
-                                    {t('eInvoice.invoice')}
-                                </StyledText>
-                                <Icon
-                                    name={!!this.state.checkEInvoiceEligibility ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
-                                    size={32}
-                                    style={styles.buttonIconStyle}
-                                />
-                                {!this.state.checkEInvoiceEligibility && !!this.props?.client?.attributes?.AES_KEY && !!this.props?.client?.attributes?.UBN && <View style={{marginHorizontal: 16}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginVertical: 8}}>
+                                <View style={{flexDirection: 'row'}}>
+                                    <StyledText style={styles.messageBlock}>
+                                        {t('eInvoice.invoice')}
+                                    </StyledText>
+                                    <Icon
+                                        name={!!this.state.checkEInvoiceEligibility ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
+                                        size={32}
+                                        style={styles.buttonIconStyle}
+                                    />
+                                </View>
+                                {!this.state.checkEInvoiceEligibility && !!this.props?.client?.attributes?.AES_KEY && !!this.props?.client?.attributes?.UBN && <View style={{marginHorizontal: 10}}>
 
                                     <MainActionButton title={t('eInvoice.setInvoice')} onPress={() => {
                                         this.props.navigation.navigate('EinvoiceEditScreen', {

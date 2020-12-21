@@ -29,6 +29,7 @@ import DropDown from "../components/DropDown";
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import {NavigationEvents} from "react-navigation";
+import {SplitBillPopUp} from '../components/PopUp'
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
@@ -56,9 +57,6 @@ class OrderFormII extends React.Component {
         selectItemToDeliver: 'Please select a line item to deliver',
         deliverOrder: 'Deliver',
         payOrder: 'Payment',
-        completeOrder: 'Complete',
-        toggleOutOfStockMsg: 'Mark as out of stock?',
-        toggleUnmarkOutOfStockMsg: 'Unmark out of stock?',
         stateTip: {
           open: {
             display: 'Open',
@@ -98,9 +96,6 @@ class OrderFormII extends React.Component {
         selectItemToDeliver: '請選擇品項送餐',
         deliverOrder: '送餐完畢',
         payOrder: '付款',
-        completeOrder: '結束訂單',
-        toggleOutOfStockMsg: '確認估清?',
-        toggleUnmarkOutOfStockMsg: '取消估清?',
         stateTip: {
           open: {
             display: '開單',
@@ -144,6 +139,7 @@ class OrderFormII extends React.Component {
         {label: context.t('printOrderDetails'), value: 'printOrderDetails'},
       ],
       otherAction: null,
+      splitBillModalVisible: false
     }
     this.onChange = activeSections => {
       this.setState({activeSections: activeSections})
@@ -404,7 +400,7 @@ class OrderFormII extends React.Component {
 
   handleItemOutOfStock = (lineItemId, outOfStock) => {
     Alert.alert(
-      `${this.context.t(outOfStock ? `toggleUnmarkOutOfStockMsg` : `toggleOutOfStockMsg`)}`,
+      `${this.context.t(outOfStock ? `order.toggleUnmarkOutOfStockMsg` : `order.toggleOutOfStockMsg`)}`,
       ``,
       [
         {
@@ -433,6 +429,37 @@ class OrderFormII extends React.Component {
 
   }
 
+  getSplitBillByHeadCount = (id) => {
+    dispatchFetchRequestWithOption(
+      api.splitOrder.splitByHead(id),
+      {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json', },
+
+      }, {
+      defaultMessage: false
+    },
+      response => {
+        response.json().then(data => {
+
+          let isPaid = data?.splitAmounts?.filter((item) => item?.paid)?.length > 0
+          if (data?.headCount >= 2 && isPaid) {
+            this.setState({splitBillModalVisible: true})
+          } else {
+            this.props.navigation.navigate('Payment', {
+              order: this.props?.order
+            })
+          }
+
+        })
+      },
+      response => {
+
+      }
+    ).then()
+  }
 
 
   render() {
@@ -503,6 +530,17 @@ class OrderFormII extends React.Component {
                 navigation={this.props.navigation}
                 prdId={this.state?.prdId}
                 isEditLineItem={this.state?.isEditLineItem ?? false} />
+
+              <SplitBillPopUp
+                navigation={this.props.navigation}
+                toRoute={['SpiltBillScreen', 'SplitBillByHeadScreen']}
+                textForRoute={[t('order.splitByItem'), t('order.splitByHeadCount')]}
+                title={t('order.splitBillPopUpTitle')}
+                params={[{order: order}, {order: order}]}
+                isVisible={this.state?.splitBillModalVisible}
+                toggleModal={(visible) => this.setState({splitBillModalVisible: visible})}
+                orderId={order?.orderId}
+              />
 
 
               <View style={{flexDirection: 'row', flex: 1}}>
@@ -848,9 +886,8 @@ class OrderFormII extends React.Component {
                           <SecondActionButton
                             onPress={() => {
                               if (splitParentOrderId === null || splitParentOrderId === order?.orderId) {
-                                this.props.navigation.navigate('SpiltBillScreen', {
-                                  order: order
-                                })
+
+                                this.setState({splitBillModalVisible: true})
                               }
                               else {
                                 Alert.alert(
@@ -863,9 +900,8 @@ class OrderFormII extends React.Component {
                                         await revertSplitOrder(this.context?.splitParentOrderId, this.context?.splitOrderId)
                                         await this.context?.saveSplitOrderId(null)
                                         await this.context?.saveSplitParentOrderId(null)
-                                        this.props.navigation.navigate('SpiltBillScreen', {
-                                          order: order
-                                        })
+
+                                        this.setState({splitBillModalVisible: true})
                                       }
                                     },
                                     {
@@ -906,9 +942,7 @@ class OrderFormII extends React.Component {
                                       }
                                     ]
                                   )
-                                  : this.props.navigation.navigate('Payment', {
-                                    order: order
-                                  })
+                                  : this.getSplitBillByHeadCount(order?.orderId)
                             }
                             style={styles.flexButton}
                           >
@@ -958,7 +992,7 @@ class OrderFormII extends React.Component {
                             onPress={() => this.handleComplete(this.props.navigation.state.params?.orderSetData?.mainOrderId ?? order.orderId)}
                             style={styles.flexButtonSecondAction}
                           >
-                            <Text style={styles.flexButtonSecondActionText}>{t('completeOrder')}</Text>
+                            <Text style={styles.flexButtonSecondActionText}>{t('order.completeOrder')}</Text>
                           </TouchableOpacity>
                         </View>
                       </View>

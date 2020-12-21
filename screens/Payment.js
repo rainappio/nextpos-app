@@ -65,6 +65,9 @@ class Payment extends React.Component {
         navigation: this.props.navigation,
         isSplitting: this.props.navigation.state.params?.isSplitting ?? false,
         parentOrder: this.props.navigation.state.params?.parentOrder ?? null,
+        isSplitByHeadCount: this.props.navigation.state.params?.isSplitByHeadCount ?? false,
+        splitAmount: this.props.navigation.state.params?.splitAmount ?? null,
+        isLastOne: this.props.navigation.state.params?.isLastOne ?? false,
       })
     }
 
@@ -108,6 +111,9 @@ class Payment extends React.Component {
         onSubmit={this.handlePayment}
         isSplitting={this.props.navigation.state.params?.isSplitting ?? false}
         parentOrder={this.props.navigation.state.params?.parentOrder ?? null}
+        isSplitByHeadCount={this.props.navigation.state.params?.isSplitByHeadCount ?? false}
+        splitAmount={this.props.navigation.state.params?.splitAmount ?? null}
+        isLastOne={this.props.navigation.state.params?.isLastOne ?? false}
       />
         : <PaymentFormScreen
           initialValues={{
@@ -119,6 +125,9 @@ class Payment extends React.Component {
           onSubmit={this.handlePayment}
           isSplitting={this.props.navigation.state.params?.isSplitting ?? false}
           parentOrder={this.props.navigation.state.params?.parentOrder ?? null}
+          isSplitByHeadCount={this.props.navigation.state.params?.isSplitByHeadCount ?? false}
+          splitAmount={this.props.navigation.state.params?.splitAmount ?? null}
+          isLastOne={this.props.navigation.state.params?.isLastOne ?? false}
         />}
     </>
     )

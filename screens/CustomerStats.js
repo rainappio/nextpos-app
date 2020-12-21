@@ -254,7 +254,7 @@ class CustomerStats extends React.Component {
 
                 {
                   ordersByType !== null && ordersByType.map(order => (
-                    <View
+                    order.orderType === 'ONLINE' ? null : <View
                       key={order.id}
                       style={styles.tableRowContainerWithBorder}
                     >

@@ -85,6 +85,18 @@ class PaymentFormScreenTablet extends React.Component {
 
 
     handleComplete = id => {
+        if (this.props?.isSplitByHeadCount) {
+            if (!this.props?.isLastOne) {
+                this.props.navigation.navigate('SplitBillByHeadScreen', {
+                    order: this.props?.parentOrder
+                })
+            } else {
+                this.context?.saveSplitParentOrderId(null)
+                handleDelete(this.props?.parentOrder?.orderId, () => NavigationService.navigate('TablesSrc'))
+            }
+
+            return
+        }
         const formData = new FormData()
         formData.append('action', 'COMPLETE')
 
@@ -98,7 +110,12 @@ class PaymentFormScreenTablet extends React.Component {
             defaultMessage: false
         }, response => {
             if (!!this.props?.isSplitting) {
-                if (this.props?.parentOrder?.lineItems.length !== 0) {
+                if (this.props?.isSplitByHeadCount && !this.props?.isLastOne) {
+                    this.props.navigation.navigate('SplitBillByHeadScreen', {
+                        order: this.props?.parentOrder
+                    })
+                }
+                else if (this.props?.parentOrder?.lineItems.length !== 0) {
                     this.props.navigation.navigate('SpiltBillScreen', {
                         order: this.props?.parentOrder
                     })
@@ -123,7 +140,7 @@ class PaymentFormScreenTablet extends React.Component {
         const transactionObj = {
             orderId: this.props.order.orderId,
             paymentMethod: this.state.selectedPayLabel,
-            billType: 'SINGLE',
+            billType: this.props?.isSplitByHeadCount ? 'SPLIT' : 'SINGLE',
             taxIdNumber: this.state.taxIDNumberKeyBoardResult.join(''),
             paymentDetails: {},
             printMark: true
@@ -134,10 +151,12 @@ class PaymentFormScreenTablet extends React.Component {
         }
         if (this.state.selectedPayLabel === 'CASH') {
             transactionObj.paymentDetails['CASH'] = autoComplete ? cash : this.state.keyboardResult
+            this.props?.isSplitByHeadCount && (transactionObj.settleAmount = this.props?.splitAmount)
         }
         if (this.state.selectedPayLabel === 'CARD') {
             transactionObj.paymentDetails['CARD_TYPE'] = this.state.selectedCardLabel
             transactionObj.paymentDetails['LAST_FOUR_DIGITS'] = this.state.cardKeyboardResult.join('')
+            this.props?.isSplitByHeadCount && (transactionObj.settleAmount = this.props?.splitAmount)
         }
 
 
@@ -189,6 +208,9 @@ class PaymentFormScreenTablet extends React.Component {
                     onSubmit: this.handleComplete,
                     isSplitting: this.props?.isSplitting ?? false,
                     parentOrder: this.props?.parentOrder ?? null,
+                    isSplitByHeadCount: this.props?.isSplitByHeadCount ?? false,
+                    splitAmount: this.props?.splitAmount ?? null,
+                    isLastOne: this.props?.isLastOne ?? false,
                 })
             })
         }).then()
@@ -367,7 +389,8 @@ class PaymentFormScreenTablet extends React.Component {
     render() {
         const {navigation, handleSubmit, globalorderoffers, order} = this.props
         const {t, themeStyle} = this.context
-        console.log('globalorderoffers render2', this.props?.form)
+        const totalAmount = this.props?.isSplitByHeadCount ? this.props?.splitAmount : order.orderTotal
+
         return (
             <ThemeContainer>
                 <View style={[styles.fullWidthScreen]}>
@@ -483,16 +506,16 @@ class PaymentFormScreenTablet extends React.Component {
                                             {this.state.haveCarrierId && <Icon style={{marginRight: 10}} name="times-circle" size={20} color='#f75336' />}
                                         </TouchableOpacity>
                                     </View>
-                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
+                                    {this.props?.isSplitByHeadCount || <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
                                         <TouchableOpacity style={[(this.state.waiveServiceCharge ? styles.selectedLabel : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {this.handleServiceChargePress(this.state.waiveServiceCharge)}}>
                                             <View style={styles.listPanel}>
                                                 <StyledText style={styles.listPanelText}>{t('payment.waiveServiceCharge')}</StyledText>
                                             </View>
                                             {this.state.waiveServiceCharge && <Icon style={{marginRight: 10}} name="times-circle" size={20} color='#f75336' />}
                                         </TouchableOpacity>
-                                    </View>
+                                    </View>}
 
-                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
+                                    {this.props?.isSplitByHeadCount || <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
                                         <TouchableOpacity style={[(this.state.haveBindAccount ? styles.selectedLabel : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {
                                             this.state.haveBindAccount && this.handleUpdateOrderMembership(order?.orderId)
                                             this.setState({haveBindAccount: !this.state.haveBindAccount, keyboardType: 'ACCOUNT'})
@@ -502,13 +525,13 @@ class PaymentFormScreenTablet extends React.Component {
                                             </View>
                                             {this.state.haveBindAccount && <Icon style={{marginRight: 10}} name="times-circle" size={20} color='#f75336' />}
                                         </TouchableOpacity>
-                                    </View>
+                                    </View>}
                                 </ScrollView>
                             </View>
                             {/* mid content */}
                             <View style={{flex: 2, borderRightWidth: 2, borderLeftWidth: 2, borderColor: '#b7b7b780', paddingHorizontal: 8}}>
                                 <ThemeKeyboardAwareScrollView style={{flex: 1}}>
-                                    <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                                    {this.props?.isSplitByHeadCount || <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
                                         <View style={[styles.tableCellView, {flex: 1}]}>
                                             <StyledText>{t('order.subtotal')}</StyledText>
                                         </View>
@@ -518,8 +541,8 @@ class PaymentFormScreenTablet extends React.Component {
                                                 {formatCurrency(order.total.amountWithTax)}
                                             </StyledText>
                                         </View>
-                                    </View>
-                                    <TouchableOpacity onPress={() => {this.setState({openDiscountKeyBoard: !this.state.openDiscountKeyBoard, openTaxIDNumberKeyBoard: false, keyboardType: 'DISCOUNT'})}} style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                                    </View>}
+                                    {this.props?.isSplitByHeadCount || <TouchableOpacity onPress={() => {this.setState({openDiscountKeyBoard: !this.state.openDiscountKeyBoard, openTaxIDNumberKeyBoard: false, keyboardType: 'DISCOUNT'})}} style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
                                         <View style={[styles.tableCellView, {flex: 1}]}>
                                             <StyledText>{t('order.discount')}</StyledText>
                                             <Icon style={{marginLeft: 10}} name="edit" size={20} color={mainThemeColor} />
@@ -530,9 +553,9 @@ class PaymentFormScreenTablet extends React.Component {
                                                 {formatCurrency(order.discount)}
                                             </StyledText>
                                         </View>
-                                    </TouchableOpacity>
+                                    </TouchableOpacity>}
 
-                                    <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                                    {this.props?.isSplitByHeadCount || <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
                                         <View style={[styles.tableCellView, {flex: 1}]}>
                                             <StyledText>{t('order.serviceCharge')}</StyledText>
 
@@ -543,7 +566,7 @@ class PaymentFormScreenTablet extends React.Component {
                                                 {formatCurrency(order.serviceCharge)}
                                             </StyledText>
                                         </View>
-                                    </View>
+                                    </View>}
 
 
                                     {this.state.selectedPayLabel === 'CASH' && <View>
@@ -567,7 +590,7 @@ class PaymentFormScreenTablet extends React.Component {
 
                                             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                                                 <StyledText style={styles.tableCellText}>
-                                                    {formatCurrency((order.orderTotal - this.state.keyboardResult) <= 0 ? 0 : (order.orderTotal - this.state.keyboardResult))}
+                                                    {formatCurrency((totalAmount - this.state.keyboardResult) <= 0 ? 0 : (totalAmount - this.state.keyboardResult))}
                                                 </StyledText>
                                             </View>
                                         </View>
@@ -579,7 +602,7 @@ class PaymentFormScreenTablet extends React.Component {
 
                                             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                                                 <StyledText style={styles.tableCellText}>
-                                                    {formatCurrency((order.orderTotal - this.state.keyboardResult) <= 0 ? (this.state.keyboardResult - order.orderTotal) : 0)}
+                                                    {formatCurrency((totalAmount - this.state.keyboardResult) <= 0 ? (this.state.keyboardResult - totalAmount) : 0)}
                                                 </StyledText>
                                             </View>
                                         </View>
@@ -749,7 +772,7 @@ class PaymentFormScreenTablet extends React.Component {
 
                                     <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                                         <StyledText style={styles.tableCellText}>
-                                            {formatCurrency(order.orderTotal)}
+                                            {formatCurrency(totalAmount)}
                                         </StyledText>
                                     </View>
                                 </View>
@@ -808,12 +831,12 @@ class PaymentFormScreenTablet extends React.Component {
                                                 )
                                             }
                                             else {
-                                                if (this.state.selectedPayLabel === 'CASH' && (order.orderTotal - this.state.keyboardResult) > 0) {
+                                                if (this.state.selectedPayLabel === 'CASH' && (totalAmount - this.state.keyboardResult) > 0) {
                                                     Alert.alert(
                                                         `${t('payment.checkAutoComplete')}`,
                                                         ` `,
                                                         [
-                                                            {text: `${t('action.yes')}`, onPress: () => this.handleSubmit(data, true, order.orderTotal)},
+                                                            {text: `${t('action.yes')}`, onPress: () => this.handleSubmit(data, true, totalAmount)},
                                                             {
                                                                 text: `${t('action.no')}`,
                                                                 onPress: () => console.log('Cancelled'),

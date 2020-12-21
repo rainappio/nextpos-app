@@ -1,5 +1,6 @@
 import React from 'react'
 import {Platform} from 'react-native'
+import NavigationService from "../navigation/NavigationService";
 import {createStackNavigator} from 'react-navigation-stack'
 import {createBottomTabNavigator} from 'react-navigation-tabs'
 import {createSwitchNavigator, StackActions} from 'react-navigation'
@@ -87,6 +88,7 @@ import TabBarBottom from "react-navigation-tabs/src/views/BottomTabBar";
 import OrderDisplayScreen from "../screens/OrderDisplayScreen";
 import ResetClientPassword from "../screens/ResetClientPassword";
 import SpiltBillScreen from "../screens/SpiltBillScreen";
+import SplitBillByHeadScreen from "../screens/SplitBillByHeadScreen";
 import SubscriptionScreen from '../screens/SubscriptionScreen'
 import RostersScreen from '../screens/RostersScreen'
 import RostersFormScreen from '../screens/RostersFormScreen'
@@ -184,6 +186,7 @@ const Tables = createStackNavigator({
   PaymentOrder: PaymentOrder,
   CheckoutComplete: CheckoutComplete,
   SpiltBillScreen: SpiltBillScreen,
+  SplitBillByHeadScreen: SplitBillByHeadScreen,
 })
 Tables.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.tables'),
@@ -242,9 +245,11 @@ const Rosters = createStackNavigator({
 })
 Rosters.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.reporting'),
-  tabBarButtonComponent: (props) => (
-    <TabBarIcon focused={props?.focused} name="md-calendar" onPress={props?.onPress} />
-  ),
+  tabBarButtonComponent: (props) => {
+    return (
+      <TabBarIcon focused={props?.focused} name="md-calendar" onPress={() => NavigationService?.navigateToRoute('CalendarScreen', null, props?.onPress)} />
+    )
+  },
 })
 
 const tabBar = createBottomTabNavigator({
