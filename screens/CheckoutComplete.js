@@ -29,7 +29,6 @@ class CheckoutComplete extends React.Component {
         serviceCharge: 'Service Charge',
         change: 'Change',
         backToTables: 'Back to Tables',
-        completeOrder: 'Complete Order',
         printInvoiceXML: 'Print invoice again',
         printReceiptXML: 'Print receipt details again',
         printerSuccess: 'Print succeeded',
@@ -45,7 +44,6 @@ class CheckoutComplete extends React.Component {
         serviceCharge: '服務費',
         change: '找錢',
         backToTables: '回到桌位頁面',
-        completeOrder: '結束訂單',
         printInvoiceXML: '重印電子發票',
         printReceiptXML: '重印明細',
         printerSuccess: '列印成功',
@@ -270,7 +268,7 @@ class CheckoutComplete extends React.Component {
               </View>
 
               {/* split done or no split */}
-              {(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0) &&
+              {(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0 || this.props.navigation.state.params.isLastOne) &&
                 <>
                   <View style={{width: '50%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
                     <TouchableOpacity
@@ -322,12 +320,12 @@ class CheckoutComplete extends React.Component {
                         marginBottom: 10,
                         overflow: 'hidden',
                         color: mainThemeColor
-                      }}>{t('completeOrder')}</Text>
+                      }}>{t('order.completeOrder')}</Text>
                     </TouchableOpacity>
                   </View></>}
 
               {/* splitting */}
-              {(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0) ||
+              {(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0 || this.props.navigation.state.params.isLastOne) ||
                 <View style={{width: '100%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
                   <TouchableOpacity
                     onPress={() =>
@@ -460,7 +458,7 @@ class CheckoutComplete extends React.Component {
                     )
                   }
                 >
-                  <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t(`${(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0) ? 'completeOrder' : 'continueSplitBill'}`)}</Text>
+                  <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t(`${(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0 || this.props.navigation.state.params.isLastOne) ? 'completeOrder' : 'continueSplitBill'}`)}</Text>
                 </TouchableOpacity>
               </View>
             </View>

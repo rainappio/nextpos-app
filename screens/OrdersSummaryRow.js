@@ -18,6 +18,7 @@ import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import {StyledText} from "../components/StyledText";
 import {SecondActionButton} from "../components/ActionButtons";
+import {SplitBillPopUp} from '../components/PopUp'
 
 class OrdersSummaryRow extends React.Component {
   static contextType = LocaleContext
@@ -102,6 +103,7 @@ class OrdersSummaryRow extends React.Component {
 
     this.state = {
       orderLineItems: {},
+      splitBillModalVisible: false
     }
 
     console.debug(`order summary order id: ${this.props.order.orderId}`)
@@ -251,7 +253,55 @@ class OrdersSummaryRow extends React.Component {
     }).then()
   }
 
+  handleMergeOrder = (setid, orderId) => {
+    dispatchFetchRequest(api.order.mergeOrderSet(setid), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({orderId: orderId})
+    }, response => {
+      response.json().then(data => {
+        this.props.getOrder(this.props.order.orderId)
+      })
+    }).then(() => this.props.navigation.navigate('Payment', {
+      order: this.props.order
+    }))
+  }
 
+  getSplitBillByHeadCount = (id) => {
+    dispatchFetchRequestWithOption(
+      api.splitOrder.splitByHead(id),
+      {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json', },
+
+      }, {
+      defaultMessage: false
+    },
+      response => {
+        response.json().then(data => {
+
+          let isPaid = data?.splitAmounts?.filter((item) => item?.paid)?.length > 0
+          if (data?.headCount >= 2 && isPaid) {
+            this.setState({splitBillModalVisible: true})
+          } else {
+            this.props.navigation.navigate('Payment', {
+              order: this.props?.order
+            })
+          }
+
+        })
+      },
+      response => {
+
+      }
+    ).then()
+  }
 
   render() {
     const {
@@ -287,6 +337,16 @@ class OrdersSummaryRow extends React.Component {
                 />
               )
             }
+          />
+          <SplitBillPopUp
+            navigation={this.props.navigation}
+            toRoute={['SpiltBillScreen', 'SplitBillByHeadScreen']}
+            textForRoute={[t('order.splitByItem'), t('order.splitByHeadCount')]}
+            title={t('order.splitBillPopUpTitle')}
+            params={[{order: order}, {order: order}]}
+            isVisible={this.state?.splitBillModalVisible}
+            toggleModal={(visible) => this.setState({splitBillModalVisible: visible})}
+            orderId={order?.orderId}
           />
 
           <OrderTopInfo order={order} />
@@ -554,9 +614,8 @@ class OrdersSummaryRow extends React.Component {
                 <SecondActionButton
                   onPress={() => {
                     if (splitParentOrderId === null || splitParentOrderId === order?.orderId) {
-                      this.props.navigation.navigate('SpiltBillScreen', {
-                        order: order
-                      })
+
+                      this.setState({splitBillModalVisible: true})
                     }
                     else {
                       Alert.alert(
@@ -569,9 +628,8 @@ class OrdersSummaryRow extends React.Component {
                               await revertSplitOrder(this.context?.splitParentOrderId, this.context?.splitOrderId)
                               await this.context?.saveSplitOrderId(null)
                               await this.context?.saveSplitParentOrderId(null)
-                              this.props.navigation.navigate('SpiltBillScreen', {
-                                order: order
-                              })
+
+                              this.setState({splitBillModalVisible: true})
                             }
                           },
                           {
@@ -591,9 +649,25 @@ class OrdersSummaryRow extends React.Component {
                   onPress={() =>
                     order.lineItems.length === 0
                       ? warningMessage(t('lineItemCountCheck'))
-                      : this.props.navigation.navigate('Payment', {
-                        order: order
-                      })
+                      : (!!this.props.navigation.state.params?.orderSetData && this.props.navigation.state.params?.orderSetData?.status !== 'MERGED')
+                        ? Alert.alert(
+                          `${this.context.t('order.mergeOrderTitle')}`,
+                          `${this.context.t('order.mergeOrderMsg')}`,
+                          [
+                            {
+                              text: `${this.context.t('action.yes')}`,
+                              onPress: () => {
+                                this.handleMergeOrder(this.props.navigation.state.params?.orderSetData?.id, order.orderId)
+                              }
+                            },
+                            {
+                              text: `${this.context.t('action.no')}`,
+                              onPress: () => console.log('Cancelled'),
+                              style: 'cancel'
+                            }
+                          ]
+                        )
+                        : this.getSplitBillByHeadCount(order?.orderId)
                   }
                 >
                   <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('payOrder')}</Text>
@@ -629,7 +703,7 @@ class OrdersSummaryRow extends React.Component {
             <TouchableOpacity
               onPress={() => this.handleComplete(order.orderId)}
             >
-              <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('completeOrder')}</Text>
+              <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('order.completeOrder')}</Text>
             </TouchableOpacity>
           )}
           {!['SETTLED', 'REFUNDED'].includes(order.state) && (

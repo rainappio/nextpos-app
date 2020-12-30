@@ -370,7 +370,8 @@ export const CardFourNumberKeyboard = (props) => {
 
     useEffect(() => {
         setOutput(props?.value)
-        setIndex(props?.value?.length)
+        if (props?.value?.length === 0)
+            setIndex(props?.value?.length)
     }, [props?.value ?? null])
 
     const numberOutput = (result) => {

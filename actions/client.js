@@ -33,7 +33,7 @@ export const getCurrentClient = () => {
       },
       response => {
         response.json().then(data => {
-          dispatchFetchRequest(api.subscription.getStatus, {
+          dispatchFetchRequest(api.client.getStatus, {
             method: 'GET',
             withCredentials: true,
             credentials: 'include',

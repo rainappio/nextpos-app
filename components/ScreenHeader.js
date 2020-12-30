@@ -32,7 +32,7 @@ class ScreenHeader extends Component {
               onPress={backActionToUse}
             >
               <View>
-                <Icon name="ios-arrow-back" size={32} style={styles.buttonIconStyle}/>
+                <Icon name="chevron-back" size={32} style={styles.buttonIconStyle} />
               </View>
             </TouchableOpacity>
           )}

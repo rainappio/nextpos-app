@@ -31,6 +31,7 @@ export const api = {
   },
   client: {
     get: `${apiRoot}/clients/me`,
+    getStatus: `${apiRoot}/clientstatus/me`,
     new: `${apiRoot}/clients`,
     update: `${apiRoot}/clients/me`,
     info: `${apiRoot}/clients/me/info`,
@@ -264,6 +265,9 @@ export const api = {
     revert: orderId => {
       return `${apiRoot}/splitOrders/${orderId}/revert`
     },
+    splitByHead: orderId => {
+      return `${apiRoot}/splitOrders/headcount/${orderId}`
+    },
   },
   printer: {
     create: `${apiRoot}/printers`,
@@ -405,7 +409,11 @@ export const api = {
     },
     delete: id => {
       return `${apiRoot}/announcements/${id}`
-    }
+    },
+    getGlobal: `${apiRoot}/admin/globalAnnouncements`,
+    markAsRead: id => {
+      return `${apiRoot}/admin/globalAnnouncements/${id}/read`
+    },
   },
   eInvoice: {
     create: `${apiRoot}/invoiceNumbers`,
@@ -428,7 +436,7 @@ export const api = {
     generateAESKey: `${apiRoot}/clients/me/aeskey`,
   },
   subscription: {
-    getStatus: `${apiRoot}/clientstatus/me`,
+    getCurrent: `${apiRoot}/clientSubscriptions/current`,
     getAllPlans: (country) => {
       return `${apiRoot}/admin/subscriptionPlans?country=${country}`
     },

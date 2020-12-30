@@ -30,6 +30,7 @@ import {getTimeDifference} from '../actions';
 import en from 'javascript-time-ago/locale/en';
 import NewOrderModal from './NewOrderModal';
 import {getInitialTablePosition, getTablePosition, getSetPosition} from "../helpers/tableAction";
+import NavigationService from "../navigation/NavigationService";
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -187,7 +188,6 @@ class TablesScreen extends React.Component {
       orderSets
     } = this.props
     const {t} = this.context
-    console.log('orderSets', orderSets)
 
 
     if (isLoading) {
@@ -555,7 +555,7 @@ class TablesScreen extends React.Component {
                     {t('joinTable')}
                   </Text>
                 </TouchableOpacity>}
-                <TouchableOpacity onPress={() => navigation.navigate('OrderDisplayScreen')} style={{flex: 1}}>
+                <TouchableOpacity onPress={() => NavigationService?.navigateToRoute('OrderDisplayScreen')} style={{flex: 1}}>
                   <Text style={[styles.bottomActionButton, styles.actionButton, {flex: 1}]}>
                     {t('menu.orderDisplay')}
                   </Text>
@@ -682,7 +682,7 @@ class TablesScreen extends React.Component {
               </View>
 
               <View style={[styles.bottom, styles.horizontalMargin]}>
-                <TouchableOpacity onPress={() => navigation.navigate('OrderDisplayScreen')}>
+                <TouchableOpacity onPress={() => NavigationService?.navigateToRoute('OrderDisplayScreen')}>
                   <Text style={[styles.bottomActionButton, styles.actionButton]}>
                     {t('menu.orderDisplay')}
                   </Text>

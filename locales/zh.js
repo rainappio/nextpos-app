@@ -8,6 +8,8 @@ const zh = {
   logout: '登出',
   changeUser: '切換使用者',
   refreshed: '已重新刷新',
+  privilegedAccessTitle: '這是進階功能',
+  premiumFeatureMsg: '是否前往訂閱',
   general: {
     noData: '沒有資料'
   },
@@ -127,6 +129,14 @@ const zh = {
     cancelFree: '取消招待成功',
     mergeOrderTitle: '併桌付款',
     mergeOrderMsg: '是否執行品項合併',
+
+    toggleOutOfStockMsg: '確認估清?',
+    toggleUnmarkOutOfStockMsg: '取消估清?',
+    splitBillPopUpTitle: '拆帳方式',
+    splitByItem: '以品項拆帳',
+    splitByHeadCount: '以人頭拆帳',
+    payLeftAmount: '一次付清',
+    completeOrder: '結束訂單',
   },
   orderState: {
     OPEN: '已開單',
@@ -368,6 +378,8 @@ const zh = {
     currentPlan: '當前方案',
     status: '狀態',
     select: '選擇',
+    planStartDate: '開始日期',
+    planEndDate: '結束日期',
     statusCode: {
       SUBMITTED: '已送出',
       ACTIVE: '使用中',
@@ -419,6 +431,14 @@ const zh = {
     recentOrders: '近期消費記錄',
     topRankings: '消費愛好'
   },
+  splitBillPopUp: {
+    quantity: '人數',
+    ok: '確定'
+  },
+  salesReport: '銷售報表',
+  staffTimeCardReport: '職員打卡表',
+  customerStatsReport: '來客總覽',
+  shiftHistory: '營收紀錄',
   empty: '空',
 }
 

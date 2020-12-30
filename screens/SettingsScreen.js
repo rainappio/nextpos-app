@@ -11,6 +11,7 @@ import ScreenHeader from "../components/ScreenHeader";
 import MenuButton from "../components/MenuButton";
 import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
+import NavigationService from "../navigation/NavigationService";
 
 class SettingsScreen extends React.Component {
   static navigationOptions = {
@@ -34,6 +35,7 @@ class SettingsScreen extends React.Component {
             <View style={{flex: 1, paddingBottom: 16}}>
               <View style={[styles.menuContainer]}>
                 <MenuButton
+                  route='Account'
                   onPress={() => this.props.navigation.navigate('Account')}
                   title={t('settings.account')}
                   icon={
@@ -45,6 +47,7 @@ class SettingsScreen extends React.Component {
                   } />
                 <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
+                  route='Store'
                   onPress={() => this.props.navigation.navigate('Store')}
                   title={t('settings.stores')}
                   icon={
@@ -58,6 +61,7 @@ class SettingsScreen extends React.Component {
 
               <View style={[styles.menuContainer]}>
                 <MenuButton
+                  route='ProductsOverview'
                   onPress={() =>
                     this.props.navigation.navigate('ProductsOverview')
                   }
@@ -72,8 +76,9 @@ class SettingsScreen extends React.Component {
                 />
                 <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
+                  route='StaffsOverview'
                   onPress={() =>
-                    this.props.navigation.navigate('StaffsOverview')
+                    NavigationService?.navigateToRoute('StaffsOverview')
                   }
                   title={t('settings.staff')}
                   icon={
@@ -88,6 +93,7 @@ class SettingsScreen extends React.Component {
 
               <View style={[styles.menuContainer]}>
                 <MenuButton
+                  route='Announcements'
                   onPress={() => this.props.navigation.navigate('Announcements')}
                   title={t('settings.announcements')}
                   icon={
@@ -100,6 +106,7 @@ class SettingsScreen extends React.Component {
                 />
                 <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
+                  route='ShiftClose'
                   onPress={() => this.props.navigation.navigate('ShiftClose')}
                   title={t('settings.manageShifts')}
                   icon={
@@ -113,7 +120,8 @@ class SettingsScreen extends React.Component {
               </View>
               <View style={[styles.menuContainer]}>
                 <MenuButton
-                  onPress={() => this.props.navigation.navigate('RostersScreen')}
+                  route='RostersScreen'
+                  onPress={() => NavigationService?.navigateToRoute('RostersScreen')}
                   title={t('settings.roster')}
                   icon={
                     <FontAwesome5Icon
@@ -125,6 +133,7 @@ class SettingsScreen extends React.Component {
                 />
                 <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
+                  route='ManageOffers'
                   onPress={() => this.props.navigation.navigate('ManageOffers')}
                   title={t('settings.manageOffers')}
                   icon={
@@ -143,7 +152,8 @@ class SettingsScreen extends React.Component {
             <View style={{flex: 1, paddingBottom: 16}}>
               <View style={[styles.menuContainer]}>
                 <MenuButton
-                  onPress={() => this.props.navigation.navigate('MemberScreen')}
+                  route='MemberScreen'
+                  onPress={() => NavigationService?.navigateToRoute('MemberScreen')}
                   title={t('settings.member')}
                   icon={
                     <FontAwesome5Icon
@@ -155,6 +165,7 @@ class SettingsScreen extends React.Component {
                 />
                 <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
+                  route='TableLayouts'
                   onPress={() => this.props.navigation.navigate('TableLayouts')}
                   title={t('settings.tableLayouts')}
                   icon={
@@ -168,6 +179,7 @@ class SettingsScreen extends React.Component {
               </View>
               <View style={[styles.menuContainer]}>
                 <MenuButton
+                  route='PrinternKDS'
                   onPress={() => this.props.navigation.navigate('PrinternKDS')}
                   title={t('settings.workingArea')}
                   icon={
@@ -180,7 +192,8 @@ class SettingsScreen extends React.Component {
                 />
                 <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
-                  onPress={() => this.props.navigation.navigate('EinvoiceStatusScreen')}
+                  route='EinvoiceStatusScreen'
+                  onPress={() => NavigationService?.navigateToRoute('EinvoiceStatusScreen')}
                   title={t('settings.eInvoice')}
                   icon={
                     <FontAwesome5Icon
@@ -194,6 +207,7 @@ class SettingsScreen extends React.Component {
 
               <View style={[styles.menuContainer]}>
                 <MenuButton
+                  route='SubscriptionScreen'
                   onPress={() => this.props.navigation.navigate('SubscriptionScreen')}
                   title={t('settings.subscription')}
                   icon={
@@ -206,6 +220,7 @@ class SettingsScreen extends React.Component {
                 />
                 <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
+                  route=''
                   onPress={() => changeLanguage()}
                   title={t('settings.language')}
                   icon={

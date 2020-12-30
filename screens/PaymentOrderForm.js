@@ -224,6 +224,7 @@ class PaymentOrderForm extends React.Component {
 
     const {t} = this.context
     const {paymentsTypes, selectedPaymentType, paymentsTypeslbl, handlePaymentTypeSelection} = this.props
+    const totalAmount = this.props?.isSplitByHeadCount ? this.props?.splitAmount : order.orderTotal
 
     const TaxInputAndBottomBtns = (props) => {
 
@@ -332,7 +333,7 @@ class PaymentOrderForm extends React.Component {
             </View>
           </Modal>
 
-          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+          {this.props?.isSplitByHeadCount || <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
               <StyledText>{t('order.subtotal')}</StyledText>
             </View>
@@ -342,9 +343,9 @@ class PaymentOrderForm extends React.Component {
                 {formatCurrency(order.total.amountWithTax)}
               </StyledText>
             </View>
-          </View>
+          </View>}
 
-          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+          {this.props?.isSplitByHeadCount || <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
               <StyledText>{t('order.discount')}</StyledText>
             </View>
@@ -354,9 +355,9 @@ class PaymentOrderForm extends React.Component {
                 {formatCurrency(order.discount)}
               </StyledText>
             </View>
-          </View>
+          </View>}
 
-          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+          {this.props?.isSplitByHeadCount || <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
               <StyledText>{t('order.serviceCharge')}</StyledText>
             </View>
@@ -366,7 +367,7 @@ class PaymentOrderForm extends React.Component {
                 {formatCurrency(order.serviceCharge)}
               </StyledText>
             </View>
-          </View>
+          </View>}
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
@@ -375,7 +376,7 @@ class PaymentOrderForm extends React.Component {
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
               <StyledText style={styles.tableCellText}>
-                {formatCurrency(order.orderTotal)}
+                {formatCurrency(totalAmount)}
               </StyledText>
             </View>
           </View>

@@ -10,6 +10,9 @@ import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
 import {getInitialTablePosition, getTablePosition} from "../helpers/tableAction";
+import AddBtn from '../components/AddBtn'
+import Modal from 'react-native-modal';
+import TableAddModal from './TableAddModal';
 
 class ManageVisualSceen extends Component {
   static navigationOptions = {
@@ -26,6 +29,7 @@ class ManageVisualSceen extends Component {
     this.state = {
       windowWidth: Dimensions.get('window').width - 30,
       windowHeight: Dimensions.get('window').height - 76,
+      modalVisible: false,
     }
 
     context.localize({
@@ -72,9 +76,29 @@ class ManageVisualSceen extends Component {
     return (
       <ThemeContainer>
         <View style={[styles.container]}>
-          <ScreenHeader title={t('manageVisualLayoutTitle')} />
+          <ScreenHeader title={t('manageVisualLayoutTitle')}
+            rightComponent={
+              <AddBtn
+                onPress={() => this.setState({modalVisible: true})}
+              />
+            } />
+          <Modal
+            isVisible={this.state.modalVisible}
+            backdropOpacity={0.7}
+            onBackdropPress={() => this.setState({modalVisible: false})}
+            useNativeDriver
+            hideModalContentWhileAnimating
+            animationIn='bounceIn'
+            animationOut='bounceOut'
+            style={{alignSelf: 'center', maxWidth: 640}}
+          >
+            <TableAddModal layoutId={layoutId} closeModal={() => {
+              this.setState({modalVisible: false})
+            }} />
+          </Modal>
           <View>
             <TouchableOpacity
+              style={{width: 60}}
               onPress={() => {
                 tablelayout.tables.map(table => {
                   this.handleReset(layoutId, table.tableId)

@@ -9,6 +9,7 @@ import MenuButton from "../components/MenuButton";
 import {withContext} from "../helpers/contextHelper";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {ThemeContainer} from "../components/ThemeContainer";
+import NavigationService from "../navigation/NavigationService";
 
 class ReportsScreen extends React.Component {
   static navigationOptions = {
@@ -20,22 +21,7 @@ class ReportsScreen extends React.Component {
     super(props, context)
   }
 
-  componentDidMount() {
-    this.context.localize({
-      en: {
-        salesReport: 'Sales Reports',
-        staffTimeCardReport: 'Staff Time Card',
-        customerStatsReport: 'Customer Statistics',
-        shiftHistory: 'Shift History'
-      },
-      zh: {
-        salesReport: '銷售報表',
-        staffTimeCardReport: '職員打卡表',
-        customerStatsReport: '來客總覽',
-        shiftHistory: '營收紀錄'
-      }
-    })
-  }
+
 
   render() {
     const {themeStyle} = this.props
@@ -52,7 +38,8 @@ class ReportsScreen extends React.Component {
           <View style={[styles.flex(1)]}>
             <View style={[styles.menuContainer]}>
               <MenuButton
-                onPress={() => this.props.navigation.navigate('SalesCharts')}
+                route='SalesCharts'
+                onPress={() => NavigationService?.navigateToRoute('SalesCharts')}
                 title={t('salesReport')}
                 icon={
                   <FontAwesomeIcon
@@ -63,7 +50,8 @@ class ReportsScreen extends React.Component {
                 } />
               <View style={styles.dynamicHorizontalPadding(6)} />
               <MenuButton
-                onPress={() => this.props.navigation.navigate('StaffTimeCard')}
+                route='StaffTimeCard'
+                onPress={() => NavigationService?.navigateToRoute('StaffTimeCard')}
                 title={t('staffTimeCardReport')}
                 icon={
                   <Icon
@@ -76,7 +64,8 @@ class ReportsScreen extends React.Component {
 
             <View style={[styles.menuContainer]}>
               <MenuButton
-                onPress={() => this.props.navigation.navigate('CustomerStats')}
+                route='CustomerStats'
+                onPress={() => NavigationService?.navigateToRoute('CustomerStats')}
                 title={t('customerStatsReport')}
                 icon={
                   <Icon
@@ -87,6 +76,7 @@ class ReportsScreen extends React.Component {
                 } />
               <View style={styles.dynamicHorizontalPadding(6)} />
               <MenuButton
+                route='ShiftHistory'
                 onPress={() => this.props.navigation.navigate('ShiftHistory')}
                 title={t('shiftHistory')}
                 icon={

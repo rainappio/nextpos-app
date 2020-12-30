@@ -25,13 +25,13 @@ class RenderStepper extends React.Component {
       ...rest
     } = this.props
 
-    if (this.state.isTablet) {
+    if (true) {
       return (
         <View>
           <View style={[styles.flex_dir_row, {alignItems: 'center'}]}>
             <View style={{width: '60%', flexDirection: 'row', alignItems: 'center'}}>
-              <StyledText style={{width: '15%'}}>{optionName}</StyledText>
-              <View style={{marginLeft: 30, flexDirection: 'row', justifyContent: 'space-around', flex: 1}}>
+              <StyledText style={{flex: 2}}>{optionName}</StyledText>
+              <View style={{flexDirection: 'row', justifyContent: 'space-around', flex: 5}}>
                 <TouchableOpacity
                   onPress={() => {this.props.input.onChange(1)}}
                   style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: mainThemeColor, borderWidth: (value === 1 ? 1 : 0), borderRadius: 100}}>
@@ -84,6 +84,7 @@ class RenderStepper extends React.Component {
         </View>
       )
     } else {
+      //old cellphone UI
       return (
         <View>
           <View style={[styles.flex_dir_row, {alignItems: 'center'}]}>
