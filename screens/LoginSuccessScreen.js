@@ -109,7 +109,7 @@ class LoginSuccessScreen extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps?.currentUser !== this.props?.currentUser && this.state?.isLoadingUserInfo) {
+    if ((prevProps?.currentUser?.username !== this.props?.currentUser?.username || prevProps?.client?.clientName !== this.props?.client?.clientName) && this.state?.isLoadingUserInfo && !!this.props?.currentUser?.username && !!this.props?.client?.clientName) {
       this.getGlobalAnnouncements()
       this.setState({
         isLoadingUserInfo: false
@@ -531,6 +531,9 @@ export class HiddenMenu extends React.Component {
         animationType="fade"
         transparent={true}
         visible={this.state.isVisible}
+        style={{
+          margin: 0, flex: 1,
+        }}
       >
         <TouchableOpacity
           activeOpacity={1}

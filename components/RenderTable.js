@@ -1,18 +1,20 @@
 import React from 'react'
-import {ScrollView, View} from 'react-native'
+import {ScrollView, View, Text} from 'react-native'
 import {Col, Table, TableWrapper} from 'react-native-table-component'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import {formatCurrency} from "../actions";
 import {withContext} from "../helpers/contextHelper";
+import {StyledText} from "../components/StyledText";
 
 const RenderTable = (props) => {
-
   const tableHeaders = props.reportData.labels
   const tableData = props.reportData.data
+  const orderCount = props.reportData.orderCount
   const isCurrency = props.isCurrency != null ? props.isCurrency : false
+  const t = props?.locale?.t
 
   const zippedData = tableHeaders.map((data, idx) => {
-    return [data, isCurrency ? formatCurrency(tableData[idx]) : tableData[idx]]
+    return [data, isCurrency ? formatCurrency(tableData[idx]) : tableData[idx], orderCount?.[idx]]
   })
 
   let tableDataLastYear = []
@@ -20,16 +22,55 @@ const RenderTable = (props) => {
   if (props.reportData.hasOwnProperty('data2')) {
     tableDataLastYear = props.reportData.data2
 
-    if (tableData[0].length > tableDataLastYear[0].length) {
+    if (tableData[0]?.length > tableDataLastYear[0]?.length) {
       tableDataLastYear[0][tableData[0].length - 1] = 0
     }
   }
 
+  if (props?.type === 'card') {
+    return (
+      <View style={{height: 300, flexWrap: 'wrap', flex: 1, borderColor: mainThemeColor, borderWidth: 1}}>
+        <View style={[styles.sectionBar, {borderColor: mainThemeColor}]}>
+          <View style={[styles.tableCellView, {flex: 1}]}>
+            <Text style={[styles.sectionBarTextSmall]}>{t('order.date')}</Text>
+          </View>
+
+          <View style={[styles.tableCellView, {justifyContent: 'flex-end', flex: 1}]}>
+            <Text style={styles.sectionBarTextSmall}>{t('shift.totalInvoices')}</Text>
+          </View>
+
+          <View style={[styles.tableCellView, {justifyContent: 'flex-end', flex: 2}]}>
+            <Text style={styles.sectionBarTextSmall}>{t('amount')}</Text>
+          </View>
+        </View>
+        <ScrollView style={{flex: 1}} nestedScrollEnabled>
+          {zippedData?.map((item) => {
+            return (
+              <View style={{flexDirection: 'row', padding: 8, }}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <StyledText>{item?.[0]}</StyledText>
+                </View>
+
+                <View style={[styles.tableCellView, {justifyContent: 'flex-end', flex: 1}]}>
+                  <StyledText style={{flexWrap: 'wrap'}}>{item?.[2]}</StyledText>
+                </View>
+
+                <View style={[styles.tableCellView, {justifyContent: 'flex-end', flex: 2}]}>
+                  <StyledText style={{flexWrap: 'wrap'}}>{item?.[1]}</StyledText>
+                </View>
+              </View>
+            )
+          })}
+        </ScrollView>
+      </View>
+    )
+  }
+
   return (
     <View style={styles.tblContainer}>
-      <ScrollView horizontal={true}>
+      <ScrollView horizontal={true} nestedScrollEnabled>
         <Table style={{flexDirection: 'row'}}
-               borderStyle={{borderWidth: 1, borderColor: '#f75336'}}>
+          borderStyle={{borderWidth: 1, borderColor: '#f75336'}}>
           {zippedData && (
             <TableWrapper style={[styles.tblrow, {borderWidth: 0, borderColor: '#f75336'}]}>
               {
@@ -37,7 +78,7 @@ const RenderTable = (props) => {
                   return (
                     <Col
                       key={columnIndex}
-                      data={columnData}
+                      data={[columnData?.[0], columnData?.[1]]}
                       flex={1}
                       textStyle={[styles.tbltext, props.themeStyle]}
                     />

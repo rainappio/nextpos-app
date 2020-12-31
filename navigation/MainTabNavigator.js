@@ -274,10 +274,24 @@ const tabBar = createBottomTabNavigator({
     }*/
   },
   Tables: {
-    screen: Tables
+    screen: Tables,
+    navigationOptions: ({navigation, screenProps: {t}}) => {
+      if (navigation.state.routes.length > 0) {
+        let tabBarVisible = true
+        navigation.state.routes.map(route => {
+          if (['Payment', 'PaymentOrder', 'CheckoutComplete', 'SpiltBillScreen', 'SplitBillByHeadScreen'].includes(route.routeName)) {
+            tabBarVisible = false
+          } else {
+            tabBarVisible = true
+          }
+        })
+        return {title: '', tabBarVisible}
+      }
+    }
   },
   Orders: {
-    screen: Orders
+    screen: Orders,
+
   },
   Reports: {
     screen: Reports

@@ -434,6 +434,13 @@ const en = {
     quantity: 'Quantity',
     ok: 'Done'
   },
+  dateRange: {
+    SHIFT: 'Shift Duration',
+    TODAY: 'Today',
+    WEEK: 'Week',
+    MONTH: 'Month',
+    RANGE: 'Date Range'
+  },
   salesReport: 'Sales Reports',
   staffTimeCardReport: 'Staff Time Card',
   customerStatsReport: 'Customer Statistics',

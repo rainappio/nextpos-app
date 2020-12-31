@@ -65,7 +65,6 @@ export default class MonthPicker extends React.Component {
         <View style={styles.tableRowContainer}>
           <View style={[styles.tableCellView, {flex: 1, marginRight: 10, justifyContent: 'flex-end'}]}>
             <TouchableOpacity
-              //style={{flex: 1}}
               hitSlop={{top: 20, bottom: 20, left: 50, right: 5}}
               onPress={() => this.navigatePrevious()}
             >

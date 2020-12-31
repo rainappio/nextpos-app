@@ -6,40 +6,23 @@ import DropDown from '../components/DropDown'
 import {LocaleContext} from '../locales/LocaleContext'
 import styles from '../styles'
 import {StyledText} from "../components/StyledText";
+import SegmentedControl from "../components/SegmentedControl";
+import TimePeriodPicker from "../components/TimePeriodPicker";
+import moment from "moment";
 
 class OrderFilterFormII extends React.Component {
     static contextType = LocaleContext
     state = {
+        dateRange: this.props?.initialValues?.dateRange ?? 0,
         readonly: true,
         showFromDate: false,
         showToDate: false,
+        currentDate: this.props?.initialValues?.fromDate ?? new Date()
     }
 
 
 
-    // todo: shared between OrdersScreen and SalesChart that caused transitioning from SalesChart to OrdersScreen an form rendering issue.
-    componentDidMount() {
-        this.context.localize({
-            en: {
-                dateRange: {
-                    SHIFT: 'Shift Duration',
-                    TODAY: 'Today',
-                    WEEK: 'This Week',
-                    MONTH: 'This Month',
-                    RANGE: 'Date Range'
-                }
-            },
-            zh: {
-                dateRange: {
-                    SHIFT: '開帳期間',
-                    TODAY: '今日',
-                    WEEK: '本週',
-                    MONTH: '本月',
-                    RANGE: '自訂日期'
-                }
-            }
-        })
-    }
+
 
     handlegetDate = (event, selectedDate) => {
         console.log(`selected date: ${selectedDate}`)
@@ -58,74 +41,164 @@ class OrderFilterFormII extends React.Component {
     };
 
     render() {
-        const {handleSubmit, handlegetDate} = this.props
-        const {t} = this.context
+        const {handleSubmit, handlegetDate, change} = this.props
+        const {t, isTablet} = this.context
+        if (isTablet) {
+            return (
+                <View>
+                    <View style={[styles.tableRowContainer]}>
+                        <View style={[styles.tableCellView, {flex: 3, marginRight: 5, flexDirection: 'column', justifyContent: 'center'}]}>
+                            <Field
+                                name="dateRange"
+                                component={SegmentedControl}
+                                onChange={(val) => {this.setState({dateRange: val})}}
+                                values={[t('dateRange.SHIFT'), t('dateRange.TODAY'), t('dateRange.WEEK'), t('dateRange.MONTH'), t('dateRange.RANGE')]}
+                            />
+                        </View>
+                        <View style={[styles.tableCellView, styles.justifyRight]}>
+                            <TouchableOpacity
+                                style={{flex: 1}}
+                                onPress={() => handleSubmit()}>
+                                <Text
+                                    style={[
+                                        styles.searchButton
+                                    ]}
+                                >
+                                    {t('action.search')}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
 
-        return (
-            <View>
-                <View style={[styles.tableRowContainer]}>
-                    <View style={[styles.tableCellView, {flex: 3, marginRight: 5}]}>
+                    {this.state.dateRange === 4 && <View style={[styles.tableRowContainer, {paddingTop: 0}]}>
+                        <View style={[styles.tableCellView, {flex: 2}]}>
+                            <Field
+                                name="fromDate"
+                                component={RenderDateTimePicker}
+                                onChange={this.handlegetDate}
+                                placeholder={t('order.fromDate')}
+                                isShow={this.state.showFromDate}
+                                showDatepicker={this.showFromDatepicker}
+                            />
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 0.2, justifyContent: 'center'}]}>
+                            <StyledText>-</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 2}]}>
+                            <Field
+                                name="toDate"
+                                component={RenderDateTimePicker}
+                                onChange={this.handlegetDate}
+                                placeholder={t('order.toDate')}
+                                isShow={this.state.showToDate}
+                                showDatepicker={this.showToDatepicker}
+                            />
+                        </View>
+                    </View>}
+                    {this.state.dateRange === 3 && <TimePeriodPicker
+                        currentDate={this.state.currentDate}
+                        selectedFilter='months'
+                        handleDateChange={(date) => {
+                            this.setState({currentDate: date})
+                            change('fromDate', new Date(moment().year(date.year()).month(date.month()).date(1)))
+                            change('toDate', new Date(moment().year(date.year()).month(date.month() + 1).date(0)))
+
+                        }}
+                    />}
+                    {this.state.dateRange === 2 && <TimePeriodPicker
+                        currentDate={this.state.currentDate}
+                        selectedFilter='weeks'
+                        handleDateChange={(date) => {
+                            this.setState({currentDate: date})
+                            change('fromDate', new Date(moment(date).isoWeekday(1)))
+                            change('toDate', new Date(moment(date).isoWeekday(7)))
+
+                        }}
+                    />}
+                </View>
+            )
+        } else {
+            return (
+                <View>
+
+                    <View style={[styles.tableCellView, {flex: 3, marginRight: 5, flexDirection: 'column', justifyContent: 'center'}]}>
                         <Field
                             name="dateRange"
-                            component={DropDown}
-                            options={[
-                                {label: t('dateRange.RANGE'), value: 'RANGE'},
-                                {label: t('dateRange.SHIFT'), value: 'SHIFT'},
-                                {label: t('dateRange.TODAY'), value: 'TODAY'},
-                                {label: t('dateRange.WEEK'), value: 'WEEK'},
-                                {label: t('dateRange.MONTH'), value: 'MONTH'}
-                            ]}
-                            onChange={(value) => {
-                                this.setState({
-                                    readonly: value !== 'RANGE'
-                                })
-                            }}
+                            component={SegmentedControl}
+                            onChange={(val) => {this.setState({dateRange: val})}}
+                            values={[t('dateRange.SHIFT'), t('dateRange.TODAY'), t('dateRange.WEEK'), t('dateRange.MONTH'), t('dateRange.RANGE')]}
                         />
                     </View>
-                    <View style={[styles.tableCellView, styles.justifyRight]}>
-                        <TouchableOpacity
-                            style={{flex: 1}}
-                            onPress={() => handleSubmit()}>
-                            <Text
-                                style={[
-                                    styles.searchButton
-                                ]}
-                            >
-                                {t('action.search')}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
 
-                <View style={[styles.tableRowContainer, {paddingTop: 0}]}>
-                    <View style={[styles.tableCellView, {flex: 2}]}>
-                        <Field
-                            name="fromDate"
-                            component={RenderDateTimePicker}
-                            onChange={this.handlegetDate}
-                            placeholder={t('order.fromDate')}
-                            isShow={this.state.showFromDate}
-                            showDatepicker={this.showFromDatepicker}
-                            readonly={this.state.readonly}
-                        />
-                    </View>
-                    <View style={[styles.tableCellView, {flex: 0.2, justifyContent: 'center'}]}>
-                        <StyledText>-</StyledText>
-                    </View>
-                    <View style={[styles.tableCellView, {flex: 2}]}>
-                        <Field
-                            name="toDate"
-                            component={RenderDateTimePicker}
-                            onChange={this.handlegetDate}
-                            placeholder={t('order.toDate')}
-                            isShow={this.state.showToDate}
-                            showDatepicker={this.showToDatepicker}
-                            readonly={this.state.readonly}
-                        />
+
+
+                    {this.state.dateRange === 4 && <View style={[styles.tableRowContainer, {paddingBottom: 0, paddingHorizontal: 0}]}>
+                        <View style={[styles.tableCellView, {flex: 2}]}>
+                            <Field
+                                name="fromDate"
+                                component={RenderDateTimePicker}
+                                onChange={this.handlegetDate}
+                                placeholder={t('order.fromDate')}
+                                isShow={this.state.showFromDate}
+                                showDatepicker={this.showFromDatepicker}
+                            />
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 0.2, justifyContent: 'center'}]}>
+                            <StyledText>-</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 2}]}>
+                            <Field
+                                name="toDate"
+                                component={RenderDateTimePicker}
+                                onChange={this.handlegetDate}
+                                placeholder={t('order.toDate')}
+                                isShow={this.state.showToDate}
+                                showDatepicker={this.showToDatepicker}
+                            />
+                        </View>
+                    </View>}
+                    {this.state.dateRange === 3 && <TimePeriodPicker
+                        currentDate={this.state.currentDate}
+                        selectedFilter='months'
+                        handleDateChange={(date) => {
+                            this.setState({currentDate: date})
+
+                            change('fromDate', new Date(moment().year(date.year()).month(date.month()).date(1)))
+                            change('toDate', new Date(moment().year(date.year()).month(date.month() + 1).date(0)))
+
+                        }}
+                    />}
+                    {this.state.dateRange === 2 && <TimePeriodPicker
+                        currentDate={this.state.currentDate}
+                        selectedFilter='weeks'
+                        handleDateChange={(date) => {
+                            this.setState({currentDate: date})
+
+                            change('fromDate', new Date(moment(date).isoWeekday(1)))
+                            change('toDate', new Date(moment(date).isoWeekday(7)))
+
+                        }}
+                    />}
+                    <View style={[styles.tableRowContainer]}>
+                        <View style={[styles.tableCellView, styles.justifyRight]}>
+                            <TouchableOpacity
+                                style={{flex: 1}}
+                                onPress={() => handleSubmit()}>
+                                <Text
+                                    style={[
+                                        styles.searchButton
+                                    ]}
+                                >
+                                    {t('action.search')}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
-            </View>
-        )
+            )
+        }
+
+
     }
 }
 

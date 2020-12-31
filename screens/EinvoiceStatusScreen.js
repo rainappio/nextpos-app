@@ -9,7 +9,7 @@ import LoadingScreen from "./LoadingScreen"
 import styles from '../styles'
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
-import {api, dispatchFetchRequest} from '../constants/Backend'
+import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {BottomMainActionButton, MainActionButton} from "../components/ActionButtons"
 import {NavigationEvents} from 'react-navigation'
 import Icon from "react-native-vector-icons/Ionicons";
@@ -51,13 +51,15 @@ class EinvoiceStatusScreen extends React.Component {
 
 
     getCurrentEinvoice = (ubn) => {
-        dispatchFetchRequest(api.eInvoice.getByUbn(ubn), {
+        dispatchFetchRequestWithOption(api.eInvoice.getByUbn(ubn), {
             method: 'GET',
             withCredentials: true,
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
+        }, {
+            defaultMessage: false
         }, response => {
             response.json().then(data => {
                 this.setState({eInvoiceData: data})
@@ -66,13 +68,15 @@ class EinvoiceStatusScreen extends React.Component {
     }
 
     checkEInvoiceEligibility = () => {
-        dispatchFetchRequest(api.eInvoice.checkEligibility, {
+        dispatchFetchRequestWithOption(api.eInvoice.checkEligibility, {
             method: 'GET',
             withCredentials: true,
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
+        }, {
+            defaultMessage: false
         }, response => {
             response.json().then(data => {
                 this.setState({checkEInvoiceEligibility: data?.eligible ?? false})
@@ -81,7 +85,7 @@ class EinvoiceStatusScreen extends React.Component {
     }
 
     handleAesKeySubmit = async (data) => {
-        await dispatchFetchRequest(api.eInvoice.generateAESKey, {
+        await dispatchFetchRequestWithOption(api.eInvoice.generateAESKey, {
             method: 'POST',
             withCredentials: true,
             credentials: 'include',
@@ -89,6 +93,8 @@ class EinvoiceStatusScreen extends React.Component {
                 'Content-Type': 'text/plain'
             },
             body: data?.AES_KEY,
+        }, {
+            defaultMessage: false
         }, response => {
             response.json().then(data => {
             })

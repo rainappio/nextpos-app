@@ -380,19 +380,34 @@ export const api = {
       return `${apiRoot}/reporting/salesRankingReport?${queryParams}`
     },
     getsalesDistributionReport: `${apiRoot}/reporting/salesDistribution?`,
-    getcustomerCountReport: (year, month) => {
-      if (year !== undefined && month !== undefined) {
-        return `${apiRoot}/reporting/customerStats?year=${year}&month=${month}`
+    getcustomerCountReport: (rangeType, fromDate, toDate) => {
+      const xRangeType = rangeType == null ? 'WEEK' : rangeType
+      let queryParams = `rangeType=${xRangeType}`
+
+      if (fromDate != null) {
+        queryParams += `&from=${fromDate}`
       }
 
-      return `${apiRoot}/reporting/customerStats`
+      if (toDate != null) {
+        queryParams += `&to=${toDate}`
+      }
+
+      return `${apiRoot}/reporting/customerStats?${queryParams}`
     },
-    getCustomerTrafficReport: (year, month) => {
-      if (year !== undefined && month !== undefined) {
-        return `${apiRoot}/reporting/customerTraffic?year=${year}&month=${month}`
+    getCustomerTrafficReport: (rangeType, fromDate, toDate) => {
+      const xRangeType = rangeType == null ? 'WEEK' : rangeType
+      let queryParams = `rangeType=${xRangeType}`
+
+      if (fromDate != null) {
+        queryParams += `&from=${fromDate}`
       }
 
-      return `${apiRoot}/reporting/customerTraffic`
+      if (toDate != null) {
+        queryParams += `&to=${toDate}`
+      }
+
+
+      return `${apiRoot}/reporting/customerTraffic?${queryParams}`
     },
     getcustomerStatsReportByDateMonth: (year, month) => {
       return `${apiRoot}/reporting/customerStats?year=${year}&month=${month}`
@@ -637,7 +652,7 @@ export const errorAlert = response => {
         errorMessage = content.localizedMessageKey != null ? i18n.t(`backend.${content.localizedMessageKey}`) : content.message
         break
       default:
-        errorMessage = `Encountered an error with your request. (${content.message})`
+        errorMessage = `Encountered an error with your request. (${response.status} ${content.message})`
     }
 
     if (response.status === 401) {

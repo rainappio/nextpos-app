@@ -30,7 +30,7 @@ const SegmentedControl = props => {
   }
 
   useEffect(() => {
-    if (selectedIndex === 0 || !!selectedIndex) {
+    if (!!selectedIndex) {
       onChange(selectedIndex)
     }
 

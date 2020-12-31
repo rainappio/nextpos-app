@@ -21,29 +21,7 @@ class OrderFilterForm extends React.Component {
     isFilterOpen: false,
   }
 
-  // todo: shared between OrdersScreen and SalesChart that caused transitioning from SalesChart to OrdersScreen an form rendering issue.
-  componentDidMount() {
-    this.context.localize({
-      en: {
-        dateRange: {
-          SHIFT: 'Shift Duration',
-          TODAY: 'Today',
-          WEEK: 'This Week',
-          MONTH: 'This Month',
-          RANGE: 'Date Range'
-        }
-      },
-      zh: {
-        dateRange: {
-          SHIFT: '開帳期間',
-          TODAY: '今日',
-          WEEK: '本週',
-          MONTH: '本月',
-          RANGE: '自訂日期'
-        }
-      }
-    })
-  }
+
 
   handlegetDate = (event, selectedDate) => {
     console.log(`selected date: ${selectedDate}`)

@@ -224,12 +224,12 @@ class EinvoiceEditScreen extends React.Component {
                 <View style={styles.container}>
                     <View style={{flex: 7}}>
                         <ScreenHeader title={t('eInvoice.eInvoiceTitle')} />
-                        {!this.state.data && <><View style={[{
+                        {!this.state.data && <View style={{height: 100}}><View style={[{
                             flexDirection: 'row',
                             alignItems: 'center',
                             marginTop: 2,
                             marginBottom: 5,
-                            flexBasis: 64
+                            flex: 1
                         }]}>
                             <View style={[styles.tableCellView, styles.flex(1)]}>
                                 <StyledText style={styles.fieldTitle}>{t('eInvoice.prefixYear')}</StyledText>
@@ -239,7 +239,7 @@ class EinvoiceEditScreen extends React.Component {
                                     name="selectedYear"
                                     component={DropDown}
                                     options={this.state.selectedYear}
-                                    validate={isRequired}
+                                    defaultValue={this.state.selectedYear[0]}
                                 />
                             </View>
                         </View>
@@ -248,7 +248,7 @@ class EinvoiceEditScreen extends React.Component {
                                 alignItems: 'center',
                                 marginTop: 2,
                                 marginBottom: 5,
-                                flexBasis: 50
+                                flex: 1
                             }}>
                                 <View style={[styles.tableCellView, styles.flex(1)]}>
                                     <StyledText style={styles.fieldTitle}>{t('eInvoice.prefixMonth')}</StyledText>
@@ -258,10 +258,10 @@ class EinvoiceEditScreen extends React.Component {
                                         name="selectedMonth"
                                         component={DropDown}
                                         options={this.state.selectedMonth}
-                                        validate={isRequired}
+                                        defaultValue={this.state.selectedMonth[0]}
                                     />
                                 </View>
-                            </View></>}
+                            </View></View>}
                         {!!this.state.data && <>
                             <View style={{
                                 paddingVertical: 12,
@@ -282,7 +282,7 @@ class EinvoiceEditScreen extends React.Component {
                                 }}
                             />
                         </View>}
-                        <ThemeKeyboardAwareScrollView style={{flex: 1}}>
+                        <ThemeKeyboardAwareScrollView >
                             {!this.state.data &&
 
                                 <View style={{flex: 15, flexDirection: 'column'}}>
@@ -398,6 +398,7 @@ class EinvoiceEditScreen extends React.Component {
 
 
                         </ThemeKeyboardAwareScrollView>
+
                     </View>
 
 

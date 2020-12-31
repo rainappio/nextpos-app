@@ -8,7 +8,7 @@ import {withContext} from "../helpers/contextHelper";
 class DropDown extends Component {
 
   componentDidMount() {
-    !!this.props?.defaultValue && this.props?.input?.onChange(this.props?.defaultValue)
+    !!this.props?.defaultValue && this.props?.input?.onChange(this.props?.defaultValue?.value)
   }
   render() {
     const {

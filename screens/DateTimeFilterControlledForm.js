@@ -34,29 +34,7 @@ class DateTimeFilterControlledForm extends React.Component {
     }
   }
 
-  componentDidMount() {
 
-    this.context.localize({
-      en: {
-        dateRange: {
-          SHIFT: 'Shift Duration',
-          TODAY: 'Today',
-          WEEK: 'This Week',
-          MONTH: 'This Month',
-          RANGE: 'Date Range'
-        }
-      },
-      zh: {
-        dateRange: {
-          SHIFT: '開帳期間',
-          TODAY: '今日',
-          WEEK: '本週',
-          MONTH: '本月',
-          RANGE: '自訂日期'
-        }
-      }
-    })
-  }
 
   showDatepicker = (which) => {
 
