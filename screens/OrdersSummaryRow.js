@@ -6,7 +6,7 @@ import {clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange} from
 import AddBtn from '../components/AddBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
 import DeleteBtn from '../components/DeleteBtn'
-import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, warningMessage} from '../constants/Backend'
+import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, warningMessage, successMessage} from '../constants/Backend'
 import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {CheckBox, Tooltip} from 'react-native-elements'
@@ -303,6 +303,29 @@ class OrdersSummaryRow extends React.Component {
     ).then()
   }
 
+  handleFreeLineitem = (orderId, lineitemId, isFree) => {
+    const formData = new FormData()
+    formData.append('free', isFree)
+    dispatchFetchRequestWithOption(
+      api.order.updateLineItemPrice(orderId, lineitemId),
+      {
+        method: 'PATCH',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+        },
+        body: formData
+      }, {
+      defaultMessage: false
+    }, response => {
+      response.json().then(data => {
+        const message = isFree ? 'order.free' : 'order.cancelFree'
+        successMessage(this.context.t(message))
+        this.props.getOrder(this.props.order.orderId)
+      })
+    }).then()
+  }
+
   render() {
     const {
       products = [],
@@ -389,7 +412,7 @@ class OrdersSummaryRow extends React.Component {
 
           <View>
             <SwipeListView
-              data={order.lineItems}
+              data={order.lineItems?.map((item) => {return {...item, disableRightSwipe: !!item?.associatedLineItemId, disableLeftSwipe: !!item?.associatedLineItemId}})}
               renderItem={(data, rowMap) => (
                 <View style={[styles.rowFront, themeStyle]}>
                   <View key={rowMap} style={{marginBottom: 15}}>
@@ -443,7 +466,20 @@ class OrdersSummaryRow extends React.Component {
               renderHiddenItem={(data, rowMap) => {
                 return (
                   <View style={[styles.rowBack, themeStyle]} key={rowMap}>
-                    <View style={{width: '60%'}}>
+                    <View style={styles.editIcon}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (data.item.price === 0) {
+                            this.handleFreeLineitem(order.orderId, data.item.lineItemId, false)
+                          } else {
+                            this.handleFreeLineitem(order.orderId, data.item.lineItemId, true)
+                          }
+                        }
+                        }>
+                        <StyledText style={{width: 40}}>{data.item.price === 0 ? t('order.cancelFreeLineitem') : t('order.freeLineitem')}</StyledText>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{width: '40%'}}>
 
                     </View>
                     <View style={styles.editIcon}>
@@ -477,7 +513,7 @@ class OrdersSummaryRow extends React.Component {
                   </View>
                 )
               }}
-              leftOpenValue={0}
+              leftOpenValue={75}
               rightOpenValue={-150}
             />
           </View>

@@ -28,6 +28,8 @@ class StoreFormScreen extends React.Component {
         clientName: 'Client Name',
         clientEmail: 'Client Email',
         clientStatus: 'Status',
+        companyName: 'Company Name',
+        companyNameHint: 'e.g. Legal entity name',
         address: 'Address',
         ubn: 'UBN',
         taxInclusive: 'Tax Inclusive',
@@ -37,6 +39,7 @@ class StoreFormScreen extends React.Component {
           showSeat: 'Vacant Seat',
           showTable: 'Vacant Table'
         },
+        invoiceData: 'Required by Electronic Invoice',
         inEffectRule: 'These settings will take effect on future orders',
         locationData: 'Location',
         country: 'Country',
@@ -50,6 +53,8 @@ class StoreFormScreen extends React.Component {
         clientName: '商家名稱',
         clientEmail: '用戶 Email',
         clientStatus: '狀態',
+        companyName: '公司名稱',
+        companyNameHint: '註冊公司名稱',
         address: '商家地址',
         ubn: '統一編號',
         taxInclusive: '價格已含稅',
@@ -59,6 +64,7 @@ class StoreFormScreen extends React.Component {
           showSeat: '座位數',
           showTable: '桌數'
         },
+        invoiceData: '電子發票必填',
         inEffectRule: '以下設定的更改將套用在未來訂單',
         locationData: '位置資訊',
         country: '國家',
@@ -116,7 +122,7 @@ class StoreFormScreen extends React.Component {
         <ScrollView scrollIndicatorInsets={{right: 1}}>
           <View style={styles.container}>
             <View>
-              <ScreenHeader title={t('settings.stores')}/>
+              <ScreenHeader title={t('settings.stores')} />
 
               <View style={styles.fieldContainer}>
                 <View style={[styles.tableCellView, {flex: 2}]}>
@@ -156,6 +162,25 @@ class StoreFormScreen extends React.Component {
                     component={InputText}
                     validate={isRequired}
                     placeholder={t('clientName')}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.sectionTitleContainer}>
+                <StyledText style={styles.sectionTitleText}>
+                  {t('invoiceData')}
+                </StyledText>
+              </View>
+
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 2}}>
+                  <StyledText style={styles.fieldTitle}>{t('companyName')}</StyledText>
+                </View>
+                <View style={{flex: 3}}>
+                  <Field
+                    name="attributes.COMPANY_NAME"
+                    component={InputText}
+                    placeholder={t('companyNameHint')}
                   />
                 </View>
               </View>
@@ -308,7 +333,7 @@ class StoreFormScreen extends React.Component {
                 <StyledText style={styles.sectionTitleText}>{t('uiPreferences')}</StyledText>
               </View>
               <View style={styles.fieldContainer}>
-                <ThemeToggleButton/>
+                <ThemeToggleButton />
               </View>
 
             </View>

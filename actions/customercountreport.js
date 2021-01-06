@@ -1,4 +1,4 @@
-import { api, dispatchFetchRequest } from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 export const FETCH_CUSTOMER_COUNT_REPORT = 'FETCH_CUSTOMER_COUNT_REPORT'
 export const FETCH_CUSTOMER_COUNT_REPORT_SUCCESS =
   'FETCH_CUSTOMER_COUNT_REPORT_SUCCESS'
@@ -19,17 +19,17 @@ export const fetchCustomerCountReportFailure = error => ({
   error
 })
 
-export const getCustomerCountReport = (year, month) => {
+export const getCustomerCountReport = (rangeType, fromDate, toDate) => {
   return dispatch => {
     dispatch(fetchCustomerCountReport())
 
     dispatchFetchRequest(
-      api.report.getcustomerCountReport(year, month),
+      api.report.getcustomerCountReport(rangeType, fromDate, toDate),
       {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
-        headers: {}
+        headers: {'version': 'v2'}
       },
       response => {
         response.json().then(data => {

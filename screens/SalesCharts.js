@@ -14,6 +14,7 @@ import OrderFilterFormII from "./OrderFilterFormII";
 import TimeZoneService from "../helpers/TimeZoneService";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
+import Icon from 'react-native-vector-icons/Ionicons'
 
 class SalesCharts extends React.Component {
   static navigationOptions = {
@@ -31,6 +32,7 @@ class SalesCharts extends React.Component {
         salesTotal: 'Sales Total',
         serviceChargeTotal: 'Service Charge Total',
         discountTotal: 'Discount Total',
+        cancelledTotal: 'Cancelled Total',
         salesDistributionTitle: 'Sales by Month',
         salesRankingTitle: 'Product Sales Ranking',
         quantity: 'Quantity',
@@ -39,15 +41,22 @@ class SalesCharts extends React.Component {
         noSalesData: 'No sales data',
         rankingFilter: {
           product: 'Product',
-          label: 'Category'
-        }
+          label: 'Category',
+          count: {
+            title: 'Count',
+            all: 'All',
+            '10': '10',
+            '25': '25',
+          }
+        },
       },
       zh: {
-        salesDashboardTitle: '銷售總覽',
+        salesDashboardTitle: '銷售報表',
         rangedSalesTitle: '銷售表',
         salesTotal: '總營業額',
         serviceChargeTotal: '總服務費',
         discountTotal: '總折扣',
+        cancelledTotal: '總作廢額',
         salesDistributionTitle: '年度銷售',
         salesRankingTitle: '產品銷售排行榜',
         quantity: '總數量',
@@ -56,17 +65,28 @@ class SalesCharts extends React.Component {
         noSalesData: '目前沒有銷售資料',
         rankingFilter: {
           product: '產品',
-          label: '分類'
-        }
+          label: '分類',
+          count: {
+            title: '顯示數量',
+            all: '全部顯示',
+            '10': '10',
+            '25': '25',
+          }
+        },
       }
     })
 
     this.state = {
       selectedRankingFilter: 0,
       showProductsRanking: false,
-      selectedRangeType: 'WEEK'
+      selectedRangeType: 'WEEK',
+      selectedRangeTypeIndex: 2,
+      selectedRankingCount: 0,
+      isCountRankDown: true
     }
+
   }
+
 
   componentDidMount() {
     this.props.getRangedSalesReport()
@@ -81,54 +101,47 @@ class SalesCharts extends React.Component {
     let rangedSalesData = {
       legend: [`${fromDate} - ${toDate}`],
       labels: [],
-      data: []
+      data: [],
+      orderCount: [],
     }
     rangedSalesReport.salesByRange.map(stats => {
       const date = moment(stats.date).format('MM/DD')
       rangedSalesData.labels.push(date)
       rangedSalesData.data.push(stats.total)
+      rangedSalesData.orderCount.push(stats.orderCount)
     })
 
     return rangedSalesData
   }
 
-  generateSalesDistribution = (salesDistributionReport) => {
 
-    const yearlySalesData = {
-      legend: ['This year', 'Last year'],
-      labels: [],
-      data: [],
-      data2: []
-    }
-
-    salesDistributionReport.salesByMonth.map(sales => {
-      const month = moment(sales.date).format('MMM')
-      yearlySalesData.labels.push(month)
-      yearlySalesData.data.push(sales.total)
-    })
-
-    salesDistributionReport.salesByMonthLastYear.map(sales => {
-      yearlySalesData.data2.push(sales.total)
-    })
-
-    return yearlySalesData
-  }
 
   handleFilterSalesChart = values => {
-    console.log(values)
-    console.log(typeof values.fromDate)
     const timezone = TimeZoneService.getTimeZone();
     const searchFromDate = moment.tz(values.fromDate, timezone).format("YYYY-MM-DDTHH:mm:ss")
     const searchToDate = moment.tz(values.toDate, timezone).format("YYYY-MM-DDTHH:mm:ss")
-    console.log(`Ranged sales selected dates - from: ${searchFromDate} to: ${searchToDate}`)
 
-    this.setState({selectedRangeType: values.dateRange})
-    this.props.getRangedSalesReport(values.dateRange, searchFromDate, searchToDate)
+    this.setState({selectedRangeTypeIndex: values.dateRange})
+
+    const rangeTypeMapping = ['SHIFT', 'TODAY', 'RANGE', 'RANGE', 'RANGE']
+    this.props.getRangedSalesReport(rangeTypeMapping[values.dateRange], searchFromDate, searchToDate)
   }
 
   handleRankingFilterChange = idx => {
     this.setState({
-      selectedRankingFilter: idx
+      selectedRankingFilter: idx,
+    })
+  }
+
+  handleRankingCountChange = idx => {
+    this.setState({
+      selectedRankingCount: idx
+    })
+  }
+
+  handleRangeTypeIndexChange = idx => {
+    this.setState({
+      selectedRankingCount: idx
     })
   }
 
@@ -148,8 +161,9 @@ class SalesCharts extends React.Component {
       haveError,
       haveSDData
     } = this.props
-    const {t} = this.context
+    const {t, isTablet} = this.context
     const containSalesData = haveData && getrangedSalesReport.salesByRange !== undefined
+
 
     let rangedSalesData = {}
     let rankingData
@@ -168,6 +182,7 @@ class SalesCharts extends React.Component {
             percentage: data.percentage
           }
         })
+        this.state.isCountRankDown || rankingData?.reverse()
       } else {
         rankingData = this.props.getrangedSalesReport.salesByLabels.map((data, index) => {
           return {
@@ -179,16 +194,18 @@ class SalesCharts extends React.Component {
             percentage: data.percentage
           }
         })
+        this.state.isCountRankDown || rankingData?.reverse()
       }
     }
 
     let salesDistributionData = {}
 
-    if (haveSDData) {
-      salesDistributionData = this.generateSalesDistribution(salesdistributionReport)
-    }
 
-    const Item = ({salesData}) => {
+    const Item = ({salesData, index}) => {
+      const isHide = this.state?.selectedRankingCount !== 0 && ((this.state?.selectedRankingCount === 1 && index >= 10) || (this.state?.selectedRankingCount === 2 && index >= 25))
+      if (isHide) {
+        return null
+      }
       return (
         <View
           style={[styles.tableRowContainer]}
@@ -220,7 +237,7 @@ class SalesCharts extends React.Component {
           </View>
 
           <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(salesData.total)}</StyledText>
+            <StyledText>{formatCurrency(salesData?.total ?? 0)}</StyledText>
           </View>
 
           <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
@@ -250,8 +267,227 @@ class SalesCharts extends React.Component {
           </Text>
         </View>
       )
-    }
+    } else if (isTablet) {
+      return (
+        <ThemeScrollView>
+          <View style={styles.fullWidthScreen}>
+            <ProductsRanking
+              isShow={this.state.showProductsRanking}
+              toggleProductsRanking={this.toggleProductsRankingModal}
+              filteredRankingData={salesRankingReport.salesByProducts}
+            />
 
+            <ScreenHeader backNavigation={true}
+              parentFullScreen={true}
+              title={t('salesDashboardTitle')}
+            />
+
+            <View>
+              <OrderFilterFormII
+                onSubmit={this.handleFilterSalesChart}
+                initialValues={{
+                  dateRange: this.state.selectedRangeTypeIndex,
+                  fromDate: new Date(getrangedSalesReport.dateRange.zonedFromDate),
+                  toDate: new Date(getrangedSalesReport.dateRange.zonedToDate)
+                }} />
+            </View>
+
+            <View style={[styles.tableRowContainer, {flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
+              <StyledText style={styles.screenSubTitle}>{moment(getrangedSalesReport.dateRange.zonedFromDate).format('YYYY-MM-DD')}</StyledText>
+              <StyledText style={[styles.screenSubTitle, {marginHorizontal: 0}]}>~</StyledText>
+              <StyledText style={styles.screenSubTitle}>{moment(getrangedSalesReport.dateRange.zonedToDate).format('YYYY-MM-DD')}</StyledText>
+            </View>
+
+            <View style={{flexDirection: 'row', marginTop: 16}}>
+              <View style={{flex: 1}}>
+                <View style={styles.tableRowContainer}>
+                  <View style={styles.tableCellView}>
+                    <StyledText style={styles.tableCellText}>{t('salesTotal')}</StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, styles.justifyRight]}>
+                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.totalSales?.salesTotal ?? 0)}</StyledText>
+                  </View>
+                </View>
+
+                <View style={styles.tableRowContainer}>
+                  <View style={styles.tableCellView}>
+                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, styles.justifyRight]}>
+                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CASH')?.orderTotal ?? 0)}</StyledText>
+                  </View>
+                </View>
+
+                <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
+                  <View style={styles.tableCellView}>
+                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, styles.justifyRight]}>
+                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CARD')?.orderTotal ?? 0)}</StyledText>
+                  </View>
+                </View>
+
+                <View style={styles.tableRowContainer}>
+                  <View style={styles.tableCellView}>
+                    <StyledText style={styles.tableCellText}>{t('serviceChargeTotal')}</StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, styles.justifyRight]}>
+                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.totalSales?.serviceChargeTotal ?? 0)}</StyledText>
+                  </View>
+                </View>
+
+                <View style={styles.tableRowContainer}>
+                  <View style={styles.tableCellView}>
+                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, styles.justifyRight]}>
+                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CASH')?.serviceCharge ?? 0)}</StyledText>
+                  </View>
+                </View>
+
+                <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
+                  <View style={styles.tableCellView}>
+                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, styles.justifyRight]}>
+                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CARD')?.serviceCharge ?? 0)}</StyledText>
+                  </View>
+                </View>
+
+                <View style={styles.tableRowContainer}>
+                  <View style={[styles.tableCellView]}>
+                    <StyledText style={styles.tableCellText}>{t('discountTotal')}</StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, styles.justifyRight]}>
+                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.totalSales?.discountTotal ?? 0)}</StyledText>
+                  </View>
+                </View>
+
+                <View style={styles.tableRowContainer}>
+                  <View style={styles.tableCellView}>
+                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, styles.justifyRight]}>
+                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CASH')?.discount ?? 0)}</StyledText>
+                  </View>
+                </View>
+
+                <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
+                  <View style={styles.tableCellView}>
+                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, styles.justifyRight]}>
+                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CARD')?.discount ?? 0)}</StyledText>
+                  </View>
+                </View>
+
+                <View style={styles.tableRowContainer}>
+                  <View style={[styles.tableCellView]}>
+                    <StyledText style={styles.tableCellText}>{t('cancelledTotal')}</StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, styles.justifyRight]}>
+                    <StyledText style={styles.tableCellText}>{formatCurrency((getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CARD')?.orderTotal ?? 0) + (getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CASH')?.orderTotal ?? 0))}</StyledText>
+                  </View>
+                </View>
+
+                <View style={styles.tableRowContainer}>
+                  <View style={styles.tableCellView}>
+                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, styles.justifyRight]}>
+                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CASH')?.orderTotal ?? 0)}</StyledText>
+                  </View>
+                </View>
+
+                <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
+                  <View style={styles.tableCellView}>
+                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, styles.justifyRight]}>
+                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CARD')?.orderTotal ?? 0)}</StyledText>
+                  </View>
+                </View>
+
+              </View>
+              <View style={{paddingHorizontal: 8, flex: 1}}>
+                <RenderTable reportData={rangedSalesData} isCurrency={true} type='card' />
+              </View>
+
+            </View>
+
+
+
+            <View style={styles.sectionContainer}>
+              <View style={styles.sectionTitleContainer}>
+                <Text style={styles.screenSubTitle}>
+                  {t('salesRankingTitle')}
+                </Text>
+              </View>
+              <View style={[styles.sectionContainer, styles.dynamicHorizontalPadding(10)]}>
+                <SegmentedControl
+                  selectedIndex={this.state.selectedRankingFilter}
+                  input={{
+                    onChange: this.handleRankingFilterChange
+                  }}
+                  values={[t('rankingFilter.product'), t('rankingFilter.label')]}
+                />
+              </View>
+
+              <View style={[{flexDirection: 'row', maxWidth: 300, alignItems: 'center'}]}>
+                <StyledText style={{paddingHorizontal: 10}}>{t('rankingFilter.count.title')}</StyledText>
+                <View style={{flexDirection: 'column', flex: 1}}>
+                  <SegmentedControl
+                    selectedIndex={this.state.selectedRankingCount}
+                    input={{
+                      onChange: this.handleRankingCountChange
+                    }}
+                    values={[t('rankingFilter.count.all'), t('rankingFilter.count.10'), t('rankingFilter.count.25')]}
+                  />
+                </View>
+              </View>
+
+              <View style={{marginBottom: 20}}>
+                <View style={styles.sectionBar}>
+                  <View style={[styles.quarter_width, styles.tableCellView]}>
+                    <Text style={[styles.sectionBarTextSmall]}>{t('order.product')}</Text>
+                  </View>
+
+                  <TouchableOpacity style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}
+                    onPress={() => this.setState({isCountRankDown: !this.state.isCountRankDown})}
+                  >
+                    <Text style={styles.sectionBarTextSmall}>{t('quantity')}</Text>
+                    <Icon name={this.state.isCountRankDown ? 'caret-down' : 'caret-up'} size={24} color={mainThemeColor} style={{padding: 0, margin: 0}} />
+                  </TouchableOpacity>
+
+                  <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                    <Text style={styles.sectionBarTextSmall}>{t('amount')}</Text>
+                  </View>
+
+                  <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                    <Text style={styles.sectionBarTextSmall}>{t('percentage')}</Text>
+                  </View>
+                </View>
+                <FlatList
+                  data={rankingData}
+                  renderItem={({item, index}) => {
+                    return <Item salesData={item} index={index} />
+                  }}
+                  ListEmptyComponent={() => {
+                    return (
+                      <Text style={[styles.messageBlock, styles.orange_color]}>{t('noSalesData')}</Text>
+                    )
+                  }}
+                  keyExtractor={item => item.id}
+                />
+              </View>
+            </View>
+
+
+          </View>
+        </ThemeScrollView>
+      )
+    }
+    //phone render
     return (
       <ThemeScrollView>
         <View style={styles.fullWidthScreen}>
@@ -270,48 +506,131 @@ class SalesCharts extends React.Component {
             <OrderFilterFormII
               onSubmit={this.handleFilterSalesChart}
               initialValues={{
-                dateRange: this.state.selectedRangeType,
+                dateRange: this.state.selectedRangeTypeIndex,
                 fromDate: new Date(getrangedSalesReport.dateRange.zonedFromDate),
                 toDate: new Date(getrangedSalesReport.dateRange.zonedToDate)
               }} />
           </View>
-
-          <View style={styles.tableRowContainerWithBorder}>
-            <View style={styles.tableCellView}>
-              <StyledText style={styles.tableCellText}>{t('salesTotal')}</StyledText>
-            </View>
-            <View style={[styles.tableCellView, styles.justifyRight]}>
-              <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.salesTotal)}</StyledText>
-            </View>
-            {/*<Chart
-            data={Object.keys(filteredRangedSalesData).length !== 0 ? filteredRangedSalesData : rangedSalesData}
-            width={Dimensions.get('window').width * 2}
-            props={{
-              yAxisLabel: '$'
-            }}
-          />*/}
+          <View style={[styles.tableRowContainer, {flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
+            <StyledText style={styles.screenSubTitle}>{moment(getrangedSalesReport.dateRange.zonedFromDate).format('YYYY-MM-DD')}</StyledText>
+            <StyledText style={[styles.screenSubTitle, {marginHorizontal: 0}]}>~</StyledText>
+            <StyledText style={styles.screenSubTitle}>{moment(getrangedSalesReport.dateRange.zonedToDate).format('YYYY-MM-DD')}</StyledText>
           </View>
 
-          <View style={styles.tableRowContainerWithBorder}>
-            <View style={styles.tableCellView}>
-              <StyledText style={styles.tableCellText}>{t('serviceChargeTotal')}</StyledText>
-            </View>
-            <View style={[styles.tableCellView, styles.justifyRight]}>
-              <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.serviceChargeTotal)}</StyledText>
-            </View>
-          </View>
 
-          <View style={styles.tableRowContainerWithBorder}>
-            <View style={[styles.tableCellView]}>
-              <StyledText style={styles.tableCellText}>{t('discountTotal')}</StyledText>
+          <View style={{flex: 1}}>
+            <View style={styles.tableRowContainer}>
+              <View style={styles.tableCellView}>
+                <StyledText style={styles.tableCellText}>{t('salesTotal')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.totalSales?.salesTotal ?? 0)}</StyledText>
+              </View>
             </View>
-            <View style={[styles.tableCellView, styles.justifyRight]}>
-              <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport.totalSales.discountTotal)}</StyledText>
+
+            <View style={styles.tableRowContainer}>
+              <View style={styles.tableCellView}>
+                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CASH')?.orderTotal ?? 0)}</StyledText>
+              </View>
             </View>
+
+            <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
+              <View style={styles.tableCellView}>
+                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CARD')?.orderTotal ?? 0)}</StyledText>
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainer}>
+              <View style={styles.tableCellView}>
+                <StyledText style={styles.tableCellText}>{t('serviceChargeTotal')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.totalSales?.serviceChargeTotal ?? 0)}</StyledText>
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainer}>
+              <View style={styles.tableCellView}>
+                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CASH')?.serviceCharge ?? 0)}</StyledText>
+              </View>
+            </View>
+
+            <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
+              <View style={styles.tableCellView}>
+                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CARD')?.serviceCharge ?? 0)}</StyledText>
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainer}>
+              <View style={[styles.tableCellView]}>
+                <StyledText style={styles.tableCellText}>{t('discountTotal')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.totalSales?.discountTotal ?? 0)}</StyledText>
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainer}>
+              <View style={styles.tableCellView}>
+                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CASH')?.discount ?? 0)}</StyledText>
+              </View>
+            </View>
+
+            <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
+              <View style={styles.tableCellView}>
+                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CARD')?.discount ?? 0)}</StyledText>
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainer}>
+              <View style={[styles.tableCellView]}>
+                <StyledText style={styles.tableCellText}>{t('cancelledTotal')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <StyledText style={styles.tableCellText}>{formatCurrency((getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CARD')?.orderTotal ?? 0) + (getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CASH')?.orderTotal ?? 0))}</StyledText>
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainer}>
+              <View style={styles.tableCellView}>
+                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CASH')?.orderTotal ?? 0)}</StyledText>
+              </View>
+            </View>
+
+            <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
+              <View style={styles.tableCellView}>
+                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CARD')?.orderTotal ?? 0)}</StyledText>
+              </View>
+            </View>
+
           </View>
 
           <View style={styles.sectionContainer}>
-            <RenderTable reportData={rangedSalesData} isCurrency={true} />
+            <RenderTable reportData={rangedSalesData} isCurrency={true} type='card' />
           </View>
 
           <View style={styles.sectionContainer}>
@@ -330,15 +649,31 @@ class SalesCharts extends React.Component {
               />
             </View>
 
+            <View style={[{flexDirection: 'row', maxWidth: 300, alignItems: 'center'}]}>
+              <StyledText style={{paddingHorizontal: 10}}>{t('rankingFilter.count.title')}</StyledText>
+              <View style={{flexDirection: 'column', flex: 1}}>
+                <SegmentedControl
+                  selectedIndex={this.state.selectedRankingCount}
+                  input={{
+                    onChange: this.handleRankingCountChange
+                  }}
+                  values={[t('rankingFilter.count.all'), t('rankingFilter.count.10'), t('rankingFilter.count.25')]}
+                />
+              </View>
+            </View>
+
             <View style={{marginBottom: 20}}>
               <View style={styles.sectionBar}>
                 <View style={[styles.quarter_width, styles.tableCellView]}>
                   <Text style={[styles.sectionBarTextSmall]}>{t('order.product')}</Text>
                 </View>
 
-                <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                <TouchableOpacity style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}
+                  onPress={() => this.setState({isCountRankDown: !this.state.isCountRankDown})}
+                >
                   <Text style={styles.sectionBarTextSmall}>{t('quantity')}</Text>
-                </View>
+                  <Icon name={this.state.isCountRankDown ? 'caret-down' : 'caret-up'} size={24} color={mainThemeColor} style={{padding: 0, margin: 0}} />
+                </TouchableOpacity>
 
                 <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
                   <Text style={styles.sectionBarTextSmall}>{t('amount')}</Text>
@@ -350,8 +685,8 @@ class SalesCharts extends React.Component {
               </View>
               <FlatList
                 data={rankingData}
-                renderItem={({item}) => {
-                  return <Item salesData={item} />
+                renderItem={({item, index}) => {
+                  return <Item salesData={item} index={index} />
                 }}
                 ListEmptyComponent={() => {
                   return (
@@ -363,19 +698,7 @@ class SalesCharts extends React.Component {
             </View>
           </View>
 
-          <View style={styles.sectionContainer}>
-            <Text style={styles.screenSubTitle}>
-              {t('salesDistributionTitle')}
-            </Text>
-            {haveSDData && (
-              <View>
-                <RenderTable
-                  reportData={salesDistributionData}
-                  isCurrency={true}
-                />
-              </View>
-            )}
-          </View>
+
         </View>
       </ThemeScrollView>
     )
@@ -442,7 +765,7 @@ class ProductsRanking extends React.Component {
               </View>
               <FlatList
                 data={filteredRankingData}
-                renderItem={({item}) => {
+                renderItem={({item, index}) => {
                   const salesData = item
 
                   return (
@@ -459,7 +782,7 @@ class ProductsRanking extends React.Component {
                       </View>
 
                       <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                        <Text style={styles.tableCellWhiteText}>{formatCurrency(salesData.productSales)}</Text>
+                        <Text style={styles.tableCellWhiteText}>{formatCurrency(salesData?.productSales ?? 0)}</Text>
                       </View>
 
                       <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
@@ -494,3 +817,6 @@ class ProductsRanking extends React.Component {
   }
 
 }
+
+
+

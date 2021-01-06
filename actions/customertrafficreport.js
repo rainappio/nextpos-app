@@ -18,20 +18,22 @@ export const fetchCustomerTrafficReportFailure = error => ({
   error
 })
 
-export const getCustomerTrafficReport = (year, month) => {
+export const getCustomerTrafficReport = (rangeType, fromDate, toDate) => {
   return dispatch => {
     dispatch(fetchCustomerTrafficReport())
 
     dispatchFetchRequest(
-      api.report.getCustomerTrafficReport(year, month),
+      api.report.getCustomerTrafficReport(rangeType, fromDate, toDate),
       {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
-        headers: {}
+        headers: {'version': 'v2'}
       },
       response => {
+        console.log('response2', response.url)
         response.json().then(data => {
+          console.log('response', JSON.stringify(data))
           dispatch(fetchCustomerTrafficReportSuccess(data))
         })
       },

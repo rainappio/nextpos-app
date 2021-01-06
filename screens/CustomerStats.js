@@ -2,17 +2,19 @@ import React from 'react'
 import {Text, View} from 'react-native'
 import {connect} from 'react-redux'
 import {getCustomerCountReport, getCustomerTrafficReport} from '../actions'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import BackendErrorScreen from './BackendErrorScreen'
-import moment from "moment";
+import moment from "moment-timezone";
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import SvgBarChart from "../components/SvgBarChart";
-import MonthPicker from "../components/MonthPicker";
-import RenderTable from "../components/RenderTable";
+import MonthPicker from "../components/MonthPicker"
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
+import {formatCurrency} from "../actions";
+import OrderFilterFormII from "./OrderFilterFormII";
+import TimeZoneService from "../helpers/TimeZoneService";
 
 class CustomerStats extends React.Component {
   static navigationOptions = {
@@ -92,6 +94,9 @@ class CustomerStats extends React.Component {
       currentDate: moment(new Date()),
       selectedFilter: 0,
       filteredWeeklySalesReport: [],
+      selectedRangeType: 'WEEK',
+      selectedRangeTypeIndex: 2,
+      searchFromDate: new Date()
     }
   }
 
@@ -111,38 +116,18 @@ class CustomerStats extends React.Component {
     return customerTrafficData
   }
 
-  generateCustomerStatsChart = (customerStatsReport) => {
+  handleFilterSalesChart = values => {
+    const timezone = TimeZoneService.getTimeZone();
+    const searchFromDate = moment.tz(values.fromDate, timezone).format("YYYY-MM-DDTHH:mm:ss")
+    const searchToDate = moment.tz(values.toDate, timezone).format("YYYY-MM-DDTHH:mm:ss")
 
-    const customerCountData = {
-      legend: ['This year', 'Last year'],
-      labels: [],
-      data: [],
-      data2: []
-    }
+    this.setState({selectedRangeTypeIndex: values.dateRange, searchFromDate: searchFromDate})
 
-    const customerAverageSpendingData = {
-      legend: ['This year', 'Last year'],
-      labels: [],
-      data: [],
-      data2: []
-    }
-
-    customerStatsReport.customerStatsThisMonth.map(stats => {
-      const date = moment(stats.date).format('MM/DD')
-      customerCountData.labels.push(date)
-      customerCountData.data.push(stats.customerCount)
-
-      customerAverageSpendingData.labels.push(date)
-      customerAverageSpendingData.data.push(stats.averageSpending)
-    })
-
-    customerStatsReport.customerStatsThisMonthLastYear.map(stats => {
-      customerCountData.data2.push(stats.customerCount)
-      customerAverageSpendingData.data2.push(stats.averageSpending)
-    })
-
-    return {countData: customerCountData, avgSpendingData: customerAverageSpendingData}
+    const rangeTypeMapping = ['SHIFT', 'TODAY', 'RANGE', 'RANGE', 'RANGE']
+    this.props.getCustomerTrafficReport(rangeTypeMapping[values.dateRange], searchFromDate, searchToDate)
+    this.props.getCustomerCountReport(rangeTypeMapping[values.dateRange], searchFromDate, searchToDate)
   }
+
 
   render() {
     const {
@@ -153,7 +138,7 @@ class CustomerStats extends React.Component {
       haveError,
       haveCCData,
     } = this.props
-    const {t} = this.context
+    const {t, isTablet} = this.context
     const containSalesData = haveData && customerTrafficReport.totalCount !== undefined && customerTrafficReport.totalCount.orderCount > 0
 
     // ranged sales
@@ -171,16 +156,6 @@ class CustomerStats extends React.Component {
     const ordersByAgeGroup = customerTrafficReport.ordersByAgeGroup
     const ordersByVisitFrequency = customerTrafficReport.ordersByVisitFrequency
     const totalCount = customerTrafficReport.totalCount
-
-    // customer stats
-    let custCountData = {}
-    let custAvgSpendingData = {}
-
-    if (haveCCData) {
-      const {countData, avgSpendingData} = this.generateCustomerStatsChart(customercountReport);
-      custCountData = countData
-      custAvgSpendingData = avgSpendingData
-    }
 
     if (isLoading) {
       return (
@@ -204,224 +179,424 @@ class CustomerStats extends React.Component {
       )
     }
 
-    return (
-      <ThemeScrollView>
-        <View style={[styles.fullWidthScreen]}>
-          <ScreenHeader backNavigation={true}
-            parentFullScreen={true}
-            title={t('customerStatsTitle')}
-          />
 
+    if (isTablet) {
+      return (
+        <ThemeScrollView>
+          <View style={[styles.fullWidthScreen]}>
+            <ScreenHeader backNavigation={true}
+              parentFullScreen={true}
+              title={t('customerStatsTitle')}
+            />
 
-          <MonthPicker
-            currentDate={this.state.currentDate}
-            selectedFilter={this.state.selectedFilter}
-            handleMonthChange={(date, selectedFilter) => {
-              this.setState({currentDate: date, selectedFilter: selectedFilter})
-
-              this.props.getCustomerTrafficReport(date.year(), date.month() + 1)
-              this.props.getCustomerCountReport(date.year(), date.month() + 1)
-            }}
-          />
-
-          {totalCount !== null && totalCount.orderCount === 0 && (
             <View>
-              <StyledText style={styles.messageBlock}>{t('noData')}</StyledText>
+              <OrderFilterFormII
+                onSubmit={this.handleFilterSalesChart}
+                initialValues={{
+                  dateRange: this.state.selectedRangeTypeIndex,
+                  fromDate: new Date(customerTrafficReport?.dateRange?.zonedFromDate ?? new Date()),
+                  toDate: new Date(customerTrafficReport?.dateRange?.zonedToDate ?? new Date())
+                }} />
             </View>
-          )}
 
-          {totalCount !== null && totalCount.orderCount > 0 && (
-            <View>
+
+            {totalCount !== null && totalCount.orderCount === 0 && (
               <View>
-                <Text style={styles.screenSubTitle}>
-                  {t('orderTraffic')}
-                </Text>
-                <SvgBarChart data={filteredCustomerTrafficData} legend='Order Count' round={maxValue} />
+                <StyledText style={styles.messageBlock}>{t('noData')}</StyledText>
               </View>
+            )}
 
-              <View style={styles.verticalPadding}>
-                <View style={styles.tableRowContainerWithBorder}>
-                  <View style={[styles.tableCellView, {flex: 1}]}>
-                    <Text style={styles.sectionBarText}>{t('orderType')}</Text>
-                  </View>
-                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                    <Text style={styles.sectionBarText}>{t('total')}</Text>
-                  </View>
-                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                    <Text style={styles.sectionBarText}>{t('percentage')}</Text>
-                  </View>
-                </View>
-
-                {
-                  ordersByType !== null && ordersByType.map(order => (
-                    order.orderType === 'ONLINE' ? null : <View
-                      key={order.id}
-                      style={styles.tableRowContainerWithBorder}
-                    >
-                      <View style={[styles.tableCellView, {flex: 1}]}>
-                        <StyledText>{t(`order.${order.orderType}`)}</StyledText>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                        <StyledText>{order.orderCount}</StyledText>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                        <StyledText>{order.percentage}</StyledText>
-                      </View>
-                    </View>
-                  ))
-                }
-
-                <View style={styles.tableRowContainerWithBorder}>
-                  <View style={[styles.tableCellView, {flex: 1}]}>
-                    <Text style={styles.sectionBarText}>{t('ageGroup')}</Text>
-                  </View>
-                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                    <Text style={styles.sectionBarText}>{t('total')}</Text>
-                  </View>
-                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                    <Text style={styles.sectionBarText}>{t('percentage')}</Text>
-                  </View>
-                </View>
-
-                {
-                  ordersByAgeGroup !== null && ordersByAgeGroup.map(order => (
-                    <View
-                      key={order.id}
-                      style={styles.tableRowContainerWithBorder}
-                    >
-                      <View style={[styles.tableCellView, {flex: 1}]}>
-                        <StyledText>{t(`age.${order.ageGroup}`)}</StyledText>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                        <StyledText>{order.orderCount}</StyledText>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                        <StyledText>{order.percentage}</StyledText>
-                      </View>
-                    </View>
-                  ))
-                }
-
-                <View style={styles.tableRowContainerWithBorder}>
-                  <View style={[styles.tableCellView, {flex: 1}]}>
-                    <Text style={styles.sectionBarText}>{t('visitFrequency')}</Text>
-                  </View>
-                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                    <Text style={styles.sectionBarText}>{t('total')}</Text>
-                  </View>
-                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                    <Text style={styles.sectionBarText}>{t('percentage')}</Text>
-                  </View>
-                </View>
-
-                {
-                  ordersByVisitFrequency !== null && ordersByVisitFrequency.map(order => (
-                    <View
-                      key={order.id}
-                      style={styles.tableRowContainerWithBorder}
-                    >
-                      <View style={[styles.tableCellView, {flex: 1}]}>
-                        <StyledText>{t(`visit.${order.visitFrequency}`)}</StyledText>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                        <StyledText>{order.orderCount}</StyledText>
-                      </View>
-                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                        <StyledText>{order.percentage}</StyledText>
-                      </View>
-                    </View>
-                  ))
-                }
-
-                <View style={styles.tableRowContainerWithBorder}>
-                  <View style={{flex: 1}}>
-                    <Text style={styles.sectionBarText}>{t('customerCountHeading')}</Text>
-                  </View>
-                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                    <Text style={styles.sectionBarText}>{t('total')}</Text>
-                  </View>
-                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                    <Text style={styles.sectionBarText}>{t('percentage')}</Text>
-                  </View>
-                </View>
-
+            {totalCount !== null && totalCount.orderCount > 0 && (
+              <View>
                 <View>
-                  <View style={styles.tableRowContainerWithBorder}>
-                    <View style={[styles.tableCellView, {flex: 1}]}>
-                      <StyledText>{t('customerCount')}</StyledText>
-                    </View>
-                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                      <StyledText>{totalCount.customerCount}</StyledText>
-                    </View>
-                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                      <StyledText>-</StyledText>
-                    </View>
-                  </View>
-                  <View style={styles.tableRowContainerWithBorder}>
-                    <View style={[styles.tableCellView, {flex: 1}]}>
-                      <StyledText>{t('maleCount')}</StyledText>
-                    </View>
-                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                      <StyledText>{totalCount.maleCount}</StyledText>
-                    </View>
-                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                      <StyledText>{totalCount.malePercentage}</StyledText>
-                    </View>
-                  </View>
-                  <View style={styles.tableRowContainerWithBorder}>
-                    <View style={[styles.tableCellView, {flex: 1}]}>
-                      <StyledText>{t('femaleCount')}</StyledText>
-                    </View>
-                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                      <StyledText>{totalCount.femaleCount}</StyledText>
-                    </View>
-                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                      <StyledText>{totalCount.femalePercentage}</StyledText>
-                    </View>
-                  </View>
-                  <View style={styles.tableRowContainerWithBorder}>
-                    <View style={[styles.tableCellView, {flex: 1}]}>
-                      <StyledText>{t('kidCount')}</StyledText>
-                    </View>
-                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                      <StyledText>{totalCount.kidCount}</StyledText>
-                    </View>
-                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                      <StyledText>{totalCount.kidPercentage}</StyledText>
-                    </View>
-                  </View>
+                  <Text style={styles.screenSubTitle}>
+                    {t('orderTraffic')}
+                  </Text>
+                  <SvgBarChart data={filteredCustomerTrafficData} legend='Order Count' round={maxValue} />
                 </View>
 
-                {haveCCData && (
-                  <View>
-                    <View style={styles.sectionContainer}>
-                      <Text style={styles.screenSubTitle}>
-                        {t('customerCountTitle')}
-                      </Text>
-                      <RenderTable
-                        reportData={custCountData}
-                      />
+                <View style={[styles.verticalPadding, {flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-evenly'}]}>
+                  <View style={{width: 480, borderColor: mainThemeColor, borderWidth: 1, marginVertical: 10}}>
+                    <View style={[styles.tableRowContainerWithBorder, {borderColor: mainThemeColor}]}>
+                      <View style={[styles.tableCellView, {flex: 1}]}>
+                        <Text style={styles.sectionBarText}>{t('orderType')}</Text>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                        <Text style={styles.sectionBarText}>{t('total')}</Text>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                        <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                      </View>
                     </View>
-                    <View style={styles.sectionContainer}>
-                      <Text style={styles.screenSubTitle}>
-                        {t('averageSpendingTitle')}
-                      </Text>
-                      <View>
 
-                        <RenderTable
-                          reportData={custAvgSpendingData}
-                          isCurrency={true}
-                        />
+                    {
+                      ordersByType !== null && ordersByType.map(order => (
+                        order.orderType === 'ONLINE' ? null : <View
+                          key={order.id}
+                          style={styles.tableRowContainer}
+                        >
+                          <View style={[styles.tableCellView, {flex: 1}]}>
+                            <StyledText>{t(`order.${order.orderType}`)}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                            <StyledText>{order.orderCount}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                            <StyledText>{order.percentage}</StyledText>
+                          </View>
+                        </View>
+                      ))
+                    }
+                  </View>
+                  <View style={{width: 480, borderColor: mainThemeColor, borderWidth: 1, marginVertical: 10}}>
+                    <View style={[styles.tableRowContainerWithBorder, {borderColor: mainThemeColor}]}>
+                      <View style={[styles.tableCellView, {flex: 1}]}>
+                        <Text style={styles.sectionBarText}>{t('ageGroup')}</Text>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                        <Text style={styles.sectionBarText}>{t('total')}</Text>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                        <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                      </View>
+                    </View>
+
+                    {
+                      ordersByAgeGroup !== null && ordersByAgeGroup.map(order => (
+                        <View
+                          key={order.id}
+                          style={styles.tableRowContainer}
+                        >
+                          <View style={[styles.tableCellView, {flex: 1}]}>
+                            <StyledText>{t(`age.${order.ageGroup}`)}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                            <StyledText>{order.orderCount}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                            <StyledText>{order.percentage}</StyledText>
+                          </View>
+                        </View>
+                      ))
+                    }
+                  </View>
+                  <View style={{width: 480, borderColor: mainThemeColor, borderWidth: 1, marginVertical: 10}}>
+                    <View style={[styles.tableRowContainerWithBorder, {borderColor: mainThemeColor}]}>
+                      <View style={[styles.tableCellView, {flex: 1}]}>
+                        <Text style={styles.sectionBarText}>{t('visitFrequency')}</Text>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                        <Text style={styles.sectionBarText}>{t('total')}</Text>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                        <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                      </View>
+                    </View>
+
+                    {
+                      ordersByVisitFrequency !== null && ordersByVisitFrequency.map(order => (
+                        <View
+                          key={order.id}
+                          style={styles.tableRowContainer}
+                        >
+                          <View style={[styles.tableCellView, {flex: 1}]}>
+                            <StyledText>{t(`visit.${order.visitFrequency}`)}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                            <StyledText>{order.orderCount}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                            <StyledText>{order.percentage}</StyledText>
+                          </View>
+                        </View>
+                      ))
+                    }
+                  </View>
+                  <View style={{width: 480, borderColor: mainThemeColor, borderWidth: 1, marginVertical: 10}}>
+                    <View style={[styles.tableRowContainerWithBorder, {borderColor: mainThemeColor}]}>
+                      <View style={{flex: 1}}>
+                        <Text style={styles.sectionBarText}>{t('customerCountHeading')}</Text>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                        <Text style={styles.sectionBarText}>{t('total')}</Text>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                        <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                      </View>
+                    </View>
+
+                    <View>
+                      <View style={styles.tableRowContainer}>
+                        <View style={[styles.tableCellView, {flex: 1}]}>
+                          <StyledText>{t('customerCount')}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                          <StyledText>{totalCount.customerCount}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                          <StyledText>-</StyledText>
+                        </View>
+                      </View>
+                      <View style={styles.tableRowContainer}>
+                        <View style={[styles.tableCellView, {flex: 1}]}>
+                          <StyledText>{t('maleCount')}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                          <StyledText>{totalCount.maleCount}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                          <StyledText>{totalCount.malePercentage}</StyledText>
+                        </View>
+                      </View>
+                      <View style={styles.tableRowContainer}>
+                        <View style={[styles.tableCellView, {flex: 1}]}>
+                          <StyledText>{t('femaleCount')}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                          <StyledText>{totalCount.femaleCount}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                          <StyledText>{totalCount.femalePercentage}</StyledText>
+                        </View>
+                      </View>
+                      <View style={styles.tableRowContainer}>
+                        <View style={[styles.tableCellView, {flex: 1}]}>
+                          <StyledText>{t('kidCount')}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                          <StyledText>{totalCount.kidCount}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                          <StyledText>{totalCount.kidPercentage}</StyledText>
+                        </View>
                       </View>
                     </View>
                   </View>
-                )}
+                  <View style={{width: 480, borderColor: mainThemeColor, borderWidth: 1, marginVertical: 10}}>
+                    <View style={[styles.tableRowContainerWithBorder, {borderBottomWidth: 0}]}>
+                      <View style={{flex: 1}}>
+                        <Text style={styles.sectionBarText}>{t('averageSpendingTitle')}</Text>
+                      </View>
+
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                        <Text style={styles.sectionBarText}>{formatCurrency(customercountReport?.customerStatsThisMonth?.[0]?.averageSpending ?? 0)}</Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={{width: 480, marginVertical: 10}}>
+
+                  </View>
+                </View>
               </View>
+            )}
+          </View>
+        </ThemeScrollView>
+      )
+    } else {
+      return (
+        <ThemeScrollView>
+          <View style={[styles.fullWidthScreen]}>
+            <ScreenHeader backNavigation={true}
+              parentFullScreen={true}
+              title={t('customerStatsTitle')}
+            />
+
+            <View>
+              <OrderFilterFormII
+                onSubmit={this.handleFilterSalesChart}
+                initialValues={{
+                  dateRange: this.state.selectedRangeTypeIndex,
+                  fromDate: new Date(customerTrafficReport?.dateRange?.zonedFromDate ?? new Date()),
+                  toDate: new Date(customerTrafficReport?.dateRange?.zonedToDate ?? new Date())
+                }} />
             </View>
-          )}
-        </View>
-      </ThemeScrollView>
-    )
+
+
+            {totalCount !== null && totalCount.orderCount === 0 && (
+              <View>
+                <StyledText style={styles.messageBlock}>{t('noData')}</StyledText>
+              </View>
+            )}
+
+            {totalCount !== null && totalCount.orderCount > 0 && (
+              <View>
+                <View>
+                  <Text style={styles.screenSubTitle}>
+                    {t('orderTraffic')}
+                  </Text>
+                  <SvgBarChart data={filteredCustomerTrafficData} legend='Order Count' round={maxValue} />
+                </View>
+
+                <View style={styles.verticalPadding}>
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[styles.tableCellView, {flex: 1}]}>
+                      <Text style={styles.sectionBarText}>{t('orderType')}</Text>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                      <Text style={styles.sectionBarText}>{t('total')}</Text>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                      <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                    </View>
+                  </View>
+
+                  {
+                    ordersByType !== null && ordersByType.map(order => (
+                      order.orderType === 'ONLINE' ? null : <View
+                        key={order.id}
+                        style={styles.tableRowContainerWithBorder}
+                      >
+                        <View style={[styles.tableCellView, {flex: 1}]}>
+                          <StyledText>{t(`order.${order.orderType}`)}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                          <StyledText>{order.orderCount}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                          <StyledText>{order.percentage}</StyledText>
+                        </View>
+                      </View>
+                    ))
+                  }
+
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[styles.tableCellView, {flex: 1}]}>
+                      <Text style={styles.sectionBarText}>{t('ageGroup')}</Text>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                      <Text style={styles.sectionBarText}>{t('total')}</Text>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                      <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                    </View>
+                  </View>
+
+                  {
+                    ordersByAgeGroup !== null && ordersByAgeGroup.map(order => (
+                      <View
+                        key={order.id}
+                        style={styles.tableRowContainerWithBorder}
+                      >
+                        <View style={[styles.tableCellView, {flex: 1}]}>
+                          <StyledText>{t(`age.${order.ageGroup}`)}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                          <StyledText>{order.orderCount}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                          <StyledText>{order.percentage}</StyledText>
+                        </View>
+                      </View>
+                    ))
+                  }
+
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[styles.tableCellView, {flex: 1}]}>
+                      <Text style={styles.sectionBarText}>{t('visitFrequency')}</Text>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                      <Text style={styles.sectionBarText}>{t('total')}</Text>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                      <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                    </View>
+                  </View>
+
+                  {
+                    ordersByVisitFrequency !== null && ordersByVisitFrequency.map(order => (
+                      <View
+                        key={order.id}
+                        style={styles.tableRowContainerWithBorder}
+                      >
+                        <View style={[styles.tableCellView, {flex: 1}]}>
+                          <StyledText>{t(`visit.${order.visitFrequency}`)}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                          <StyledText>{order.orderCount}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                          <StyledText>{order.percentage}</StyledText>
+                        </View>
+                      </View>
+                    ))
+                  }
+
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={{flex: 1}}>
+                      <Text style={styles.sectionBarText}>{t('customerCountHeading')}</Text>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                      <Text style={styles.sectionBarText}>{t('total')}</Text>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                      <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                    </View>
+                  </View>
+
+                  <View>
+                    <View style={styles.tableRowContainerWithBorder}>
+                      <View style={[styles.tableCellView, {flex: 1}]}>
+                        <StyledText>{t('customerCount')}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                        <StyledText>{totalCount.customerCount}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                        <StyledText>-</StyledText>
+                      </View>
+                    </View>
+                    <View style={styles.tableRowContainerWithBorder}>
+                      <View style={[styles.tableCellView, {flex: 1}]}>
+                        <StyledText>{t('maleCount')}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                        <StyledText>{totalCount.maleCount}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                        <StyledText>{totalCount.malePercentage}</StyledText>
+                      </View>
+                    </View>
+                    <View style={styles.tableRowContainerWithBorder}>
+                      <View style={[styles.tableCellView, {flex: 1}]}>
+                        <StyledText>{t('femaleCount')}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                        <StyledText>{totalCount.femaleCount}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                        <StyledText>{totalCount.femalePercentage}</StyledText>
+                      </View>
+                    </View>
+                    <View style={styles.tableRowContainerWithBorder}>
+                      <View style={[styles.tableCellView, {flex: 1}]}>
+                        <StyledText>{t('kidCount')}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+                        <StyledText>{totalCount.kidCount}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                        <StyledText>{totalCount.kidPercentage}</StyledText>
+                      </View>
+                    </View>
+                  </View>
+
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={{flex: 1}}>
+                      <Text style={styles.sectionBarText}>{t('averageSpendingTitle')}</Text>
+                    </View>
+
+                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                      <Text style={styles.sectionBarText}>{formatCurrency(customercountReport?.customerStatsThisMonth?.[0]?.averageSpending ?? 0)}</Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            )}
+          </View>
+        </ThemeScrollView>
+      )
+    }
+
   }
 }
 
@@ -436,8 +611,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getCustomerTrafficReport: (year, month) => dispatch(getCustomerTrafficReport(year, month)),
-  getCustomerCountReport: (year, month) => dispatch(getCustomerCountReport(year, month))
+  getCustomerTrafficReport: (rangeType, fromDate, toDate) => dispatch(getCustomerTrafficReport(rangeType, fromDate, toDate)),
+  getCustomerCountReport: (rangeType, fromDate, toDate) => dispatch(getCustomerCountReport(rangeType, fromDate, toDate))
 })
 
 export default connect(

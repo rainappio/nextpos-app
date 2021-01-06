@@ -245,7 +245,7 @@ class PaymentOrderForm extends React.Component {
 
             <View>
               <TouchableOpacity
-                onPress={() => props.navigation.navigate('OrdersSummary')}
+                onPress={() => props.navigation.goBack()}
               >
                 <Text style={[styles.bottomActionButton, styles.cancelButton]}>
                   {t('action.cancel')}

@@ -435,6 +435,13 @@ const zh = {
     quantity: '人數',
     ok: '確定'
   },
+  dateRange: {
+    SHIFT: '開帳期間',
+    TODAY: '今日',
+    WEEK: '週',
+    MONTH: '月',
+    RANGE: '自訂日期'
+  },
   salesReport: '銷售報表',
   staffTimeCardReport: '職員打卡表',
   customerStatsReport: '來客總覽',
