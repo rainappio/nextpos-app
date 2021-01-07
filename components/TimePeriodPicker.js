@@ -64,7 +64,7 @@ export default class TimePeriodPicker extends React.Component {
                 <View style={[styles.tableRowContainer, {maxWidth: 640}]}>
                     <View style={[styles.tableCellView, {flex: 1, marginRight: 10, justifyContent: 'flex-end'}]}>
                         <TouchableOpacity
-                            hitSlop={{top: 20, bottom: 20, left: 50, right: 5}}
+                            hitSlop={{left: 50, right: 5}}
                             onPress={() => this.navigatePrevious()}
                         >
                             <Text>
@@ -82,7 +82,7 @@ export default class TimePeriodPicker extends React.Component {
                     <View style={[styles.tableCellView, {flex: 1, marginLeft: 10}]}>
                         <TouchableOpacity
                             style={{flex: 1}}
-                            hitSlop={{top: 20, bottom: 20, left: 5, right: 50}}
+                            hitSlop={{left: 5, right: 50}}
                             onPress={() => this.navigateNext()}
                         >
                             <Text>
