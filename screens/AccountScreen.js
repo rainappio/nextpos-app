@@ -54,11 +54,13 @@ class AccountScreen extends React.Component {
     await this.context.localize({
       en: {
         username: 'User Name',
-        nickname: 'Nick Name'
+        nickname: 'Nick Name',
+        updateDate: 'Update Date'
       },
       zh: {
         username: '使用者名稱',
-        nickname: '暱稱'
+        nickname: '暱稱',
+        updateDate: '最後更新'
       }
     })
   }
@@ -83,8 +85,8 @@ class AccountScreen extends React.Component {
       <View style={[styles.mainContainer, themeStyle]}>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader backNavigation={true}
-                        parentFullScreen={true}
-                        title={t('settings.account')}
+            parentFullScreen={true}
+            title={t('settings.account')}
           />
 
           <View style={styles.tableRowContainerWithBorder}>
@@ -112,9 +114,10 @@ class AccountScreen extends React.Component {
               <StyledText style={styles.fieldTitle}>{t('password')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-              <EditPasswordPopUp defaultUser={currentUser.defaultUser} name={currentUser.username} ownAccount={true}/>
+              <EditPasswordPopUp defaultUser={currentUser.defaultUser} name={currentUser.username} ownAccount={true} />
             </View>
           </View>
+
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
               <StyledText style={styles.fieldTitle}>App Version</StyledText>
@@ -122,6 +125,17 @@ class AccountScreen extends React.Component {
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <StyledText>
                 {Constants.nativeAppVersion} | {Constants.nativeBuildVersion}
+              </StyledText>
+            </View>
+          </View>
+
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText style={styles.fieldTitle}>{t('updateDate')}</StyledText>
+            </View>
+            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+              <StyledText>
+                2021-01-07
               </StyledText>
             </View>
           </View>
