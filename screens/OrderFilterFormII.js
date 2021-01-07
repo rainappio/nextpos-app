@@ -46,7 +46,7 @@ class OrderFilterFormII extends React.Component {
         if (isTablet) {
             return (
                 <View>
-                    <View style={[styles.tableRowContainer]}>
+                    <View style={[styles.tableRowContainer, {marginBottom: 8}]}>
                         <View style={[styles.tableCellView, {flex: 3, marginRight: 5, flexDirection: 'column', justifyContent: 'center'}]}>
                             <Field
                                 name="dateRange"
@@ -57,7 +57,7 @@ class OrderFilterFormII extends React.Component {
                         </View>
                         <View style={[styles.tableCellView, styles.justifyRight]}>
                             <TouchableOpacity
-                                style={{flex: 1}}
+                                style={{flex: 1, marginLeft: 40}}
                                 onPress={() => handleSubmit()}>
                                 <Text
                                     style={[
@@ -121,7 +121,7 @@ class OrderFilterFormII extends React.Component {
             return (
                 <View>
 
-                    <View style={[styles.tableCellView, {flex: 3, marginRight: 5, flexDirection: 'column', justifyContent: 'center'}]}>
+                    <View style={[styles.tableCellView, {flex: 3, marginHorizontal: 2, marginBottom: 8, flexDirection: 'column', justifyContent: 'center'}]}>
                         <Field
                             name="dateRange"
                             component={SegmentedControl}
