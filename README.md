@@ -23,3 +23,12 @@ https://stackoverflow.com/questions/41048546/how-can-i-attach-to-a-stateless-com
 
 https://forums.expo.io/t/end-to-end-testing/2342
 
+
+## Reference
+
+Permission issues with Build Android AAB
+
+https://docs.expo.io/versions/latest/sdk/permissions/
+
+https://docs.expo.io/versions/latest/config/app/
+
