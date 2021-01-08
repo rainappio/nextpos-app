@@ -55,7 +55,7 @@ class AccountScreen extends React.Component {
       en: {
         username: 'User Name',
         nickname: 'Nick Name',
-        updateDate: 'Update Date'
+        updateDate: 'Last updated'
       },
       zh: {
         username: '使用者名稱',
@@ -135,7 +135,7 @@ class AccountScreen extends React.Component {
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <StyledText>
-                2021-01-07
+                2021-01-08
               </StyledText>
             </View>
           </View>
