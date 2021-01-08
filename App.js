@@ -8,7 +8,8 @@ import {
   AsyncStorage,
   YellowBox,
   Dimensions,
-  LogBox
+  LogBox,
+  Alert
 } from 'react-native';
 if (Platform.OS === "android") {
   // See https://github.com/expo/expo/issues/6536 for this issue.
@@ -49,7 +50,7 @@ import {getTheme, storeTheme} from "./helpers/contextHelper";
 
 import * as Device from 'expo-device';
 import * as ScreenOrientation from 'expo-screen-orientation';
-
+import {checkExpoUpdate} from "./helpers/updateAppHelper";
 
 
 
@@ -133,7 +134,9 @@ export default class App extends React.Component {
       splitOrderId: null,
       saveSplitOrderId: this.saveSplitOrderId,
       splitParentOrderId: null,
-      saveSplitParentOrderId: this.saveSplitParentOrderId
+      saveSplitParentOrderId: this.saveSplitParentOrderId,
+      disableReload: false,
+      setDisableReload: this.setDisableReload,
     }
 
     TimeZoneService.setClientReference(() => store.getState().client)
@@ -152,7 +155,7 @@ export default class App extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     getTheme().then(async (theme) => {
       const themeStyle = theme === 'light' ? themes.light : themes.dark
       const reverseThemeStyle = theme === 'light' ? {...themes.light, borderColor: 'black'} : themes.light
@@ -168,7 +171,12 @@ export default class App extends React.Component {
     })
     this.initSplitOrderId()
     this.initSplitParentOrderId()
+
+
+    checkExpoUpdate(this.state?.disableReload, this.setDisableReload)
   }
+
+
 
   mergeLocaleResource = async locales => {
     const updatedLocaleResource = {
@@ -239,6 +247,10 @@ export default class App extends React.Component {
       reverseThemeStyle: reverseThemeStyle,
       complexTheme: complexTheme[theme]
     })
+  }
+
+  setDisableReload = (flag) => {
+    this.setState({disableReload: flag})
   }
 
   initSplitParentOrderId = async () => {
@@ -325,7 +337,9 @@ export default class App extends React.Component {
               splitOrderId: this.state?.splitOrderId,
               saveSplitOrderId: this.state.saveSplitOrderId,
               splitParentOrderId: this.state.splitParentOrderId,
-              saveSplitParentOrderId: this.state.saveSplitParentOrderId
+              saveSplitParentOrderId: this.state.saveSplitParentOrderId,
+              disableReload: this.state.disableReload,
+              setDisableReload: this.state.setDisableReload,
             }}>
               <LocaleContext.Provider value={this.state}>
                 <AppNavigator

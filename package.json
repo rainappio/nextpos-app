@@ -91,7 +91,8 @@
     "redux-thunk": "^2.3.0",
     "sentry-expo": "^2.0.3",
     "taiwan-id-validator2": "^0.2.0",
-    "validator": "^11.1.0"
+    "validator": "^11.1.0",
+    "expo-updates": "~0.4.1"
   },
   "devDependencies": {
     "babel-preset-expo": "8.3.0",
