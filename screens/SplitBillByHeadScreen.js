@@ -19,7 +19,7 @@ import OrderItemDetailEditModal from './OrderItemDetailEditModal';
 import OrderTopInfo from "./OrderTopInfo";
 import DeleteBtn from '../components/DeleteBtn'
 import NavigationService from "../navigation/NavigationService";
-import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer, revertSplitOrder} from "../helpers/orderActions";
+import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer, handleOrderAction} from "../helpers/orderActions";
 import {SwipeRow} from 'react-native-swipe-list-view'
 import ScreenHeader from "../components/ScreenHeader";
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -198,7 +198,7 @@ class SplitBillByHeadScreen extends React.Component {
                                         {
                                             text: `${t('action.yes')}`,
                                             onPress: () => {
-                                                this.props.navigation.goBack()
+                                                handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack())
 
                                             }
                                         },
@@ -395,7 +395,7 @@ class SplitBillByHeadScreen extends React.Component {
                                                             color: mainThemeColor,
                                                         }}
                                                         handleDeleteAction={() => {
-                                                            this.props.navigation.goBack()
+                                                            handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack())
                                                         }}
                                                     />
                                                     <View style={{flex: 2, marginLeft: 16}}>
@@ -447,7 +447,7 @@ class SplitBillByHeadScreen extends React.Component {
                                         {
                                             text: `${t('action.yes')}`,
                                             onPress: () => {
-                                                this.props.navigation.goBack()
+                                                handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack())
 
                                             }
                                         },
@@ -665,7 +665,7 @@ class SplitBillByHeadScreen extends React.Component {
                                         color: mainThemeColor,
                                     }}
                                     handleDeleteAction={() => {
-                                        this.props.navigation.goBack()
+                                        handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack())
                                     }}
                                 />
                                 <View style={{flex: 1, marginLeft: 16}}>

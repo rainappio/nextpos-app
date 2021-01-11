@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, TouchableOpacity, View} from 'react-native'
+import {Text, TouchableOpacity, View, Alert} from 'react-native'
 import {getTimeDifference} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles, {mainThemeColor} from '../styles'
@@ -43,19 +43,38 @@ class OrderItem extends React.PureComponent {
                   style={[{flexDirection: 'row', flex: 9, marginLeft: 3}]}
                   key={order.orderId}
                   onPress={() => {
-                    if (isTablet) {
-                      navigation.navigate('OrderFormII', {
+
+                    order.state === 'PAYMENT_IN_PROCESS'
+                      ? Alert.alert(
+                        `${t('isPayingTitle')}`,
+                        `${t('isPayingMsg')}`,
+                        [
+                          {
+                            text: `${t('action.yes')}`,
+                            onPress: () => {
+                              this.props.navigation.navigate('Payment', {
+                                order: order
+                              })
+                            }
+                          },
+                          {
+                            text: `${t('action.no')}`,
+                            onPress: () => console.log('Cancelled'),
+                            style: 'cancel'
+                          }
+                        ]
+                      )
+                      : isTablet ? navigation.navigate('OrderFormII', {
                         orderId: order.orderId,
                         orderState: order.state
-                      })
-                    } else {
-                      navigation.navigate('OrdersSummary', {
+                      }) : navigation.navigate('OrdersSummary', {
                         orderId: order.orderId,
                         onSubmit: handleOrderSubmit,
                         handleDelete: handleDelete,
                         orderState: order.state
                       })
-                    }
+
+
 
                   }
                   }
@@ -97,19 +116,38 @@ class OrderItem extends React.PureComponent {
             style={[{flexDirection: 'row', flex: 9, marginLeft: 3}]}
             key={order.orderId}
             onPress={() => {
-              if (isTablet) {
-                navigation.navigate('OrderFormII', {
+
+              order.state === 'PAYMENT_IN_PROCESS'
+                ? Alert.alert(
+                  `${t('isPayingTitle')}`,
+                  `${t('isPayingMsg')}`,
+                  [
+                    {
+                      text: `${t('action.yes')}`,
+                      onPress: () => {
+                        this.props.navigation.navigate('Payment', {
+                          order: order
+                        })
+                      }
+                    },
+                    {
+                      text: `${t('action.no')}`,
+                      onPress: () => console.log('Cancelled'),
+                      style: 'cancel'
+                    }
+                  ]
+                )
+                : isTablet ? navigation.navigate('OrderFormII', {
                   orderId: order.orderId,
                   orderState: order.state
-                })
-              } else {
-                navigation.navigate('OrdersSummary', {
+                }) : navigation.navigate('OrdersSummary', {
                   orderId: order.orderId,
                   onSubmit: handleOrderSubmit,
                   handleDelete: handleDelete,
                   orderState: order.state
                 })
-              }
+
+
 
             }
             }

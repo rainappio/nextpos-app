@@ -1,14 +1,14 @@
 import React, {Component, useContext, useState, useEffect} from 'react'
-import {Animated, PanResponder, FlatList, RefreshControl, Text, TouchableOpacity, View, Dimensions, KeyboardAvoidingView} from 'react-native'
+import {Animated, PanResponder, FlatList, RefreshControl, Text, TouchableOpacity, View, Dimensions, KeyboardAvoidingView, Alert} from 'react-native'
 import {connect} from 'react-redux'
 import AddBtn from '../components/AddBtn'
 import OrderStart from './OrderStart'
 import OrderItem from './OrderItem'
 import {getfetchOrderInflights, getMostRecentShiftStatus, getShiftStatus, getTableLayouts, getTablesAvailable, getTableLayout} from '../actions'
 import styles, {mainThemeColor} from '../styles'
-import {successMessage, api, dispatchFetchRequest} from '../constants/Backend'
+import {successMessage, api, dispatchFetchRequest, apiRoot} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
-import {handleDelete, handleOrderSubmit, handleCreateOrderSet, handleDeleteOrderSet} from '../helpers/orderActions'
+import {handleDelete, handleOrderSubmit, handleCreateOrderSet, handleDeleteOrderSet, handleOrderAction} from '../helpers/orderActions'
 import {NavigationEvents} from "react-navigation";
 import {handleOpenShift} from "../helpers/shiftActions";
 import {getCurrentClient} from "../actions/client";
@@ -31,6 +31,8 @@ import en from 'javascript-time-ago/locale/en';
 import NewOrderModal from './NewOrderModal';
 import {getInitialTablePosition, getTablePosition, getSetPosition} from "../helpers/tableAction";
 import NavigationService from "../navigation/NavigationService";
+import SockJsClient from 'react-stomp';
+import {MaterialIcons} from '@expo/vector-icons';
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -58,7 +60,11 @@ class TablesScreen extends React.Component {
       orderModalData: {},
       screenMode: 'normal',
       selectedOrderId: [],
+      ordersInflight: null,
+      ordersInflightWSConnected: false
     }
+
+
   }
 
   componentDidMount() {
@@ -95,7 +101,9 @@ class TablesScreen extends React.Component {
         availableSeats: 'Vacant',
         availableTables: 'Vacant',
         joinTable: 'Join Table',
-        joinTableMode: 'Join Table Mode'
+        joinTableMode: 'Join Table Mode',
+        isPayingTitle: 'Order in Payment Mode',
+        isPayingMsg: 'Proceed to enter payment screen.',
       },
       zh: {
         noTableLayout: '需要創建至少一個桌面跟一個桌位.',
@@ -114,7 +122,9 @@ class TablesScreen extends React.Component {
         availableSeats: '空位',
         availableTables: '空桌',
         joinTable: '併桌',
-        joinTableMode: '併桌模式'
+        joinTableMode: '併桌模式',
+        isPayingTitle: '此訂單正在結帳流程',
+        isPayingMsg: '是否進入結帳流程？',
       }
     })
   }
@@ -190,11 +200,7 @@ class TablesScreen extends React.Component {
     const {t} = this.context
 
 
-    if (isLoading) {
-      return (
-        <LoadingScreen />
-      )
-    } else if (tablelayouts === undefined || tablelayouts.length === 0) {
+    if (tablelayouts === undefined || tablelayouts.length === 0 || !haveData) {
       return (
         <ThemeScrollView
           refreshControl={
@@ -288,7 +294,7 @@ class TablesScreen extends React.Component {
           </KeyboardAvoidingView>
         </ThemeContainer>
       )
-    } else if (haveData) {
+    } else {
       let tableDisplay = 'SHOW_SEAT'
 
       if (client.attributes !== undefined && client.attributes.TABLE_AVAILABILITY_DISPLAY !== undefined) {
@@ -324,6 +330,24 @@ class TablesScreen extends React.Component {
                 await this.loadInfo()
                 this.loadLocalization()
               }}
+            />
+            <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/inflightOrders/${client?.id}`]}
+              onMessage={(data) => {
+                if (data === `${client?.id}.inflightOrders.ordersChanged`) {
+                  this.props.getfetchOrderInflights()
+                }
+              }}
+              ref={(client) => {
+                this.orderRef = client
+              }}
+              onConnect={() => {
+                this.orderRef.sendMessage(`/async/inflightOrders/${client?.id}`)
+                console.log('onConnect')
+              }}
+              onDisconnect={() => {
+                console.log('onDisconnect')
+              }}
+              debug={false}
             />
 
             <View style={[styles.fullWidthScreen]}>
@@ -443,6 +467,7 @@ class TablesScreen extends React.Component {
                         <StyledText>{t('orderState.SETTLED')}</StyledText>
 
                       </View>
+                      {(this.state?.tableWidth && !isLoading) || <View style={{flex: 1, width: '100%'}}><LoadingScreen /></View>}
                       {orderSets?.results?.map((item) => {
                         return (this.state?.tableWidth && tablelayouts[this.state.tableIndex]?.id === item?.tableLayoutId &&
                           <TableSet
@@ -455,6 +480,8 @@ class TablesScreen extends React.Component {
                         )
                       })
                       }
+
+
                       {
                         tablelayouts[this.state.tableIndex]?.tables?.map((table, index) => {
                           let positionArr = tablelayouts[this.state.tableIndex]?.tables?.map((table, index) => {
@@ -464,7 +491,7 @@ class TablesScreen extends React.Component {
                               return {...getInitialTablePosition(index, this.state?.tableHeight ?? this.state?.windowHeight), tableId: table?.tableId, tableData: table}
                             }
                           })
-                          return (this.state?.tableWidth && <Draggable
+                          return (this.state?.tableWidth && !isLoading && <Draggable
                             screenMode={this.state?.screenMode}
                             borderColor={themeStyle.color === '#f1f1f1' ? '#BFBFBF' : '#BFBFBF'}
                             table={table}
@@ -496,12 +523,31 @@ class TablesScreen extends React.Component {
                                 let orderSetData = orderSets?.results?.find((orderSetsItem) => {
                                   return orderSetsItem?.linkedOrders?.some((ordersItem) => {return ordersItem?.orderId === order.orderId})
                                 })
-                                console.log('orderSetData', orderSetData)
-                                navigation.navigate('OrderFormII', {
-                                  orderId: order.orderId,
-                                  orderState: order.state,
-                                  orderSetData: orderSetData
-                                })
+                                order.state === 'PAYMENT_IN_PROCESS'
+                                  ? Alert.alert(
+                                    `${t('isPayingTitle')}`,
+                                    `${t('isPayingMsg')}`,
+                                    [
+                                      {
+                                        text: `${t('action.yes')}`,
+                                        onPress: () => {
+                                          this.props.navigation.navigate('Payment', {
+                                            order: order
+                                          })
+                                        }
+                                      },
+                                      {
+                                        text: `${t('action.no')}`,
+                                        onPress: () => console.log('Cancelled'),
+                                        style: 'cancel'
+                                      }
+                                    ]
+                                  )
+                                  : navigation.navigate('OrderFormII', {
+                                    orderId: order.orderId,
+                                    orderState: order.state,
+                                    orderSetData: orderSetData
+                                  })
                               }
 
                             }}
@@ -518,7 +564,7 @@ class TablesScreen extends React.Component {
                     </View>
                     <View style={{flex: 1}}>
                       <FlatList
-                        data={ordersInflight['NO_LAYOUT']}
+                        data={ordersInflight?.['NO_LAYOUT']}
                         renderItem={({item}) => {
                           console.log('NO_LAYOUT')
                           return (
@@ -597,6 +643,24 @@ class TablesScreen extends React.Component {
                 this.loadLocalization()
               }}
             />
+            <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/inflightOrders/${client?.id}`]}
+              onMessage={(data) => {
+                if (data === `${client?.id}.inflightOrders.ordersChanged`) {
+                  this.props.getfetchOrderInflights()
+                }
+              }}
+              ref={(client) => {
+                this.orderRef = client
+              }}
+              onConnect={() => {
+                this.orderRef.sendMessage(`/async/inflightOrders/${client?.id}`)
+                console.log('onConnect')
+              }}
+              onDisconnect={() => {
+                console.log('onDisconnect')
+              }}
+              debug={false}
+            />
 
             <View style={styles.fullWidthScreen}>
               <ScreenHeader backNavigation={false}
@@ -610,6 +674,7 @@ class TablesScreen extends React.Component {
                   />
                 }
               />
+
 
               {tablelayouts.map((tblLayout, idx) => (
                 <View style={{}} key={idx}>
@@ -632,7 +697,7 @@ class TablesScreen extends React.Component {
                     )}
                   </View>
                   <FlatList
-                    data={ordersInflight[tblLayout.id]}
+                    data={ordersInflight?.[tblLayout.id]}
                     renderItem={({item}) => {
                       return (
                         <OrderItem
@@ -660,7 +725,7 @@ class TablesScreen extends React.Component {
                   </Text>
                 </View>
                 <FlatList
-                  data={ordersInflight['NO_LAYOUT']}
+                  data={ordersInflight?.['NO_LAYOUT']}
                   renderItem={({item}) => {
                     return (
                       <OrderItem
@@ -693,8 +758,6 @@ class TablesScreen extends React.Component {
         )
       }
 
-    } else {
-      return null
     }
   }
 }
@@ -703,7 +766,7 @@ const mapStateToProps = state => ({
   tablelayouts: state.tablelayouts.data.tableLayouts,
   ordersInflight: state.ordersinflight.data.orders,
   orderSets: state.ordersinflight.data?.setData,
-  haveData: state.ordersinflight.haveData && state.tablelayouts.haveData,
+  haveData: state.tablelayouts.haveData,
   haveError: state.ordersinflight.haveError || state.tablelayouts.haveError,
   isLoading: state.ordersinflight.loading || state.tablelayouts.loading,
   shiftStatus: state.shift.data.shiftStatus,
@@ -987,6 +1050,8 @@ class Draggable extends Component {
                   })]}>
                   {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#ffc818'}}></View>}
                   {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
+                  {tableStatus === 'PAYMENT_IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><MaterialIcons name="attach-money" size={25}
+                    style={[styles.iconStyle, {color: 'red'}]} /></View>}
                   <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Ionicons name={'ios-people'} color={'black'} size={20} />
@@ -1017,6 +1082,8 @@ class Draggable extends Component {
                   })]}>
                   {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#ffc818'}}></View>}
                   {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
+                  {tableStatus === 'PAYMENT_IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><MaterialIcons name="attach-money" size={25}
+                    style={[styles.iconStyle, {color: 'red'}]} /></View>}
                   <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Ionicons name={'ios-people'} color={'black'} size={20} />

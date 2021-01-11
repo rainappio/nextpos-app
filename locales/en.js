@@ -148,7 +148,8 @@ const en = {
     COMPLETED: 'Completed',
     DELETED: 'Deleted',
     CANCELLED: 'Cancelled',
-    OTHERS: 'Empty'
+    OTHERS: 'Empty',
+    PAYMENT_IN_PROCESS: 'Paying',
   },
   orderLog: {
     title: 'Order Logs',

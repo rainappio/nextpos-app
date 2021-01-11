@@ -27,7 +27,7 @@ export const getfetchOrderInflights = () => {
         withCredentials: true,
         credentials: 'include',
         headers: {
-          // when shift is not active, this is expected so suppress error.
+
           'x-suppress-error': true
         }
       },

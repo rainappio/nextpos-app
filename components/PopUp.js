@@ -9,6 +9,7 @@ import {Field, reduxForm} from 'redux-form'
 import RenderStepper from './RenderStepper'
 import {isCountZero, isRequired} from '../validators'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
+import {handleOrderAction} from "../helpers/orderActions";
 
 class PopUpBase extends Component {
   static contextType = LocaleContext
@@ -305,7 +306,8 @@ class SplitBillPopUpBase extends Component {
       dataArr,
       themeStyle,
       params,
-      handleSubmit
+      handleSubmit,
+      orderId
     } = this.props
     const {t, isTablet} = this.context
 
@@ -363,10 +365,11 @@ class SplitBillPopUpBase extends Component {
                               this.setState({showHeadCount: true})
                             } else {
                               let par = params?.[index] ?? {}
-                              navigation.navigate(item, {
+                              handleOrderAction(orderId, 'ENTER_PAYMENT', () => navigation.navigate(item, {
                                 ...par,
                                 dataArr: dataArr?.[index] ?? null
-                              })
+                              }))
+
                               this.toggleModal(false)
                             }
                           }}
@@ -385,10 +388,10 @@ class SplitBillPopUpBase extends Component {
                     <TouchableOpacity
                       onPress={handleSubmit(data => {
                         //此處高度客製化，無泛用性
-                        navigation.navigate(toRoute[1], {
+                        handleOrderAction(orderId, 'ENTER_PAYMENT', () => navigation.navigate(toRoute[1], {
                           ...params?.[1],
                           headCount: data?.quantity
-                        })
+                        }))
                         this.toggleModal(false)
                       })}
                     >

@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import PaymentDiscountModal from './PaymentDiscountModal'
 import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
 import {isGuiNumberValid} from 'taiwan-id-validator2'
-import {handleDelete} from "../helpers/orderActions";
+import {handleDelete, handleOrderAction} from "../helpers/orderActions";
 import NavigationService from "../navigation/NavigationService";
 import {NavigationEvents} from 'react-navigation'
 import {ScanView} from '../components/scanView'
@@ -387,7 +387,7 @@ class PaymentFormScreenTablet extends React.Component {
     }
 
     render() {
-        const {navigation, handleSubmit, globalorderoffers, order} = this.props
+        const {navigation, handleSubmit, globalorderoffers, order, isSplitting} = this.props
         const {t, themeStyle} = this.context
         const totalAmount = this.props?.isSplitByHeadCount ? this.props?.splitAmount : order.orderTotal
 
@@ -397,6 +397,9 @@ class PaymentFormScreenTablet extends React.Component {
                     <ScreenHeader backNavigation={true}
                         parentFullScreen={true}
                         title={t('payment.paymentTitle')}
+                        backAction={() => {
+                            !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()
+                        }}
                     />
                     <NavigationEvents
                         onWillFocus={async () => {
@@ -538,7 +541,7 @@ class PaymentFormScreenTablet extends React.Component {
 
                                         <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                                             <StyledText style={styles.tableCellText}>
-                                                {formatCurrency(order.total.amountWithTax)}
+                                                {formatCurrency(order?.total?.amountWithTax)}
                                             </StyledText>
                                         </View>
                                     </View>}
@@ -812,7 +815,7 @@ class PaymentFormScreenTablet extends React.Component {
                             <View style={{flex: 1, flexDirection: 'row', padding: '3%'}}>
                                 <View style={{flex: 1, marginHorizontal: 5}}>
                                     <TouchableOpacity
-                                        onPress={() => this.props.navigation.goBack()}
+                                        onPress={() => !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()}
                                         style={styles.flexButtonSecondAction}
                                     >
                                         <Text style={styles.flexButtonSecondActionText}>{t('payment.cancel')}</Text>

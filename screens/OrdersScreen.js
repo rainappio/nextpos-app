@@ -2,7 +2,7 @@ import React from 'react'
 import {FlatList, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
-import {formatDate, getOrdersByDateRange, getOrdersByInvoiceNumber} from '../actions'
+import {formatDate, getOrdersByDateRange, getOrdersByInvoiceNumber, formatCurrency} from '../actions'
 import {ListItem} from 'react-native-elements'
 import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -18,8 +18,11 @@ import {compose} from "redux";
 import {withContext} from "../helpers/contextHelper";
 import {StyledText} from "../components/StyledText";
 import BackendErrorScreen from "./BackendErrorScreen";
+import {Octicons} from '@expo/vector-icons';
+import * as Animatable from 'react-native-animatable';
 
 class OrdersScreen extends React.Component {
+  handleViewRef = ref => this.view = ref;
   static navigationOptions = {
     header: null
   }
@@ -33,11 +36,12 @@ class OrdersScreen extends React.Component {
       searchFilter: {
         searchTypeIndex: 0,
         tableName: null,
-        dateRange: 'SHIFT',
+        dateRange: 0,
         shiftId: null,
         fromDate: new Date(),
         toDate: new Date(),
-        invoiceNumber: null
+        invoiceNumber: null,
+        showFilter: false
       }
     }
   }
@@ -56,10 +60,11 @@ class OrdersScreen extends React.Component {
   keyExtractor = (order, index) => index.toString()
 
   handleOrderSearch = values => {
+    const rangeTypeMapping = ['SHIFT', 'TODAY', 'RANGE', 'RANGE', 'RANGE']
     const searchTypeIndex = values?.searchTypeIndex ?? 0
     if (searchTypeIndex === 0) {
       const tableName = values?.tableName ?? null
-      const dateRange = values.dateRange != null ? values.dateRange : 'SHIFT'
+      const dateRange = (typeof (values?.dateRange) === 'number') ? rangeTypeMapping?.[values.dateRange] : (values.dateRange != null ? values.dateRange : 'SHIFT')
       const shiftId = values.shiftId != null ? values.shiftId : null
       const fromDate = moment(values.fromDate).format("YYYY-MM-DDTHH:mm:ss")
       const toDate = moment(values.toDate).format("YYYY-MM-DDTHH:mm:ss")
@@ -69,7 +74,7 @@ class OrdersScreen extends React.Component {
           ...this.state.searchFilter,
           searchTypeIndex: searchTypeIndex,
           tableName: tableName,
-          dateRange: dateRange,
+          dateRange: values.dateRange,
           shiftId: shiftId,
           fromDate: values.fromDate,
           toDate: values.toDate
@@ -126,14 +131,26 @@ class OrdersScreen extends React.Component {
     }
   }
 
+  bounce = (showFilter) => {
+    this.setState({showFilter: true}, () => {
+      if (showFilter) {
+        this.view.fadeOutUp(100).then(endState => this.setState({showFilter: false}))
+      } else {
+        this.view.fadeInDown(200).then(endState => this.setState({showFilter: true}))
+      }
+    })
+  }
+
   render() {
-    const {getordersByDateRange, dateRange, isLoading, haveError, haveData} = this.props
+    const {getordersByDateRange, dateRange, isLoading, haveError, haveData, getordersByDateRangeFullData} = this.props
     const {t} = this.context
 
     const orders = []
     getordersByDateRange !== undefined && getordersByDateRange.map(order => {
       orders.push(order)
     })
+
+
 
     if (isLoading) {
       return (
@@ -151,7 +168,7 @@ class OrdersScreen extends React.Component {
               onWillFocus={() => {
                 if (this.state?.searchFilter?.searchTypeIndex === 0) {
                   const shiftId = this.props.navigation.getParam('shiftId')
-                  const dateRangeToUse = shiftId != null ? 'SHIFT' : this.state.searchFilter.dateRange
+                  const dateRangeToUse = shiftId != null ? 0 : this.state.searchFilter.dateRange
 
                   this.handleOrderSearch({
                     dateRange: dateRangeToUse,
@@ -184,11 +201,9 @@ class OrdersScreen extends React.Component {
               title={t('order.ordersTitle')}
               rightComponent={
                 <TouchableOpacity
-                  onPress={() => {
-                    this.handleOrderSearch({})
-                  }}
+                  onPress={() => this.setState({showFilter: true})}
                 >
-                  <Icon name="md-refresh" size={32} color={mainThemeColor} />
+                  <Octicons name="kebab-horizontal" size={32} color={mainThemeColor} />
                 </TouchableOpacity>
               }
             />
@@ -199,13 +214,24 @@ class OrdersScreen extends React.Component {
                 initialValues={{
                   searchTypeIndex: this.state.searchFilter.searchTypeIndex,
                   tableName: this.state.searchFilter.tableName,
-                  dateRange: this.state.searchFilter.dateRange,
+                  dateRange: this.state?.searchFilter?.dateRange,
                   fromDate: new Date(dateRange?.zonedFromDate ?? new Date()),
                   toDate: new Date(dateRange?.zonedToDate ?? new Date()),
                   invoiceNumber: this.state.searchFilter?.invoiceNumber,
-                }} />
+                }}
+                isShow={this.state?.showFilter}
+                closeModal={() => this.setState({showFilter: false})}
+              />
             </View>
-
+            <View style={[styles.tableRowContainer, {flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
+              <StyledText style={styles.screenSubTitle}>{moment(dateRange?.zonedFromDate).format('YYYY-MM-DD')}</StyledText>
+              <StyledText style={[styles.screenSubTitle, {marginHorizontal: 0}]}>~</StyledText>
+              <StyledText style={styles.screenSubTitle}>{moment(dateRange.zonedToDate).format('YYYY-MM-DD')}</StyledText>
+            </View>
+            <View style={[styles.tableRowContainer, {flexDirection: 'row', justifyContent: 'flex-start'}]}>
+              <StyledText style={[styles.screenSubTitle, {marginHorizontal: 0, marginRight: 20}]}>{t('order.total')}:</StyledText>
+              <StyledText style={[styles.screenSubTitle, {marginHorizontal: 0}]}>{formatCurrency(getordersByDateRangeFullData?.ordersTotal ?? 0)}</StyledText>
+            </View>
             <View style={{flex: 3}}>
               <View style={[styles.sectionBar]}>
                 <View style={{flex: 2}}>
@@ -264,6 +290,7 @@ class OrdersScreen extends React.Component {
 
 const mapStateToProps = state => ({
   getordersByDateRange: state.ordersbydaterange.data.orders,
+  getordersByDateRangeFullData: state.ordersbydaterange.data,
   dateRange: state.ordersbydaterange.data.dateRange,
   haveData: state.ordersbydaterange.haveData,
   haveError: state.ordersbydaterange.haveError,
