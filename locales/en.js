@@ -445,6 +445,10 @@ const en = {
   staffTimeCardReport: 'Staff Time Card',
   customerStatsReport: 'Customer Statistics',
   shiftHistory: 'Shift History',
+  updateExpo: {
+    haveUpdate: 'New App Version Detected',
+    msg: 'Yes to relaunch the app to update to latest version'
+  }
 }
 
 export default en

@@ -15,7 +15,8 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "checkAutomatically": "ON_ERROR_RECOVERY"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -36,16 +37,14 @@
     },
     "description": "Rain App",
     "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "rain-solution",
-            "project": "rain-solution",
-            "authToken": "ade0fd2a92e441708f7d44899c1033507056807656f24e2a8e04efc00b198c31"
-          }
+      "postPublish": [{
+        "file": "sentry-expo/upload-sourcemaps",
+        "config": {
+          "organization": "rain-solution",
+          "project": "rain-solution",
+          "authToken": "ade0fd2a92e441708f7d44899c1033507056807656f24e2a8e04efc00b198c31"
         }
-      ]
+      }]
     },
     "android": {
       "package": "io.rainapp",

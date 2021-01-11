@@ -447,6 +447,10 @@ const zh = {
   customerStatsReport: '來客總覽',
   shiftHistory: '營收紀錄',
   empty: '空',
+  updateExpo: {
+    haveUpdate: '發現新版本!',
+    msg: '是否立即重啟以套用更新'
+  }
 }
 
 export default zh

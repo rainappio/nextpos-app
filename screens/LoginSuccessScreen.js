@@ -1,5 +1,5 @@
 import React from 'react'
-import {Image, Text, TouchableOpacity, View} from 'react-native'
+import {Image, Text, TouchableOpacity, View, Alert} from 'react-native'
 import {connect} from 'react-redux'
 import {Field, reduxForm} from 'redux-form'
 import IonIcon from 'react-native-vector-icons/Ionicons'
@@ -9,7 +9,7 @@ import {doLogout, formatDateObj, getAnnouncements, getClientUsr, getCurrentClien
 import styles, {mainThemeColor} from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
 import {NavigationEvents} from 'react-navigation'
-import {getToken, api, dispatchFetchRequestWithOption} from '../constants/Backend'
+import {getToken, api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {Avatar} from 'react-native-elements'
 import Markdown from 'react-native-markdown-display'
@@ -25,6 +25,7 @@ import NavigationService from "../navigation/NavigationService";
 import Modal from 'react-native-modal';
 import {Pages} from 'react-native-pages'
 import {CheckBox} from 'react-native-elements'
+import {checkExpoUpdate} from "../helpers/updateAppHelper";
 
 class LoginSuccessScreen extends React.Component {
   static navigationOptions = {
@@ -106,7 +107,10 @@ class LoginSuccessScreen extends React.Component {
       loggedIn: token.loggedIn,
       tokenExpiry: token.tokenExp,
     })
+
+    checkExpoUpdate(this.context?.disableReload, this.context?.setDisableReload)
   }
+
 
   componentDidUpdate(prevProps, prevState) {
     if ((prevProps?.currentUser?.username !== this.props?.currentUser?.username || prevProps?.client?.clientName !== this.props?.client?.clientName) && this.state?.isLoadingUserInfo && !!this.props?.currentUser?.username && !!this.props?.client?.clientName) {
