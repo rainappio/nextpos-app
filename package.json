@@ -18,7 +18,7 @@
     "@expo/vector-icons": "^12.0.0",
     "@react-native-community/async-storage": "~1.12.0",
     "@react-native-community/datetimepicker": "3.0.4",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "base-64": "^0.1.0",
     "d3": "^5.15.1",
     "expo": "^40.0.0",
@@ -34,6 +34,7 @@
     "expo-permissions": "~10.0.0",
     "expo-screen-orientation": "~2.1.0",
     "expo-task-manager": "~8.6.0",
+    "expo-updates": "~0.4.1",
     "geolib": "^3.2.1",
     "i18n-js": "^3.3.0",
     "immutable": "^4.0.0-rc.12",
@@ -91,8 +92,7 @@
     "redux-thunk": "^2.3.0",
     "sentry-expo": "^2.0.3",
     "taiwan-id-validator2": "^0.2.0",
-    "validator": "^11.1.0",
-    "expo-updates": "~0.4.1"
+    "validator": "^11.1.0"
   },
   "devDependencies": {
     "babel-preset-expo": "8.3.0",
