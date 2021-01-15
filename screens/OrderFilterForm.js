@@ -223,8 +223,8 @@ class OrderFilterForm extends React.Component {
           margin: 0, flex: 1, justifyContent: 'flex-start'
         }}
       >
-        <View style={[{height: 250, width: '100%', alignSelf: 'flex-end'}]}>
-          <View style={[themeStyle, {flexDirection: 'column', flex: 1, borderBottomRightRadius: 10, borderBottomLeftRadius: 10}]}>
+        <View style={[{height: 300, width: '100%', alignSelf: 'flex-end'}]}>
+          <View style={[themeStyle, {flexDirection: 'column', flex: 1, paddingTop: 50, borderBottomRightRadius: 10, borderBottomLeftRadius: 10}]}>
             <View style={[styles.tableRowContainer]}>
               <TouchableOpacity
                 onPress={() => {
