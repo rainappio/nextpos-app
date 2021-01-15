@@ -213,6 +213,9 @@ class PaymentFormScreenTablet extends React.Component {
                     isLastOne: this.props?.isLastOne ?? false,
                 })
             })
+        }, response => {
+            this.context?.saveSplitParentOrderId(null)
+            this.props.navigation.navigate('TablesSrc')
         }).then()
     }
 

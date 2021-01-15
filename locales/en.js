@@ -10,6 +10,7 @@ const en = {
   refreshed: 'Refreshed',
   privilegedAccessTitle: 'This is a premium feature',
   premiumFeatureMsg: 'Subscribe now',
+  greeting: 'Hello',
   general: {
     noData: 'No data'
   },
@@ -245,6 +246,7 @@ const en = {
     totalCardInRegister: 'Actual Card Amount',
     difference: 'Difference',
 
+    deleteLineItemLog: 'Deleted Line Items',
     // messages
     shiftOpened: 'Shift opened',
     shiftAborted: 'Closing shift aborted',
@@ -321,6 +323,8 @@ const en = {
       printerHasWorkingArea: 'This printer is used by working area',
       optionInUse: 'This option is already in use',
       emptyTables: 'Please select tables',
+      orderFinalized: 'This order has been settled, return to table screen.',
+      passwordUsed: 'Password is used',
     }
   },
   eInvoice: {
@@ -449,6 +453,17 @@ const en = {
   updateExpo: {
     haveUpdate: 'New App Version Detected',
     msg: 'Yes to relaunch the app to update to latest version'
+  },
+  editPasswordPopUp: {
+    passwordTitle: 'Password',
+    editPassword: 'Edit Password',
+    enterOldPassword: 'Enter Old Password',
+    originalPassword: 'Original Password',
+    enter: 'Enter',
+    enterNewPassword: 'Enter New Password',
+    newPassword: 'New Password',
+    incorrectPassword: 'Incorrect password',
+    passwordUpdated: 'Password is updated'
   }
 }
 

@@ -19,3 +19,12 @@ export const getSetPosition = (screenPosition, windowWidth, windowHeight) => {
 
     return {x: Number(screenPosition.x * windowWidth), y: Number(screenPosition.y * windowHeight)}
 }
+
+export const getModNum = (num, mod) => {
+    let tempNum = num
+    if (num < 0) {
+        tempNum = 0
+    }
+    tempNum = tempNum - (tempNum % mod)
+    return tempNum
+}

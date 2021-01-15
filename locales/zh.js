@@ -10,6 +10,7 @@ const zh = {
   refreshed: '已重新刷新',
   privilegedAccessTitle: '這是進階功能',
   premiumFeatureMsg: '是否前往訂閱',
+  greeting: '您好',
   general: {
     noData: '沒有資料'
   },
@@ -245,6 +246,7 @@ const zh = {
     totalCardTransitionAmt: '刷卡營業額',
     totalCardInRegister: '實際刷卡營業額',
     difference: '差額',
+    deleteLineItemLog: '刪除品項紀錄',
 
     // messages
     shiftOpened: '已開帳',
@@ -323,6 +325,8 @@ const zh = {
       printerHasWorkingArea: '此出單機有使用中的工作區',
       optionInUse: '此註記正在使用中',
       emptyTables: '請選擇桌位',
+      orderFinalized: '此訂單已被結帳，返回桌位頁面',
+      passwordUsed: '密碼已被使用',
     }
   },
   eInvoice: {
@@ -451,6 +455,17 @@ const zh = {
   updateExpo: {
     haveUpdate: '發現新版本!',
     msg: '是否立即重啟以套用更新'
+  },
+  editPasswordPopUp: {
+    passwordTitle: '設定密碼',
+    editPassword: '編輯密碼',
+    enterOldPassword: '輸入原本密碼',
+    originalPassword: '原本密碼',
+    enter: '輸入',
+    enterNewPassword: '輸入新密碼',
+    newPassword: '新密碼',
+    incorrectPassword: '密碼輸入錯誤',
+    passwordUpdated: '密碼更新成功'
   }
 }
 
