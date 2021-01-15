@@ -340,7 +340,7 @@ class PaymentOrderForm extends React.Component {
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
               <StyledText style={styles.tableCellText}>
-                {formatCurrency(order.total.amountWithTax)}
+                {formatCurrency(order?.total?.amountWithTax)}
               </StyledText>
             </View>
           </View>}

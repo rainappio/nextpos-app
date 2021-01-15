@@ -6,19 +6,20 @@ import {clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange} from
 import AddBtn from '../components/AddBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
 import DeleteBtn from '../components/DeleteBtn'
-import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, warningMessage, successMessage} from '../constants/Backend'
+import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, warningMessage, successMessage, apiRoot} from '../constants/Backend'
 import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {CheckBox, Tooltip} from 'react-native-elements'
 import ScreenHeader from "../components/ScreenHeader";
 import OrderTopInfo from "./OrderTopInfo";
-import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer, handleQuickCheckout, revertSplitOrder, handlePrintWorkingOrder, handlePrintOrderDetails} from "../helpers/orderActions";
+import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer, handleQuickCheckout, revertSplitOrder, handlePrintWorkingOrder, handlePrintOrderDetails, handleOrderAction} from "../helpers/orderActions";
 import NavigationService from "../navigation/NavigationService";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import {StyledText} from "../components/StyledText";
 import {SecondActionButton} from "../components/ActionButtons";
 import {SplitBillPopUp} from '../components/PopUp'
+import SockJsClient from 'react-stomp';
 
 class OrdersSummaryRow extends React.Component {
   static contextType = LocaleContext
@@ -266,9 +267,9 @@ class OrdersSummaryRow extends React.Component {
       response.json().then(data => {
         this.props.getOrder(this.props.order.orderId)
       })
-    }).then(() => this.props.navigation.navigate('Payment', {
+    }).then(() => handleOrderAction(this.props.order?.orderId, 'ENTER_PAYMENT', () => this.props.navigation.navigate('Payment', {
       order: this.props.order
-    }))
+    })))
   }
 
   getSplitBillByHeadCount = (id) => {
@@ -290,9 +291,9 @@ class OrdersSummaryRow extends React.Component {
           if (data?.headCount >= 2 && isPaid) {
             this.setState({splitBillModalVisible: true})
           } else {
-            this.props.navigation.navigate('Payment', {
-              order: this.props?.order
-            })
+            handleOrderAction(this.props.order?.orderId, 'ENTER_PAYMENT', () => this.props.navigation.navigate('Payment', {
+              order: this.props.order
+            }))
           }
 
         })
@@ -360,6 +361,24 @@ class OrdersSummaryRow extends React.Component {
                 />
               )
             }
+          />
+          <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/order/${order?.orderId}`]}
+            onMessage={(data) => {
+              if (data === `${order?.orderId}.order.orderChanged`) {
+                this.props.getOrder(order?.orderId)
+              }
+            }}
+            ref={(client) => {
+              this.orderFormRef = client
+            }}
+            onConnect={() => {
+              this.orderFormRef.sendMessage(`/async/order/${order?.orderId}`)
+              console.log('onConnect')
+            }}
+            onDisconnect={() => {
+              console.log('onDisconnect')
+            }}
+            debug={false}
           />
           <SplitBillPopUp
             navigation={this.props.navigation}
@@ -525,7 +544,7 @@ class OrdersSummaryRow extends React.Component {
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                 <StyledText>
-                  ${order.total.amountWithTax}
+                  ${order?.total?.amountWithTax}
                 </StyledText>
               </View>
             </View>

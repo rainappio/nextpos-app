@@ -1,4 +1,4 @@
-import { api, dispatchFetchRequest } from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 export const FETCH_TABLES_AVAILABLE = 'FETCH_TABLES_AVAILABLE'
 export const FETCH_TABLES_AVAILABLE_SUCCESS = 'FETCH_TABLES_AVAILABLE_SUCCESS'
 export const FETCH_TABLES_AVAILABLE_FAILURE = 'FETCH_TABLES_AVAILABLE_FAILURE'
@@ -29,7 +29,7 @@ export const getTablesAvailable = () => {
         withCredentials: true,
         credentials: 'include',
         headers: {
-          // when shift is not active, this is expected so suppress error.
+
           'x-suppress-error': true
         }
       },

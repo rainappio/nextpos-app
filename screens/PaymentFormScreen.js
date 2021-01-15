@@ -10,6 +10,7 @@ import ScreenHeader from "../components/ScreenHeader";
 import CustomCheckBox from "../components/CustomCheckBox";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
+import {handleOrderAction} from "../helpers/orderActions";
 
 class PaymentFormScreen extends React.Component {
   static navigationOptions = {
@@ -44,7 +45,7 @@ class PaymentFormScreen extends React.Component {
   }
 
   render() {
-    const {order, navigation, handleSubmit, globalorderoffers} = this.props
+    const {order, navigation, handleSubmit, globalorderoffers, isSplitting} = this.props
     const {t} = this.context
 
     return (
@@ -53,6 +54,9 @@ class PaymentFormScreen extends React.Component {
           <ScreenHeader backNavigation={true}
             parentFullScreen={true}
             title={t('paymentTitle')}
+            backAction={() => {
+              !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()
+            }}
           />
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
@@ -62,7 +66,7 @@ class PaymentFormScreen extends React.Component {
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
               <StyledText style={styles.tableCellText}>
-                {formatCurrency(order.total.amountWithTax)}
+                {formatCurrency(order?.total?.amountWithTax)}
               </StyledText>
             </View>
           </View>
@@ -160,7 +164,7 @@ class PaymentFormScreen extends React.Component {
 
             <View>
               <TouchableOpacity
-                onPress={() => navigation.navigate('OrdersSummary')}
+                onPress={() => !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()}
               >
                 <Text
                   style={[styles.bottomActionButton, styles.cancelButton]}

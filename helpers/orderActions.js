@@ -9,6 +9,7 @@ import styles from "../styles"
 import i18n from 'i18n-js'
 import {StyledText} from "../components/StyledText";
 import {printMessage} from "./printerActions";
+import {MaterialIcons} from '@expo/vector-icons';
 
 export const renderOrderState = state => {
   switch (state) {
@@ -53,6 +54,9 @@ export const renderOrderState = state => {
         size={25}
         style={styles.iconStyle}
       />
+    case 'PAYMENT_IN_PROCESS':
+      return <MaterialIcons name="attach-money" size={25}
+        style={styles.iconStyle} />
   }
 }
 
@@ -215,9 +219,10 @@ export const handleQuickCheckout = async (order, print) => {
             })
           }
           successMessage(i18n.t('order.submitted'))
-          NavigationService.navigate('Payment', {
+          handleOrderAction(order?.orderId, 'ENTER_PAYMENT', () => NavigationService.navigate('Payment', {
             order: order
-          })
+          }))
+
         }
       })
     }
@@ -317,4 +322,30 @@ export const handleDeleteOrderSet = async (setId) => {
     response => {
 
     }).then()
+}
+
+export const handleOrderAction = (id, action, successCallback = null) => {
+  const formData = new FormData()
+  formData.append('action', action)
+
+  dispatchFetchRequestWithOption(
+    api.order.process(id),
+    {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+
+        'x-suppress-error': true
+      },
+      body: formData
+    }, {
+    defaultMessage: false
+  },
+    response => {
+      !!successCallback ? successCallback() : console.log('no successCallback')
+    }, response => {
+      !!successCallback ? successCallback() : console.log('no successCallback')
+    }
+  ).then()
 }

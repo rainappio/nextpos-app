@@ -148,7 +148,8 @@ const zh = {
     COMPLETED: '完成',
     DELETED: '刪單',
     CANCELLED: '作廢',
-    OTHERS: '空桌'
+    OTHERS: '空桌',
+    PAYMENT_IN_PROCESS: '結帳中',
   },
   orderLog: {
     title: '訂單日誌',

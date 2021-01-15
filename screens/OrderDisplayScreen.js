@@ -64,24 +64,24 @@ class OrderDisplayScreen extends React.Component {
 
     return (
       <ThemeScrollView>
-        <SockJsClient url={webSocketHost} topics={['/dest/realtimeOrders']}
-                      onMessage={(data) => {
-                        this.setState({receiving: true, orders: data})
-                      }}
-                      ref={(client) => {
-                        this.clientRef = client
-                      }}
-                      onConnect={() => {
-                        this.setState({socketConnected: true})
-                      }}
-                      onDisconnect={() => {
-                        this.setState({socketConnected: false})
-                      }}
-                      debug={false}
+        <SockJsClient url={webSocketHost} topics={[`/dest/realtimeOrders/${client?.id}`]}
+          onMessage={(data) => {
+            this.setState({receiving: true, orders: data})
+          }}
+          ref={(client) => {
+            this.clientRef = client
+          }}
+          onConnect={() => {
+            this.setState({socketConnected: true})
+          }}
+          onDisconnect={() => {
+            this.setState({socketConnected: false})
+          }}
+          debug={false}
         />
         <View style={styles.fullWidthScreen}>
           <ScreenHeader parentFullScreen={true}
-                        title={t('menu.orderDisplay')}
+            title={t('menu.orderDisplay')}
           />
 
           <View style={styles.sectionTitleContainer}>
@@ -149,7 +149,7 @@ class OrderDisplayScreen extends React.Component {
           <View style={[styles.bottom, styles.horizontalMargin]}>
             <TouchableOpacity
               onPress={() => {
-                this.clientRef.sendMessage('/async/realtimeOrders', client.id);
+                this.clientRef.sendMessage(`/async/realtimeOrders/${client?.id}`);
               }}
             >
               <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('order.liveOrders')}</Text>

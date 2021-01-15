@@ -19,7 +19,7 @@ import OrderItemDetailEditModal from './OrderItemDetailEditModal';
 import OrderTopInfo from "./OrderTopInfo";
 import DeleteBtn from '../components/DeleteBtn'
 import NavigationService from "../navigation/NavigationService";
-import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer, revertSplitOrder} from "../helpers/orderActions";
+import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer, revertSplitOrder, handleOrderAction} from "../helpers/orderActions";
 import {SwipeRow} from 'react-native-swipe-list-view'
 import ScreenHeader from "../components/ScreenHeader";
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -28,7 +28,6 @@ import {NavigationEvents} from 'react-navigation'
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {SwipeListView} from 'react-native-swipe-list-view'
 import {CheckBox, Tooltip} from 'react-native-elements'
-
 
 
 class SpiltBillScreen extends React.Component {
@@ -177,8 +176,10 @@ class SpiltBillScreen extends React.Component {
                                         {
                                             text: `${t('action.yes')}`,
                                             onPress: () => {
-                                                this.props.navigation.goBack()
-                                                !!this.state?.splitOrderData ? this.revertSplitOrder(this.props.navigation.state.params?.order?.orderId, this.state.splitOrderId) : this.cleanSplitContext()
+                                                handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => {
+                                                    !!this.state?.splitOrderData ? this.revertSplitOrder(this.props.navigation.state.params?.order?.orderId, this.state.splitOrderId) : this.cleanSplitContext()
+                                                    this.props.navigation.goBack()
+                                                })
                                             }
                                         },
                                         {
@@ -399,8 +400,11 @@ class SpiltBillScreen extends React.Component {
                                                             color: mainThemeColor,
                                                         }}
                                                         handleDeleteAction={() => {
-                                                            this.props.navigation.goBack()
-                                                            !!this.state?.splitOrderData && this.revertSplitOrder(this.props.navigation.state.params?.order?.orderId, this.state.splitOrderId)
+                                                            handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => {
+                                                                !!this.state?.splitOrderData && this.revertSplitOrder(this.props.navigation.state.params?.order?.orderId, this.state.splitOrderId)
+                                                                this.props.navigation.goBack()
+                                                            })
+
                                                         }}
                                                     />
                                                     <View style={{flex: 2, marginLeft: 16}}>
@@ -453,8 +457,11 @@ class SpiltBillScreen extends React.Component {
                                             {
                                                 text: `${t('action.yes')}`,
                                                 onPress: () => {
-                                                    this.props.navigation.goBack()
-                                                    !!this.state?.splitOrderData ? this.revertSplitOrder(this.props.navigation.state.params?.order?.orderId, this.state.splitOrderId) : this.cleanSplitContext()
+                                                    handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => {
+                                                        !!this.state?.splitOrderData ? this.revertSplitOrder(this.props.navigation.state.params?.order?.orderId, this.state.splitOrderId) : this.cleanSplitContext()
+                                                        this.props.navigation.goBack()
+                                                    })
+
                                                 }
                                             },
                                             {
@@ -713,8 +720,11 @@ class SpiltBillScreen extends React.Component {
                                         color: mainThemeColor,
                                     }}
                                     handleDeleteAction={() => {
-                                        this.props.navigation.goBack()
-                                        !!this.state?.splitOrderData && this.revertSplitOrder(this.props.navigation.state.params?.order?.orderId, this.state.splitOrderId)
+                                        handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => {
+                                            !!this.state?.splitOrderData && this.revertSplitOrder(this.props.navigation.state.params?.order?.orderId, this.state.splitOrderId)
+                                            this.props.navigation.goBack()
+                                        })
+
                                     }}
                                 />
                                 <View style={{flex: 1, marginLeft: 16}}>

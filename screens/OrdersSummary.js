@@ -26,15 +26,11 @@ class OrdersSummary extends React.Component {
       order,
     } = this.props
 
-    if (isLoading) {
+    if (haveError) {
       return (
-        <LoadingScreen/>
+        <BackendErrorScreen />
       )
-    } else if (haveError) {
-      return (
-        <BackendErrorScreen/>
-      )
-    } else if (haveData) {
+    } else if (!!order?.orderId) {
       return (
         <ThemeScrollView>
           <NavigationEvents

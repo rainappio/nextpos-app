@@ -9,7 +9,7 @@ import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
-import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
+import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage, apiRoot} from '../constants/Backend'
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
 import {ListItem} from "react-native-elements";
@@ -19,7 +19,7 @@ import OrderItemDetailEditModal from './OrderItemDetailEditModal';
 import OrderTopInfo from "./OrderTopInfo";
 import DeleteBtn from '../components/DeleteBtn'
 import NavigationService from "../navigation/NavigationService";
-import {handleDelete, handleOrderSubmit, handleQuickCheckout, revertSplitOrder, handlePrintWorkingOrder, handlePrintOrderDetails} from "../helpers/orderActions";
+import {handleDelete, handleOrderSubmit, handleQuickCheckout, revertSplitOrder, handlePrintWorkingOrder, handlePrintOrderDetails, handleOrderAction} from "../helpers/orderActions";
 import {SwipeRow} from 'react-native-swipe-list-view'
 import ScreenHeader from "../components/ScreenHeader";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -30,6 +30,7 @@ import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import {NavigationEvents} from "react-navigation";
 import {SplitBillPopUp} from '../components/PopUp'
+import SockJsClient from 'react-stomp';
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
@@ -393,9 +394,9 @@ class OrderFormII extends React.Component {
       response.json().then(data => {
         this.props.getOrder(this.props.order.orderId)
       })
-    }).then(() => this.props.navigation.navigate('Payment', {
+    }).then(() => handleOrderAction(this.props.order?.orderId, 'ENTER_PAYMENT', ()=>this.props.navigation.navigate('Payment', {
       order: this.props.order
-    }))
+    })))
   }
 
   handleItemOutOfStock = (lineItemId, outOfStock) => {
@@ -448,9 +449,9 @@ class OrderFormII extends React.Component {
           if (data?.headCount >= 2 && isPaid) {
             this.setState({splitBillModalVisible: true})
           } else {
-            this.props.navigation.navigate('Payment', {
-              order: this.props?.order
-            })
+            handleOrderAction(this.props.order?.orderId, 'ENTER_PAYMENT', ()=>this.props.navigation.navigate('Payment', {
+              order: this.props.order
+            }))
           }
 
         })
@@ -470,7 +471,7 @@ class OrderFormII extends React.Component {
       isLoading,
       order,
       themeStyle,
-
+      orderIsLoading,
       productsData
     } = this.props
 
@@ -510,6 +511,24 @@ class OrderFormII extends React.Component {
                 onWillFocus={() => {
                   this.props.getOrder()
                 }}
+              />
+              <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/order/${order?.orderId}`]}
+                onMessage={(data) => {
+                  if (data === `${order?.orderId}.order.orderChanged`) {
+                    this.props.getOrder()
+                  }
+                }}
+                ref={(client) => {
+                  this.orderFormRef = client
+                }}
+                onConnect={() => {
+                  this.orderFormRef.sendMessage(`/async/order/${order?.orderId}`)
+                  console.log('onConnect')
+                }}
+                onDisconnect={() => {
+                  console.log('onDisconnect')
+                }}
+                debug={false}
               />
               <ScreenHeader backNavigation={true}
                 backAction={() => this.props.navigation.navigate('TablesSrc')}
@@ -1002,105 +1021,106 @@ class OrderFormII extends React.Component {
                 </View>
 
                 <View style={[styles.orderItemRightList, {borderColor: mainThemeColor, borderTopWidth: 1, paddingTop: 5}]}>
-                  <View style={{flex: 5, borderBottomWidth: 1, borderColor: mainThemeColor, paddingLeft: 10}}>
-                    <ScrollView style={{flex: 1}}>
-                      {order?.lineItems?.length > 0 ?
-                        order?.lineItems?.map((item, index) => {
-                          return (
-                            <SwipeRow
-                              leftOpenValue={50}
-                              rightOpenValue={-50}
-                              disableLeftSwipe={!!item?.associatedLineItemId}
-                              disableRightSwipe={!!item?.associatedLineItemId}
-                              ref={(e) => this[`ref_${index}`] = e}
-                            >
-                              <View style={{flex: 1, marginBottom: '3%', borderRadius: 10, width: '100%', flexDirection: 'row'}}>
-                                <View style={{flex: 1, borderRadius: 10}} >
-                                  <TouchableOpacity
-                                    onPress={() => {
-                                      this[`ref_${index}`]?.closeRow()
-                                      if (item.price === 0) {
-                                        this.handleFreeLineitem(order.orderId, item.lineItemId, false)
-                                      } else {
-                                        this.handleFreeLineitem(order.orderId, item.lineItemId, true)
-                                      }
-                                    }}
-                                    style={{flex: 1, backgroundColor: mainThemeColor, borderRadius: 10, paddingLeft: 5, alignItems: 'flex-start', justifyContent: 'center'}}>
-                                    <StyledText style={{width: 40}}>{item.price === 0 ? t('order.cancelFreeLineitem') : t('order.freeLineitem')}</StyledText>
-                                  </TouchableOpacity>
-                                </View>
-                                <View style={{...styles.delIcon, flex: 1, borderRadius: 10}} >
-                                  <DeleteBtn
-                                    handleDeleteAction={() => {
-                                      this[`ref_${index}`]?.closeRow()
-                                      this.handleDeleteLineItem(
-                                        order.orderId,
-                                        item.lineItemId
-                                      );
-                                    }}
-                                    islineItemDelete={true}
-                                    containerStyle={{flex: 1, width: '100%', justifyContent: 'center', alignItems: 'flex-end'}}
-                                  />
-                                </View>
-                              </View>
-
-                              <TouchableOpacity
-                                disabled={!!item?.associatedLineItemId}
-                                style={[{backgroundColor: '#d6d6d6'}, {marginBottom: '3%', borderRadius: 8, }, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
-                                activeOpacity={0.8}
-                                onPress={() => {
-                                  this.editItem(item.productId, item)
-                                }}>
-                                <View style={{aspectRatio: 2, alignItems: 'flex-start', flexDirection: 'row'}}>
-                                  <View style={{flex: 2.5, flexDirection: 'column', paddingLeft: '3%', paddingTop: '3%'}}>
-                                    <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price}</StyledText>
-                                    {!!item?.childProducts?.length > 0 && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}> - {item.childProducts.map((childProduct) => childProduct?.productName).join(',')}</StyledText>}
-                                    {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
-                                    {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
-                                  </View>
-                                  <View style={{position: 'absolute', bottom: '3%', left: '3%', flexDirection: 'row'}}>
-                                    <View style={{marginRight: 5}}>
-                                      {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
-                                      {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && (
-                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
-                                      )}
-                                      {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
-                                      {item?.state === 'DELIVERED' && (
-                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
-                                      )}
-                                      {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
-                                    </View>
-                                    <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>
-                                      {timeAgo.format(Date.now() - getTimeDifference(item?.createdDate), {flavour: 'narrow'})}
-                                    </StyledText>
-                                  </View>
-                                  <View style={{flexDirection: 'column', flex: 1, padding: '3%', justifyContent: 'space-between', height: '100%', alignItems: 'flex-end', borderLeftWidth: 1}} >
-
-                                    <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
-                                      <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{`${item.quantity}`}</StyledText>
-                                      <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>${item.lineItemSubTotal}</StyledText>
-                                    </View>
-
-                                    {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && <TouchableOpacity
+                  {orderIsLoading ? <View style={{flex: 5, borderBottomWidth: 1, borderColor: mainThemeColor, paddingLeft: 10}}><LoadingScreen /></View>
+                    : <View style={{flex: 5, borderBottomWidth: 1, borderColor: mainThemeColor, paddingLeft: 10}}>
+                      <ScrollView style={{flex: 1}}>
+                        {order?.lineItems?.length > 0 ?
+                          order?.lineItems?.map((item, index) => {
+                            return (
+                              <SwipeRow
+                                leftOpenValue={50}
+                                rightOpenValue={-50}
+                                disableLeftSwipe={!!item?.associatedLineItemId}
+                                disableRightSwipe={!!item?.associatedLineItemId}
+                                ref={(e) => this[`ref_${index}`] = e}
+                              >
+                                <View style={{flex: 1, marginBottom: '3%', borderRadius: 10, width: '100%', flexDirection: 'row'}}>
+                                  <View style={{flex: 1, borderRadius: 10}} >
+                                    <TouchableOpacity
                                       onPress={() => {
-                                        this.setState({
-                                          choosenItem: {...this.state?.choosenItem, [item.lineItemId]: !this.state?.choosenItem?.[item.lineItemId] ?? false}
-                                        });
-                                        this.toggleOrderLineItem(item.lineItemId);
+                                        this[`ref_${index}`]?.closeRow()
+                                        if (item.price === 0) {
+                                          this.handleFreeLineitem(order.orderId, item.lineItemId, false)
+                                        } else {
+                                          this.handleFreeLineitem(order.orderId, item.lineItemId, true)
+                                        }
                                       }}
-                                      style={{width: '100%', }}
-                                    >
-                                      <StyledText style={{...{backgroundColor: '#d6d6d6', color: '#fff'}, padding: 5, backgroundColor: '#808080', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1, width: '100%', textAlign: 'center'}}>{t('choose')}</StyledText>
-                                    </TouchableOpacity>}
+                                      style={{flex: 1, backgroundColor: mainThemeColor, borderRadius: 10, paddingLeft: 5, alignItems: 'flex-start', justifyContent: 'center'}}>
+                                      <StyledText style={{width: 40}}>{item.price === 0 ? t('order.cancelFreeLineitem') : t('order.freeLineitem')}</StyledText>
+                                    </TouchableOpacity>
+                                  </View>
+                                  <View style={{...styles.delIcon, flex: 1, borderRadius: 10}} >
+                                    <DeleteBtn
+                                      handleDeleteAction={() => {
+                                        this[`ref_${index}`]?.closeRow()
+                                        this.handleDeleteLineItem(
+                                          order.orderId,
+                                          item.lineItemId
+                                        );
+                                      }}
+                                      islineItemDelete={true}
+                                      containerStyle={{flex: 1, width: '100%', justifyContent: 'center', alignItems: 'flex-end'}}
+                                    />
                                   </View>
                                 </View>
-                              </TouchableOpacity>
-                            </SwipeRow>
-                          )
-                        })
-                        : <StyledText style={{alignSelf: 'center'}}>{t('nothing')}</StyledText>}
-                    </ScrollView>
-                  </View>
+
+                                <TouchableOpacity
+                                  disabled={!!item?.associatedLineItemId}
+                                  style={[{backgroundColor: '#d6d6d6'}, {marginBottom: '3%', borderRadius: 8, }, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
+                                  activeOpacity={0.8}
+                                  onPress={() => {
+                                    this.editItem(item.productId, item)
+                                  }}>
+                                  <View style={{aspectRatio: 2, alignItems: 'flex-start', flexDirection: 'row'}}>
+                                    <View style={{flex: 2.5, flexDirection: 'column', paddingLeft: '3%', paddingTop: '3%'}}>
+                                      <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price}</StyledText>
+                                      {!!item?.childProducts?.length > 0 && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}> - {item.childProducts.map((childProduct) => childProduct?.productName).join(',')}</StyledText>}
+                                      {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
+                                      {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
+                                    </View>
+                                    <View style={{position: 'absolute', bottom: '3%', left: '3%', flexDirection: 'row'}}>
+                                      <View style={{marginRight: 5}}>
+                                        {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
+                                        {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && (
+                                          <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
+                                        )}
+                                        {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
+                                        {item?.state === 'DELIVERED' && (
+                                          <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
+                                        )}
+                                        {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
+                                      </View>
+                                      <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>
+                                        {timeAgo.format(Date.now() - getTimeDifference(item?.createdDate), {flavour: 'narrow'})}
+                                      </StyledText>
+                                    </View>
+                                    <View style={{flexDirection: 'column', flex: 1, padding: '3%', justifyContent: 'space-between', height: '100%', alignItems: 'flex-end', borderLeftWidth: 1}} >
+
+                                      <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
+                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{`${item.quantity}`}</StyledText>
+                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>${item.lineItemSubTotal}</StyledText>
+                                      </View>
+
+                                      {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && <TouchableOpacity
+                                        onPress={() => {
+                                          this.setState({
+                                            choosenItem: {...this.state?.choosenItem, [item.lineItemId]: !this.state?.choosenItem?.[item.lineItemId] ?? false}
+                                          });
+                                          this.toggleOrderLineItem(item.lineItemId);
+                                        }}
+                                        style={{width: '100%', }}
+                                      >
+                                        <StyledText style={{...{backgroundColor: '#d6d6d6', color: '#fff'}, padding: 5, backgroundColor: '#808080', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1, width: '100%', textAlign: 'center'}}>{t('choose')}</StyledText>
+                                      </TouchableOpacity>}
+                                    </View>
+                                  </View>
+                                </TouchableOpacity>
+                              </SwipeRow>
+                            )
+                          })
+                          : <StyledText style={{alignSelf: 'center'}}>{t('nothing')}</StyledText>}
+                      </ScrollView>
+                    </View>}
                   <View style={{flex: 1, marginVertical: 5, justifyContent: 'space-between', paddingLeft: 10}}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                       <StyledText >{t('order.subtotal')}</StyledText>
@@ -1341,6 +1361,7 @@ const mapStateToProps = state => ({
   haveError: state.products.haveError,
   isLoading: state.products.loading,
   order: state.order.data,
+  orderIsLoading: state.order.loading,
   productsData: state.products
 })
 

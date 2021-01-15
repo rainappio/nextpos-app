@@ -67,12 +67,6 @@ class ManageVisualSceen extends Component {
     const layoutId = this.props.navigation.state.params.layoutId !== false && this.props.navigation.state.params.layoutId;
 
 
-    if (isLoading) {
-      return (
-        <LoadingScreen />
-      )
-    }
-
     return (
       <ThemeContainer>
         <View style={[styles.container]}>
@@ -199,11 +193,20 @@ class Draggable extends Component {
       }, {
         defaultMessage: false
       }, response => {
-        this.props.getTableLayout(layoutId)
       }).then()
     }
+  }
 
-
+  componentDidUpdate(prevProps, prevState) {
+    const windowWidth = this.props.tableWidth;
+    const windowHeight = this.props.tableHeight;
+    if (prevProps?.table !== this.props?.table) {
+      if (this.props.table.position != null) {
+        this.state.pan.setValue(getTablePosition(this.props.table, windowWidth, windowHeight))
+      } else {
+        this.state.pan.setValue(getInitialTablePosition(this.props.index, windowHeight))
+      }
+    }
   }
 
 
@@ -261,20 +264,7 @@ class Draggable extends Component {
     return true
   }
 
-  handleReset = (layoutId, tableId) => {
-    dispatchFetchRequest(api.tablelayout.updateTablePosition(layoutId, tableId), {
-      method: 'POST',
-      withCredentials: true,
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({})
-    }, response => {
-      this.props.getTableLayout(layoutId)
-    }).then()
-    return true
-  }
+
 
   renderDraggable(layoutId, table, index) {
     const panStyle = {
