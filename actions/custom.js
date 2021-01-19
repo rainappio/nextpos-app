@@ -1,7 +1,12 @@
 import TimeZoneService from "../helpers/TimeZoneService";
 import {Platform} from 'react-native';
+import moment from "moment-timezone";
 
 const timezone = TimeZoneService.getTimeZone()
+
+export const customFormatLocaleDate = (date, format = null) => {
+  return moment(date ?? new Date()).tz(timezone).format(format ?? "YYYY-MM-DD HH:mm")
+}
 
 /**
  * Format date string.

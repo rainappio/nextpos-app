@@ -60,40 +60,40 @@ class PaymentOrder extends React.Component {
         handleDelete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate('TablesSrc'))
       }
 
-      return
-    }
-    const formData = new FormData()
-    formData.append('action', 'COMPLETE')
+    } else {
+      const formData = new FormData()
+      formData.append('action', 'COMPLETE')
+      dispatchFetchRequestWithOption(api.order.process(id), {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {},
+        body: formData
+      }, {
+        defaultMessage: false
+      }, response => {
+        if (!!this.props.navigation.state.params?.isSplitting) {
+          if (this.props.navigation.state.params?.isSplitByHeadCount && !this.props.navigation.state.params?.isLastOne) {
+            this.props.navigation.navigate('SplitBillByHeadScreen', {
+              order: this.props.navigation.state.params?.parentOrder
+            })
+          }
+          else if (this.props.navigation.state.params?.parentOrder?.lineItems.length !== 0) {
+            this.props.navigation.navigate('SpiltBillScreen', {
+              order: this.props.navigation.state.params?.parentOrder
+            })
+          } else {
+            this.context?.saveSplitParentOrderId(null)
+            handleDelete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate('TablesSrc'))
+          }
 
-    dispatchFetchRequestWithOption(api.order.process(id), {
-      method: 'POST',
-      withCredentials: true,
-      credentials: 'include',
-      headers: {},
-      body: formData
-    }, {
-      defaultMessage: false
-    }, response => {
-      if (!!this.props.navigation.state.params?.isSplitting) {
-        if (this.props.navigation.state.params?.isSplitByHeadCount && !this.props.navigation.state.params?.isLastOne) {
-          this.props.navigation.navigate('SplitBillByHeadScreen', {
-            order: this.props.navigation.state.params?.parentOrder
-          })
-        }
-        else if (this.props.navigation.state.params?.parentOrder?.lineItems.length !== 0) {
-          this.props.navigation.navigate('SpiltBillScreen', {
-            order: this.props.navigation.state.params?.parentOrder
-          })
         } else {
           this.context?.saveSplitParentOrderId(null)
-          handleDelete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate('TablesSrc'))
+          this.props.navigation.navigate('TablesSrc')
         }
+      }).then()
+    }
 
-      } else {
-        this.context?.saveSplitParentOrderId(null)
-        this.props.navigation.navigate('TablesSrc')
-      }
-    }).then()
   }
 
 
@@ -143,6 +143,9 @@ class PaymentOrder extends React.Component {
             isLastOne: this.props.navigation.state.params?.isLastOne ?? false,
           })
         })
+      }, response => {
+        this.context?.saveSplitParentOrderId(null)
+        this.props.navigation.navigate('TablesSrc')
       }).then()
     }
     // const transactionObj = {

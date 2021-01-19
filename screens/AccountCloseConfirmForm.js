@@ -1,8 +1,8 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {Text, TouchableOpacity, View} from 'react-native'
-import {formatCurrency, formatDate} from '../actions'
-import styles from '../styles'
+import {Text, TouchableOpacity, View, ScrollView} from 'react-native'
+import {formatCurrency, formatDate, dateToLocaleString, customFormatLocaleDate} from '../actions'
+import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
 import {renderShiftStatus} from "../helpers/shiftActions";
@@ -10,6 +10,8 @@ import InputText from '../components/InputText'
 import ScreenHeader from "../components/ScreenHeader";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
+import Modal from 'react-native-modal';
+import {Ionicons} from '@expo/vector-icons';
 
 class AccountCloseConfirmForm extends React.Component {
   static navigationOptions = {
@@ -19,13 +21,16 @@ class AccountCloseConfirmForm extends React.Component {
 
   constructor(props, context) {
     super(props, context)
+    this.state = {
+      isShow: false
+    }
   }
 
   render() {
-    const { t } = this.context
-		const { handleSubmit, mostrecentShift, handleAbortCloseShift } = this.props
+    const {t, themeStyle} = this.context
+    const {handleSubmit, mostrecentShift, handleAbortCloseShift} = this.props
 
-		const closingShiftReport = {
+    const closingShiftReport = {
       totalOrderCount: 0,
       totalByPaymentMethod: {},
       orderCountByState: {}
@@ -36,13 +41,13 @@ class AccountCloseConfirmForm extends React.Component {
       closingShiftReport.totalOrderCount = mostrecentShift.close.closingShiftReport.totalOrderCount
     }
 
-		if (mostrecentShift.close.closingShiftReport != null && mostrecentShift.close.closingShiftReport.totalByPaymentMethod != null) {
-			closingShiftReport.totalByPaymentMethod = mostrecentShift.close.closingShiftReport.totalByPaymentMethod
-		}
+    if (mostrecentShift.close.closingShiftReport != null && mostrecentShift.close.closingShiftReport.totalByPaymentMethod != null) {
+      closingShiftReport.totalByPaymentMethod = mostrecentShift.close.closingShiftReport.totalByPaymentMethod
+    }
 
-		if(mostrecentShift.close.closingShiftReport != null && mostrecentShift.close.closingShiftReport.orderCountByState != null) {
-			closingShiftReport.orderCountByState = mostrecentShift.close.closingShiftReport.orderCountByState
-		}
+    if (mostrecentShift.close.closingShiftReport != null && mostrecentShift.close.closingShiftReport.orderCountByState != null) {
+      closingShiftReport.orderCountByState = mostrecentShift.close.closingShiftReport.orderCountByState
+    }
 
     const cashTotal = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.orderTotal : 0
     const actualCashAmount = mostrecentShift.close.closingBalances.hasOwnProperty('CASH') ? mostrecentShift.close.closingBalances.CASH.closingBalance : 0
@@ -61,7 +66,62 @@ class AccountCloseConfirmForm extends React.Component {
     return (
       <ThemeKeyboardAwareScrollView>
         <View style={[styles.container]}>
-          <ScreenHeader title={t('shift.confirmCloseTitle')}/>
+          <ScreenHeader title={t('shift.confirmCloseTitle')} />
+          <Modal
+            isVisible={this.state?.isShow}
+            useNativeDriver
+            hideModalContentWhileAnimating
+            animationIn='fadeIn'
+            animationOut='fadeOut'
+            onBackdropPress={() => this.setState({isShow: false})}
+            style={{
+              margin: 0, flex: 1,
+            }}
+          ><ScrollView style={[themeStyle, {padding: 10, borderRadius: 20, maxHeight: '50%', marginHorizontal: 10}]}>
+              <View style={styles.sectionBar}>
+                <View style={[{flex: 1}, styles.tableCellView]}>
+                  <Text style={[styles.sectionBarTextSmall]}>{t('order.product')}</Text>
+                </View>
+
+                <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}
+                >
+                  <Text style={styles.sectionBarTextSmall}>{t('order.quantity')}</Text>
+                </View>
+
+                <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                  <Text style={styles.sectionBarTextSmall}>{t('order.total')}</Text>
+                </View>
+
+                <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                  <Text style={styles.sectionBarTextSmall}>{t('order.date')}</Text>
+                </View>
+              </View>
+              {mostrecentShift?.deletedLineItems?.map((item) => {
+                return (
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[{flex: 1}, styles.tableCellView]}>
+                      <StyledText style={[styles.tableCellView]}>{item?.productName}</StyledText>
+                    </View>
+
+                    <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}
+                    >
+                      <StyledText style={[styles.tableCellView]}>{item?.quantity}</StyledText>
+                    </View>
+
+                    <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                      <StyledText style={[styles.tableCellView]}>{formatCurrency(item?.total ?? 0)}</StyledText>
+                    </View>
+
+                    <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                      <StyledText style={[styles.tableCellView]}>{customFormatLocaleDate(item?.deletedDate)}</StyledText>
+                    </View>
+                  </View>
+
+                )
+              })}
+            </ScrollView>
+
+          </Modal>
 
           <View>
             <StyledText style={[styles.toRight]}>
@@ -294,6 +354,16 @@ class AccountCloseConfirmForm extends React.Component {
             <StyledText>{formatCurrency(cashServiceCharge + cardServiceCharge)}</StyledText>
           </View>
         </View>
+        <TouchableOpacity style={[styles.sectionBar]}
+          onPress={() => {this.setState({isShow: true})}}>
+          <View style={{flex: 3, flexDirection: 'row'}}>
+            <StyledText style={[styles.sectionBarText, {marginRight: 10}]}>
+              {t('shift.deleteLineItemLog')}
+            </StyledText>
+            <Ionicons name="eye" size={20} color={mainThemeColor} />
+          </View>
+
+        </TouchableOpacity>
         {/* #Invoice */}
 
         {/* Others */}
@@ -309,7 +379,7 @@ class AccountCloseConfirmForm extends React.Component {
           </View>
         </View>
 
-        <View style={[styles.bottom, styles.horizontalMargin]}>
+        <View style={[styles.bottom, styles.horizontalMargin, {marginTop: 40}]}>
 
           <TouchableOpacity
             onPress={handleSubmit}

@@ -62,7 +62,6 @@ class OrdersSummaryRow extends React.Component {
         selectItemToDeliver: 'Please select a line item to deliver',
         deliverOrder: 'Deliver',
         payOrder: 'Payment',
-        completeOrder: 'Complete'
       },
       zh: {
         orderSummaryTitle: '訂單總覽',
@@ -98,7 +97,6 @@ class OrdersSummaryRow extends React.Component {
         selectItemToDeliver: '請選擇品項送餐',
         deliverOrder: '送餐完畢',
         payOrder: '付款',
-        completeOrder: '結束訂單'
       }
     })
 

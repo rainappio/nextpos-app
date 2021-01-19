@@ -9,7 +9,7 @@ import LoadingScreen from "./LoadingScreen";
 import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
-import {getInitialTablePosition, getTablePosition} from "../helpers/tableAction";
+import {getInitialTablePosition, getTablePosition, getModNum} from "../helpers/tableAction";
 import AddBtn from '../components/AddBtn'
 import Modal from 'react-native-modal';
 import TableAddModal from './TableAddModal';
@@ -120,6 +120,14 @@ class ManageVisualSceen extends Component {
               <View style={{flexWrap: 'wrap'}}>
                 {
                   tablelayout.tables.map((table, index) => {
+                    let positionArr = tablelayout?.tables?.map((table, index) => {
+                      if (table.position != null) {
+                        return {...getTablePosition(table, this.state?.tableWidth ?? this.state?.windowWidth, this.state?.tableHeight ?? this.state?.windowHeight), tableId: table?.tableId, tableData: table}
+                      } else {
+                        return {...getInitialTablePosition(index, this.state?.tableHeight ?? this.state?.windowHeight), tableId: table?.tableId, tableData: table}
+                      }
+                    })
+                    console.log('positionArr', JSON.stringify(positionArr))
                     return (this.state?.tableWidth && <Draggable
                       table={table}
                       key={table.tableId}
@@ -128,7 +136,7 @@ class ManageVisualSceen extends Component {
                       getTableLayout={this.props.getTableLayout}
                       tableWidth={this.state?.tableWidth ?? this.state?.windowWidth}
                       tableHeight={this.state?.tableHeight ?? this.state?.windowHeight}
-
+                      positionArr={positionArr}
                     />)
                   })
                 }
@@ -193,6 +201,7 @@ class Draggable extends Component {
       }, {
         defaultMessage: false
       }, response => {
+        this.props.getTableLayout(layoutId)
       }).then()
     }
   }
@@ -228,14 +237,36 @@ class Draggable extends Component {
         this.state.pan.flattenOffset();
         console.log(`on release: ${JSON.stringify(this.state.pan)}`)
 
-        if (this.isDropArea(e, gesture)) {
-          Animated.timing(this.state.opacity, {
-            toValue: 0,
-            duration: 1000
-          }).start();
+        if (this.handleDragEnd(this.state.pan)) {
+          console.log('HAHA')
+          this.isDropArea(e, gesture)
+        } else {
+          const windowWidth = this.props.tableWidth;
+          const windowHeight = this.props.tableHeight;
+          if (this.props.table.position != null) {
+            this.state.pan.setValue(getTablePosition(this.props.table, windowWidth, windowHeight))
+          } else {
+            this.state.pan.setValue(getInitialTablePosition(this.props.index, windowHeight))
+          }
         }
       }
     });
+  }
+
+  handleDragEnd = (pan) => {
+    let positionArr = this.props.positionArr
+    console.log('positionArr', positionArr)
+    let flag = true
+    positionArr?.forEach((table) => {
+      let dx = Math.abs(getModNum(pan.x?._value, 10) - table?.x)
+      let dy = Math.abs(getModNum(pan.y?._value, 10) - table?.y)
+      let dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2))
+      if (dis < 90 && this.props?.table?.tableId !== table?.tableId) {
+        flag = false
+      }
+    })
+    return flag
+
   }
 
   isDropArea(e, gesture) {
@@ -247,7 +278,6 @@ class Draggable extends Component {
     const windowHeight = this.props.tableHeight;
     const numberX = {...this.state.pan.x};
     const numberY = {...this.state.pan.y};
-    console.debug(this.state.pan, windowWidth, typeof numberX, numberX._value * 6 / windowWidth)
 
     dispatchFetchRequest(api.tablelayout.updateTablePosition(layoutId, tableId), {
       method: 'POST',
@@ -256,7 +286,7 @@ class Draggable extends Component {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({x: numberX._value / windowWidth, y: numberY._value / windowHeight})
+      body: JSON.stringify({x: getModNum(numberX._value, 10) / windowWidth, y: getModNum(numberY._value, 10) / windowHeight})
     }, response => {
       this.props.getTableLayout(layoutId)
     }).then()
@@ -279,7 +309,7 @@ class Draggable extends Component {
             <View>
               <Animated.View
                 {...this.panResponder.panHandlers}
-                style={[panStyle, styles.circle, {position: 'absolute'}]}
+                style={[panStyle, styles.circle, {position: 'absolute', borderWidth: 3, borderColor: '#BFBFBF'}]}
               >
                 <Text style={{color: '#fff', textAlign: 'center', marginTop: 15}}>{table.tableName}</Text>
               </Animated.View>
@@ -288,7 +318,7 @@ class Draggable extends Component {
             <View>
               <Animated.View
                 {...this.panResponder.panHandlers}
-                style={[panStyle, styles.circle, {position: 'absolute'}]}
+                style={[panStyle, styles.circle, {position: 'absolute', borderWidth: 3, borderColor: '#BFBFBF'}]}
               >
                 <Text style={{color: '#fff', textAlign: 'center', marginTop: 15}}>{table.tableName}</Text>
               </Animated.View>

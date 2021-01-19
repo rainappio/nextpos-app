@@ -1,11 +1,13 @@
 import React from 'react'
-import {Text, TouchableOpacity, View} from 'react-native'
-import styles from '../styles'
+import {Text, TouchableOpacity, View, ScrollView} from 'react-native'
+import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
-import {formatCurrency, formatDate} from "../actions";
+import {formatCurrency, formatDate, customFormatLocaleDate} from "../actions";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
+import Modal from 'react-native-modal';
+import {Ionicons} from '@expo/vector-icons';
 
 class ShiftDetails extends React.Component {
   static navigationOptions = {
@@ -15,7 +17,9 @@ class ShiftDetails extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
+    this.state = {
+      isShow: false
+    }
     context.localize({
       en: {
         shiftDetailsTitle: 'Shift Details',
@@ -29,7 +33,7 @@ class ShiftDetails extends React.Component {
   }
 
   render() {
-    const {t} = this.context
+    const {t, themeStyle} = this.context
     const {shift} = this.props.navigation.state.params
 
     const closingShiftReport = {
@@ -69,10 +73,64 @@ class ShiftDetails extends React.Component {
       <ThemeScrollView>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader parentFullScreen={true}
-                        title={t('shiftDetailsTitle')}/>
+            title={t('shiftDetailsTitle')} />
+          <Modal
+            isVisible={this.state?.isShow}
+            useNativeDriver
+            hideModalContentWhileAnimating
+            animationIn='fadeIn'
+            animationOut='fadeOut'
+            onBackdropPress={() => this.setState({isShow: false})}
+            style={{
+              margin: 0, flex: 1,
+            }}
+          ><ScrollView style={[themeStyle, {padding: 10, borderRadius: 20, maxHeight: '50%', marginHorizontal: 10}]}>
+              <View style={styles.sectionBar}>
+                <View style={[{flex: 1}, styles.tableCellView]}>
+                  <Text style={[styles.sectionBarTextSmall]}>{t('order.product')}</Text>
+                </View>
 
+                <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}
+                >
+                  <Text style={styles.sectionBarTextSmall}>{t('order.quantity')}</Text>
+                </View>
+
+                <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                  <Text style={styles.sectionBarTextSmall}>{t('order.total')}</Text>
+                </View>
+
+                <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                  <Text style={styles.sectionBarTextSmall}>{t('order.date')}</Text>
+                </View>
+              </View>
+              {shift?.deletedLineItems?.map((item) => {
+                return (
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[{flex: 1}, styles.tableCellView]}>
+                      <StyledText style={[styles.tableCellView]}>{item?.productName}</StyledText>
+                    </View>
+
+                    <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}
+                    >
+                      <StyledText style={[styles.tableCellView]}>{item?.quantity}</StyledText>
+                    </View>
+
+                    <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                      <StyledText style={[styles.tableCellView]}>{formatCurrency(item?.total ?? 0)}</StyledText>
+                    </View>
+
+                    <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                      <StyledText style={[styles.tableCellView]}>{customFormatLocaleDate(item?.deletedDate)}</StyledText>
+                    </View>
+                  </View>
+
+                )
+              })}
+            </ScrollView>
+
+          </Modal>
           <View>
-            <View style={{ alignItems: 'center'}}>
+            <View style={{alignItems: 'center'}}>
               <StyledText>{formatDate(shift.open.timestamp)} - {formatDate(shift.close.timestamp)}</StyledText>
             </View>
             {/* Post-Closing Entries */}
@@ -305,6 +363,16 @@ class ShiftDetails extends React.Component {
               </View>
             </View>
           </View>
+          <TouchableOpacity style={[styles.sectionBar]}
+            onPress={() => {this.setState({isShow: true})}}>
+            <View style={{flex: 3, flexDirection: 'row'}}>
+              <StyledText style={[styles.sectionBarText, {marginRight: 10}]}>
+                {t('shift.deleteLineItemLog')}
+              </StyledText>
+              <Ionicons name="eye" size={20} color={mainThemeColor} />
+            </View>
+
+          </TouchableOpacity>
 
           <View style={[styles.sectionContainer, styles.verticalPadding, styles.horizontalMargin]}>
             <TouchableOpacity
@@ -316,6 +384,7 @@ class ShiftDetails extends React.Component {
               <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('searchShiftOrders')}</Text>
             </TouchableOpacity>
           </View>
+
 
         </View>
       </ThemeScrollView>

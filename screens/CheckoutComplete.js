@@ -270,7 +270,7 @@ class CheckoutComplete extends React.Component {
               {/* split done or no split */}
               {(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0 || this.props.navigation.state.params.isLastOne) &&
                 <>
-                  <View style={{width: '50%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
+                  {(!this.props.navigation.state.params.isSplitting) && <View style={{width: '50%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
                     <TouchableOpacity
                       onPress={() => {
                         if (!!this.props.navigation.state.params.isSplitting) {
@@ -293,9 +293,9 @@ class CheckoutComplete extends React.Component {
                         {t('backToTables')}
                       </Text>
                     </TouchableOpacity>
-                  </View>
+                  </View>}
 
-                  <View style={{width: '50%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
+                  <View style={{width: (!this.props.navigation.state.params.isSplitting) ? '50%' : '100%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
                     <TouchableOpacity
                       onPress={() =>
                         this.props.navigation.state.params.onSubmit(
@@ -434,7 +434,7 @@ class CheckoutComplete extends React.Component {
                   </Text>
                 </TouchableOpacity>
               </View>
-              {(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0) && <View>
+              {(!this.props.navigation.state.params.isSplitting) && <View>
                 <TouchableOpacity
                   onPress={() => {
                     if (!!this.props.navigation.state.params.isSplitting) {
@@ -458,7 +458,7 @@ class CheckoutComplete extends React.Component {
                     )
                   }
                 >
-                  <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t(`${(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0 || this.props.navigation.state.params.isLastOne) ? 'completeOrder' : 'continueSplitBill'}`)}</Text>
+                  <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t(`${(!this.props.navigation.state.params.isSplitting || this.props.navigation.state.params.parentOrder?.lineItems.length === 0 || this.props.navigation.state.params.isLastOne) ? 'order.completeOrder' : 'continueSplitBill'}`)}</Text>
                 </TouchableOpacity>
               </View>
             </View>

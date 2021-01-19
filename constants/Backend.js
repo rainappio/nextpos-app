@@ -22,6 +22,7 @@ export const apiRoot = 'https://api.rain-app.io'
 export const api = {
   apiRoot,
   getAuthToken: `${apiRoot}/oauth/token`,
+  getClientUserTokens: `${apiRoot}/clientUserTokens`,
   account: {
     sendResetPasscode: (clientEmail) => {
       return `${apiRoot}/account/sendResetPasscode?clientEmail=${clientEmail}`
@@ -582,7 +583,7 @@ export const dispatchFetchRequestWithOption = async (
     if (token != null) {
       console.trace(`Use client user token: ${useClientUserToken}`)
       const tokenObj = JSON.parse(token)
-      payload.headers.Authorization = `Bearer ${tokenObj.access_token}`
+      payload.headers.Authorization = payload?.headers?.Authorization ?? `Bearer ${tokenObj.access_token}`
 
       const suppressError = payload.headers['x-suppress-error']
       const response = await fetch(endpoint, payload)
