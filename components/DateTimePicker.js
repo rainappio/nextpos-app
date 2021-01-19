@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Text, TouchableOpacity, View} from 'react-native'
+import {Text, TouchableOpacity, View, Appearance} from 'react-native'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 import moment from 'moment-timezone'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -41,6 +41,7 @@ class RenderDateTimePicker extends Component {
 			...rest
 		} = this.props
 		const {t, locale} = this.context
+		const colorScheme = Appearance.getColorScheme();
 
 		const timezone = TimeZoneService.getTimeZone()
 		const i18nMoment = moment(value).tz(timezone);
@@ -69,7 +70,7 @@ class RenderDateTimePicker extends Component {
 							flexDirection: 'row',
 						}}
 					>
-						<View style={{backgroundColor: 'white', borderRadius: 10, paddingHorizontal: 10}}>
+						<View style={{borderRadius: 10, paddingHorizontal: 10, backgroundColor: '#989898'}}>
 
 							<RNDateTimePicker
 								testID="dateTimePicker"

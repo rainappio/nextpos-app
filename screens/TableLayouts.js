@@ -1,10 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {View} from 'react-native'
+import {View, TouchableOpacity} from 'react-native'
 import {Accordion, List} from '@ant-design/react-native'
 import {getTableLayouts} from '../actions'
+import {MainActionButton} from '../components/ActionButtons'
 import AddBtn from '../components/AddBtn'
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import {NavigationEvents} from "react-navigation";
@@ -15,6 +16,8 @@ import {StyledText} from "../components/StyledText";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import {ListItem} from "react-native-elements";
+import {Octicons} from '@expo/vector-icons';
+import {OptionModal} from "../components/OptionModal";
 
 class TableLayouts extends React.Component {
   static navigationOptions = {
@@ -26,7 +29,8 @@ class TableLayouts extends React.Component {
     super(props, context)
 
     this.state = {
-      activeSections: [0]
+      activeSections: [0],
+      isShowModal: false
     }
 
     this.onChange = activeSections => {
@@ -39,10 +43,18 @@ class TableLayouts extends React.Component {
 
     this.context.localize({
       en: {
-        noTableLayout: 'No table layout'
+        noTableLayout: 'No table layout',
+        tableLayouts: {
+          addTableLayout: 'Add Table Layout',
+          manageVisualLayoutTitle: 'Manage Visual Layout',
+        }
       },
       zh: {
-        noTableLayout: '沒有資料'
+        noTableLayout: '沒有資料',
+        tableLayouts: {
+          addTableLayout: '新增樓面',
+          manageVisualLayoutTitle: '管理桌位位置',
+        }
       }
     })
   }
@@ -71,7 +83,7 @@ class TableLayouts extends React.Component {
 
   render() {
     const {navigation, tablelayouts = [], loading, themeStyle} = this.props
-    const {t} = this.context
+    const {t, isTablet} = this.context
 
     if (loading) {
       return (
@@ -90,9 +102,27 @@ class TableLayouts extends React.Component {
             <ScreenHeader backNavigation={true}
               title={t('settings.tableLayouts')}
               rightComponent={
-                <AddBtn
-                  onPress={() => this.props.navigation.navigate('TableLayoutAdd')}
-                />
+                isTablet ?
+                  <OptionModal
+                    toggleModal={(flag) => this.setState({isShowModal: flag})}
+                    isShowModal={this.state?.isShowModal}>
+                    <View style={{marginBottom: 20, width: 240}}>
+                      <MainActionButton title={t('tableLayouts.addTableLayout')}
+                        onPress={() => {
+                          this.setState({isShowModal: false})
+                          this.props.navigation.navigate('TableLayoutAdd')
+                        }} />
+                    </View>
+                    <View>
+                      <MainActionButton title={t('tableLayouts.manageVisualLayoutTitle')} onPress={() => {
+                        this.setState({isShowModal: false})
+                        this.props.navigation.navigate('ManageVisualSceen')
+                      }} />
+                    </View>
+                  </OptionModal>
+                  : <AddBtn
+                    onPress={() => this.props.navigation.navigate('TableLayoutAdd')}
+                  />
               }
             />
           </View>
