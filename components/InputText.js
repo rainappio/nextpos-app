@@ -40,7 +40,7 @@ const InputText = ({
         {...rest}
         style={[
           styles.rootInput,
-          //{ borderColor: !valid && touched ? 'red' : 'gray' },
+
           {height: height},
           (alignLeft && {textAlign: 'left'}),
           themeStyle,

@@ -93,7 +93,7 @@ class ShiftClose extends React.Component {
 
     if (loading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else {
       return (
@@ -106,7 +106,7 @@ class ShiftClose extends React.Component {
               }}
             />
             <ScreenHeader parentFullScreen={true}
-                          title={t('shiftTitle')}/>
+              title={t('shiftTitle')} />
 
             <View style={{flex: 3, justifyContent: 'center'}}>
               <View style={styles.tableRowContainerWithBorder}>
@@ -192,53 +192,18 @@ class ShiftClose extends React.Component {
                     </Text>
                   </TouchableOpacity>
                 ) : (
-                  <View>
-                    {/*<View style={[styles.fieldContainer]}>
-                      <StyledText style={[styles.fieldTitle, {flex: 2}]}>
-                        {t('cash')}
-                      </StyledText>
-                      <TextInput
-                        name="balance"
-                        value={String(this.state.balance)}
-                        type='text'
-                        onChangeText={(value) => this.setState({balance: value})}
-                        placeholder={t('cash')}
-                        keyboardType={`numeric`}
-                        style={[{flex: 3, height: 44, borderBottomColor: '#f1f1f1', borderBottomWidth: 1}]}
-                        inputAccessoryViewID="shiftBalance"
-                      />
-                      {Platform.OS === 'ios' && (
-                        <InputAccessoryView nativeID="shiftBalance">
-                          <TouchableOpacity
-                            onPress={() => Keyboard.dismiss()}
-                            style={[{flex: 1, flexDirection: 'row-reverse'}, styles.grayBg]}
-                          >
-                            <Text
-                              style={[
-                                styles.margin_15,
-                                {fontSize: 16, fontWeight: 'bold', color: '#F39F86'}
-                              ]}
-                            >
-                              Done
-                            </Text>
-                          </TouchableOpacity>
-                        </InputAccessoryView>
-                      )}
-                    </View>*/}
-                    <TouchableOpacity
-                      onPress={() => this.props.navigation.navigate('Tables')}
-                    >
-                      <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                        {t('openShiftAction')}
-                      </Text>
-                    </TouchableOpacity>
-                    {/*<ConfirmActionButton
-                      handleConfirmAction={this.handleOpenShift}
-                      params={this.state.balance}
-                      buttonTitle="openShiftAction"
-                    />*/}
-                  </View>
-                )
+                    <View>
+
+                      <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('Tables')}
+                      >
+                        <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                          {t('openShiftAction')}
+                        </Text>
+                      </TouchableOpacity>
+
+                    </View>
+                  )
               }
             </View>
           </View>

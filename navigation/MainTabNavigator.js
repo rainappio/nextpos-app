@@ -90,10 +90,8 @@ import ResetClientPassword from "../screens/ResetClientPassword";
 import SpiltBillScreen from "../screens/SpiltBillScreen";
 import SplitBillByHeadScreen from "../screens/SplitBillByHeadScreen";
 import SubscriptionScreen from '../screens/SubscriptionScreen'
-import RostersScreen from '../screens/RostersScreen'
 import RostersFormScreen from '../screens/RostersFormScreen'
 import CalendarScreen from '../screens/CalendarScreen'
-import CalendarEventScreen from '../screens/CalendarEventScreen'
 import MemberScreen from '../screens/MemberScreen'
 import MemberFormScreen from '../screens/MemberFormScreen'
 
@@ -159,8 +157,6 @@ const Settings = createStackNavigator({
   EditOffer: EditOffer,
   ProductsOverviewforOffer: ProductsOverviewforOffer,
   SubscriptionScreen: SubscriptionScreen,
-  RostersScreen: RostersScreen,
-  RostersFormScreen: RostersFormScreen,
   MemberScreen: MemberScreen,
   MemberFormScreen: MemberFormScreen
 })
@@ -240,7 +236,7 @@ Reports.navigationOptions = ({screenProps: {t}}) => ({
 
 const Rosters = createStackNavigator({
   CalendarScreen: CalendarScreen,
-  CalendarEventScreen: CalendarEventScreen,
+  RostersFormScreen: RostersFormScreen,
 
 })
 Rosters.navigationOptions = ({screenProps: {t}}) => ({

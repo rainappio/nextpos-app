@@ -15,12 +15,19 @@ class RenderDateTimePicker extends Component {
 	constructor(props, context) {
 		super(props, context)
 		this.state = {
-			result: !!this.props?.input?.value ? this.props?.input?.value : new Date()
+			result: !!this.props?.input?.value ? this.props?.input?.value : new Date(),
+			mode: 'date'
 		}
 	}
 
 	handleChange = (result) => {
 		this.setState({result: result})
+	}
+
+	componentDidMount() {
+		this.props?.input?.onChange(
+			!!this.props?.input?.value ? this.props?.input?.value
+				: !!this.props?.defaultValue ? this.props?.defaultValue : new Date())
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -97,14 +104,25 @@ class RenderDateTimePicker extends Component {
 					</Modal> :
 						isShow && <RNDateTimePicker
 							testID="dateTimePicker"
-							value={!!value ? this.state?.result : new Date()}
-							mode={"date"}
+							value={this.state?.result}
+							mode={this.state?.mode}
 							is24Hour={true}
-							display="calendar"
+							display="default"
 							onChange={(e, selectedDate) => {
 								console.log(`on change date: ${selectedDate} ${e.nativeEvent.timestamp}`)
-								showDatepicker();
-								onChange(new Date(e.nativeEvent?.timestamp ?? value))
+								if (e?.type === 'dismissed') {
+									showDatepicker();
+									this.setState({mode: 'date'})
+								}
+
+								else if (this.state?.mode === 'date') {
+									this.setState({mode: 'time', result: new Date(e.nativeEvent?.timestamp ?? value)})
+								} else {
+									showDatepicker();
+									onChange(new Date(e.nativeEvent?.timestamp ?? value))
+									this.setState({mode: 'date'})
+								}
+
 
 							}}
 						/>

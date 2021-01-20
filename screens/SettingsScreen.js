@@ -120,12 +120,12 @@ class SettingsScreen extends React.Component {
               </View>
               <View style={[styles.menuContainer]}>
                 <MenuButton
-                  route='RostersScreen'
-                  onPress={() => NavigationService?.navigateToRoute('RostersScreen')}
-                  title={t('settings.roster')}
+                  route='MemberScreen'
+                  onPress={() => NavigationService?.navigateToRoute('MemberScreen')}
+                  title={t('settings.member')}
                   icon={
                     <FontAwesome5Icon
-                      name="business-time"
+                      name="user-cog"
                       size={40}
                       style={[styles.buttonIconStyle]}
                     />
@@ -152,19 +152,6 @@ class SettingsScreen extends React.Component {
             <View style={{flex: 1, paddingBottom: 16}}>
               <View style={[styles.menuContainer]}>
                 <MenuButton
-                  route='MemberScreen'
-                  onPress={() => NavigationService?.navigateToRoute('MemberScreen')}
-                  title={t('settings.member')}
-                  icon={
-                    <FontAwesome5Icon
-                      name="user-cog"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }
-                />
-                <View style={styles.dynamicHorizontalPadding(6)} />
-                <MenuButton
                   route='TableLayouts'
                   onPress={() => this.props.navigation.navigate('TableLayouts')}
                   title={t('settings.tableLayouts')}
@@ -176,8 +163,7 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
-              </View>
-              <View style={[styles.menuContainer]}>
+                <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
                   route='PrinternKDS'
                   onPress={() => this.props.navigation.navigate('PrinternKDS')}
@@ -190,7 +176,8 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
-                <View style={styles.dynamicHorizontalPadding(6)} />
+              </View>
+              <View style={[styles.menuContainer]}>
                 <MenuButton
                   route='EinvoiceStatusScreen'
                   onPress={() => NavigationService?.navigateToRoute('EinvoiceStatusScreen')}
@@ -203,9 +190,7 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
-              </View>
-
-              <View style={[styles.menuContainer]}>
+                <View style={styles.dynamicHorizontalPadding(6)} />
                 <MenuButton
                   route='SubscriptionScreen'
                   onPress={() => this.props.navigation.navigate('SubscriptionScreen')}
@@ -218,7 +203,9 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
-                <View style={styles.dynamicHorizontalPadding(6)} />
+              </View>
+
+              <View style={[styles.menuContainer]}>
                 <MenuButton
                   route=''
                   onPress={() => changeLanguage()}
@@ -231,6 +218,8 @@ class SettingsScreen extends React.Component {
                     />
                   }
                 />
+                <View style={styles.dynamicHorizontalPadding(6)} />
+                <View style={{flex: 1}}></View>
               </View>
 
               <View style={[styles.menuContainer]}>

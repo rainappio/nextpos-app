@@ -1,10 +1,10 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
 import {connect} from 'react-redux'
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
+import {ScrollView, Text, TouchableOpacity, View, Platform, Alert} from 'react-native'
 import {isNDigitsNumber, isRequired, isTwoBigWords} from '../validators'
-import InputText from '../components/InputText'
-import styles from '../styles'
+import DropDownInputText from '../components/DropDownInputText'
+import styles, {mainThemeColor} from '../styles'
 import Icon from 'react-native-vector-icons/AntDesign'
 import {LocaleContext} from '../locales/LocaleContext'
 import SegmentedControl from "../components/SegmentedControl";
@@ -18,9 +18,14 @@ import ThemeToggleButton from "../themes/ThemeToggleButton";
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import {number} from 'prop-types'
 import DeleteBtn from '../components/DeleteBtn'
-import {RenderTimePicker} from '../components/DateTimePicker'
+import RenderDateTimePicker, {RenderTimePicker} from '../components/DateTimePicker'
 import TimeZoneService from "../helpers/TimeZoneService";
 import {normalizeTimeString} from '../actions'
+import {Accordion, List} from '@ant-design/react-native'
+import {ThemeScrollView} from "../components/ThemeScrollView";
+import {ListItem} from "react-native-elements";
+import {CheckBox} from 'react-native-elements'
+import {lab} from 'd3'
 
 
 class RostersFormScreen extends React.Component {
@@ -85,8 +90,48 @@ class RostersFormScreen extends React.Component {
                 {label: context.t('dayPicker.Thursday'), value: 'THURSDAY'},
                 {label: context.t('dayPicker.Friday'), value: 'FRIDAY'},
                 {label: context.t('dayPicker.Saturday'), value: 'SATURDAY'},
-            ]
+            ],
+            repeatType: 0,
+            eventColor: props.navigation?.state?.params?.data?.eventColor ?? '#fff',
+            activeSections: [],
+            labels: [],
+            isManager: props?.currentUser?.roles?.includes('MANAGER') ?? false,
         }
+
+        context.localize({
+            en: {
+                rostersForm: {
+                    shift: 'Shift',
+                    morningShift: 'Morning',
+                    afternoonShift: 'Afternoon',
+                    nightShift: 'Night',
+                    midnightShift: 'Midnight',
+                    repeat: 'Repeat',
+                    NONE: 'None',
+                    WEEKLY: 'Weekly',
+                    confirmEditAll: 'Apply changes to event series?',
+                    confirmDeleteAll: 'Delete all events in the series?',
+                    eventColor: 'Event Color',
+                    workingAreaDistribute: 'Select Working Area',
+                },
+            },
+            zh: {
+                rostersForm: {
+                    shift: '班別',
+                    morningShift: '早班',
+                    afternoonShift: '午班',
+                    nightShift: '晚班',
+                    midnightShift: '夜班',
+                    repeat: '重複',
+                    NONE: '不重複',
+                    WEEKLY: '每週',
+                    confirmEditAll: '是否將此變更套用至同週期排班?',
+                    confirmDeleteAll: '是否刪除同週期排班?',
+                    eventColor: '排程顏色',
+                    workingAreaDistribute: '工作區選擇',
+                },
+            }
+        })
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -94,10 +139,35 @@ class RostersFormScreen extends React.Component {
     }
 
     componentDidMount() {
-        if (!this.props.navigation?.state?.params?.data) {
-            this.props?.change(`selectedYear`, new Date().getFullYear())
-            this.props?.change(`selectedMonth`, new Date().getMonth() + 1)
+        if (!!this.props.navigation?.state?.params?.data) {
+            this.props?.change(`startTime`, new Date(this.props.navigation?.state?.params?.data?.startTime))
+            this.props?.change(`endTime`, new Date(this.props.navigation?.state?.params?.data?.endTime))
         }
+        this.getLabels()
+    }
+
+    getLabels = () => {
+        dispatchFetchRequest(`${api.workingarea.getAll}?visibility=ROSTER`, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }, response => {
+            response.json().then(data => {
+                this.setState({
+                    labels: (data?.workingAreas?.map((label) => {
+                        return ({
+                            labelName: label?.name,
+                            resources: this.props.navigation?.state?.params?.users?.map((user) => {return {...user, isSelected: this.props.navigation?.state?.params?.data?.eventResources?.[`${label?.name}`]?.some((eventResource) => eventResource?.resourceId === user?.username)}}),
+                            labelIsSelected: this.props.navigation?.state?.params?.data?.eventResources?.[`${label?.name}`]?.some((eventResource) => eventResource?.resourceId === this.props?.currentUser?.username)
+                        })
+                    }))
+                })
+
+            })
+        }).then()
     }
 
 
@@ -117,77 +187,197 @@ class RostersFormScreen extends React.Component {
             }
         })
         if (!isEdit) {
-            let request = JSON.stringify({
-                "year": values?.selectedYear ?? '',
-                "month": values?.selectedMonth ?? '',
-                "rosterEntries": rosterEntriesArr
+            let request = {
+                eventName: values?.title,
+                eventRepeat: values?.repeatType === 1 ? 'WEEKLY' : 'NONE',
+                startTime: moment(!!values[`startTime`] ? values[`startTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
+                endTime: moment(!!values[`endTime`] ? values[`endTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
+                eventColor: this.state?.eventColor,
+                workingAreaToUsernames: {}
+            }
+            this.state?.labels.forEach((label) => {
+                let users = label?.resources?.filter((user, userIndex) => user?.isSelected)
+                if (users?.length > 0) {
+                    request.workingAreaToUsernames.[`${label?.labelName}`] = users?.map((item) => {return item?.username})
+                }
             })
-            console.log('form', request)
-            dispatchFetchRequest(api.roster.createPlan, {
+            dispatchFetchRequest(api.rosterEvent.createEvents, {
                 method: 'POST',
                 withCredentials: true,
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    "year": values?.selectedYear ?? '',
-                    "month": values?.selectedMonth ?? '',
-                    "rosterEntries": rosterEntriesArr
-                })
+                body: JSON.stringify(request)
             }, response => {
                 response.json().then(data => {
-                    console.log('handleSubmit', data)
                     this.props.navigation?.state?.params?.refreshScreen()
                     this.props.navigation.goBack()
                 })
             }).then()
         } else {
-            console.log('else', rosterEntriesArr)
-
-            for (let i = 0; i < rosterEntriesArr.length; i++) {
-                const item = rosterEntriesArr[i]
-
-                await dispatchFetchRequest(api.roster.createEntry(this.state?.data?.id), {
+            let request = {
+                eventName: values?.title,
+                applyToSeries: false,
+                startTime: moment(!!values[`startTime`] ? values[`startTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
+                endTime: moment(!!values[`endTime`] ? values[`endTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
+                eventColor: this.state?.eventColor,
+                workingAreaToUsernames: {}
+            }
+            this.state?.labels.forEach((label) => {
+                let users = label?.resources?.filter((user, userIndex) => user?.isSelected)
+                if (users?.length > 0) {
+                    request.workingAreaToUsernames.[`${label?.labelName}`] = users?.map((item) => {return item?.username})
+                }
+            })
+            if (this.state?.data?.eventRepeat === 'WEEKLY') {
+                Alert.alert(
+                    ``,
+                    `${this.context.t('rostersForm.confirmEditAll')}`,
+                    [
+                        {
+                            text: `${this.context.t('action.yes')}`,
+                            onPress: () => {
+                                request.applyToSeries = true
+                                dispatchFetchRequest(api.rosterEvent.getEventsById(this.state?.data?.id), {
+                                    method: 'POST',
+                                    withCredentials: true,
+                                    credentials: 'include',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(request)
+                                }, response => {
+                                    response.json().then(data => {
+                                        this.props.navigation?.state?.params?.refreshScreen()
+                                        this.props.navigation.goBack()
+                                    })
+                                }).then()
+                            }
+                        },
+                        {
+                            text: `${this.context.t('action.no')}`,
+                            onPress: () => {
+                                dispatchFetchRequest(api.rosterEvent.getEventsById(this.state?.data?.id), {
+                                    method: 'POST',
+                                    withCredentials: true,
+                                    credentials: 'include',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(request)
+                                }, response => {
+                                    response.json().then(data => {
+                                        this.props.navigation?.state?.params?.refreshScreen()
+                                        this.props.navigation.goBack()
+                                    })
+                                }).then()
+                            },
+                            style: 'cancel'
+                        }
+                    ]
+                )
+            } else {
+                dispatchFetchRequest(api.rosterEvent.getEventsById(this.state?.data?.id), {
                     method: 'POST',
                     withCredentials: true,
                     credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        "dayOfWeek": item?.dayOfWeek ?? '',
-                        "startTime": item?.startTime ?? '',
-                        "endTime": item?.endTime ?? '',
-                    })
+                    body: JSON.stringify(request)
                 }, response => {
                     response.json().then(data => {
-
+                        this.props.navigation?.state?.params?.refreshScreen()
+                        this.props.navigation.goBack()
                     })
                 }).then()
             }
-            this.props.navigation?.state?.params?.refreshScreen()
-            this.props.navigation.goBack()
+
         }
 
     }
+
+    handleStaffSubmit = () => {
+
+        let selectedLabels = this.state?.labels?.filter((label) => label?.labelIsSelected)
+        let request = {
+            workingAreas: selectedLabels.length > 0
+                ? selectedLabels?.map((item) => {return item?.labelName})
+                : []
+        }
+        dispatchFetchRequest(api.rosterEvent.updateEventResources(this.state?.data?.id), {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        }, response => {
+            response.json().then(data => {
+                this.props.navigation?.state?.params?.refreshScreen()
+                this.props.navigation.goBack()
+            })
+        }).then()
+    }
     handleDelete = async () => {
-        await dispatchFetchRequest(
-            api.roster.deletePlan(this.state?.data?.id),
-            {
+        if (this.state?.data?.eventRepeat === 'WEEKLY') {
+            Alert.alert(
+                ``,
+                `${this.context.t('rostersForm.confirmDeleteAll')}`,
+                [
+                    {
+                        text: `${this.context.t('action.yes')}`,
+                        onPress: () => {
+                            dispatchFetchRequest(`${api.rosterEvent.getEventsById(this.state?.data?.id)}/all`, {
+                                method: 'DELETE',
+                                withCredentials: true,
+                                credentials: 'include',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                            }, response => {
+                                this.props.navigation?.state?.params?.refreshScreen()
+                                this.props.navigation.goBack()
+
+                            }).then()
+                        }
+                    },
+                    {
+                        text: `${this.context.t('action.no')}`,
+                        onPress: () => {
+                            dispatchFetchRequest(`${api.rosterEvent.getEventsById(this.state?.data?.id)}`, {
+                                method: 'DELETE',
+                                withCredentials: true,
+                                credentials: 'include',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                            }, response => {
+                                this.props.navigation?.state?.params?.refreshScreen()
+                                this.props.navigation.goBack()
+
+                            }).then()
+                        },
+                        style: 'cancel'
+                    }
+                ]
+            )
+        } else {
+            dispatchFetchRequest(`${api.rosterEvent.getEventsById(this.state?.data?.id)}`, {
                 method: 'DELETE',
                 withCredentials: true,
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
-                }
-            },
-            response => {
+                },
+            }, response => {
+                this.props.navigation?.state?.params?.refreshScreen()
+                this.props.navigation.goBack()
 
-            }
-        ).then()
-        await this.props.navigation?.state?.params?.refreshScreen()
-        await this.props.navigation.goBack()
+            }).then()
+        }
     }
 
     addForm = () => {
@@ -211,53 +401,7 @@ class RostersFormScreen extends React.Component {
 
     }
 
-    deleteForm = (index) => {
-        if (index < this.state.rosterEntriesLength) {
-            dispatchFetchRequest(
-                api.roster.deleteEntry(this.state?.data?.id, this.state.rosterEntries?.[index]?.id),
-                {
-                    method: 'DELETE',
-                    withCredentials: true,
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                },
-                response => {
-                    console.log('response', response.url)
-                    response.json().then(data => {
-                        console.log('res', data)
-                        let arr = [...this.state.rosterEntries]
-                        let showFromDateArr = [...this.state.showFromDate]
-                        let showToDateArr = [...this.state.showToDate]
-                        delete arr[index]
-                        delete showFromDateArr[index]
-                        delete showToDateArr[index]
-                        this.setState({
-                            rosterEntries: arr,
-                            showFromDate: showFromDateArr,
-                            showToDate: showToDateArr
-                        })
-                    })
 
-                }
-            ).then()
-        } else {
-            let arr = [...this.state.rosterEntries]
-            let showFromDateArr = [...this.state.showFromDate]
-            let showToDateArr = [...this.state.showToDate]
-            delete arr[index]
-            delete showFromDateArr[index]
-            delete showToDateArr[index]
-            this.setState({
-                rosterEntries: arr,
-                showFromDate: showFromDateArr,
-                showToDate: showToDateArr
-            })
-        }
-
-
-    }
     handlegetDate = (event, selectedDate) => {
         console.log(`selected date: ${selectedDate}`)
     }
@@ -279,174 +423,558 @@ class RostersFormScreen extends React.Component {
     };
 
     render() {
-        const {t} = this.context
+        const {t, themeStyle, isTablet} = this.context
         const {handleSubmit} = this.props
+        const timezone = TimeZoneService.getTimeZone()
+        if (isTablet) {
+            return (
 
+                <ThemeContainer>
+                    <View style={styles.container}>
+                        <ScreenHeader title={t('settings.roster')} />
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                            <View style={{flex: 7, maxWidth: 640, justifyContent: 'space-between', }}>
+                                <View >
+
+                                    {this.state.rosterEntries?.map((item, index) => {
+                                        if (item === undefined)
+                                            return null
+                                        return (<View style={{
+                                            flexDirection: 'row'
+                                        }}>
+
+                                            <View style={{flex: 15, flexDirection: 'column'}}>
+
+                                                <View style={[styles.fieldContainer, {...(Platform.OS !== 'android' && {zIndex: 10})}]}>
+                                                    <View style={[styles.tableCellView, {flex: 1}]}>
+                                                        <StyledText style={styles.fieldTitle}>{t('rostersForm.shift')}</StyledText>
+                                                    </View>
+                                                    <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+
+                                                        {this.state?.isManager ? <Field
+                                                            component={DropDownInputText}
+                                                            name="title"
+                                                            validate={isRequired}
+                                                            alignLeft={true}
+                                                            pickerLabels={[
+                                                                {label: t('rostersForm.morningShift'), value: 'morningShift'},
+                                                                {label: t('rostersForm.afternoonShift'), value: 'afternoonShift'},
+                                                                {label: t('rostersForm.nightShift'), value: 'nightShift'},
+                                                                {label: t('rostersForm.midnightShift'), value: 'midnightShift'},
+                                                            ]}
+                                                            defaultValue={this.props.navigation?.state?.params?.data?.eventName ?? t('rostersForm.morningShift')}
+                                                        /> :
+                                                            <StyledText>{this.props.navigation?.state?.params?.data?.eventName ?? t('rostersForm.morningShift')}</StyledText>}
+                                                    </View>
+                                                </View>
+                                                <View style={styles.fieldContainer}>
+                                                    <View style={[styles.tableCellView, {flex: 1}]}>
+                                                        <StyledText style={styles.fieldTitle}>{t('roster.startTime')}</StyledText>
+                                                    </View>
+                                                    <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+
+                                                        {this.state?.isManager ? <Field
+                                                            name={`startTime`}
+                                                            component={RenderDateTimePicker}
+                                                            onChange={this.handlegetDate}
+                                                            placeholder={t('order.fromDate')}
+                                                            isShow={this.state.showFromDate?.[index] ?? false}
+                                                            showDatepicker={() => this.showFromDatepicker(index)}
+                                                            defaultValue={this.state?.data?.startTime ?? new Date()}
+                                                            readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}
+                                                        /> :
+                                                            <StyledText>{moment(this.state?.data?.startTime ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
+                                                    </View>
+                                                </View>
+                                                <View style={styles.fieldContainer}>
+                                                    <View style={[styles.tableCellView, {flex: 1}]}>
+                                                        <StyledText style={styles.fieldTitle}>{t('roster.endTime')}</StyledText>
+                                                    </View>
+                                                    <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+
+                                                        {this.state?.isManager ? <Field
+                                                            name={`endTime`}
+                                                            component={RenderDateTimePicker}
+                                                            onChange={this.handlegetDate}
+                                                            isShow={this.state.showToDate?.[index] ?? false}
+                                                            showDatepicker={() => this.showToDatepicker(index)}
+                                                            defaultValue={this.state?.data?.endTime ?? new Date()}
+                                                            readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}
+                                                        /> :
+                                                            <StyledText>{moment(this.state?.data?.endTime ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
+                                                    </View>
+                                                </View>
+                                                {!!this.state?.data || <View style={styles.fieldContainer}>
+                                                    <View style={[styles.tableCellView, {flex: 1}]}>
+                                                        <StyledText style={styles.fieldTitle}>{t('rostersForm.repeat')}</StyledText>
+                                                    </View>
+                                                    <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end', flexDirection: 'column'}]}>
+                                                        <Field
+                                                            name="repeatType"
+                                                            component={SegmentedControl}
+                                                            onChange={(val) => {this.setState({repeatType: val})}}
+                                                            values={[t('rostersForm.NONE'), t('rostersForm.WEEKLY')]}
+                                                            selectedIndex={this.state?.repeatType}
+                                                        />
+                                                    </View>
+                                                </View>}
+                                                <View style={styles.fieldContainer}>
+                                                    <View style={[styles.tableCellView, {flex: 1}]}>
+                                                        <StyledText style={styles.fieldTitle}>{t('rostersForm.eventColor')}</StyledText>
+                                                    </View>
+                                                    {this.state?.isManager ? <View style={[styles.tableCellView, {flex: 2, justifyContent: 'space-between'}]}>
+
+                                                        <TouchableOpacity
+                                                            onPress={() => this.setState({eventColor: '#fff'})}
+                                                            style={[{backgroundColor: '#fff'}, this.state?.eventColor === '#fff' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        <TouchableOpacity
+                                                            onPress={() => this.setState({eventColor: '#3D8CE0'})}
+                                                            style={[{backgroundColor: '#3D8CE0'}, this.state?.eventColor === '#3D8CE0' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        <TouchableOpacity
+                                                            onPress={() => this.setState({eventColor: '#4EB57B'})}
+                                                            style={[{backgroundColor: '#4EB57B'}, this.state?.eventColor === '#4EB57B' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        <TouchableOpacity
+                                                            onPress={() => this.setState({eventColor: '#CCC850'})}
+                                                            style={[{backgroundColor: '#CCC850'}, this.state?.eventColor === '#CCC850' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        <TouchableOpacity
+                                                            onPress={() => this.setState({eventColor: '#F5574C'})}
+                                                            style={[{backgroundColor: '#F5574C'}, this.state?.eventColor === '#F5574C' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        <TouchableOpacity
+                                                            onPress={() => this.setState({eventColor: '#E67ABE'})}
+                                                            style={[{backgroundColor: '#E67ABE'}, this.state?.eventColor === '#E67ABE' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+
+
+                                                    </View> :
+                                                        <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+                                                            <TouchableOpacity
+                                                                style={[{backgroundColor: this.state?.eventColor}, {width: 40, height: 40, borderRadius: 40}]} ></TouchableOpacity>
+                                                        </View>}
+                                                </View>
+                                            </View>
+
+                                        </View>)
+                                    })}
+                                </View>
+                                {!!this.state?.data && <View style={[styles.fieldContainer, {alignItems: 'center', justifyContent: 'center', paddingVertical: 10}]}>
+                                    <StyledText style={{fontWeight: 'bold'}}>{t('rostersForm.workingAreaDistribute')}</StyledText>
+                                </View>}
+                                {!!this.state?.data && <ThemeScrollView style={{flex: 1}}>
+                                    {this.state?.isManager ? <Accordion
+                                        onChange={(activeSections) => this.setState({activeSections: activeSections})}
+                                        activeSections={this.state?.activeSections}
+                                        expandMultiple
+                                    //duration={300}
+                                    >
+                                        {this.state?.labels.map((label, labelIndex) => {
+                                            return (
+                                                <Accordion.Panel
+
+                                                    header={
+                                                        <View style={[styles.listPanel]}>
+                                                            <View style={[styles.tableCellView, styles.flex(1)]}>
+                                                                <StyledText style={[{color: mainThemeColor, fontWeight: 'bold'}, styles.listPanelText]}>{label?.labelName} ({label?.resources?.filter((item) => item?.isSelected).length})</StyledText>
+                                                            </View>
+
+                                                        </View>
+                                                    }
+                                                >
+
+                                                    <List>
+                                                        {label?.resources?.map((user, userIndex) => (
+                                                            <ListItem
+                                                                title={
+                                                                    <View style={[styles.tableRowContainer]}>
+                                                                        <View style={[styles.tableCellView]}>
+                                                                            <CheckBox
+                                                                                containerStyle={{margin: 0, padding: 0}}
+                                                                                checkedIcon={'check-circle'}
+                                                                                uncheckedIcon={'circle'}
+                                                                                checked={user?.isSelected}
+                                                                                onPress={() => {
+                                                                                    let tempLabels = [...this.state?.labels]
+                                                                                    tempLabels[labelIndex].resources[userIndex].isSelected = !tempLabels[labelIndex].resources[userIndex].isSelected
+                                                                                    this.setState({labels: tempLabels})
+                                                                                }}
+                                                                            >
+                                                                            </CheckBox>
+                                                                        </View>
+                                                                        <View style={[styles.tableCellView]}>
+                                                                            <StyledText>{user?.username}</StyledText>
+                                                                        </View>
+
+                                                                    </View>
+                                                                }
+                                                                onPress={() => {
+                                                                    let tempLabels = [...this.state?.labels]
+                                                                    tempLabels[labelIndex].resources[userIndex].isSelected = !tempLabels[labelIndex].resources[userIndex].isSelected
+                                                                    this.setState({labels: tempLabels})
+                                                                }}
+                                                                bottomDivider
+                                                                containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: themeStyle.backgroundColor},]}
+                                                            />
+                                                        ))}
+                                                        {label?.resources?.length === 0 && (
+                                                            <ListItem
+                                                                title={
+                                                                    <View style={[styles.tableRowContainer]}>
+                                                                        <View style={[styles.tableCellView]}>
+                                                                            <StyledText>({t('empty')})</StyledText>
+                                                                        </View>
+                                                                    </View>
+                                                                }
+                                                                onPress={() => {
+
+                                                                }}
+                                                                bottomDivider
+                                                                containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor},]}
+                                                            />
+                                                        )}
+                                                    </List>
+
+                                                </Accordion.Panel>
+                                            )
+                                        })}
+                                    </Accordion> :
+                                        <View>
+                                            {this.state?.labels.map((label, labelIndex) => {
+                                                return (
+                                                    <ListItem
+                                                        title={
+                                                            <View style={[styles.tableRowContainer, {paddingHorizontal: 0}]}>
+                                                                <View style={[styles.tableCellView]}>
+                                                                    <CheckBox
+                                                                        containerStyle={{margin: 0, padding: 0}}
+                                                                        checkedIcon={'check-circle'}
+                                                                        uncheckedIcon={'circle'}
+                                                                        checked={label?.labelIsSelected}
+                                                                        onPress={() => {
+                                                                            let tempLabels = [...this.state?.labels]
+                                                                            tempLabels[labelIndex].labelIsSelected = !tempLabels[labelIndex].labelIsSelected
+                                                                            this.setState({labels: tempLabels})
+                                                                        }}
+                                                                    >
+                                                                    </CheckBox>
+                                                                </View>
+                                                                <View style={[styles.tableCellView]}>
+                                                                    <StyledText>{label?.labelName}</StyledText>
+                                                                </View>
+
+                                                            </View>
+                                                        }
+                                                        onPress={() => {
+                                                            let tempLabels = [...this.state?.labels]
+                                                            tempLabels[labelIndex].labelIsSelected = !tempLabels[labelIndex].labelIsSelected
+                                                            this.setState({labels: tempLabels})
+                                                        }}
+                                                        bottomDivider
+                                                        containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: themeStyle.backgroundColor},]}
+                                                    />
+                                                )
+                                            })}
+                                        </View>}
+                                </ThemeScrollView>}
+                                <View style={[{marginTop: 30, justifyContent: 'flex-end'}]}>
+                                    {this.state.uneditable || <TouchableOpacity onPress={
+                                        this.state?.isManager ?
+                                            handleSubmit(data => {
+                                                this.handleSubmit(data, !!this.state.data)
+                                            }) :
+                                            () => this.handleStaffSubmit()}>
+                                        <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                                            {t('action.save')}
+                                        </Text>
+                                    </TouchableOpacity>}
+
+                                    <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                                        <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                                            {t('action.cancel')}
+                                        </Text>
+                                    </TouchableOpacity>
+                                    {!!this.state.data && this.state?.isManager && <DeleteBtn handleDeleteAction={() => this.handleDelete()} />}
+                                </View>
+
+                            </View>
+
+
+                        </View>
+                    </View>
+                </ThemeContainer>
+
+            )
+        }
 
         return (
 
-            <ThemeContainer>
+            <ThemeScrollView>
                 <View style={styles.container}>
-                    <View style={{flex: 7, }}>
-                        <ScreenHeader title={t('settings.roster')} />
-                        {!this.state.data && <><View style={[{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginTop: 2,
-                            marginBottom: 5,
-                            flexBasis: 64
-                        }]}>
-                            <View style={[styles.tableCellView, styles.flex(1)]}>
-                                <StyledText style={styles.fieldTitle}>{t('roster.year')}</StyledText>
-                            </View>
-                            <View style={[styles.justifyRight]}>
-                                <Field
-                                    name="selectedYear"
-                                    component={DropDown}
-                                    options={this.state.selectedYear}
-                                />
-                            </View>
-                        </View>
-                            <View style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                marginTop: 2,
-                                marginBottom: 5,
-                                flexBasis: 50
-                            }}>
-                                <View style={[styles.tableCellView, styles.flex(1)]}>
-                                    <StyledText style={styles.fieldTitle}>{t('roster.month')}</StyledText>
-                                </View>
-                                <View style={[styles.justifyRight]}>
-                                    <Field
-                                        name="selectedMonth"
-                                        component={DropDown}
-                                        options={this.state.selectedMonth}
-                                    />
-                                </View>
-                            </View></>}
-                        {!!this.state.data && <>
-                            <View style={{
-                                paddingVertical: 12,
-                                paddingHorizontal: 10,
-                                flexDirection: 'row'
-                            }}>
-                                <StyledText style={{flex: 1, textAlign: 'center'}}>{this.state?.data?.rosterMonth}</StyledText>
-                            </View>
-                        </>}
-                        {this.state.uneditable || <View style={{flexDirection: 'row', alignSelf: 'center', marginVertical: 10}}>
-                            <Icon
-                                name="pluscircleo"
-                                size={32}
-                                color={'gray'}
-                                onPress={() => {
-                                    this.addForm()
-                                }}
-                            />
-                        </View>}
-                        <ThemeKeyboardAwareScrollView style={{flex: 1}}>
+                    <ScreenHeader title={t('settings.roster')} />
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                        <View style={{flex: 7, maxWidth: 640, justifyContent: 'space-between', }}>
+                            <View >
 
-                            {this.state.rosterEntries?.map((item, index) => {
-                                if (item === undefined)
-                                    return null
-                                return (<View style={{
-                                    paddingVertical: 12,
-                                    paddingHorizontal: 10,
-                                    borderColor: '#f1f1f1',
-                                    borderBottomWidth: 1,
-                                    flexDirection: 'row'
-                                }}>
+                                {this.state.rosterEntries?.map((item, index) => {
+                                    if (item === undefined)
+                                        return null
+                                    return (<View style={{
+                                        flexDirection: 'row'
+                                    }}>
 
-                                    <View style={{flex: 15, flexDirection: 'column'}}>
-                                        <View style={styles.fieldContainer}>
-                                            <View style={[styles.tableCellView, {flex: 1}]}>
-                                                <StyledText style={styles.fieldTitle}>{t('roster.dayOfWeek')}</StyledText>
+                                        <View style={{flex: 15, flexDirection: 'column'}}>
+
+                                            <View style={[styles.fieldContainer, {...(Platform.OS !== 'android' && {zIndex: 10})}]}>
+                                                <View style={[styles.tableCellView, {flex: 1}]}>
+                                                    <StyledText style={styles.fieldTitle}>{t('rostersForm.shift')}</StyledText>
+                                                </View>
+                                                <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+
+                                                    {this.state?.isManager ? <Field
+                                                        component={DropDownInputText}
+                                                        name="title"
+                                                        validate={isRequired}
+                                                        alignLeft={true}
+                                                        pickerLabels={[
+                                                            {label: t('rostersForm.morningShift'), value: 'morningShift'},
+                                                            {label: t('rostersForm.afternoonShift'), value: 'afternoonShift'},
+                                                            {label: t('rostersForm.nightShift'), value: 'nightShift'},
+                                                            {label: t('rostersForm.midnightShift'), value: 'midnightShift'},
+                                                        ]}
+                                                        defaultValue={this.props.navigation?.state?.params?.data?.eventName ?? t('rostersForm.morningShift')}
+                                                    /> :
+                                                        <StyledText>{this.props.navigation?.state?.params?.data?.eventName ?? t('rostersForm.morningShift')}</StyledText>}
+                                                </View>
                                             </View>
-                                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                            <View style={styles.fieldContainer}>
+                                                <View style={[styles.tableCellView, {flex: 1}]}>
+                                                    <StyledText style={styles.fieldTitle}>{t('roster.startTime')}</StyledText>
+                                                </View>
+                                                <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
 
-                                                <Field
-                                                    name={`dayOfWeek${index}`}
-                                                    component={DropDown}
-                                                    options={this.state.dayOfWeek}
-                                                    placeholder={{value: null, label: ``}}
-                                                    validate={isRequired}
-                                                    defaultValue={item?.dayOfWeek}
-                                                    disabled={index <= this.state.rosterEntriesLength - 1 ? true : false}
-                                                />
+                                                    {this.state?.isManager ? <Field
+                                                        name={`startTime`}
+                                                        component={RenderDateTimePicker}
+                                                        onChange={this.handlegetDate}
+                                                        placeholder={t('order.fromDate')}
+                                                        isShow={this.state.showFromDate?.[index] ?? false}
+                                                        showDatepicker={() => this.showFromDatepicker(index)}
+                                                        defaultValue={this.state?.data?.startTime ?? new Date()}
+                                                        readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}
+                                                    /> :
+                                                        <StyledText>{moment(this.state?.data?.startTime ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
+                                                </View>
+                                            </View>
+                                            <View style={styles.fieldContainer}>
+                                                <View style={[styles.tableCellView, {flex: 1}]}>
+                                                    <StyledText style={styles.fieldTitle}>{t('roster.endTime')}</StyledText>
+                                                </View>
+                                                <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+
+                                                    {this.state?.isManager ? <Field
+                                                        name={`endTime`}
+                                                        component={RenderDateTimePicker}
+                                                        onChange={this.handlegetDate}
+                                                        isShow={this.state.showToDate?.[index] ?? false}
+                                                        showDatepicker={() => this.showToDatepicker(index)}
+                                                        defaultValue={this.state?.data?.endTime ?? new Date()}
+                                                        readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}
+                                                    /> :
+                                                        <StyledText>{moment(this.state?.data?.endTime ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
+                                                </View>
+                                            </View>
+                                            {!!this.state?.data || <View style={styles.fieldContainer}>
+                                                <View style={[styles.tableCellView, {flex: 1}]}>
+                                                    <StyledText style={styles.fieldTitle}>{t('rostersForm.repeat')}</StyledText>
+                                                </View>
+                                                <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end', flexDirection: 'column'}]}>
+                                                    <Field
+                                                        name="repeatType"
+                                                        component={SegmentedControl}
+                                                        onChange={(val) => {this.setState({repeatType: val})}}
+                                                        values={[t('rostersForm.NONE'), t('rostersForm.WEEKLY')]}
+                                                        selectedIndex={this.state?.repeatType}
+                                                    />
+                                                </View>
+                                            </View>}
+                                            <View style={styles.fieldContainer}>
+                                                <View style={[styles.tableCellView, {flex: 1}]}>
+                                                    <StyledText style={styles.fieldTitle}>{t('rostersForm.eventColor')}</StyledText>
+                                                </View>
+                                                {this.state?.isManager ? <View style={[styles.tableCellView, {flex: 2, justifyContent: 'space-between'}]}>
+
+                                                    <TouchableOpacity
+                                                        onPress={() => this.setState({eventColor: '#fff'})}
+                                                        style={[{backgroundColor: '#fff'}, this.state?.eventColor === '#fff' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        onPress={() => this.setState({eventColor: '#3D8CE0'})}
+                                                        style={[{backgroundColor: '#3D8CE0'}, this.state?.eventColor === '#3D8CE0' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        onPress={() => this.setState({eventColor: '#4EB57B'})}
+                                                        style={[{backgroundColor: '#4EB57B'}, this.state?.eventColor === '#4EB57B' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        onPress={() => this.setState({eventColor: '#CCC850'})}
+                                                        style={[{backgroundColor: '#CCC850'}, this.state?.eventColor === '#CCC850' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        onPress={() => this.setState({eventColor: '#F5574C'})}
+                                                        style={[{backgroundColor: '#F5574C'}, this.state?.eventColor === '#F5574C' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                    <TouchableOpacity
+                                                        onPress={() => this.setState({eventColor: '#E67ABE'})}
+                                                        style={[{backgroundColor: '#E67ABE'}, this.state?.eventColor === '#E67ABE' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+
+
+                                                </View> :
+                                                    <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+                                                        <TouchableOpacity
+                                                            style={[{backgroundColor: this.state?.eventColor}, {width: 40, height: 40, borderRadius: 40}]} ></TouchableOpacity>
+                                                    </View>}
                                             </View>
                                         </View>
-                                        <View style={styles.fieldContainer}>
-                                            <View style={[styles.tableCellView, {flex: 1}]}>
-                                                <StyledText style={styles.fieldTitle}>{t('roster.startTime')}</StyledText>
-                                            </View>
-                                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
 
-                                                <Field
-                                                    name={`startTime${index}`}
-                                                    component={RenderTimePicker}
-                                                    onChange={this.handlegetDate}
-                                                    placeholder={t('order.fromDate')}
-                                                    isShow={this.state.showFromDate?.[index] ?? false}
-                                                    showDatepicker={() => this.showFromDatepicker(index)}
-                                                    defaultValue={normalizeTimeString(item?.startTime)}
-                                                    readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}
-                                                />
-                                            </View>
-                                        </View>
-                                        <View style={styles.fieldContainer}>
-                                            <View style={[styles.tableCellView, {flex: 1}]}>
-                                                <StyledText style={styles.fieldTitle}>{t('roster.endTime')}</StyledText>
-                                            </View>
-                                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                    </View>)
+                                })}
+                            </View>
+                            {!!this.state?.data && <View style={[styles.fieldContainer, {alignItems: 'center', justifyContent: 'center', paddingVertical: 10}]}>
+                                <StyledText style={{fontWeight: 'bold'}}>{t('rostersForm.workingAreaDistribute')}</StyledText>
+                            </View>}
+                            {!!this.state?.data && <View style={{flex: 1}}>
+                                {this.state?.isManager ? <Accordion
+                                    onChange={(activeSections) => this.setState({activeSections: activeSections})}
+                                    activeSections={this.state?.activeSections}
+                                    expandMultiple
+                                //duration={300}
+                                >
+                                    {this.state?.labels.map((label, labelIndex) => {
+                                        return (
+                                            <Accordion.Panel
 
-                                                <Field
-                                                    name={`endTime${index}`}
-                                                    component={RenderTimePicker}
-                                                    onChange={this.handlegetDate}
-                                                    isShow={this.state.showToDate?.[index] ?? false}
-                                                    showDatepicker={() => this.showToDatepicker(index)}
-                                                    defaultValue={normalizeTimeString(item?.endTime)}
-                                                    readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}
+                                                header={
+                                                    <View style={[styles.listPanel]}>
+                                                        <View style={[styles.tableCellView, styles.flex(1)]}>
+                                                            <StyledText style={[{color: mainThemeColor, fontWeight: 'bold'}, styles.listPanelText]}>{label?.labelName} ({label?.resources?.filter((item) => item?.isSelected).length})</StyledText>
+                                                        </View>
+
+                                                    </View>
+                                                }
+                                            >
+
+                                                <List>
+                                                    {label?.resources?.map((user, userIndex) => (
+                                                        <ListItem
+                                                            title={
+                                                                <View style={[styles.tableRowContainer]}>
+                                                                    <View style={[styles.tableCellView]}>
+                                                                        <CheckBox
+                                                                            containerStyle={{margin: 0, padding: 0}}
+                                                                            checkedIcon={'check-circle'}
+                                                                            uncheckedIcon={'circle'}
+                                                                            checked={user?.isSelected}
+                                                                            onPress={() => {
+                                                                                let tempLabels = [...this.state?.labels]
+                                                                                tempLabels[labelIndex].resources[userIndex].isSelected = !tempLabels[labelIndex].resources[userIndex].isSelected
+                                                                                this.setState({labels: tempLabels})
+                                                                            }}
+                                                                        >
+                                                                        </CheckBox>
+                                                                    </View>
+                                                                    <View style={[styles.tableCellView]}>
+                                                                        <StyledText>{user?.username}</StyledText>
+                                                                    </View>
+
+                                                                </View>
+                                                            }
+                                                            onPress={() => {
+                                                                let tempLabels = [...this.state?.labels]
+                                                                tempLabels[labelIndex].resources[userIndex].isSelected = !tempLabels[labelIndex].resources[userIndex].isSelected
+                                                                this.setState({labels: tempLabels})
+                                                            }}
+                                                            bottomDivider
+                                                            containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: themeStyle.backgroundColor},]}
+                                                        />
+                                                    ))}
+                                                    {label?.resources?.length === 0 && (
+                                                        <ListItem
+                                                            title={
+                                                                <View style={[styles.tableRowContainer]}>
+                                                                    <View style={[styles.tableCellView]}>
+                                                                        <StyledText>({t('empty')})</StyledText>
+                                                                    </View>
+                                                                </View>
+                                                            }
+                                                            onPress={() => {
+
+                                                            }}
+                                                            bottomDivider
+                                                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor},]}
+                                                        />
+                                                    )}
+                                                </List>
+
+                                            </Accordion.Panel>
+                                        )
+                                    })}
+                                </Accordion> :
+                                    <View>
+                                        {this.state?.labels.map((label, labelIndex) => {
+                                            return (
+                                                <ListItem
+                                                    title={
+                                                        <View style={[styles.tableRowContainer, {paddingHorizontal: 0}]}>
+                                                            <View style={[styles.tableCellView]}>
+                                                                <CheckBox
+                                                                    containerStyle={{margin: 0, padding: 0}}
+                                                                    checkedIcon={'check-circle'}
+                                                                    uncheckedIcon={'circle'}
+                                                                    checked={label?.labelIsSelected}
+                                                                    onPress={() => {
+                                                                        let tempLabels = [...this.state?.labels]
+                                                                        tempLabels[labelIndex].labelIsSelected = !tempLabels[labelIndex].labelIsSelected
+                                                                        this.setState({labels: tempLabels})
+                                                                    }}
+                                                                >
+                                                                </CheckBox>
+                                                            </View>
+                                                            <View style={[styles.tableCellView]}>
+                                                                <StyledText>{label?.labelName}</StyledText>
+                                                            </View>
+
+                                                        </View>
+                                                    }
+                                                    onPress={() => {
+                                                        let tempLabels = [...this.state?.labels]
+                                                        tempLabels[labelIndex].labelIsSelected = !tempLabels[labelIndex].labelIsSelected
+                                                        this.setState({labels: tempLabels})
+                                                    }}
+                                                    bottomDivider
+                                                    containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: themeStyle.backgroundColor},]}
                                                 />
-                                            </View>
-                                        </View>
-                                    </View>
-                                    {this.state.uneditable || <View style={{marginLeft: 10, alignItems: 'center', justifyContent: 'center'}}>
-                                        <Icon
-                                            name="minuscircleo"
-                                            size={32}
-                                            color={'gray'}
-                                            onPress={() => {
-                                                this.deleteForm(index)
-                                            }}
-                                        />
+                                            )
+                                        })}
                                     </View>}
-                                </View>)
-                            })}
+                            </View>}
+                            <View style={[{marginTop: 30, justifyContent: 'flex-end'}]}>
+                                {this.state.uneditable || <TouchableOpacity onPress={
+                                    this.state?.isManager ?
+                                        handleSubmit(data => {
+                                            this.handleSubmit(data, !!this.state.data)
+                                        }) :
+                                        () => this.handleStaffSubmit()}>
+                                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                                        {t('action.save')}
+                                    </Text>
+                                </TouchableOpacity>}
+
+                                <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                                        {t('action.cancel')}
+                                    </Text>
+                                </TouchableOpacity>
+                                {!!this.state.data && this.state?.isManager && <DeleteBtn handleDeleteAction={() => this.handleDelete()} />}
+                            </View>
+
+                        </View>
 
 
-                        </ThemeKeyboardAwareScrollView>
-                    </View>
-
-
-                    <View style={[{marginTop: 30, justifyContent: 'flex-end'}]}>
-                        {this.state.uneditable || <TouchableOpacity onPress={handleSubmit(data => {
-                            this.handleSubmit(data, !!this.state.data)
-                        })}>
-                            <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                                {t('action.save')}
-                            </Text>
-                        </TouchableOpacity>}
-
-                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                                {t('action.cancel')}
-                            </Text>
-                        </TouchableOpacity>
-                        {!!this.state.data && <DeleteBtn handleDeleteAction={() => this.handleDelete()} />}
                     </View>
                 </View>
-            </ThemeContainer>
+            </ThemeScrollView>
 
         )
     }
@@ -455,6 +983,7 @@ class RostersFormScreen extends React.Component {
 const mapStateToProps = state => ({
     isLoading: state.offers.loading,
     client: state.client.data,
+    currentUser: state.clientuser.data,
 })
 
 const mapDispatchToProps = dispatch => ({

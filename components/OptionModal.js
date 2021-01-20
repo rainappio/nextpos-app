@@ -39,7 +39,7 @@ export const OptionModal = (props) => {
             <TouchableOpacity
                 onPress={() => props?.toggleModal(true)}
             >
-                <Octicons name="kebab-horizontal" size={32} color={mainThemeColor} />
+                {props?.icon ?? <Octicons name="kebab-horizontal" size={32} color={mainThemeColor} />}
             </TouchableOpacity>
             <Modal
                 isVisible={props?.isShowModal ?? false}
@@ -52,12 +52,17 @@ export const OptionModal = (props) => {
                     margin: 0, flex: 1, justifyContent: 'flex-start'
                 }}
             >
-                <View style={[{marginTop: 100, marginRight: 15, alignSelf: 'flex-end'}]}>
+                {localeContext?.isTablet ? <View style={[{marginTop: 100, marginRight: 15, alignSelf: 'flex-end'}]}>
 
                     <View style={[localeContext?.themeStyle, {flexDirection: 'column', borderRadius: 10, padding: 20}]}>
                         {props?.children}
                     </View>
                 </View>
+                    : <View style={[{width: '100%', alignSelf: 'flex-end'}]}>
+                        <View style={[localeContext?.themeStyle, {flexDirection: 'column', paddingBottom: 10, paddingTop: 50, borderBottomRightRadius: 10, borderBottomLeftRadius: 10}]}>
+                            {props?.children}
+                        </View>
+                    </View>}
 
             </Modal>
         </>

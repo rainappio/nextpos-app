@@ -66,6 +66,7 @@ class PaymentFormScreenTablet extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         if (this.props?.order !== prevProps?.order) {
             this.setState({openDiscountKeyBoard: false, waiveServiceCharge: this.props.order?.serviceCharge === 0, accountKeyBoardResult: this.props?.order?.membership?.phoneNumber ? this.props?.order?.membership?.phoneNumber?.split('') : []})
+            console.log('this.props.order', JSON.stringify(this.props.order))
         }
     }
 
@@ -393,6 +394,7 @@ class PaymentFormScreenTablet extends React.Component {
         const {navigation, handleSubmit, globalorderoffers, order, isSplitting} = this.props
         const {t, themeStyle} = this.context
         const totalAmount = this.props?.isSplitByHeadCount ? this.props?.splitAmount : order.orderTotal
+        console.log('waiveServiceChargeRender', this.state?.waiveServiceCharge)
 
         return (
             <ThemeContainer>

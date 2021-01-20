@@ -251,7 +251,9 @@ const zh = {
     // messages
     shiftOpened: '已開帳',
     shiftAborted: '關帳取消',
-    shiftClosed: '已關帳'
+    shiftClosed: '已關帳',
+    sendEmail: '發送關帳紀錄Email',
+    sendEmailDone: '信件已發送'
   },
   preferences: {
     darkMode: '暗黑模式'
@@ -327,6 +329,7 @@ const zh = {
       emptyTables: '請選擇桌位',
       orderFinalized: '此訂單已被結帳，返回桌位頁面',
       passwordUsed: '密碼已被使用',
+      cannotDelete: '此併桌訂單不能被刪除。請用結帳來完成訂單。',
     }
   },
   eInvoice: {
@@ -356,6 +359,7 @@ const zh = {
     endTime: '結束時間',
     createEvent: '建立行程',
     deleteEvent: '刪除行程',
+    resources: '人員'
   },
   bar: 'Bar {{someValue}}',
   printerSuccess: '列印成功',
@@ -409,7 +413,7 @@ const zh = {
     },
     startTime: '開始時間',
     endTime: '結束時間',
-    eventResources: '配置',
+    eventResources: '工作區',
     assign: '分配',
     remove: '移除分配',
   },

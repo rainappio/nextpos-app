@@ -96,16 +96,16 @@ export const handleConfirmCloseShift = (values) => {
 
 export const handleAbortCloseShift = () => {
   dispatchFetchRequestWithOption(api.shift.abort, {
-      method: 'POST',
-      withCredentials: true,
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: ''
-    }, {
-      defaultMessage: false
+    method: 'POST',
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
     },
+    body: ''
+  }, {
+    defaultMessage: false
+  },
     response => {
       successMessage(i18n.t('shift.shiftAborted'))
       NavigationService.navigate('ShiftClose')
@@ -114,4 +114,20 @@ export const handleAbortCloseShift = () => {
 
 export const renderShiftStatus = (status) => {
   return i18n.t(`shift.status.${status}`)
+}
+
+export const handleSendEmail = (shiftId) => {
+  dispatchFetchRequestWithOption(api.shift.sendEmail(shiftId), {
+    method: 'POST',
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }, {
+    defaultMessage: false
+  },
+    response => {
+      successMessage(i18n.t('shift.sendEmailDone'))
+    }).then()
 }
