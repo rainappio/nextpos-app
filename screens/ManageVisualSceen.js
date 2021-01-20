@@ -3,8 +3,8 @@ import {connect} from 'react-redux'
 import {Animated, PanResponder, Text, TouchableOpacity, View, Dimensions} from "react-native";
 import ScreenHeader from "../components/ScreenHeader";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
-import {getTableLayout} from '../actions'
-import styles from '../styles'
+import {getTableLayout, getTableLayouts} from '../actions'
+import styles, {mainThemeColor} from '../styles'
 import LoadingScreen from "./LoadingScreen";
 import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
@@ -30,6 +30,8 @@ class ManageVisualSceen extends Component {
       windowWidth: Dimensions.get('window').width - 30,
       windowHeight: Dimensions.get('window').height - 76,
       modalVisible: false,
+      tableIndex: 0,
+      isLoading: false
     }
 
     context.localize({
@@ -45,10 +47,16 @@ class ManageVisualSceen extends Component {
   }
 
   componentDidMount() {
-    this.props.getTableLayout(this.props.navigation.state.params.layoutId)
+    this.props.getTableLayouts()
   }
-  handleReset = (layoutId, tableId) => {
-    dispatchFetchRequest(api.tablelayout.updateTablePosition(layoutId, tableId), {
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps?.isLoading !== this.props?.isLoading && !this.props?.isLoading) {
+      this.setState({isLoading: false})
+    }
+  }
+  handleReset = async (layoutId, tableId) => {
+    await dispatchFetchRequestWithOption(api.tablelayout.updateTablePosition(layoutId, tableId), {
       method: 'POST',
       withCredentials: true,
       credentials: 'include',
@@ -56,16 +64,21 @@ class ManageVisualSceen extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({})
+    }, {
+      defaultMessage: false
     }, response => {
-      this.props.getTableLayout(layoutId)
+
     }).then()
     return true
   }
   render() {
-    const {tablelayout, isLoading} = this.props
-    const {t} = this.context
-    const layoutId = this.props.navigation.state.params.layoutId !== false && this.props.navigation.state.params.layoutId;
-
+    const {tablelayouts} = this.props
+    const {t, themeStyle} = this.context
+    if (this.state?.isLoading) {
+      return (
+        <LoadingScreen />
+      )
+    }
 
     return (
       <ThemeContainer>
@@ -86,28 +99,61 @@ class ManageVisualSceen extends Component {
             animationOut='bounceOut'
             style={{alignSelf: 'center', maxWidth: 640}}
           >
-            <TableAddModal layoutId={layoutId} closeModal={() => {
+            <TableAddModal layoutId={tablelayouts[this.state.tableIndex]?.id} closeModal={() => {
               this.setState({modalVisible: false})
-            }} />
+            }}
+              setLoading={() => this.setState({isLoading: true})}
+            />
           </Modal>
-          <View>
-            <TouchableOpacity
-              style={{width: 60}}
-              onPress={() => {
-                tablelayout.tables.map(table => {
-                  this.handleReset(layoutId, table.tableId)
-                })
-              }}>
-              <StyledText style={{
-                borderWidth: 0.5,
-                textAlign: 'center',
-                padding: 4,
-                fontSize: 12,
-                borderRadius: 4,
-                width: 60
-              }}>{t('resetTables')}
-              </StyledText>
-            </TouchableOpacity>
+
+
+          <View style={{flexDirection: 'row', width: '100%', minHeight: 80}}>
+            {tablelayouts?.map((tblLayout, index) => {
+              return (<TouchableOpacity
+                disabled={this.state?.screenMode === 'joinTable'}
+                style={{
+                  borderColor: mainThemeColor,
+                  borderWidth: 0.5,
+                  borderBottomWidth: 0,
+                  padding: 4,
+                  borderTopLeftRadius: 4,
+                  borderTopRightRadius: 4,
+                  width: 120,
+                  backgroundColor: this.state?.tableIndex === index ? themeStyle.color : null,
+                }}
+                onPress={() => {this.setState({tableIndex: index})}}>
+                <StyledText style={[styles.sectionBarText, {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                  {tblLayout?.layoutName}
+                </StyledText>
+
+
+
+              </TouchableOpacity>)
+            })}
+            <View style={{alignSelf: 'center', right: 0, position: 'absolute'}}>
+              <TouchableOpacity
+                style={{width: 60}}
+                onPress={async () => {
+
+                  this.setState({isLoading: true})
+                  for (let i = 0; i < tablelayouts[this.state.tableIndex]?.tables?.length; i++) {
+                    await this.handleReset(tablelayouts[this.state.tableIndex]?.id, tablelayouts[this.state.tableIndex]?.tables?.[i]?.tableId)
+                  }
+                  this.props.getTableLayouts()
+                }}>
+                <StyledText style={{
+                  borderWidth: 0.5,
+                  textAlign: 'center',
+                  padding: 4,
+                  fontSize: 12,
+                  borderRadius: 4,
+                  width: 60
+                }}>{t('resetTables')}
+                </StyledText>
+              </TouchableOpacity>
+            </View>
+
+
           </View>
           <View style={{flex: 1}}>
             <View onLayout={(event) => {
@@ -116,11 +162,11 @@ class ManageVisualSceen extends Component {
                 tableWidth: width,
                 tableHeight: height,
               })
-            }} style={[styles.ballContainer, {height: '100%', marginTop: 22}]}>
+            }} style={[styles.ballContainer, {height: '100%'}]}>
               <View style={{flexWrap: 'wrap'}}>
                 {
-                  tablelayout.tables.map((table, index) => {
-                    let positionArr = tablelayout?.tables?.map((table, index) => {
+                  tablelayouts[this.state.tableIndex]?.tables.map((table, index) => {
+                    let positionArr = tablelayouts[this.state.tableIndex]?.tables?.map((table, index) => {
                       if (table.position != null) {
                         return {...getTablePosition(table, this.state?.tableWidth ?? this.state?.windowWidth, this.state?.tableHeight ?? this.state?.windowHeight), tableId: table?.tableId, tableData: table}
                       } else {
@@ -132,8 +178,8 @@ class ManageVisualSceen extends Component {
                       table={table}
                       key={table.tableId}
                       index={index}
-                      layoutId={layoutId}
-                      getTableLayout={this.props.getTableLayout}
+                      layoutId={tablelayouts[this.state.tableIndex]?.id}
+                      getTableLayouts={this.props.getTableLayouts}
                       tableWidth={this.state?.tableWidth ?? this.state?.windowWidth}
                       tableHeight={this.state?.tableHeight ?? this.state?.windowHeight}
                       positionArr={positionArr}
@@ -143,6 +189,10 @@ class ManageVisualSceen extends Component {
               </View>
             </View>
           </View>
+
+          <View style={{...styles.bottomButtonContainerWithoutFlex, marginTop: 0, flexDirection: 'row', minHeight: 48}}>
+
+          </View>
         </View>
       </ThemeContainer>
     );
@@ -150,15 +200,15 @@ class ManageVisualSceen extends Component {
 }
 
 const mapStateToProps = state => ({
-  tablelayout: state.tablelayout.data,
-  haveData: state.tablelayout.haveData,
-  haveError: state.tablelayout.haveError,
-  isLoading: state.tablelayout.loading
+  tablelayouts: state.tablelayouts.data.tableLayouts,
+  haveData: state.tablelayouts.haveData,
+  haveError: state.tablelayouts.haveError,
+  isLoading: state.tablelayouts.loading
 })
 
 const mapDispatchToProps = (dispatch) => ({
   dispatch,
-  getTableLayout: (id) => dispatch(getTableLayout(id))
+  getTableLayouts: () => dispatch(getTableLayouts()),
 })
 
 export default connect(
@@ -201,7 +251,7 @@ class Draggable extends Component {
       }, {
         defaultMessage: false
       }, response => {
-        this.props.getTableLayout(layoutId)
+        this.props.getTableLayouts()
       }).then()
     }
   }
@@ -238,7 +288,6 @@ class Draggable extends Component {
         console.log(`on release: ${JSON.stringify(this.state.pan)}`)
 
         if (this.handleDragEnd(this.state.pan)) {
-          console.log('HAHA')
           this.isDropArea(e, gesture)
         } else {
           const windowWidth = this.props.tableWidth;
@@ -288,7 +337,7 @@ class Draggable extends Component {
       },
       body: JSON.stringify({x: getModNum(numberX._value, 10) / windowWidth, y: getModNum(numberY._value, 10) / windowHeight})
     }, response => {
-      this.props.getTableLayout(layoutId)
+      this.props.getTableLayouts()
     }).then()
 
     return true

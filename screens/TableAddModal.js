@@ -32,7 +32,7 @@ class TableAddModal extends React.Component {
             body: JSON.stringify(values)
         }, response => {
             this.props.closeModal()
-            this.props.getTableLayout(layoutId)
+            this.props?.setLoading()
             this.props.getTableLayouts()
         }).then()
     }

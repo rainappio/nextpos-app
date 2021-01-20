@@ -46,9 +46,9 @@ class TableLayoutForm extends React.Component {
       initialValues,
       handleDeleteLayout
     } = this.props
-    const { t } = this.context
+    const {t} = this.context
 
-    Item = ({ table, layoutId }) => {
+    Item = ({table, layoutId}) => {
       return (
         <View style={styles.tableRowContainerWithBorder}>
           <View style={styles.tableCellView}>
@@ -107,7 +107,7 @@ class TableLayoutForm extends React.Component {
               </View>
               <FlatList
                 data={initialValues.tables}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                   <Item table={item} layoutId={initialValues.id} />
                 )}
                 keyExtractor={item => item.tableId}
@@ -125,14 +125,6 @@ class TableLayoutForm extends React.Component {
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('ManageVisualSceen', {
-                tables: initialValues.tables,
-                layoutId: initialValues.id
-              })}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                  {t('manageVisualLayout')}
-              </Text>
-              </TouchableOpacity>
             </View>
           ) : (
               <TouchableOpacity onPress={handleSubmit}>
