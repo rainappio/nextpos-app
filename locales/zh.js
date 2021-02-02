@@ -242,7 +242,8 @@ const zh = {
     totalCashTransitionAmt: '現金營業額',
     totalCashInRegister: '實際現金總額',
     enterAmount: '請輸入金額',
-    remark: '理由',
+    remark: '差異原因',
+    enterRemark: '請輸入原因',
     totalCardTransitionAmt: '刷卡營業額',
     totalCardInRegister: '實際刷卡營業額',
     difference: '差額',
@@ -452,9 +453,9 @@ const zh = {
     RANGE: '自訂日期'
   },
   salesReport: '銷售報表',
-  staffTimeCardReport: '職員打卡表',
+  staffTimeCardReport: '打卡記錄',
   customerStatsReport: '來客總覽',
-  shiftHistory: '營收紀錄',
+  shiftHistory: '關帳紀錄',
   empty: '空',
   updateExpo: {
     haveUpdate: '發現新版本!',

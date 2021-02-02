@@ -22,8 +22,8 @@ class AccountClosureForm extends React.Component {
   }
 
   render() {
-    const { t } = this.context
-    const { mostrecentShift, handleSubmit } = this.props
+    const {t} = this.context
+    const {mostrecentShift, handleSubmit} = this.props
 
     const closingShiftReport = {
       totalByPaymentMethod: {}
@@ -36,7 +36,7 @@ class AccountClosureForm extends React.Component {
     return (
       <ThemeKeyboardAwareScrollView>
         <View style={[styles.container]}>
-          <ScreenHeader title={t('shift.accountCloseTitle')}/>
+          <ScreenHeader title={t('shift.accountCloseTitle')} />
 
           <View>
             <StyledText style={[styles.toRight]}>
@@ -104,14 +104,20 @@ class AccountClosureForm extends React.Component {
         </View>
 
         <View style={styles.tableRowContainerWithBorder}>
-          <View style={{flex: 1}}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <StyledText style={[styles.fieldTitle]}>
+              {t('shift.remark')}
+            </StyledText>
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
             <Field
               name="cash.unbalanceReason"
               component={InputText}
-              placeholder={t('shift.remark')}
+              placeholder={t('shift.enterRemark')}
               height={35}
             />
           </View>
+
         </View>
 
         {/* #Cash */}

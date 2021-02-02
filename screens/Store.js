@@ -31,26 +31,30 @@ class Store extends React.Component {
       values.clientSettings.APPLY_CUSTOM_OFFER.value = values.clientSettings.APPLY_CUSTOM_OFFER.enabled
     }
 
+    if (!values.clientSettings.SERVICE_CHARGE.value) {
+      values.clientSettings.SERVICE_CHARGE.value = 0
+    }
+
     dispatchFetchRequest(api.client.update, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values)
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify(values)
+    },
       response => {
         this.props.navigation.navigate('SettingScr')
       }).then()
   }
 
   render() {
-    const { client, navigation, loading, haveData } = this.props
+    const {client, navigation, loading, haveData} = this.props
 
     if (loading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveData) {
       return (

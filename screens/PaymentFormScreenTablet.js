@@ -66,7 +66,6 @@ class PaymentFormScreenTablet extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         if (this.props?.order !== prevProps?.order) {
             this.setState({openDiscountKeyBoard: false, waiveServiceCharge: this.props.order?.serviceCharge === 0, accountKeyBoardResult: this.props?.order?.membership?.phoneNumber ? this.props?.order?.membership?.phoneNumber?.split('') : []})
-            console.log('this.props.order', JSON.stringify(this.props.order))
         }
     }
 
@@ -189,7 +188,6 @@ class PaymentFormScreenTablet extends React.Component {
     }
 
     fetchApi = (transactionObj) => {
-        console.log('transactionObj', transactionObj)
         dispatchFetchRequestWithOption(api.payment.charge, {
             method: 'POST',
             withCredentials: true,
@@ -222,8 +220,6 @@ class PaymentFormScreenTablet extends React.Component {
 
     handleServiceChargePress = async (waiveServiceCharge) => {
 
-
-        console.log('waiveServiceCharge', waiveServiceCharge)
         await dispatchFetchRequestWithOption(api.order.waiveServiceCharge(this.props.order.orderId, !waiveServiceCharge), {
             method: 'POST',
             withCredentials: true,
@@ -269,7 +265,6 @@ class PaymentFormScreenTablet extends React.Component {
                 defaultMessage: false
             }, response => {
                 response.json().then(data => {
-                    console.log('res', data)
                     if (data?.results?.length > 0) {
                         dispatchFetchRequestWithOption(api.membership.updateOrderMembership(orderId), {
                             method: 'POST',
@@ -343,7 +338,6 @@ class PaymentFormScreenTablet extends React.Component {
             defaultMessage: false
         }, response => {
             response.json().then(data => {
-                console.log('handleCreateMember', data)
                 dispatchFetchRequestWithOption(api.membership.updateOrderMembership(orderId), {
                     method: 'POST',
                     withCredentials: true,
@@ -386,7 +380,7 @@ class PaymentFormScreenTablet extends React.Component {
         }, {
             defaultMessage: false
         }, response => {
-            response.json().then(data => console.log('handleUpdateOrderMembership', JSON.stringify(data)))
+
         }).then(() => this.refreshOrder())
     }
 
@@ -394,7 +388,6 @@ class PaymentFormScreenTablet extends React.Component {
         const {navigation, handleSubmit, globalorderoffers, order, isSplitting} = this.props
         const {t, themeStyle} = this.context
         const totalAmount = this.props?.isSplitByHeadCount ? this.props?.splitAmount : order.orderTotal
-        console.log('waiveServiceChargeRender', this.state?.waiveServiceCharge)
 
         return (
             <ThemeContainer>
@@ -514,7 +507,7 @@ class PaymentFormScreenTablet extends React.Component {
                                             {this.state.haveCarrierId && <Icon style={{marginRight: 10}} name="times-circle" size={20} color='#f75336' />}
                                         </TouchableOpacity>
                                     </View>
-                                    {this.props?.isSplitByHeadCount || <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
+                                    {this.props?.isSplitByHeadCount || order?.serviceChargeEnabled && <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
                                         <TouchableOpacity style={[(this.state.waiveServiceCharge ? styles.selectedLabel : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {this.handleServiceChargePress(this.state.waiveServiceCharge)}}>
                                             <View style={styles.listPanel}>
                                                 <StyledText style={styles.listPanelText}>{t('payment.waiveServiceCharge')}</StyledText>

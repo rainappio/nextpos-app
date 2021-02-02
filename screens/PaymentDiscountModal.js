@@ -242,7 +242,7 @@ class PaymentFormScreen extends React.Component {
                     </View>
                 </View>
 
-                <View style={[styles.sectionContainer]}>
+                {order?.serviceChargeEnabled && <View style={[styles.sectionContainer]}>
                     <View style={[styles.sectionTitleContainer]}>
                         <StyledText style={styles.sectionTitleText}>{t('orderOptions')}</StyledText>
                     </View>
@@ -255,7 +255,7 @@ class PaymentFormScreen extends React.Component {
                             optionName={t('waiveServiceCharge')}
                         />
                     </View>
-                </View>
+                </View>}
 
                 <View style={[styles.sectionContainer]}>
                     <View style={[styles.sectionTitleContainer]}>

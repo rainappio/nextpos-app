@@ -242,6 +242,7 @@ const en = {
     totalCashInRegister: 'Actual Cash Amount',
     enterAmount: 'Enter Amount',
     remark: 'Unbalance Reason',
+    enterRemark: 'Enter Unbalance Reason',
     totalCardTransitionAmt: 'Total Card Transactions',
     totalCardInRegister: 'Actual Card Amount',
     difference: 'Difference',

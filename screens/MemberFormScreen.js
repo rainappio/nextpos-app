@@ -21,7 +21,6 @@ import InputText from '../components/InputText'
 import {isRequired} from '../validators'
 import SegmentedControl from "../components/SegmentedControl";
 import {RenderDatePicker} from '../components/DateTimePicker'
-import {normalizeTimeString} from '../actions'
 import moment from 'moment-timezone'
 import TimeZoneService from "../helpers/TimeZoneService";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";

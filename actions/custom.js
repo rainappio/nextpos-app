@@ -75,6 +75,7 @@ export const formatTime = date => {
   return dateObj.toLocaleTimeString('en-TW', {
     dateStyle: 'long',
     //timeZone: timezone
+    hour12: false
   })
 }
 
@@ -115,22 +116,13 @@ const useDateObj = (date) => {
   return dateObj
 }
 
-export const normalizeTimeString = time => {
+export const normalizeTimeString = (time, formatString = null) => {
   if (!!time) {
-    let d = new Date()
-
-    let [hours, minutes, seconds] = time.split(':')
 
 
-    d.setHours(+hours)
-    d.setMinutes(minutes)
-    d.setSeconds(seconds)
-
-    let date = new Date(d)
-
-    return date
+    return moment(time).tz(timezone).format(formatString ?? 'YYYY-MM-DD HH:mm:ss')
   } else {
-    return new Date()
+    return moment().tz(timezone).format(formatString ?? 'YYYY-MM-DD HH:mm:ss')
   }
 }
 

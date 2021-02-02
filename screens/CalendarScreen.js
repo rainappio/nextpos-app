@@ -64,16 +64,18 @@ class CalendarScreen extends React.Component {
                     roster: 'Roster',
                     reservation: 'Reservation',
                     showMyEvent: 'Show my event.',
+                    noWorkingArea: 'Not Assigned'
                 }
             },
             zh: {
                 calendar: {
                     monthly: '月曆',
-                    weekly: '周歷',
+                    weekly: '周曆',
                     daily: '日曆',
                     roster: '排班',
                     reservation: '訂位',
                     showMyEvent: '顯示我的排班',
+                    noWorkingArea: '尚未排班'
                 }
             }
         })
@@ -114,7 +116,10 @@ class CalendarScreen extends React.Component {
         }, response => {
             response.json().then(async (data) => {
                 this.setState({rosterEvents: data?.results, groupedResults: data?.groupedResults})
-                this.setState({isLoading: false})
+                this.setState({
+                    isLoading: false, nowYear: new Date(this.state?.selectedDate).getFullYear(),
+                    nowMonth: new Date(this.state?.selectedDate).getMonth() + 1
+                })
             })
         }).then().catch(() => this.setState({isLoading: false}))
     }
@@ -123,7 +128,11 @@ class CalendarScreen extends React.Component {
 
     handleChangeCalendarMode = (date = null, modeIndex = 1) => {
         this.refreshScreen()
-        this.setState({calendarMode: ['month', 'week', 'day']?.[modeIndex], calendarTypeIndex: modeIndex})
+        this.setState({
+            calendarMode: ['month', 'week', 'day']?.[modeIndex], calendarTypeIndex: modeIndex,
+            nowYear: new Date(this.state?.selectedDate).getFullYear(),
+            nowMonth: new Date(this.state?.selectedDate).getMonth() + 1
+        })
     }
 
 
@@ -151,7 +160,7 @@ class CalendarScreen extends React.Component {
         this.setState({showRosterFormModal: flag, modalTasks: task})
     }
 
-    handleMonthChange = async (year = new Date().getFullYear(), month = new Date().getMonth() + 1, callack) => {
+    handleMonthChange = async (year = new Date().getFullYear(), month = new Date().getMonth() + 1, callback) => {
         this.setState({monthLoading: true})
         await dispatchFetchRequest(api.rosterEvent.getEventsByDate(year, month), {
             method: 'GET',
@@ -162,7 +171,8 @@ class CalendarScreen extends React.Component {
             },
         }, response => {
             response.json().then(async (data) => {
-                this.setState({rosterEvents: data?.results, groupedResults: data?.groupedResults, isLoading: false, nowYear: year, nowMonth: month, monthLoading: false}, () => callack())
+
+                this.setState({rosterEvents: data?.results, groupedResults: data?.groupedResults, isLoading: false, nowYear: year, nowMonth: month, monthLoading: false, selectedDate: `${year}-${month < 10 ? '0' : ''}${month}-01`}, () => callback())
             })
         }).then().catch(() => this.setState({monthLoading: true}))
     }
@@ -184,7 +194,7 @@ class CalendarScreen extends React.Component {
                     }}
                 />
 
-                <View style={styles.fullWidthScreen}>
+                <View style={[styles.fullWidthScreen, {marginBottom: 0}]}>
                     <ScreenHeader backNavigation={false}
                         parentFullScreen={true}
                         title={t('calendarEvent.screenTitle')}
@@ -271,19 +281,19 @@ class CalendarScreen extends React.Component {
                         animationOut='fadeOutUp'
                         onBackdropPress={() => this.toggleRosterFormModal([], false)}
                         style={{
-                            margin: 0
+                            margin: 0, justifyContent: 'center'
                         }}
                     >
-
-                        <ScrollView style={[themeStyle, {maxWidth: 640, alignSelf: 'center', marginVertical: '15%', width: '100%', flex: 1}]}>
-
-                            {this.state?.modalTasks?.map((task) => {
-                                return (
-                                    <CalendarEvent event={task} isManager={this.props?.currentUser?.roles?.includes('MANAGER')}
-                                        users={this.state?.users} closeModal={() => this.toggleRosterFormModal([], false)} refreshScreen={() => this.refreshScreen()} />
-                                )
-                            })}
-                        </ScrollView>
+                        <View style={[themeStyle, {maxWidth: 640, alignSelf: 'center', maxHeight: '70%', width: '100%'}]}>
+                            <ScrollView >
+                                {this.state?.modalTasks?.map((task) => {
+                                    return (
+                                        <CalendarEvent event={task} isManager={this.props?.currentUser?.roles?.includes('MANAGER')}
+                                            users={this.state?.users} closeModal={() => this.toggleRosterFormModal([], false)} refreshScreen={() => this.refreshScreen()} />
+                                    )
+                                })}
+                            </ScrollView>
+                        </View>
 
 
                     </Modal>
@@ -342,7 +352,7 @@ class CalendarScreen extends React.Component {
                                 }
                             }}
                             dayComponent={({date, state, onPress}) => {
-                                let today = moment(new Date()).tz(timezone).format("YYYY-MM-DD")
+                                let today = moment(this.state?.selectedDate ?? new Date()).tz(timezone).format("YYYY-MM-DD")
                                 let isToday = today === date.dateString
                                 let task = !!this.state?.rosterEvents
                                     ? this.state?.rosterEvents?.filter((event) => {
@@ -358,13 +368,20 @@ class CalendarScreen extends React.Component {
                                         }}
                                     >
                                         <View style={{flex: 1}}>
-                                            <View style={{flex: 1, justifyContent: 'center'}}>
-                                                <Text style={{
-                                                    textAlign: 'center',
-                                                    color: isToday ? '#00adf5' : state === 'disabled' ? 'rgba(128, 128, 128, 0.5)' : 'black',
+                                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                                <View style={{
+                                                    backgroundColor: isToday ? '#00adf5' : undefined, width: 24,
+                                                    borderRadius: 24,
+                                                    height: 24, justifyContent: 'center', alignItems: 'center'
                                                 }}>
-                                                    {date.day}
-                                                </Text>
+                                                    <Text style={{
+                                                        textAlign: 'center',
+                                                        color: isToday ? '#fff' : state === 'disabled' ? 'rgba(128, 128, 128, 0.5)' : 'black',
+
+                                                    }}>
+                                                        {date.day}
+                                                    </Text>
+                                                </View>
                                             </View>
                                             <View style={{flex: 2}}>
                                                 <ScrollView style={{flex: 1}}>
@@ -385,8 +402,8 @@ class CalendarScreen extends React.Component {
                                                                 }}
                                                                 style={{borderWidth: 1, borderColor: (!event?.eventColor || event?.eventColor === '#fff') ? mainThemeColor : event?.eventColor, backgroundColor: event?.eventColor ?? undefined, margin: 5, marginTop: 0, borderRadius: 5}}>
                                                                 <Text style={{
+                                                                    color: '#454545',
                                                                     textAlign: 'center',
-                                                                    color: state === 'disabled' ? 'gray' : 'black',
                                                                 }}
                                                                     numberOfLines={1}
                                                                 >
@@ -400,8 +417,8 @@ class CalendarScreen extends React.Component {
                                                                 }}
                                                                 style={{borderWidth: 1, borderColor: (!event?.eventColor || event?.eventColor === '#fff') ? mainThemeColor : event?.eventColor, backgroundColor: event?.eventColor ?? undefined, marginBottom: 5, borderRadius: 5}}>
                                                                 <Text style={{
+                                                                    color: '#454545',
                                                                     textAlign: 'center',
-                                                                    color: state === 'disabled' ? 'gray' : 'black',
                                                                 }}
                                                                     numberOfLines={1}
                                                                 >
@@ -423,11 +440,11 @@ class CalendarScreen extends React.Component {
 
                     {this.state.isLoading || this.state.calendarMode === 'week' && <View style={[styles.flex(1),]}>
 
-                        <RenderAgenda events={this.state?.rosterEvents} selectedDate={this.state?.selectedDate} isManager={this.props?.currentUser?.roles?.includes('MANAGER')} users={this.state?.users} refreshScreen={() => this.refreshScreen()} />
+                        <RenderAgenda events={this.state?.rosterEvents} selectedDate={this.state?.selectedDate} isManager={this.props?.currentUser?.roles?.includes('MANAGER')} users={this.state?.users} refreshScreen={() => this.refreshScreen()} toggleRosterFormModal={(task) => this.toggleRosterFormModal(task, true)} changeSelectedDate={(date) => this.setState({selectedDate: date})} />
                     </View>}
                     {this.state.isLoading || this.state.calendarMode === 'day' && <View style={[styles.flex(1),]}>
 
-                        <DayCalendar events={this.state?.groupedResults} selectedDate={this.state?.selectedDate} isManager={this.props?.currentUser?.roles?.includes('MANAGER')} users={this.state?.users} refreshScreen={() => this.refreshScreen()} />
+                        <DayCalendar events={this.state?.groupedResults} selectedDate={this.state?.selectedDate} isManager={this.props?.currentUser?.roles?.includes('MANAGER')} users={this.state?.users} refreshScreen={() => this.refreshScreen()} changeSelectedDate={(date) => this.setState({selectedDate: date})} />
                     </View>}
                 </View>
             </ThemeContainer>

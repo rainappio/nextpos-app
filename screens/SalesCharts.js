@@ -287,7 +287,7 @@ class SalesCharts extends React.Component {
                 onSubmit={this.handleFilterSalesChart}
                 initialValues={{
                   dateRange: this.state.selectedRangeTypeIndex,
-                  fromDate: new Date(getrangedSalesReport.dateRange.zonedFromDate),
+                  fromDate: new Date(getrangedSalesReport.dateRange.zonedFromDate ?? new Date()),
                   toDate: new Date(getrangedSalesReport.dateRange.zonedToDate)
                 }} />
             </View>
