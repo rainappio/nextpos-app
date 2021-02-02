@@ -15,7 +15,7 @@ class ProductEdit extends Component {
     this.props.getLables()
     this.props.load()
     this.props.getProductOptions()
-    this.props.getWorkingAreas()
+    this.props.getWorkingAreas('PRODUCT')
     this.props.getProduct()
   }
 
@@ -100,7 +100,7 @@ class ProductEdit extends Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveData) {
       return (
@@ -146,7 +146,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   clearProduct: () =>
     dispatch(clearProduct(props.navigation.state.params.productId)),
   getProducts: () => dispatch(getProducts()),
-  getWorkingAreas: () => dispatch(getWorkingAreas()),
+  getWorkingAreas: () => dispatch(getWorkingAreas('PRODUCT')),
   getProductOptions: () => {
     const labelId = props.navigation.state.params.labelId
 

@@ -73,7 +73,7 @@ class MemberScreen extends React.Component {
 
     getMembers = async () => {
         //if need loading pending
-        //this.setState({isLoading: true})
+
 
         await dispatchFetchRequest(api.membership.getMembers, {
             method: 'GET',

@@ -32,22 +32,22 @@ class AccountCloseConfirm extends React.Component {
     }, response => {
       successMessage(this.context.t('shift.shiftClosed'))
       this.props.getMostRecentShiftStatus()
-      this.props.navigation.navigate('CloseComplete')
+      this.props.navigation.navigate('CloseComplete', {mostRecentShift: this.props?.mostRecentShift})
     }).then()
   }
 
   handleAbortCloseShift = () => {
     dispatchFetchRequestWithOption(api.shift.abort, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: ''
-      }, {
-        defaultMessage: false
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
       },
+      body: ''
+    }, {
+      defaultMessage: false
+    },
       response => {
         successMessage(this.context.t('shift.shiftAborted'))
         this.props.navigation.navigate('ShiftClose')
@@ -60,7 +60,7 @@ class AccountCloseConfirm extends React.Component {
 
     if (loading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     }
 

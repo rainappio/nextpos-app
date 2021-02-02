@@ -6,6 +6,7 @@ import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import {ThemeContainer} from "../components/ThemeContainer";
+import {handleSendEmail} from "../helpers/shiftActions";
 
 class CloseComplete extends React.Component {
   static navigationOptions = {
@@ -33,7 +34,7 @@ class CloseComplete extends React.Component {
       <ThemeContainer>
         <View style={styles.container}>
           <ScreenHeader backNavigation={false}
-                        title={t('closeCompletedTitle')}/>
+            title={t('closeCompletedTitle')} />
 
           <View
             style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
@@ -45,6 +46,11 @@ class CloseComplete extends React.Component {
           </View>
 
           <View>
+            <TouchableOpacity
+              onPress={() => handleSendEmail(this.props.navigation.state.params?.mostRecentShift?.id)}
+            >
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('shift.sendEmail')}</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('LoginSuccess')}
             >

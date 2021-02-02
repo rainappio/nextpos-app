@@ -26,6 +26,7 @@ class WorkingAreaEdit extends React.Component {
   }
 
   handleUpdate = values => {
+    console.log('values', values)
     dispatchFetchRequest(api.workingarea.update(values.id), {
       method: 'POST',
       withCredentials: true,
@@ -68,6 +69,7 @@ class WorkingAreaEdit extends React.Component {
 
   render() {
     const {navigation, workingarea, loading, haveError, haveData} = this.props
+    console.log('workingarea', JSON.stringify(workingarea))
     const {t} = this.context
 
     if (loading) {

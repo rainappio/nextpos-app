@@ -8,6 +8,7 @@ import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {StyledText} from "../components/StyledText";
 import DeleteBtn from '../components/DeleteBtn'
+import DropDown from '../components/DropDown'
 
 class WorkingAreaForm extends React.Component {
   static navigationOptions = {
@@ -24,14 +25,22 @@ class WorkingAreaForm extends React.Component {
         addWorkingAreaTitle: 'Add Working Area',
         workingAreaName: 'Name',
         noOfPrintCopies: 'No. of Print Copies',
-        linkedPrinters: 'Linked Printer(s)'
+        linkedPrinters: 'Linked Printer(s)',
+        visibilityOption: 'Visibility',
+        showAll: 'Show All',
+        showInRoster: 'Show in Roster Screen',
+        showInProduct: 'Show in Product Screen',
       },
       zh: {
         editWorkingAreaTitle: '編輯工作區',
         addWorkingAreaTitle: '新增工作區',
         workingAreaName: '名稱',
         noOfPrintCopies: '預設出單張數',
-        linkedPrinters: '連結出單機設定'
+        linkedPrinters: '連結出單機設定',
+        visibilityOption: '顯示範圍設定',
+        showAll: '全部顯示',
+        showInRoster: '顯示於排班',
+        showInProduct: '顯示於產品管理',
       }
     })
   }
@@ -75,6 +84,22 @@ class WorkingAreaForm extends React.Component {
                     ? String(value)
                     : ''
                 }}
+              />
+            </View>
+          </View>
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, styles.flex(1)]}>
+              <StyledText style={styles.fieldTitle}>{t('visibilityOption')}</StyledText>
+            </View>
+            <View style={[styles.tableCellView, styles.justifyRight]}>
+              <Field
+                name="visibility"
+                component={DropDown}
+                options={[{value: 'ALL', label: t('showAll')}, {value: 'ROSTER', label: t('showInRoster')}, {value: 'PRODUCT', label: t('showInProduct')}]}
+                search
+                selection
+                fluid
+                defaultValue={isEdit ? null : {value: 'ALL', label: t('showAll')}}
               />
             </View>
           </View>

@@ -121,7 +121,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getWorkingAreas: () => dispatch(getWorkingAreas()),
+  getWorkingAreas: () => dispatch(getWorkingAreas('PRODUCT')),
   getProductOptions: () => dispatch(getProductOptions()),
   clearLabel: () => dispatch(clearLabel()),
   getLabel: () => dispatch(getLabel(props.navigation.state.params.labelId)),

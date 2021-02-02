@@ -8,6 +8,7 @@ import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import Modal from 'react-native-modal';
 import {Ionicons} from '@expo/vector-icons';
+import {handleSendEmail} from "../helpers/shiftActions";
 
 class ShiftDetails extends React.Component {
   static navigationOptions = {
@@ -383,7 +384,14 @@ class ShiftDetails extends React.Component {
               }}>
               <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('searchShiftOrders')}</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                handleSendEmail(shift.id)
+              }}>
+              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('shift.sendEmail')}</Text>
+            </TouchableOpacity>
           </View>
+
 
 
         </View>

@@ -190,7 +190,7 @@ class CreateAccFormScreen extends React.Component {
               <StyledText style={styles.text}>
                 {t('privacyAgreement')}
               </StyledText>
-              <TouchableOpacity onPress={() => this.viewPrivacyPolicy('http://rain-app.io')}>
+              <TouchableOpacity onPress={() => this.viewPrivacyPolicy('https://www.rain-app.io/privacy')}>
                 <StyledText style={styles.subText}>
                   {t('viewPrivacy')}
                 </StyledText>

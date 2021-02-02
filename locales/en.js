@@ -250,7 +250,9 @@ const en = {
     // messages
     shiftOpened: 'Shift opened',
     shiftAborted: 'Closing shift aborted',
-    shiftClosed: 'Shift closed'
+    shiftClosed: 'Shift closed',
+    sendEmail: 'Send Shift Report Email',
+    sendEmailDone: 'Email has been sent'
   },
   preferences: {
     darkMode: 'Dark Mode'
@@ -325,6 +327,7 @@ const en = {
       emptyTables: 'Please select tables',
       orderFinalized: 'This order has been settled, return to table screen.',
       passwordUsed: 'Password is used',
+      cannotDelete: 'Order set has been merged. Please settle the order.',
     }
   },
   eInvoice: {
@@ -354,6 +357,7 @@ const en = {
     endTime: 'End Time',
     createEvent: 'Create Event',
     deleteEvent: 'Delete Event',
+    resources: 'Resources'
   },
   bar: 'Bar {{someValue}}',
   printerSuccess: 'Print Success',

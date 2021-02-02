@@ -23,6 +23,19 @@ class AccountScreen extends React.Component {
   constructor(props, context) {
     super(props, context)
 
+    context.localize({
+      en: {
+        username: 'User Name',
+        nickname: 'Nick Name',
+        updateDate: 'Last updated'
+      },
+      zh: {
+        username: '使用者名稱',
+        nickname: '暱稱',
+        updateDate: '最後更新'
+      }
+    })
+
     this.state = {
       objects: []
     }
@@ -51,18 +64,7 @@ class AccountScreen extends React.Component {
       objects: objects
     })
 
-    await this.context.localize({
-      en: {
-        username: 'User Name',
-        nickname: 'Nick Name',
-        updateDate: 'Last updated'
-      },
-      zh: {
-        username: '使用者名稱',
-        nickname: '暱稱',
-        updateDate: '最後更新'
-      }
-    })
+
   }
 
   render() {
@@ -135,7 +137,7 @@ class AccountScreen extends React.Component {
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <StyledText>
-                2021-01-19
+                2021-02-02
               </StyledText>
             </View>
           </View>

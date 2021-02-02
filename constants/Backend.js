@@ -311,7 +311,10 @@ export const api = {
     },
     initiate: `${apiRoot}/shifts/initiateClose`,
     confirm: `${apiRoot}/shifts/confirmClose`,
-    abort: `${apiRoot}/shifts/abortClose`
+    abort: `${apiRoot}/shifts/abortClose`,
+    sendEmail: shiftId => {
+      return `${apiRoot}/shifts/${shiftId}/email`
+    },
   },
   tablelayout: {
     create: `${apiRoot}/tablelayouts`,
@@ -457,6 +460,19 @@ export const api = {
       return `${apiRoot}/admin/subscriptionPlans?country=${country}`
     },
     selectPlan: `${apiRoot}/clientSubscriptions`,
+  },
+  rosterEvent: {
+    createEvents: `${apiRoot}/rosterEvents`,
+    getEvents: `${apiRoot}/rosterEvents/me`,
+    getEventsById: (id) => {
+      return `${apiRoot}/rosterEvents/${id}`
+    },
+    getEventsByDate: (year, month) => {
+      return `${apiRoot}/rosterEvents?year=${year}&month=${month}`
+    },
+    updateEventResources: (id) => {
+      return `${apiRoot}/rosterEvents/${id}/resources`
+    },
   },
   roster: {
     getAllPlans: `${apiRoot}/rosterPlans`,
