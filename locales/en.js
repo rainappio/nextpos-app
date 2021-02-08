@@ -468,7 +468,8 @@ const en = {
     enterNewPassword: 'Enter New Password',
     newPassword: 'New Password',
     incorrectPassword: 'Incorrect password',
-    passwordUpdated: 'Password is updated'
+    passwordUpdated: 'Password is updated',
+    changePasswordAlert: 'Change password will reset your gesture password. Proceed?'
   }
 }
 

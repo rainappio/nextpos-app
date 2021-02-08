@@ -4,7 +4,7 @@ import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {getClientUsr} from '../actions'
 import {connect} from 'react-redux'
-import EditPasswordPopUp from '../components/EditPasswordPopUp'
+import {EditPasswordPopUp, EditGesturePasswordPopUp} from '../components/EditPasswordPopUp'
 import {reduxForm} from 'redux-form'
 import {getToken} from '../constants/Backend'
 import Constants from "expo-constants/src/Constants";
@@ -27,17 +27,20 @@ class AccountScreen extends React.Component {
       en: {
         username: 'User Name',
         nickname: 'Nick Name',
-        updateDate: 'Last updated'
+        updateDate: 'Last updated',
+        gesturePassword: 'Gesture Password'
       },
       zh: {
         username: '使用者名稱',
         nickname: '暱稱',
-        updateDate: '最後更新'
+        updateDate: '最後更新',
+        gesturePassword: '圖形密碼'
       }
     })
 
     this.state = {
-      objects: []
+      objects: [],
+      updateGestureFlag: false
     }
   }
 
@@ -116,9 +119,18 @@ class AccountScreen extends React.Component {
               <StyledText style={styles.fieldTitle}>{t('password')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-              <EditPasswordPopUp defaultUser={currentUser.defaultUser} name={currentUser.username} ownAccount={true} />
+              <EditPasswordPopUp defaultUser={currentUser.defaultUser} name={currentUser.username} ownAccount={true} updateCallback={() => this.setState({updateGestureFlag: !this.state?.updateGestureFlag})} />
             </View>
           </View>
+
+          {!!currentUser.defaultUser && <View style={[styles.tableRowContainerWithBorder]}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText style={styles.fieldTitle}>{t('gesturePassword')}</StyledText>
+            </View>
+            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+              <EditGesturePasswordPopUp defaultUser={currentUser.defaultUser} name={currentUser.username} ownAccount={true} updateGestureFlag={this.state?.updateGestureFlag} />
+            </View>
+          </View>}
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>

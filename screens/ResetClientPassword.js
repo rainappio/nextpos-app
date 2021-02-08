@@ -1,7 +1,7 @@
 import React from "react";
 import {LocaleContext} from "../locales/LocaleContext";
 import ResetClientPasswordScreen from "./ResetClientPasswordScreen";
-import {api, warningMessage} from "../constants/Backend";
+import {api, warningMessage, successMessage} from "../constants/Backend";
 
 class ResetClientPassword extends React.Component {
   static navigationOptions = {
@@ -20,7 +20,9 @@ class ResetClientPassword extends React.Component {
         resetPassword: 'Enter a new password',
         clientAccountNotFound: 'Client email is not registered',
         passcodeVerificationFailed: 'Passcode verification failed',
-        resetPasswordFailed: 'Reset password failed'
+        resetPasswordFailed: 'Reset password failed',
+        sendPasscodeAgain: 'Send Passcode Again',
+        changePassword: 'Change Password'
       },
       zh: {
         resetPasswordTitle: '重置密碼',
@@ -29,7 +31,9 @@ class ResetClientPassword extends React.Component {
         resetPassword: '輸入新的密碼',
         clientAccountNotFound: '帳號電子郵件尚未註冊',
         passcodeVerificationFailed: '待碼驗證失敗',
-        resetPasswordFailed: '重置密碼失敗'
+        resetPasswordFailed: '重置密碼失敗',
+        sendPasscodeAgain: '重寄驗證碼',
+        changePassword: '更改密碼'
       }
     })
 
@@ -104,6 +108,7 @@ class ResetClientPassword extends React.Component {
         if (!response.ok) {
           warningMessage(this.context.t('resetPasswordFailed'))
         } else {
+          successMessage(this.context.t('editPasswordPopUp.passwordUpdated'))
           this.props.navigation.navigate('Login', {
             removeLoginAs: true
           })

@@ -52,7 +52,7 @@ export const OptionModal = (props) => {
                     margin: 0, flex: 1, justifyContent: 'flex-start'
                 }}
             >
-                {localeContext?.isTablet ? <View style={[{marginTop: 100, marginRight: 15, alignSelf: 'flex-end'}]}>
+                {(localeContext?.isTablet || !!props?.tabletView) ? <View style={[{marginTop: 100, marginRight: 15, alignSelf: 'flex-end'}]}>
 
                     <View style={[localeContext?.themeStyle, {flexDirection: 'column', borderRadius: 10, padding: 20}]}>
                         {props?.children}

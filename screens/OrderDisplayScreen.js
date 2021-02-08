@@ -13,6 +13,10 @@ import {LocaleContext} from "../locales/LocaleContext";
 import {playSound} from "../helpers/playSoundHelper";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import {normalizeTimeString} from '../actions'
+import {OptionModal} from "../components/OptionModal";
+import {CheckBox} from 'react-native-elements'
+import Icon from 'react-native-vector-icons/Ionicons'
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 
 class OrderDisplayScreen extends React.Component {
   static navigationOptions = {
@@ -28,7 +32,10 @@ class OrderDisplayScreen extends React.Component {
       socketConnected: false,
       receiving: false,
       orders: [],
-      firstTimeConnect: true
+      firstTimeConnect: true,
+      isShowModal: false,
+      labels: [],
+      selectedLabels: new Set(),
     }
   }
 
@@ -38,15 +45,38 @@ class OrderDisplayScreen extends React.Component {
         receivingText: 'Receiving',
         totalOrders: 'Total Pending Orders',
         tablesName: 'Table Name',
-        noWorkingArea: 'No Working Area'
+        noWorkingArea: 'No Working Area',
+        allSelected: 'All',
+        selectWorkingArea: 'Working area to show'
       },
       zh: {
         receivingText: '接收訂單中',
         totalOrders: '等待處理訂單',
         tablesName: '桌位',
-        noWorkingArea: '無指定工作區'
+        noWorkingArea: '無指定工作區',
+        allSelected: '全選',
+        selectWorkingArea: '顯示工作區'
       }
     })
+    this.getLabels()
+  }
+
+  getLabels = () => {
+    dispatchFetchRequest(`${api.workingarea.getAll}?visibility=ROSTER`, {
+      method: 'GET',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }, response => {
+      response.json().then(data => {
+        let labelsArr = data?.workingAreas?.map((item) => item?.name)
+        labelsArr.push('noWorkingArea')
+        this.setState({labels: data?.workingAreas?.map((item) => item?.name), selectedLabels: new Set([...labelsArr])})
+
+      })
+    }).then()
   }
 
   prepareLineItem = (orderId, lineItemId) => {
@@ -92,6 +122,7 @@ class OrderDisplayScreen extends React.Component {
     const t = locale.t
 
     const webSocketHost = `${apiRoot}/ws`
+    console.log('labels', this.state?.labels, this.state?.selectedLabels)
 
     return (
       <ThemeScrollView>
@@ -119,126 +150,179 @@ class OrderDisplayScreen extends React.Component {
         <View style={styles.fullWidthScreen}>
           <ScreenHeader parentFullScreen={true}
             title={t('menu.orderDisplay')}
+            rightComponent={
+              <View style={{flexDirection: 'row'}}>
+                <View style={{marginRight: 8}}>
+                  <OptionModal
+                    tabletView
+                    icon={<MaterialCommunityIcons name="filter-variant" size={32} color={mainThemeColor} />}
+                    toggleModal={(flag) => this.setState({isShowModal: flag})}
+                    isShowModal={this.state?.isShowModal}>
+                    <View >
+                      <View style={{
+                        flexDirection: 'row',
+                        paddingVertical: 8,
+                        alignItems: 'center'
+                      }}>
+                        <Text style={{marginLeft: 10, color: mainThemeColor, fontSize: 16, fontWeight: 'bold'}}>{t('selectWorkingArea')}</Text>
+                      </View>
+                      <View style={{
+                        flexDirection: 'row',
+                        paddingVertical: 8,
+                        alignItems: 'center'
+                      }}>
+                        <View>
+                          <CheckBox
+                            checkedIcon={'check-circle'}
+                            uncheckedIcon={'circle'}
+                            checked={this.state?.selectedLabels?.size === this.state?.labels?.length + 1}
+                            containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                            onPress={() => {
+                              let tempSet = new Set()
+                              if (this.state?.selectedLabels?.size === this.state?.labels?.length + 1) {
+                                tempSet = new Set()
+                              } else {
+                                let labelsArr = [...this.state?.labels]
+                                labelsArr.push('noWorkingArea')
+                                tempSet = new Set([...labelsArr])
+                              }
+                              this.setState({selectedLabels: tempSet})
+                            }}
+                          >
+                          </CheckBox>
+                        </View>
+                        <StyledText>{t('allSelected')}</StyledText>
+                      </View>
+                      {this.state?.labels?.map((workingArea) => {
+                        return (
+                          <View style={{
+                            flexDirection: 'row',
+                            paddingVertical: 8,
+                            alignItems: 'center'
+                          }}>
+                            <View>
+                              <CheckBox
+                                checkedIcon={'check-circle'}
+                                uncheckedIcon={'circle'}
+                                checked={this.state?.selectedLabels?.has(workingArea)}
+                                containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                                onPress={() => {
+                                  let tempSet = new Set(this.state?.selectedLabels)
+                                  if (this.state?.selectedLabels?.has(workingArea)) {
+                                    tempSet.delete(workingArea)
+                                  } else {
+                                    tempSet.add(workingArea)
+                                  }
+                                  this.setState({selectedLabels: tempSet})
+                                }}
+                              >
+                              </CheckBox>
+                            </View>
+                            <StyledText>{workingArea}</StyledText>
+                          </View>
+                        )
+                      })}
+                      <View style={{
+                        flexDirection: 'row',
+                        paddingVertical: 8,
+                        alignItems: 'center'
+                      }}>
+                        <View>
+                          <CheckBox
+                            checkedIcon={'check-circle'}
+                            uncheckedIcon={'circle'}
+                            checked={this.state?.selectedLabels?.has('noWorkingArea')}
+                            containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                            onPress={() => {
+                              let tempSet = new Set(this.state?.selectedLabels)
+                              if (this.state?.selectedLabels?.has('noWorkingArea')) {
+                                tempSet.delete('noWorkingArea')
+                              } else {
+                                tempSet.add('noWorkingArea')
+                              }
+                              this.setState({selectedLabels: tempSet})
+                            }}
+                          >
+                          </CheckBox>
+                        </View>
+                        <StyledText>{t('noWorkingArea')}</StyledText>
+                      </View>
+                    </View>
+                  </OptionModal>
+                </View>
+              </View>
+            }
           />
 
           <View style={styles.sectionTitleContainer}>
-            <StyledText style={styles.sectionTitleText}>{t('totalOrders')}: {Object.keys(this.state.orders).reduce((accumulator, currentValue, currentIndex, array) => {return (accumulator + this.state.orders[`${currentValue}`]?.length)}, 0)}</StyledText>
+            <StyledText style={styles.sectionTitleText}>{t('totalOrders')}: {Object.keys(this.state.orders).reduce((accumulator, currentValue, currentIndex, array) => {return (accumulator + (this.state?.selectedLabels.has(currentValue) ? this.state.orders[`${currentValue}`]?.length : 0))}, 0)}</StyledText>
           </View>
 
           <View style={{paddingHorizontal: 30}}>
             {Object.keys(this.state.orders)?.map((workingArea) => {
-              return (
-                <>
-                  <View style={{borderBottomWidth: 1, borderColor: mainThemeColor, paddingBottom: 10}}>
-                    <Text style={styles.sectionBarText}>{workingArea === 'noWorkingArea' ? t('noWorkingArea') : workingArea}</Text>
-                  </View>
-                  <DraggableFlatList
-                    data={this.state.orders[`${workingArea}`]}
-                    renderItem={({item, index, drag, isActive}) => {
-
-
-                      return (
-                        <TouchableOpacity style={[styles.sectionContainerWithBorder, {paddingHorizontal: 10}]}
-                          onLongPress={drag}
-                        >
-                          <View style={[styles.tableCellView, {paddingBottom: 8}]}>
-                            <View style={{flex: 1, flexDirection: 'row', }}>
-                              <StyledText>{item?.serialId} </StyledText>
-                              <StyledText>({item?.tables?.length > 0 ? item?.tables?.map((table) => table?.displayName).join(', ') : t('order.takeOut')})</StyledText>
-                            </View>
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
-                              <View style={{width: 16, height: 16, borderRadius: 16, marginRight: 8, backgroundColor: (new Date() - new Date(item?.modifiedDate ?? new Date())) > 1800000 ? 'red' : '#86bf20'}}></View>
-                              <StyledText>{normalizeTimeString(item?.modifiedDate ?? new Date(), 'HH:mm:ss')}</StyledText>
-                            </View>
-                          </View>
-                          <View style={styles.tableCellView}>
-                            <View style={[styles.tableCellView, styles.flex(2)]}>
-                              <StyledText>{item.displayName}</StyledText>
-                            </View>
-                            <View style={[styles.tableCellView, styles.flex(1)]}>
-                              <StyledText>{item.quantity}</StyledText>
-                            </View>
-                            <View style={[styles.tableCellView, styles.flex(3)]}>
-                              <StyledText>{item.options}</StyledText>
-                            </View>
-                            <TouchableOpacity
-                              onPress={() => {
-                                this.prepareLineItem(item.orderId, item.lineItemId)
-                              }}
-                            >
-                              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.prepare')}</Text>
-                            </TouchableOpacity>
-                          </View>
-                        </TouchableOpacity>
-                      )
-                    }}
-                    keyExtractor={(item, index) => `draggable-item-${item.lineItemId}`}
-                    onDragEnd={({data}) => {
-                      let oldOrders = {...this.state?.orders}
-                      oldOrders[`${workingArea}`] = [...data]
-                      this.setState({orders: oldOrders})
-                      this.handleLineItemOrdering(data)
-
-                    }}
-                  />
-                </>
-              )
-            })}
-            {/* <FlatList
-              data={this.state.orders}
-              renderItem={({item}) => {
-
-                const hasItemsToPrepare = item.orderLineItems.filter(li => {
-                  return ['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(li.state)
-                }).length
-
-                if (!hasItemsToPrepare) {
-                  return null
-                }
-
+              if (this.state?.selectedLabels.has(workingArea)) {
                 return (
-                  <View key={item.id} style={styles.sectionContainerWithBorder}>
-                    <View style={styles.tableCellView}>
-                      <StyledText>{item.serialId}</StyledText>
+                  <>
+                    <View style={{borderBottomWidth: 1, borderColor: mainThemeColor, paddingBottom: 10}}>
+                      <Text style={styles.sectionBarText}>{workingArea === 'noWorkingArea' ? t('noWorkingArea') : workingArea}</Text>
                     </View>
-                    <View style={styles.tableCellView}>
-                      <StyledText>{item.orderType === 'IN_STORE' ? item.tableDisplayName : t('order.takeOut')}</StyledText>
-                    </View>
-                    {item.orderLineItems.map(li => {
-                      if (['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(li.state)) {
+                    <DraggableFlatList
+                      data={this.state.orders[`${workingArea}`]}
+                      renderItem={({item, index, drag, isActive}) => {
+
+
                         return (
-                          <View key={li.id} style={styles.tableRowContainer}>
-                            <View style={[styles.tableCellView, styles.flex(1)]}>
-                              <StyledText>{li.productSnapshot.name}</StyledText>
+                          <TouchableOpacity style={[styles.sectionContainerWithBorder, {paddingHorizontal: 10}]}
+                            onLongPress={drag}
+                          >
+                            <View style={[styles.tableCellView, {paddingBottom: 8}]}>
+                              <View style={{flex: 1, flexDirection: 'row', }}>
+                                <StyledText>{item?.serialId} </StyledText>
+                                <StyledText>({item?.tables?.length > 0 ? item?.tables?.map((table) => table?.displayName).join(', ') : t('order.takeOut')})</StyledText>
+                              </View>
+                              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
+                                <View style={{width: 16, height: 16, borderRadius: 16, marginRight: 8, backgroundColor: (new Date() - new Date(item?.modifiedDate ?? new Date())) > 1800000 ? 'red' : '#86bf20'}}></View>
+                                <StyledText>{normalizeTimeString(item?.modifiedDate ?? new Date(), 'HH:mm:ss')}</StyledText>
+                              </View>
                             </View>
-                            <View style={[styles.tableCellView, styles.flex(1)]}>
-                              <StyledText>{li.quantity}</StyledText>
+                            <View style={styles.tableCellView}>
+                              <View style={[styles.tableCellView, styles.flex(2)]}>
+                                <StyledText>{item.displayName}</StyledText>
+                              </View>
+                              <View style={[styles.tableCellView, styles.flex(1)]}>
+                                <StyledText>{item.quantity}</StyledText>
+                              </View>
+                              <View style={[styles.tableCellView, styles.flex(3)]}>
+                                <StyledText>{item.options}</StyledText>
+                              </View>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  this.prepareLineItem(item.orderId, item.lineItemId)
+                                }}
+                              >
+                                <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.prepare')}</Text>
+                              </TouchableOpacity>
                             </View>
-                            <View style={[styles.tableCellView, styles.flex(1)]}>
-                              <StyledText>{li.productOptions}</StyledText>
-                            </View>
-                            <TouchableOpacity
-                              onPress={() => {
-                                this.prepareLineItem(item.id, li.id)
-                              }}
-                            >
-                              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.prepare')}</Text>
-                            </TouchableOpacity>
-                          </View>
+                          </TouchableOpacity>
                         )
-                      } else {
-                        return null
-                      }
-                    })}
-                  </View>
+                      }}
+                      keyExtractor={(item, index) => `draggable-item-${item.lineItemId}`}
+                      onDragEnd={({data}) => {
+                        let oldOrders = {...this.state?.orders}
+                        oldOrders[`${workingArea}`] = [...data]
+                        this.setState({orders: oldOrders})
+                        this.handleLineItemOrdering(data)
+
+                      }}
+                    />
+                  </>
                 )
-              }}
-              ListEmptyComponent={
-                <View>
-                  <StyledText style={styles.messageBlock}>{t('general.noData')}</StyledText>
-                </View>
+              } else {
+                return null
               }
-            /> */}
+
+            })}
+
           </View>
 
         </View>

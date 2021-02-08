@@ -6,7 +6,7 @@ import {isRequired, isNDigitsNumber} from '../validators'
 import InputText from '../components/InputText'
 import PinCodeInput from '../components/PinCodeInput'
 import {getClientUsrs, resolveRoles} from '../actions'
-import EditPasswordPopUp from '../components/EditPasswordPopUp'
+import {EditPasswordPopUp} from '../components/EditPasswordPopUp'
 import DeleteBtn from '../components/DeleteBtn'
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -65,7 +65,7 @@ class StaffFormScreen extends React.Component {
       },
       zh: {
         staffTitle: '員工',
-        nickName: '匿稱',
+        nickName: '暱稱',
         username: '使用者名稱',
         password: '密碼',
         role: '權限',
@@ -132,19 +132,7 @@ class StaffFormScreen extends React.Component {
             <ScreenHeader title={t('staffTitle')}
               parentFullScreen={true} />
 
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, styles.flex(1)]}>
-                <StyledText style={styles.fieldTitle}>{t('nickName')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, styles.justifyRight]}>
-                <Field
-                  name="nickname"
-                  component={InputText}
-                  placeholder={t('nickName')}
-                  secureTextEntry={false}
-                />
-              </View>
-            </View>
+
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, styles.flex(1)]}>
@@ -159,6 +147,20 @@ class StaffFormScreen extends React.Component {
                   secureTextEntry={false}
                   editable={!isEditForm}
                   autoCapitalize="none"
+                />
+              </View>
+            </View>
+
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, styles.flex(1)]}>
+                <StyledText style={styles.fieldTitle}>{t('nickName')}</StyledText>
+              </View>
+              <View style={[styles.tableCellView, styles.justifyRight]}>
+                <Field
+                  name="nickname"
+                  component={InputText}
+                  placeholder={t('nickName')}
+                  secureTextEntry={false}
                 />
               </View>
             </View>

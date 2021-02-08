@@ -67,7 +67,10 @@ const zh = {
     unpin: '移除置頂',
     pin: '加入置頂',
     activate: '啟用',
-    deactivate: '停用'
+    deactivate: '停用',
+    submit: '送出',
+    confirm: '確認',
+
   },
   // ==== domain specific ====
   keyboardAction: {
@@ -470,7 +473,8 @@ const zh = {
     enterNewPassword: '輸入新密碼',
     newPassword: '新密碼',
     incorrectPassword: '密碼輸入錯誤',
-    passwordUpdated: '密碼更新成功'
+    passwordUpdated: '密碼更新成功',
+    changePasswordAlert: '更改密碼將導致圖形密碼重置，是否繼續？'
   }
 }
 
