@@ -561,7 +561,6 @@ class RostersFormScreen extends React.Component {
                                                                 showDatepicker={() => this.showEndDatepicker()}
                                                                 defaultValue={this.state?.data?.repeatEndDate ?? new Date()}
                                                                 validate={(value, allValues, props, name) => {
-                                                                    console.log('val', JSON.stringify(allValues))
                                                                     if (!!allValues?.startTime && !!value && (new Date(allValues?.startTime).getMonth() !== new Date(value).getMonth())) {
                                                                         console.log('validate', value, allValues)
                                                                         this.props?.change(`repeatEndDate`, new Date(moment(allValues?.startTime).endOf('month').tz(timezone)))
@@ -580,7 +579,7 @@ class RostersFormScreen extends React.Component {
 
                                                         <TouchableOpacity
                                                             onPress={() => this.setState({eventColor: '#fff'})}
-                                                            style={[{backgroundColor: '#fff'}, this.state?.eventColor === '#fff' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                            style={[{backgroundColor: '#fff'}, this.state?.eventColor === '#fff' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30, borderColor: mainThemeColor, borderWidth: 1}]} ></TouchableOpacity>
                                                         <TouchableOpacity
                                                             onPress={() => this.setState({eventColor: '#3D8CE0'})}
                                                             style={[{backgroundColor: '#3D8CE0'}, this.state?.eventColor === '#3D8CE0' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
@@ -806,7 +805,7 @@ class RostersFormScreen extends React.Component {
                                                     {this.state?.isManager ? <Field
                                                         name={`startTime`}
                                                         component={RenderDateTimePicker}
-                                                        onChange={this.handlegetDate}
+                                                        onChange={this.handlegetFromDate}
                                                         placeholder={t('order.fromDate')}
                                                         isShow={this.state.showFromDate?.[index] ?? false}
                                                         showDatepicker={() => this.showFromDatepicker(index)}
@@ -834,7 +833,7 @@ class RostersFormScreen extends React.Component {
                                                         <StyledText>{moment(this.state?.data?.endTime ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
                                                 </View>
                                             </View>
-                                            {!!this.state?.data || <View style={styles.fieldContainer}>
+                                            {this.state?.isManager && <><View style={styles.fieldContainer}>
                                                 <View style={[styles.tableCellView, {flex: 1}]}>
                                                     <StyledText style={styles.fieldTitle}>{t('rostersForm.repeat')}</StyledText>
                                                 </View>
@@ -843,11 +842,35 @@ class RostersFormScreen extends React.Component {
                                                         name="repeatType"
                                                         component={SegmentedControl}
                                                         onChange={(val) => {this.setState({repeatType: val})}}
-                                                        values={[t('rostersForm.NONE'), t('rostersForm.WEEKLY')]}
+                                                        values={[t('rostersForm.NONE'), t('rostersForm.DAILY'), t('rostersForm.WEEKLY')]}
                                                         selectedIndex={this.state?.repeatType}
                                                     />
                                                 </View>
-                                            </View>}
+                                            </View>
+                                                {this.state?.repeatType !== 0 && <View style={styles.fieldContainer}>
+                                                    <View style={[styles.tableCellView, {flex: 1}]}>
+                                                        <StyledText style={styles.fieldTitle}>{t('rostersForm.repeatEndDate')}</StyledText>
+                                                    </View>
+                                                    <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+
+                                                        {this.state?.isManager ? <Field
+                                                            name={`repeatEndDate`}
+                                                            component={RenderDateTimePicker}
+                                                            onChange={this.handlegetDate}
+                                                            isShow={this.state?.showEndDate ?? false}
+                                                            showDatepicker={() => this.showEndDatepicker()}
+                                                            defaultValue={this.state?.data?.repeatEndDate ?? new Date()}
+                                                            validate={(value, allValues, props, name) => {
+                                                                if (!!allValues?.startTime && !!value && (new Date(allValues?.startTime).getMonth() !== new Date(value).getMonth())) {
+                                                                    console.log('validate', value, allValues)
+                                                                    this.props?.change(`repeatEndDate`, new Date(moment(allValues?.startTime).endOf('month').tz(timezone)))
+                                                                }
+                                                            }}
+                                                        /> :
+                                                            <StyledText>{moment(this.state?.data?.repeatEndDate ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
+                                                    </View>
+                                                </View>}
+                                            </>}
                                             <View style={styles.fieldContainer}>
                                                 <View style={[styles.tableCellView, {flex: 1}]}>
                                                     <StyledText style={styles.fieldTitle}>{t('rostersForm.eventColor')}</StyledText>
@@ -856,7 +879,7 @@ class RostersFormScreen extends React.Component {
 
                                                     <TouchableOpacity
                                                         onPress={() => this.setState({eventColor: '#fff'})}
-                                                        style={[{backgroundColor: '#fff'}, this.state?.eventColor === '#fff' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        style={[{backgroundColor: '#fff'}, this.state?.eventColor === '#fff' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30, borderColor: mainThemeColor, borderWidth: 1}]} ></TouchableOpacity>
                                                     <TouchableOpacity
                                                         onPress={() => this.setState({eventColor: '#3D8CE0'})}
                                                         style={[{backgroundColor: '#3D8CE0'}, this.state?.eventColor === '#3D8CE0' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
