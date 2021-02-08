@@ -1,7 +1,7 @@
 import {StyledText} from "../components/StyledText";
 import {FlatList, Text, TouchableOpacity, View} from "react-native";
 import React from "react";
-import styles from '../styles'
+import styles, {mainThemeColor} from '../styles'
 import ScreenHeader from "../components/ScreenHeader";
 import SockJsClient from 'react-stomp';
 import {connect} from "react-redux";
@@ -10,6 +10,9 @@ import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import {api, apiRoot, dispatchFetchRequest} from "../constants/Backend";
 import {LocaleContext} from "../locales/LocaleContext";
+import {playSound} from "../helpers/playSoundHelper";
+import DraggableFlatList from "react-native-draggable-flatlist";
+import {normalizeTimeString} from '../actions'
 
 class OrderDisplayScreen extends React.Component {
   static navigationOptions = {
@@ -24,7 +27,8 @@ class OrderDisplayScreen extends React.Component {
     this.state = {
       socketConnected: false,
       receiving: false,
-      orders: []
+      orders: [],
+      firstTimeConnect: true
     }
   }
 
@@ -32,11 +36,15 @@ class OrderDisplayScreen extends React.Component {
     this.context.localize({
       en: {
         receivingText: 'Receiving',
-        totalOrders: 'Total Pending Orders'
+        totalOrders: 'Total Pending Orders',
+        tablesName: 'Table Name',
+        noWorkingArea: 'No Working Area'
       },
       zh: {
         receivingText: '接收訂單中',
-        totalOrders: '等待處理訂單'
+        totalOrders: '等待處理訂單',
+        tablesName: '桌位',
+        noWorkingArea: '無指定工作區'
       }
     })
   }
@@ -56,6 +64,29 @@ class OrderDisplayScreen extends React.Component {
     }).then()
   }
 
+  handleLineItemOrdering = (data) => {
+    let request = {
+      lineItemOrderings: data.map((item) => {
+        return {
+          orderId: item?.orderId,
+          lineItemId: item?.lineItemId,
+        }
+      })
+    }
+
+    dispatchFetchRequest(api.order.lineItemOrdering, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(request)
+    }, response => {
+
+    }).then()
+  }
+
   render() {
     const {client, locale} = this.props
     const t = locale.t
@@ -66,12 +97,18 @@ class OrderDisplayScreen extends React.Component {
       <ThemeScrollView>
         <SockJsClient url={webSocketHost} topics={[`/dest/realtimeOrders/${client?.id}`]}
           onMessage={(data) => {
-            this.setState({receiving: true, orders: data})
+            if (data?.needAlert) {
+              playSound()
+            }
+            this.setState({receiving: true, orders: data?.results, needAlert: data?.needAlert, firstTimeConnect: false})
           }}
           ref={(client) => {
             this.clientRef = client
           }}
           onConnect={() => {
+            if (this.state?.firstTimeConnect) {
+              this.clientRef.sendMessage(`/async/realtimeOrders/${client?.id}`);
+            }
             this.setState({socketConnected: true})
           }}
           onDisconnect={() => {
@@ -85,12 +122,69 @@ class OrderDisplayScreen extends React.Component {
           />
 
           <View style={styles.sectionTitleContainer}>
-            <StyledText style={styles.sectionTitleText}>{t('receivingText')}: {this.state.receiving ? 'Yes' : 'No'}</StyledText>
-            <StyledText style={styles.sectionTitleText}>{t('totalOrders')}: {this.state.orders.length}</StyledText>
+            <StyledText style={styles.sectionTitleText}>{t('totalOrders')}: {Object.keys(this.state.orders).reduce((accumulator, currentValue, currentIndex, array) => {return (accumulator + this.state.orders[`${currentValue}`]?.length)}, 0)}</StyledText>
           </View>
 
-          <View>
-            <FlatList
+          <View style={{paddingHorizontal: 30}}>
+            {Object.keys(this.state.orders)?.map((workingArea) => {
+              return (
+                <>
+                  <View style={{borderBottomWidth: 1, borderColor: mainThemeColor, paddingBottom: 10}}>
+                    <Text style={styles.sectionBarText}>{workingArea === 'noWorkingArea' ? t('noWorkingArea') : workingArea}</Text>
+                  </View>
+                  <DraggableFlatList
+                    data={this.state.orders[`${workingArea}`]}
+                    renderItem={({item, index, drag, isActive}) => {
+
+
+                      return (
+                        <TouchableOpacity style={[styles.sectionContainerWithBorder, {paddingHorizontal: 10}]}
+                          onLongPress={drag}
+                        >
+                          <View style={[styles.tableCellView, {paddingBottom: 8}]}>
+                            <View style={{flex: 1, flexDirection: 'row', }}>
+                              <StyledText>{item?.serialId} </StyledText>
+                              <StyledText>({item?.tables?.length > 0 ? item?.tables?.map((table) => table?.displayName).join(', ') : t('order.takeOut')})</StyledText>
+                            </View>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
+                              <View style={{width: 16, height: 16, borderRadius: 16, marginRight: 8, backgroundColor: (new Date() - new Date(item?.modifiedDate ?? new Date())) > 1800000 ? 'red' : '#86bf20'}}></View>
+                              <StyledText>{normalizeTimeString(item?.modifiedDate ?? new Date(), 'HH:mm:ss')}</StyledText>
+                            </View>
+                          </View>
+                          <View style={styles.tableCellView}>
+                            <View style={[styles.tableCellView, styles.flex(2)]}>
+                              <StyledText>{item.displayName}</StyledText>
+                            </View>
+                            <View style={[styles.tableCellView, styles.flex(1)]}>
+                              <StyledText>{item.quantity}</StyledText>
+                            </View>
+                            <View style={[styles.tableCellView, styles.flex(3)]}>
+                              <StyledText>{item.options}</StyledText>
+                            </View>
+                            <TouchableOpacity
+                              onPress={() => {
+                                this.prepareLineItem(item.orderId, item.lineItemId)
+                              }}
+                            >
+                              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.prepare')}</Text>
+                            </TouchableOpacity>
+                          </View>
+                        </TouchableOpacity>
+                      )
+                    }}
+                    keyExtractor={(item, index) => `draggable-item-${item.lineItemId}`}
+                    onDragEnd={({data}) => {
+                      let oldOrders = {...this.state?.orders}
+                      oldOrders[`${workingArea}`] = [...data]
+                      this.setState({orders: oldOrders})
+                      this.handleLineItemOrdering(data)
+
+                    }}
+                  />
+                </>
+              )
+            })}
+            {/* <FlatList
               data={this.state.orders}
               renderItem={({item}) => {
 
@@ -144,17 +238,9 @@ class OrderDisplayScreen extends React.Component {
                   <StyledText style={styles.messageBlock}>{t('general.noData')}</StyledText>
                 </View>
               }
-            />
+            /> */}
           </View>
-          <View style={[styles.bottom, styles.horizontalMargin]}>
-            <TouchableOpacity
-              onPress={() => {
-                this.clientRef.sendMessage(`/async/realtimeOrders/${client?.id}`);
-              }}
-            >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('order.liveOrders')}</Text>
-            </TouchableOpacity>
-          </View>
+
         </View>
 
       </ThemeScrollView>

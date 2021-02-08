@@ -36,7 +36,7 @@ class StaffTimeCard extends React.Component {
         totalHr: "Total Hours"
       },
       zh: {
-        title: '職員打卡表',
+        title: '打卡記錄',
         yearLabel: '年',
         monthLabel: '月',
         firstColTitle: '員工',
@@ -60,15 +60,15 @@ class StaffTimeCard extends React.Component {
   }
 
   handleFilter = (values) => {
-  	const month = values.month;
-  	const year = values.year;
+    const month = values.month;
+    const year = values.year;
 
-  	if (!month || !year) {
+    if (!month || !year) {
       warningMessage('Please Choose Both Year and Month')
       return
     }
 
-  	this.setState({ selectedYear: year, selectedMonth: month })
+    this.setState({selectedYear: year, selectedMonth: month})
 
     this.props.getTimeCards(year, month)
   }
@@ -109,7 +109,7 @@ class StaffTimeCard extends React.Component {
 
     if (loading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveData) {
       return (
@@ -124,8 +124,8 @@ class StaffTimeCard extends React.Component {
           />
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
-                          parentFullScreen={true}
-                          title={t('title')}
+              parentFullScreen={true}
+              title={t('title')}
             />
 
             <StaffTimeCardFilterForm
@@ -153,7 +153,7 @@ class StaffTimeCard extends React.Component {
             <FlatList
               data={timecards}
               renderItem={({item, index}) => (
-                <Item timecard={item} layoutId={item.id} index={index}/>
+                <Item timecard={item} layoutId={item.id} index={index} />
               )}
               keyExtractor={item => item.id}
             />

@@ -257,6 +257,7 @@ export const api = {
     printOrderDetails: id => {
       return `${apiRoot}/orders/${id}/orderDetails`
     },
+    lineItemOrdering: `${apiRoot}/orders/lineItemOrdering`,
   },
   splitOrder: {
     new: `${apiRoot}/splitOrders`,

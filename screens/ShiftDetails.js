@@ -24,11 +24,13 @@ class ShiftDetails extends React.Component {
     context.localize({
       en: {
         shiftDetailsTitle: 'Shift Details',
-        searchShiftOrders: 'Search Shift Orders'
+        searchShiftOrders: 'Search Shift Orders',
+        deletedBy: 'Deleted By'
       },
       zh: {
         shiftDetailsTitle: '帳內容',
-        searchShiftOrders: '尋找帳訂單'
+        searchShiftOrders: '尋找帳訂單',
+        deletedBy: '操作者'
       }
     })
   }
@@ -91,7 +93,7 @@ class ShiftDetails extends React.Component {
                   <Text style={[styles.sectionBarTextSmall]}>{t('order.product')}</Text>
                 </View>
 
-                <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}
+                <View style={[{flex: 0.5}, styles.tableCellView, {justifyContent: 'flex-end'}]}
                 >
                   <Text style={styles.sectionBarTextSmall}>{t('order.quantity')}</Text>
                 </View>
@@ -103,15 +105,19 @@ class ShiftDetails extends React.Component {
                 <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
                   <Text style={styles.sectionBarTextSmall}>{t('order.date')}</Text>
                 </View>
+                <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                  <Text style={styles.sectionBarTextSmall}>{t('deletedBy')}</Text>
+                </View>
               </View>
               {shift?.deletedLineItems?.map((item) => {
                 return (
                   <View style={styles.tableRowContainerWithBorder}>
-                    <View style={[{flex: 1}, styles.tableCellView]}>
-                      <StyledText style={[styles.tableCellView]}>{item?.productName}</StyledText>
+                    <View style={[{flex: 1, flexWrap: 'wrap'}, styles.tableCellView]}>
+                      <StyledText style={[styles.tableCellView]}>{item?.productName} </StyledText>
+                      <StyledText style={[styles.tableCellView]}>{item?.total === 0 && `(${t('order.freeLineitem')})`}</StyledText>
                     </View>
 
-                    <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}
+                    <View style={[{flex: 0.5}, styles.tableCellView, {justifyContent: 'flex-end'}]}
                     >
                       <StyledText style={[styles.tableCellView]}>{item?.quantity}</StyledText>
                     </View>
@@ -122,6 +128,10 @@ class ShiftDetails extends React.Component {
 
                     <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
                       <StyledText style={[styles.tableCellView]}>{customFormatLocaleDate(item?.deletedDate)}</StyledText>
+                    </View>
+
+                    <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                      <StyledText style={[styles.tableCellView]}>{item?.deletedBy}</StyledText>
                     </View>
                   </View>
 

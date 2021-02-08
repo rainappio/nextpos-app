@@ -20,7 +20,6 @@ import {number} from 'prop-types'
 import DeleteBtn from '../components/DeleteBtn'
 import RenderDateTimePicker, {RenderTimePicker} from '../components/DateTimePicker'
 import TimeZoneService from "../helpers/TimeZoneService";
-import {normalizeTimeString} from '../actions'
 import {Accordion, List} from '@ant-design/react-native'
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {ListItem} from "react-native-elements";
@@ -56,6 +55,7 @@ class RostersFormScreen extends React.Component {
             showToDate: !!props.navigation?.state?.params?.data?.rosterEntries
                 ? new Array(entriesArr?.length).fill(false)
                 : [false],
+            showEndDate: false,
             rosterEntries: !!props.navigation?.state?.params?.data?.rosterEntries
                 ? entriesArr
                 : [{
@@ -91,7 +91,8 @@ class RostersFormScreen extends React.Component {
                 {label: context.t('dayPicker.Friday'), value: 'FRIDAY'},
                 {label: context.t('dayPicker.Saturday'), value: 'SATURDAY'},
             ],
-            repeatType: 0,
+            repeatType: props.navigation?.state?.params?.data?.eventRepeat === 'WEEKLY' ? 2
+                : props.navigation?.state?.params?.data?.eventRepeat === 'DAILY' ? 1 : 0,
             eventColor: props.navigation?.state?.params?.data?.eventColor ?? '#fff',
             activeSections: [],
             labels: [],
@@ -109,10 +110,12 @@ class RostersFormScreen extends React.Component {
                     repeat: 'Repeat',
                     NONE: 'None',
                     WEEKLY: 'Weekly',
+                    DAILY: 'Daily',
                     confirmEditAll: 'Apply changes to event series?',
                     confirmDeleteAll: 'Delete all events in the series?',
                     eventColor: 'Event Color',
                     workingAreaDistribute: 'Select Working Area',
+                    repeatEndDate: 'Repeat End Date'
                 },
             },
             zh: {
@@ -125,10 +128,12 @@ class RostersFormScreen extends React.Component {
                     repeat: '重複',
                     NONE: '不重複',
                     WEEKLY: '每週',
+                    DAILY: '每日',
                     confirmEditAll: '是否將此變更套用至同週期排班?',
                     confirmDeleteAll: '是否刪除同週期排班?',
                     eventColor: '排程顏色',
                     workingAreaDistribute: '工作區選擇',
+                    repeatEndDate: '重複至'
                 },
             }
         })
@@ -142,6 +147,7 @@ class RostersFormScreen extends React.Component {
         if (!!this.props.navigation?.state?.params?.data) {
             this.props?.change(`startTime`, new Date(this.props.navigation?.state?.params?.data?.startTime))
             this.props?.change(`endTime`, new Date(this.props.navigation?.state?.params?.data?.endTime))
+            this.props?.change(`repeatEndDate`, new Date(this.props.navigation?.state?.params?.data?.repeatEndDate ?? new Date()))
         }
         this.getLabels()
     }
@@ -189,7 +195,8 @@ class RostersFormScreen extends React.Component {
         if (!isEdit) {
             let request = {
                 eventName: values?.title,
-                eventRepeat: values?.repeatType === 1 ? 'WEEKLY' : 'NONE',
+                eventRepeat: ['NONE', 'DAILY', 'WEEKLY'][this.state?.repeatType ?? 0],
+                repeatEndDate: moment(!!values[`repeatEndDate`] ? values[`repeatEndDate`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
                 startTime: moment(!!values[`startTime`] ? values[`startTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
                 endTime: moment(!!values[`endTime`] ? values[`endTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
                 eventColor: this.state?.eventColor,
@@ -198,9 +205,10 @@ class RostersFormScreen extends React.Component {
             this.state?.labels.forEach((label) => {
                 let users = label?.resources?.filter((user, userIndex) => user?.isSelected)
                 if (users?.length > 0) {
-                    request.workingAreaToUsernames.[`${label?.labelName}`] = users?.map((item) => {return item?.username})
+                    request.workingAreaToUsernames[`${label?.labelName}`] = users?.map((item) => {return item?.username})
                 }
             })
+            console.log('request', JSON.stringify(request))
             dispatchFetchRequest(api.rosterEvent.createEvents, {
                 method: 'POST',
                 withCredentials: true,
@@ -211,6 +219,7 @@ class RostersFormScreen extends React.Component {
                 body: JSON.stringify(request)
             }, response => {
                 response.json().then(data => {
+                    console.log('res', JSON.stringify(data))
                     this.props.navigation?.state?.params?.refreshScreen()
                     this.props.navigation.goBack()
                 })
@@ -218,6 +227,8 @@ class RostersFormScreen extends React.Component {
         } else {
             let request = {
                 eventName: values?.title,
+                eventRepeat: ['NONE', 'DAILY', 'WEEKLY'][this.state?.repeatType ?? 0],
+                repeatEndDate: moment(!!values[`repeatEndDate`] ? values[`repeatEndDate`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
                 applyToSeries: false,
                 startTime: moment(!!values[`startTime`] ? values[`startTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
                 endTime: moment(!!values[`endTime`] ? values[`endTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
@@ -227,10 +238,10 @@ class RostersFormScreen extends React.Component {
             this.state?.labels.forEach((label) => {
                 let users = label?.resources?.filter((user, userIndex) => user?.isSelected)
                 if (users?.length > 0) {
-                    request.workingAreaToUsernames.[`${label?.labelName}`] = users?.map((item) => {return item?.username})
+                    request.workingAreaToUsernames[`${label?.labelName}`] = users?.map((item) => {return item?.username})
                 }
             })
-            if (this.state?.data?.eventRepeat === 'WEEKLY') {
+            if ((this.state?.data?.eventRepeat === 'WEEKLY' || this.state?.data?.eventRepeat === 'DAILY') && (this.state?.data?.eventRepeat === request.eventRepeat)) {
                 Alert.alert(
                     ``,
                     `${this.context.t('rostersForm.confirmEditAll')}`,
@@ -239,6 +250,7 @@ class RostersFormScreen extends React.Component {
                             text: `${this.context.t('action.yes')}`,
                             onPress: () => {
                                 request.applyToSeries = true
+                                console.log('request', JSON.stringify(request))
                                 dispatchFetchRequest(api.rosterEvent.getEventsById(this.state?.data?.id), {
                                     method: 'POST',
                                     withCredentials: true,
@@ -249,6 +261,7 @@ class RostersFormScreen extends React.Component {
                                     body: JSON.stringify(request)
                                 }, response => {
                                     response.json().then(data => {
+                                        console.log('res', JSON.stringify(data))
                                         this.props.navigation?.state?.params?.refreshScreen()
                                         this.props.navigation.goBack()
                                     })
@@ -258,6 +271,7 @@ class RostersFormScreen extends React.Component {
                         {
                             text: `${this.context.t('action.no')}`,
                             onPress: () => {
+                                console.log('request', JSON.stringify(request))
                                 dispatchFetchRequest(api.rosterEvent.getEventsById(this.state?.data?.id), {
                                     method: 'POST',
                                     withCredentials: true,
@@ -268,6 +282,7 @@ class RostersFormScreen extends React.Component {
                                     body: JSON.stringify(request)
                                 }, response => {
                                     response.json().then(data => {
+                                        console.log('res', JSON.stringify(data))
                                         this.props.navigation?.state?.params?.refreshScreen()
                                         this.props.navigation.goBack()
                                     })
@@ -278,6 +293,7 @@ class RostersFormScreen extends React.Component {
                     ]
                 )
             } else {
+                console.log('request', JSON.stringify(request))
                 dispatchFetchRequest(api.rosterEvent.getEventsById(this.state?.data?.id), {
                     method: 'POST',
                     withCredentials: true,
@@ -288,6 +304,7 @@ class RostersFormScreen extends React.Component {
                     body: JSON.stringify(request)
                 }, response => {
                     response.json().then(data => {
+                        console.log('res', JSON.stringify(data))
                         this.props.navigation?.state?.params?.refreshScreen()
                         this.props.navigation.goBack()
                     })
@@ -322,7 +339,7 @@ class RostersFormScreen extends React.Component {
         }).then()
     }
     handleDelete = async () => {
-        if (this.state?.data?.eventRepeat === 'WEEKLY') {
+        if (this.state?.data?.eventRepeat === 'WEEKLY' || this.state?.data?.eventRepeat === 'DAILY') {
             Alert.alert(
                 ``,
                 `${this.context.t('rostersForm.confirmDeleteAll')}`,
@@ -405,6 +422,11 @@ class RostersFormScreen extends React.Component {
     handlegetDate = (event, selectedDate) => {
         console.log(`selected date: ${selectedDate}`)
     }
+    handlegetFromDate = (event, selectedDate) => {
+        console.log(`selected from date: ${selectedDate}`)
+        this.props?.change(`endTime`, new Date(selectedDate))
+        //this.props?.change(`repeatEndDate`, new Date(selectedDate))
+    }
 
     showFromDatepicker = (index) => {
         let showFromDateArr = [...this.state.showFromDate]
@@ -422,10 +444,17 @@ class RostersFormScreen extends React.Component {
         })
     };
 
+    showEndDatepicker = () => {
+        this.setState({
+            showEndDate: !this.state?.showEndDate
+        })
+    };
+
     render() {
         const {t, themeStyle, isTablet} = this.context
         const {handleSubmit} = this.props
         const timezone = TimeZoneService.getTimeZone()
+        console.log('data', JSON.stringify(this.state?.data))
         if (isTablet) {
             return (
 
@@ -476,7 +505,7 @@ class RostersFormScreen extends React.Component {
                                                         {this.state?.isManager ? <Field
                                                             name={`startTime`}
                                                             component={RenderDateTimePicker}
-                                                            onChange={this.handlegetDate}
+                                                            onChange={this.handlegetFromDate}
                                                             placeholder={t('order.fromDate')}
                                                             isShow={this.state.showFromDate?.[index] ?? false}
                                                             showDatepicker={() => this.showFromDatepicker(index)}
@@ -504,7 +533,7 @@ class RostersFormScreen extends React.Component {
                                                             <StyledText>{moment(this.state?.data?.endTime ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
                                                     </View>
                                                 </View>
-                                                {!!this.state?.data || <View style={styles.fieldContainer}>
+                                                {this.state?.isManager && <><View style={styles.fieldContainer}>
                                                     <View style={[styles.tableCellView, {flex: 1}]}>
                                                         <StyledText style={styles.fieldTitle}>{t('rostersForm.repeat')}</StyledText>
                                                     </View>
@@ -513,11 +542,36 @@ class RostersFormScreen extends React.Component {
                                                             name="repeatType"
                                                             component={SegmentedControl}
                                                             onChange={(val) => {this.setState({repeatType: val})}}
-                                                            values={[t('rostersForm.NONE'), t('rostersForm.WEEKLY')]}
+                                                            values={[t('rostersForm.NONE'), t('rostersForm.DAILY'), t('rostersForm.WEEKLY')]}
                                                             selectedIndex={this.state?.repeatType}
                                                         />
                                                     </View>
-                                                </View>}
+                                                </View>
+                                                    {this.state?.repeatType !== 0 && <View style={styles.fieldContainer}>
+                                                        <View style={[styles.tableCellView, {flex: 1}]}>
+                                                            <StyledText style={styles.fieldTitle}>{t('rostersForm.repeatEndDate')}</StyledText>
+                                                        </View>
+                                                        <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+
+                                                            {this.state?.isManager ? <Field
+                                                                name={`repeatEndDate`}
+                                                                component={RenderDateTimePicker}
+                                                                onChange={this.handlegetDate}
+                                                                isShow={this.state?.showEndDate ?? false}
+                                                                showDatepicker={() => this.showEndDatepicker()}
+                                                                defaultValue={this.state?.data?.repeatEndDate ?? new Date()}
+                                                                validate={(value, allValues, props, name) => {
+                                                                    console.log('val', JSON.stringify(allValues))
+                                                                    if (!!allValues?.startTime && !!value && (new Date(allValues?.startTime).getMonth() !== new Date(value).getMonth())) {
+                                                                        console.log('validate', value, allValues)
+                                                                        this.props?.change(`repeatEndDate`, new Date(moment(allValues?.startTime).endOf('month').tz(timezone)))
+                                                                    }
+                                                                }}
+                                                            /> :
+                                                                <StyledText>{moment(this.state?.data?.repeatEndDate ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
+                                                        </View>
+                                                    </View>}
+                                                </>}
                                                 <View style={styles.fieldContainer}>
                                                     <View style={[styles.tableCellView, {flex: 1}]}>
                                                         <StyledText style={styles.fieldTitle}>{t('rostersForm.eventColor')}</StyledText>
@@ -534,8 +588,8 @@ class RostersFormScreen extends React.Component {
                                                             onPress={() => this.setState({eventColor: '#4EB57B'})}
                                                             style={[{backgroundColor: '#4EB57B'}, this.state?.eventColor === '#4EB57B' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                         <TouchableOpacity
-                                                            onPress={() => this.setState({eventColor: '#CCC850'})}
-                                                            style={[{backgroundColor: '#CCC850'}, this.state?.eventColor === '#CCC850' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                            onPress={() => this.setState({eventColor: '#F5EF42'})}
+                                                            style={[{backgroundColor: '#F5EF42'}, this.state?.eventColor === '#F5EF42' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                         <TouchableOpacity
                                                             onPress={() => this.setState({eventColor: '#F5574C'})}
                                                             style={[{backgroundColor: '#F5574C'}, this.state?.eventColor === '#F5574C' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
@@ -810,8 +864,8 @@ class RostersFormScreen extends React.Component {
                                                         onPress={() => this.setState({eventColor: '#4EB57B'})}
                                                         style={[{backgroundColor: '#4EB57B'}, this.state?.eventColor === '#4EB57B' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                     <TouchableOpacity
-                                                        onPress={() => this.setState({eventColor: '#CCC850'})}
-                                                        style={[{backgroundColor: '#CCC850'}, this.state?.eventColor === '#CCC850' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        onPress={() => this.setState({eventColor: '#F5EF42'})}
+                                                        style={[{backgroundColor: '#F5EF42'}, this.state?.eventColor === '#F5EF42' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                     <TouchableOpacity
                                                         onPress={() => this.setState({eventColor: '#F5574C'})}
                                                         style={[{backgroundColor: '#F5574C'}, this.state?.eventColor === '#F5574C' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>

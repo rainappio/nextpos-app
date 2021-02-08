@@ -15,6 +15,7 @@ import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
+import {ThemeContainer} from "../components/ThemeContainer";
 
 class OrderDetail extends React.Component {
   static navigationOptions = {
@@ -116,260 +117,262 @@ class OrderDetail extends React.Component {
       const orderDuration = order.orderDuration !== null ? order.orderDuration : {}
 
       return (
-        <ThemeScrollView>
-          <NavigationEvents
-            onWillFocus={() => {
-              this.props.getOrder()
-            }}
-            onWillBlur={() => {
-              !!this.props?.orderId && this.props?.closeModal()
-            }}
-          />
+
+        <ThemeContainer>
           <View style={[styles.fullWidthScreen, (!!this.props?.orderId && {marginTop: 0})]}>
             <ScreenHeader parentFullScreen={true}
               backAction={() => !!this.props?.orderId ? this.props?.closeModal() : this.props.navigation.goBack()}
               title={t('order.orderDetailsTitle')} />
+            <NavigationEvents
+              onWillFocus={() => {
+                this.props.getOrder()
+              }}
+              onWillBlur={() => {
+                !!this.props?.orderId && this.props?.closeModal()
+              }}
+            />
+            <ThemeScrollView>
+              <OrderTopInfo order={order} />
 
-            <OrderTopInfo order={order} />
-
-            <View style={[styles.tableRowContainerWithBorder]}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
-                <StyledText>{t('order.ageGroup')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <StyledText>
-                  {filteredageGroup !== undefined ? filteredageGroup.label : t('order.notFilledIn')}
-                </StyledText>
-              </View>
-            </View>
-
-            <View style={[styles.tableRowContainerWithBorder]}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
-                <StyledText>{t('order.visitedFrequency')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <StyledText>
-                  {filteredvisitFrequency !== undefined ? filteredvisitFrequency.label : t('order.notFilledIn')}
-                </StyledText>
-              </View>
-            </View>
-
-            {order.orderPreparationTime != null && (
               <View style={[styles.tableRowContainerWithBorder]}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
-                  <StyledText>{t('order.preparationDuration')}</StyledText>
+                  <StyledText>{t('order.ageGroup')}</StyledText>
                 </View>
                 <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                   <StyledText>
-                    {order.orderPreparationTime.durationHours} {t('timecard.hours')} {order.orderPreparationTime.durationMinutes} {t('timecard.minutes')}
+                    {filteredageGroup !== undefined ? filteredageGroup.label : t('order.notFilledIn')}
                   </StyledText>
                 </View>
               </View>
-            )}
 
-            <View style={[styles.tableRowContainerWithBorder]}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
-                <StyledText>{t('order.orderStartDate')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <StyledText>
-                  {formatTime(order.createdDate)}
-                </StyledText>
-              </View>
-            </View>
-
-            <View style={[styles.tableRowContainerWithBorder]}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
-                <StyledText>{t('order.endDate')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <StyledText>
-                  {formatTime(order.modifiedDate)}
-                </StyledText>
-              </View>
-            </View>
-
-            <View style={[styles.tableRowContainerWithBorder]}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
-                <StyledText>{t('order.duration')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <StyledText>
-                  {orderDuration.durationHours} {t('timecard.hours')} {orderDuration.durationMinutes} {t('timecard.minutes')}
-                </StyledText>
-              </View>
-            </View>
-
-            <View style={styles.sectionBar}>
-              <View style={{flex: 2.5}}>
-                <Text style={styles.sectionBarTextSmall}>
-                  {t('order.lineItemCreatedDate')}
-                </Text>
+              <View style={[styles.tableRowContainerWithBorder]}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <StyledText>{t('order.visitedFrequency')}</StyledText>
+                </View>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  <StyledText>
+                    {filteredvisitFrequency !== undefined ? filteredvisitFrequency.label : t('order.notFilledIn')}
+                  </StyledText>
+                </View>
               </View>
 
-              <View style={{flex: 1.7}}>
-                <TouchableOpacity>
-                  <Text style={styles.sectionBarTextSmall}>
-                    {t('order.product')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              <View style={{flex: 0.8}}>
-                <TouchableOpacity>
-                  <Text style={styles.sectionBarTextSmall}>
-                    {t('order.quantity')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              <View style={{flex: 1.3}}>
-                <Text style={[styles.sectionBarTextSmall, {textAlign: 'right'}]}>{t('order.subtotal')}</Text>
-              </View>
-            </View>
-
-            <FlatList
-              style={{marginBottom: 20}}
-              data={order.lineItems}
-              renderItem={({item, index}) => (
-                <Item
-                  orderDetail={item}
-                  lineItemDate={item.modifiedDate}
-                />
-              )}
-              keyExtractor={(item, index) => index.toString()}
-            />
-
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
-                <StyledText>{t('order.serviceCharge')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <StyledText>
-                  {formatCurrency(order.serviceCharge)}
-                </StyledText>
-              </View>
-            </View>
-
-            <View style={[styles.tableRowContainerWithBorder]}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
-                <StyledText>{t('order.discount')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <StyledText>
-                  {formatCurrency(order.discount)}
-                </StyledText>
-              </View>
-            </View>
-
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
-                <StyledText>{t('order.total')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <StyledText>
-                  {formatCurrency(order.orderTotal)}
-                </StyledText>
-              </View>
-            </View>
-
-            <FlatList
-              data={order.transactions}
-              renderItem={({item, index}) => (
-                <View style={styles.tableRowContainerWithBorder}>
+              {order.orderPreparationTime != null && (
+                <View style={[styles.tableRowContainerWithBorder]}>
                   <View style={[styles.tableCellView, {flex: 1}]}>
-                    <StyledText>{t('order.paymentMethod')}</StyledText>
+                    <StyledText>{t('order.preparationDuration')}</StyledText>
                   </View>
                   <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                    <StyledText>{item.paymentMethod}</StyledText>
+                    <StyledText>
+                      {order.orderPreparationTime.durationHours} {t('timecard.hours')} {order.orderPreparationTime.durationMinutes} {t('timecard.minutes')}
+                    </StyledText>
                   </View>
                 </View>
               )}
-              keyExtractor={(item, index) => index.toString()}
-            />
 
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
-                <StyledText>{t('order.serveBy')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <StyledText>
-                  {order.servedBy}
-                </StyledText>
-              </View>
-            </View>
-
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
-                <StyledText>{t('order.orderStatus')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                {renderOrderState(order.state)}
-              </View>
-            </View>
-            {order?.transactions?.map((item, index) => {
-              return (
-                item?.invoiceStatus && <View style={styles.tableRowContainerWithBorder} key={index}>
-                  <View style={[styles.tableCellView, {flex: 1}]}>
-                    <StyledText>{t('invoiceStatus.invoiceStatus')}</StyledText>
-                  </View>
-                  <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                    <StyledText>{t(`invoiceStatus.${item?.invoiceStatus}`)}</StyledText>
-                  </View>
+              <View style={[styles.tableRowContainerWithBorder]}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <StyledText>{t('order.orderStartDate')}</StyledText>
                 </View>
-              )
-            })}
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  <StyledText>
+                    {formatTime(order.createdDate)}
+                  </StyledText>
+                </View>
+              </View>
 
-            <View style={styles.sectionTitleContainer}>
-              <StyledText style={styles.sectionTitleText}>{t('orderLog.title')}</StyledText>
-            </View>
+              <View style={[styles.tableRowContainerWithBorder]}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <StyledText>{t('order.endDate')}</StyledText>
+                </View>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  <StyledText>
+                    {formatTime(order.modifiedDate)}
+                  </StyledText>
+                </View>
+              </View>
 
-            {order.orderLogs != null && order.orderLogs.map((log, idx) => {
-              return (
-                <View key={idx}>
-                  <View style={[styles.tableRowContainerWithBorder, complexTheme.shade]}>
-                    <View style={[styles.tableCellView, {flex: 2}]}>
-                      <StyledText>{formatTime(log.logDate)} ({log.who})</StyledText>
+              <View style={[styles.tableRowContainerWithBorder]}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <StyledText>{t('order.duration')}</StyledText>
+                </View>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  <StyledText>
+                    {orderDuration.durationHours} {t('timecard.hours')} {orderDuration.durationMinutes} {t('timecard.minutes')}
+                  </StyledText>
+                </View>
+              </View>
+
+              <View style={styles.sectionBar}>
+                <View style={{flex: 2.5}}>
+                  <Text style={styles.sectionBarTextSmall}>
+                    {t('order.lineItemCreatedDate')}
+                  </Text>
+                </View>
+
+                <View style={{flex: 1.7}}>
+                  <TouchableOpacity>
+                    <Text style={styles.sectionBarTextSmall}>
+                      {t('order.product')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={{flex: 0.8}}>
+                  <TouchableOpacity>
+                    <Text style={styles.sectionBarTextSmall}>
+                      {t('order.quantity')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={{flex: 1.3}}>
+                  <Text style={[styles.sectionBarTextSmall, {textAlign: 'right'}]}>{t('order.subtotal')}</Text>
+                </View>
+              </View>
+
+              <FlatList
+                style={{marginBottom: 20}}
+                data={order.lineItems}
+                renderItem={({item, index}) => (
+                  <Item
+                    orderDetail={item}
+                    lineItemDate={item.modifiedDate}
+                  />
+                )}
+                keyExtractor={(item, index) => index.toString()}
+              />
+
+              <View style={styles.tableRowContainerWithBorder}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <StyledText>{t('order.serviceCharge')}</StyledText>
+                </View>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  <StyledText>
+                    {formatCurrency(order.serviceCharge)}
+                  </StyledText>
+                </View>
+              </View>
+
+              <View style={[styles.tableRowContainerWithBorder]}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <StyledText>{t('order.discount')}</StyledText>
+                </View>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  <StyledText>
+                    {formatCurrency(order.discount)}
+                  </StyledText>
+                </View>
+              </View>
+
+              <View style={styles.tableRowContainerWithBorder}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <StyledText>{t('order.total')}</StyledText>
+                </View>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  <StyledText>
+                    {formatCurrency(order.orderTotal)}
+                  </StyledText>
+                </View>
+              </View>
+
+              <FlatList
+                data={order.transactions}
+                renderItem={({item, index}) => (
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[styles.tableCellView, {flex: 1}]}>
+                      <StyledText>{t('order.paymentMethod')}</StyledText>
                     </View>
                     <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                      <StyledText>{t(`orderLog.${log.action}`)}</StyledText>
+                      <StyledText>{item.paymentMethod}</StyledText>
                     </View>
                   </View>
-                  <View style={styles.tableRowContainerWithBorder}>
-                    <View style={[{flex: 1, alignItems: 'flex-end'}]}>
-                      {log.entries != null && log.entries.map((entry, eIdx) => {
-                        const entryValue = entry.from != null ? `${entry.from} -> ${entry.to}` : entry.to
-
-                        return (
-                          <View key={`entry-${eIdx}`}>
-                            <StyledText>{entry.name}: {entryValue}</StyledText>
-                          </View>
-                        )
-                      })}
-                    </View>
-                  </View>
-                </View>
-              )
-            })}
-
-            {!!this.props?.orderId || <View style={[styles.bottom, styles.horizontalMargin]}>
-              <TouchableOpacity
-                onPress={() => this.handleCopyOrder(order)}
-              >
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                  {t('order.copyOrder')}
-                </Text>
-              </TouchableOpacity>
-              <DeleteBtn
-                handleDeleteAction={() => handleDelete(order.orderId, () => this.props.getOrder())}
+                )}
+                keyExtractor={(item, index) => index.toString()}
               />
-              {order?.transactions?.[0]?.invoiceStatus === 'PROCESSED' && <DeleteBtn
-                text={t('invoiceStatus.cancelInvoice')}
-                handleDeleteAction={() => handleCancelInvoice(order?.transactions?.[0]?.transactionId, () => this.props.getOrder())}
-              />}
-            </View>}
+
+              <View style={styles.tableRowContainerWithBorder}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <StyledText>{t('order.serveBy')}</StyledText>
+                </View>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  <StyledText>
+                    {order.servedBy}
+                  </StyledText>
+                </View>
+              </View>
+
+              <View style={styles.tableRowContainerWithBorder}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
+                  <StyledText>{t('order.orderStatus')}</StyledText>
+                </View>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  {renderOrderState(order.state)}
+                </View>
+              </View>
+              {order?.transactions?.map((item, index) => {
+                return (
+                  item?.invoiceStatus && <View style={styles.tableRowContainerWithBorder} key={index}>
+                    <View style={[styles.tableCellView, {flex: 1}]}>
+                      <StyledText>{t('invoiceStatus.invoiceStatus')}</StyledText>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                      <StyledText>{t(`invoiceStatus.${item?.invoiceStatus}`)}</StyledText>
+                    </View>
+                  </View>
+                )
+              })}
+
+              <View style={styles.sectionTitleContainer}>
+                <StyledText style={styles.sectionTitleText}>{t('orderLog.title')}</StyledText>
+              </View>
+
+              {order.orderLogs != null && order.orderLogs.map((log, idx) => {
+                return (
+                  <View key={idx}>
+                    <View style={[styles.tableRowContainerWithBorder, complexTheme.shade]}>
+                      <View style={[styles.tableCellView, {flex: 2}]}>
+                        <StyledText>{formatTime(log.logDate)} ({log.who})</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                        <StyledText>{t(`orderLog.${log.action}`)}</StyledText>
+                      </View>
+                    </View>
+                    <View style={styles.tableRowContainerWithBorder}>
+                      <View style={[{flex: 1, alignItems: 'flex-end'}]}>
+                        {log.entries != null && log.entries.map((entry, eIdx) => {
+                          const entryValue = entry.from != null ? `${entry.from} -> ${entry.to}` : entry.to
+
+                          return (
+                            <View key={`entry-${eIdx}`}>
+                              <StyledText>{entry.name}: {entryValue}</StyledText>
+                            </View>
+                          )
+                        })}
+                      </View>
+                    </View>
+                  </View>
+                )
+              })}
+
+              {!!this.props?.orderId || <View style={[styles.bottom, styles.horizontalMargin]}>
+                <TouchableOpacity
+                  onPress={() => this.handleCopyOrder(order)}
+                >
+                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                    {t('order.copyOrder')}
+                  </Text>
+                </TouchableOpacity>
+                <DeleteBtn
+                  handleDeleteAction={() => handleDelete(order.orderId, () => this.props.getOrder())}
+                />
+                {order?.transactions?.[0]?.invoiceStatus === 'PROCESSED' && <DeleteBtn
+                  text={t('invoiceStatus.cancelInvoice')}
+                  handleDeleteAction={() => handleCancelInvoice(order?.transactions?.[0]?.transactionId, () => this.props.getOrder())}
+                />}
+              </View>}
+            </ThemeScrollView>
           </View>
-        </ThemeScrollView>
+        </ThemeContainer>
       )
     } else {
       return null

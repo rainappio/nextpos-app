@@ -41,7 +41,7 @@ class OrderFilterFormII extends React.Component {
     };
 
     render() {
-        const {handleSubmit, handlegetDate, change} = this.props
+        const {handleSubmit, handlegetDate, change, initialValues} = this.props
         const {t, isTablet} = this.context
         if (isTablet) {
             return (
@@ -79,6 +79,7 @@ class OrderFilterFormII extends React.Component {
                                 placeholder={t('order.fromDate')}
                                 isShow={this.state.showFromDate}
                                 showDatepicker={this.showFromDatepicker}
+                                defaultValue={initialValues?.fromDate ?? new Date()}
                             />
                         </View>
                         <View style={[styles.tableCellView, {flex: 0.2, justifyContent: 'center'}]}>
@@ -92,6 +93,7 @@ class OrderFilterFormII extends React.Component {
                                 placeholder={t('order.toDate')}
                                 isShow={this.state.showToDate}
                                 showDatepicker={this.showToDatepicker}
+                                defaultValue={initialValues?.toDate ?? new Date()}
                             />
                         </View>
                     </View>}
