@@ -1,7 +1,7 @@
 import React from "react";
 import {LocaleContext} from "../locales/LocaleContext";
-import {Text, TouchableOpacity, View} from "react-native";
-import styles from "../styles";
+import {Text, TouchableOpacity, View, KeyboardAvoidingView, Animated} from "react-native";
+import styles, {mainThemeColor} from "../styles";
 import {Field, reduxForm} from "redux-form";
 import InputText from "../components/InputText";
 import {isEmail, isRequired, isvalidPassword} from "../validators";
@@ -9,6 +9,8 @@ import {ThemeContainer} from "../components/ThemeContainer";
 import ScreenHeader from "../components/ScreenHeader";
 import {StyledText} from "../components/StyledText";
 import {withNavigation} from "react-navigation";
+import {ThemeScrollView} from "../components/ThemeScrollView";
+import {CountdownCircleTimer} from 'react-native-countdown-circle-timer'
 
 class ResetClientPasswordScreen extends React.Component {
   static navigationOptions = {
@@ -22,112 +24,309 @@ class ResetClientPasswordScreen extends React.Component {
     this.state = {
       clientEmail: null,
       passcode: null,
-      resetPassword: null
+      resetPassword: null,
+      canResendPasscode: false
     }
   }
 
   render() {
     const {showPasscodeField, showResetPasswordField, handleSubmit, handleVerifyPasscode, handleResetPassword} = this.props
-    const {t} = this.context
-
-    return (
-      <ThemeContainer>
-        <View style={[styles.container]}>
-          <ScreenHeader
-            backNavigation={false}
-            title={t('resetPasswordTitle')}
-          />
-
-          <View style={[styles.flex(1)]}>
-            <View style={styles.sectionContainer}>
-              <View style={styles.sectionTitleContainer}>
-                <StyledText style={styles.sectionTitleText}>{t('enterEmail')}</StyledText>
-              </View>
-            </View>
-
-            <Field
-              name="clientEmail"
-              component={InputText}
-              onChange={(value) => this.setState({clientEmail: value})}
-              validate={[isRequired, isEmail]}
-              autoCapitalize="none"
-              placeholder={t('email')}
+    const {t, isTablet} = this.context
+    if (isTablet) {
+      return (
+        <ThemeContainer>
+          <KeyboardAvoidingView style={styles.container} behavior="height">
+            <ScreenHeader
+              backNavigation={false}
+              title={t('resetPasswordTitle')}
             />
 
+            <ThemeScrollView style={{paddingHorizontal: '15%'}}>
+              {showResetPasswordField ?
+                <View style={[styles.flex(1)]}>
+                  <View style={styles.sectionContainer}>
+                    <View style={styles.sectionTitleContainer}>
+                      <StyledText style={styles.sectionTitleText}>{t('greeting')}, {this.state?.clientEmail}</StyledText>
+                    </View>
+                  </View>
 
-            {showPasscodeField && (
-              <View style={styles.sectionContainer}>
-                <View style={styles.sectionTitleContainer}>
-                  <StyledText style={styles.sectionTitleText}>{t('enterPasscode')}</StyledText>
+
+                  <View style={styles.sectionContainer}>
+                    <View style={styles.sectionTitleContainer}>
+                      <StyledText style={styles.sectionTitleText}>{t('resetPassword')}</StyledText>
+                    </View>
+                    <View style={[styles.tableCellView]}>
+                      <Field
+                        name="resetPassword"
+                        component={InputText}
+                        validate={[isRequired, isvalidPassword]}
+                        onChange={(value) => this.setState({resetPassword: value})}
+                        placeholder={t('password')}
+                        secureTextEntry={true}
+                      />
+
+                    </View>
+                  </View>
+
                 </View>
-                <View style={[styles.tableCellView, styles.withBorder]}>
-                  <Field
-                    name="passcode"
-                    component={InputText}
-                    validate={[isRequired]}
-                    onChange={(value) => this.setState({passcode: value})}
-                    autoCapitalize="none"
-                    placeholder={t('passcode')}
-                  />
-                  <TouchableOpacity
-                    onPress={() => handleVerifyPasscode(this.state.clientEmail, this.state.passcode)}>
-                    <Text
-                      style={[
-                        styles.searchButton
-                      ]}
-                    >
-                      {t('action.enter')}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                : showPasscodeField ?
+                  <View style={[styles.flex(1)]}>
+                    <View style={styles.sectionContainer}>
+                      <View style={styles.sectionTitleContainer}>
+                        <StyledText style={styles.sectionTitleText}>{t('greeting')}, {this.state?.clientEmail}</StyledText>
+                      </View>
+                    </View>
+
+
+
+
+                    <View style={styles.sectionContainer}>
+                      <View style={styles.sectionTitleContainer}>
+                        <StyledText style={styles.sectionTitleText}>{t('enterPasscode')}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView]}>
+
+                        <TouchableOpacity
+                          style={[{
+                            borderRadius: 4,
+                            backgroundColor: mainThemeColor,
+                            alignItems: 'center',
+                            height: '100%',
+                            flexDirection: 'row',
+                            paddingHorizontal: 12,
+                            marginRight: 12
+                          }]}
+                          disabled={!this.state?.canResendPasscode}
+
+                          onPress={() => {
+                            this.setState({canResendPasscode: false}, handleSubmit)
+
+                          }}
+                        >
+                          {this.state?.canResendPasscode || <CountdownCircleTimer
+                            size={36}
+                            strokeWidth={4}
+                            isPlaying
+                            duration={30}
+                            onComplete={() => {
+                              this.setState({canResendPasscode: true})
+                            }}
+                            colors={[
+                              ['#004777', 0.4],
+                              ['#8FFD01', 0.4],
+                              ['#A30000', 0.2],
+                            ]}
+                          >
+                            {({remainingTime, animatedColor}) => (
+                              <Animated.Text style={{color: animatedColor}}>
+                                {remainingTime}
+                              </Animated.Text>
+                            )}
+                          </CountdownCircleTimer>}
+                          <Text style={{color: '#fff', marginLeft: 6}}>{t('sendPasscodeAgain')}</Text>
+                        </TouchableOpacity>
+                        <Field
+                          name="passcode"
+                          component={InputText}
+                          onChange={(value) => this.setState({passcode: value})}
+                          autoCapitalize="none"
+                          placeholder={t('passcode')}
+                        />
+
+                      </View>
+                    </View>
+
+
+                  </View>
+                  : <View style={[styles.flex(1)]}>
+                    <View style={styles.sectionContainer}>
+                      <View style={styles.sectionTitleContainer}>
+                        <StyledText style={styles.sectionTitleText}>{t('enterEmail')}</StyledText>
+                      </View>
+                    </View>
+
+                    <Field
+                      name="clientEmail"
+                      component={InputText}
+                      onChange={(value) => this.setState({clientEmail: value})}
+                      validate={[isRequired, isEmail]}
+                      autoCapitalize="none"
+                      placeholder={t('email')}
+                    />
+                  </View>
+              }
+
+              <View style={{
+                justifyContent: 'center',
+                marginTop: 10,
+                marginBottom: 10,
+                flexDirection: 'row',
+                paddingHorizontal: '15%',
+                height: 72
+              }}>
+
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Login')}
+                  style={[styles.flexButtonSecondAction, {marginRight: 5}]}
+                >
+                  <Text style={styles.flexButtonSecondActionText}>
+                    {t('action.cancel')}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={showResetPasswordField ? () => handleResetPassword(this.state.clientEmail, this.state.resetPassword) : showPasscodeField ? () => handleVerifyPasscode(this.state.clientEmail, this.state.passcode) : handleSubmit} style={[styles.flexButton, , {marginLeft: 5}]}>
+                  <Text style={styles.flexButtonText}>
+                    {showResetPasswordField ? t('changePassword') : showPasscodeField ? t('action.confirm') : t('action.submit')}
+                  </Text>
+                </TouchableOpacity>
               </View>
-            )}
 
-            {showResetPasswordField && (
-              <View style={styles.sectionContainer}>
-                <View style={styles.sectionTitleContainer}>
-                  <StyledText style={styles.sectionTitleText}>{t('resetPassword')}</StyledText>
+            </ThemeScrollView>
+          </KeyboardAvoidingView>
+        </ThemeContainer >
+      )
+    } else {
+      return (
+        <ThemeContainer>
+          <KeyboardAvoidingView style={styles.container} behavior="height">
+            <ScreenHeader
+              backNavigation={false}
+              title={t('resetPasswordTitle')}
+            />
+
+            <ThemeScrollView >
+              {showResetPasswordField ?
+                <View style={[styles.flex(1)]}>
+                  <View style={styles.sectionContainer}>
+                    <View style={styles.sectionTitleContainer}>
+                      <StyledText style={styles.sectionTitleText}>{t('greeting')}, {this.state?.clientEmail}</StyledText>
+                    </View>
+                  </View>
+
+                  <View style={styles.sectionContainer}>
+                    <View style={styles.sectionTitleContainer}>
+                      <StyledText style={styles.sectionTitleText}>{t('resetPassword')}</StyledText>
+                    </View>
+                    <View style={[styles.tableCellView]}>
+                      <Field
+                        name="resetPassword"
+                        component={InputText}
+                        validate={[isRequired, isvalidPassword]}
+                        onChange={(value) => this.setState({resetPassword: value})}
+                        placeholder={t('password')}
+                        secureTextEntry={true}
+                      />
+
+                    </View>
+                  </View>
+
                 </View>
-                <View style={[styles.tableCellView]}>
-                  <Field
-                    name="resetPassword"
-                    component={InputText}
-                    validate={[isRequired, isvalidPassword]}
-                    onChange={(value) => this.setState({resetPassword: value})}
-                    placeholder={t('password')}
-                    secureTextEntry={true}
-                  />
-                  <TouchableOpacity
-                    onPress={() => handleResetPassword(this.state.clientEmail, this.state.resetPassword)}>
-                    <Text
-                      style={[
-                        styles.searchButton
-                      ]}
-                    >
-                      {t('action.enter')}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                : showPasscodeField ?
+                  <View style={[styles.flex(1)]}>
+                    <View style={styles.sectionContainer}>
+                      <View style={styles.sectionTitleContainer}>
+                        <StyledText style={styles.sectionTitleText}>{t('greeting')}, {this.state?.clientEmail}</StyledText>
+                      </View>
+                    </View>
+
+
+
+
+                    <View style={styles.sectionContainer}>
+                      <View style={styles.sectionTitleContainer}>
+                        <StyledText style={styles.sectionTitleText}>{t('enterPasscode')}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView]}>
+
+                        <TouchableOpacity
+                          style={[{
+                            borderRadius: 4,
+                            backgroundColor: mainThemeColor,
+                            alignItems: 'center',
+                            height: '100%',
+                            flexDirection: 'row',
+                            paddingHorizontal: 12,
+                            marginRight: 12
+                          }]}
+                          disabled={!this.state?.canResendPasscode}
+
+                          onPress={() => {
+                            this.setState({canResendPasscode: false}, handleSubmit)
+
+                          }}
+                        >
+                          {this.state?.canResendPasscode || <CountdownCircleTimer
+                            size={36}
+                            strokeWidth={4}
+                            isPlaying
+                            duration={30}
+                            onComplete={() => {
+                              this.setState({canResendPasscode: true})
+                            }}
+                            colors={[
+                              ['#004777', 0.4],
+                              ['#8FFD01', 0.4],
+                              ['#A30000', 0.2],
+                            ]}
+                          >
+                            {({remainingTime, animatedColor}) => (
+                              <Animated.Text style={{color: animatedColor}}>
+                                {remainingTime}
+                              </Animated.Text>
+                            )}
+                          </CountdownCircleTimer>}
+                          <Text style={{color: '#fff', marginLeft: 6}}>{t('sendPasscodeAgain')}</Text>
+                        </TouchableOpacity>
+                        <Field
+                          name="passcode"
+                          component={InputText}
+                          onChange={(value) => this.setState({passcode: value})}
+                          autoCapitalize="none"
+                          placeholder={t('passcode')}
+                        />
+
+                      </View>
+                    </View>
+
+
+                  </View>
+                  : <View style={[styles.flex(1)]}>
+                    <View style={styles.sectionContainer}>
+                      <View style={styles.sectionTitleContainer}>
+                        <StyledText style={styles.sectionTitleText}>{t('enterEmail')}</StyledText>
+                      </View>
+                    </View>
+
+                    <Field
+                      name="clientEmail"
+                      component={InputText}
+                      onChange={(value) => this.setState({clientEmail: value})}
+                      validate={[isRequired, isEmail]}
+                      autoCapitalize="none"
+                      placeholder={t('email')}
+                    />
+                  </View>
+              }
+
+
+              <View style={styles.bottom}>
+                <TouchableOpacity
+                  onPress={showResetPasswordField ? () => handleResetPassword(this.state.clientEmail, this.state.resetPassword) : showPasscodeField ? () => handleVerifyPasscode(this.state.clientEmail, this.state.passcode) : handleSubmit}>
+                  <Text style={[styles.bottomActionButton, styles.actionButton]}>{showResetPasswordField ? t('changePassword') : showPasscodeField ? t('action.confirm') : t('action.submit')}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Login')}
+                >
+                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                    {t('action.cancel')}
+                  </Text>
+                </TouchableOpacity>
               </View>
-            )}
-          </View>
+            </ThemeScrollView>
+          </KeyboardAvoidingView>
+        </ThemeContainer >
+      )
+    }
 
-          <View style={styles.bottom}>
-            <TouchableOpacity
-              onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.ok')}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Login')}
-            >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
-                {t('action.cancel')}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ThemeContainer>
-    )
   }
 }
 

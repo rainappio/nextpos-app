@@ -56,7 +56,7 @@ class UserTimeCards extends React.Component {
       console.log('timecard', timecard)
 
       return (
-        <TouchableOpacity
+        <View
           style={styles.tableRowContainerWithBorder}
 
         >
@@ -74,7 +74,7 @@ class UserTimeCards extends React.Component {
               {timecard.hours}&nbsp;{t('timecard.hours')}&nbsp;{timecard.minutes}&nbsp;{t('timecard.minutes')}
             </StyledText>
           </View>
-        </TouchableOpacity>
+        </View>
       )
     }
 

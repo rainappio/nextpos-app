@@ -394,7 +394,7 @@ class OrderFormII extends React.Component {
       response.json().then(data => {
         this.props.getOrder(this.props.order.orderId)
       })
-    }).then(() => handleOrderAction(this.props.order?.orderId, 'ENTER_PAYMENT', ()=>this.props.navigation.navigate('Payment', {
+    }).then(() => handleOrderAction(this.props.order?.orderId, 'ENTER_PAYMENT', () => this.props.navigation.navigate('Payment', {
       order: this.props.order
     })))
   }
@@ -449,7 +449,7 @@ class OrderFormII extends React.Component {
           if (data?.headCount >= 2 && isPaid) {
             this.setState({splitBillModalVisible: true})
           } else {
-            handleOrderAction(this.props.order?.orderId, 'ENTER_PAYMENT', ()=>this.props.navigation.navigate('Payment', {
+            handleOrderAction(this.props.order?.orderId, 'ENTER_PAYMENT', () => this.props.navigation.navigate('Payment', {
               order: this.props.order
             }))
           }

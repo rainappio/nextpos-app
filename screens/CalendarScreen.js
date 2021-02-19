@@ -28,6 +28,7 @@ import {CalendarEvent} from "../components/CalendarEvent";
 import {Ionicons} from '@expo/vector-icons';
 import {compose} from "redux";
 import {connect} from 'react-redux'
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 
 class CalendarScreen extends React.Component {
     static navigationOptions = {
@@ -202,7 +203,7 @@ class CalendarScreen extends React.Component {
                             <View style={{flexDirection: 'row'}}>
                                 <View style={{marginRight: 8}}>
                                     <OptionModal
-                                        icon={<Icon name="filter" size={32} color={mainThemeColor} />}
+                                        icon={<MaterialCommunityIcons name="filter-variant" size={32} color={mainThemeColor} />}
                                         toggleModal={(flag) => this.setState({isShowModal: flag})}
                                         isShowModal={this.state?.isShowModal}>
                                         <View style={{maxWidth: 640}}>

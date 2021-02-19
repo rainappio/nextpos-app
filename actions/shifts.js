@@ -1,4 +1,4 @@
-import { api, dispatchFetchRequest } from '../constants/Backend'
+import {api, dispatchFetchRequest} from '../constants/Backend'
 export const FETCH_SHIFTS = 'FETCH_SHIFTS'
 export const FETCH_SHIFTS_SUCCESS = 'FETCH_SHIFTS_SUCCESS'
 export const FETCH_SHIFTS_FAILURE = 'FETCH_SHIFTS_FAILURE'
