@@ -45,17 +45,11 @@ class OrderDisplayScreen extends React.Component {
         receivingText: 'Receiving',
         totalOrders: 'Total Pending Orders',
         tablesName: 'Table Name',
-        noWorkingArea: 'No Working Area',
-        allSelected: 'All',
-        selectWorkingArea: 'Working area to show'
       },
       zh: {
         receivingText: '接收訂單中',
         totalOrders: '等待處理訂單',
         tablesName: '桌位',
-        noWorkingArea: '無指定工作區',
-        allSelected: '全選',
-        selectWorkingArea: '顯示工作區'
       }
     })
     this.getLabels()

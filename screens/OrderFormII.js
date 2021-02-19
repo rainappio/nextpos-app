@@ -19,7 +19,7 @@ import OrderItemDetailEditModal from './OrderItemDetailEditModal';
 import OrderTopInfo from "./OrderTopInfo";
 import DeleteBtn from '../components/DeleteBtn'
 import NavigationService from "../navigation/NavigationService";
-import {handleDelete, handleOrderSubmit, handleQuickCheckout, revertSplitOrder, handlePrintWorkingOrder, handlePrintOrderDetails, handleOrderAction} from "../helpers/orderActions";
+import {handleDelete, handleOrderSubmit, handleQuickCheckout, revertSplitOrder, handlePrintWorkingOrder, handlePrintOrderDetails, handleOrderAction, getTableDisplayName} from "../helpers/orderActions";
 import {SwipeRow} from 'react-native-swipe-list-view'
 import ScreenHeader from "../components/ScreenHeader";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -1301,8 +1301,8 @@ class OrderFormII extends React.Component {
 
             <View style={[styles.shoppingBar]}>
               <View style={[styles.tableCellView, styles.half_width]}>
-                <Text style={[styles.primaryText, styles.whiteColor]}>
-                  {order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')}
+                <Text style={[styles.primaryText, styles.whiteColor]} numberOfLines={1}>
+                  {getTableDisplayName(order)}
                 </Text>
               </View>
 

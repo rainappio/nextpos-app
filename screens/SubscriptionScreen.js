@@ -1,5 +1,5 @@
 import React from 'react'
-import {FlatList, TouchableOpacity, View, Text} from 'react-native'
+import {FlatList, TouchableOpacity, View, Text, ScrollView} from 'react-native'
 import {connect} from 'react-redux'
 import ScreenHeader from "../components/ScreenHeader"
 import {LocaleContext} from '../locales/LocaleContext'
@@ -138,7 +138,7 @@ class SubscriptionScreen extends React.Component {
             )
         }
         return (
-            <ThemeScrollView>
+            <ThemeContainer>
                 <NavigationEvents
                     onWillFocus={() => {
                         this.refreshScreen()
@@ -330,8 +330,9 @@ class SubscriptionScreen extends React.Component {
                                                     <StyledText style={{flex: 1, textAlign: 'right'}}>${item?.planPrices?.MONTHLY}</StyledText>
                                                 </View>
                                                 <View style={{flexDirection: 'row', flex: 1}}>
-                                                    <View style={{flex: 2, flexDirection: 'column', paddingRight: 15}}>
+                                                    <View style={{flex: 2, flexDirection: 'column', paddingRight: 15}}><ScrollView>
                                                         <StyledText style={{textAlign: 'left'}}>{item?.description}</StyledText>
+                                                    </ScrollView>
                                                     </View>
                                                     <View style={{flex: 1, alignSelf: 'flex-end'}}>
                                                         <View style={{flex: 1, maxHeight: 64}}>
@@ -354,7 +355,7 @@ class SubscriptionScreen extends React.Component {
 
 
                 </View>
-            </ThemeScrollView>
+            </ThemeContainer>
         )
     }
 }

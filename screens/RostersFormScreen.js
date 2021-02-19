@@ -25,6 +25,7 @@ import {ThemeScrollView} from "../components/ThemeScrollView";
 import {ListItem} from "react-native-elements";
 import {CheckBox} from 'react-native-elements'
 import {lab} from 'd3'
+import RNSwitch from '../components/RNSwitch'
 
 
 class RostersFormScreen extends React.Component {
@@ -97,6 +98,7 @@ class RostersFormScreen extends React.Component {
             activeSections: [],
             labels: [],
             isManager: props?.currentUser?.roles?.includes('MANAGER') ?? false,
+            hasWorkingAreaDistribute: false
         }
 
         context.localize({
@@ -162,12 +164,13 @@ class RostersFormScreen extends React.Component {
             },
         }, response => {
             response.json().then(data => {
+                console.log('getLabels', JSON.stringify(this.props.navigation?.state?.params?.data?.eventResources))
                 this.setState({
                     labels: (data?.workingAreas?.map((label) => {
                         return ({
                             labelName: label?.name,
-                            resources: this.props.navigation?.state?.params?.users?.map((user) => {return {...user, isSelected: this.props.navigation?.state?.params?.data?.eventResources?.[`${label?.name}`]?.some((eventResource) => eventResource?.resourceId === user?.username)}}),
-                            labelIsSelected: this.props.navigation?.state?.params?.data?.eventResources?.[`${label?.name}`]?.some((eventResource) => eventResource?.resourceId === this.props?.currentUser?.username)
+                            resources: this.props.navigation?.state?.params?.users?.map((user) => {return {...user, isSelected: this.props.navigation?.state?.params?.data?.eventResources?.[`${label?.name}`]?.some((eventResource) => eventResource?.resourceId === user?.id)}}),
+                            labelIsSelected: this.props.navigation?.state?.params?.data?.eventResources?.[`${label?.name}`]?.some((eventResource) => eventResource?.resourceId === this.props?.currentUser?.id)
                         })
                     }))
                 })
@@ -233,14 +236,17 @@ class RostersFormScreen extends React.Component {
                 startTime: moment(!!values[`startTime`] ? values[`startTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
                 endTime: moment(!!values[`endTime`] ? values[`endTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
                 eventColor: this.state?.eventColor,
-                workingAreaToUsernames: {}
+                workingAreaToUsernames: !!values?.workingAreaDistribute ? {} : null
             }
-            this.state?.labels.forEach((label) => {
-                let users = label?.resources?.filter((user, userIndex) => user?.isSelected)
-                if (users?.length > 0) {
-                    request.workingAreaToUsernames[`${label?.labelName}`] = users?.map((item) => {return item?.username})
-                }
-            })
+            if (values?.workingAreaDistribute) {
+                this.state?.labels.forEach((label) => {
+                    let users = label?.resources?.filter((user, userIndex) => user?.isSelected)
+                    if (users?.length > 0) {
+                        request.workingAreaToUsernames[`${label?.labelName}`] = users?.map((item) => {return item?.username})
+                    }
+                })
+            }
+
             if ((this.state?.data?.eventRepeat === 'WEEKLY' || this.state?.data?.eventRepeat === 'DAILY') && (this.state?.data?.eventRepeat === request.eventRepeat)) {
                 Alert.alert(
                     ``,
@@ -581,20 +587,20 @@ class RostersFormScreen extends React.Component {
                                                             onPress={() => this.setState({eventColor: '#fff'})}
                                                             style={[{backgroundColor: '#fff'}, this.state?.eventColor === '#fff' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30, borderColor: mainThemeColor, borderWidth: 1}]} ></TouchableOpacity>
                                                         <TouchableOpacity
-                                                            onPress={() => this.setState({eventColor: '#3D8CE0'})}
-                                                            style={[{backgroundColor: '#3D8CE0'}, this.state?.eventColor === '#3D8CE0' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                            onPress={() => this.setState({eventColor: '#CCDDFF'})}
+                                                            style={[{backgroundColor: '#CCDDFF'}, this.state?.eventColor === '#CCDDFF' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                         <TouchableOpacity
-                                                            onPress={() => this.setState({eventColor: '#4EB57B'})}
-                                                            style={[{backgroundColor: '#4EB57B'}, this.state?.eventColor === '#4EB57B' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                            onPress={() => this.setState({eventColor: '#AAFFEE'})}
+                                                            style={[{backgroundColor: '#AAFFEE'}, this.state?.eventColor === '#AAFFEE' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                         <TouchableOpacity
-                                                            onPress={() => this.setState({eventColor: '#F5EF42'})}
-                                                            style={[{backgroundColor: '#F5EF42'}, this.state?.eventColor === '#F5EF42' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                            onPress={() => this.setState({eventColor: '#DEB887'})}
+                                                            style={[{backgroundColor: '#DEB887'}, this.state?.eventColor === '#DEB887' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                         <TouchableOpacity
-                                                            onPress={() => this.setState({eventColor: '#F5574C'})}
-                                                            style={[{backgroundColor: '#F5574C'}, this.state?.eventColor === '#F5574C' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                            onPress={() => this.setState({eventColor: '#FFC8B4'})}
+                                                            style={[{backgroundColor: '#FFC8B4'}, this.state?.eventColor === '#FFC8B4' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                         <TouchableOpacity
-                                                            onPress={() => this.setState({eventColor: '#E67ABE'})}
-                                                            style={[{backgroundColor: '#E67ABE'}, this.state?.eventColor === '#E67ABE' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                            onPress={() => this.setState({eventColor: '#FFB7DD'})}
+                                                            style={[{backgroundColor: '#FFB7DD'}, this.state?.eventColor === '#FFB7DD' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
 
 
                                                     </View> :
@@ -608,10 +614,18 @@ class RostersFormScreen extends React.Component {
                                         </View>)
                                     })}
                                 </View>
-                                {!!this.state?.data && <View style={[styles.fieldContainer, {alignItems: 'center', justifyContent: 'center', paddingVertical: 10}]}>
+                                {!!this.state?.data && <View style={[styles.fieldContainer, {alignItems: 'center', paddingVertical: 10}]}>
+
+                                    <View style={{marginRight: 10}}>
+                                        <Field
+                                            name="workingAreaDistribute"
+                                            component={RNSwitch}
+                                            onChange={(flag) => this.setState({hasWorkingAreaDistribute: flag})}
+                                        />
+                                    </View>
                                     <StyledText style={{fontWeight: 'bold'}}>{t('rostersForm.workingAreaDistribute')}</StyledText>
                                 </View>}
-                                {!!this.state?.data && <ThemeScrollView style={{flex: 1}}>
+                                {(!!this.state?.data && this.state?.hasWorkingAreaDistribute) ? <ThemeScrollView style={{flex: 1}}>
                                     {this.state?.isManager ? <Accordion
                                         onChange={(activeSections) => this.setState({activeSections: activeSections})}
                                         activeSections={this.state?.activeSections}
@@ -652,7 +666,7 @@ class RostersFormScreen extends React.Component {
                                                                             </CheckBox>
                                                                         </View>
                                                                         <View style={[styles.tableCellView]}>
-                                                                            <StyledText>{user?.username}</StyledText>
+                                                                            <StyledText>{user?.displayName}</StyledText>
                                                                         </View>
 
                                                                     </View>
@@ -725,25 +739,31 @@ class RostersFormScreen extends React.Component {
                                                 )
                                             })}
                                         </View>}
-                                </ThemeScrollView>}
-                                <View style={[{marginTop: 30, justifyContent: 'flex-end'}]}>
-                                    {this.state.uneditable || <TouchableOpacity onPress={
-                                        this.state?.isManager ?
-                                            handleSubmit(data => {
-                                                this.handleSubmit(data, !!this.state.data)
-                                            }) :
-                                            () => this.handleStaffSubmit()}>
-                                        <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                                            {t('action.save')}
-                                        </Text>
-                                    </TouchableOpacity>}
+                                </ThemeScrollView> : <View style={{flex: 1}}></View>}
+                                <View style={[{marginTop: 30, justifyContent: 'flex-end', flexDirection: 'row', flex: 1, maxHeight: 50}]}>
 
-                                    <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                                        <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                                    {!!this.state.data && this.state?.isManager && <DeleteBtn
+                                        containerStyle={[styles.flexButton, styles.deleteButton]}
+                                        textStyle={styles.flexButtonText}
+                                        handleDeleteAction={() => this.handleDelete()} />}
+                                    <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={[styles.flexButtonSecondAction, {marginHorizontal: 10}]}>
+                                        <Text style={[styles.flexButtonSecondActionText]}>
                                             {t('action.cancel')}
                                         </Text>
                                     </TouchableOpacity>
-                                    {!!this.state.data && this.state?.isManager && <DeleteBtn handleDeleteAction={() => this.handleDelete()} />}
+
+                                    {this.state.uneditable || <TouchableOpacity
+                                        style={styles.flexButton}
+                                        onPress={
+                                            this.state?.isManager ?
+                                                handleSubmit(data => {
+                                                    this.handleSubmit(data, !!this.state.data)
+                                                }) :
+                                                () => this.handleStaffSubmit()}>
+                                        <Text style={[styles.flexButtonText]}>
+                                            {t('action.save')}
+                                        </Text>
+                                    </TouchableOpacity>}
                                 </View>
 
                             </View>
@@ -881,20 +901,20 @@ class RostersFormScreen extends React.Component {
                                                         onPress={() => this.setState({eventColor: '#fff'})}
                                                         style={[{backgroundColor: '#fff'}, this.state?.eventColor === '#fff' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30, borderColor: mainThemeColor, borderWidth: 1}]} ></TouchableOpacity>
                                                     <TouchableOpacity
-                                                        onPress={() => this.setState({eventColor: '#3D8CE0'})}
-                                                        style={[{backgroundColor: '#3D8CE0'}, this.state?.eventColor === '#3D8CE0' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        onPress={() => this.setState({eventColor: '#CCDDFF'})}
+                                                        style={[{backgroundColor: '#CCDDFF'}, this.state?.eventColor === '#CCDDFF' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                     <TouchableOpacity
-                                                        onPress={() => this.setState({eventColor: '#4EB57B'})}
-                                                        style={[{backgroundColor: '#4EB57B'}, this.state?.eventColor === '#4EB57B' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        onPress={() => this.setState({eventColor: '#AAFFEE'})}
+                                                        style={[{backgroundColor: '#AAFFEE'}, this.state?.eventColor === '#AAFFEE' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                     <TouchableOpacity
-                                                        onPress={() => this.setState({eventColor: '#F5EF42'})}
-                                                        style={[{backgroundColor: '#F5EF42'}, this.state?.eventColor === '#F5EF42' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        onPress={() => this.setState({eventColor: '#DEB887'})}
+                                                        style={[{backgroundColor: '#DEB887'}, this.state?.eventColor === '#DEB887' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                     <TouchableOpacity
-                                                        onPress={() => this.setState({eventColor: '#F5574C'})}
-                                                        style={[{backgroundColor: '#F5574C'}, this.state?.eventColor === '#F5574C' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        onPress={() => this.setState({eventColor: '#FFC8B4'})}
+                                                        style={[{backgroundColor: '#FFC8B4'}, this.state?.eventColor === '#FFC8B4' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                     <TouchableOpacity
-                                                        onPress={() => this.setState({eventColor: '#E67ABE'})}
-                                                        style={[{backgroundColor: '#E67ABE'}, this.state?.eventColor === '#E67ABE' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        onPress={() => this.setState({eventColor: '#FFB7DD'})}
+                                                        style={[{backgroundColor: '#FFB7DD'}, this.state?.eventColor === '#FFB7DD' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
 
 
                                                 </View> :
@@ -908,10 +928,17 @@ class RostersFormScreen extends React.Component {
                                     </View>)
                                 })}
                             </View>
-                            {!!this.state?.data && <View style={[styles.fieldContainer, {alignItems: 'center', justifyContent: 'center', paddingVertical: 10}]}>
+                            {!!this.state?.data && <View style={[styles.fieldContainer, {alignItems: 'center', paddingVertical: 10}]}>
+                                <View style={{marginRight: 10}}>
+                                    <Field
+                                        name="workingAreaDistribute"
+                                        component={RNSwitch}
+                                        onChange={(flag) => this.setState({hasWorkingAreaDistribute: flag})}
+                                    />
+                                </View>
                                 <StyledText style={{fontWeight: 'bold'}}>{t('rostersForm.workingAreaDistribute')}</StyledText>
                             </View>}
-                            {!!this.state?.data && <View style={{flex: 1}}>
+                            {(!!this.state?.data && this.state?.hasWorkingAreaDistribute) ? <View style={{flex: 1}}>
                                 {this.state?.isManager ? <Accordion
                                     onChange={(activeSections) => this.setState({activeSections: activeSections})}
                                     activeSections={this.state?.activeSections}
@@ -952,7 +979,7 @@ class RostersFormScreen extends React.Component {
                                                                         </CheckBox>
                                                                     </View>
                                                                     <View style={[styles.tableCellView]}>
-                                                                        <StyledText>{user?.username}</StyledText>
+                                                                        <StyledText>{user?.displayName}</StyledText>
                                                                     </View>
 
                                                                 </View>
@@ -1025,7 +1052,7 @@ class RostersFormScreen extends React.Component {
                                             )
                                         })}
                                     </View>}
-                            </View>}
+                            </View> : <View style={{flex: 1}}></View>}
                             <View style={[{marginTop: 30, justifyContent: 'flex-end'}]}>
                                 {this.state.uneditable || <TouchableOpacity onPress={
                                     this.state?.isManager ?

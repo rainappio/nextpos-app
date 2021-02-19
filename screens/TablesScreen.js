@@ -846,7 +846,8 @@ class Draggable extends Component {
   handleChangeTable = (table, values) => {
     const updateOrder = {}
     updateOrder.orderType = values.orderType
-    if (values?.tables?.length > 1) {
+    updateOrder.tableIds = []
+    if (values?.tables?.length >= 1) {
       let array = [...values?.tables]
       let removeTable = null
       array?.forEach((item, index) => {
@@ -856,9 +857,11 @@ class Draggable extends Component {
       if (removeTable !== null) {
         array.splice(removeTable, 1);
       }
-      updateOrder.tableIds = array?.map((item) => item?.tableId)
+      let otherTableArr = array?.map((item) => item?.tableId)
+      otherTableArr.push(table.tableId)
+      updateOrder.tableIds = otherTableArr
     }
-    updateOrder.tableId = table.tableId
+    console.log('updateOrder', JSON.stringify(updateOrder))
 
 
     dispatchFetchRequest(api.order.update(values.orderId), {

@@ -11,6 +11,10 @@ const zh = {
   privilegedAccessTitle: '這是進階功能',
   premiumFeatureMsg: '是否前往訂閱',
   greeting: '您好',
+  deletedBy: '操作者',
+  noWorkingArea: '無指定工作區',
+  allSelected: '全選',
+  selectWorkingArea: '顯示工作區',
   general: {
     noData: '沒有資料'
   },

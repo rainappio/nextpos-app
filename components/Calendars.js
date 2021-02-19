@@ -193,7 +193,11 @@ class RenderAgendaBase2 extends Component {
         const {t} = this.context
         let weekStart = moment(this.state?.selectedDate).startOf('isoWeek').tz(timezone)
         let weekEnd = moment(this.state?.selectedDate).endOf('isoWeek').tz(timezone)
-        const weekEvents = this.state?.events?.filter((event) => moment(event?.startTime).isBetween(weekStart, weekEnd))
+        const weekEvents = this.state?.events?.filter((event) =>
+            (moment(event?.startTime).isBetween(weekStart, weekEnd) &&
+                ((this.props?.selectedLabels.has('noWorkingArea') && Object.keys(event?.eventResources).length === 0) || (Object.keys(event?.eventResources).some((area) => this.props?.selectedLabels.has(area))))
+            ))
+        console.log('weekEvents', JSON.stringify(weekEvents), this.props?.selectedLabels)
 
 
 

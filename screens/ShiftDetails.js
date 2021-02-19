@@ -9,6 +9,7 @@ import {StyledText} from "../components/StyledText";
 import Modal from 'react-native-modal';
 import {Ionicons} from '@expo/vector-icons';
 import {handleSendEmail} from "../helpers/shiftActions";
+import {DeleteLineItemLogModal} from "../components/DeleteLineItemLogModal";
 
 class ShiftDetails extends React.Component {
   static navigationOptions = {
@@ -25,12 +26,10 @@ class ShiftDetails extends React.Component {
       en: {
         shiftDetailsTitle: 'Shift Details',
         searchShiftOrders: 'Search Shift Orders',
-        deletedBy: 'Deleted By'
       },
       zh: {
         shiftDetailsTitle: '帳內容',
         searchShiftOrders: '尋找帳訂單',
-        deletedBy: '操作者'
       }
     })
   }
@@ -77,69 +76,8 @@ class ShiftDetails extends React.Component {
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader parentFullScreen={true}
             title={t('shiftDetailsTitle')} />
-          <Modal
-            isVisible={this.state?.isShow}
-            useNativeDriver
-            hideModalContentWhileAnimating
-            animationIn='fadeIn'
-            animationOut='fadeOut'
-            onBackdropPress={() => this.setState({isShow: false})}
-            style={{
-              margin: 0, flex: 1,
-            }}
-          ><ScrollView style={[themeStyle, {padding: 10, borderRadius: 20, maxHeight: '50%', marginHorizontal: 10}]}>
-              <View style={styles.sectionBar}>
-                <View style={[{flex: 1}, styles.tableCellView]}>
-                  <Text style={[styles.sectionBarTextSmall]}>{t('order.product')}</Text>
-                </View>
 
-                <View style={[{flex: 0.5}, styles.tableCellView, {justifyContent: 'flex-end'}]}
-                >
-                  <Text style={styles.sectionBarTextSmall}>{t('order.quantity')}</Text>
-                </View>
-
-                <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                  <Text style={styles.sectionBarTextSmall}>{t('order.total')}</Text>
-                </View>
-
-                <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                  <Text style={styles.sectionBarTextSmall}>{t('order.date')}</Text>
-                </View>
-                <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                  <Text style={styles.sectionBarTextSmall}>{t('deletedBy')}</Text>
-                </View>
-              </View>
-              {shift?.deletedLineItems?.map((item) => {
-                return (
-                  <View style={styles.tableRowContainerWithBorder}>
-                    <View style={[{flex: 1, flexWrap: 'wrap'}, styles.tableCellView]}>
-                      <StyledText style={[styles.tableCellView]}>{item?.productName} </StyledText>
-                      <StyledText style={[styles.tableCellView]}>{item?.total === 0 && `(${t('order.freeLineitem')})`}</StyledText>
-                    </View>
-
-                    <View style={[{flex: 0.5}, styles.tableCellView, {justifyContent: 'flex-end'}]}
-                    >
-                      <StyledText style={[styles.tableCellView]}>{item?.quantity}</StyledText>
-                    </View>
-
-                    <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                      <StyledText style={[styles.tableCellView]}>{formatCurrency(item?.total ?? 0)}</StyledText>
-                    </View>
-
-                    <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                      <StyledText style={[styles.tableCellView]}>{customFormatLocaleDate(item?.deletedDate)}</StyledText>
-                    </View>
-
-                    <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                      <StyledText style={[styles.tableCellView]}>{item?.deletedBy}</StyledText>
-                    </View>
-                  </View>
-
-                )
-              })}
-            </ScrollView>
-
-          </Modal>
+          <DeleteLineItemLogModal isShow={this.state?.isShow} closeModal={() => this.setState({isShow: false})} data={shift} />
           <View>
             <View style={{alignItems: 'center'}}>
               <StyledText>{formatDate(shift.open.timestamp)} - {formatDate(shift.close.timestamp)}</StyledText>

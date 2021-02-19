@@ -74,7 +74,7 @@ const CalendarEventBase = (props) => {
 
 
     return (
-        <TouchableOpacity key={event?.id} style={{flexDirection: 'row', borderWidth: 1, borderRadius: 10, borderColor: mainThemeColor, margin: 10, maxWidth: 640, alignSelf: 'center', padding: 10}}
+        <TouchableOpacity key={event?.id} style={{flexDirection: 'row', borderWidth: 1, borderRadius: 10, borderColor: event?.eventColor, margin: 10, maxWidth: 640, alignSelf: 'center', padding: 10}}
             onPress={() => {
                 !!props?.closeModal && props?.closeModal()
                 props.navigation.navigate('RostersFormScreen', {
@@ -101,27 +101,32 @@ const CalendarEventBase = (props) => {
                 <FontAwesome5Icon
                     name={event?.eventType === 'ROSTER' ? "business-time" : 'utensils'}
                     size={36}
-                    style={[styles.buttonIconStyle]}
+                    style={[styles.buttonIconStyle, {color: event?.eventColor}]}
                 />
                 <StyledText style={{...props?.theme?.text, marginTop: 10}}>{event?.eventName}</StyledText>
 
             </View>
-            <View style={{flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', flex: 3}}>
-                <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
-                    <StyledText style={{...props?.theme?.text, flexWrap: 'wrap', }}>{localeContext.t(`calendarEvent.startTime`)}: </StyledText>
-                    <StyledText style={{...props?.theme?.text, flexWrap: 'wrap', }}>{moment(event?.startTime ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>
+            <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 3}}>
+                <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+
+                    <StyledText style={{...props?.theme?.text, flexWrap: 'wrap', fontSize: 16, color: mainThemeColor, marginBottom: 16}}>{moment(event?.startTime ?? new Date()).tz(timezone).format("HH:mm")} - {moment(event?.endTime ?? new Date()).tz(timezone).format("HH:mm")}</StyledText>
+
                 </View>
-                <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
-                    <StyledText style={{...props?.theme?.text, flexWrap: 'wrap', }}>{localeContext.t(`calendarEvent.endTime`)}: </StyledText>
-                    <StyledText style={{...props?.theme?.text, flexWrap: 'wrap', }}>{moment(event?.endTime ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>
-                </View>
-                <View style={{flexWrap: 'wrap', flexDirection: 'row', marginTop: 5}}>
-                    <StyledText style={{...props?.theme?.text, }}>{localeContext.t(`calendarEvent.eventResources`)}: </StyledText>
-                </View>
+
+
                 {labels?.map((label) => {
                     return (
-                        <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
-                            <StyledText style={{...props?.theme?.text, flexWrap: 'wrap', marginLeft: 5}}>{label?.name}: {event?.eventResources?.[`${label?.name}`]?.map((item) => item?.resourceName)?.join(', ')}</StyledText>
+                        <View style={{flexDirection: 'row'}}>
+                            <StyledText style={{...props?.theme?.textm, marginVertical: 5, fontWeight: 'bold'}}>{label?.name} </StyledText>
+                            <View style={{flexDirection: 'row', flex: 1, flexWrap: 'wrap', }}>
+                                {event?.eventResources?.[`${label?.name}`]?.map((item) => {
+                                    return (
+                                        <View style={{...localeContext?.complexTheme?.shade, paddingHorizontal: 5, paddingVertical: 2, borderRadius: 10, marginHorizontal: 5, marginVertical: 5}}>
+                                            <StyledText style={{...props?.theme?.text, flexWrap: 'wrap', }}>{item?.resourceName}</StyledText>
+                                        </View>
+                                    )
+                                })}
+                            </View>
                         </View>
                     )
                 })}
