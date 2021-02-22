@@ -11,6 +11,10 @@ const en = {
   privilegedAccessTitle: 'This is a premium feature',
   premiumFeatureMsg: 'Subscribe now',
   greeting: 'Hello',
+  deletedBy: 'Deleted By',
+  noWorkingArea: 'No Working Area',
+  allSelected: 'All',
+  selectWorkingArea: 'Working area to show',
   general: {
     noData: 'No data'
   },

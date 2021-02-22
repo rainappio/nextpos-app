@@ -54,7 +54,9 @@ class CalendarScreen extends React.Component {
             modalTasks: [],
             nowYear: new Date().getFullYear(),
             nowMonth: new Date().getMonth() + 1,
-            monthLoading: false
+            monthLoading: false,
+            labels: [],
+            selectedLabels: new Set(),
         }
         context.localize({
             en: {
@@ -96,11 +98,13 @@ class CalendarScreen extends React.Component {
 
         this.getUsers()
         this.getEvents()
+        this.getLabels()
     }
 
     refreshScreen = async () => {
 
         this.getUsers()
+        this.getLabels()
         this.getEvents(new Date(this.state?.selectedDate ?? new Date()).getFullYear(), new Date(this.state?.selectedDate ?? new Date()).getMonth() + 1)
     }
 
@@ -176,6 +180,24 @@ class CalendarScreen extends React.Component {
                 this.setState({rosterEvents: data?.results, groupedResults: data?.groupedResults, isLoading: false, nowYear: year, nowMonth: month, monthLoading: false, selectedDate: `${year}-${month < 10 ? '0' : ''}${month}-01`}, () => callback())
             })
         }).then().catch(() => this.setState({monthLoading: true}))
+    }
+
+    getLabels = () => {
+        dispatchFetchRequest(`${api.workingarea.getAll}?visibility=ROSTER`, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }, response => {
+            response.json().then(data => {
+                let labelsArr = data?.workingAreas?.map((item) => item?.name)
+                labelsArr.push('noWorkingArea')
+                this.setState({labels: data?.workingAreas?.map((item) => item?.name), selectedLabels: new Set([...labelsArr])})
+
+            })
+        }).then()
     }
 
 
@@ -258,6 +280,96 @@ class CalendarScreen extends React.Component {
                                                     }}
                                                 />
                                             </View>
+                                            {this.state?.searchTypeIndex === 0 && this.state?.calendarTypeIndex === 1 && <View >
+                                                <View style={{
+                                                    flexDirection: 'row',
+                                                    paddingVertical: 8,
+                                                    alignItems: 'center'
+                                                }}>
+                                                    <Text style={{marginLeft: 10, color: mainThemeColor, fontSize: 16, fontWeight: 'bold'}}>{t('selectWorkingArea')}</Text>
+                                                </View>
+                                                <View style={{
+                                                    flexDirection: 'row',
+                                                    paddingVertical: 8,
+                                                    alignItems: 'center'
+                                                }}>
+                                                    <View>
+                                                        <CheckBox
+                                                            checkedIcon={'check-circle'}
+                                                            uncheckedIcon={'circle'}
+                                                            checked={this.state?.selectedLabels?.size === this.state?.labels?.length + 1}
+                                                            containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                                                            onPress={() => {
+                                                                let tempSet = new Set()
+                                                                if (this.state?.selectedLabels?.size === this.state?.labels?.length + 1) {
+                                                                    tempSet = new Set()
+                                                                } else {
+                                                                    let labelsArr = [...this.state?.labels]
+                                                                    labelsArr.push('noWorkingArea')
+                                                                    tempSet = new Set([...labelsArr])
+                                                                }
+                                                                this.setState({selectedLabels: tempSet})
+                                                            }}
+                                                        >
+                                                        </CheckBox>
+                                                    </View>
+                                                    <StyledText>{t('allSelected')}</StyledText>
+                                                </View>
+                                                {this.state?.labels?.map((workingArea) => {
+                                                    return (
+                                                        <View style={{
+                                                            flexDirection: 'row',
+                                                            paddingVertical: 8,
+                                                            alignItems: 'center'
+                                                        }}>
+                                                            <View>
+                                                                <CheckBox
+                                                                    checkedIcon={'check-circle'}
+                                                                    uncheckedIcon={'circle'}
+                                                                    checked={this.state?.selectedLabels?.has(workingArea)}
+                                                                    containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                                                                    onPress={() => {
+                                                                        let tempSet = new Set(this.state?.selectedLabels)
+                                                                        if (this.state?.selectedLabels?.has(workingArea)) {
+                                                                            tempSet.delete(workingArea)
+                                                                        } else {
+                                                                            tempSet.add(workingArea)
+                                                                        }
+                                                                        this.setState({selectedLabels: tempSet})
+                                                                    }}
+                                                                >
+                                                                </CheckBox>
+                                                            </View>
+                                                            <StyledText>{workingArea}</StyledText>
+                                                        </View>
+                                                    )
+                                                })}
+                                                <View style={{
+                                                    flexDirection: 'row',
+                                                    paddingVertical: 8,
+                                                    alignItems: 'center'
+                                                }}>
+                                                    <View>
+                                                        <CheckBox
+                                                            checkedIcon={'check-circle'}
+                                                            uncheckedIcon={'circle'}
+                                                            checked={this.state?.selectedLabels?.has('noWorkingArea')}
+                                                            containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                                                            onPress={() => {
+                                                                let tempSet = new Set(this.state?.selectedLabels)
+                                                                if (this.state?.selectedLabels?.has('noWorkingArea')) {
+                                                                    tempSet.delete('noWorkingArea')
+                                                                } else {
+                                                                    tempSet.add('noWorkingArea')
+                                                                }
+                                                                this.setState({selectedLabels: tempSet})
+                                                            }}
+                                                        >
+                                                        </CheckBox>
+                                                    </View>
+                                                    <StyledText>{t('calendar.noWorkingArea')}</StyledText>
+                                                </View>
+                                            </View>}
 
                                         </View>
                                     </OptionModal>
@@ -285,7 +397,10 @@ class CalendarScreen extends React.Component {
                             margin: 0, justifyContent: 'center'
                         }}
                     >
-                        <View style={[themeStyle, {maxWidth: 640, alignSelf: 'center', maxHeight: '70%', width: '100%'}]}>
+                        <View style={[themeStyle, {maxWidth: 640, alignSelf: 'center', maxHeight: '70%', width: '100%', borderRadius: 16, paddingBottom: 8}]}>
+                            <View style={[styles.tableRowContainer, {justifyContent: 'center'}]}>
+                                <Text style={[styles.announcementTitle]}>{moment(this.state?.selectedDate ?? new Date()).tz(timezone).format("YYYY-MM-DD")}</Text>
+                            </View>
                             <ScrollView >
                                 {this.state?.modalTasks?.map((task) => {
                                     return (
@@ -355,11 +470,16 @@ class CalendarScreen extends React.Component {
                             dayComponent={({date, state, onPress}) => {
                                 let today = moment(this.state?.selectedDate ?? new Date()).tz(timezone).format("YYYY-MM-DD")
                                 let isToday = today === date.dateString
-                                let task = !!this.state?.rosterEvents
+                                let unsortTask = !!this.state?.rosterEvents
                                     ? this.state?.rosterEvents?.filter((event) => {
                                         return moment(event?.startTime ?? new Date()).tz(timezone).format("YYYY-MM-DD") === date.dateString
                                     })
                                     : []
+
+                                let task = unsortTask.length > 0 ? unsortTask.sort(function (a, b) {
+
+                                    return -(new Date(b.startTime) - new Date(a.startTime));
+                                }) : []
                                 return (
                                     <TouchableOpacity
                                         style={{flex: 1, width: '100%'}}
@@ -441,7 +561,7 @@ class CalendarScreen extends React.Component {
 
                     {this.state.isLoading || this.state.calendarMode === 'week' && <View style={[styles.flex(1),]}>
 
-                        <RenderAgenda events={this.state?.rosterEvents} selectedDate={this.state?.selectedDate} isManager={this.props?.currentUser?.roles?.includes('MANAGER')} users={this.state?.users} refreshScreen={() => this.refreshScreen()} toggleRosterFormModal={(task) => this.toggleRosterFormModal(task, true)} changeSelectedDate={(date) => this.setState({selectedDate: date})} />
+                        <RenderAgenda events={this.state?.rosterEvents} selectedDate={this.state?.selectedDate} isManager={this.props?.currentUser?.roles?.includes('MANAGER')} users={this.state?.users} refreshScreen={() => this.refreshScreen()} toggleRosterFormModal={(task) => this.toggleRosterFormModal(task, true)} changeSelectedDate={(date) => this.setState({selectedDate: date})} selectedLabels={this.state?.selectedLabels} />
                     </View>}
                     {this.state.isLoading || this.state.calendarMode === 'day' && <View style={[styles.flex(1),]}>
 

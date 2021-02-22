@@ -12,6 +12,7 @@ import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScro
 import {StyledText} from "../components/StyledText";
 import Modal from 'react-native-modal';
 import {Ionicons} from '@expo/vector-icons';
+import {DeleteLineItemLogModal} from "../components/DeleteLineItemLogModal";
 
 class AccountCloseConfirmForm extends React.Component {
   static navigationOptions = {
@@ -67,61 +68,8 @@ class AccountCloseConfirmForm extends React.Component {
       <ThemeKeyboardAwareScrollView>
         <View style={[styles.container]}>
           <ScreenHeader title={t('shift.confirmCloseTitle')} />
-          <Modal
-            isVisible={this.state?.isShow}
-            useNativeDriver
-            hideModalContentWhileAnimating
-            animationIn='fadeIn'
-            animationOut='fadeOut'
-            onBackdropPress={() => this.setState({isShow: false})}
-            style={{
-              margin: 0, flex: 1,
-            }}
-          ><ScrollView style={[themeStyle, {padding: 10, borderRadius: 20, maxHeight: '50%', marginHorizontal: 10}]}>
-              <View style={styles.sectionBar}>
-                <View style={[{flex: 1}, styles.tableCellView]}>
-                  <Text style={[styles.sectionBarTextSmall]}>{t('order.product')}</Text>
-                </View>
 
-                <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}
-                >
-                  <Text style={styles.sectionBarTextSmall}>{t('order.quantity')}</Text>
-                </View>
-
-                <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                  <Text style={styles.sectionBarTextSmall}>{t('order.total')}</Text>
-                </View>
-
-                <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                  <Text style={styles.sectionBarTextSmall}>{t('order.date')}</Text>
-                </View>
-              </View>
-              {mostrecentShift?.deletedLineItems?.map((item) => {
-                return (
-                  <View style={styles.tableRowContainerWithBorder}>
-                    <View style={[{flex: 1}, styles.tableCellView]}>
-                      <StyledText style={[styles.tableCellView]}>{item?.productName}</StyledText>
-                    </View>
-
-                    <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}
-                    >
-                      <StyledText style={[styles.tableCellView]}>{item?.quantity}</StyledText>
-                    </View>
-
-                    <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                      <StyledText style={[styles.tableCellView]}>{formatCurrency(item?.total ?? 0)}</StyledText>
-                    </View>
-
-                    <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                      <StyledText style={[styles.tableCellView]}>{customFormatLocaleDate(item?.deletedDate)}</StyledText>
-                    </View>
-                  </View>
-
-                )
-              })}
-            </ScrollView>
-
-          </Modal>
+          <DeleteLineItemLogModal isShow={this.state?.isShow} closeModal={() => this.setState({isShow: false})} data={mostrecentShift} />
 
           <View>
             <StyledText style={[styles.toRight]}>

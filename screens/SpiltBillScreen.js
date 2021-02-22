@@ -19,7 +19,7 @@ import OrderItemDetailEditModal from './OrderItemDetailEditModal';
 import OrderTopInfo from "./OrderTopInfo";
 import DeleteBtn from '../components/DeleteBtn'
 import NavigationService from "../navigation/NavigationService";
-import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer, revertSplitOrder, handleOrderAction} from "../helpers/orderActions";
+import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer, revertSplitOrder, handleOrderAction, getTableDisplayName} from "../helpers/orderActions";
 import {SwipeRow} from 'react-native-swipe-list-view'
 import ScreenHeader from "../components/ScreenHeader";
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -158,10 +158,9 @@ class SpiltBillScreen extends React.Component {
             haveError,
             isLoading,
             order,
-            themeStyle,
             productsData
         } = this.props
-        const {reverseThemeStyle, t, splitParentOrderId, complexTheme, } = this.context
+        const {reverseThemeStyle, t, splitParentOrderId, complexTheme, themeStyle} = this.context
 
         if (this.context.isTablet) {
             return (
@@ -207,6 +206,8 @@ class SpiltBillScreen extends React.Component {
                                     flexDirection: 'row',
                                     justifyContent: 'flex-start',
                                     alignItems: 'center',
+                                    overflow: 'hidden',
+                                    marginRight: 10
                                 }}>
                                     <Text style={[styles.sectionBarText]}>
                                         {t('splitBill.parentOrder')}
@@ -214,7 +215,10 @@ class SpiltBillScreen extends React.Component {
                                     <View style={styles.tableRowContainer}>
                                         <StyledText>Order ID: </StyledText>
                                         <StyledText style={styles.tableCellText}>{order.serialId}</StyledText>
-                                        <StyledText> ({order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')})</StyledText>
+
+                                    </View>
+                                    <View style={{flex: 1}}>
+                                        <Text numberOfLines={1} style={themeStyle} > ({getTableDisplayName(order)})</Text>
                                     </View>
                                 </View>
                                 <View style={{flex: 7, paddingRight: 16}}>
@@ -303,7 +307,7 @@ class SpiltBillScreen extends React.Component {
                                     {!!this.state?.splitOrderData && <View style={styles.tableRowContainer}>
                                         <StyledText>Order ID: </StyledText>
                                         <StyledText style={styles.tableCellText}>{this.state?.splitOrderData?.serialId}</StyledText>
-                                        <StyledText> ({this.state?.splitOrderData?.orderType === 'IN_STORE' ? this.state?.splitOrderData?.tableDisplayName : t('order.takeOut')})</StyledText>
+                                        <StyledText> ({getTableDisplayName(this.state?.splitOrderData)})</StyledText>
                                     </View>}
                                 </View>
                                 <View style={{flex: 1}}>
@@ -492,7 +496,10 @@ class SpiltBillScreen extends React.Component {
                                         <View style={styles.tableRowContainer}>
                                             <StyledText>Order ID: </StyledText>
                                             <StyledText style={styles.tableCellText}>{order.serialId}</StyledText>
-                                            <StyledText> ({order.orderType === 'IN_STORE' ? order.tableDisplayName : t('order.takeOut')})</StyledText>
+
+                                        </View>
+                                        <View style={{flex: 1}}>
+                                            <Text numberOfLines={1} style={themeStyle} > ({getTableDisplayName(order)})</Text>
                                         </View>
                                     </View>
                                     <View style={[styles.sectionBar]}>
@@ -601,7 +608,7 @@ class SpiltBillScreen extends React.Component {
                                         {!!this.state?.splitOrderData && <View style={styles.tableRowContainer}>
                                             <StyledText>Order ID: </StyledText>
                                             <StyledText style={styles.tableCellText}>{this.state?.splitOrderData?.serialId}</StyledText>
-                                            <StyledText> ({this.state?.splitOrderData?.orderType === 'IN_STORE' ? this.state?.splitOrderData?.tableDisplayName : t('order.takeOut')})</StyledText>
+                                            <StyledText> ({getTableDisplayName(this.state?.splitOrderData)})</StyledText>
                                         </View>}
                                     </View>
 

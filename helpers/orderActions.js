@@ -349,3 +349,7 @@ export const handleOrderAction = (id, action, successCallback = null) => {
     }
   ).then()
 }
+
+export const getTableDisplayName = (order) => {
+  return order?.orderType === 'IN_STORE' ? (!!order?.tables ? order?.tables?.map((table) => table?.displayName)?.join(',') : order?.tableDisplayName) : i18n.t('order.takeOut')
+}

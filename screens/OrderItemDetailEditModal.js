@@ -34,33 +34,7 @@ const OrderItemDetailEditModal = (props) => {
         setModalVisible(props?.modalVisible ?? false);
     }, [props?.modalVisible]);
 
-    const handleSubmit = values => {
-        const createOrder = {}
-        createOrder.orderType = 'IN_STORE'
-        createOrder.tableId = props?.data?.table?.tableId
-        createOrder.demographicData = {
-            male: values.male,
-            female: values.female,
-            kid: values.kid,
-            ageGroup: values.ageGroup,
-            visitFrequency: values.visitFrequency
-        }
 
-        dispatchFetchRequest(api.order.new, {
-            method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(createOrder)
-        },
-            response => {
-                response.json().then(data => {
-                    props?.submitOrder(data.orderId)
-                })
-            }).then()
-    }
     return (
 
         <Modal
@@ -82,9 +56,8 @@ const OrderItemDetailEditModal = (props) => {
                 marginBottom: 53,
                 alignSelf: 'center',
             }}>
-                <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={80}>
+                <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={0}>
                     <ConnectedOrderItemOptions
-                        onSubmit={handleSubmit}
                         navigation={props.navigation}
                         prdId={props.prdId}
                         initialValues={{
@@ -472,34 +445,30 @@ class OrderItemOptions extends React.Component {
                                 >
                                     <View>
                                         <View style={[styles.tableRowContainerWithBorder]}>
-                                            <View style={[{flex: 1}]}>
-                                                <Field
-                                                    name={`productOptions[${lastOptionIndex}]`}
-                                                    component={InputText}
-                                                    placeholder={t('freeTextProductOption')}
-                                                    alignLeft={true}
-                                                    format={(value, name) => {
-                                                        return value != null ? String(value.optionValue) : ''
-                                                    }}
-                                                    normalize={value => {
-                                                        return {
-                                                            optionName: t('freeTextProductOption'),
-                                                            optionValue: value
-                                                        }
-                                                    }}
-                                                />
-                                            </View>
+                                            <Field
+                                                name={`productOptions[${lastOptionIndex}]`}
+                                                component={InputText}
+                                                placeholder={t('freeTextProductOption')}
+                                                alignLeft={true}
+                                                format={(value, name) => {
+                                                    return value != null ? String(value.optionValue) : ''
+                                                }}
+                                                normalize={value => {
+                                                    return {
+                                                        optionName: t('freeTextProductOption'),
+                                                        optionValue: value
+                                                    }
+                                                }}
+                                            />
                                         </View>
                                         <View style={[styles.tableRowContainerWithBorder]}>
-                                            <View style={[{flex: 1}]}>
-                                                <Field
-                                                    name={`overridePrice`}
-                                                    component={InputText}
-                                                    placeholder={t('overridePrice')}
-                                                    keyboardType='numeric'
-                                                    alignLeft={true}
-                                                />
-                                            </View>
+                                            <Field
+                                                name={`overridePrice`}
+                                                component={InputText}
+                                                placeholder={t('overridePrice')}
+                                                keyboardType='numeric'
+                                                alignLeft={true}
+                                            />
                                         </View>
                                     </View>
                                 </Accordion.Panel>

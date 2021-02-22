@@ -130,7 +130,13 @@ class RenderDateTimePicker extends Component {
 
 				</View>
 				<View>
-					<View style={[styles.flex_dir_row, styles.jc_alignIem_center]}>
+					<TouchableOpacity
+						style={[styles.flex_dir_row, styles.jc_alignIem_center]}
+						onPress={(e) => {
+							if (!readonly) {
+								showDatepicker()
+							}
+						}}>
 						<View style={{
 							flex: 1,
 							flexDirection: 'row',
@@ -146,17 +152,13 @@ class RenderDateTimePicker extends Component {
 								size={24}
 								style={[styles.orange_color]}
 							/>
-							<Text onPress={(e) => {
-								if (!readonly) {
-									showDatepicker()
-								}
-							}}
+							<Text
 								style={{fontSize: 11, color: fontColor, marginLeft: 5}}
 							>
 								{i18nMoment.tz(timezone).format("YYYY-MM-DD HH:mm A")}
 							</Text>
 						</View>
-					</View>
+					</TouchableOpacity>
 				</View>
 			</View>
 		)

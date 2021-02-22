@@ -25,7 +25,7 @@ const NewOrderModal = (props) => {
     const handleSubmit = values => {
         const createOrder = {}
         createOrder.orderType = 'IN_STORE'
-        createOrder.tableId = props?.data?.table?.tableId
+        createOrder.tableIds = [props?.data?.table?.tableId]
         createOrder.demographicData = {
             male: values.male,
             female: values.female,

@@ -6,6 +6,7 @@ import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import {formatDate} from "../actions";
 import {withNavigation} from 'react-navigation'
 import {StyledText} from "../components/StyledText";
+import {getTableDisplayName} from "../helpers/orderActions";
 
 class OrderTopInfo extends Component {
   static contextType = LocaleContext
@@ -29,7 +30,7 @@ class OrderTopInfo extends Component {
             <View style={[styles.tableCellView, {width: '20%'}]}>
               <View>
                 <Text style={[styles.primaryText]}>
-                  {order.orderType === 'IN_STORE' ? (!!order?.tables ? order?.tables?.map((table) => table?.displayName)?.join(',') : order.tableDisplayName) : t('order.takeOut')}
+                  {getTableDisplayName(order)}
                 </Text>
               </View>
             </View>
@@ -108,7 +109,7 @@ class OrderTopInfo extends Component {
             <View style={[styles.tableCellView, {width: '35%'}]}>
               <View>
                 <Text style={[styles.primaryText]}>
-                  {order.orderType === 'IN_STORE' ? (!!order?.tables ? order?.tables?.map((table) => table?.displayName)?.join(',') : order.tableDisplayName) : t('order.takeOut')}
+                  {getTableDisplayName(order)}
                 </Text>
               </View>
             </View>
