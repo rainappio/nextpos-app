@@ -12,6 +12,8 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import TimePeriodPicker from "../components/TimePeriodPicker";
 import moment from "moment";
 import Modal from 'react-native-modal';
+import {CheckBox} from 'react-native-elements'
+import {renderOrderState} from "../helpers/orderActions";
 
 class OrderFilterForm extends React.Component {
   static contextType = LocaleContext
@@ -25,6 +27,8 @@ class OrderFilterForm extends React.Component {
     isFilterOpen: false,
     currentDate: this.props?.initialValues?.fromDate ?? new Date(),
     needSearch: false,
+    statusOptions: ['OPEN', 'IN_PROCESS', 'DELIVERED', 'SETTLED', 'COMPLETED', 'DELETED', 'CANCELLED', 'PAYMENT_IN_PROCESS'],
+    selectedStatusOptions: this.props?.initialValues?.selectedStatusOptions ?? new Set(),
   }
 
 
@@ -47,7 +51,7 @@ class OrderFilterForm extends React.Component {
 
   render() {
     const {handleSubmit, handlegetDate, change, isShow, closeModal} = this.props
-    const {t, isTablet, themeStyle} = this.context
+    const {t, isTablet, themeStyle, appType} = this.context
 
     if (isTablet) {
       return (
@@ -64,8 +68,8 @@ class OrderFilterForm extends React.Component {
             margin: 0, flex: 1, justifyContent: 'flex-start'
           }}
         >
-          <View style={[{height: 215, marginTop: 100, marginRight: 15, width: '50%', alignSelf: 'flex-end'}]}>
-            <View style={[themeStyle, {flexDirection: 'column', flex: 1, borderRadius: 10}]}>
+          <View style={[{marginTop: 100, marginRight: 15, width: '50%', alignSelf: 'flex-end'}]}>
+            <View style={[themeStyle, {flexDirection: 'column', borderRadius: 10}]}>
               <View style={[styles.tableRowContainer]}>
                 <TouchableOpacity
                   onPress={() => {
@@ -85,7 +89,7 @@ class OrderFilterForm extends React.Component {
                 </TouchableOpacity>
 
               </View>
-              {this.state?.searchTypeIndex === 0 && <View style={{flex: 1, justifyContent: 'space-between'}}>
+              {this.state?.searchTypeIndex === 0 && <View style={{justifyContent: 'space-between'}}>
                 <View style={[styles.tableRowContainer]}>
                   <View style={[styles.tableCellView, {flex: 3, marginRight: 5, flexDirection: 'column', justifyContent: 'center'}]}>
                     <Field
@@ -169,9 +173,134 @@ class OrderFilterForm extends React.Component {
                     </TouchableOpacity>
                   </View>
                 </View>
+                {appType === 'store' ? <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                  <View style={{
+                    flexDirection: 'row',
+                    paddingVertical: 8,
+                    alignItems: 'center',
+                    width: '100%'
+                  }}>
+                    <View>
+                      <CheckBox
+                        checkedIcon={'check-circle'}
+                        uncheckedIcon={'circle'}
+                        checked={this.state?.selectedStatusOptions?.size === this.state?.statusOptions?.length}
+                        containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                        onPress={() => {
+                          let tempSet = new Set()
+                          if (this.state?.selectedStatusOptions?.size === this.state?.statusOptions?.length) {
+                            tempSet = new Set()
+                          } else {
+                            let labelsArr = [...this.state?.statusOptions]
+                            tempSet = new Set([...labelsArr])
+                          }
+                          this.setState({selectedStatusOptions: tempSet})
+                          this.props?.getSelectedStatus(tempSet)
+                        }}
+                      >
+                      </CheckBox>
+                    </View>
+                    <StyledText>{t('allSelected')}</StyledText>
+                  </View>
+                  {this.state?.statusOptions?.map((status) => {
+                    return (
+                      <View style={{
+                        flexDirection: 'row',
+                        paddingVertical: 8,
+                        alignItems: 'center',
+                        width: '50%'
+                      }}>
+
+                        <View>
+                          <CheckBox
+                            checkedIcon={'check-circle'}
+                            uncheckedIcon={'circle'}
+                            checked={this.state?.selectedStatusOptions?.has(status)}
+                            containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                            onPress={() => {
+                              let tempSet = new Set(this.state?.selectedStatusOptions)
+                              if (this.state?.selectedStatusOptions?.has(status)) {
+                                tempSet.delete(status)
+                              } else {
+                                tempSet.add(status)
+                              }
+                              this.setState({selectedStatusOptions: tempSet})
+                              this.props?.getSelectedStatus(tempSet)
+                            }}
+                          >
+                          </CheckBox>
+                        </View>
+                        <View style={{marginRight: 10}}>
+                          {renderOrderState(status)}
+                        </View>
+                        <StyledText>{t(`orderState.${status}`)}</StyledText>
+
+                      </View>
+                    )
+                  })}
+                </View> :
+                  <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                    <View style={{
+                      flexDirection: 'row',
+                      paddingVertical: 8,
+                      alignItems: 'center',
+                      width: '50%'
+                    }}>
+                      <View>
+                        <CheckBox
+                          checkedIcon={'check-circle'}
+                          uncheckedIcon={'circle'}
+                          checked={this.state?.selectedStatusOptions.has('OPEN') && this.state?.selectedStatusOptions.has('IN_PROCESS') && this.state?.selectedStatusOptions.has('DELIVERED') && this.state?.selectedStatusOptions.has('SETTLED') && this.state?.selectedStatusOptions.has('PAYMENT_IN_PROCESS')}
+                          containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                          onPress={() => {
+                            let tempSet = new Set(this.state?.selectedStatusOptions)
+                            let changeSet = new Set(['OPEN', 'IN_PROCESS', 'DELIVERED', 'SETTLED', 'PAYMENT_IN_PROCESS'])
+                            if (this.state?.selectedStatusOptions.has('OPEN') && this.state?.selectedStatusOptions.has('IN_PROCESS') && this.state?.selectedStatusOptions.has('DELIVERED') && this.state?.selectedStatusOptions.has('SETTLED') && this.state?.selectedStatusOptions.has('PAYMENT_IN_PROCESS')) {
+                              changeSet.forEach((item) => tempSet.delete(item))
+                            } else {
+                              changeSet.forEach((item) => tempSet.add(item))
+                            }
+                            this.setState({selectedStatusOptions: tempSet})
+                            this.props?.getSelectedStatus(tempSet)
+                          }}
+                        >
+                        </CheckBox>
+                      </View>
+                      <StyledText>{t('selectUnCompletedOrder')}</StyledText>
+                    </View>
+                    <View style={{
+                      flexDirection: 'row',
+                      paddingVertical: 8,
+                      alignItems: 'center',
+                      width: '50%'
+                    }}>
+                      <View>
+                        <CheckBox
+                          checkedIcon={'check-circle'}
+                          uncheckedIcon={'circle'}
+                          checked={this.state?.selectedStatusOptions.has('COMPLETED') && this.state?.selectedStatusOptions.has('DELETED') && this.state?.selectedStatusOptions.has('CANCELLED')}
+                          containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                          onPress={() => {
+                            let tempSet = new Set(this.state?.selectedStatusOptions)
+                            let changeSet = new Set(['COMPLETED', 'DELETED', 'CANCELLED'])
+                            if (this.state?.selectedStatusOptions.has('COMPLETED') && this.state?.selectedStatusOptions.has('DELETED') && this.state?.selectedStatusOptions.has('CANCELLED')) {
+                              changeSet.forEach((item) => tempSet.delete(item))
+                            } else {
+                              changeSet.forEach((item) => tempSet.add(item))
+                            }
+                            this.setState({selectedStatusOptions: tempSet})
+                            this.props?.getSelectedStatus(tempSet)
+                          }}
+                        >
+                        </CheckBox>
+                      </View>
+                      <StyledText>{t('selectCompletedOrder')}</StyledText>
+                    </View>
+                  </View>
+                }
               </View>}
               {this.state?.searchTypeIndex === 1 &&
-                <View style={{flex: 1, justifyContent: 'space-between'}}>
+                <View style={{justifyContent: 'space-between'}}>
                   <View style={[styles.tableRowContainer]}>
                     <View style={[styles.tableCellView, {flex: 3, marginRight: 5}]}>
                       <Field
@@ -224,7 +353,7 @@ class OrderFilterForm extends React.Component {
         }}
       >
         <View style={[{height: 300, width: '100%', alignSelf: 'flex-end'}]}>
-          <View style={[themeStyle, {flexDirection: 'column', flex: 1, paddingTop: 50, borderBottomRightRadius: 10, borderBottomLeftRadius: 10}]}>
+          <View style={[themeStyle, {flexDirection: 'column', paddingTop: 50, borderBottomRightRadius: 10, borderBottomLeftRadius: 10}]}>
             <View style={[styles.tableRowContainer]}>
               <TouchableOpacity
                 onPress={() => {
@@ -244,7 +373,7 @@ class OrderFilterForm extends React.Component {
               </TouchableOpacity>
 
             </View>
-            {this.state?.searchTypeIndex === 0 && <View style={{flex: 1, justifyContent: 'space-between'}}>
+            {this.state?.searchTypeIndex === 0 && <View >
               <View style={[styles.tableRowContainer]}>
                 <View style={[styles.tableCellView, {flex: 3, marginRight: 5, flexDirection: 'column', justifyContent: 'center'}]}>
                   <Field
@@ -328,9 +457,134 @@ class OrderFilterForm extends React.Component {
                   </TouchableOpacity>
                 </View>
               </View>
+              {appType === 'store' ? <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                <View style={{
+                  flexDirection: 'row',
+                  paddingVertical: 8,
+                  alignItems: 'center',
+                  width: '100%'
+                }}>
+                  <View>
+                    <CheckBox
+                      checkedIcon={'check-circle'}
+                      uncheckedIcon={'circle'}
+                      checked={this.state?.selectedStatusOptions?.size === this.state?.statusOptions?.length}
+                      containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                      onPress={() => {
+                        let tempSet = new Set()
+                        if (this.state?.selectedStatusOptions?.size === this.state?.statusOptions?.length) {
+                          tempSet = new Set()
+                        } else {
+                          let labelsArr = [...this.state?.statusOptions]
+                          tempSet = new Set([...labelsArr])
+                        }
+                        this.setState({selectedStatusOptions: tempSet})
+                        this.props?.getSelectedStatus(tempSet)
+                      }}
+                    >
+                    </CheckBox>
+                  </View>
+                  <StyledText>{t('allSelected')}</StyledText>
+                </View>
+                {this.state?.statusOptions?.map((status) => {
+                  return (
+                    <View style={{
+                      flexDirection: 'row',
+                      paddingVertical: 8,
+                      alignItems: 'center',
+                      width: '50%'
+                    }}>
+
+                      <View>
+                        <CheckBox
+                          checkedIcon={'check-circle'}
+                          uncheckedIcon={'circle'}
+                          checked={this.state?.selectedStatusOptions?.has(status)}
+                          containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                          onPress={() => {
+                            let tempSet = new Set(this.state?.selectedStatusOptions)
+                            if (this.state?.selectedStatusOptions?.has(status)) {
+                              tempSet.delete(status)
+                            } else {
+                              tempSet.add(status)
+                            }
+                            this.setState({selectedStatusOptions: tempSet})
+                            this.props?.getSelectedStatus(tempSet)
+                          }}
+                        >
+                        </CheckBox>
+                      </View>
+                      <View style={{marginRight: 10}}>
+                        {renderOrderState(status)}
+                      </View>
+                      <StyledText>{t(`orderState.${status}`)}</StyledText>
+
+                    </View>
+                  )
+                })}
+              </View> :
+                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                  <View style={{
+                    flexDirection: 'row',
+                    paddingVertical: 8,
+                    alignItems: 'center',
+                    width: '50%'
+                  }}>
+                    <View>
+                      <CheckBox
+                        checkedIcon={'check-circle'}
+                        uncheckedIcon={'circle'}
+                        checked={this.state?.selectedStatusOptions.has('OPEN') && this.state?.selectedStatusOptions.has('IN_PROCESS') && this.state?.selectedStatusOptions.has('DELIVERED') && this.state?.selectedStatusOptions.has('SETTLED') && this.state?.selectedStatusOptions.has('PAYMENT_IN_PROCESS')}
+                        containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                        onPress={() => {
+                          let tempSet = new Set(this.state?.selectedStatusOptions)
+                          let changeSet = new Set(['OPEN', 'IN_PROCESS', 'DELIVERED', 'SETTLED', 'PAYMENT_IN_PROCESS'])
+                          if (this.state?.selectedStatusOptions.has('OPEN') && this.state?.selectedStatusOptions.has('IN_PROCESS') && this.state?.selectedStatusOptions.has('DELIVERED') && this.state?.selectedStatusOptions.has('SETTLED') && this.state?.selectedStatusOptions.has('PAYMENT_IN_PROCESS')) {
+                            changeSet.forEach((item) => tempSet.delete(item))
+                          } else {
+                            changeSet.forEach((item) => tempSet.add(item))
+                          }
+                          this.setState({selectedStatusOptions: tempSet})
+                          this.props?.getSelectedStatus(tempSet)
+                        }}
+                      >
+                      </CheckBox>
+                    </View>
+                    <StyledText>{t('selectUnCompletedOrder')}</StyledText>
+                  </View>
+                  <View style={{
+                    flexDirection: 'row',
+                    paddingVertical: 8,
+                    alignItems: 'center',
+                    width: '50%'
+                  }}>
+                    <View>
+                      <CheckBox
+                        checkedIcon={'check-circle'}
+                        uncheckedIcon={'circle'}
+                        checked={this.state?.selectedStatusOptions.has('COMPLETED') && this.state?.selectedStatusOptions.has('DELETED') && this.state?.selectedStatusOptions.has('CANCELLED')}
+                        containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                        onPress={() => {
+                          let tempSet = new Set(this.state?.selectedStatusOptions)
+                          let changeSet = new Set(['COMPLETED', 'DELETED', 'CANCELLED'])
+                          if (this.state?.selectedStatusOptions.has('COMPLETED') && this.state?.selectedStatusOptions.has('DELETED') && this.state?.selectedStatusOptions.has('CANCELLED')) {
+                            changeSet.forEach((item) => tempSet.delete(item))
+                          } else {
+                            changeSet.forEach((item) => tempSet.add(item))
+                          }
+                          this.setState({selectedStatusOptions: tempSet})
+                          this.props?.getSelectedStatus(tempSet)
+                        }}
+                      >
+                      </CheckBox>
+                    </View>
+                    <StyledText>{t('selectCompletedOrder')}</StyledText>
+                  </View>
+                </View>
+              }
             </View>}
             {this.state?.searchTypeIndex === 1 &&
-              <View style={{flex: 1, justifyContent: 'space-between'}}>
+              <View style={{justifyContent: 'space-between'}}>
                 <View style={[styles.tableRowContainer]}>
                   <View style={[styles.tableCellView, {flex: 3, marginRight: 5}]}>
                     <Field

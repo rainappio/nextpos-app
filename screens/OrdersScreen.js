@@ -21,6 +21,7 @@ import BackendErrorScreen from "./BackendErrorScreen";
 import {Octicons} from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 
+
 class OrdersScreen extends React.Component {
   handleViewRef = ref => this.view = ref;
   static navigationOptions = {
@@ -42,7 +43,8 @@ class OrdersScreen extends React.Component {
         toDate: new Date(),
         invoiceNumber: null,
         showFilter: false
-      }
+      },
+      selectedStatusOptions: new Set(['OPEN', 'IN_PROCESS', 'DELIVERED', 'SETTLED', 'COMPLETED', 'DELETED', 'CANCELLED', 'PAYMENT_IN_PROCESS'])
     }
   }
 
@@ -146,8 +148,15 @@ class OrdersScreen extends React.Component {
     const {t} = this.context
 
     const orders = []
-    getordersByDateRange !== undefined && getordersByDateRange.map(order => {
-      orders.push(order)
+    getordersByDateRange !== undefined && getordersByDateRange.forEach(order => {
+      if (this.state?.searchTypeIndex === 1) {
+        orders.push(order)
+      } else if (this.state?.selectedStatusOptions.has(order?.state)) {
+        orders.push(order)
+      } else {
+
+      }
+
     })
 
 
@@ -218,15 +227,17 @@ class OrdersScreen extends React.Component {
                   fromDate: new Date(dateRange?.zonedFromDate ?? new Date()),
                   toDate: new Date(dateRange?.zonedToDate ?? new Date()),
                   invoiceNumber: this.state.searchFilter?.invoiceNumber,
+                  selectedStatusOptions: this.state?.selectedStatusOptions,
                 }}
                 isShow={this.state?.showFilter}
                 closeModal={() => this.setState({showFilter: false})}
+                getSelectedStatus={(data) => this.setState({selectedStatusOptions: data})}
               />
             </View>
             <View style={[styles.tableRowContainer, {flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
               <StyledText style={styles.screenSubTitle}>{moment(dateRange?.zonedFromDate).format('YYYY-MM-DD')}</StyledText>
               <StyledText style={[styles.screenSubTitle, {marginHorizontal: 0}]}>~</StyledText>
-              <StyledText style={styles.screenSubTitle}>{moment(dateRange.zonedToDate).format('YYYY-MM-DD')}</StyledText>
+              <StyledText style={styles.screenSubTitle}>{moment(dateRange?.zonedToDate).format('YYYY-MM-DD')}</StyledText>
             </View>
             <View style={[styles.tableRowContainer, {flexDirection: 'row', justifyContent: 'flex-start'}]}>
               <StyledText style={[styles.screenSubTitle, {marginHorizontal: 0, marginRight: 20}]}>{t('order.total')}:</StyledText>

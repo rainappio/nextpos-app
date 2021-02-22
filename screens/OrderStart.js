@@ -5,6 +5,7 @@ import OrderForm from './OrderForm'
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
+import RetailStartOrderForm from './RetailStartOrderForm'
 
 class OrderStart extends React.Component {
   static navigationOptions = {
@@ -44,7 +45,7 @@ class OrderStart extends React.Component {
     },
       response => {
         response.json().then(data => {
-          this.props.navigation.navigate('OrderFormII', {
+          this.props.navigation.navigate(this.context.appType === 'store' ? 'OrderFormII' : 'RetailOrderForm', {
             orderId: data.orderId
           })
         })
@@ -53,7 +54,7 @@ class OrderStart extends React.Component {
 
   render() {
     const {navigation, isLoading, haveData, availableTables, tableLayouts} = this.props
-
+    const {appType} = this.context
     const initialValues = {
       male: 0,
       female: 0,
@@ -76,12 +77,19 @@ class OrderStart extends React.Component {
       )
     } else {
       return (
-        <OrderForm
-          onSubmit={this.handleSubmit}
-          navigation={navigation}
-          tablesMap={tablesMap}
-          initialValues={initialValues}
-        />
+        appType === 'store' ?
+          <OrderForm
+            onSubmit={this.handleSubmit}
+            navigation={navigation}
+            tablesMap={tablesMap}
+            initialValues={initialValues}
+          /> :
+          <RetailStartOrderForm
+            onSubmit={this.handleSubmit}
+            navigation={navigation}
+            tablesMap={tablesMap}
+            initialValues={{...initialValues, orderType: 'TAKE_OUT'}}
+          />
       )
     }
   }

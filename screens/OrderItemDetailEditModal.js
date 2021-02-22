@@ -143,9 +143,7 @@ class ConnectedOrderItemOptionsBase extends React.Component {
                 body: JSON.stringify(lineItemRequest)
             },
             response => {
-                this.props.navigation.navigate('OrderFormII', {
-                    orderId: orderId
-                })
+
                 this.props.getOrder(orderId)
                 this.props.goBack()
             }
@@ -193,9 +191,7 @@ class ConnectedOrderItemOptionsBase extends React.Component {
             },
             body: JSON.stringify(lineItemRequest)
         }, response => {
-            this.props.navigation.navigate('OrderFormII', {
-                orderId: orderId
-            })
+
             this.props.getOrder(orderId)
             this.props.goBack()
 

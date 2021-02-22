@@ -51,6 +51,7 @@ import {getTheme, storeTheme} from "./helpers/contextHelper";
 import * as Device from 'expo-device';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {checkExpoUpdate} from "./helpers/updateAppHelper";
+import {api, dispatchFetchRequest} from './constants/Backend'
 
 
 
@@ -137,6 +138,9 @@ export default class App extends React.Component {
       saveSplitParentOrderId: this.saveSplitParentOrderId,
       disableReload: false,
       setDisableReload: this.setDisableReload,
+      appType: 'store',
+      changeAppType: this.changeAppType,
+      getAppType: this.getAppType,
     }
 
     TimeZoneService.setClientReference(() => store.getState().client)
@@ -229,6 +233,48 @@ export default class App extends React.Component {
     console.log(`Default locale: ${Localization.locale}, current locale: ${this.state.locale}, changing to ${toLocale}`)
 
     this.setState({locale: toLocale})
+  }
+
+  t = (scope, options) => {
+    return i18n.t(scope, {locale: this.state.locale, ...options})
+  }
+
+  changeAppType = () => {
+    dispatchFetchRequest(api.client.changeClientType, {
+      method: 'PATCH',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({clientType: this.state?.appType === 'store' ? 'RETAIL' : 'FOOD_BEVERAGE'})
+    },
+      response => {
+        response.json().then(data => {
+          this.setState({appType: data?.clientType === 'FOOD_BEVERAGE' ? 'store' : 'retail'})
+        })
+      }).then()
+  }
+
+  getAppType = (successCallback = null) => {
+    dispatchFetchRequest(
+      api.client.get,
+      {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {}
+      },
+      response => {
+        response.json().then(data => {
+
+          this.setState({appType: data?.clientType === 'FOOD_BEVERAGE' ? 'store' : 'retail'})
+          !!successCallback && successCallback()
+        })
+      },
+      response => {
+      }
+    ).then()
   }
 
   t = (scope, options) => {
@@ -340,6 +386,9 @@ export default class App extends React.Component {
               saveSplitParentOrderId: this.state.saveSplitParentOrderId,
               disableReload: this.state.disableReload,
               setDisableReload: this.state.setDisableReload,
+              appType: this.state?.appType,
+              changeAppType: this.state?.changeAppType,
+              getAppType: this.state?.getAppType
             }}>
               <LocaleContext.Provider value={this.state}>
                 <AppNavigator
@@ -352,7 +401,10 @@ export default class App extends React.Component {
                     localize: this.localize,
                     changeLanguage: this.changeLanguage,
                     themeStyle: this.state.themeStyle,
-                    reverseThemeStyle: this.state.reverseThemeStyle
+                    reverseThemeStyle: this.state.reverseThemeStyle,
+                    appType: this.state?.appType,
+                    changeAppType: this.state?.changeAppType,
+                    getAppType: this.state?.getAppType
                   }}
                 />
               </LocaleContext.Provider>

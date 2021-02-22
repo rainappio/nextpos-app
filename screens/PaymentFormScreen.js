@@ -46,7 +46,7 @@ class PaymentFormScreen extends React.Component {
 
   render() {
     const {order, navigation, handleSubmit, globalorderoffers, isSplitting} = this.props
-    const {t} = this.context
+    const {t, appType} = this.context
 
     return (
       <ThemeKeyboardAwareScrollView>
@@ -83,7 +83,7 @@ class PaymentFormScreen extends React.Component {
             </View>
           </View>
 
-          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+          {(appType === 'store') && <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
               <StyledText>{t('order.serviceCharge')}</StyledText>
             </View>
@@ -93,7 +93,7 @@ class PaymentFormScreen extends React.Component {
                 {formatCurrency(order.serviceCharge)}
               </StyledText>
             </View>
-          </View>
+          </View>}
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
@@ -107,7 +107,7 @@ class PaymentFormScreen extends React.Component {
             </View>
           </View>
 
-          {order?.serviceChargeEnabled && <View style={[styles.sectionContainer]}>
+          {(appType === 'store') && order?.serviceChargeEnabled && <View style={[styles.sectionContainer]}>
             <View style={[styles.sectionTitleContainer]}>
               <StyledText style={styles.sectionTitleText}>{t('orderOptions')}</StyledText>
             </View>

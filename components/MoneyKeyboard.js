@@ -202,6 +202,7 @@ export const DiscountKeyboard = (props) => {
         })
     }
     const handleLabelPress = async (name, label) => {
+        console.log('label', JSON.stringify(label))
         setSelectedLabel(name);
         if (name === "NO_DISCOUNT") {
             const url = api.order.removeDiscount(props?.order?.orderId)
@@ -221,7 +222,7 @@ export const DiscountKeyboard = (props) => {
             }).then(() => {
                 !!props?.okPress ? props?.okPress() : console.warn("need okPress()")
             })
-        } else {
+        } else if (label?.discountValue === 0) {
 
             setDiscountObj({
                 offerId: label.offerId,
@@ -230,6 +231,27 @@ export const DiscountKeyboard = (props) => {
             })
             setOutput(0)
             setKeyboardStatus(2)
+        } else {
+            const url = api.order.applyDiscount(props?.order?.orderId)
+            await dispatchFetchRequestWithOption(url, {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    offerId: label.offerId,
+                    orderDiscount: label.offerId,
+                    discount: label.discountValue
+                })
+
+            }, {
+                defaultMessage: false
+            }, response => {
+            }).then(() => {
+                !!props?.okPress ? props?.okPress() : console.warn("need okPress()")
+            })
         }
     }
 

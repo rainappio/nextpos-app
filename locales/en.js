@@ -15,6 +15,8 @@ const en = {
   noWorkingArea: 'No Working Area',
   allSelected: 'All',
   selectWorkingArea: 'Working area to show',
+  selectCompletedOrder: 'Show Completed Orders',
+  selectUnCompletedOrder: 'Show Uncompleted Orders',
   general: {
     noData: 'No data'
   },
@@ -44,7 +46,9 @@ const en = {
     eInvoice: 'E-invoice',
     subscription: 'Subscription',
     roster: 'Roster',
-    member: 'Membership'
+    member: 'Membership',
+    changeToStore: 'Hospitality Mode',
+    changeToRetail: 'Retail Mode',
   },
   newItem: {
     new: 'New',
@@ -206,6 +210,7 @@ const en = {
     checkAutoComplete: 'Entered cash amount is less than the settling amount. Do you want to make up the difference automatically?',
     checkCarrierId: 'Mobile carrier format is incorrect, please rescan.',
     carrierId: 'Mobile Carrier',
+    npoBan: 'Donate Number',
     checkPrintInvoice: 'Print electronic invoice?'
   },
   timecard: {

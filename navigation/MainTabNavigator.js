@@ -94,13 +94,22 @@ import RostersFormScreen from '../screens/RostersFormScreen'
 import CalendarScreen from '../screens/CalendarScreen'
 import MemberScreen from '../screens/MemberScreen'
 import MemberFormScreen from '../screens/MemberFormScreen'
+import RetailOrderForm from '../screens/RetailOrderForm'
+import RetailCheckoutComplete from '../screens/RetailCheckoutComplete'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
   ClientUsers: ClientUsers,
   ClientUserLogin: ClientUserLogin,
   ClockIn: ClockIn,
-  PasswordReset: PasswordReset
+  PasswordReset: PasswordReset,
+  RetailOrderStart: OrderStart,
+  RetailOrderForm: RetailOrderForm,
+  RetailOrderFormIII: OrderFormIII,
+  RetailPayment: Payment,
+  RetailCheckoutComplete: RetailCheckoutComplete,
+  RetailOrdersSummary: OrdersSummary,
+  RetailPaymentOrder: PaymentOrder,
 })
 Home.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.home'),
@@ -183,13 +192,17 @@ const Tables = createStackNavigator({
   CheckoutComplete: CheckoutComplete,
   SpiltBillScreen: SpiltBillScreen,
   SplitBillByHeadScreen: SplitBillByHeadScreen,
+}, {
+  defaultNavigationOptions: {
+    gesturesEnabled: false,
+  },
 })
-Tables.navigationOptions = ({screenProps: {t}}) => ({
+Tables.navigationOptions = ({screenProps: {t, appType}}) => ({
   title: t('menu.tables'),
-  tabBarButtonComponent: (props) => (
+  tabBarButtonComponent: (props) => (appType === 'store' ?
     <TabBarIcon focused={props?.focused} name="md-people" onPress={props?.onPress} />
+    : null
   ),
-
 })
 
 const Orders = createStackNavigator({
@@ -251,23 +264,19 @@ Rosters.navigationOptions = ({screenProps: {t}}) => ({
 const tabBar = createBottomTabNavigator({
   Home: {
     screen: Home,
-    /*navigationOptions: ({ navigation, screenProps: { t } }) => {
+    navigationOptions: ({navigation, screenProps: {t}}) => {
       if (navigation.state.routes.length > 0) {
+        let tabBarVisible = true
         navigation.state.routes.map(route => {
-          if (
-            route.routeName === 'Home' ||
-            route.routeName === 'Intro' ||
-            route.routeName === 'Login' ||
-            route.routeName === 'PasswordReset'
-          ) {
+          if (['RetailPayment', 'RetailPaymentOrder', 'RetailCheckoutComplete'].includes(route.routeName)) {
             tabBarVisible = false
           } else {
             tabBarVisible = true
           }
         })
-        return { title: '', tabBarVisible }
+        return {title: '', tabBarVisible}
       }
-    }*/
+    }
   },
   Tables: {
     screen: Tables,

@@ -57,7 +57,7 @@ class PaymentOrder extends React.Component {
         })
       } else {
         this.context?.saveSplitParentOrderId(null)
-        handleDelete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate('TablesSrc'))
+        handleDelete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess'))
       }
 
     } else {
@@ -84,12 +84,12 @@ class PaymentOrder extends React.Component {
             })
           } else {
             this.context?.saveSplitParentOrderId(null)
-            handleDelete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate('TablesSrc'))
+            handleDelete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess'))
           }
 
         } else {
           this.context?.saveSplitParentOrderId(null)
-          this.props.navigation.navigate('TablesSrc')
+          this.props.navigation.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess')
         }
       }).then()
     }
@@ -133,7 +133,7 @@ class PaymentOrder extends React.Component {
         successMessage(this.context.t('charged'))
 
         response.json().then(data => {
-          this.props.navigation.navigate('CheckoutComplete', {
+          this.props.navigation.navigate(this.context?.appType === 'store' ? 'CheckoutComplete' : 'RetailCheckoutComplete', {
             transactionResponse: data,
             onSubmit: this.handleComplete,
             isSplitting: this.props.navigation.state.params?.isSplitting ?? false,
@@ -145,7 +145,7 @@ class PaymentOrder extends React.Component {
         })
       }, response => {
         this.context?.saveSplitParentOrderId(null)
-        this.props.navigation.navigate('TablesSrc')
+        this.props.navigation.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess')
       }).then()
     }
     // const transactionObj = {
@@ -175,6 +175,9 @@ class PaymentOrder extends React.Component {
       taxIdNumber: values?.taxIdNumber ?? null,
       paymentDetails: {},
       printMark: true
+    }
+    if (!!values?.npoBan) {
+      transactionObj.npoBan = values?.npoBan
     }
     if (!!values?.carrierId) {
       transactionObj.carrierType = 'MOBILE'

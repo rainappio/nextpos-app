@@ -12,6 +12,7 @@ import MenuButton from "../components/MenuButton";
 import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
 import NavigationService from "../navigation/NavigationService";
+import {Entypo} from '@expo/vector-icons';
 
 class SettingsScreen extends React.Component {
   static navigationOptions = {
@@ -21,7 +22,197 @@ class SettingsScreen extends React.Component {
   static contextType = LocaleContext
 
   render() {
-    const {t, changeLanguage} = this.context
+    const {t, changeLanguage, changeAppType, appType} = this.context
+
+    let menuButtonsArr = [
+      <MenuButton
+        route='Account'
+        onPress={() => this.props.navigation.navigate('Account')}
+        title={t('settings.account')}
+        icon={
+          <MaterialIcon
+            name="account-box"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        } />,
+
+      <MenuButton
+        route='Store'
+        onPress={() => this.props.navigation.navigate('Store')}
+        title={t('settings.stores')}
+        icon={
+          <Icon
+            name="md-home"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        } />,
+
+      <MenuButton
+        route='ProductsOverview'
+        onPress={() =>
+          this.props.navigation.navigate('ProductsOverview')
+        }
+        title={t('settings.products')}
+        icon={
+          <Icon
+            name="ios-beaker"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='StaffsOverview'
+        onPress={() =>
+          NavigationService?.navigateToRoute('StaffsOverview')
+        }
+        title={t('settings.staff')}
+        icon={
+          <Icon
+            name="ios-people"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='Announcements'
+        onPress={() => this.props.navigation.navigate('Announcements')}
+        title={t('settings.announcements')}
+        icon={
+          <FontAwesomeIcon
+            name="commenting"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='ShiftClose'
+        onPress={() => this.props.navigation.navigate('ShiftClose')}
+        title={t('settings.manageShifts')}
+        icon={
+          <Icon
+            name="md-book"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='MemberScreen'
+        onPress={() => NavigationService?.navigateToRoute('MemberScreen')}
+        title={t('settings.member')}
+        icon={
+          <FontAwesome5Icon
+            name="user-cog"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='ManageOffers'
+        onPress={() => this.props.navigation.navigate('ManageOffers')}
+        title={t('settings.manageOffers')}
+        icon={
+          <FontAwesomeIcon
+            name="sun-o"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='TableLayouts'
+        onPress={() => this.props.navigation.navigate('TableLayouts')}
+        title={t('settings.tableLayouts')}
+        icon={
+          <MaterialIcon
+            name="event-seat"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='PrinternKDS'
+        onPress={() => this.props.navigation.navigate('PrinternKDS')}
+        title={t('settings.workingArea')}
+        icon={
+          <Icon
+            name="md-print"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='EinvoiceStatusScreen'
+        onPress={() => NavigationService?.navigateToRoute('EinvoiceStatusScreen')}
+        title={t('settings.eInvoice')}
+        icon={
+          <FontAwesome5Icon
+            name="file-invoice-dollar"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='SubscriptionScreen'
+        onPress={() => this.props.navigation.navigate('SubscriptionScreen')}
+        title={t('settings.subscription')}
+        icon={
+          <MCIcon
+            name="professional-hexagon"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route=''
+        onPress={() => changeLanguage()}
+        title={t('settings.language')}
+        icon={
+          <MaterialIcon
+            name="language"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route=''
+        onPress={() => changeAppType()}
+        title={appType === 'store' ? t('settings.changeToRetail') : t('settings.changeToStore')}
+        icon={
+          <Entypo name="cycle"
+            size={40}
+            style={[styles.buttonIconStyle]}
+          />
+        }
+      />,
+    ]
+
+    if (appType === 'retail') {
+      menuButtonsArr.splice(menuButtonsArr.findIndex((item) => item?.props?.route === 'TableLayouts'), 1)
+    }
+
 
     return (
       <ThemeContainer>
@@ -34,200 +225,52 @@ class SettingsScreen extends React.Component {
           <Pages indicatorColor={mainThemeColor}>
             <View style={{flex: 1, paddingBottom: 16}}>
               <View style={[styles.menuContainer]}>
-                <MenuButton
-                  route='Account'
-                  onPress={() => this.props.navigation.navigate('Account')}
-                  title={t('settings.account')}
-                  icon={
-                    <MaterialIcon
-                      name="account-box"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  } />
+                {menuButtonsArr?.[0] ?? <View style={{flex: 1}}></View>}
                 <View style={styles.dynamicHorizontalPadding(6)} />
-                <MenuButton
-                  route='Store'
-                  onPress={() => this.props.navigation.navigate('Store')}
-                  title={t('settings.stores')}
-                  icon={
-                    <Icon
-                      name="md-home"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  } />
+                {menuButtonsArr?.[1] ?? <View style={{flex: 1}}></View>}
               </View>
 
               <View style={[styles.menuContainer]}>
-                <MenuButton
-                  route='ProductsOverview'
-                  onPress={() =>
-                    this.props.navigation.navigate('ProductsOverview')
-                  }
-                  title={t('settings.products')}
-                  icon={
-                    <Icon
-                      name="ios-beaker"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }
-                />
+                {menuButtonsArr?.[2] ?? <View style={{flex: 1}}></View>}
                 <View style={styles.dynamicHorizontalPadding(6)} />
-                <MenuButton
-                  route='StaffsOverview'
-                  onPress={() =>
-                    NavigationService?.navigateToRoute('StaffsOverview')
-                  }
-                  title={t('settings.staff')}
-                  icon={
-                    <Icon
-                      name="ios-people"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }
-                />
+                {menuButtonsArr?.[3] ?? <View style={{flex: 1}}></View>}
               </View>
 
               <View style={[styles.menuContainer]}>
-                <MenuButton
-                  route='Announcements'
-                  onPress={() => this.props.navigation.navigate('Announcements')}
-                  title={t('settings.announcements')}
-                  icon={
-                    <FontAwesomeIcon
-                      name="commenting"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }
-                />
+                {menuButtonsArr?.[4] ?? <View style={{flex: 1}}></View>}
                 <View style={styles.dynamicHorizontalPadding(6)} />
-                <MenuButton
-                  route='ShiftClose'
-                  onPress={() => this.props.navigation.navigate('ShiftClose')}
-                  title={t('settings.manageShifts')}
-                  icon={
-                    <Icon
-                      name="md-book"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }
-                />
+                {menuButtonsArr?.[5] ?? <View style={{flex: 1}}></View>}
               </View>
               <View style={[styles.menuContainer]}>
-                <MenuButton
-                  route='MemberScreen'
-                  onPress={() => NavigationService?.navigateToRoute('MemberScreen')}
-                  title={t('settings.member')}
-                  icon={
-                    <FontAwesome5Icon
-                      name="user-cog"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }
-                />
+                {menuButtonsArr?.[6] ?? <View style={{flex: 1}}></View>}
                 <View style={styles.dynamicHorizontalPadding(6)} />
-                <MenuButton
-                  route='ManageOffers'
-                  onPress={() => this.props.navigation.navigate('ManageOffers')}
-                  title={t('settings.manageOffers')}
-                  icon={
-                    <FontAwesomeIcon
-                      name="sun-o"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }
-                />
+                {menuButtonsArr?.[7] ?? <View style={{flex: 1}}></View>}
               </View>
-
-
             </View>
 
             <View style={{flex: 1, paddingBottom: 16}}>
               <View style={[styles.menuContainer]}>
-                <MenuButton
-                  route='TableLayouts'
-                  onPress={() => this.props.navigation.navigate('TableLayouts')}
-                  title={t('settings.tableLayouts')}
-                  icon={
-                    <MaterialIcon
-                      name="event-seat"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }
-                />
+                {menuButtonsArr?.[8] ?? <View style={{flex: 1}}></View>}
                 <View style={styles.dynamicHorizontalPadding(6)} />
-                <MenuButton
-                  route='PrinternKDS'
-                  onPress={() => this.props.navigation.navigate('PrinternKDS')}
-                  title={t('settings.workingArea')}
-                  icon={
-                    <Icon
-                      name="md-print"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }
-                />
+                {menuButtonsArr?.[9] ?? <View style={{flex: 1}}></View>}
               </View>
               <View style={[styles.menuContainer]}>
-                <MenuButton
-                  route='EinvoiceStatusScreen'
-                  onPress={() => NavigationService?.navigateToRoute('EinvoiceStatusScreen')}
-                  title={t('settings.eInvoice')}
-                  icon={
-                    <FontAwesome5Icon
-                      name="file-invoice-dollar"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }
-                />
+                {menuButtonsArr?.[10] ?? <View style={{flex: 1}}></View>}
                 <View style={styles.dynamicHorizontalPadding(6)} />
-                <MenuButton
-                  route='SubscriptionScreen'
-                  onPress={() => this.props.navigation.navigate('SubscriptionScreen')}
-                  title={t('settings.subscription')}
-                  icon={
-                    <MCIcon
-                      name="professional-hexagon"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }
-                />
+                {menuButtonsArr?.[11] ?? <View style={{flex: 1}}></View>}
               </View>
 
               <View style={[styles.menuContainer]}>
-                <MenuButton
-                  route=''
-                  onPress={() => changeLanguage()}
-                  title={t('settings.language')}
-                  icon={
-                    <MaterialIcon
-                      name="language"
-                      size={40}
-                      style={[styles.buttonIconStyle]}
-                    />
-                  }
-                />
+                {menuButtonsArr?.[12] ?? <View style={{flex: 1}}></View>}
                 <View style={styles.dynamicHorizontalPadding(6)} />
-                <View style={{flex: 1}}></View>
+                {menuButtonsArr?.[13] ?? <View style={{flex: 1}}></View>}
               </View>
 
               <View style={[styles.menuContainer]}>
-                <View style={{flex: 1}}></View>
+                {menuButtonsArr?.[14] ?? <View style={{flex: 1}}></View>}
                 <View style={styles.dynamicHorizontalPadding(6)} />
-                <View style={{flex: 1}}></View>
+                {menuButtonsArr?.[15] ?? <View style={{flex: 1}}></View>}
               </View>
-
 
             </View>
           </Pages>

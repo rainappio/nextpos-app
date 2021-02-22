@@ -82,15 +82,7 @@ class ProductFormScreen extends React.Component {
           <ScreenHeader parentFullScreen={true}
             title={isEditForm ? t('editProduct') : t('newProduct')}
             backAction={() => backAction(this.props.navigation)}
-            rightComponent={
-              <AddBtn
-                onPress={() =>
-                  this.props.navigation.navigate('Option', {
-                    customRoute: this.props.navigation.state.routeName
-                  })
-                }
-              />
-            }
+
           />
 
           <View style={styles.tableRowContainerWithBorder}>
