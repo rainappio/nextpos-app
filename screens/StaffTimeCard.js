@@ -31,9 +31,6 @@ class StaffTimeCard extends React.Component {
         secColTitle: 'Total Shifts',
         thirdColTitle: 'Total Hours',
 
-        userTimeCardTitle: "User Time Cards",
-        day: "Shift",
-        totalHr: "Total Hours"
       },
       zh: {
         title: '打卡記錄',
@@ -43,9 +40,6 @@ class StaffTimeCard extends React.Component {
         secColTitle: '總班數',
         thirdColTitle: '總時數',
 
-        userTimeCardTitle: "職員打卡",
-        day: "值班",
-        totalHr: "總時數"
       }
     })
 
@@ -79,6 +73,7 @@ class StaffTimeCard extends React.Component {
 
     Item = ({timecard, layoutId, index}) => {
       const displayName = timecard.nickname != null ? timecard.nickname : timecard.id
+      console.log('timecard', JSON.stringify(timecard))
 
       return (
         <TouchableOpacity

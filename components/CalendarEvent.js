@@ -109,7 +109,7 @@ const CalendarEventBase = (props) => {
             <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 3}}>
                 <View style={{flexDirection: 'row', justifyContent: 'center'}}>
 
-                    <StyledText style={{...props?.theme?.text, flexWrap: 'wrap', fontSize: 16, color: mainThemeColor, marginBottom: 16}}>{moment(event?.startTime ?? new Date()).tz(timezone).format("HH:mm")} - {moment(event?.endTime ?? new Date()).tz(timezone).format("HH:mm")}</StyledText>
+                    <StyledText style={{flexWrap: 'wrap', fontSize: 16, marginBottom: 16}}>{moment(event?.startTime ?? new Date()).tz(timezone).format("HH:mm")} - {moment(event?.endTime ?? new Date()).tz(timezone).format("HH:mm")}</StyledText>
 
                 </View>
 

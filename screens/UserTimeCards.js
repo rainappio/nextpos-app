@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {FlatList, Text, TouchableOpacity, View} from 'react-native'
-import {formatDate, getUserTimeCards} from '../actions'
+import {formatDate, getUserTimeCards, normalizeTimeString} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {warningMessage} from '../constants/Backend'
@@ -11,6 +11,7 @@ import StaffTimeCardFilterForm from "./StaffTimeCardFilterForm";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import UserTimeCardDetail from "./UserTimeCardDetail";
+import moment from 'moment-timezone'
 
 class UserTimeCards extends React.Component {
   static navigationOptions = {
@@ -18,11 +19,40 @@ class UserTimeCards extends React.Component {
   }
   static contextType = LocaleContext
 
-  state = {
-    timecardId: null,
-    selectedYear: this.props.navigation.getParam('year'),
-    selectedMonth: this.props.navigation.getParam('month')
+  constructor(props, context) {
+    super(props, context);
+
+    context.localize({
+      en: {
+        timeCardDate: 'Date',
+        timeCardTime: 'Time',
+        userTimeCardTitle: "User Time Cards",
+        day: "Shift",
+        totalHr: "Total Hours",
+        arriveLateMinutes: 'Arrive Late Minutes',
+        leaveEarlyMinutes: 'Leave Early Minutes',
+        minute: 'min'
+      },
+      zh: {
+        timeCardDate: '打卡日期',
+        timeCardTime: '上班/下班時間',
+        userTimeCardTitle: "職員打卡",
+        day: "值班",
+        totalHr: "總時數",
+        arriveLateMinutes: '遲到時數',
+        leaveEarlyMinutes: '早退時數',
+        minute: '分'
+      }
+    })
+
+    this.state = {
+      timecardId: null,
+      selectedYear: props.navigation.getParam('year'),
+      selectedMonth: props.navigation.getParam('month')
+    }
   }
+
+
 
   handleFilter = (values) => {
     const month = values.month;
@@ -60,18 +90,32 @@ class UserTimeCards extends React.Component {
           style={styles.tableRowContainerWithBorder}
 
         >
-          <View style={[styles.tableCellView, {flex: 1, flexDirection: 'column', alignItems: 'flex-start'}]}>
+          <View style={[styles.tableCellView, {flex: 3.2, alignItems: 'flex-start'}]}>
             <StyledText style={{fontWeight: active ? 'bold' : 'normal'}}>
-              {formatDate(timecard.clockIn)}
+              {normalizeTimeString(timecard?.clockIn, 'YYYY/MM/DD dd')}
             </StyledText>
+
+          </View>
+          <View style={[styles.tableCellView, {flex: 3, alignItems: 'flex-start'}]}>
             <StyledText style={{fontWeight: active ? 'bold' : 'normal'}}>
-              {formatDate(timecard.clockOut)}
+              {normalizeTimeString(timecard?.clockIn, 'hh:mm')}~{!!timecard?.clockOut && normalizeTimeString(timecard?.clockOut, 'hh:mm')}
             </StyledText>
+
           </View>
 
-          <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+          <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-start'}]}>
             <StyledText>
               {timecard.hours}&nbsp;{t('timecard.hours')}&nbsp;{timecard.minutes}&nbsp;{t('timecard.minutes')}
+            </StyledText>
+          </View>
+          <View style={[styles.tableCellView, {flex: 1.2, justifyContent: 'flex-end'}]}>
+            <StyledText>
+              {timecard?.arriveLateMinutes ?? '0'}{t('minute')}
+            </StyledText>
+          </View>
+          <View style={[styles.tableCellView, {flex: 1.2, justifyContent: 'flex-end'}]}>
+            <StyledText>
+              {timecard?.leaveEarlyMinutes ?? '0'}{t('minute')}
             </StyledText>
           </View>
         </View>
@@ -109,14 +153,36 @@ class UserTimeCards extends React.Component {
             />*/}
 
           <View style={[styles.sectionBar]}>
-            <View style={[styles.tableCellView, {flex: 1}]}>
-              <Text style={styles.sectionBarText}>{t('day')}</Text>
+            <View style={[styles.tableCellView, {flex: 3.2, alignItems: 'flex-start'}]}>
+              <Text style={styles.sectionBarText}>
+                {t('timeCardDate')}
+              </Text>
+
+            </View>
+            <View style={[styles.tableCellView, {flex: 3, alignItems: 'flex-start'}]}>
+              <Text style={styles.sectionBarText}>
+                {t('timeCardTime')}
+              </Text>
+
             </View>
 
-            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+            <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-start'}]}>
               <Text style={[styles.sectionBarText]}>{t('totalHr')}</Text>
             </View>
+            <View style={[styles.tableCellView, {flex: 1.2, justifyContent: 'flex-end'}]}>
+              <Text style={styles.sectionBarText}>
+                {t('arriveLateMinutes')}
+              </Text>
+            </View>
+            <View style={[styles.tableCellView, {flex: 1.2, justifyContent: 'flex-end'}]}>
+              <Text style={styles.sectionBarText}>
+                {t('leaveEarlyMinutes')}
+              </Text>
+            </View>
           </View>
+
+
+
 
           <FlatList
             data={usertimeCards}
