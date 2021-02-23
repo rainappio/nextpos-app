@@ -892,7 +892,7 @@ class Draggable extends Component {
           x: this.state.pan.x._value,
           y: this.state.pan.y._value
         })
-        //this.state.pan.setValue({ x:0, y:0})
+        this.state.pan.setValue({x: 0, y: 0})
       },
       onPanResponderMove: Animated.event([
         null, {dx: this.state.pan.x, dy: this.state.pan.y}
