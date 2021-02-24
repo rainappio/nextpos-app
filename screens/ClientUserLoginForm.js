@@ -88,32 +88,33 @@ class ClientUserLoginForm extends React.Component {
             {this.props.defaultUser ? (
               <View style={[styles.sectionContainer, styles.flex(1)]}>
 
-                {this.state?.showGesture &&
-                  <>
-                    {(!this.state?.showGesture || this.state?.wrongPassword) && <View style={{width: isTablet ? 400 : 320, alignSelf: 'center'}}>
-                      <View style={[styles.tableCellView, styles.dynamicVerticalPadding(10)]}>
-                        <Field
-                          name="password"
-                          component={InputText}
-                          placeholder={t('password')}
-                          secureTextEntry={true}
-                          alignLeft={true}
-                        />
-                      </View>
 
-                      <View >
-                        <TouchableOpacity
-                          onPress={handleSubmit}
-                        >
-                          <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('login')}</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>}
-                    {this.state?.wrongPassword &&
-                      <Text style={{marginBottom: -20, marginTop: 20, textAlign: 'center', color: '#f75336'}}>
-                        {t('editPasswordPopUp.incorrectPassword')}
-                      </Text>}
-                    <GesturePassword gestureAreaLength={isTablet ? 400 : 320} style={{alignSelf: 'center'}} getResult={(result) => this.checkGesturePassword(result)} /></>}
+
+                {(!this.state?.showGesture || this.state?.wrongPassword) && <View style={{width: isTablet ? 400 : 320, alignSelf: 'center'}}>
+                  <View style={[styles.tableCellView, styles.dynamicVerticalPadding(10)]}>
+                    <Field
+                      name="password"
+                      component={InputText}
+                      placeholder={t('password')}
+                      secureTextEntry={true}
+                      alignLeft={true}
+                    />
+                  </View>
+
+                  <View >
+                    <TouchableOpacity
+                      onPress={handleSubmit}
+                    >
+                      <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('login')}</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>}
+                {this.state?.wrongPassword &&
+                  <Text style={{marginBottom: -20, marginTop: 20, textAlign: 'center', color: '#f75336'}}>
+                    {t('editPasswordPopUp.incorrectPassword')}
+                  </Text>}
+                {this.state?.showGesture &&
+                  <GesturePassword gestureAreaLength={isTablet ? 400 : 320} style={{alignSelf: 'center'}} getResult={(result) => this.checkGesturePassword(result)} />}
 
                 <View style={{flex: 1}}></View>
 
