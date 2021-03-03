@@ -295,7 +295,7 @@ class SubscriptionScreen extends React.Component {
                     <View style={[styles.container, {justifyContent: 'flex-start', marginTop: 0, marginBottom: 0}]}>
                         <View style={{flexDirection: 'row', marginBottom: 16, maxWidth: 640, alignSelf: 'center'}}>
                             <StyledText style={{flex: 1, textAlign: 'left'}}>{t('subscription.currentPlan')}</StyledText>
-                            <StyledText style={{flex: 1, textAlign: 'right'}}>{this.state?.subscription?.planName === 'FREE' ? t('subscription.planCode.FREE') : this.state?.subscription?.planName}</StyledText>
+                            <StyledText style={{flex: 1, textAlign: 'right'}}>{this.state?.subscription?.planName === 'planName.free' ? t('subscription.planCode.FREE') : this.state?.subscription?.planName}</StyledText>
                         </View>
                         <View style={{flexDirection: 'row', marginBottom: 16, maxWidth: 640, alignSelf: 'center'}}>
                             <StyledText style={{flex: 1, textAlign: 'left'}}>{t('subscription.status')}</StyledText>

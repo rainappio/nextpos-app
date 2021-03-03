@@ -229,6 +229,36 @@ export const handleQuickCheckout = async (order, print) => {
   ).then()
 }
 
+export const handleRetailCheckout = async (order) => {
+  const formData = new FormData()
+  formData.append('print', false)
+
+  dispatchFetchRequestWithOption(
+    api.order.quickCheckout(order?.orderId),
+    {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {},
+      body: formData
+    }, {
+    defaultMessage: false
+  },
+    response => {
+      response.json().then(data => {
+        if (data.hasOwnProperty('orderId')) {
+
+          successMessage(i18n.t('order.submitted'))
+          handleOrderAction(order?.orderId, 'ENTER_PAYMENT', () => NavigationService.navigate('RetailPayment', {
+            order: order
+          }))
+
+        }
+      })
+    }
+  ).then()
+}
+
 export const handleDelete = (id, callback) => {
   dispatchFetchRequestWithOption(
     api.order.delete(id),

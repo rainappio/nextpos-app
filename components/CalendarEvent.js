@@ -74,7 +74,7 @@ const CalendarEventBase = (props) => {
 
 
     return (
-        <TouchableOpacity key={event?.id} style={{flexDirection: 'row', borderWidth: 1, borderRadius: 10, borderColor: event?.eventColor, margin: 10, maxWidth: 640, alignSelf: 'center', padding: 10}}
+        <TouchableOpacity key={event?.id} style={{flexDirection: 'row', borderWidth: 1, borderRadius: 10, borderColor: event?.eventColor === '#fff' ? mainThemeColor : event?.eventColor, margin: 10, maxWidth: 640, alignSelf: 'center', padding: 10}}
             onPress={() => {
                 !!props?.closeModal && props?.closeModal()
                 props.navigation.navigate('RostersFormScreen', {
@@ -101,7 +101,7 @@ const CalendarEventBase = (props) => {
                 <FontAwesome5Icon
                     name={event?.eventType === 'ROSTER' ? "business-time" : 'utensils'}
                     size={36}
-                    style={[styles.buttonIconStyle, {color: event?.eventColor}]}
+                    style={[styles.buttonIconStyle, {color: event?.eventColor === '#fff' ? mainThemeColor : event?.eventColor}]}
                 />
                 <StyledText style={{...props?.theme?.text, marginTop: 10}}>{event?.eventName}</StyledText>
 

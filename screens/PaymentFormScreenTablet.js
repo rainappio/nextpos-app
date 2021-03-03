@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Field, reduxForm} from 'redux-form'
-import {Text, TouchableOpacity, View, ScrollView, Alert, KeyboardAvoidingView} from 'react-native'
+import {Text, TouchableOpacity, View, ScrollView, Alert, KeyboardAvoidingView, Animated} from 'react-native'
 import {formatCurrency, getfetchglobalOrderOffers, getOrder} from '../actions'
 import RenderCheckBox from '../components/rn-elements/CheckBox'
 import styles, {mainThemeColor} from '../styles'
@@ -53,7 +53,9 @@ class PaymentFormScreenTablet extends React.Component {
             carrierId: '123',
             keyboardType: 'CASH',
             haveBindAccount: props?.order?.membership?.phoneNumber ? true : false,
-            accountKeyBoardResult: props?.order?.membership?.phoneNumber ? props?.order?.membership?.phoneNumber?.split('') : []
+            accountKeyBoardResult: props?.order?.membership?.phoneNumber ? props?.order?.membership?.phoneNumber?.split('') : [],
+            discountOpacity: new Animated.Value(0),
+            serviceChargeOpacity: new Animated.Value(0),
         }
     }
 
@@ -66,6 +68,13 @@ class PaymentFormScreenTablet extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         if (this.props?.order !== prevProps?.order) {
             this.setState({openDiscountKeyBoard: false, waiveServiceCharge: this.props.order?.serviceCharge === 0, accountKeyBoardResult: this.props?.order?.membership?.phoneNumber ? this.props?.order?.membership?.phoneNumber?.split('') : []})
+        }
+
+        if ((this.props?.order?.discount !== prevProps?.order?.discount)) {
+            this.handleFlashDiscount(0)
+        }
+        if ((this.props?.order?.serviceCharge !== prevProps?.order?.serviceCharge)) {
+            this.handleFlashServiceCharge(0)
         }
     }
 
@@ -82,6 +91,38 @@ class PaymentFormScreenTablet extends React.Component {
         this.setState({openDiscountKeyBoard: false, waiveServiceCharge: this.props.order?.serviceCharge === 0})
     }
 
+    handleFlashDiscount = (count = 0) => {
+        if (count < 2) {
+            Animated.timing(this.state.discountOpacity, {
+                toValue: this.state.discountOpacity?._value < 1 ? 1 : 0,
+                duration: 500
+            }).start(() => {
+                this.handleFlashDiscount(count + 1)
+            })
+        } else {
+            Animated.timing(this.state.discountOpacity, {
+                toValue: 0,
+                duration: 100
+            })
+        }
+    }
+
+    handleFlashServiceCharge = (count = 0) => {
+        if (count < 2) {
+            Animated.timing(this.state.serviceChargeOpacity, {
+                toValue: this.state.serviceChargeOpacity?._value < 1 ? 1 : 0,
+                duration: 500
+            }).start(() => {
+                this.handleFlashServiceCharge(count + 1)
+            })
+        } else {
+            Animated.timing(this.state.serviceChargeOpacity, {
+                toValue: 0,
+                duration: 100
+            })
+        }
+    }
+
 
 
     handleComplete = id => {
@@ -92,7 +133,7 @@ class PaymentFormScreenTablet extends React.Component {
                 })
             } else {
                 this.context?.saveSplitParentOrderId(null)
-                handleDelete(this.props?.parentOrder?.orderId, () => NavigationService.navigate('TablesSrc'))
+                handleDelete(this.props?.parentOrder?.orderId, () => NavigationService.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess'))
             }
 
             return
@@ -121,12 +162,12 @@ class PaymentFormScreenTablet extends React.Component {
                     })
                 } else {
                     this.context?.saveSplitParentOrderId(null)
-                    handleDelete(this.props?.parentOrder?.orderId, () => NavigationService.navigate('TablesSrc'))
+                    handleDelete(this.props?.parentOrder?.orderId, () => NavigationService.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess'))
                 }
 
             } else {
                 this.context?.saveSplitParentOrderId(null)
-                this.props.navigation.navigate('TablesSrc')
+                this.props.navigation.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess')
             }
         }).then()
     }
@@ -144,6 +185,9 @@ class PaymentFormScreenTablet extends React.Component {
             taxIdNumber: this.state.taxIDNumberKeyBoardResult.join(''),
             paymentDetails: {},
             printMark: true
+        }
+        if (!!values?.npoBan) {
+            transactionObj.npoBan = values?.npoBan
         }
         if (!!values?.carrierId && this.state?.haveCarrierId) {
             transactionObj.carrierType = 'MOBILE'
@@ -202,7 +246,7 @@ class PaymentFormScreenTablet extends React.Component {
             successMessage(this.context.t('payment.charged'))
 
             response.json().then(data => {
-                this.props.navigation.navigate('CheckoutComplete', {
+                this.props.navigation.navigate(this.context?.appType === 'store' ? 'CheckoutComplete' : 'RetailCheckoutComplete', {
                     transactionResponse: data,
                     onSubmit: this.handleComplete,
                     isSplitting: this.props?.isSplitting ?? false,
@@ -214,7 +258,7 @@ class PaymentFormScreenTablet extends React.Component {
             })
         }, response => {
             this.context?.saveSplitParentOrderId(null)
-            this.props.navigation.navigate('TablesSrc')
+            this.props.navigation.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess')
         }).then()
     }
 
@@ -386,7 +430,7 @@ class PaymentFormScreenTablet extends React.Component {
 
     render() {
         const {navigation, handleSubmit, globalorderoffers, order, isSplitting} = this.props
-        const {t, themeStyle} = this.context
+        const {t, themeStyle, appType, complexTheme} = this.context
         const totalAmount = this.props?.isSplitByHeadCount ? this.props?.splitAmount : order.orderTotal
 
         return (
@@ -507,7 +551,7 @@ class PaymentFormScreenTablet extends React.Component {
                                             {this.state.haveCarrierId && <Icon style={{marginRight: 10}} name="times-circle" size={20} color='#f75336' />}
                                         </TouchableOpacity>
                                     </View>
-                                    {this.props?.isSplitByHeadCount || order?.serviceChargeEnabled && <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
+                                    {this.props?.isSplitByHeadCount || order?.serviceChargeEnabled && (appType === 'store') && <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
                                         <TouchableOpacity style={[(this.state.waiveServiceCharge ? styles.selectedLabel : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {this.handleServiceChargePress(this.state.waiveServiceCharge)}}>
                                             <View style={styles.listPanel}>
                                                 <StyledText style={styles.listPanelText}>{t('payment.waiveServiceCharge')}</StyledText>
@@ -543,20 +587,31 @@ class PaymentFormScreenTablet extends React.Component {
                                             </StyledText>
                                         </View>
                                     </View>}
-                                    {this.props?.isSplitByHeadCount || <TouchableOpacity onPress={() => {this.setState({openDiscountKeyBoard: !this.state.openDiscountKeyBoard, openTaxIDNumberKeyBoard: false, keyboardType: 'DISCOUNT'})}} style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
-                                        <View style={[styles.tableCellView, {flex: 1}]}>
-                                            <StyledText>{t('order.discount')}</StyledText>
-                                            <Icon style={{marginLeft: 10}} name="edit" size={20} color={mainThemeColor} />
-                                        </View>
+                                    {this.props?.isSplitByHeadCount ||
+                                        <Animated.View >
+                                            <Animated.View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: complexTheme?.shade?.backgroundColor, opacity: this.state.discountOpacity}}>
 
-                                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                                            <StyledText style={styles.tableCellText}>
-                                                {formatCurrency(order.discount)}
-                                            </StyledText>
-                                        </View>
-                                    </TouchableOpacity>}
+                                            </Animated.View>
 
-                                    {this.props?.isSplitByHeadCount || <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                                            <TouchableOpacity onPress={() => {this.setState({openDiscountKeyBoard: !this.state.openDiscountKeyBoard, openTaxIDNumberKeyBoard: false, keyboardType: 'DISCOUNT'})}} style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                                                <View style={[styles.tableCellView, {flex: 1}]}>
+                                                    <StyledText>{t('order.discount')}</StyledText>
+                                                    <Icon style={{marginLeft: 10}} name="edit" size={20} color={mainThemeColor} />
+                                                </View>
+
+                                                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                                    <StyledText style={styles.tableCellText}>
+                                                        {formatCurrency(order.discount)}
+                                                    </StyledText>
+                                                </View>
+
+                                            </TouchableOpacity>
+                                        </Animated.View>}
+
+                                    {this.props?.isSplitByHeadCount || (appType === 'store') && <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                                        <Animated.View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: complexTheme?.shade?.backgroundColor, opacity: this.state.serviceChargeOpacity}}>
+
+                                        </Animated.View>
                                         <View style={[styles.tableCellView, {flex: 1}]}>
                                             <StyledText>{t('order.serviceCharge')}</StyledText>
 
@@ -583,18 +638,25 @@ class PaymentFormScreenTablet extends React.Component {
                                                 </StyledText>
                                             </View>
                                         </TouchableOpacity>
+                                        <Animated.View >
+                                            <Animated.View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: complexTheme?.shade?.backgroundColor, opacity: this.state.discountOpacity}}>
 
-                                        <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
-                                            <View style={[styles.tableCellView, {flex: 1}]}>
-                                                <StyledText>{t('payment.remainder')}</StyledText>
-                                            </View>
+                                            </Animated.View>
+                                            <Animated.View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: complexTheme?.shade?.backgroundColor, opacity: this.state.serviceChargeOpacity}}>
 
-                                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                                                <StyledText style={styles.tableCellText}>
-                                                    {formatCurrency((totalAmount - this.state.keyboardResult) <= 0 ? 0 : (totalAmount - this.state.keyboardResult))}
-                                                </StyledText>
+                                            </Animated.View>
+                                            <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                                                <View style={[styles.tableCellView, {flex: 1}]}>
+                                                    <StyledText>{t('payment.remainder')}</StyledText>
+                                                </View>
+
+                                                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                                    <StyledText style={styles.tableCellText}>
+                                                        {formatCurrency((totalAmount - this.state.keyboardResult) <= 0 ? 0 : (totalAmount - this.state.keyboardResult))}
+                                                    </StyledText>
+                                                </View>
                                             </View>
-                                        </View>
+                                        </Animated.View>
 
                                         <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
                                             <View style={[styles.tableCellView, {flex: 1}]}>
@@ -723,26 +785,41 @@ class PaymentFormScreenTablet extends React.Component {
                                         </TouchableOpacity>
                                     </View>}
                                     {this.state.haveCarrierId &&
-                                        <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
-                                            <View style={[styles.tableCellView, {flex: 1}]}>
-                                                <StyledText>{t('payment.carrierId')}</StyledText>
-                                            </View>
+                                        <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding, {flexDirection: 'column'}]}>
+                                            <View style={{flexDirection: 'row'}}>
+                                                <View style={[styles.tableCellView, {flex: 1}]}>
+                                                    <StyledText>{t('payment.carrierId')}</StyledText>
+                                                </View>
 
-                                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                                                <Field
-                                                    name={`carrierId`}
-                                                    component={InputText}
-                                                    validate={this.state.modalVisible ? undefined : [isRequired]}
-                                                />
-                                                <TouchableOpacity style={{minWidth: 64, alignItems: 'center', }}
-                                                    onPress={() => {
-                                                        this.setState({
-                                                            openScanView: !this.state.openScanView
-                                                        })
-                                                    }}
-                                                >
-                                                    <Icon style={{marginLeft: 10}} name="camera" size={24} color={mainThemeColor} />
-                                                </TouchableOpacity>
+                                                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                                    <Field
+                                                        name={`carrierId`}
+                                                        component={InputText}
+                                                        validate={this.state.modalVisible ? undefined : [isRequired]}
+                                                    />
+                                                    <TouchableOpacity style={{minWidth: 64, alignItems: 'center', }}
+                                                        onPress={() => {
+                                                            this.setState({
+                                                                openScanView: !this.state.openScanView
+                                                            })
+                                                        }}
+                                                    >
+                                                        <Icon style={{marginLeft: 10}} name="camera" size={24} color={mainThemeColor} />
+                                                    </TouchableOpacity>
+                                                </View>
+                                            </View>
+                                            <View style={{flexDirection: 'row', marginTop: 10}}>
+                                                <View style={[styles.tableCellView, {flex: 1}]}>
+                                                    <StyledText>{t('payment.npoBan')}</StyledText>
+                                                </View>
+
+                                                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                                    <Field
+                                                        name={`npoBan`}
+                                                        component={InputText}
+                                                    />
+
+                                                </View>
                                             </View>
                                         </View>
                                     }
@@ -798,7 +875,9 @@ class PaymentFormScreenTablet extends React.Component {
                                 {this.state.keyboardType === 'DISCOUNT' && <DiscountKeyboard
                                     globalorderoffers={globalorderoffers}
                                     title={t('payment.discountOptions')}
-                                    okPress={this.refreshOrder}
+                                    okPress={() => {
+                                        this.refreshOrder()
+                                    }}
                                     order={order}
                                 />}
                                 {this.state.keyboardType === 'ACCOUNT' && <CustomTitleAndDigitKeyboard

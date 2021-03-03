@@ -46,8 +46,8 @@ class ClientUserLogin extends React.Component {
       )
       res.username = values.username
       await AsyncStorage.setItem('clientusrToken', JSON.stringify(res))
+      this.context?.getAppType(() => this.props.navigation.navigate('LoginSuccess'))
 
-      this.props.navigation.navigate('LoginSuccess')
     }
   }
 

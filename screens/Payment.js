@@ -60,7 +60,7 @@ class Payment extends React.Component {
     }
 
     const goToPaymentOrder = async () => {
-      this.props.navigation.navigate('PaymentOrder', {
+      this.props.navigation.navigate(this.context?.appType === 'store' ? 'PaymentOrder' : 'RetailPaymentOrder', {
         orderId: this.props.navigation.state.params.order.orderId,
         navigation: this.props.navigation,
         isSplitting: this.props.navigation.state.params?.isSplitting ?? false,

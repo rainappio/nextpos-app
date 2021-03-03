@@ -72,7 +72,8 @@ class LoginSuccessScreen extends React.Component {
         addProduct: 'Add Product',
         addTable: 'Add Table',
         addWorkingArea: 'Add Working Area',
-        markAsReadPrompt: 'Dismiss'
+        markAsReadPrompt: 'Dismiss',
+        continueOrder: 'Continue Order'
       },
       zh: {
         welcome: '歡迎,',
@@ -87,7 +88,8 @@ class LoginSuccessScreen extends React.Component {
         addProduct: '新增產品',
         addTable: '新增桌位',
         addWorkingArea: '新增工作區',
-        markAsReadPrompt: '不再顯示此公告'
+        markAsReadPrompt: '不再顯示此公告',
+        continueOrder: '繼續訂單'
       }
     })
     // <NavigationEvent> component in the render function takes care of loading user info.
@@ -191,9 +193,11 @@ class LoginSuccessScreen extends React.Component {
       themeStyle,
       client,
       printers = [],
+      order
     } = this.props
-    const {t} = this.context
+    const {t, appType} = this.context
     const {username, loggedIn, tokenExpiry} = this.state
+    console.log('client', JSON.stringify(client))
 
     if (isLoading) {
       return (
@@ -310,14 +314,17 @@ class LoginSuccessScreen extends React.Component {
             {shiftStatus === 'ACTIVE' && (
               <View style={[styles.menuContainer, {flex: 1}]}>
                 <MenuButton
-                  route='OrderStart'
+                  route={appType === 'store' ? 'OrderStart' : 'RetailOrderStart'}
                   onPress={() => {
-                    this.props.navigation.navigate('OrderStart', {
+                    console.log('order', JSON.stringify(order))
+                    this.props.navigation.navigate(appType === 'store' ? 'OrderStart' :
+                      (!!order && order?.orderType === 'TAKE_OUT' && ['OPEN', 'IN_PROCESS', 'DELIVERED', 'PAYMENT_IN_PROCESS'].includes(order?.state)) ? 'RetailOrderForm' : 'RetailOrderStart', {
                       handleOrderSubmit: handleOrderSubmit,
-                      handleDelete: handleDelete
+                      handleDelete: handleDelete,
+                      orderId: order?.orderId
                     })
                   }}
-                  title={t('quickOrder')}
+                  title={(appType === 'retail' && !!order && order?.orderType === 'TAKE_OUT' && order?.state === 'OPEN') ? t('continueOrder') : t('quickOrder')}
                   icon={
                     <MaterialIcon
                       name="play-arrow"
@@ -484,6 +491,7 @@ const mapStateToProps = state => ({
   shiftStatus: state.shift.data.shiftStatus,
   client: state.client.data,
   printers: state.printers.data.printers,
+  order: state.order.data,
 })
 
 const mapDispatchToProps = dispatch => ({

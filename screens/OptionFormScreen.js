@@ -14,6 +14,8 @@ import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScro
 import {StyledText} from "../components/StyledText";
 import {WhiteSpace} from "@ant-design/react-native";
 import {backAction} from '../helpers/backActions'
+import {Ionicons} from '@expo/vector-icons';
+import * as Animatable from 'react-native-animatable';
 
 class OptionFormScreen extends React.Component {
   static navigationOptions = {
@@ -27,7 +29,10 @@ class OptionFormScreen extends React.Component {
     this.state = {
       initialValuesCount: props?.initialValues?.optionValues?.length ?? 0
     }
+
   }
+
+
 
   componentDidMount() {
     this.context.localize({
@@ -59,50 +64,100 @@ class OptionFormScreen extends React.Component {
     return nextState !== this.state;
   }
 
+  exchangeAnimate = (from, to, callback) => {
+    Promise.all([
+      this.[`renderOptionValRef_${from}`]?.pulse(500).then(endState => endState),
+      this.[`renderOptionValRef_${to}`]?.pulse(500).then(endState => endState),]
+    ).finally(() => {
+
+    })
+    callback()
+  }
+
+  deleteAnimate = (index, callback) => {
+    this.[`renderOptionValRef_${index}`]?.fadeOutRight(250).then(() => {
+      this.[`renderOptionValRef_${index}`]?.animate({0: {opacity: 1}, 1: {opacity: 1}}, 1)
+      callback()
+    })
+  }
+
   render() {
     const {t} = this.context
     const {handleSubmit, handleDeleteOption, initialValues} = this.props
+    console.log('optionValues', initialValues?.optionValues)
 
 
     const renderOptionValPopup = (name, index, fields) => (
-      <View
-        style={[styles.tableRowContainerWithBorder]}
-        key={index}
-      >
-        <View style={[{flex: 4}]}>
-          <Field
-            component={InputText}
-            name={`${name}.value`}
-            placeholder={t('value')}
-            alignLeft={true}
-            validate={isRequired}
-          />
-          <WhiteSpace />
-          <Field
-            component={InputText}
-            name={`${name}.price`}
-            placeholder={t('price')}
-            keyboardType={`numeric`}
-            alignLeft={true}
-            validate={isRequired}
-            format={(value, name) => {
-              return value !== undefined && value !== null ? String(value) : ''
-            }}
-          />
-        </View>
-        <View style={[{flex: 1, justifyContent: 'center', alignItems: 'flex-end'}]}>
-          <Icon
-            name="minuscircleo"
-            size={32}
-            color={fields.length > 1 ? mainThemeColor : 'gray'}
-            onPress={() => {
-              if (fields.length > 1)
-                fields.remove(index)
-            }}
-          />
-        </View>
+      <Animatable.View ref={(ref) => {
+        this.[`renderOptionValRef_${index}`] = ref
+      }}>
+        <View
+          style={[styles.tableRowContainerWithBorder]}
+          key={index}
+        >
+          <View style={[{flex: 1, minWidth: 64, justifyContent: 'center', alignItems: 'center'}]}>
+            <TouchableOpacity
+              onPress={() => {
+                if (index > 0) {
+                  this.exchangeAnimate(index, index - 1, () => fields.swap(index, index - 1))
+                }
+              }}>
+              <Ionicons
+                name="caret-up-outline"
+                size={32}
+                color={index > 0 ? mainThemeColor : 'gray'}
 
-      </View>
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                if (index < fields.length - 1)
+                  this.exchangeAnimate(index, index + 1, () => fields.swap(index, index + 1))
+
+              }}>
+
+              <Ionicons
+                name="caret-down-outline"
+                size={32}
+                color={index < fields.length - 1 ? mainThemeColor : 'gray'}
+
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={[{flex: 27}]}>
+            <Field
+              component={InputText}
+              name={`${name}.value`}
+              placeholder={t('value')}
+              alignLeft={true}
+              validate={isRequired}
+            />
+            <WhiteSpace />
+            <Field
+              component={InputText}
+              name={`${name}.price`}
+              placeholder={t('price')}
+              keyboardType={`numeric`}
+              alignLeft={true}
+              format={(value, name) => {
+                return value !== undefined && value !== null ? String(value) : ''
+              }}
+            />
+          </View>
+          <View style={[{flex: 2, minWidth: 64, justifyContent: 'center', alignItems: 'center'}]}>
+            <Icon
+              name="minuscircleo"
+              size={32}
+              color={fields.length > 1 ? mainThemeColor : 'gray'}
+              onPress={() => {
+                if (fields.length > 1)
+                  this.deleteAnimate(index, () => fields.remove(index))
+              }}
+            />
+          </View>
+
+        </View>
+      </Animatable.View>
     )
 
     const renderOptionsValues = ({label, fields}) => {
@@ -113,15 +168,20 @@ class OptionFormScreen extends React.Component {
       return (
         <View>
           <View style={styles.sectionContainer}>
-            <View style={styles.sectionTitleContainer}>
-              <StyledText style={styles.sectionTitleText}>{label}</StyledText>
+            <View style={[styles.sectionTitleContainer]}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <StyledText style={styles.sectionTitleText}>{label}</StyledText>
 
-              <IonIcon
-                name="md-add"
-                size={32}
-                color={mainThemeColor}
-                onPress={() => fields.push()}
-              />
+                <IonIcon
+                  name="md-add"
+                  size={32}
+                  color={mainThemeColor}
+                  onPress={() => {
+                    this.scrollViewRef?.scrollToEnd({animated: true})
+                    fields.push()
+                  }}
+                />
+              </View>
             </View>
           </View>
           {fields.map(renderOptionValPopup)}
@@ -130,7 +190,7 @@ class OptionFormScreen extends React.Component {
     }
 
     return (
-      <ThemeKeyboardAwareScrollView>
+      <ThemeKeyboardAwareScrollView getRef={(ref) => this.scrollViewRef = ref}>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader parentFullScreen={true}
             backAction={() => backAction(this.props.navigation)}

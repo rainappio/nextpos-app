@@ -36,6 +36,7 @@ export const api = {
     new: `${apiRoot}/clients`,
     update: `${apiRoot}/clients/me`,
     info: `${apiRoot}/clients/me/info`,
+    changeClientType: `${apiRoot}/clients/me/clientType`,
   },
   clientUser: {
     new: `${apiRoot}/clients/me/users`,

@@ -68,9 +68,7 @@ class OrderFormIII extends React.Component {
         body: JSON.stringify(lineItemRequest)
       },
       response => {
-        this.props.navigation.navigate('OrderFormII', {
-          orderId: orderId
-        })
+        this.props.navigation.goBack()
         this.props.getOrder(orderId)
       }
     ).then()
@@ -117,19 +115,19 @@ class OrderFormIII extends React.Component {
       },
       body: JSON.stringify(lineItemRequest)
     }, response => {
-      this.props.navigation.navigate('OrdersSummary')
+      this.props.navigation.goBack()
       this.props.getOrder()
     }).then()
   }
 
   render() {
-    const { product, globalProductOffers, haveError, isLoading } = this.props
+    const {product, globalProductOffers, haveError, isLoading} = this.props
 
     const isEditLineItem = this.props.navigation.getParam('lineItem') != null
     const lineItemDiscount = {
-        offerId: 'NO_DISCOUNT',
-        productDiscount: 'NO_DISCOUNT',
-        discount: -1
+      offerId: 'NO_DISCOUNT',
+      productDiscount: 'NO_DISCOUNT',
+      discount: -1
     }
 
     const initialValues = {
@@ -173,7 +171,7 @@ class OrderFormIII extends React.Component {
             <OrderFormIV
               onSubmit={this.handleSubmit}
               product={product}
-              initialValues={{ lineItemDiscount: lineItemDiscount, quantity: 1 }}
+              initialValues={{lineItemDiscount: lineItemDiscount, quantity: 1}}
               globalProductOffers={globalProductOffers}
             />
           )}

@@ -222,7 +222,7 @@ class PaymentOrderForm extends React.Component {
       resetTotal
     } = this.props
 
-    const {t} = this.context
+    const {t, appType} = this.context
     const {paymentsTypes, selectedPaymentType, paymentsTypeslbl, handlePaymentTypeSelection} = this.props
     const totalAmount = this.props?.isSplitByHeadCount ? this.props?.splitAmount : order.orderTotal
 
@@ -357,7 +357,7 @@ class PaymentOrderForm extends React.Component {
             </View>
           </View>}
 
-          {this.props?.isSplitByHeadCount || <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+          {this.props?.isSplitByHeadCount || (appType === 'store') && <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
               <StyledText>{t('order.serviceCharge')}</StyledText>
             </View>
@@ -526,6 +526,21 @@ class PaymentOrderForm extends React.Component {
                   <Icon style={{marginLeft: 10}} name="camera" size={24} color={mainThemeColor} />
                 </TouchableOpacity>
               </View>
+            </View>
+
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 2}}>
+                <StyledText style={styles.fieldTitle}>{t('payment.npoBan')}</StyledText>
+              </View>
+              <View style={{flex: 3}}>
+                <Field
+                  name="npoBan"
+                  component={InputText}
+                  placeholder={t('payment.npoBan')}
+                  extraStyle={{textAlign: 'left'}}
+                />
+              </View>
+
             </View>
             {this.state?.openScanView && <View style={{flexDirection: 'column'}}>
               <ScanView successCallback={(data) => {this.handleScanSuccess(data)}} style={{height: 320, width: '100%'}} />

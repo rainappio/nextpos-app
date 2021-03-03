@@ -15,6 +15,8 @@ const zh = {
   noWorkingArea: '無指定工作區',
   allSelected: '全選',
   selectWorkingArea: '顯示工作區',
+  selectCompletedOrder: '顯示已完成訂單',
+  selectUnCompletedOrder: '顯示未完成訂單',
   general: {
     noData: '沒有資料'
   },
@@ -44,7 +46,9 @@ const zh = {
     eInvoice: '電子發票',
     subscription: '訂閱',
     roster: '排班管理',
-    member: '會員管理'
+    member: '會員管理',
+    changeToStore: '切換商店版',
+    changeToRetail: '切換零售版',
   },
   newItem: {
     new: '新增',
@@ -209,6 +213,7 @@ const zh = {
     checkAutoComplete: '輸入的現金金額小於訂單總金額，請問您想要自動補差額嗎？',
     checkCarrierId: '格式錯誤，請重新掃描',
     carrierId: '手機條碼',
+    npoBan: '愛心碼',
     checkPrintInvoice: '是否要列印電子發票'
   },
   timecard: {

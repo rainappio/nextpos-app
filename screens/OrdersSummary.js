@@ -6,12 +6,15 @@ import {NavigationEvents} from "react-navigation";
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
 import OrdersSummaryRow from "./OrdersSummaryRow";
+import RetailOrderSummaryScreen from "./RetailOrderSummaryScreen";
 import {ThemeScrollView} from "../components/ThemeScrollView";
+import {LocaleContext} from '../locales/LocaleContext'
 
 class OrdersSummary extends React.Component {
   static navigationOptions = {
     header: null
   }
+  static contextType = LocaleContext
 
   componentDidMount() {
     this.props.getOrder()
@@ -25,6 +28,7 @@ class OrdersSummary extends React.Component {
       isLoading,
       order,
     } = this.props
+    const {appType} = this.context
 
     if (haveError) {
       return (
@@ -38,18 +42,17 @@ class OrdersSummary extends React.Component {
               this.props.getOrder()
             }}
           />
-          <OrdersSummaryRow
+          {appType === 'store' ? <OrdersSummaryRow
             order={order}
             navigation={navigation}
             initialValues={order}
-          />
-          {/*<OrdersSummaryRowOverView
-            order={order}
-            navigation={navigation}
-            isLoading={isLoading}
-            haveError={haveError}
-            haveData={haveData}
-          />*/}
+          /> :
+            <RetailOrderSummaryScreen
+              order={order}
+              navigation={navigation}
+              initialValues={order}
+            />
+          }
         </ThemeScrollView>
       )
     } else {
