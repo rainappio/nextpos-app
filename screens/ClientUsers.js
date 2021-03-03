@@ -46,6 +46,7 @@ class ClientUsers extends React.Component {
 
   render() {
     const {clientusers, navigation} = this.props
+    console.log('clientusers', JSON.stringify(clientusers))
     const {t} = this.context
     return (
       <ThemeContainer>
@@ -92,10 +93,10 @@ class ClientUsers extends React.Component {
                         lineHeight: 44
                       }}
                     >
-                      {item.username[0].toUpperCase()}
+                      {item?.displayName[0].toUpperCase()}
                     </Text>
                     <StyledText style={{marginLeft: 15}}>
-                      {item.nickname != null ? item.nickname : item.username}
+                      {item?.displayName}
                     </StyledText>
                   </View>
                 </TouchableOpacity>

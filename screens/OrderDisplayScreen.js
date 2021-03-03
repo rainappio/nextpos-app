@@ -122,7 +122,6 @@ class OrderDisplayScreen extends React.Component {
     const t = locale.t
 
     const webSocketHost = `${apiRoot}/ws`
-    console.log('labels', this.state?.labels, this.state?.selectedLabels)
 
     const renderWorkingAreas = Object.keys(this.state.orders)?.filter((workingArea) => this.state?.selectedLabels.has(workingArea))
 

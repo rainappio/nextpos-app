@@ -136,7 +136,6 @@ const Settings = createStackNavigator({
   OptionEdit: OptionEdit,
   Category: Category,
   CategoryCustomize: CategoryCustomize,
-  LoginSuccess: LoginSuccessScreen,
   PrinternKDS: PrinternKDS,
   PrinterAdd: PrinterAdd,
   PrinterEdit: PrinterEdit,
@@ -308,6 +307,7 @@ const tabBar = createBottomTabNavigator({
     screen: Settings
   }
 }, {
+  resetOnBlur: true,
   defaultNavigationOptions: {
     tabBarOnPress: async ({navigation, defaultHandler}) => {
       const tokenObj = await getToken()

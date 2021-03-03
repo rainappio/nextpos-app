@@ -251,7 +251,7 @@ export default class App extends React.Component {
     },
       response => {
         response.json().then(data => {
-          this.setState({appType: data?.clientType === 'FOOD_BEVERAGE' ? 'store' : 'retail'})
+          this.setState({appType: data?.clientType === 'RETAIL' ? 'retail' : 'store'})
         })
       }).then()
   }
@@ -268,7 +268,7 @@ export default class App extends React.Component {
       response => {
         response.json().then(data => {
 
-          this.setState({appType: data?.clientType === 'FOOD_BEVERAGE' ? 'store' : 'retail'})
+          this.setState({appType: data?.clientType === 'RETAIL' ? 'retail' : 'store'})
           !!successCallback && successCallback()
         })
       },

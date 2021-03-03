@@ -11,11 +11,13 @@ class StaffEditScreen extends Component {
   }
 
   state = {
-    isEditForm: true
+    isEditForm: true,
+    clientuser: {},
+    isLoading: false
   }
 
-  componentDidMount() {
-    this.props.getClientUsr()
+  async componentDidMount() {
+    await this.getClientUsr(this.props.navigation.state.params.staffname)
     this.props.getUserRoles()
   }
 
@@ -52,16 +54,33 @@ class StaffEditScreen extends Component {
     })
   }
 
+  getClientUsr = async (name) => {
+    this.setState({isLoading: true})
+    dispatchFetchRequest(
+      api.clientUser.get(name),
+      {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {}
+      },
+      response => {
+        response.json().then(data => {
+          this.setState({clientuser: data, isLoading: false})
+        })
+      },
+    ).then()
+
+  }
+
   render() {
     const {
       navigation,
-      clientuser,
       haveData,
       haveError,
-      isLoading,
       userRoles
     } = this.props
-    const { isEditForm } = this.state
+    const {isEditForm, clientuser, isLoading, } = this.state
 
     clientuser.selectedRole = 0
 

@@ -88,13 +88,7 @@ class TablesScreen extends React.Component {
           'You need to define at least one table layout and one table.',
         noInflightOrders: 'No order on this table layout',
         shiftClosing: 'Please close shift first',
-        openShift: {
-          title: 'Open shift to start sales',
-          openBalance: 'Open Balance',
-          enterAmount: 'Enter Amount',
-          open: 'Open',
-          cancel: 'Cancel'
-        },
+
         otherOrders: 'Other Orders',
         seatingCapacity: 'Seats',
         tableCapacity: 'Tables',
@@ -109,13 +103,7 @@ class TablesScreen extends React.Component {
         noTableLayout: '需要創建至少一個桌面跟一個桌位.',
         noInflightOrders: '此樓面沒有訂單',
         shiftClosing: '請先完成關帳',
-        openShift: {
-          title: '請開帳來開始銷售',
-          openBalance: '開帳現金',
-          enterAmount: '請輸入金額',
-          open: '開帳',
-          cancel: '取消'
-        },
+
         otherOrders: '其他訂單',
         seatingCapacity: '總座位',
         tableCapacity: '總桌數',
@@ -805,7 +793,7 @@ class Draggable extends Component {
       panUnder: new Animated.ValueXY(),
       opacity: new Animated.Value(1),
       isDraggable: false,
-      tableOrder: props?.orders[`${props?.layoutId}`]?.find((item) => {return (item?.tableId === props?.table?.tableId || item?.tables?.some((table) => table?.tableId === props?.table?.tableId))}),
+      tableOrder: props?.orders?.[`${props?.layoutId}`]?.find((item) => {return (item?.tableId === props?.table?.tableId || item?.tables?.some((table) => table?.tableId === props?.table?.tableId))}),
       isSelected: false
     };
   }

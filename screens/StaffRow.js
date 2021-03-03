@@ -47,10 +47,10 @@ class StaffRow extends React.Component {
       <ThemeScrollView>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader title={t('staffListTitle')}
-                        parentFullScreen={true}
-                        rightComponent={
-                          <AddBtn onPress={() => this.props.navigation.navigate('Staff')}/>
-                        }
+            parentFullScreen={true}
+            rightComponent={
+              <AddBtn onPress={() => this.props.navigation.navigate('Staff')} />
+            }
           />
 
           <View style={styles.childContainer}>
@@ -58,6 +58,7 @@ class StaffRow extends React.Component {
               data={clientusersOnly}
               renderItem={(data, rowMap) => (
                 <TouchableOpacity
+                  disabled={this.props?.isStaff ?? false}
                   onPress={() =>
                     this.props.navigation.navigate('StaffEdit', {
                       staffname: data.item.username
@@ -66,7 +67,7 @@ class StaffRow extends React.Component {
                 >
                   <View style={styles.rowFront}>
                     <StyledText id={data.item.username} style={styles.rowFrontText}>
-                      {data.item.username}
+                      {data?.item?.displayName}
                     </StyledText>
                   </View>
                 </TouchableOpacity>
