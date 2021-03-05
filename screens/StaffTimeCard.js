@@ -72,8 +72,7 @@ class StaffTimeCard extends React.Component {
     const {timecards, haveData, haveError, loading} = this.props
 
     Item = ({timecard, layoutId, index}) => {
-      const displayName = timecard.nickname != null ? timecard.nickname : timecard.id
-      console.log('timecard', JSON.stringify(timecard))
+      const displayName = timecard?.displayName ?? timecard.id
 
       return (
         <TouchableOpacity

@@ -560,7 +560,7 @@ class PaymentFormScreenTablet extends React.Component {
                                         </TouchableOpacity>
                                     </View>}
 
-                                    {this.props?.isSplitByHeadCount || <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
+                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
                                         <TouchableOpacity style={[(this.state.haveBindAccount ? styles.selectedLabel : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {
                                             this.state.haveBindAccount && this.handleUpdateOrderMembership(order?.orderId)
                                             this.setState({haveBindAccount: !this.state.haveBindAccount, keyboardType: 'ACCOUNT'})
@@ -570,7 +570,7 @@ class PaymentFormScreenTablet extends React.Component {
                                             </View>
                                             {this.state.haveBindAccount && <Icon style={{marginRight: 10}} name="times-circle" size={20} color='#f75336' />}
                                         </TouchableOpacity>
-                                    </View>}
+                                    </View>
                                 </ScrollView>
                             </View>
                             {/* mid content */}

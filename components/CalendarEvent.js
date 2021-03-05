@@ -10,7 +10,6 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import TimeZoneService from "../helpers/TimeZoneService";
 import moment from "moment-timezone";
 import {MainActionFlexButton, DeleteFlexButton} from "../components/ActionButtons";
-import UserSelectModal from "../screens/UserSelectModal";
 import {withNavigation} from 'react-navigation';
 
 /*
@@ -85,17 +84,6 @@ const CalendarEventBase = (props) => {
                 })
             }}
         >
-            {/* remove it if calendar done but no used */}
-            {/* <UserSelectModal
-                modalVisible={modalVisible}
-                submitOrder={(data) => {
-                    setModalVisible(false)
-                    handleAssignUsers(data)
-                }}
-                closeModal={() => {setModalVisible(false)}}
-                eventData={event}
-                data={props?.users}
-                labels={labels} /> */}
 
             <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1}}>
                 <FontAwesome5Icon

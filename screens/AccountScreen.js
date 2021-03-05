@@ -31,7 +31,7 @@ class AccountScreen extends React.Component {
         gesturePassword: 'Gesture Password'
       },
       zh: {
-        username: '使用者名稱',
+        username: '使用者代號',
         nickname: '暱稱',
         updateDate: '最後更新',
         gesturePassword: '圖形密碼'
@@ -100,7 +100,7 @@ class AccountScreen extends React.Component {
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <StyledText>
-                {currentUser.username}
+                {currentUser?.username}
               </StyledText>
             </View>
           </View>
@@ -110,7 +110,7 @@ class AccountScreen extends React.Component {
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <StyledText>
-                {currentUser.nickname}
+                {currentUser?.displayName}
               </StyledText>
             </View>
           </View>
@@ -149,7 +149,7 @@ class AccountScreen extends React.Component {
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <StyledText>
-                2021-03-03
+                2021-03-05
               </StyledText>
             </View>
           </View>

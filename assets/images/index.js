@@ -7,7 +7,7 @@ const images = {
   checkicon: require('./ic_check_box.png'),
   checkiconOutline: require('./ic_check_box_outline_blank.png'),
   cash: require('./cash.png'),
-  beenclock: require('./beenclock.png'),
+  beenclock: require('./clockIn_bee.png'),
   handholdbox: require('./hand-hold-box.png'),
   end: require('./end.png')
 }

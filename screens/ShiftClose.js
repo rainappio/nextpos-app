@@ -11,6 +11,7 @@ import {NavigationEvents} from "react-navigation";
 import LoadingScreen from "./LoadingScreen";
 import {StyledText} from "../components/StyledText";
 import {ThemeContainer} from "../components/ThemeContainer";
+import {OpenShiftScreen} from "./OpenShiftScreen";
 
 class ShiftClose extends React.Component {
   static navigationOptions = {
@@ -53,7 +54,8 @@ class ShiftClose extends React.Component {
     })
 
     this.state = {
-      balance: 0
+      balance: 0,
+      isOpenShift: false
     }
   }
 
@@ -95,7 +97,18 @@ class ShiftClose extends React.Component {
       return (
         <LoadingScreen />
       )
-    } else {
+    } else if (this.state?.isOpenShift) {
+      return (
+        <OpenShiftScreen handleOpenShift={() => {
+          this.props.getShiftStatus()
+          this.props.getMostRecentShiftStatus()
+          this.setState({isOpenShift: false})
+        }}
+          handleCancel={() => this.setState({isOpenShift: false})} />
+      )
+    }
+
+    else {
       return (
         <ThemeContainer>
           <View style={[styles.fullWidthScreen]}>
@@ -195,7 +208,7 @@ class ShiftClose extends React.Component {
                     <View>
 
                       <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('Tables')}
+                        onPress={() => this.setState({isOpenShift: true})}
                       >
                         <Text style={[styles.bottomActionButton, styles.actionButton]}>
                           {t('openShiftAction')}

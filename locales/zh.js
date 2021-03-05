@@ -484,7 +484,14 @@ const zh = {
     incorrectPassword: '密碼輸入錯誤',
     passwordUpdated: '密碼更新成功',
     changePasswordAlert: '更改密碼將導致圖形密碼重置，是否繼續？'
-  }
+  },
+  openShift: {
+    title: '請開帳來開始銷售',
+    openBalance: '開帳現金',
+    enterAmount: '請輸入金額',
+    open: '開帳',
+    cancel: '取消'
+  },
 }
 
 export default zh

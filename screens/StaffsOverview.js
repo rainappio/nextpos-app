@@ -18,7 +18,8 @@ class StaffsOverview extends React.Component {
       navigation,
       haveData,
       haveError,
-      isLoading
+      isLoading,
+      currentUser
     } = this.props
 
     return (
@@ -28,6 +29,7 @@ class StaffsOverview extends React.Component {
         haveData={haveData}
         haveError={haveError}
         isLoading={isLoading}
+        currentUser={currentUser}
       />
     )
   }
@@ -37,7 +39,8 @@ const mapStateToProps = state => ({
   clientusers: state.clientusers.data.users,
   haveData: state.clientusers.haveData,
   haveError: state.clientusers.haveError,
-  isLoading: state.clientusers.loading
+  isLoading: state.clientusers.loading,
+  currentUser: state.clientuser.data,
 })
 
 const mapDispatchToProps = dispatch => ({

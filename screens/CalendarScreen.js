@@ -16,7 +16,6 @@ import TimeZoneService from "../helpers/TimeZoneService";
 import moment from "moment-timezone";
 import {StyledText} from '../components/StyledText'
 import {RenderAgenda, DayCalendar} from "../components/Calendars";
-import UserSelectModal from './UserSelectModal';
 import AddBtn from '../components/AddBtn'
 import Modal from 'react-native-modal';
 import {OptionModal} from "../components/OptionModal";

@@ -102,6 +102,7 @@ class LoginSuccessScreen extends React.Component {
     this.props.getCurrentUser(token.username)
     this.props.getAnnouncements()
     this.props.getShiftStatus()
+    console.log('token', JSON.stringify(token))
 
     this.setState({
       token: token,
@@ -292,7 +293,7 @@ class LoginSuccessScreen extends React.Component {
             <View style={[{flex: 1, marginTop: 6, alignItems: 'flex-end'}]}>
               <Avatar
                 rounded
-                title={username != null && username.charAt(0).toUpperCase()}
+                title={!!currentUser?.displayName && currentUser.displayName.charAt(0).toUpperCase()}
                 size="small"
                 overlayContainerStyle={[styles.orange_bg]}
                 titleStyle={styles.whiteColor}

@@ -479,7 +479,14 @@ const en = {
     incorrectPassword: 'Incorrect password',
     passwordUpdated: 'Password is updated',
     changePasswordAlert: 'Change password will reset your gesture password. Proceed?'
-  }
+  },
+  openShift: {
+    title: 'Open shift to start sales',
+    openBalance: 'Open Balance',
+    enterAmount: 'Enter Amount',
+    open: 'Open',
+    cancel: 'Cancel'
+  },
 }
 
 export default en

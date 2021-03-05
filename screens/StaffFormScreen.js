@@ -117,7 +117,8 @@ class StaffFormScreen extends React.Component {
       handleEditCancel,
       initialValues,
       onCancel,
-      userRoles = []
+      userRoles = [],
+      currentUser
     } = this.props
     const {t} = this.context
 
@@ -134,22 +135,7 @@ class StaffFormScreen extends React.Component {
 
 
 
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, styles.flex(1)]}>
-                <StyledText style={styles.fieldTitle}>{t('username')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, styles.justifyRight]}>
-                <Field
-                  name="username"
-                  component={InputText}
-                  validate={isRequired}
-                  placeholder={t('username')}
-                  secureTextEntry={false}
-                  editable={!isEditForm}
-                  autoCapitalize="none"
-                />
-              </View>
-            </View>
+
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, styles.flex(1)]}>
@@ -279,6 +265,10 @@ class StaffFormScreen extends React.Component {
   }
 }
 
+const mapStateToProps = state => ({
+  currentUser: state.clientuser.data,
+})
+
 const mapDispatchToProps = dispatch => ({
   dispatch,
   getClientUsrs: () => dispatch(getClientUsrs())
@@ -291,6 +281,6 @@ StaffFormScreen = reduxForm({
 
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(StaffFormScreen)

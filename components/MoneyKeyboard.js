@@ -431,14 +431,14 @@ export const CardFourNumberKeyboard = (props) => {
 
 
     return (
-        <View style={{
+        <View style={[{
             backgroundColor: '#fff',
             margin: '5%',
             borderRadius: 10,
             flex: 1,
-
+            borderWidth: 1,
             alignItems: 'center'
-        }}>
+        }]}>
             <View style={styles.cardKeyboardRowContainer}>
                 <TouchableOpacity onPress={() => {setIndex(0)}} style={styles.cardNumberInput(Index === 0)}>
                     <Text >{Output[0]}</Text>
