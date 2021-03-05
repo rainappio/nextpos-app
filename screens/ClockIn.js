@@ -279,7 +279,6 @@ class ClockIn extends React.Component {
 
     const locationBasedService = client.clientSettings.LOCATION_BASED_SERVICE != null ? client.clientSettings.LOCATION_BASED_SERVICE.enabled : false
 
-    console.log('client', locationBasedService)
 
     /**
      * This check exists to circumvent the issue that the first render() call hasn't set the this.state.timecard object yet.

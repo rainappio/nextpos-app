@@ -492,6 +492,12 @@ const zh = {
     open: '開帳',
     cancel: '取消'
   },
+  account: {
+    username: '使用者代號',
+    nickname: '暱稱',
+    updateDate: '最後更新',
+    gesturePassword: '圖形密碼'
+  },
 }
 
 export default zh

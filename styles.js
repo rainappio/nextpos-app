@@ -144,7 +144,8 @@ export default StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 2,
     elevation: 1,
-    padding: 12
+    padding: 12,
+    elevation: 5
   },
   modalContainer: {
     flex: 1,
