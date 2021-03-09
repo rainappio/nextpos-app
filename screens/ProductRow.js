@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import DraggableFlatList from "react-native-draggable-flatlist";
 import {CustomPopUp} from '../components/PopUp'
 import {getLables, getProducts} from '../actions'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import ScreenHeader from "../components/ScreenHeader";
@@ -119,7 +119,7 @@ class ProductRow extends React.Component {
         onPress={() => this.onSelect(item.id)}
         onLongPress={item?.id === 'ungrouped' ? null : drag}
       >
-        <View style={[styles.productPanel, {borderColor: mainThemeColor, borderBottomWidth: 1}]}>
+        <View style={[styles.productPanel, {borderColor: this.context?.customMainThemeColor, borderBottomWidth: 1}]}>
           <View style={[styles.flex(1)]}>
             <StyledText style={[styles.listPanelText]}>{item.label}</StyledText>
           </View>
@@ -128,7 +128,7 @@ class ProductRow extends React.Component {
               <MaterialIcon
                 name="edit"
                 size={22}
-                style={[styles.iconStyle, {paddingHorizontal: 10}]}
+                style={[styles?.iconStyle(this.context?.customMainThemeColor), {paddingHorizontal: 10}]}
                 onPress={() => {
                   this.props.navigation.navigate('CategoryCustomize', {
                     labelId: item.id
@@ -192,7 +192,7 @@ class ProductRow extends React.Component {
                   size={22}
                   color={
                     data.pinned
-                      ? mainThemeColor
+                      ? this.context?.customMainThemeColor
                       : '#ccc'}
                   style={{transform: [{rotateY: '180deg'}]}} />
               }
@@ -322,7 +322,7 @@ class ProductRow extends React.Component {
       navigation,
       themeStyle
     } = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
     var getlabels = labels !== undefined && labels
     var labelsArr = [{label: t('product.pinned'), id: 'pinned'}, ...getlabels, {label: t('product.ungrouped'), id: 'ungrouped'}]
 
@@ -388,7 +388,7 @@ class ProductRow extends React.Component {
                 borderWidth: 0,
                 borderTopWidth: 0,
                 borderBottomWidth: 0,
-                backgroundColor: mainThemeColor
+                backgroundColor: customMainThemeColor
               }}
               inputStyle={{backgroundColor: themeStyle.backgroundColor}}
               inputContainerStyle={{borderRadius: 0, backgroundColor: themeStyle.backgroundColor}}
@@ -423,7 +423,7 @@ class ProductRow extends React.Component {
               style={{height: 46}}
               onPress={() => this.onSelect('pinned')}
             >
-              <View style={[styles.productPanel, {borderColor: mainThemeColor, borderBottomWidth: 1}]}>
+              <View style={[styles.productPanel, {borderColor: customMainThemeColor, borderBottomWidth: 1}]}>
                 <View style={[styles.flex(1)]}>
                   <StyledText style={[styles.listPanelText]}>{t('product.pinned')}</StyledText>
                 </View>
@@ -454,7 +454,7 @@ class ProductRow extends React.Component {
                           <AntDesignIcon
                             name={'pushpin'}
                             size={22}
-                            color={mainThemeColor}
+                            color={customMainThemeColor}
                             style={{transform: [{rotateY: '180deg'}]}} />
                         }
                       </TouchableOpacity>

@@ -62,7 +62,7 @@ class OrderDetail extends React.Component {
 
   render() {
     const {order, isLoading, haveData, complexTheme} = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     Item = ({orderDetail, lineItemDate}) => {
       return (
@@ -204,14 +204,14 @@ class OrderDetail extends React.Component {
 
               <View style={styles.sectionBar}>
                 <View style={{flex: 2.5}}>
-                  <Text style={styles.sectionBarTextSmall}>
+                  <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>
                     {t('order.lineItemCreatedDate')}
                   </Text>
                 </View>
 
                 <View style={{flex: 1.7}}>
                   <TouchableOpacity>
-                    <Text style={styles.sectionBarTextSmall}>
+                    <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>
                       {t('order.product')}
                     </Text>
                   </TouchableOpacity>
@@ -219,14 +219,14 @@ class OrderDetail extends React.Component {
 
                 <View style={{flex: 0.8}}>
                   <TouchableOpacity>
-                    <Text style={styles.sectionBarTextSmall}>
+                    <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>
                       {t('order.quantity')}
                     </Text>
                   </TouchableOpacity>
                 </View>
 
                 <View style={{flex: 1.3}}>
-                  <Text style={[styles.sectionBarTextSmall, {textAlign: 'right'}]}>{t('order.subtotal')}</Text>
+                  <Text style={[styles?.sectionBarTextSmall(customMainThemeColor), {textAlign: 'right'}]}>{t('order.subtotal')}</Text>
                 </View>
               </View>
 
@@ -306,7 +306,7 @@ class OrderDetail extends React.Component {
                   <StyledText>{t('order.orderStatus')}</StyledText>
                 </View>
                 <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                  {renderOrderState(order.state)}
+                  {renderOrderState(order.state, customMainThemeColor)}
                 </View>
               </View>
               {order?.transactions?.map((item, index) => {
@@ -358,7 +358,7 @@ class OrderDetail extends React.Component {
                 <TouchableOpacity
                   onPress={() => this.handleCopyOrder(order)}
                 >
-                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                     {t('order.copyOrder')}
                   </Text>
                 </TouchableOpacity>

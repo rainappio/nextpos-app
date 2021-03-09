@@ -47,7 +47,7 @@ class RenderDateTimePicker extends Component {
 			themeStyle,
 			...rest
 		} = this.props
-		const {t, locale} = this.context
+		const {t, locale, customMainThemeColor} = this.context
 		const colorScheme = Appearance.getColorScheme();
 
 		const timezone = TimeZoneService.getTimeZone()
@@ -98,7 +98,7 @@ class RenderDateTimePicker extends Component {
 									showDatepicker();
 								}}
 							>
-								<Text style={[styles.bottomActionButton, styles.actionButton]}>{t('datetimeRange.select')}</Text>
+								<Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('datetimeRange.select')}</Text>
 							</TouchableOpacity>
 						</View>
 					</Modal> :
@@ -150,7 +150,7 @@ class RenderDateTimePicker extends Component {
 							<FontAwesomeIcon
 								name="calendar"
 								size={24}
-								style={[styles.orange_color]}
+								style={[{color: customMainThemeColor}]}
 							/>
 							<Text
 								style={{fontSize: 11, color: fontColor, marginLeft: 5}}
@@ -207,7 +207,7 @@ class RenderTimePickerBase extends Component {
 			mode,
 			...rest
 		} = this.props
-		const {t, locale} = this.context
+		const {t, locale, customMainThemeColor} = this.context
 		const timezone = TimeZoneService.getTimeZone()
 		const i18nMoment = moment(!!value ? value : new Date()).tz(timezone);
 
@@ -259,7 +259,7 @@ class RenderTimePickerBase extends Component {
 										showDatepicker();
 									}}
 								>
-									<Text style={[styles.bottomActionButton, styles.actionButton]}>{t('datetimeRange.select')}</Text>
+									<Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('datetimeRange.select')}</Text>
 								</TouchableOpacity>
 							</View>
 
@@ -303,7 +303,7 @@ class RenderTimePickerBase extends Component {
 							<FontAwesomeIcon
 								name="clock-o"
 								size={24}
-								style={[styles.orange_color]}
+								style={[{color: customMainThemeColor}]}
 							/>
 							<Text
 								style={{fontSize: 11, color: fontColor, marginLeft: 5}}
@@ -358,7 +358,7 @@ class RenderDatePickerBase extends Component {
 			mode,
 			...rest
 		} = this.props
-		const {t, locale} = this.context
+		const {t, locale, customMainThemeColor} = this.context
 		const timezone = TimeZoneService.getTimeZone()
 		const i18nMoment = moment(!!value ? value : new Date()).tz(timezone);
 
@@ -409,7 +409,7 @@ class RenderDatePickerBase extends Component {
 									showDatepicker();
 								}}
 							>
-								<Text style={[styles.bottomActionButton, styles.actionButton]}>{t('datetimeRange.select')}</Text>
+								<Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('datetimeRange.select')}</Text>
 							</TouchableOpacity>
 						</View>
 					</Modal> :
@@ -452,7 +452,7 @@ class RenderDatePickerBase extends Component {
 							<FontAwesomeIcon
 								name="clock-o"
 								size={24}
-								style={[styles.orange_color]}
+								style={[{color: customMainThemeColor}]}
 							/>
 							<Text
 								style={{fontSize: 11, color: fontColor, marginLeft: 5}}

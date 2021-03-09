@@ -55,7 +55,7 @@ class PrinternKDS extends React.Component {
       haveError,
       haveData
     } = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     if (loading) {
       return (
@@ -86,7 +86,7 @@ class PrinternKDS extends React.Component {
 
           <View>
             <View style={styles.sectionBar}>
-              <Text style={styles.sectionBarText}>
+              <Text style={styles?.sectionBarText(customMainThemeColor)}>
                 {t('printerTitle')}
               </Text>
 
@@ -121,7 +121,7 @@ class PrinternKDS extends React.Component {
             </View>
 
             <View style={styles.sectionBar}>
-              <Text style={styles.sectionBarText}>
+              <Text style={styles?.sectionBarText(customMainThemeColor)}>
                 {t('workingAreaTitle')}
               </Text>
             </View>

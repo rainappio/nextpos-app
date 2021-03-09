@@ -13,6 +13,7 @@ import DropDown from "../components/DropDown";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
 import ThemeToggleButton from "../themes/ThemeToggleButton";
+import {ThemePicker} from "../components/ThemePicker";
 
 class StoreFormScreen extends React.Component {
   static navigationOptions = {
@@ -126,7 +127,7 @@ class StoreFormScreen extends React.Component {
   }
 
   render() {
-    const {t} = this.context
+    const {t, customMainThemeColor, changeCustomMainThemeColor, theme, toggleTheme} = this.context
     const {handleSubmit} = this.props
 
     const tableDisplayTypes = Object.keys(this.state.tableDisplayTypes).map(key => this.state.tableDisplayTypes[key].label)
@@ -371,21 +372,27 @@ class StoreFormScreen extends React.Component {
               <View style={styles.sectionTitleContainer}>
                 <StyledText style={styles.sectionTitleText}>{t('uiPreferences')}</StyledText>
               </View>
-              <View style={styles.fieldContainer}>
-                <ThemeToggleButton />
+              <View style={[styles.fieldContainer, {justifyContent: 'center'}]}>
+                <ThemePicker
+                  style={{width: 200}}
+                  colors={['#f18d1a', '#006B35', '#000']}
+                  handleSelectColor={(color) => {
+                    changeCustomMainThemeColor(color)
+                  }}
+                />
               </View>
 
             </View>
 
             <View style={[styles.bottom, {marginTop: 30}]}>
               <TouchableOpacity onPress={handleSubmit}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                   {t('action.save')}
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                   {t('action.cancel')}
                 </Text>
               </TouchableOpacity>

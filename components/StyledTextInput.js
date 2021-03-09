@@ -13,9 +13,10 @@ const StyledTextInput = (props) => {
         {...props}
         placeholderTextColor={themeStyle.color}
         style={[
-          styles.rootInput,
+
           themeStyle,
-          styles.withBorder
+          styles?.rootInput(props?.locale),
+          styles?.withBorder(props?.locale)
         ]}
       />
     </View>

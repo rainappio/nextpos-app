@@ -1,12 +1,13 @@
 import React, {Component} from 'react'
 import {Text, View} from 'react-native'
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
+import {withContext} from "../helpers/contextHelper";
 
 /**
  * Reference: https://www.npmjs.com/package/react-native-smooth-pincode-input
  */
-export default class PinCodeInput extends Component {
+class PinCodeInput extends Component {
   constructor(props) {
     super(props)
 
@@ -23,6 +24,7 @@ export default class PinCodeInput extends Component {
       options,
       customHeight,
       editable,
+      locale: {customMainThemeColor},
       ...rest
     } = this.props
 
@@ -34,7 +36,7 @@ export default class PinCodeInput extends Component {
             cellStyle={{
               borderWidth: 1,
               borderRadius: 2,
-              borderColor: mainThemeColor,
+              borderColor: customMainThemeColor,
               height: customHeight,
               marginHorizontal: 4
             }}
@@ -52,3 +54,5 @@ export default class PinCodeInput extends Component {
     )
   }
 }
+
+export default withContext(PinCodeInput)

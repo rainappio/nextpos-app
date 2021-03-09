@@ -11,6 +11,8 @@ import {ThemeScrollView} from "../components/ThemeScrollView";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {CardFourNumberKeyboard} from '../components/MoneyKeyboard'
 import {GesturePassword} from '../components/GesturePassword'
+import {compose} from "redux";
+import {connect} from "react-redux";
 
 class ClientUserLoginForm extends React.Component {
   static navigationOptions = {
@@ -44,8 +46,9 @@ class ClientUserLoginForm extends React.Component {
   }
 
   checkGesturePassword = async (result = null) => {
+    console.log('client', JSON.stringify(this.props?.client))
     try {
-      const value = await AsyncStorage.getItem('gesturePassword');
+      const value = await AsyncStorage.getItem(`gesturePassword_${this.props?.client?.id}`);
       if (value !== null) {
         // We have data!!
         this.setState({showGesture: true})
@@ -70,7 +73,7 @@ class ClientUserLoginForm extends React.Component {
 
   render() {
     const {clientusersName, displayName, handleSubmit, themeStyle} = this.props
-    const {t, isTablet} = this.context
+    const {t, isTablet, customMainThemeColor} = this.context
     return (
       <ThemeContainer>
         <View style={styles.fullWidthScreen}>
@@ -80,7 +83,7 @@ class ClientUserLoginForm extends React.Component {
 
           <View style={[styles.horizontalMargin, styles.flex(1)]}>
             <View>
-              <Text style={[styles.screenSubTitle]}>
+              <Text style={[styles?.screenSubTitle(customMainThemeColor)]}>
                 {displayName}
               </Text>
             </View>
@@ -105,7 +108,7 @@ class ClientUserLoginForm extends React.Component {
                     <TouchableOpacity
                       onPress={handleSubmit}
                     >
-                      <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('login')}</Text>
+                      <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('login')}</Text>
                     </TouchableOpacity>
                   </View>
                 </View>}
@@ -142,4 +145,14 @@ ClientUserLoginForm = reduxForm({
   form: 'ClientUserLoginForm'
 })(ClientUserLoginForm)
 
-export default withContext(ClientUserLoginForm)
+
+const mapStateToProps = state => ({
+  client: state.client.data
+})
+
+const enhance = compose(
+  connect(mapStateToProps, null),
+  withContext
+)
+
+export default enhance(ClientUserLoginForm)

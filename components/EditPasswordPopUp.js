@@ -3,7 +3,7 @@ import {Field} from 'redux-form'
 import {AsyncStorage, Keyboard, Modal, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, KeyboardAvoidingView, Alert} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PinCodeInput from '../components/PinCodeInput'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {api, dispatchFetchRequestWithOption, successMessage, warningMessage, storage} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {encode as btoa} from "base-64";
@@ -15,6 +15,8 @@ import {CardFourNumberKeyboard} from './MoneyKeyboard'
 import {ThemeKeyboardAwareScrollView} from './ThemeKeyboardAwareScrollView'
 import {GesturePassword} from '../components/GesturePassword'
 import {doLoggedIn} from '../actions'
+import {compose} from "redux";
+import {connect} from "react-redux";
 
 class EditPasswordPopUpBase extends Component {
   static contextType = LocaleContext
@@ -133,7 +135,7 @@ class EditPasswordPopUpBase extends Component {
                   if (data.username) {
                     successMessage(this.context.t('editPasswordPopUp.passwordUpdated'))
                     this.getToken(updatedPassword)
-                    AsyncStorage.removeItem('gesturePassword')
+                    AsyncStorage.removeItem(`gesturePassword_${this.props?.client?.id}`)
                     this.props?.updateCallback && this.props?.updateCallback()
                   }
                 })
@@ -162,9 +164,8 @@ class EditPasswordPopUpBase extends Component {
 
 
   checkGesturePassword = async (result = null) => {
-
     try {
-      const value = await AsyncStorage.getItem('gesturePassword');
+      const value = await AsyncStorage.getItem(`gesturePassword_${this.props?.client?.id}`);
       if (value !== null) {
         this.setState({hasGesturePassword: true})
         // We have data!!
@@ -233,7 +234,7 @@ class EditPasswordPopUpBase extends Component {
    */
   render() {
     const {themeStyle} = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     return (
       <View>
@@ -242,7 +243,7 @@ class EditPasswordPopUpBase extends Component {
             this.toggleModal(true)
           }}
         >
-          <Icon name="md-create" size={24} color={mainThemeColor} />
+          <Icon name="md-create" size={24} color={customMainThemeColor} />
         </TouchableOpacity>
 
         <Modal
@@ -277,13 +278,13 @@ class EditPasswordPopUpBase extends Component {
                               onChangeText={(value) => this.setState({originalPassword: value})}
                               placeholder={t('editPasswordPopUp.originalPassword')}
                               secureTextEntry={true}
-                              style={[styles.rootInput, styles.withBorder, themeStyle, {flex: 1}]}
+                              style={[themeStyle, styles?.rootInput(this.context), styles?.withBorder(this.context), {flex: 1}]}
                             />
                             <TouchableOpacity
                               style={{marginLeft: 10}}
                               onPress={() => this.handleCheckPassword(this.state.originalPassword)}
                             >
-                              <Text style={[styles.searchButton]}>{t('editPasswordPopUp.enter')}</Text>
+                              <Text style={[styles?.searchButton(customMainThemeColor)]}>{t('editPasswordPopUp.enter')}</Text>
                             </TouchableOpacity>
                           </View>
                         ) : (
@@ -318,13 +319,13 @@ class EditPasswordPopUpBase extends Component {
                               placeholder={t('editPasswordPopUp.newPassword')}
                               secureTextEntry={true}
                               validate={isvalidPassword}
-                              style={[styles.rootInput, styles.withBorder, themeStyle, {flex: 1}]}
+                              style={[themeStyle, styles?.rootInput(this.context), styles?.withBorder(this.context), {flex: 1}]}
                             />
                             <TouchableOpacity
                               style={{marginLeft: 10}}
                               onPress={() => this.handleChangeMasterPwd(this.state.newPassword)}
                             >
-                              <Text style={[styles.searchButton]}>{t('editPasswordPopUp.enter')}</Text>
+                              <Text style={[styles?.searchButton(customMainThemeColor)]}>{t('editPasswordPopUp.enter')}</Text>
                             </TouchableOpacity>
                           </View>
                         ) : (
@@ -355,7 +356,16 @@ class EditPasswordPopUpBase extends Component {
   }
 }
 
-export const EditPasswordPopUp = withContext(EditPasswordPopUpBase)
+const mapStateToProps = state => ({
+  client: state.client.data
+})
+
+const enhance = compose(
+  connect(mapStateToProps, null),
+  withContext
+)
+
+export const EditPasswordPopUp = enhance(EditPasswordPopUpBase)
 
 class EditGesturePasswordPopUpBase extends Component {
   static contextType = LocaleContext
@@ -432,7 +442,7 @@ class EditGesturePasswordPopUpBase extends Component {
   checkGesturePassword = async (result = null) => {
 
     try {
-      const value = await AsyncStorage.getItem('gesturePassword');
+      const value = await AsyncStorage.getItem(`gesturePassword_${this.props?.client?.id}`);
       if (value !== null) {
         this.setState({hasGesturePassword: true})
         // We have data!!
@@ -454,7 +464,7 @@ class EditGesturePasswordPopUpBase extends Component {
   updateGesturePassword = async (result = null) => {
 
     try {
-      await AsyncStorage.setItem('gesturePassword', result);
+      await AsyncStorage.setItem(`gesturePassword_${this.props?.client?.id}`, result);
       await AsyncStorage.setItem(`gesturePassword_${result}`, this.state?.oldPassword);
       successMessage(this.context.t('editPasswordPopUp.passwordUpdated'))
       this.setState({hasGesturePassword: true, showEnterNewPassword: false, wrongPassword: false})
@@ -465,7 +475,7 @@ class EditGesturePasswordPopUpBase extends Component {
   }
   render() {
     const {themeStyle} = this.props
-    const {t, isTablet} = this.context
+    const {t, isTablet, customMainThemeColor} = this.context
 
     return (
       <View>
@@ -474,7 +484,7 @@ class EditGesturePasswordPopUpBase extends Component {
             this.toggleModal(true)
           }}
         >
-          <Icon name={this.state?.hasGesturePassword ? "md-create" : 'add'} size={24} color={mainThemeColor} />
+          <Icon name={this.state?.hasGesturePassword ? "md-create" : 'add'} size={24} color={customMainThemeColor} />
         </TouchableOpacity>
 
         <Modal
@@ -502,7 +512,7 @@ class EditGesturePasswordPopUpBase extends Component {
                           {t('editPasswordPopUp.enterOldPassword')}
                         </StyledText>
                         {this.state?.wrongPassword &&
-                          <StyledText style={{marginBottom: 10, textAlign: 'center', color: 'red'}}>
+                          <StyledText style={{marginBottom: 10, textAlign: 'center', color: '#f75336'}}>
                             {t('editPasswordPopUp.incorrectPassword')}
                           </StyledText>}
                         {this.props.defaultUser ? (
@@ -513,13 +523,13 @@ class EditGesturePasswordPopUpBase extends Component {
                               onChangeText={(value) => this.setState({originalPassword: value})}
                               placeholder={t('editPasswordPopUp.originalPassword')}
                               secureTextEntry={true}
-                              style={[styles.rootInput, styles.withBorder, themeStyle, {flex: 1}]}
+                              style={[themeStyle, styles?.rootInput(this.context), styles?.withBorder(this.context), {flex: 1}]}
                             />
                             <TouchableOpacity
                               style={{marginLeft: 10}}
                               onPress={() => this.handleCheckPassword(this.state.originalPassword)}
                             >
-                              <Text style={[styles.searchButton]}>{t('editPasswordPopUp.enter')}</Text>
+                              <Text style={[styles?.searchButton(customMainThemeColor)]}>{t('editPasswordPopUp.enter')}</Text>
                             </TouchableOpacity>
                           </View>
                         ) : (
@@ -576,4 +586,4 @@ class EditGesturePasswordPopUpBase extends Component {
   }
 }
 
-export const EditGesturePasswordPopUp = withContext(EditGesturePasswordPopUpBase)
+export const EditGesturePasswordPopUp = enhance(EditGesturePasswordPopUpBase)

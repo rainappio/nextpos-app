@@ -28,7 +28,7 @@ class CloseComplete extends React.Component {
   }
 
   render() {
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     return (
       <ThemeContainer>
@@ -49,12 +49,12 @@ class CloseComplete extends React.Component {
             <TouchableOpacity
               onPress={() => handleSendEmail(this.props.navigation.state.params?.mostRecentShift?.id)}
             >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('shift.sendEmail')}</Text>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('shift.sendEmail')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('LoginSuccess')}
             >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.done')}</Text>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('action.done')}</Text>
             </TouchableOpacity>
           </View>
         </View>

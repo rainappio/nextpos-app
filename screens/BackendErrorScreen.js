@@ -28,13 +28,13 @@ class BackendErrorScreen extends React.Component {
   }
 
   render() {
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     return (
       <ThemeContainer>
         <View style={[styles.container]}>
           <ScreenHeader backNavigation={false}
-                        title={t('errorScreenTitle')}/>
+            title={t('errorScreenTitle')} />
 
           <View>
             <StyledText style={styles.messageBlock}>{t('errorMessage')}</StyledText>
@@ -43,7 +43,7 @@ class BackendErrorScreen extends React.Component {
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Login')}
             >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('login')}
               </Text>
             </TouchableOpacity>

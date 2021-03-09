@@ -14,6 +14,7 @@ import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
+import {withContext} from "../helpers/contextHelper";
 
 class Announcements extends React.Component {
   static navigationOptions = {
@@ -43,7 +44,7 @@ class Announcements extends React.Component {
 
   _renderRow = ({data, active}) => {
     return (
-      <Row data={data} active={active} navigation={this.props.navigation}/>
+      <Row data={data} active={active} navigation={this.props.navigation} />
     )
   }
 
@@ -80,21 +81,21 @@ class Announcements extends React.Component {
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else {
       return (
         <ThemeScrollView>
           <View style={styles.fullWidthScreen}>
             <ScreenHeader title={t('settings.announcements')}
-                          parentFullScreen={true}
-                          rightComponent={
-                            <AddBtn
-                              onPress={() =>
-                                this.props.navigation.navigate('AnnouncementsAdd')
-                              }
-                            />
-                          }
+              parentFullScreen={true}
+              rightComponent={
+                <AddBtn
+                  onPress={() =>
+                    this.props.navigation.navigate('AnnouncementsAdd')
+                  }
+                />
+              }
             />
 
             {Object.keys(getannouncements).length !== 0 && (
@@ -139,7 +140,7 @@ export default connect(
   mapDispatchToProps
 )(Announcements)
 
-class Row extends React.Component {
+class RowBase extends React.Component {
   constructor(props) {
     super(props)
 
@@ -191,7 +192,7 @@ class Row extends React.Component {
   }
 
   render() {
-    const {data} = this.props
+    const {data, customMainThemeColor} = this.props
 
     return (
       <Animated.View style={[
@@ -206,19 +207,19 @@ class Row extends React.Component {
               <IonIcon
                 name={data.titleIcon}
                 size={32}
-                style={styles.buttonIconStyle}
+                style={styles?.buttonIconStyle(customMainThemeColor)}
               />
             </View>
 
             <View style={[styles.tableCellView, {width: '75%'}]}>
-              <StyledText style={styles.announcementTitle}>{data.title}</StyledText>
+              <StyledText style={styles?.announcementTitle(customMainThemeColor)}>{data.title}</StyledText>
             </View>
 
             <View style={[styles.tableCellView, {justifyContent: 'flex-end', width: '15%'}]}>
               <Icon
                 name="md-create"
                 size={24}
-                style={styles.buttonIconStyle}
+                style={styles?.buttonIconStyle(customMainThemeColor)}
                 onPress={() =>
                   this.props.navigation.navigate('AnnouncementsEdit', {
                     announcementId: data.id,
@@ -229,7 +230,7 @@ class Row extends React.Component {
             </View>
           </View>
 
-          <View style={styles.markdownContainer}>
+          <View style={styles.markdownContainer(this.props?.locale)}>
             <Markdown>
               {data.markdownContent}
             </Markdown>
@@ -239,3 +240,5 @@ class Row extends React.Component {
     )
   }
 }
+
+const Row = withContext(RowBase)

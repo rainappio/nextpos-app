@@ -120,7 +120,7 @@ class RetailStartOrderForm extends Component {
 
     render() {
         const {tablesMap} = this.props
-        const {t, complexTheme} = this.context
+        const {t, complexTheme, customMainThemeColor} = this.context
 
         const orderTypes = Object.keys(this.state.orderTypes).map(key => this.state.orderTypes[key].label)
         const ageGroups = Object.keys(this.state.ageGroups).map(key => this.state.ageGroups[key].label)
@@ -282,7 +282,7 @@ class RetailStartOrderForm extends Component {
                                             }
                                         }}
                                     >
-                                        <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                                        <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                                             {t('openOrder')}
                                         </Text>
                                     </TouchableOpacity>
@@ -294,7 +294,7 @@ class RetailStartOrderForm extends Component {
                                             this.props.navigation.goBack()
                                         }}
                                     >
-                                        <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                                        <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('action.cancel')}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -439,7 +439,7 @@ class RetailStartOrderForm extends Component {
                                             }
                                         }}
                                     >
-                                        <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                                        <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                                             {t('openOrder')}
                                         </Text>
                                     </TouchableOpacity>
@@ -451,7 +451,7 @@ class RetailStartOrderForm extends Component {
                                             this.props.navigation.goBack()
                                         }}
                                     >
-                                        <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                                        <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('action.cancel')}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>

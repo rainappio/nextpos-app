@@ -6,7 +6,7 @@ import {LocaleContext} from '../locales/LocaleContext'
 import AddBtn from '../components/AddBtn'
 import {getCurrentClient} from '../actions/client'
 import LoadingScreen from "./LoadingScreen"
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import {api, dispatchFetchRequest} from '../constants/Backend'
@@ -129,7 +129,7 @@ class SubscriptionScreen extends React.Component {
 
     render() {
         const {isLoading, client} = this.props
-        const {themeStyle, t} = this.context
+        const {themeStyle, t, customMainThemeColor} = this.context
         const labels = [t('subscription.submitted'), t('subscription.activated')]
 
         if (isLoading) {
@@ -161,8 +161,8 @@ class SubscriptionScreen extends React.Component {
                         style={{alignSelf: 'center', maxWidth: 640, width: '80%'}}
                     >
                         <View style={[themeStyle, {borderRadius: 20, flex: 1}]}>
-                            <Pages indicatorColor={mainThemeColor}>
-                                <View style={{flex: 1, borderColor: mainThemeColor, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', alignContent: 'center', paddingBottom: 16}}>
+                            <Pages indicatorColor={customMainThemeColor}>
+                                <View style={{flex: 1, borderColor: customMainThemeColor, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', alignContent: 'center', paddingBottom: 16}}>
                                     <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
                                         <StyledText style={{fontSize: 20}}>{t('subscriptionAd.part1Text')}</StyledText>
                                     </View>
@@ -171,7 +171,7 @@ class SubscriptionScreen extends React.Component {
                                             <View style={{flexDirection: 'column', margin: 16}}><FontAwesome
                                                 name="clock-o"
                                                 size={40}
-                                                style={[styles.buttonIconStyle, {marginBottom: 8}]}
+                                                style={[styles?.buttonIconStyle(customMainThemeColor), {marginBottom: 8}]}
                                             />
                                                 <StyledText>{t('menu.timecard')}</StyledText>
                                             </View>}
@@ -179,7 +179,7 @@ class SubscriptionScreen extends React.Component {
                                             <View style={{flexDirection: 'column', margin: 16}}><Icon
                                                 name="md-time"
                                                 size={40}
-                                                style={[styles.buttonIconStyle, {marginBottom: 8}]}
+                                                style={[styles?.buttonIconStyle(customMainThemeColor), {marginBottom: 8}]}
                                             />
                                                 <StyledText>{t('staffTimeCardReport')}</StyledText>
                                             </View>}
@@ -187,7 +187,7 @@ class SubscriptionScreen extends React.Component {
                                             <View style={{flexDirection: 'column', margin: 16}}><Icon
                                                 name="ios-people"
                                                 size={40}
-                                                style={[styles.buttonIconStyle, {marginBottom: 8}]}
+                                                style={[styles?.buttonIconStyle(customMainThemeColor), {marginBottom: 8}]}
                                             />
                                                 <StyledText>{t('settings.staff')}</StyledText>
                                             </View>}
@@ -195,7 +195,7 @@ class SubscriptionScreen extends React.Component {
                                     </View>
                                 </View>
 
-                                <View style={{flex: 1, borderColor: mainThemeColor, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', alignContent: 'center', paddingBottom: 16}}>
+                                <View style={{flex: 1, borderColor: customMainThemeColor, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', alignContent: 'center', paddingBottom: 16}}>
                                     <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
                                         <StyledText style={{fontSize: 20}}>{t('subscriptionAd.part2Text')}</StyledText>
                                     </View>
@@ -205,7 +205,7 @@ class SubscriptionScreen extends React.Component {
                                             <MaterialCommunityIcons
                                                 name="pot-steam"
                                                 size={40}
-                                                style={[styles.buttonIconStyle, {marginBottom: 8}]}
+                                                style={[styles?.buttonIconStyle(customMainThemeColor), {marginBottom: 8}]}
                                             />
                                             <StyledText>{t('menu.orderDisplay')}</StyledText>
                                         </View>}
@@ -213,7 +213,7 @@ class SubscriptionScreen extends React.Component {
                                             <View style={{flexDirection: 'column', margin: 16}}><FontAwesome
                                                 name="bar-chart"
                                                 size={40}
-                                                style={[styles.buttonIconStyle, {marginBottom: 8}]}
+                                                style={[styles?.buttonIconStyle(customMainThemeColor), {marginBottom: 8}]}
                                             />
                                                 <StyledText>{t('salesReport')}</StyledText>
                                             </View>}
@@ -221,7 +221,7 @@ class SubscriptionScreen extends React.Component {
                                             <View style={{flexDirection: 'column', margin: 16}}><Icon
                                                 name="md-trending-up"
                                                 size={40}
-                                                style={[styles.buttonIconStyle, {marginBottom: 8}]}
+                                                style={[styles?.buttonIconStyle(customMainThemeColor), {marginBottom: 8}]}
                                             />
                                                 <StyledText>{t('customerStatsReport')}</StyledText>
                                             </View>}
@@ -230,7 +230,7 @@ class SubscriptionScreen extends React.Component {
                                             <View style={{flexDirection: 'column', margin: 16}}><FontAwesome5
                                                 name="file-invoice-dollar"
                                                 size={40}
-                                                style={[styles.buttonIconStyle, {marginBottom: 8}]}
+                                                style={[styles?.buttonIconStyle(customMainThemeColor), {marginBottom: 8}]}
                                             />
                                                 <StyledText>{t('settings.eInvoice')}</StyledText>
                                             </View>}
@@ -238,7 +238,7 @@ class SubscriptionScreen extends React.Component {
                                     </View>
                                 </View>
 
-                                <View style={{flex: 1, borderColor: mainThemeColor, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', alignContent: 'center', paddingBottom: 16}}>
+                                <View style={{flex: 1, borderColor: customMainThemeColor, borderBottomWidth: 1, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', alignContent: 'center', paddingBottom: 16}}>
                                     <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end'}}>
                                         <StyledText style={{fontSize: 20}}>{t('subscriptionAd.part3Text')}</StyledText>
                                     </View>
@@ -248,7 +248,7 @@ class SubscriptionScreen extends React.Component {
                                             <View style={{flexDirection: 'column', margin: 16}}><FontAwesome5
                                                 name="user-cog"
                                                 size={40}
-                                                style={[styles.buttonIconStyle, {marginBottom: 8}]}
+                                                style={[styles?.buttonIconStyle(customMainThemeColor), {marginBottom: 8}]}
                                             />
                                                 <StyledText>{t('settings.member')}</StyledText>
                                             </View>}
@@ -256,7 +256,7 @@ class SubscriptionScreen extends React.Component {
                                             <View style={{flexDirection: 'column', margin: 16}}><Icon
                                                 name="md-calendar"
                                                 size={40}
-                                                style={[styles.buttonIconStyle, {marginBottom: 8}]}
+                                                style={[styles?.buttonIconStyle(customMainThemeColor), {marginBottom: 8}]}
                                             />
                                                 <StyledText>{t('calendarEvent.screenTitle')}</StyledText>
                                             </View>}
@@ -265,7 +265,7 @@ class SubscriptionScreen extends React.Component {
                                             <View style={{flexDirection: 'column', margin: 16}}><FontAwesome5
                                                 name="business-time"
                                                 size={40}
-                                                style={[styles.buttonIconStyle, {marginBottom: 8}]}
+                                                style={[styles?.buttonIconStyle(customMainThemeColor), {marginBottom: 8}]}
                                             />
                                                 <StyledText>{t('settings.roster')}</StyledText>
                                             </View>}
@@ -283,7 +283,7 @@ class SubscriptionScreen extends React.Component {
                                     onPress={() => this.setState({modalVisible: false})}
                                     style={{width: '100%', maxWidth: 250}}
                                 >
-                                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                                         {t('action.ok')}
                                     </Text>
 
@@ -318,14 +318,14 @@ class SubscriptionScreen extends React.Component {
                             }}
                         />
                         <View style={{flex: 1}}>
-                            <Pages indicatorColor={mainThemeColor} >
+                            <Pages indicatorColor={customMainThemeColor} >
                                 {this.state?.plans?.map((item, index) => {
                                     return (
                                         <View key={`Plan${index}`} style={{flex: 1, alignItems: 'center'}}>
                                             <View
-                                                style={{flex: 1, alignItems: 'center', maxWidth: 640, borderColor: mainThemeColor, borderWidth: 1, marginVertical: 30, borderRadius: 30, padding: 15}}
+                                                style={{flex: 1, alignItems: 'center', maxWidth: 640, borderColor: customMainThemeColor, borderWidth: 1, marginVertical: 30, borderRadius: 30, padding: 15}}
                                             >
-                                                <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: mainThemeColor, paddingBottom: 15, marginBottom: 15}}>
+                                                <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: customMainThemeColor, paddingBottom: 15, marginBottom: 15}}>
                                                     <StyledText style={{flex: 1, textAlign: 'left'}}>{item?.planName}</StyledText>
                                                     <StyledText style={{flex: 1, textAlign: 'right'}}>${item?.planPrices?.MONTHLY}</StyledText>
                                                 </View>

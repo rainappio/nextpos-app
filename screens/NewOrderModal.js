@@ -195,7 +195,7 @@ class OrderForm extends Component {
     }
 
     render() {
-        const {t} = this.context
+        const {t, customMainThemeColor} = this.context
 
         const orderTypes = Object.keys(this.state.orderTypes).map(key => this.state.orderTypes[key].label)
         const ageGroups = Object.keys(this.state.ageGroups).map(key => this.state.ageGroups[key].label)
@@ -325,7 +325,7 @@ class OrderForm extends Component {
                                         this.props.goBack()
                                     }}
                                 >
-                                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('action.cancel')}</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={{flex: 1, marginHorizontal: 5}}>
@@ -335,7 +335,7 @@ class OrderForm extends Component {
 
                                     }}
                                 >
-                                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                                         {t('openOrder')}
                                     </Text>
                                 </TouchableOpacity>

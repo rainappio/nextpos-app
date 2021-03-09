@@ -2,7 +2,7 @@ import React from 'react'
 import {Text, View} from 'react-native'
 import {CheckBox} from 'react-native-elements'
 import IonIcon from 'react-native-vector-icons/Ionicons'
-import styles, {mainThemeColor} from "../../styles";
+import styles from "../../styles";
 import {withContext} from "../../helpers/contextHelper";
 import {StyledText} from "../StyledText";
 
@@ -21,6 +21,7 @@ class RenderPureCheckBox extends React.Component {
       isIconAsTitle,
       meta: {error, touched, valid},
       themeStyle,
+      locale: {customMainThemeColor},
       ...rest
     } = this.props
 
@@ -32,13 +33,13 @@ class RenderPureCheckBox extends React.Component {
               {!isIconAsTitle ? (
                 <StyledText>{title}</StyledText>
               ) : (
-                <IonIcon
-                  name={customValue}
-                  size={26}
-                  color={mainThemeColor}
-                  style={{marginLeft: 22}}
-                />
-              )}
+                  <IonIcon
+                    name={customValue}
+                    size={26}
+                    color={customMainThemeColor}
+                    style={{marginLeft: 22}}
+                  />
+                )}
             </View>
           }
           checkedIcon={'check-circle'}

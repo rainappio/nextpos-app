@@ -4,7 +4,7 @@ import {Field, reduxForm} from 'redux-form'
 import RenderDateTimePicker from '../components/DateTimePicker'
 import DropDown from '../components/DropDown'
 import {LocaleContext} from '../locales/LocaleContext'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {StyledText} from "../components/StyledText";
 import SegmentedControl from "../components/SegmentedControl";
 import InputText from '../components/InputText'
@@ -25,7 +25,7 @@ import {Octicons} from '@expo/vector-icons';
 */
 export const OptionModal = (props) => {
     const localeContext = useContext(LocaleContext);
-
+    const {customMainThemeColor} = localeContext
 
     useEffect(() => {
 
@@ -39,7 +39,7 @@ export const OptionModal = (props) => {
             <TouchableOpacity
                 onPress={() => props?.toggleModal(true)}
             >
-                {props?.icon ?? <Octicons name="kebab-horizontal" size={32} color={mainThemeColor} />}
+                {props?.icon ?? <Octicons name="kebab-horizontal" size={32} color={customMainThemeColor} />}
             </TouchableOpacity>
             <Modal
                 isVisible={props?.isShowModal ?? false}

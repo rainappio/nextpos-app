@@ -21,7 +21,7 @@ class OrderTopInfo extends Component {
 
   render() {
     const {order} = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     if (this.state.isTablet) {
       return (
@@ -29,7 +29,7 @@ class OrderTopInfo extends Component {
           <View style={[styles.tableRowContainer]}>
             <View style={[styles.tableCellView, {width: '20%'}]}>
               <View>
-                <Text style={[styles.primaryText]}>
+                <Text style={[styles?.primaryText(customMainThemeColor)]}>
                   {getTableDisplayName(order)}
                 </Text>
               </View>
@@ -47,9 +47,9 @@ class OrderTopInfo extends Component {
                   <FontAwesomeIcon
                     name="user"
                     size={25}
-                    style={[styles.buttonIconStyle]}
+                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
                   >
-                    <Text style={[styles.primaryText]}>
+                    <Text style={[styles?.primaryText(customMainThemeColor)]}>
                       &nbsp;{order.demographicData != null ? order.demographicData.customerCount : 0}
                     </Text>
                   </FontAwesomeIcon>
@@ -108,7 +108,7 @@ class OrderTopInfo extends Component {
           <View style={[styles.tableRowContainer]}>
             <View style={[styles.tableCellView, {width: '35%'}]}>
               <View>
-                <Text style={[styles.primaryText]}>
+                <Text style={[styles?.primaryText(customMainThemeColor)]}>
                   {getTableDisplayName(order)}
                 </Text>
               </View>
@@ -128,9 +128,9 @@ class OrderTopInfo extends Component {
                   <FontAwesomeIcon
                     name="user"
                     size={25}
-                    style={[styles.buttonIconStyle]}
+                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
                   >
-                    <Text style={[styles.primaryText]}>
+                    <Text style={[styles?.primaryText(customMainThemeColor)]}>
                       &nbsp;{order.demographicData != null ? order.demographicData.customerCount : 0}
                     </Text>
                   </FontAwesomeIcon>

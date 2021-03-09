@@ -6,7 +6,7 @@ import {default as MaterialIcon} from 'react-native-vector-icons/MaterialIcons'
 import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import ScreenHeader from "../components/ScreenHeader";
 import MenuButton from "../components/MenuButton";
 import {LocaleContext} from "../locales/LocaleContext";
@@ -22,7 +22,7 @@ class SettingsScreen extends React.Component {
   static contextType = LocaleContext
 
   render() {
-    const {t, changeLanguage, changeAppType, appType} = this.context
+    const {t, changeLanguage, changeAppType, appType, customMainThemeColor} = this.context
 
     let menuButtonsArr = [
       <MenuButton
@@ -33,7 +33,7 @@ class SettingsScreen extends React.Component {
           <MaterialIcon
             name="account-box"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         } />,
 
@@ -45,7 +45,7 @@ class SettingsScreen extends React.Component {
           <Icon
             name="md-home"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         } />,
 
@@ -59,7 +59,7 @@ class SettingsScreen extends React.Component {
           <Icon
             name="ios-beaker"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         }
       />,
@@ -74,7 +74,7 @@ class SettingsScreen extends React.Component {
           <Icon
             name="ios-people"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         }
       />,
@@ -87,7 +87,7 @@ class SettingsScreen extends React.Component {
           <FontAwesomeIcon
             name="commenting"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         }
       />,
@@ -100,7 +100,7 @@ class SettingsScreen extends React.Component {
           <Icon
             name="md-book"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         }
       />,
@@ -113,7 +113,7 @@ class SettingsScreen extends React.Component {
           <FontAwesome5Icon
             name="user-cog"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         }
       />,
@@ -126,7 +126,7 @@ class SettingsScreen extends React.Component {
           <FontAwesomeIcon
             name="sun-o"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         }
       />,
@@ -139,7 +139,7 @@ class SettingsScreen extends React.Component {
           <MaterialIcon
             name="event-seat"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         }
       />,
@@ -152,7 +152,7 @@ class SettingsScreen extends React.Component {
           <Icon
             name="md-print"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         }
       />,
@@ -165,7 +165,7 @@ class SettingsScreen extends React.Component {
           <FontAwesome5Icon
             name="file-invoice-dollar"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         }
       />,
@@ -178,7 +178,7 @@ class SettingsScreen extends React.Component {
           <MCIcon
             name="professional-hexagon"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         }
       />,
@@ -191,7 +191,7 @@ class SettingsScreen extends React.Component {
           <MaterialIcon
             name="language"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         }
       />,
@@ -203,7 +203,7 @@ class SettingsScreen extends React.Component {
         icon={
           <Entypo name="cycle"
             size={40}
-            style={[styles.buttonIconStyle]}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         }
       />,
@@ -222,7 +222,7 @@ class SettingsScreen extends React.Component {
             title={t('menu.settings')} />
 
 
-          <Pages indicatorColor={mainThemeColor}>
+          <Pages indicatorColor={customMainThemeColor}>
             <View style={{flex: 1, paddingBottom: 16}}>
               <View style={[styles.menuContainer]}>
                 {menuButtonsArr?.[0] ?? <View style={{flex: 1}}></View>}

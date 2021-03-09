@@ -17,7 +17,7 @@ import {handleOpenShift} from "../helpers/shiftActions";
 
 */
 export const OpenShiftScreen = (props) => {
-    const {t, themeStyle} = useContext(LocaleContext);
+    const {t, themeStyle, customMainThemeColor} = useContext(LocaleContext);
     const [openBalance, setOpenBalance] = useState(0);
 
     return (
@@ -25,7 +25,7 @@ export const OpenShiftScreen = (props) => {
             <KeyboardAvoidingView style={{flex: 1}} behavior="height">
                 <View style={styles.modalContainer}>
                     <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
-                        <Text style={styles.screenSubTitle}>
+                        <Text style={styles?.screenSubTitle(customMainThemeColor)}>
                             {t('openShift.title')}
                         </Text>
                         <View style={styles.tableRowContainer}>
@@ -49,7 +49,7 @@ export const OpenShiftScreen = (props) => {
                         <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
                             <View style={{width: '45%', marginHorizontal: 5}}>
                                 <TouchableOpacity onPress={() => handleOpenShift(openBalance, () => props?.handleOpenShift())}>
-                                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                                         {t('openShift.open')}
                                     </Text>
                                 </TouchableOpacity>
@@ -61,7 +61,7 @@ export const OpenShiftScreen = (props) => {
                                         props?.handleCancel()
                                     }}
                                 >
-                                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(useContext(LocaleContext))]}>
                                         {t('openShift.cancel')}
                                     </Text>
                                 </TouchableOpacity>

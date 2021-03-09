@@ -11,52 +11,52 @@ import {StyledText} from "../components/StyledText";
 import {printMessage} from "./printerActions";
 import {MaterialIcons} from '@expo/vector-icons';
 
-export const renderOrderState = state => {
+export const renderOrderState = (state, customMainThemeColor) => {
   switch (state) {
     case 'OPEN':
       return (
         <Icon
           name={'md-list'}
           size={25}
-          style={styles.iconStyle} />
+          style={styles?.iconStyle(customMainThemeColor)} />
       )
     case 'IN_PROCESS':
       return <Image
         source={images.process}
-        style={[{width: 30, height: 20}]}
+        style={[{width: 30, height: 20}, {tintColor: customMainThemeColor}]}
       />
     case 'DELIVERED':
       return <MCIcon
         name={'silverware-fork-knife'}
         size={23}
-        style={styles.iconStyle}
+        style={styles?.iconStyle(customMainThemeColor)}
       />
     case 'SETTLED':
       return <Image
         source={images.settled}
-        style={[{width: 28, height: 20}]}
+        style={[{width: 28, height: 20}, {tintColor: customMainThemeColor}]}
       />
     case 'COMPLETED':
       return <Icon
         name={'md-checkmark-circle-outline'}
         size={25}
-        style={styles.iconStyle}
+        style={styles?.iconStyle(customMainThemeColor)}
       />
     case 'DELETED':
       return <MCIcon
         name={'delete'}
         size={25}
-        style={styles.iconStyle}
+        style={styles?.iconStyle(customMainThemeColor)}
       />
     case 'CANCELLED':
       return <MCIcon
         name={'file-cancel'}
         size={25}
-        style={styles.iconStyle}
+        style={styles?.iconStyle(customMainThemeColor)}
       />
     case 'PAYMENT_IN_PROCESS':
       return <MaterialIcons name="attach-money" size={25}
-        style={styles.iconStyle} />
+        style={styles?.iconStyle(customMainThemeColor)} />
   }
 }
 
@@ -381,5 +381,5 @@ export const handleOrderAction = (id, action, successCallback = null) => {
 }
 
 export const getTableDisplayName = (order) => {
-  return order?.orderType === 'IN_STORE' ? (!!order?.tables ? order?.tables?.map((table) => table?.displayName)?.join(',') : order?.tableDisplayName) : i18n.t('order.takeOut')
+  return order?.orderType === 'IN_STORE' ? (!!order?.tables ? order?.tables?.map((table) => table?.displayName)?.join(',') : 'ERR') : i18n.t('order.takeOut')
 }

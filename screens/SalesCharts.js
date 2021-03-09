@@ -2,7 +2,7 @@ import React from 'react'
 import {FlatList, Modal, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
 import {formatCurrency, formatDateObj, getRangedSalesReport, getSalesDistributionReport, getSalesRankingReport} from '../actions'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import BackendErrorScreen from './BackendErrorScreen'
 import moment from "moment-timezone";
@@ -161,7 +161,7 @@ class SalesCharts extends React.Component {
       haveError,
       haveSDData
     } = this.props
-    const {t, isTablet} = this.context
+    const {t, isTablet, customMainThemeColor} = this.context
     const containSalesData = haveData && getrangedSalesReport.salesByRange !== undefined
 
 
@@ -293,9 +293,9 @@ class SalesCharts extends React.Component {
             </View>
 
             <View style={[styles.tableRowContainer, {flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
-              <StyledText style={styles.screenSubTitle}>{moment(getrangedSalesReport.dateRange.zonedFromDate).format('YYYY-MM-DD')}</StyledText>
-              <StyledText style={[styles.screenSubTitle, {marginHorizontal: 0}]}>~</StyledText>
-              <StyledText style={styles.screenSubTitle}>{moment(getrangedSalesReport.dateRange.zonedToDate).format('YYYY-MM-DD')}</StyledText>
+              <StyledText style={styles?.screenSubTitle(customMainThemeColor)}>{moment(getrangedSalesReport.dateRange.zonedFromDate).format('YYYY-MM-DD')}</StyledText>
+              <StyledText style={[styles?.screenSubTitle(customMainThemeColor), {marginHorizontal: 0}]}>~</StyledText>
+              <StyledText style={styles?.screenSubTitle(customMainThemeColor)}>{moment(getrangedSalesReport.dateRange.zonedToDate).format('YYYY-MM-DD')}</StyledText>
             </View>
 
             <View style={{flexDirection: 'row', marginTop: 16}}>
@@ -419,7 +419,7 @@ class SalesCharts extends React.Component {
 
             <View style={styles.sectionContainer}>
               <View style={styles.sectionTitleContainer}>
-                <Text style={styles.screenSubTitle}>
+                <Text style={styles?.screenSubTitle(customMainThemeColor)}>
                   {t('salesRankingTitle')}
                 </Text>
               </View>
@@ -449,22 +449,22 @@ class SalesCharts extends React.Component {
               <View style={{marginBottom: 20}}>
                 <View style={styles.sectionBar}>
                   <View style={[styles.quarter_width, styles.tableCellView]}>
-                    <Text style={[styles.sectionBarTextSmall]}>{t('order.product')}</Text>
+                    <Text style={[styles?.sectionBarTextSmall(customMainThemeColor)]}>{t('order.product')}</Text>
                   </View>
 
                   <TouchableOpacity style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}
                     onPress={() => this.setState({isCountRankDown: !this.state.isCountRankDown})}
                   >
-                    <Text style={styles.sectionBarTextSmall}>{t('quantity')}</Text>
-                    <Icon name={this.state.isCountRankDown ? 'caret-down' : 'caret-up'} size={24} color={mainThemeColor} style={{padding: 0, margin: 0}} />
+                    <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('quantity')}</Text>
+                    <Icon name={this.state.isCountRankDown ? 'caret-down' : 'caret-up'} size={24} color={customMainThemeColor} style={{padding: 0, margin: 0}} />
                   </TouchableOpacity>
 
                   <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                    <Text style={styles.sectionBarTextSmall}>{t('amount')}</Text>
+                    <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('amount')}</Text>
                   </View>
 
                   <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                    <Text style={styles.sectionBarTextSmall}>{t('percentage')}</Text>
+                    <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('percentage')}</Text>
                   </View>
                 </View>
                 <FlatList
@@ -474,7 +474,7 @@ class SalesCharts extends React.Component {
                   }}
                   ListEmptyComponent={() => {
                     return (
-                      <Text style={[styles.messageBlock, styles.orange_color]}>{t('noSalesData')}</Text>
+                      <Text style={[styles.messageBlock, {color: customMainThemeColor},]}>{t('noSalesData')}</Text>
                     )
                   }}
                   keyExtractor={item => item.id}
@@ -512,9 +512,9 @@ class SalesCharts extends React.Component {
               }} />
           </View>
           <View style={[styles.tableRowContainer, {flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
-            <StyledText style={styles.screenSubTitle}>{moment(getrangedSalesReport.dateRange.zonedFromDate).format('YYYY-MM-DD')}</StyledText>
-            <StyledText style={[styles.screenSubTitle, {marginHorizontal: 0}]}>~</StyledText>
-            <StyledText style={styles.screenSubTitle}>{moment(getrangedSalesReport.dateRange.zonedToDate).format('YYYY-MM-DD')}</StyledText>
+            <StyledText style={styles?.screenSubTitle(customMainThemeColor)}>{moment(getrangedSalesReport.dateRange.zonedFromDate).format('YYYY-MM-DD')}</StyledText>
+            <StyledText style={[styles?.screenSubTitle(customMainThemeColor), {marginHorizontal: 0}]}>~</StyledText>
+            <StyledText style={styles?.screenSubTitle(customMainThemeColor)}>{moment(getrangedSalesReport.dateRange.zonedToDate).format('YYYY-MM-DD')}</StyledText>
           </View>
 
 
@@ -635,7 +635,7 @@ class SalesCharts extends React.Component {
 
           <View style={styles.sectionContainer}>
             <View style={styles.sectionTitleContainer}>
-              <Text style={styles.screenSubTitle}>
+              <Text style={styles?.screenSubTitle(customMainThemeColor)}>
                 {t('salesRankingTitle')}
               </Text>
             </View>
@@ -665,22 +665,22 @@ class SalesCharts extends React.Component {
             <View style={{marginBottom: 20}}>
               <View style={styles.sectionBar}>
                 <View style={[styles.quarter_width, styles.tableCellView]}>
-                  <Text style={[styles.sectionBarTextSmall]}>{t('order.product')}</Text>
+                  <Text style={[styles?.sectionBarTextSmall(customMainThemeColor)]}>{t('order.product')}</Text>
                 </View>
 
                 <TouchableOpacity style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}
                   onPress={() => this.setState({isCountRankDown: !this.state.isCountRankDown})}
                 >
-                  <Text style={styles.sectionBarTextSmall}>{t('quantity')}</Text>
-                  <Icon name={this.state.isCountRankDown ? 'caret-down' : 'caret-up'} size={24} color={mainThemeColor} style={{padding: 0, margin: 0}} />
+                  <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('quantity')}</Text>
+                  <Icon name={this.state.isCountRankDown ? 'caret-down' : 'caret-up'} size={24} color={customMainThemeColor} style={{padding: 0, margin: 0}} />
                 </TouchableOpacity>
 
                 <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                  <Text style={styles.sectionBarTextSmall}>{t('amount')}</Text>
+                  <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('amount')}</Text>
                 </View>
 
                 <View style={[styles.quarter_width, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                  <Text style={styles.sectionBarTextSmall}>{t('percentage')}</Text>
+                  <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('percentage')}</Text>
                 </View>
               </View>
               <FlatList
@@ -690,7 +690,7 @@ class SalesCharts extends React.Component {
                 }}
                 ListEmptyComponent={() => {
                   return (
-                    <Text style={[styles.messageBlock, styles.orange_color]}>{t('noSalesData')}</Text>
+                    <Text style={[styles.messageBlock, {color: customMainThemeColor},]}>{t('noSalesData')}</Text>
                   )
                 }}
                 keyExtractor={item => item.id}
@@ -733,16 +733,16 @@ class ProductsRanking extends React.Component {
 
   render() {
     const {isShow, toggleProductsRanking, filteredRankingData} = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     return (
       <View>
         <Modal transparent={true}
           visible={isShow}
         >
-          <View style={[styles.container, {flex: 1, backgroundColor: mainThemeColor, borderColor: 'red', borderRadius: 20, opacity: 0.95}]}>
+          <View style={[styles.container, {flex: 1, backgroundColor: customMainThemeColor, borderColor: '#f75336', borderRadius: 20, opacity: 0.95}]}>
             <View style={[styles.sectionContainer, {flex: 1}]}>
-              <Text style={[styles.screenTitle, {color: '#fff'}]}>{t('salesRankingTitle')}</Text>
+              <Text style={[styles?.screenTitle(customMainThemeColor), {color: '#fff'}]}>{t('salesRankingTitle')}</Text>
             </View>
 
             <View style={{flex: 4}}>
@@ -794,7 +794,7 @@ class ProductsRanking extends React.Component {
                 }}
                 ListEmptyComponent={() => {
                   return (
-                    <Text style={[styles.messageBlock, styles.orange_color]}>{t('noSalesData')}</Text>
+                    <Text style={[styles.messageBlock, {color: customMainThemeColor},]}>{t('noSalesData')}</Text>
                   )
                 }}
                 keyExtractor={item => item.id}
@@ -807,7 +807,7 @@ class ProductsRanking extends React.Component {
                   toggleProductsRanking();
                 }}
               >
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.done')}</Text>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('action.done')}</Text>
               </TouchableOpacity>
             </View>
           </View>

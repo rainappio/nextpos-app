@@ -61,7 +61,7 @@ class PrinterForm extends React.Component {
 
   render() {
     const {handleSubmit, isEdit, handleEditCancel, ipAddress} = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     return (
       <View style={styles.flex(1)}>
@@ -122,19 +122,19 @@ class PrinterForm extends React.Component {
 
         <View style={[styles.bottom, styles.horizontalMargin]}>
           <TouchableOpacity onPress={handleSubmit}>
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
               {isEdit ? t('action.update') : t('action.save')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {this.handleTestPrint(ipAddress)}}>
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
               {t('testPrint')}
             </Text>
           </TouchableOpacity>
           {isEdit ? (
             <>
               <TouchableOpacity onPress={handleEditCancel}>
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                   {t('action.cancel')}
                 </Text>
               </TouchableOpacity>
@@ -146,7 +146,7 @@ class PrinterForm extends React.Component {
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('PrinternKDS')}
               >
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                   {t('action.cancel')}
                 </Text>
               </TouchableOpacity>

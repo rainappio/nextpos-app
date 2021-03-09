@@ -3,7 +3,6 @@ import {Text, TouchableOpacity, View, StyleSheet} from 'react-native'
 import {StyledText} from "./StyledText";
 import {LocaleContext} from '../locales/LocaleContext'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {mainThemeColor} from '../styles';
 import {Button} from 'react-native-elements';
 import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
 
@@ -20,6 +19,7 @@ import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
 */
 export const MoneyKeyboard = (props) => {
     const localeContext = useContext(LocaleContext);
+    const {customMainThemeColor, customSecondThemeColor, customBackgroundColor} = localeContext
 
     const [Output, setOutput] = useState(props?.initialValue ?? 0);
 
@@ -79,57 +79,57 @@ export const MoneyKeyboard = (props) => {
             </View>
             <View style={{flex: 3, width: '100%', justifyContent: 'space-between'}}>
                 <View style={styles.numberRowContainer}>
-                    <TouchableOpacity onPress={() => handleNumberPress(1)} style={styles.numderButton}>
-                        <Text>1</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(1)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>1</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(2)} style={styles.numderButton}>
-                        <Text>2</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(2)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>2</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(3)} style={styles.numderButton}>
-                        <Text>3</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.numberRowContainer}>
-                    <TouchableOpacity onPress={() => handleNumberPress(4)} style={styles.numderButton}>
-                        <Text>4</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(5)} style={styles.numderButton}>
-                        <Text>5</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(6)} style={styles.numderButton}>
-                        <Text>6</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(3)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>3</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.numberRowContainer}>
-                    <TouchableOpacity onPress={() => handleNumberPress(7)} style={styles.numderButton}>
-                        <Text>7</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(4)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>4</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(8)} style={styles.numderButton}>
-                        <Text>8</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(5)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>5</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(9)} style={styles.numderButton}>
-                        <Text>9</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(6)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>6</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.numberRowContainer}>
-                    <TouchableOpacity onPress={() => handleNumberPress(0)} style={styles.numderButton}>
-                        <Text>0</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(7)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>7</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(100)} style={styles.numderButton}>
-                        <Text>00</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(8)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>8</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleNumberPress(9)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>9</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.numberRowContainer}>
+                    <TouchableOpacity onPress={() => handleNumberPress(0)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>0</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleNumberPress(100)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>00</Text>
                     </TouchableOpacity>
                     <View style={{width: '25%', }}></View>
                 </View>
             </View>
             <View style={styles.keyboardRowContainer}>
                 <TouchableOpacity onPress={() => handleCleanPress()} style={styles.buttomButton}>
-                    <Text >{localeContext.t('keyboardAction.clean')}</Text>
+                    <Text style={styles.secondColorButton(customSecondThemeColor)}>{localeContext.t('keyboardAction.clean')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleDeletePress()} style={styles.buttomButton}>
-                    <Icon name="backspace" size={48} color="#505050" />
+                    <Icon name="backspace" size={48} color={customSecondThemeColor} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleOkPress()} style={styles.buttomButton}>
-                    <Text >{localeContext.t('keyboardAction.ok')}</Text>
+                    <Text style={styles.secondColorButton(customSecondThemeColor)}>{localeContext.t('keyboardAction.ok')}</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -149,7 +149,7 @@ export const MoneyKeyboard = (props) => {
 */
 export const DiscountKeyboard = (props) => {
     const localeContext = useContext(LocaleContext);
-
+    const {customMainThemeColor, customSecondThemeColor, customBackgroundColor} = localeContext
     const [Output, setOutput] = useState(props?.initialValue ?? 0);
     const [KeyboardStatus, setKeyboardStatus] = useState(1);
     const [SelectedLabel, setSelectedLabel] = useState('');
@@ -158,7 +158,6 @@ export const DiscountKeyboard = (props) => {
         orderDiscount: 'NO_DISCOUNT',
         discount: -1,
     });
-    console.log('props?.globalorderoffers', props?.globalorderoffers)
 
     const handleBackPress = () => {
         setKeyboardStatus(1)
@@ -284,7 +283,7 @@ export const DiscountKeyboard = (props) => {
                             width: '100%',
                             margin: 0,
                             borderRadius: 10,
-                            backgroundColor: mainThemeColor,
+                            backgroundColor: customMainThemeColor,
                         }}
                         onPress={() => {
                             handleLabelPress(item?.offerId, item)
@@ -313,59 +312,59 @@ export const DiscountKeyboard = (props) => {
                 </View>
                 <View style={{flex: 3, width: '100%', justifyContent: 'space-between'}}>
                     <View style={styles.numberRowContainer}>
-                        <TouchableOpacity onPress={() => handleNumberPress(1)} style={styles.numderButton}>
-                            <Text>1</Text>
+                        <TouchableOpacity onPress={() => handleNumberPress(1)} style={styles.numderButton(customMainThemeColor)}>
+                            <Text style={styles.cardNumberText(customMainThemeColor)}>1</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleNumberPress(2)} style={styles.numderButton}>
-                            <Text>2</Text>
+                        <TouchableOpacity onPress={() => handleNumberPress(2)} style={styles.numderButton(customMainThemeColor)}>
+                            <Text style={styles.cardNumberText(customMainThemeColor)}>2</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleNumberPress(3)} style={styles.numderButton}>
-                            <Text>3</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.numberRowContainer}>
-                        <TouchableOpacity onPress={() => handleNumberPress(4)} style={styles.numderButton}>
-                            <Text>4</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleNumberPress(5)} style={styles.numderButton}>
-                            <Text>5</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleNumberPress(6)} style={styles.numderButton}>
-                            <Text>6</Text>
+                        <TouchableOpacity onPress={() => handleNumberPress(3)} style={styles.numderButton(customMainThemeColor)}>
+                            <Text style={styles.cardNumberText(customMainThemeColor)}>3</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.numberRowContainer}>
-                        <TouchableOpacity onPress={() => handleNumberPress(7)} style={styles.numderButton}>
-                            <Text>7</Text>
+                        <TouchableOpacity onPress={() => handleNumberPress(4)} style={styles.numderButton(customMainThemeColor)}>
+                            <Text style={styles.cardNumberText(customMainThemeColor)}>4</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleNumberPress(8)} style={styles.numderButton}>
-                            <Text>8</Text>
+                        <TouchableOpacity onPress={() => handleNumberPress(5)} style={styles.numderButton(customMainThemeColor)}>
+                            <Text style={styles.cardNumberText(customMainThemeColor)}>5</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleNumberPress(9)} style={styles.numderButton}>
-                            <Text>9</Text>
+                        <TouchableOpacity onPress={() => handleNumberPress(6)} style={styles.numderButton(customMainThemeColor)}>
+                            <Text style={styles.cardNumberText(customMainThemeColor)}>6</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.numberRowContainer}>
-                        <TouchableOpacity onPress={() => handleNumberPress(0)} style={styles.numderButton}>
-                            <Text>0</Text>
+                        <TouchableOpacity onPress={() => handleNumberPress(7)} style={styles.numderButton(customMainThemeColor)}>
+                            <Text style={styles.cardNumberText(customMainThemeColor)}>7</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleNumberPress(100)} style={styles.numderButton}>
-                            <Text>00</Text>
+                        <TouchableOpacity onPress={() => handleNumberPress(8)} style={styles.numderButton(customMainThemeColor)}>
+                            <Text style={styles.cardNumberText(customMainThemeColor)}>8</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleNumberPress(9)} style={styles.numderButton(customMainThemeColor)}>
+                            <Text style={styles.cardNumberText(customMainThemeColor)}>9</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.numberRowContainer}>
+                        <TouchableOpacity onPress={() => handleNumberPress(0)} style={styles.numderButton(customMainThemeColor)}>
+                            <Text style={styles.cardNumberText(customMainThemeColor)}>0</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleNumberPress(100)} style={styles.numderButton(customMainThemeColor)}>
+                            <Text style={styles.cardNumberText(customMainThemeColor)}>00</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => handleCleanPress()} style={styles.buttomButton}>
-                            <Text >{localeContext.t('keyboardAction.clean')}</Text>
+                            <Text style={styles.secondColorButton(customSecondThemeColor)}>{localeContext.t('keyboardAction.clean')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.keyboardRowContainer}>
                     <TouchableOpacity onPress={() => handleBackPress()} style={styles.buttomButton}>
-                        <Text >{localeContext.t('keyboardAction.back')}</Text>
+                        <Text style={styles.secondColorButton(customSecondThemeColor)}>{localeContext.t('keyboardAction.back')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleDeletePress()} style={styles.buttomButton}>
-                        <Icon name="backspace" size={48} color="#505050" />
+                        <Icon name="backspace" size={48} color={customSecondThemeColor} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleOkPress()} style={styles.buttomButton}>
-                        <Text >{localeContext.t('keyboardAction.ok')}</Text>
+                        <Text style={styles.secondColorButton(customSecondThemeColor)}>{localeContext.t('keyboardAction.ok')}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -386,7 +385,7 @@ export const DiscountKeyboard = (props) => {
 */
 export const CardFourNumberKeyboard = (props) => {
     const localeContext = useContext(LocaleContext);
-
+    const {customMainThemeColor, customSecondThemeColor, customBackgroundColor} = localeContext
     const [Output, setOutput] = useState(props?.initialValue ?? ['', '', '', '']);
     const [Index, setIndex] = useState(0);
 
@@ -432,7 +431,7 @@ export const CardFourNumberKeyboard = (props) => {
 
     return (
         <View style={[{
-            backgroundColor: '#fff',
+            backgroundColor: customBackgroundColor,
             margin: '5%',
             borderRadius: 10,
             flex: 1,
@@ -440,62 +439,62 @@ export const CardFourNumberKeyboard = (props) => {
             alignItems: 'center'
         }]}>
             <View style={styles.cardKeyboardRowContainer}>
-                <TouchableOpacity onPress={() => {setIndex(0)}} style={styles.cardNumberInput(Index === 0)}>
+                <TouchableOpacity onPress={() => {setIndex(0)}} style={styles.cardNumberInput(Index === 0, customMainThemeColor)}>
                     <Text >{Output[0]}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {setIndex(1)}} style={styles.cardNumberInput(Index === 1)}>
+                <TouchableOpacity onPress={() => {setIndex(1)}} style={styles.cardNumberInput(Index === 1, customMainThemeColor)}>
                     <Text >{Output[1]}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {setIndex(2)}} style={styles.cardNumberInput(Index === 2)}>
+                <TouchableOpacity onPress={() => {setIndex(2)}} style={styles.cardNumberInput(Index === 2, customMainThemeColor)}>
                     <Text >{Output[2]}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {setIndex(3)}} style={styles.cardNumberInput(Index === 3)}>
+                <TouchableOpacity onPress={() => {setIndex(3)}} style={styles.cardNumberInput(Index === 3, customMainThemeColor)}>
                     <Text >{Output[3]}</Text>
                 </TouchableOpacity>
             </View>
             <View style={{flex: 4, width: '100%', justifyContent: 'space-evenly'}}>
                 <View style={styles.numberRowContainer}>
-                    <TouchableOpacity onPress={() => handleNumberPress(1)} style={styles.numderButton}>
-                        <Text>1</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(1)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>1</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(2)} style={styles.numderButton}>
-                        <Text>2</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(2)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>2</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(3)} style={styles.numderButton}>
-                        <Text>3</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.numberRowContainer}>
-                    <TouchableOpacity onPress={() => handleNumberPress(4)} style={styles.numderButton}>
-                        <Text>4</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(5)} style={styles.numderButton}>
-                        <Text>5</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(6)} style={styles.numderButton}>
-                        <Text>6</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(3)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>3</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.numberRowContainer}>
-                    <TouchableOpacity onPress={() => handleNumberPress(7)} style={styles.numderButton}>
-                        <Text>7</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(4)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>4</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(8)} style={styles.numderButton}>
-                        <Text>8</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(5)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>5</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(9)} style={styles.numderButton}>
-                        <Text>9</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(6)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>6</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.numberRowContainer}>
+                    <TouchableOpacity onPress={() => handleNumberPress(7)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>7</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleNumberPress(8)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>8</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleNumberPress(9)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>9</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.numberRowContainer}>
                     <TouchableOpacity onPress={() => handleCleanPress()} style={styles.buttomButton}>
-                        <Text >{localeContext.t('keyboardAction.clean')}</Text>
+                        <Text style={styles.secondColorButton(customSecondThemeColor)}>{localeContext.t('keyboardAction.clean')}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(0)} style={styles.numderButton}>
-                        <Text>0</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(0)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>0</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleDeletePress()} style={styles.buttomButton}>
-                        <Icon name="backspace" size={48} color="#505050" />
+                        <Icon name="backspace" size={48} color={customSecondThemeColor} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -518,6 +517,7 @@ export const CardFourNumberKeyboard = (props) => {
 */
 export const CustomTitleAndDigitKeyboard = (props) => {
     const localeContext = useContext(LocaleContext);
+    const {customMainThemeColor, customSecondThemeColor, customBackgroundColor} = localeContext
 
     const [Output, setOutput] = useState(props?.initialValue ?? ['', '', '', '']);
     const [Index, setIndex] = useState(props?.value ? props?.value?.length : 0);
@@ -578,47 +578,47 @@ export const CustomTitleAndDigitKeyboard = (props) => {
             </View>
             <View style={{flex: 4, width: '100%', justifyContent: 'space-evenly'}}>
                 <View style={styles.numberRowContainer}>
-                    <TouchableOpacity onPress={() => handleNumberPress(1)} style={styles.numderButton}>
-                        <Text>1</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(1)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>1</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(2)} style={styles.numderButton}>
-                        <Text>2</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(2)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>2</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(3)} style={styles.numderButton}>
-                        <Text>3</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.numberRowContainer}>
-                    <TouchableOpacity onPress={() => handleNumberPress(4)} style={styles.numderButton}>
-                        <Text>4</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(5)} style={styles.numderButton}>
-                        <Text>5</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(6)} style={styles.numderButton}>
-                        <Text>6</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(3)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>3</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.numberRowContainer}>
-                    <TouchableOpacity onPress={() => handleNumberPress(7)} style={styles.numderButton}>
-                        <Text>7</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(4)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>4</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(8)} style={styles.numderButton}>
-                        <Text>8</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(5)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>5</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(9)} style={styles.numderButton}>
-                        <Text>9</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(6)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>6</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.numberRowContainer}>
+                    <TouchableOpacity onPress={() => handleNumberPress(7)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>7</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleNumberPress(8)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>8</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleNumberPress(9)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>9</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.numberRowContainer}>
                     <TouchableOpacity onPress={() => handleCleanPress()} style={styles.buttomButton}>
-                        <Text >{localeContext.t('keyboardAction.clean')}</Text>
+                        <Text style={styles.secondColorButton(customSecondThemeColor)}>{localeContext.t('keyboardAction.clean')}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleNumberPress(0)} style={styles.numderButton}>
-                        <Text>0</Text>
+                    <TouchableOpacity onPress={() => handleNumberPress(0)} style={styles.numderButton(customMainThemeColor)}>
+                        <Text style={styles.cardNumberText(customMainThemeColor)}>0</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleDeletePress()} style={styles.buttomButton}>
-                        <Icon name="backspace" size={48} color="#505050" />
+                        <Icon name="backspace" size={48} color={customSecondThemeColor} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -655,14 +655,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: '15%',
     },
-    numderButton: {
+    numderButton: (color = '#000') => ({
         width: '25%',
         aspectRatio: 1,
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 1,
-        borderRadius: 1000
-    },
+        borderRadius: 1000,
+        borderColor: color
+    }),
     paperMoney: color => {
         return {
             width: '25%',
@@ -680,7 +681,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    cardNumberInput: isFocus => {
+    cardNumberInput: (isFocus, color = '#000') => {
         if (isFocus) {
             return {
                 width: '20%',
@@ -688,6 +689,7 @@ const styles = StyleSheet.create({
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderBottomWidth: 2,
+                borderColor: color
             }
         } else {
             return {
@@ -700,4 +702,11 @@ const styles = StyleSheet.create({
             }
         }
     },
+    cardNumberText: (color = '#000') => ({
+        color: color
+    }),
+    secondColorButton: (color = '#000') => ({
+        color: color,
+        fontSize: 20,
+    })
 });

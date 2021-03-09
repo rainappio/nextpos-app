@@ -4,7 +4,7 @@ import {Field, reduxForm} from 'redux-form'
 import RenderDateTimePicker from '../components/DateTimePicker'
 import DropDown from '../components/DropDown'
 import {LocaleContext} from '../locales/LocaleContext'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {StyledText} from "../components/StyledText";
 import SegmentedControl from "../components/SegmentedControl";
 import InputText from '../components/InputText'
@@ -51,7 +51,7 @@ class OrderFilterForm extends React.Component {
 
   render() {
     const {handleSubmit, handlegetDate, change, isShow, closeModal} = this.props
-    const {t, isTablet, themeStyle, appType} = this.context
+    const {t, isTablet, themeStyle, appType, customMainThemeColor} = this.context
 
     if (isTablet) {
       return (
@@ -76,7 +76,7 @@ class OrderFilterForm extends React.Component {
                     change('searchTypeIndex', 0)
                     this.setState({searchTypeIndex: 0})
                   }}
-                  style={[{flex: 1, borderWidth: 1, borderColor: mainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginRight: 5}, (this.state?.searchTypeIndex === 0 && {backgroundColor: mainThemeColor})]}>
+                  style={[{flex: 1, borderWidth: 1, borderColor: customMainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginRight: 5}, (this.state?.searchTypeIndex === 0 && {backgroundColor: customMainThemeColor})]}>
                   <StyledText>{this.state?.searchType[0]}</StyledText>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -84,7 +84,7 @@ class OrderFilterForm extends React.Component {
                     change('searchTypeIndex', 1)
                     this.setState({searchTypeIndex: 1})
                   }}
-                  style={[{flex: 1, borderWidth: 1, borderColor: mainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginLeft: 5}, (this.state?.searchTypeIndex === 1 && {backgroundColor: mainThemeColor})]}>
+                  style={[{flex: 1, borderWidth: 1, borderColor: customMainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginLeft: 5}, (this.state?.searchTypeIndex === 1 && {backgroundColor: customMainThemeColor})]}>
                   <StyledText>{this.state?.searchType[1]}</StyledText>
                 </TouchableOpacity>
 
@@ -165,7 +165,7 @@ class OrderFilterForm extends React.Component {
                       }}>
                       <Text
                         style={[
-                          styles.searchButton
+                          styles?.searchButton(customMainThemeColor)
                         ]}
                       >
                         {t('action.search')}
@@ -231,7 +231,7 @@ class OrderFilterForm extends React.Component {
                           </CheckBox>
                         </View>
                         <View style={{marginRight: 10}}>
-                          {renderOrderState(status)}
+                          {renderOrderState(status, customMainThemeColor)}
                         </View>
                         <StyledText>{t(`orderState.${status}`)}</StyledText>
 
@@ -323,7 +323,7 @@ class OrderFilterForm extends React.Component {
                         }}>
                         <Text
                           style={[
-                            styles.searchButton
+                            styles?.searchButton(customMainThemeColor)
                           ]}
                         >
                           {t('action.search')}
@@ -360,7 +360,7 @@ class OrderFilterForm extends React.Component {
                   change('searchTypeIndex', 0)
                   this.setState({searchTypeIndex: 0})
                 }}
-                style={[{flex: 1, borderWidth: 1, borderColor: mainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginRight: 5}, (this.state?.searchTypeIndex === 0 && {backgroundColor: mainThemeColor})]}>
+                style={[{flex: 1, borderWidth: 1, borderColor: customMainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginRight: 5}, (this.state?.searchTypeIndex === 0 && {backgroundColor: customMainThemeColor})]}>
                 <StyledText>{this.state?.searchType[0]}</StyledText>
               </TouchableOpacity>
               <TouchableOpacity
@@ -368,7 +368,7 @@ class OrderFilterForm extends React.Component {
                   change('searchTypeIndex', 1)
                   this.setState({searchTypeIndex: 1})
                 }}
-                style={[{flex: 1, borderWidth: 1, borderColor: mainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginLeft: 5}, (this.state?.searchTypeIndex === 1 && {backgroundColor: mainThemeColor})]}>
+                style={[{flex: 1, borderWidth: 1, borderColor: customMainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginLeft: 5}, (this.state?.searchTypeIndex === 1 && {backgroundColor: customMainThemeColor})]}>
                 <StyledText>{this.state?.searchType[1]}</StyledText>
               </TouchableOpacity>
 
@@ -449,7 +449,7 @@ class OrderFilterForm extends React.Component {
                     }}>
                     <Text
                       style={[
-                        styles.searchButton
+                        styles?.searchButton(customMainThemeColor)
                       ]}
                     >
                       {t('action.search')}
@@ -515,7 +515,7 @@ class OrderFilterForm extends React.Component {
                         </CheckBox>
                       </View>
                       <View style={{marginRight: 10}}>
-                        {renderOrderState(status)}
+                        {renderOrderState(status, customMainThemeColor)}
                       </View>
                       <StyledText>{t(`orderState.${status}`)}</StyledText>
 
@@ -607,7 +607,7 @@ class OrderFilterForm extends React.Component {
                       }}>
                       <Text
                         style={[
-                          styles.searchButton
+                          styles?.searchButton(customMainThemeColor)
                         ]}
                       >
                         {t('action.search')}

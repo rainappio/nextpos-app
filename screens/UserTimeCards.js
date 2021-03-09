@@ -10,7 +10,6 @@ import LoadingScreen from "./LoadingScreen";
 import StaffTimeCardFilterForm from "./StaffTimeCardFilterForm";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
-import UserTimeCardDetail from "./UserTimeCardDetail";
 import moment from 'moment-timezone'
 
 class UserTimeCards extends React.Component {
@@ -78,7 +77,7 @@ class UserTimeCards extends React.Component {
   }
 
   render() {
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
     const {usertimeCards, haveData, haveError, loading, timeCard} = this.props
 
     Item = ({timecard}) => {
@@ -136,7 +135,7 @@ class UserTimeCards extends React.Component {
           />
 
           <View>
-            <Text style={styles.screenSubTitle}>{this.props.navigation.getParam('displayName')}</Text>
+            <Text style={styles?.screenSubTitle(customMainThemeColor)}>{this.props.navigation.getParam('displayName')}</Text>
           </View>
 
           <StaffTimeCardFilterForm
@@ -154,28 +153,28 @@ class UserTimeCards extends React.Component {
 
           <View style={[styles.sectionBar]}>
             <View style={[styles.tableCellView, {flex: 3.2, alignItems: 'flex-start'}]}>
-              <Text style={styles.sectionBarText}>
+              <Text style={styles?.sectionBarText(customMainThemeColor)}>
                 {t('timeCardDate')}
               </Text>
 
             </View>
             <View style={[styles.tableCellView, {flex: 3, alignItems: 'flex-start'}]}>
-              <Text style={styles.sectionBarText}>
+              <Text style={styles?.sectionBarText(customMainThemeColor)}>
                 {t('timeCardTime')}
               </Text>
 
             </View>
 
             <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-start'}]}>
-              <Text style={[styles.sectionBarText]}>{t('totalHr')}</Text>
+              <Text style={[styles?.sectionBarText(customMainThemeColor)]}>{t('totalHr')}</Text>
             </View>
             <View style={[styles.tableCellView, {flex: 1.2, justifyContent: 'flex-end'}]}>
-              <Text style={styles.sectionBarText}>
+              <Text style={styles?.sectionBarText(customMainThemeColor)}>
                 {t('arriveLateMinutes')}
               </Text>
             </View>
             <View style={[styles.tableCellView, {flex: 1.2, justifyContent: 'flex-end'}]}>
-              <Text style={styles.sectionBarText}>
+              <Text style={styles?.sectionBarText(customMainThemeColor)}>
                 {t('leaveEarlyMinutes')}
               </Text>
             </View>

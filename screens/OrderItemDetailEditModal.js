@@ -1,11 +1,11 @@
-import React, {useState, useEffect, Component} from "react";
+import React, {useState, useEffect, Component, useContext} from "react";
 import {Field, reduxForm} from 'redux-form'
 import {connect} from 'react-redux'
 import {Alert, StyleSheet, Text, TouchableHighlight, View, TouchableOpacity, KeyboardAvoidingView} from "react-native";
 import {Accordion, List} from '@ant-design/react-native'
 import RenderStepper from '../components/RenderStepper'
 import {isCountZero, isRequired} from '../validators'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import PickerInput from "../components/PickerInput";
 import SegmentedControl from "../components/SegmentedControl";
@@ -27,7 +27,7 @@ import Modal from 'react-native-modal';
 
 
 const OrderItemDetailEditModal = (props) => {
-
+    const {customMainThemeColor} = useContext(LocaleContext);
     const [modalVisible, setModalVisible] = useState(props?.modalVisible ?? false);
 
     useEffect(() => {
@@ -50,7 +50,7 @@ const OrderItemDetailEditModal = (props) => {
                 width: '80%',
                 height: '90%',
                 borderWidth: 5,
-                borderColor: mainThemeColor,
+                borderColor: customMainThemeColor,
                 marginTop: 53,
                 justifyContent: 'center',
                 marginBottom: 53,
@@ -332,13 +332,13 @@ class OrderItemOptions extends React.Component {
 
     render() {
         const {product, globalProductOffers} = this.props
-        const {t, themeStyle} = this.context
+        const {t, themeStyle, customMainThemeColor} = this.context
 
         const hasProductOptions = product.productOptions != null && product.productOptions.length > 0
         const lastOptionIndex = product.productOptions != null ? product.productOptions.length : 0
 
         return (
-            <View style={[themeStyle, {height: '100%'}]}>
+            <View style={[themeStyle, {height: '100%', borderRadius: 10}]}>
                 <ScreenHeader backNavigation={true}
                     parentFullScreen={true}
                     title={`${product.name} ($${product.price})`}
@@ -520,14 +520,14 @@ class OrderItemOptions extends React.Component {
                                 this.props.goBack()
                             }}
                         >
-                            <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('action.cancel')}</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{flex: 1, marginHorizontal: 5}}>
                         <TouchableOpacity
                             onPress={this.props.handleSubmit}
                         >
-                            <Text style={[[styles.bottomActionButton, styles.actionButton]]}>
+                            <Text style={[[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]]}>
                                 {t('action.save')}
                             </Text>
                         </TouchableOpacity>

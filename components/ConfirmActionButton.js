@@ -11,8 +11,8 @@ class ConfirmActionButton extends React.Component {
   }
 
   render() {
-    const { handleConfirmAction, params, buttonTitle } = this.props
-    const { t } = this.context
+    const {handleConfirmAction, params, buttonTitle} = this.props
+    const {t, customMainThemeColor} = this.context
 
     return (
       <TouchableOpacity
@@ -34,7 +34,7 @@ class ConfirmActionButton extends React.Component {
           )
         }}
       >
-        <Text style={[styles.bottomActionButton, styles.actionButton]}>
+        <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
           {t(buttonTitle)}
         </Text>
       </TouchableOpacity>

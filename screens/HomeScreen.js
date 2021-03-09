@@ -27,7 +27,7 @@ export default class HomeScreen extends React.Component {
   }
 
   render() {
-    let {t} = this.context
+    let {t, customMainThemeColor} = this.context
 
     return (
       <ThemeContainer>
@@ -46,16 +46,16 @@ export default class HomeScreen extends React.Component {
           </View>
 
           <View style={styles.flex(2)}>
-            <StyledText style={styles.welcomeText}>Quickly</StyledText>
-            <StyledText style={styles.welcomeText}>Easily</StyledText>
-            <StyledText style={styles.welcomeText}>Securely</StyledText>
+            <StyledText style={styles?.welcomeText(this.context)}>Quickly</StyledText>
+            <StyledText style={styles?.welcomeText(this.context)}>Easily</StyledText>
+            <StyledText style={styles?.welcomeText(this.context)}>Securely</StyledText>
           </View>
 
           <View style={styles.bottom}>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Intro')}
             >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('getStarted')}
               </Text>
             </TouchableOpacity>

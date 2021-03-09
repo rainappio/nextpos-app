@@ -159,7 +159,7 @@ class DateTimeFilterControlledForm extends React.Component {
 
   render() {
     const {handleSubmit, handlegetDate, showAndroidDateTimeOnly, startDate, endDate} = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
     const {date, time} = this.state;
 
     return (
@@ -202,7 +202,7 @@ class DateTimeFilterControlledForm extends React.Component {
                 >
                   <Text
                     style={[
-                      styles.searchButton
+                      styles?.searchButton(customMainThemeColor)
                     ]}
                   >
                     {t('action.search')}
@@ -223,7 +223,7 @@ class DateTimeFilterControlledForm extends React.Component {
                   <FontAwesomeIcon
                     name="calendar"
                     size={20}
-                    style={[styles.orange_color]}
+                    style={[{color: customMainThemeColor},]}
                   />&nbsp;
                   {/*moment(this.props.startDate).format("YYYY-MM-DD HH:mm A")*/}
                   {this.formatDate(this.state.date, this.state.time)}
@@ -235,7 +235,7 @@ class DateTimeFilterControlledForm extends React.Component {
                   <FontAwesomeIcon
                     name="calendar"
                     size={20}
-                    style={[styles.orange_color]}
+                    style={[{color: customMainThemeColor},]}
                   />&nbsp;
                   {this.formatDate(this.state.todate, this.state.totime)}</Text>
               </TouchableOpacity>

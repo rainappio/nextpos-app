@@ -46,7 +46,7 @@ class TableLayoutForm extends React.Component {
       initialValues,
       handleDeleteLayout
     } = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     Item = ({table, layoutId}) => {
       return (
@@ -120,7 +120,7 @@ class TableLayoutForm extends React.Component {
           {isEdit ? (
             <View>
               <TouchableOpacity onPress={handleSubmit}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                   {t('action.update')}
                 </Text>
               </TouchableOpacity>
@@ -128,7 +128,7 @@ class TableLayoutForm extends React.Component {
             </View>
           ) : (
               <TouchableOpacity onPress={handleSubmit}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                   {t('action.save')}
                 </Text>
               </TouchableOpacity>
@@ -136,7 +136,7 @@ class TableLayoutForm extends React.Component {
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('TableLayouts')}
           >
-            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
               {t('action.cancel')}
             </Text>
           </TouchableOpacity>

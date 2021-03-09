@@ -42,7 +42,7 @@ class OrderFilterFormII extends React.Component {
 
     render() {
         const {handleSubmit, handlegetDate, change, initialValues} = this.props
-        const {t, isTablet} = this.context
+        const {t, isTablet, customMainThemeColor} = this.context
         if (isTablet) {
             return (
                 <View>
@@ -61,7 +61,7 @@ class OrderFilterFormII extends React.Component {
                                 onPress={() => handleSubmit()}>
                                 <Text
                                     style={[
-                                        styles.searchButton
+                                        styles?.searchButton(customMainThemeColor)
                                     ]}
                                 >
                                     {t('action.search')}
@@ -190,7 +190,7 @@ class OrderFilterFormII extends React.Component {
                                 onPress={() => handleSubmit()}>
                                 <Text
                                     style={[
-                                        styles.searchButton
+                                        styles?.searchButton(customMainThemeColor)
                                     ]}
                                 >
                                     {t('action.search')}

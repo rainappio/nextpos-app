@@ -48,7 +48,7 @@ export default class MonthPicker extends React.Component {
   }
 
   render() {
-    const {locale} = this.context
+    const {locale, customMainThemeColor} = this.context
     const i18nMoment = moment(this.state.currentDate);
 
     if (locale === 'zh-Hant-TW') {
@@ -69,7 +69,7 @@ export default class MonthPicker extends React.Component {
               onPress={() => this.navigatePrevious()}
             >
               <Text>
-                <Icon name="chevron-back" size={32} color="#f18d1a" />
+                <Icon name="chevron-back" size={32} color={customMainThemeColor} />
               </Text>
             </TouchableOpacity>
           </View>
@@ -92,7 +92,7 @@ export default class MonthPicker extends React.Component {
               onPress={() => this.navigateNext()}
             >
               <Text>
-                <Icon name="chevron-forward" size={32} color="#f18d1a" />
+                <Icon name="chevron-forward" size={32} color={customMainThemeColor} />
               </Text>
             </TouchableOpacity>
           </View>

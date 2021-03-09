@@ -2,7 +2,7 @@ import React from 'react'
 import {Text, View, TouchableOpacity} from 'react-native'
 import {LocaleContext} from "../locales/LocaleContext";
 import {Stepper} from '@ant-design/react-native'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {StyledText} from "./StyledText";
 import {withContext} from "../helpers/contextHelper";
 
@@ -22,6 +22,7 @@ class RenderStepper extends React.Component {
       optionName,
       meta: {error, touched, valid},
       themeStyle,
+      locale: {customMainThemeColor},
       ...rest
     } = this.props
 
@@ -34,27 +35,27 @@ class RenderStepper extends React.Component {
               <View style={{flexDirection: 'row', justifyContent: 'space-around', flex: 5}}>
                 <TouchableOpacity
                   onPress={() => {this.props.input.onChange(1)}}
-                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: mainThemeColor, borderWidth: (value === 1 ? 1 : 0), borderRadius: 100}}>
+                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: customMainThemeColor, borderWidth: (value === 1 ? 1 : 0), borderRadius: 100}}>
                   <StyledText>1</StyledText>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {this.props.input.onChange(2)}}
-                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: mainThemeColor, borderWidth: (value === 2 ? 1 : 0), borderRadius: 100}}>
+                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: customMainThemeColor, borderWidth: (value === 2 ? 1 : 0), borderRadius: 100}}>
                   <StyledText>2</StyledText>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {this.props.input.onChange(3)}}
-                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: mainThemeColor, borderWidth: (value === 3 ? 1 : 0), borderRadius: 100}}>
+                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: customMainThemeColor, borderWidth: (value === 3 ? 1 : 0), borderRadius: 100}}>
                   <StyledText>3</StyledText>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {this.props.input.onChange(4)}}
-                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: mainThemeColor, borderWidth: (value === 4 ? 1 : 0), borderRadius: 100}}>
+                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: customMainThemeColor, borderWidth: (value === 4 ? 1 : 0), borderRadius: 100}}>
                   <StyledText>4</StyledText>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {this.props.input.onChange(5)}}
-                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: mainThemeColor, borderWidth: (value === 5 ? 1 : 0), borderRadius: 100}}>
+                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: customMainThemeColor, borderWidth: (value === 5 ? 1 : 0), borderRadius: 100}}>
                   <StyledText>5</StyledText>
                 </TouchableOpacity>
               </View>

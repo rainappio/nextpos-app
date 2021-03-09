@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {Text, TouchableOpacity, View} from 'react-native'
 import {formatCurrency, getPrinters, getWorkingAreas} from '../actions'
 import {api, dispatchFetchRequestWithOption, successMessage, warningMessage, dispatchFetchRequest} from '../constants/Backend'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -151,7 +151,7 @@ class RetailCheckoutComplete extends React.Component {
             workingareas = [],
 
         } = this.props
-        const {t} = this.context
+        const {t, customMainThemeColor} = this.context
         const {transactionResponse} = this.props.navigation.state.params
         if (this.context.isTablet) {
             return (
@@ -166,7 +166,7 @@ class RetailCheckoutComplete extends React.Component {
                             <Icon
                                 name='md-checkmark-circle-outline'
                                 size={42}
-                                style={styles.buttonIconStyle}
+                                style={styles?.buttonIconStyle(customMainThemeColor)}
                             />
                             <StyledText style={styles.messageBlock}>
                                 {t('totalAmount')}: {formatCurrency(transactionResponse.settleAmount)}
@@ -183,7 +183,7 @@ class RetailCheckoutComplete extends React.Component {
                                 <Icon
                                     name={this.state.isInvoicePrint ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
                                     size={32}
-                                    style={styles.buttonIconStyle}
+                                    style={styles?.buttonIconStyle(customMainThemeColor)}
                                 />
                             </View>}
                             {!!this.state.receiptXML && <View style={{flexDirection: 'row'}}>
@@ -193,7 +193,7 @@ class RetailCheckoutComplete extends React.Component {
                                 <Icon
                                     name={this.state.isReceiptPrint ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
                                     size={32}
-                                    style={styles.buttonIconStyle}
+                                    style={styles?.buttonIconStyle(customMainThemeColor)}
                                 />
                             </View>}
 
@@ -223,7 +223,7 @@ class RetailCheckoutComplete extends React.Component {
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         alignContent: 'center',
-                                        backgroundColor: mainThemeColor,
+                                        backgroundColor: customMainThemeColor,
                                         borderRadius: 10,
                                     }}
                                 >
@@ -251,7 +251,7 @@ class RetailCheckoutComplete extends React.Component {
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         alignContent: 'center',
-                                        backgroundColor: mainThemeColor,
+                                        backgroundColor: customMainThemeColor,
                                         borderRadius: 10,
                                     }}
                                 >
@@ -284,7 +284,7 @@ class RetailCheckoutComplete extends React.Component {
                                         alignContent: 'center',
                                         backgroundColor: '#fff',
                                         borderWidth: 1,
-                                        borderColor: mainThemeColor,
+                                        borderColor: customMainThemeColor,
                                         borderRadius: 10,
                                     }}
                                 >
@@ -293,7 +293,7 @@ class RetailCheckoutComplete extends React.Component {
                                         padding: 10,
                                         marginBottom: 10,
                                         overflow: 'hidden',
-                                        color: mainThemeColor
+                                        color: customMainThemeColor
                                     }}>{t('order.completeOrder')}</Text>
                                 </TouchableOpacity>
                             </View>
@@ -317,7 +317,7 @@ class RetailCheckoutComplete extends React.Component {
                             <Icon
                                 name='md-checkmark-circle-outline'
                                 size={42}
-                                style={styles.buttonIconStyle}
+                                style={styles?.buttonIconStyle(customMainThemeColor)}
                             />
                             <StyledText style={styles.messageBlock}>
                                 {t('totalAmount')}: {formatCurrency(transactionResponse.settleAmount)}
@@ -334,7 +334,7 @@ class RetailCheckoutComplete extends React.Component {
                                 <Icon
                                     name={this.state.isInvoicePrint ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
                                     size={32}
-                                    style={styles.buttonIconStyle}
+                                    style={styles?.buttonIconStyle(customMainThemeColor)}
                                 />
                             </View>}
                             {!!this.state.receiptXML && <View style={{flexDirection: 'row'}}>
@@ -344,7 +344,7 @@ class RetailCheckoutComplete extends React.Component {
                                 <Icon
                                     name={this.state.isReceiptPrint ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
                                     size={32}
-                                    style={styles.buttonIconStyle}
+                                    style={styles?.buttonIconStyle(customMainThemeColor)}
                                 />
                             </View>}
 
@@ -361,7 +361,7 @@ class RetailCheckoutComplete extends React.Component {
 
                                     }}
                                 >
-                                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                                         {t('printInvoiceXML')}
                                     </Text>
                                 </TouchableOpacity>
@@ -374,7 +374,7 @@ class RetailCheckoutComplete extends React.Component {
 
                                     }}
                                 >
-                                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                                         {t('printReceiptXML')}
                                     </Text>
                                 </TouchableOpacity>
@@ -389,7 +389,7 @@ class RetailCheckoutComplete extends React.Component {
                                         )
                                     }
                                 >
-                                    <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('order.completeOrder')}</Text>
+                                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('order.completeOrder')}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

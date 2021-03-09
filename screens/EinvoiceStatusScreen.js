@@ -116,7 +116,7 @@ class EinvoiceStatusScreen extends React.Component {
 
     render() {
         const {navigation, isLoading, client, handleSubmit} = this.props
-        const {t} = this.context
+        const {t, customMainThemeColor} = this.context
 
         if (isLoading) {
             return (
@@ -145,7 +145,7 @@ class EinvoiceStatusScreen extends React.Component {
                                     <Icon
                                         name={!!this.props?.client?.attributes?.UBN ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
                                         size={32}
-                                        style={styles.buttonIconStyle}
+                                        style={styles?.buttonIconStyle(customMainThemeColor)}
                                     />
                                 </View>
                                 {!this.props?.client?.attributes?.UBN && <View style={{marginHorizontal: 10}}>
@@ -162,7 +162,7 @@ class EinvoiceStatusScreen extends React.Component {
                                     <Icon
                                         name={!!this.props?.client?.attributes?.AES_KEY ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
                                         size={32}
-                                        style={[styles.buttonIconStyle]}
+                                        style={[styles?.buttonIconStyle(customMainThemeColor)]}
                                     />
                                 </View>
                                 {!this.props?.client?.attributes?.AES_KEY && <View style={{marginLeft: 10, flex: 1}}>
@@ -187,7 +187,7 @@ class EinvoiceStatusScreen extends React.Component {
                                     <Icon
                                         name={!!this.state.checkEInvoiceEligibility ? 'md-checkmark-circle-outline' : 'md-close-circle-outline'}
                                         size={32}
-                                        style={styles.buttonIconStyle}
+                                        style={styles?.buttonIconStyle(customMainThemeColor)}
                                     />
                                 </View>
                                 {!this.state.checkEInvoiceEligibility && !!this.props?.client?.attributes?.AES_KEY && !!this.props?.client?.attributes?.UBN && <View style={{marginHorizontal: 10}}>

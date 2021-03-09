@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import {View, Text} from 'react-native'
 import SegmentedControlTab from "react-native-segmented-control-tab";
-import styles, {mainThemeColor} from "../styles";
+import styles from "../styles";
 import {withContext} from "../helpers/contextHelper";
 
 const SegmentedControl = props => {
@@ -11,22 +11,23 @@ const SegmentedControl = props => {
     selectedIndex,
     vertical,
     themeStyle,
+    locale: {customMainThemeColor},
     ...rest
   } = props
 
 
   const horizontalStyleProps = {
     tabsContainerStyle: {width: '100%'},
-    tabStyle: {borderColor: mainThemeColor, width: '100%', backgroundColor: themeStyle.backgroundColor},
-    tabTextStyle: {color: mainThemeColor},
-    activeTabStyle: {backgroundColor: mainThemeColor}
+    tabStyle: {borderColor: customMainThemeColor, width: '100%', backgroundColor: themeStyle.backgroundColor},
+    tabTextStyle: {color: customMainThemeColor},
+    activeTabStyle: {backgroundColor: customMainThemeColor}
   }
 
   const verticalStyleProps = {
     tabsContainerStyle: {width: '100%', flexDirection: 'column'},
-    tabStyle: {borderColor: mainThemeColor, width: '100%', backgroundColor: themeStyle.backgroundColor},
-    tabTextStyle: {color: mainThemeColor},
-    activeTabStyle: {backgroundColor: mainThemeColor}
+    tabStyle: {borderColor: customMainThemeColor, width: '100%', backgroundColor: themeStyle.backgroundColor},
+    tabTextStyle: {color: customMainThemeColor},
+    activeTabStyle: {backgroundColor: customMainThemeColor}
   }
 
   useEffect(() => {

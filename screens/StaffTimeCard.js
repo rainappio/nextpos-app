@@ -68,7 +68,7 @@ class StaffTimeCard extends React.Component {
   }
 
   render() {
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
     const {timecards, haveData, haveError, loading} = this.props
 
     Item = ({timecard, layoutId, index}) => {
@@ -132,15 +132,15 @@ class StaffTimeCard extends React.Component {
 
             <View style={[styles.sectionBar]}>
               <View style={[styles.tableCellView, {flex: 5}]}>
-                <Text style={[styles.sectionBarText]}>{t('firstColTitle')}</Text>
+                <Text style={[styles?.sectionBarText(customMainThemeColor)]}>{t('firstColTitle')}</Text>
               </View>
 
               <View style={[styles.tableCellView, {flex: 2}]}>
-                <Text style={[styles.sectionBarText]}>{t('secColTitle')}</Text>
+                <Text style={[styles?.sectionBarText(customMainThemeColor)]}>{t('secColTitle')}</Text>
               </View>
 
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <Text style={[styles.sectionBarText, {textAlign: 'right'}]}>{t('thirdColTitle')}</Text>
+                <Text style={[styles?.sectionBarText(customMainThemeColor), {textAlign: 'right'}]}>{t('thirdColTitle')}</Text>
               </View>
             </View>
 

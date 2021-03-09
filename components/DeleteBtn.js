@@ -25,7 +25,7 @@ class DeleteBtn extends React.Component {
       islineItemDelete,
       disabled
     } = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     return (
       <TouchableOpacity
@@ -56,7 +56,7 @@ class DeleteBtn extends React.Component {
             color="#fff"
           />
         ) : (
-            <Text style={this.props?.textStyle ?? [styles.bottomActionButton, styles.deleteButton]}>
+            <Text style={this.props?.textStyle ?? [styles?.bottomActionButton(customMainThemeColor), styles.deleteButton]}>
               {this.props?.text ?? t('action.delete')}
             </Text>
           )}

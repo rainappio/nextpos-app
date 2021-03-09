@@ -6,7 +6,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import {doLogout, formatDateObj, getAnnouncements, getClientUsr, getCurrentClient, getShiftStatus, getPrinters} from '../actions'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
 import {NavigationEvents} from 'react-navigation'
 import {getToken, api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
@@ -58,6 +58,7 @@ class LoginSuccessScreen extends React.Component {
    * https://reactnavigation.org/docs/en/navigation-lifecycle.html
    */
   componentDidMount() {
+    this.loadUserInfo()
     this.context.localize({
       en: {
         welcome: 'Welcome,',
@@ -196,7 +197,7 @@ class LoginSuccessScreen extends React.Component {
       printers = [],
       order
     } = this.props
-    const {t, appType} = this.context
+    const {t, appType, customMainThemeColor} = this.context
     const {username, loggedIn, tokenExpiry} = this.state
 
     if (haveError) {
@@ -229,12 +230,12 @@ class LoginSuccessScreen extends React.Component {
             style={{alignSelf: 'center', maxWidth: 640, width: '80%'}}
           >
             <View style={[themeStyle, {borderRadius: 20, flex: 0.7}]}>
-              <Pages indicatorColor={mainThemeColor}>
+              <Pages indicatorColor={customMainThemeColor}>
                 {this.state?.globalAnnouncements?.map((item) => {
                   return (
                     <View style={{flex: 1, paddingBottom: 18}}>
-                      <View style={{alignItems: 'center', borderColor: mainThemeColor, borderBottomWidth: 1, paddingVertical: 10, marginBottom: 10}}>
-                        <StyledText style={{fontSize: 28, color: mainThemeColor, marginHorizontal: 8}}>{item?.title}</StyledText>
+                      <View style={{alignItems: 'center', borderColor: customMainThemeColor, borderBottomWidth: 1, paddingVertical: 10, marginBottom: 10}}>
+                        <StyledText style={{fontSize: 28, color: customMainThemeColor, marginHorizontal: 8}}>{item?.title}</StyledText>
                       </View>
 
                       <View style={{alignItems: 'center'}}>
@@ -290,7 +291,7 @@ class LoginSuccessScreen extends React.Component {
                 rounded
                 title={!!currentUser?.displayName && currentUser.displayName.charAt(0).toUpperCase()}
                 size="small"
-                overlayContainerStyle={[styles.orange_bg]}
+                overlayContainerStyle={[{backgroundColor: customMainThemeColor}]}
                 titleStyle={styles.whiteColor}
                 onPress={() => this.hiddenMenu.current.toggleMenu()}
               />
@@ -298,7 +299,7 @@ class LoginSuccessScreen extends React.Component {
           </View>
 
           <View style={[styles.horizontalMargin, {marginTop: 15}]}>
-            <Text style={[styles.primaryText]}>
+            <Text style={[styles?.primaryText(customMainThemeColor)]}>
               {t('welcome')} {currentUser?.displayName}{!!currentUser?.defaultUser && t('ownerRemark')}
             </Text>
             <StyledText style={[styles.subText]}>
@@ -325,7 +326,7 @@ class LoginSuccessScreen extends React.Component {
                     <MaterialIcon
                       name="play-arrow"
                       size={40}
-                      style={[styles.buttonIconStyle]}
+                      style={[styles?.buttonIconStyle(customMainThemeColor)]}
                     />
                   } />
               </View>
@@ -343,7 +344,7 @@ class LoginSuccessScreen extends React.Component {
                   <FontAwesomeIcon
                     name="clock-o"
                     size={40}
-                    style={[styles.buttonIconStyle]}
+                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
                   />
                 } />
 
@@ -359,7 +360,7 @@ class LoginSuccessScreen extends React.Component {
               || client?.localClientStatus?.noWorkingArea) &&
               <View style={[styles.sectionContainer, styles.withBottomBorder, {alignItems: 'center'}]}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <StyledText style={[styles.announcementTitle]}>
+                  <StyledText style={[styles?.announcementTitle(customMainThemeColor)]}>
                     {t('clientStatusTitle')}
                   </StyledText>
                 </View>
@@ -372,7 +373,7 @@ class LoginSuccessScreen extends React.Component {
                     <IonIcon
                       name={'arrow-forward-circle-outline'}
                       size={32}
-                      color={mainThemeColor}
+                      color={customMainThemeColor}
                     />
                   </TouchableOpacity>}
                 {client?.localClientStatus?.noTable &&
@@ -383,7 +384,7 @@ class LoginSuccessScreen extends React.Component {
                     <IonIcon
                       name={'arrow-forward-circle-outline'}
                       size={32}
-                      color={mainThemeColor}
+                      color={customMainThemeColor}
                     />
                   </TouchableOpacity>}
                 {client?.localClientStatus?.noCategory &&
@@ -394,7 +395,7 @@ class LoginSuccessScreen extends React.Component {
                     <IonIcon
                       name={'arrow-forward-circle-outline'}
                       size={32}
-                      color={mainThemeColor}
+                      color={customMainThemeColor}
                     />
                   </TouchableOpacity>}
                 {client?.localClientStatus?.noProduct &&
@@ -405,7 +406,7 @@ class LoginSuccessScreen extends React.Component {
                     <IonIcon
                       name={'arrow-forward-circle-outline'}
                       size={32}
-                      color={mainThemeColor}
+                      color={customMainThemeColor}
                     />
                   </TouchableOpacity>}
                 {client?.localClientStatus?.noElectronicInvoice &&
@@ -416,7 +417,7 @@ class LoginSuccessScreen extends React.Component {
                     <IonIcon
                       name={'arrow-forward-circle-outline'}
                       size={32}
-                      color={mainThemeColor}
+                      color={customMainThemeColor}
                     />
                   </TouchableOpacity>}
                 {client?.localClientStatus?.noPrinter &&
@@ -427,7 +428,7 @@ class LoginSuccessScreen extends React.Component {
                     <IonIcon
                       name={'arrow-forward-circle-outline'}
                       size={32}
-                      color={mainThemeColor}
+                      color={customMainThemeColor}
                     />
                   </TouchableOpacity>}
                 {client?.localClientStatus?.noWorkingArea &&
@@ -438,7 +439,7 @@ class LoginSuccessScreen extends React.Component {
                     <IonIcon
                       name={'arrow-forward-circle-outline'}
                       size={32}
-                      color={mainThemeColor}
+                      color={customMainThemeColor}
                     />
                   </TouchableOpacity>}
 
@@ -455,14 +456,14 @@ class LoginSuccessScreen extends React.Component {
                     <IonIcon
                       name={getannoc.titleIcon}
                       size={32}
-                      color={mainThemeColor}
+                      color={customMainThemeColor}
                     />
-                    <StyledText style={[styles.announcementTitle, {marginLeft: 10}]}>
+                    <StyledText style={[styles?.announcementTitle(customMainThemeColor), {marginLeft: 10}]}>
                       {getannoc.title}
                     </StyledText>
                   </View>
 
-                  <View style={styles.markdownContainer}>
+                  <View style={styles.markdownContainer(this.context)}>
                     <Markdown style={themeStyle}>
                       {getannoc.markdownContent}
                     </Markdown>

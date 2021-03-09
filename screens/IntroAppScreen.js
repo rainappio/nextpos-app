@@ -41,7 +41,7 @@ class IntroAppScreen extends React.Component {
   }
 
   render() {
-    let {t} = this.context
+    let {t, customMainThemeColor} = this.context
 
     return (
       <ThemeContainer>
@@ -60,21 +60,21 @@ class IntroAppScreen extends React.Component {
           </View>
 
           <View style={styles.flex(2)}>
-            <StyledText style={styles.welcomeText}>Simplify</StyledText>
-            <StyledText style={styles.welcomeText}>Your</StyledText>
-            <StyledText style={styles.welcomeText}>Selling</StyledText>
+            <StyledText style={styles?.welcomeText(this.context)}>Simplify</StyledText>
+            <StyledText style={styles?.welcomeText(this.context)}>Your</StyledText>
+            <StyledText style={styles?.welcomeText(this.context)}>Selling</StyledText>
           </View>
 
           <View style={[styles.bottom]}>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('CreateAcc')}
             >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('createAccount')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={this.isTokenAlive}>
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                 {t('signIn')}
               </Text>
             </TouchableOpacity>

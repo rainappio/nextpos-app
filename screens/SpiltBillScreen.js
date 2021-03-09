@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import {Accordion, List} from '@ant-design/react-native'
 import {getLables, getProducts, clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
@@ -160,7 +160,7 @@ class SpiltBillScreen extends React.Component {
             order,
             productsData
         } = this.props
-        const {reverseThemeStyle, t, splitParentOrderId, complexTheme, themeStyle} = this.context
+        const {reverseThemeStyle, t, splitParentOrderId, complexTheme, themeStyle, customMainThemeColor} = this.context
 
         if (this.context.isTablet) {
             return (
@@ -209,7 +209,7 @@ class SpiltBillScreen extends React.Component {
                                     overflow: 'hidden',
                                     marginRight: 10
                                 }}>
-                                    <Text style={[styles.sectionBarText]}>
+                                    <Text style={[styles?.sectionBarText(customMainThemeColor)]}>
                                         {t('splitBill.parentOrder')}
                                     </Text>
                                     <View style={styles.tableRowContainer}>
@@ -226,14 +226,14 @@ class SpiltBillScreen extends React.Component {
                                         {order?.lineItems?.length > 0 ?
                                             order?.lineItems?.map((item, index) => {
                                                 return (
-                                                    <TouchableOpacity style={[{backgroundColor: '#d6d6d6'}, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
+                                                    <TouchableOpacity style={[{backgroundColor: '#d6d6d6'}, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}
                                                         activeOpacity={0.8}
                                                         onPress={() => {this.addItem(item)}}>
                                                         <View style={{aspectRatio: 3, alignItems: 'center', flexDirection: 'row'}}>
                                                             <View style={{flex: 2.5, flexDirection: 'column', paddingLeft: '3%'}}>
-                                                                <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price} {`X${item.quantity}`}</StyledText>
-                                                                {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
-                                                                {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
+                                                                <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.productName} ${item.price} {`X${item.quantity}`}</StyledText>
+                                                                {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.options}</StyledText>}
+                                                                {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
                                                             </View>
                                                             <View style={{flexDirection: 'column', flex: 1, paddingRight: '3%', justifyContent: 'space-around', height: '100%', alignItems: 'flex-end', borderLeftWidth: 1}} >
                                                                 {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && <TouchableOpacity
@@ -247,17 +247,17 @@ class SpiltBillScreen extends React.Component {
                                                                     <StyledText style={{...{backgroundColor: '#d6d6d6', color: '#000'}, padding: 5, backgroundColor: 'gray', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1}}>{t('choose')}</StyledText>
                                                                 </TouchableOpacity>}
                                                                 <View>
-                                                                    {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
+                                                                    {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
                                                                     {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && (
-                                                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
+                                                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
                                                                     )}
-                                                                    {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
+                                                                    {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
                                                                     {item?.state === 'DELIVERED' && (
-                                                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
+                                                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
                                                                     )}
-                                                                    {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
+                                                                    {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
                                                                 </View>
-                                                                <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.lineItemSubTotal}</StyledText>
+                                                                <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.lineItemSubTotal}</StyledText>
                                                             </View>
                                                         </View>
                                                     </TouchableOpacity>
@@ -267,7 +267,7 @@ class SpiltBillScreen extends React.Component {
                                             : <StyledText style={{alignSelf: 'center'}}>{t('splitBill.nothing')}</StyledText>}
                                     </ScrollView>
                                 </View>
-                                <View style={{flex: 1, marginVertical: 5, justifyContent: 'space-between', paddingRight: 16, borderTopWidth: 1, borderColor: mainThemeColor, paddingTop: 8}}>
+                                <View style={{flex: 1, marginVertical: 5, justifyContent: 'space-between', paddingRight: 16, borderTopWidth: 1, borderColor: customMainThemeColor, paddingTop: 8}}>
                                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                                         <StyledText >{t('order.subtotal')}</StyledText>
                                         <StyledText >${order?.total?.amountWithTax}</StyledText>
@@ -293,7 +293,7 @@ class SpiltBillScreen extends React.Component {
                                 marginTop: 8,
                                 marginBottom: 5,
                                 borderLeftWidth: 1,
-                                borderColor: mainThemeColor
+                                borderColor: customMainThemeColor
                             }}>
                                 <View style={{
                                     flexDirection: 'row',
@@ -301,7 +301,7 @@ class SpiltBillScreen extends React.Component {
                                     alignItems: 'center',
                                     paddingLeft: 16
                                 }}>
-                                    <Text style={[styles.sectionBarText, styles.tableRowContainer, {paddingLeft: 0}]}>
+                                    <Text style={[styles?.sectionBarText(customMainThemeColor), styles.tableRowContainer, {paddingLeft: 0}]}>
                                         {t('splitBill.splitOrder')}
                                     </Text>
                                     {!!this.state?.splitOrderData && <View style={styles.tableRowContainer}>
@@ -321,14 +321,14 @@ class SpiltBillScreen extends React.Component {
 
 
 
-                                                                <TouchableOpacity style={[{backgroundColor: '#d6d6d6', color: '#000'}, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}
+                                                                <TouchableOpacity style={[{backgroundColor: '#d6d6d6', color: '#000'}, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}
                                                                     activeOpacity={0.8}
                                                                     onPress={() => {this.deleteItem(item)}}>
                                                                     <View style={{aspectRatio: 6, alignItems: 'center', flexDirection: 'row'}}>
                                                                         <View style={{flex: 2.5, flexDirection: 'column', paddingLeft: '3%'}}>
-                                                                            <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.productName} ${item.price} {`X${item.quantity}`}</StyledText>
-                                                                            {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.options}</StyledText>}
-                                                                            {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
+                                                                            <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.productName} ${item.price} {`X${item.quantity}`}</StyledText>
+                                                                            {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.options}</StyledText>}
+                                                                            {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
                                                                         </View>
                                                                         <View style={{flexDirection: 'column', flex: 1, paddingRight: '3%', justifyContent: 'space-around', height: '100%', alignItems: 'flex-end', borderLeftWidth: 1}} >
                                                                             {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && <TouchableOpacity
@@ -342,18 +342,18 @@ class SpiltBillScreen extends React.Component {
                                                                                 <StyledText style={{...{backgroundColor: '#d6d6d6', color: '#000'}, padding: 5, backgroundColor: 'gray', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1}}>{t('choose')}</StyledText>
                                                                             </TouchableOpacity>}
                                                                             <View>
-                                                                                {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
+                                                                                {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
                                                                                 {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && (
-                                                                                    <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
+                                                                                    <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
                                                                                 )}
-                                                                                {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
+                                                                                {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
                                                                                 {item?.state === 'DELIVERED' && (
-                                                                                    <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
+                                                                                    <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
                                                                                 )}
-                                                                                {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
+                                                                                {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
                                                                             </View>
 
-                                                                            <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: mainThemeColor})]}>{item.lineItemSubTotal}</StyledText>
+                                                                            <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.lineItemSubTotal}</StyledText>
                                                                         </View>
                                                                     </View>
                                                                 </TouchableOpacity>
@@ -362,7 +362,7 @@ class SpiltBillScreen extends React.Component {
                                                         : <StyledText style={{alignSelf: 'center'}}>{t('splitBill.nothing')}</StyledText>}
                                                 </ScrollView>
                                             </View>
-                                            <View style={{flex: 1, marginVertical: 5, flexDirection: 'row', paddingLeft: 16, borderTopWidth: 1, borderColor: mainThemeColor, paddingTop: 8}}>
+                                            <View style={{flex: 1, marginVertical: 5, flexDirection: 'row', paddingLeft: 16, borderTopWidth: 1, borderColor: customMainThemeColor, paddingTop: 8}}>
 
                                                 <View style={{flex: 1, justifyContent: 'space-between'}}>
                                                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -394,14 +394,14 @@ class SpiltBillScreen extends React.Component {
                                                             alignItems: 'center',
                                                             borderRadius: 4,
                                                             borderWidth: 1,
-                                                            borderColor: mainThemeColor,
+                                                            borderColor: customMainThemeColor,
                                                             justifyContent: 'center',
                                                             backgroundColor: '#fff',
                                                         }}
                                                         textStyle={{
                                                             textAlign: 'center',
                                                             fontSize: 16,
-                                                            color: mainThemeColor,
+                                                            color: customMainThemeColor,
                                                         }}
                                                         handleDeleteAction={() => {
                                                             handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => {
@@ -490,7 +490,7 @@ class SpiltBillScreen extends React.Component {
                                         justifyContent: 'flex-start',
                                         alignItems: 'center',
                                     }}>
-                                        <Text style={[styles.sectionBarText, {paddingLeft: 10}]}>
+                                        <Text style={[styles?.sectionBarText(customMainThemeColor), {paddingLeft: 10}]}>
                                             {t('splitBill.parentOrder')}
                                         </Text>
                                         <View style={styles.tableRowContainer}>
@@ -505,7 +505,7 @@ class SpiltBillScreen extends React.Component {
                                     <View style={[styles.sectionBar]}>
                                         <View style={[styles.tableCellView, {flex: 8}]}>
                                             <TouchableOpacity>
-                                                <Text style={styles.sectionBarTextSmall}>
+                                                <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>
                                                     {t('order.product')}
                                                 </Text>
                                             </TouchableOpacity>
@@ -513,7 +513,7 @@ class SpiltBillScreen extends React.Component {
 
                                         <View style={[styles.tableCellView, {flex: 2}]}>
                                             <TouchableOpacity>
-                                                <Text style={styles.sectionBarTextSmall}>
+                                                <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>
                                                     {t('order.quantity')}
                                                 </Text>
                                             </TouchableOpacity>
@@ -521,13 +521,13 @@ class SpiltBillScreen extends React.Component {
 
                                         <View style={[styles.tableCellView, {flex: 3}]}>
                                             <TouchableOpacity>
-                                                <Text style={styles.sectionBarTextSmall}>{t('order.unitPrice')}</Text>
+                                                <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('order.unitPrice')}</Text>
                                             </TouchableOpacity>
                                         </View>
 
                                         <View style={[styles.tableCellView, {flex: 3}]}>
                                             <TouchableOpacity>
-                                                <Text style={styles.sectionBarTextSmall}>{t('order.subtotal')}</Text>
+                                                <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('order.subtotal')}</Text>
                                             </TouchableOpacity>
                                         </View>
 
@@ -594,7 +594,7 @@ class SpiltBillScreen extends React.Component {
 
                                 </View>
                             </View>
-                            <View style={{flex: 9, paddingBottom: 8, borderColor: mainThemeColor, borderTopWidth: 1, paddingTop: 8}}>
+                            <View style={{flex: 9, paddingBottom: 8, borderColor: customMainThemeColor, borderTopWidth: 1, paddingTop: 8}}>
                                 <View style={{marginBottom: 5}}>
 
                                     <View style={{
@@ -602,7 +602,7 @@ class SpiltBillScreen extends React.Component {
                                         justifyContent: 'flex-start',
                                         alignItems: 'center',
                                     }}>
-                                        <Text style={[styles.sectionBarText, {paddingLeft: 10}]}>
+                                        <Text style={[styles?.sectionBarText(customMainThemeColor), {paddingLeft: 10}]}>
                                             {t('splitBill.splitOrder')}
                                         </Text>
                                         {!!this.state?.splitOrderData && <View style={styles.tableRowContainer}>
@@ -615,7 +615,7 @@ class SpiltBillScreen extends React.Component {
                                     <View style={[styles.sectionBar]}>
                                         <View style={[styles.tableCellView, {flex: 8}]}>
                                             <TouchableOpacity>
-                                                <Text style={styles.sectionBarTextSmall}>
+                                                <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>
                                                     {t('order.product')}
                                                 </Text>
                                             </TouchableOpacity>
@@ -623,7 +623,7 @@ class SpiltBillScreen extends React.Component {
 
                                         <View style={[styles.tableCellView, {flex: 2}]}>
                                             <TouchableOpacity>
-                                                <Text style={styles.sectionBarTextSmall}>
+                                                <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>
                                                     {t('order.quantity')}
                                                 </Text>
                                             </TouchableOpacity>
@@ -631,13 +631,13 @@ class SpiltBillScreen extends React.Component {
 
                                         <View style={[styles.tableCellView, {flex: 3}]}>
                                             <TouchableOpacity>
-                                                <Text style={styles.sectionBarTextSmall}>{t('order.unitPrice')}</Text>
+                                                <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('order.unitPrice')}</Text>
                                             </TouchableOpacity>
                                         </View>
 
                                         <View style={[styles.tableCellView, {flex: 3}]}>
                                             <TouchableOpacity>
-                                                <Text style={styles.sectionBarTextSmall}>{t('order.subtotal')}</Text>
+                                                <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('order.subtotal')}</Text>
                                             </TouchableOpacity>
                                         </View>
 
@@ -717,14 +717,14 @@ class SpiltBillScreen extends React.Component {
                                         alignItems: 'center',
                                         borderRadius: 4,
                                         borderWidth: 1,
-                                        borderColor: mainThemeColor,
+                                        borderColor: customMainThemeColor,
                                         justifyContent: 'center',
                                         backgroundColor: '#fff',
                                     }}
                                     textStyle={{
                                         textAlign: 'center',
                                         fontSize: 16,
-                                        color: mainThemeColor,
+                                        color: customMainThemeColor,
                                     }}
                                     handleDeleteAction={() => {
                                         handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => {
