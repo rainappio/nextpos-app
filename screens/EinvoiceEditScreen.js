@@ -334,7 +334,7 @@ class EinvoiceEditScreen extends React.Component {
                                 return (<View style={{
                                     paddingVertical: 12,
                                     paddingHorizontal: 10,
-                                    borderColor: '#f1f1f1',
+                                    borderColor: '#e7e7e7',
                                     borderBottomWidth: 1,
                                     flexDirection: 'row'
                                 }}>

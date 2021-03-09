@@ -22,7 +22,7 @@ import {Octicons} from '@expo/vector-icons';
 
 */
 export const InProcessOrderCard = (props) => {
-    const {t, themeStyle} = useContext(LocaleContext);
+    const {t, themeStyle, isTablet} = useContext(LocaleContext);
     const [isShow, setIsShow] = useState(false);
 
     return (
@@ -113,7 +113,7 @@ export const InProcessOrderCard = (props) => {
                     <View style={{height: 32}}>
                         {!!props?.data?.orderLineItems?.[0] &&
                             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                <Text numberOfLines={1} style={[themeStyle, {width: 70}]}>{props?.data?.orderLineItems?.[0]?.displayName}</Text>
+                                <Text numberOfLines={1} style={[themeStyle, {width: isTablet ? 130 : 70}]}>{props?.data?.orderLineItems?.[0]?.displayName}</Text>
                                 <Text style={[themeStyle, {paddingHorizontal: 10, fontWeight: 'bold', color: props?.data?.orderLineItems?.[0]?.quantity > 1 ? '#f75336' : themeStyle?.color}]}>{props?.data?.orderLineItems?.[0]?.quantity}</Text>
                                 <Text numberOfLines={1} style={[themeStyle, {flex: 1}]}>{props?.data?.orderLineItems?.[0]?.options}</Text>
                             </View>}
@@ -121,7 +121,7 @@ export const InProcessOrderCard = (props) => {
                     <View style={{height: 32}}>
                         {!!props?.data?.orderLineItems?.[1] &&
                             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                <Text numberOfLines={1} style={[themeStyle, {width: 70}]}>{props?.data?.orderLineItems?.[1]?.displayName}</Text>
+                                <Text numberOfLines={1} style={[themeStyle, {width: isTablet ? 130 : 70}]}>{props?.data?.orderLineItems?.[1]?.displayName}</Text>
                                 <Text style={[themeStyle, {paddingHorizontal: 10, fontWeight: 'bold', color: props?.data?.orderLineItems?.[1]?.quantity > 1 ? '#f75336' : themeStyle?.color}]}>{props?.data?.orderLineItems?.[1]?.quantity}</Text>
                                 <Text numberOfLines={1} style={[themeStyle, {flex: 1}]}>{props?.data?.orderLineItems?.[1]?.options}</Text>
                             </View>}
@@ -129,7 +129,7 @@ export const InProcessOrderCard = (props) => {
                     <View style={{height: 32}}>
                         {!!props?.data?.orderLineItems?.[2] &&
                             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                <Text numberOfLines={1} style={[themeStyle, {width: 70}]}>{props?.data?.orderLineItems?.[2]?.displayName}</Text>
+                                <Text numberOfLines={1} style={[themeStyle, {width: isTablet ? 130 : 70}]}>{props?.data?.orderLineItems?.[2]?.displayName}</Text>
                                 <Text style={[themeStyle, {paddingHorizontal: 10, fontWeight: 'bold', color: props?.data?.orderLineItems?.[2]?.quantity > 1 ? '#f75336' : themeStyle?.color}]}>{props?.data?.orderLineItems?.[2]?.quantity}</Text>
                                 <Text numberOfLines={1} style={[themeStyle, {flex: 1}]}>{props?.data?.orderLineItems?.[2]?.options}</Text>
                             </View>}
@@ -137,7 +137,7 @@ export const InProcessOrderCard = (props) => {
                     <View style={{height: 32}}>
                         {!!props?.data?.orderLineItems?.[3] &&
                             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                <Text numberOfLines={1} style={[themeStyle, {width: 70}]}>{props?.data?.orderLineItems?.[3]?.displayName}</Text>
+                                <Text numberOfLines={1} style={[themeStyle, {width: isTablet ? 130 : 70}]}>{props?.data?.orderLineItems?.[3]?.displayName}</Text>
                                 <Text style={[themeStyle, {paddingHorizontal: 10, fontWeight: 'bold', color: props?.data?.orderLineItems?.[3]?.quantity > 1 ? '#f75336' : themeStyle?.color}]}>{props?.data?.orderLineItems?.[3]?.quantity}</Text>
                                 <Text numberOfLines={1} style={[themeStyle, {flex: 1}]}>{props?.data?.orderLineItems?.[3]?.options}</Text>
                             </View>}

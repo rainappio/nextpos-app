@@ -85,7 +85,7 @@ class ClientUsers extends React.Component {
                   <View style={styles.tableCellView}>
                     <Text
                       style={{
-                        backgroundColor: '#f1f1f1',
+                        backgroundColor: '#e7e7e7',
                         width: 44,
                         height: 44,
                         borderRadius: 44,

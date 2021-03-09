@@ -99,7 +99,7 @@ export default StyleSheet.create({
     backgroundColor: '#f5f5f5'
   },
   lightgrayBg: {
-    backgroundColor: '#f1f1f1'
+    backgroundColor: '#e7e7e7'
   },
   paddTop_30: {
     paddingTop: 30
@@ -138,7 +138,7 @@ export default StyleSheet.create({
   boxShadow: {
     borderWidth: 1,
     borderRadius: 2,
-    borderColor: '#f1f1f1',
+    borderColor: '#e7e7e7',
     shadowColor: '#222222',
     shadowOffset: {width: 5, height: 5},
     shadowOpacity: 0.4,
@@ -182,7 +182,7 @@ export default StyleSheet.create({
     paddingHorizontal: 12,
   },
   rowFront: {
-    borderBottomColor: '#f1f1f1',
+    borderBottomColor: '#e7e7e7',
     borderBottomWidth: 1
   },
   rowFrontText: {
@@ -229,7 +229,7 @@ export default StyleSheet.create({
     paddingBottom: 20
   },
   borderBottomLine: {
-    borderBottomColor: '#f1f1f1',
+    borderBottomColor: '#e7e7e7',
     borderBottomWidth: 1
   },
   mgrbtn20: {
@@ -396,7 +396,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     marginTop: 5,
     marginBottom: 20,
-    borderColor: '#f1f1f1',
+    borderColor: '#e7e7e7',
     borderBottomWidth: 1,
   },
   sectionTitleContainer: {
@@ -412,7 +412,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    borderColor: '#f1f1f1',
+    borderColor: '#e7e7e7',
     borderBottomWidth: 1,
     paddingVertical: 8,
     paddingHorizontal: 10,
@@ -482,13 +482,13 @@ export default StyleSheet.create({
   },
   withBottomBorder: {
     borderBottomWidth: 1,
-    borderColor: '#f1f1f1'
+    borderColor: '#e7e7e7'
   },
   tableRowContainerWithBorder: {
     flexDirection: 'row',
     paddingVertical: 12,
     paddingHorizontal: 10,
-    borderColor: '#f1f1f1',
+    borderColor: '#e7e7e7',
     borderBottomWidth: 1,
   },
   tableRowContainer: {
@@ -539,7 +539,7 @@ export default StyleSheet.create({
 
   },
   markdownContainer: {
-    backgroundColor: '#f1f1f1',
+    backgroundColor: '#e7e7e7',
     padding: 10
   },
   messageBlock: {
@@ -643,7 +643,7 @@ export default StyleSheet.create({
   row: {
     flexDirection: 'column',
     alignItems: 'center',
-    borderColor: '#f1f1f1',
+    borderColor: '#e7e7e7',
     borderWidth: 1,
     flex: 1,
     marginBottom: 12,
