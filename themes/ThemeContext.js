@@ -8,15 +8,15 @@ export const themes = {
   light: {
     color: '#444',
     backgroundColor: '#fff',
-    borderColor: '#f1f1f1',
+    borderColor: '#e7e7e7',
     shadowColor: '#222222',
 
   },
   dark: {
-    color: '#f1f1f1',
+    color: '#e7e7e7',
     backgroundColor: '#222222',
-    borderColor: '#f1f1f1',
-    shadowColor: '#f1f1f1',
+    borderColor: '#e7e7e7',
+    shadowColor: '#e7e7e7',
 
   },
 }

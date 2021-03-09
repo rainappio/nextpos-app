@@ -370,15 +370,6 @@ class OrderDisplayScreen extends React.Component {
                           data={this.state.orders[`${workingArea}`]}
                           dragItemOverflow
                           renderItem={({item, index, drag, isActive}) => {
-                            if (false) {
-                              return (
-                                <TouchableOpacity style={[styles.sectionContainerWithBorder, {marginBottom: 5, paddingHorizontal: 10}]}
-                                  onLongPress={drag}
-                                >
-                                  <InProcessOrderCard />
-                                </TouchableOpacity>
-                              )
-                            }
 
 
                             return (

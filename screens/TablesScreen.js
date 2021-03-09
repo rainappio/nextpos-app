@@ -481,7 +481,7 @@ class TablesScreen extends React.Component {
                           })
                           return (this.state?.tableWidth && !isLoading && <Draggable
                             screenMode={this.state?.screenMode}
-                            borderColor={themeStyle.color === '#f1f1f1' ? '#BFBFBF' : '#BFBFBF'}
+                            borderColor={themeStyle.color === '#e7e7e7' ? '#BFBFBF' : '#BFBFBF'}
                             table={table}
                             key={table.tableId}
                             layoutId={tablelayouts[this.state.tableIndex]?.id}
