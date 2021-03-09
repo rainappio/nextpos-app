@@ -487,6 +487,12 @@ const en = {
     open: 'Open',
     cancel: 'Cancel'
   },
+  account: {
+    username: 'User Name',
+    nickname: 'Nick Name',
+    updateDate: 'Last updated',
+    gesturePassword: 'Gesture Password'
+  },
 }
 
 export default en

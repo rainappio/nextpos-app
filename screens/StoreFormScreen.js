@@ -35,9 +35,14 @@ class StoreFormScreen extends React.Component {
         taxInclusive: 'Tax Inclusive',
         serviceCharge: 'Service Charge %',
         tableAvailabilityDisplayTitle: 'Table Availability Display',
+        orderAvailabilityDisplayTitle: 'Order Display Mode',
         tableAvailabilityDisplay: {
           showSeat: 'Vacant Seat',
           showTable: 'Vacant Table'
+        },
+        orderDisplayMode: {
+          LINE_ITEM: 'Line Item',
+          ORDER: 'Order'
         },
         invoiceData: 'Required by Electronic Invoice',
         inEffectRule: 'These settings will take effect on future orders',
@@ -60,9 +65,14 @@ class StoreFormScreen extends React.Component {
         taxInclusive: '價格已含稅',
         serviceCharge: '服務費(％)',
         tableAvailabilityDisplayTitle: '座位顯示方式',
+        orderAvailabilityDisplayTitle: '即時訂單顯示方式',
         tableAvailabilityDisplay: {
           showSeat: '座位數',
           showTable: '桌數'
+        },
+        orderDisplayMode: {
+          LINE_ITEM: '品項',
+          ORDER: '訂單'
         },
         invoiceData: '電子發票必填',
         inEffectRule: '以下設定的更改將套用在未來訂單',
@@ -81,7 +91,12 @@ class StoreFormScreen extends React.Component {
       tableDisplayTypes: {
         0: {label: context.t('tableAvailabilityDisplay.showSeat'), value: 'SHOW_SEAT'},
         1: {label: context.t('tableAvailabilityDisplay.showTable'), value: 'SHOW_TABLE'}
-      }
+      },
+      selectedOrderDisplayType: this.props?.initialValues?.attributes?.ORDER_DISPLAY_MODE === 'ORDER' ? 1 : 0,
+      orderDisplayTypes: {
+        0: {label: context.t('orderDisplayMode.LINE_ITEM'), value: 'LINE_ITEM'},
+        1: {label: context.t('orderDisplayMode.ORDER'), value: 'ORDER'}
+      },
     }
   }
 
@@ -97,6 +112,8 @@ class StoreFormScreen extends React.Component {
           this.handleTableDisplaySelection(1)
           break
       }
+
+
     }
   }
 
@@ -104,12 +121,16 @@ class StoreFormScreen extends React.Component {
     const selectedIndex = this.selectedTableDisplayType === index ? null : index
     this.setState({selectedTableDisplayType: selectedIndex})
   }
+  handleOrderDisplaySelection = (index) => {
+    this.setState({selectedOrderDisplayType: index})
+  }
 
   render() {
     const {t} = this.context
     const {handleSubmit} = this.props
 
     const tableDisplayTypes = Object.keys(this.state.tableDisplayTypes).map(key => this.state.tableDisplayTypes[key].label)
+    const orderDisplayTypes = Object.keys(this.state.orderDisplayTypes).map(key => this.state.orderDisplayTypes[key].label)
 
     const timezones = moment.tz.names().filter(tz => {
       return tz.includes('Asia/Taipei') || tz.includes('Australia/Brisbane')
@@ -274,6 +295,24 @@ class StoreFormScreen extends React.Component {
                   values={tableDisplayTypes}
                   normalize={value => {
                     return this.state.tableDisplayTypes[value].value
+                  }}
+                />
+              </View>
+            </View>
+
+            <View style={styles.fieldContainer}>
+              <View style={{flex: 2}}>
+                <StyledText style={styles.fieldTitle}>{t('orderAvailabilityDisplayTitle')}</StyledText>
+              </View>
+              <View style={{flex: 3}}>
+                <Field
+                  name="attributes.ORDER_DISPLAY_MODE"
+                  component={SegmentedControl}
+                  selectedIndex={this.state.selectedOrderDisplayType}
+                  onChange={this.handleOrderDisplaySelection}
+                  values={orderDisplayTypes}
+                  normalize={value => {
+                    return this.state.orderDisplayTypes[value].value
                   }}
                 />
               </View>

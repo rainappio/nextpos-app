@@ -23,20 +23,7 @@ class AccountScreen extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    context.localize({
-      en: {
-        username: 'User Name',
-        nickname: 'Nick Name',
-        updateDate: 'Last updated',
-        gesturePassword: 'Gesture Password'
-      },
-      zh: {
-        username: '使用者代號',
-        nickname: '暱稱',
-        updateDate: '最後更新',
-        gesturePassword: '圖形密碼'
-      }
-    })
+
 
     this.state = {
       objects: [],
@@ -62,6 +49,8 @@ class AccountScreen extends React.Component {
       const value = await AsyncStorage.getItem(key)
       objects.push({key: key, value: value})
     }
+
+
 
     this.setState({
       objects: objects
@@ -96,7 +85,7 @@ class AccountScreen extends React.Component {
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('username')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('account.username')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <StyledText>
@@ -106,7 +95,7 @@ class AccountScreen extends React.Component {
           </View>
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('nickname')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('account.nickname')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <StyledText>
@@ -125,7 +114,7 @@ class AccountScreen extends React.Component {
 
           {!!currentUser.defaultUser && <View style={[styles.tableRowContainerWithBorder]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('gesturePassword')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('account.gesturePassword')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <EditGesturePasswordPopUp defaultUser={currentUser.defaultUser} name={currentUser.username} ownAccount={true} updateGestureFlag={this.state?.updateGestureFlag} />
@@ -145,11 +134,11 @@ class AccountScreen extends React.Component {
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('updateDate')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('account.updateDate')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <StyledText>
-                2021-03-05
+                2021-03-09
               </StyledText>
             </View>
           </View>

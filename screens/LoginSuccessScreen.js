@@ -198,13 +198,8 @@ class LoginSuccessScreen extends React.Component {
     } = this.props
     const {t, appType} = this.context
     const {username, loggedIn, tokenExpiry} = this.state
-    console.log('client', JSON.stringify(client))
 
-    if (isLoading) {
-      return (
-        <LoadingScreen />
-      )
-    } else if (haveError) {
+    if (haveError) {
       return <BackendErrorScreen />
     }
 
@@ -304,7 +299,7 @@ class LoginSuccessScreen extends React.Component {
 
           <View style={[styles.horizontalMargin, {marginTop: 15}]}>
             <Text style={[styles.primaryText]}>
-              {t('welcome')} {currentUser.displayName}{currentUser.defaultUser && t('ownerRemark')}
+              {t('welcome')} {currentUser?.displayName}{!!currentUser?.defaultUser && t('ownerRemark')}
             </Text>
             <StyledText style={[styles.subText]}>
               {t('loggedIn')} {formatDateObj(loggedIn)}

@@ -259,6 +259,7 @@ export const api = {
       return `${apiRoot}/orders/${id}/orderDetails`
     },
     lineItemOrdering: `${apiRoot}/orders/lineItemOrdering`,
+    orderOrdering: `${apiRoot}/orders/orderOrdering`,
   },
   splitOrder: {
     new: `${apiRoot}/splitOrders`,
