@@ -33,7 +33,7 @@ class RenderCheckBox extends React.Component {
               {customValue.discount === 0 && (
                 <View style={[styles.tableCellView, styles.flex(2)]}>
                   <TextInput
-                    style={[styles.rootInput, styles.flex(0.6), themeStyle, styles.withBorder, {textAlign: 'left'}]}
+                    style={[themeStyle, styles?.rootInput(this.props?.locale), styles.flex(0.6), styles?.withBorder(this.props?.locale), {textAlign: 'left'}]}
                     value={defaultValueDisplay(customValue, value)}
                     clearTextOnFocus={true}
                     selectTextOnFocus={true}

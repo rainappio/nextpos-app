@@ -4,7 +4,7 @@ import {Animated, PanResponder, Text, TouchableOpacity, View, Dimensions} from "
 import ScreenHeader from "../components/ScreenHeader";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {getTableLayout, getTableLayouts} from '../actions'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import LoadingScreen from "./LoadingScreen";
 import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
@@ -13,6 +13,7 @@ import {getInitialTablePosition, getTablePosition, getModNum} from "../helpers/t
 import AddBtn from '../components/AddBtn'
 import Modal from 'react-native-modal';
 import TableAddModal from './TableAddModal';
+import {withContext} from "../helpers/contextHelper";
 
 class ManageVisualSceen extends Component {
   static navigationOptions = {
@@ -73,7 +74,7 @@ class ManageVisualSceen extends Component {
   }
   render() {
     const {tablelayouts} = this.props
-    const {t, themeStyle} = this.context
+    const {t, themeStyle, customMainThemeColor} = this.context
     if (this.state?.isLoading) {
       return (
         <LoadingScreen />
@@ -112,7 +113,7 @@ class ManageVisualSceen extends Component {
               return (<TouchableOpacity
                 disabled={this.state?.screenMode === 'joinTable'}
                 style={{
-                  borderColor: mainThemeColor,
+                  borderColor: customMainThemeColor,
                   borderWidth: 0.5,
                   borderBottomWidth: 0,
                   padding: 4,
@@ -122,7 +123,7 @@ class ManageVisualSceen extends Component {
                   backgroundColor: this.state?.tableIndex === index ? themeStyle.color : null,
                 }}
                 onPress={() => {this.setState({tableIndex: index})}}>
-                <StyledText style={[styles.sectionBarText, {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                <StyledText style={[styles?.sectionBarText(customMainThemeColor), {flex: 4, textAlign: 'center', marginRight: 4}]}>
                   {tblLayout?.layoutName}
                 </StyledText>
 
@@ -162,7 +163,7 @@ class ManageVisualSceen extends Component {
                 tableWidth: width,
                 tableHeight: height,
               })
-            }} style={[styles.ballContainer, {height: '100%'}]}>
+            }} style={[styles?.ballContainer(customMainThemeColor), {height: '100%'}]}>
               <View style={{flexWrap: 'wrap'}}>
                 {
                   tablelayouts[this.state.tableIndex]?.tables.map((table, index) => {
@@ -216,7 +217,7 @@ export default connect(
   mapDispatchToProps
 )(ManageVisualSceen)
 
-class Draggable extends Component {
+class DraggableBase extends Component {
   constructor(props) {
     super(props);
 
@@ -345,7 +346,7 @@ class Draggable extends Component {
 
 
 
-  renderDraggable(layoutId, table, index) {
+  renderDraggable(layoutId, table, index, customMainThemeColor) {
     const panStyle = {
       transform: this.state.pan.getTranslateTransform()
     }
@@ -358,7 +359,7 @@ class Draggable extends Component {
             <View>
               <Animated.View
                 {...this.panResponder.panHandlers}
-                style={[panStyle, styles.circle, {position: 'absolute', borderWidth: 3, borderColor: '#BFBFBF'}]}
+                style={[panStyle, styles?.circle(customMainThemeColor), {position: 'absolute', borderWidth: 3, borderColor: '#BFBFBF'}]}
               >
                 <Text style={{color: '#fff', textAlign: 'center', marginTop: 15}}>{table.tableName}</Text>
               </Animated.View>
@@ -367,7 +368,7 @@ class Draggable extends Component {
             <View>
               <Animated.View
                 {...this.panResponder.panHandlers}
-                style={[panStyle, styles.circle, {position: 'absolute', borderWidth: 3, borderColor: '#BFBFBF'}]}
+                style={[panStyle, styles?.circle(customMainThemeColor), {position: 'absolute', borderWidth: 3, borderColor: '#BFBFBF'}]}
               >
                 <Text style={{color: '#fff', textAlign: 'center', marginTop: 15}}>{table.tableName}</Text>
               </Animated.View>
@@ -378,13 +379,15 @@ class Draggable extends Component {
   }
 
   render() {
-    const {table, layoutId, index} = this.props
+    const {table, layoutId, index, customMainThemeColor} = this.props
     return (
       <View style={{alignItems: "flex-start", borderWidth: 0, marginBottom: 0}} ref='self'>
-        {this.renderDraggable(layoutId, table, index)}
+        {this.renderDraggable(layoutId, table, index, customMainThemeColor)}
       </View>
     );
   }
 }
+
+const Draggable = withContext(DraggableBase)
 
 //https://snack.expo.io/@yoobidev/draggable-component

@@ -2,7 +2,7 @@ import React from 'react'
 import {Text, View} from 'react-native'
 import {connect} from 'react-redux'
 import {getCustomerCountReport, getCustomerTrafficReport} from '../actions'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import BackendErrorScreen from './BackendErrorScreen'
 import moment from "moment-timezone";
@@ -138,7 +138,7 @@ class CustomerStats extends React.Component {
       haveError,
       haveCCData,
     } = this.props
-    const {t, isTablet} = this.context
+    const {t, isTablet, customMainThemeColor} = this.context
     const containSalesData = haveData && customerTrafficReport.totalCount !== undefined && customerTrafficReport.totalCount.orderCount > 0
 
     // ranged sales
@@ -209,23 +209,23 @@ class CustomerStats extends React.Component {
             {totalCount !== null && totalCount.orderCount > 0 && (
               <View>
                 <View>
-                  <Text style={styles.screenSubTitle}>
+                  <Text style={styles?.screenSubTitle(customMainThemeColor)}>
                     {t('orderTraffic')}
                   </Text>
                   <SvgBarChart data={filteredCustomerTrafficData} legend='Order Count' round={maxValue} />
                 </View>
 
                 <View style={[styles.verticalPadding, {flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-evenly'}]}>
-                  <View style={{width: 480, borderColor: mainThemeColor, borderWidth: 1, marginVertical: 10}}>
-                    <View style={[styles.tableRowContainerWithBorder, {borderColor: mainThemeColor}]}>
+                  <View style={{width: 480, borderColor: customMainThemeColor, borderWidth: 1, marginVertical: 10}}>
+                    <View style={[styles.tableRowContainerWithBorder, {borderColor: customMainThemeColor}]}>
                       <View style={[styles.tableCellView, {flex: 1}]}>
-                        <Text style={styles.sectionBarText}>{t('orderType')}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('orderType')}</Text>
                       </View>
                       <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                        <Text style={styles.sectionBarText}>{t('total')}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('total')}</Text>
                       </View>
                       <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                        <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('percentage')}</Text>
                       </View>
                     </View>
 
@@ -248,16 +248,16 @@ class CustomerStats extends React.Component {
                       ))
                     }
                   </View>
-                  <View style={{width: 480, borderColor: mainThemeColor, borderWidth: 1, marginVertical: 10}}>
-                    <View style={[styles.tableRowContainerWithBorder, {borderColor: mainThemeColor}]}>
+                  <View style={{width: 480, borderColor: customMainThemeColor, borderWidth: 1, marginVertical: 10}}>
+                    <View style={[styles.tableRowContainerWithBorder, {borderColor: customMainThemeColor}]}>
                       <View style={[styles.tableCellView, {flex: 1}]}>
-                        <Text style={styles.sectionBarText}>{t('ageGroup')}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('ageGroup')}</Text>
                       </View>
                       <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                        <Text style={styles.sectionBarText}>{t('total')}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('total')}</Text>
                       </View>
                       <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                        <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('percentage')}</Text>
                       </View>
                     </View>
 
@@ -280,16 +280,16 @@ class CustomerStats extends React.Component {
                       ))
                     }
                   </View>
-                  <View style={{width: 480, borderColor: mainThemeColor, borderWidth: 1, marginVertical: 10}}>
-                    <View style={[styles.tableRowContainerWithBorder, {borderColor: mainThemeColor}]}>
+                  <View style={{width: 480, borderColor: customMainThemeColor, borderWidth: 1, marginVertical: 10}}>
+                    <View style={[styles.tableRowContainerWithBorder, {borderColor: customMainThemeColor}]}>
                       <View style={[styles.tableCellView, {flex: 1}]}>
-                        <Text style={styles.sectionBarText}>{t('visitFrequency')}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('visitFrequency')}</Text>
                       </View>
                       <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                        <Text style={styles.sectionBarText}>{t('total')}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('total')}</Text>
                       </View>
                       <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                        <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('percentage')}</Text>
                       </View>
                     </View>
 
@@ -312,16 +312,16 @@ class CustomerStats extends React.Component {
                       ))
                     }
                   </View>
-                  <View style={{width: 480, borderColor: mainThemeColor, borderWidth: 1, marginVertical: 10}}>
-                    <View style={[styles.tableRowContainerWithBorder, {borderColor: mainThemeColor}]}>
+                  <View style={{width: 480, borderColor: customMainThemeColor, borderWidth: 1, marginVertical: 10}}>
+                    <View style={[styles.tableRowContainerWithBorder, {borderColor: customMainThemeColor}]}>
                       <View style={{flex: 1}}>
-                        <Text style={styles.sectionBarText}>{t('customerCountHeading')}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('customerCountHeading')}</Text>
                       </View>
                       <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                        <Text style={styles.sectionBarText}>{t('total')}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('total')}</Text>
                       </View>
                       <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                        <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('percentage')}</Text>
                       </View>
                     </View>
 
@@ -372,14 +372,14 @@ class CustomerStats extends React.Component {
                       </View>
                     </View>
                   </View>
-                  <View style={{width: 480, borderColor: mainThemeColor, borderWidth: 1, marginVertical: 10}}>
+                  <View style={{width: 480, borderColor: customMainThemeColor, borderWidth: 1, marginVertical: 10}}>
                     <View style={[styles.tableRowContainerWithBorder, {borderBottomWidth: 0}]}>
                       <View style={{flex: 1}}>
-                        <Text style={styles.sectionBarText}>{t('averageSpendingTitle')}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('averageSpendingTitle')}</Text>
                       </View>
 
                       <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                        <Text style={styles.sectionBarText}>{formatCurrency(customercountReport?.customerStatsThisMonth?.[0]?.averageSpending ?? 0)}</Text>
+                        <Text style={styles?.sectionBarText(customMainThemeColor)}>{formatCurrency(customercountReport?.customerStatsThisMonth?.[0]?.averageSpending ?? 0)}</Text>
                       </View>
                     </View>
                   </View>
@@ -421,7 +421,7 @@ class CustomerStats extends React.Component {
             {totalCount !== null && totalCount.orderCount > 0 && (
               <View>
                 <View>
-                  <Text style={styles.screenSubTitle}>
+                  <Text style={styles?.screenSubTitle(customMainThemeColor)}>
                     {t('orderTraffic')}
                   </Text>
                   <SvgBarChart data={filteredCustomerTrafficData} legend='Order Count' round={maxValue} />
@@ -430,13 +430,13 @@ class CustomerStats extends React.Component {
                 <View style={styles.verticalPadding}>
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
-                      <Text style={styles.sectionBarText}>{t('orderType')}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('orderType')}</Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                      <Text style={styles.sectionBarText}>{t('total')}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('total')}</Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                      <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('percentage')}</Text>
                     </View>
                   </View>
 
@@ -461,13 +461,13 @@ class CustomerStats extends React.Component {
 
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
-                      <Text style={styles.sectionBarText}>{t('ageGroup')}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('ageGroup')}</Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                      <Text style={styles.sectionBarText}>{t('total')}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('total')}</Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                      <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('percentage')}</Text>
                     </View>
                   </View>
 
@@ -492,13 +492,13 @@ class CustomerStats extends React.Component {
 
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
-                      <Text style={styles.sectionBarText}>{t('visitFrequency')}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('visitFrequency')}</Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                      <Text style={styles.sectionBarText}>{t('total')}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('total')}</Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                      <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('percentage')}</Text>
                     </View>
                   </View>
 
@@ -523,13 +523,13 @@ class CustomerStats extends React.Component {
 
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={{flex: 1}}>
-                      <Text style={styles.sectionBarText}>{t('customerCountHeading')}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('customerCountHeading')}</Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-                      <Text style={styles.sectionBarText}>{t('total')}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('total')}</Text>
                     </View>
                     <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                      <Text style={styles.sectionBarText}>{t('percentage')}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('percentage')}</Text>
                     </View>
                   </View>
 
@@ -582,11 +582,11 @@ class CustomerStats extends React.Component {
 
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={{flex: 1}}>
-                      <Text style={styles.sectionBarText}>{t('averageSpendingTitle')}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{t('averageSpendingTitle')}</Text>
                     </View>
 
                     <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                      <Text style={styles.sectionBarText}>{formatCurrency(customercountReport?.customerStatsThisMonth?.[0]?.averageSpending ?? 0)}</Text>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>{formatCurrency(customercountReport?.customerStatsThisMonth?.[0]?.averageSpending ?? 0)}</Text>
                     </View>
                   </View>
                 </View>

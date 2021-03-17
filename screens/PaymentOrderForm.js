@@ -4,7 +4,7 @@ import {Field, reduxForm} from 'redux-form'
 import {Text, TouchableOpacity, View, Alert} from 'react-native'
 import {formatCurrency} from '../actions'
 import InputText from '../components/InputText'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import SegmentedControl from '../components/SegmentedControl'
 import DropDown from '../components/DropDown'
@@ -222,7 +222,7 @@ class PaymentOrderForm extends React.Component {
       resetTotal
     } = this.props
 
-    const {t, appType} = this.context
+    const {t, appType, customMainThemeColor} = this.context
     const {paymentsTypes, selectedPaymentType, paymentsTypeslbl, handlePaymentTypeSelection} = this.props
     const totalAmount = this.props?.isSplitByHeadCount ? this.props?.splitAmount : order.orderTotal
 
@@ -238,7 +238,7 @@ class PaymentOrderForm extends React.Component {
 
           <View style={styles.bottom}>
             <TouchableOpacity onPress={() => props.handleSubmit()}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('charge')}
               </Text>
             </TouchableOpacity>
@@ -247,7 +247,7 @@ class PaymentOrderForm extends React.Component {
               <TouchableOpacity
                 onPress={() => props.navigation.goBack()}
               >
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                   {t('action.cancel')}
                 </Text>
               </TouchableOpacity>
@@ -279,7 +279,7 @@ class PaymentOrderForm extends React.Component {
               paddingHorizontal: 20,
               minHeight: 200,
               borderWidth: 5,
-              borderColor: mainThemeColor,
+              borderColor: customMainThemeColor,
               justifyContent: 'center',
               alignSelf: 'center',
             }}>
@@ -309,7 +309,7 @@ class PaymentOrderForm extends React.Component {
                         this.setState({modalVisible: false})
                       }}
                     >
-                      <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+                      <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('action.cancel')}</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{flex: 1, marginHorizontal: 5}}>
@@ -319,7 +319,7 @@ class PaymentOrderForm extends React.Component {
                         this.handleCreateMember(data, order?.orderId)
                       })}
                     >
-                      <Text style={[[styles.bottomActionButton, styles.actionButton]]}>
+                      <Text style={[[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]]}>
                         {t('action.save')}
                       </Text>
                     </TouchableOpacity>
@@ -434,17 +434,14 @@ class PaymentOrderForm extends React.Component {
                           width: 70,
                           height: 50,
                           borderWidth: 2,
-                          borderColor: mainThemeColor,
+                          borderColor: customMainThemeColor,
                           justifyContent: 'center'
                         }}
                       >
                         <Text
                           style={[
-                            styles.primaryText,
+                            styles?.primaryText(customMainThemeColor),
                             styles.centerText
-                            // styles.orange_color,
-                            // styles.textBold,
-                            // styles.centerText
                           ]}
                         >
                           {moneyAmt.label}
@@ -523,7 +520,7 @@ class PaymentOrderForm extends React.Component {
                     this.setState({openScanView: !this.state?.openScanView})
                   }}
                 >
-                  <Icon style={{marginLeft: 10}} name="camera" size={24} color={mainThemeColor} />
+                  <Icon style={{marginLeft: 10}} name="camera" size={24} color={customMainThemeColor} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -569,7 +566,7 @@ class PaymentOrderForm extends React.Component {
                     })
                   }}
                 >
-                  <Icon style={{marginLeft: 10}} name="search" size={24} color={mainThemeColor} />
+                  <Icon style={{marginLeft: 10}} name="search" size={24} color={customMainThemeColor} />
                 </TouchableOpacity>
               </View>
             </View>

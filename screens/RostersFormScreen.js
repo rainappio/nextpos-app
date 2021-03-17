@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {ScrollView, Text, TouchableOpacity, View, Platform, Alert} from 'react-native'
 import {isNDigitsNumber, isRequired, isTwoBigWords} from '../validators'
 import DropDownInputText from '../components/DropDownInputText'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import Icon from 'react-native-vector-icons/AntDesign'
 import {LocaleContext} from '../locales/LocaleContext'
 import SegmentedControl from "../components/SegmentedControl";
@@ -457,7 +457,7 @@ class RostersFormScreen extends React.Component {
     };
 
     render() {
-        const {t, themeStyle, isTablet} = this.context
+        const {t, themeStyle, isTablet, customMainThemeColor} = this.context
         const {handleSubmit} = this.props
         const timezone = TimeZoneService.getTimeZone()
         console.log('data', JSON.stringify(this.state?.data))
@@ -585,22 +585,22 @@ class RostersFormScreen extends React.Component {
 
                                                         <TouchableOpacity
                                                             onPress={() => this.setState({eventColor: '#fff'})}
-                                                            style={[{backgroundColor: '#fff'}, this.state?.eventColor === '#fff' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30, borderColor: mainThemeColor, borderWidth: 1}]} ></TouchableOpacity>
+                                                            style={[{backgroundColor: '#fff'}, this.state?.eventColor === '#fff' ? {width: 40, height: 40, borderRadius: 40, borderColor: customMainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30, borderColor: customMainThemeColor, borderWidth: 1}]} ></TouchableOpacity>
                                                         <TouchableOpacity
                                                             onPress={() => this.setState({eventColor: '#CCDDFF'})}
-                                                            style={[{backgroundColor: '#CCDDFF'}, this.state?.eventColor === '#CCDDFF' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                            style={[{backgroundColor: '#CCDDFF'}, this.state?.eventColor === '#CCDDFF' ? {width: 40, height: 40, borderRadius: 40, borderColor: customMainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                         <TouchableOpacity
                                                             onPress={() => this.setState({eventColor: '#AAFFEE'})}
-                                                            style={[{backgroundColor: '#AAFFEE'}, this.state?.eventColor === '#AAFFEE' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                            style={[{backgroundColor: '#AAFFEE'}, this.state?.eventColor === '#AAFFEE' ? {width: 40, height: 40, borderRadius: 40, borderColor: customMainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                         <TouchableOpacity
                                                             onPress={() => this.setState({eventColor: '#DEB887'})}
-                                                            style={[{backgroundColor: '#DEB887'}, this.state?.eventColor === '#DEB887' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                            style={[{backgroundColor: '#DEB887'}, this.state?.eventColor === '#DEB887' ? {width: 40, height: 40, borderRadius: 40, borderColor: customMainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                         <TouchableOpacity
                                                             onPress={() => this.setState({eventColor: '#FFC8B4'})}
-                                                            style={[{backgroundColor: '#FFC8B4'}, this.state?.eventColor === '#FFC8B4' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                            style={[{backgroundColor: '#FFC8B4'}, this.state?.eventColor === '#FFC8B4' ? {width: 40, height: 40, borderRadius: 40, borderColor: customMainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                         <TouchableOpacity
                                                             onPress={() => this.setState({eventColor: '#FFB7DD'})}
-                                                            style={[{backgroundColor: '#FFB7DD'}, this.state?.eventColor === '#FFB7DD' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                            style={[{backgroundColor: '#FFB7DD'}, this.state?.eventColor === '#FFB7DD' ? {width: 40, height: 40, borderRadius: 40, borderColor: customMainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
 
 
                                                     </View> :
@@ -639,7 +639,7 @@ class RostersFormScreen extends React.Component {
                                                     header={
                                                         <View style={[styles.listPanel]}>
                                                             <View style={[styles.tableCellView, styles.flex(1)]}>
-                                                                <StyledText style={[{color: mainThemeColor, fontWeight: 'bold'}, styles.listPanelText]}>{label?.labelName} ({label?.resources?.filter((item) => item?.isSelected).length})</StyledText>
+                                                                <StyledText style={[{color: customMainThemeColor, fontWeight: 'bold'}, styles.listPanelText]}>{label?.labelName} ({label?.resources?.filter((item) => item?.isSelected).length})</StyledText>
                                                             </View>
 
                                                         </View>
@@ -743,17 +743,17 @@ class RostersFormScreen extends React.Component {
                                 <View style={[{marginTop: 30, justifyContent: 'flex-end', flexDirection: 'row', flex: 1, maxHeight: 50}]}>
 
                                     {!!this.state.data && this.state?.isManager && <DeleteBtn
-                                        containerStyle={[styles.flexButton, styles.deleteButton]}
+                                        containerStyle={[styles?.flexButton(customMainThemeColor), styles.deleteButton]}
                                         textStyle={styles.flexButtonText}
                                         handleDeleteAction={() => this.handleDelete()} />}
-                                    <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={[styles.flexButtonSecondAction, {marginHorizontal: 10}]}>
-                                        <Text style={[styles.flexButtonSecondActionText]}>
+                                    <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={[styles?.flexButtonSecondAction(customMainThemeColor), {marginHorizontal: 10}]}>
+                                        <Text style={[styles?.flexButtonSecondActionText(customMainThemeColor)]}>
                                             {t('action.cancel')}
                                         </Text>
                                     </TouchableOpacity>
 
                                     {this.state.uneditable || <TouchableOpacity
-                                        style={styles.flexButton}
+                                        style={styles?.flexButton(customMainThemeColor)}
                                         onPress={
                                             this.state?.isManager ?
                                                 handleSubmit(data => {
@@ -899,22 +899,22 @@ class RostersFormScreen extends React.Component {
 
                                                     <TouchableOpacity
                                                         onPress={() => this.setState({eventColor: '#fff'})}
-                                                        style={[{backgroundColor: '#fff'}, this.state?.eventColor === '#fff' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30, borderColor: mainThemeColor, borderWidth: 1}]} ></TouchableOpacity>
+                                                        style={[{backgroundColor: '#fff'}, this.state?.eventColor === '#fff' ? {width: 40, height: 40, borderRadius: 40, borderColor: customMainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30, borderColor: customMainThemeColor, borderWidth: 1}]} ></TouchableOpacity>
                                                     <TouchableOpacity
                                                         onPress={() => this.setState({eventColor: '#CCDDFF'})}
-                                                        style={[{backgroundColor: '#CCDDFF'}, this.state?.eventColor === '#CCDDFF' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        style={[{backgroundColor: '#CCDDFF'}, this.state?.eventColor === '#CCDDFF' ? {width: 40, height: 40, borderRadius: 40, borderColor: customMainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                     <TouchableOpacity
                                                         onPress={() => this.setState({eventColor: '#AAFFEE'})}
-                                                        style={[{backgroundColor: '#AAFFEE'}, this.state?.eventColor === '#AAFFEE' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        style={[{backgroundColor: '#AAFFEE'}, this.state?.eventColor === '#AAFFEE' ? {width: 40, height: 40, borderRadius: 40, borderColor: customMainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                     <TouchableOpacity
                                                         onPress={() => this.setState({eventColor: '#DEB887'})}
-                                                        style={[{backgroundColor: '#DEB887'}, this.state?.eventColor === '#DEB887' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        style={[{backgroundColor: '#DEB887'}, this.state?.eventColor === '#DEB887' ? {width: 40, height: 40, borderRadius: 40, borderColor: customMainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                     <TouchableOpacity
                                                         onPress={() => this.setState({eventColor: '#FFC8B4'})}
-                                                        style={[{backgroundColor: '#FFC8B4'}, this.state?.eventColor === '#FFC8B4' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        style={[{backgroundColor: '#FFC8B4'}, this.state?.eventColor === '#FFC8B4' ? {width: 40, height: 40, borderRadius: 40, borderColor: customMainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
                                                     <TouchableOpacity
                                                         onPress={() => this.setState({eventColor: '#FFB7DD'})}
-                                                        style={[{backgroundColor: '#FFB7DD'}, this.state?.eventColor === '#FFB7DD' ? {width: 40, height: 40, borderRadius: 40, borderColor: mainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
+                                                        style={[{backgroundColor: '#FFB7DD'}, this.state?.eventColor === '#FFB7DD' ? {width: 40, height: 40, borderRadius: 40, borderColor: customMainThemeColor, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30}]} ></TouchableOpacity>
 
 
                                                 </View> :
@@ -952,7 +952,7 @@ class RostersFormScreen extends React.Component {
                                                 header={
                                                     <View style={[styles.listPanel]}>
                                                         <View style={[styles.tableCellView, styles.flex(1)]}>
-                                                            <StyledText style={[{color: mainThemeColor, fontWeight: 'bold'}, styles.listPanelText]}>{label?.labelName} ({label?.resources?.filter((item) => item?.isSelected).length})</StyledText>
+                                                            <StyledText style={[{color: customMainThemeColor, fontWeight: 'bold'}, styles.listPanelText]}>{label?.labelName} ({label?.resources?.filter((item) => item?.isSelected).length})</StyledText>
                                                         </View>
 
                                                     </View>
@@ -1060,13 +1060,13 @@ class RostersFormScreen extends React.Component {
                                             this.handleSubmit(data, !!this.state.data)
                                         }) :
                                         () => this.handleStaffSubmit()}>
-                                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                                         {t('action.save')}
                                     </Text>
                                 </TouchableOpacity>}
 
                                 <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                                         {t('action.cancel')}
                                     </Text>
                                 </TouchableOpacity>

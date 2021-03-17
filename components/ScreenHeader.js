@@ -18,7 +18,7 @@ class ScreenHeader extends Component {
       style
     } = this.props
 
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     const displayBackButton = backNavigation !== undefined ? backNavigation : true
     const backActionToUse = backAction !== undefined ? backAction : () => this.props.navigation.goBack()
@@ -32,12 +32,12 @@ class ScreenHeader extends Component {
               onPress={backActionToUse}
             >
               <View>
-                <Icon name="chevron-back" size={32} style={styles.buttonIconStyle} />
+                <Icon name="chevron-back" size={32} style={styles?.buttonIconStyle(customMainThemeColor)} />
               </View>
             </TouchableOpacity>
           )}
         </View>
-        <Text style={[styles.screenTitle, {width: '60%', borderWidth: 0}]}>{title}</Text>
+        <Text style={[styles?.screenTitle(customMainThemeColor), {width: '60%', borderWidth: 0}]}>{title}</Text>
         <View style={{width: '20%', alignItems: 'flex-end', borderWidth: 0}}>
           {rightComponent}
         </View>

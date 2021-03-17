@@ -58,7 +58,7 @@ class ProductFormScreen extends React.Component {
   }
 
   render() {
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     const {
       initialValues,
@@ -225,7 +225,7 @@ class ProductFormScreen extends React.Component {
 
           <View style={[styles.bottom, styles.horizontalMargin]}>
             <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('action.save')}
               </Text>
             </TouchableOpacity>
@@ -236,7 +236,7 @@ class ProductFormScreen extends React.Component {
                   isPinned ?
                     <TouchableOpacity onPress={() => handlepinToggle(productId)}>
                       <Text
-                        style={[styles.bottomActionButton, styles.actionButton]}
+                        style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}
                       >
                         {t('action.unpin')}
                       </Text>
@@ -244,7 +244,7 @@ class ProductFormScreen extends React.Component {
                     :
                     <TouchableOpacity onPress={() => handlepinToggle(productId)}>
                       <Text
-                        style={[styles.bottomActionButton, styles.actionButton]}
+                        style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}
                       >
                         {t('action.pin')}
                       </Text>
@@ -253,7 +253,7 @@ class ProductFormScreen extends React.Component {
 
                 <TouchableOpacity onPress={handleEditCancel}>
                   <Text
-                    style={[styles.bottomActionButton, styles.cancelButton]}
+                    style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
                   >
                     {t('action.cancel')}
                   </Text>
@@ -267,7 +267,7 @@ class ProductFormScreen extends React.Component {
                   }
                 >
                   <Text
-                    style={[styles.bottomActionButton, styles.cancelButton]}
+                    style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
                   >
                     {t('action.cancel')}
                   </Text>

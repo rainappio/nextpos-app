@@ -24,6 +24,7 @@ export const withContext = (Component) => {
                   theme={themeContext.theme}
                   themeStyle={themeContext.themeStyle}
                   complexTheme={themeContext.complexTheme}
+                  customMainThemeColor={themeContext.customMainThemeColor}
                   toggleTheme={themeContext.toggleTheme}
                   locale={localeContext}
                   {...this.props} />

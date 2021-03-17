@@ -1,7 +1,7 @@
 import React from 'react'
 import {ScrollView, View, Text} from 'react-native'
 import {Col, Table, TableWrapper} from 'react-native-table-component'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {formatCurrency} from "../actions";
 import {withContext} from "../helpers/contextHelper";
 import {StyledText} from "../components/StyledText";
@@ -12,6 +12,7 @@ const RenderTable = (props) => {
   const orderCount = props.reportData.orderCount
   const isCurrency = props.isCurrency != null ? props.isCurrency : false
   const t = props?.locale?.t
+  const customMainThemeColor = props?.locale?.customMainThemeColor
 
   const zippedData = tableHeaders.map((data, idx) => {
     return [data, isCurrency ? formatCurrency(tableData[idx]) : tableData[idx], orderCount?.[idx]]
@@ -29,18 +30,18 @@ const RenderTable = (props) => {
 
   if (props?.type === 'card') {
     return (
-      <View style={{height: 300, flexWrap: 'wrap', flex: 1, borderColor: mainThemeColor, borderWidth: 1}}>
-        <View style={[styles.sectionBar, {borderColor: mainThemeColor}]}>
+      <View style={{height: 300, flexWrap: 'wrap', flex: 1, borderColor: customMainThemeColor, borderWidth: 1}}>
+        <View style={[styles.sectionBar, {borderColor: customMainThemeColor}]}>
           <View style={[styles.tableCellView, {flex: 1}]}>
-            <Text style={[styles.sectionBarTextSmall]}>{t('order.date')}</Text>
+            <Text style={[styles?.sectionBarTextSmall(customMainThemeColor)]}>{t('order.date')}</Text>
           </View>
 
           <View style={[styles.tableCellView, {justifyContent: 'flex-end', flex: 1}]}>
-            <Text style={styles.sectionBarTextSmall}>{t('shift.totalInvoices')}</Text>
+            <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('shift.totalInvoices')}</Text>
           </View>
 
           <View style={[styles.tableCellView, {justifyContent: 'flex-end', flex: 2}]}>
-            <Text style={styles.sectionBarTextSmall}>{t('amount')}</Text>
+            <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('amount')}</Text>
           </View>
         </View>
         <ScrollView style={{flex: 1}} nestedScrollEnabled>

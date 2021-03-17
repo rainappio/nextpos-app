@@ -3,7 +3,7 @@ import {Text, TouchableOpacity, View, StyleSheet} from 'react-native'
 import {StyledText} from "./StyledText";
 import {LocaleContext} from '../locales/LocaleContext'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {Button} from 'react-native-elements';
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
@@ -25,6 +25,7 @@ import {withNavigation} from 'react-navigation';
 */
 const CalendarEventBase = (props) => {
     const localeContext = useContext(LocaleContext);
+    const {customMainThemeColor} = localeContext
     const timezone = TimeZoneService.getTimeZone()
 
     const [event, setEvent] = useState(props?.event ?? null);
@@ -73,7 +74,7 @@ const CalendarEventBase = (props) => {
 
 
     return (
-        <TouchableOpacity key={event?.id} style={{flexDirection: 'row', borderWidth: 1, borderRadius: 10, borderColor: event?.eventColor === '#fff' ? mainThemeColor : event?.eventColor, margin: 10, maxWidth: 640, alignSelf: 'center', padding: 10}}
+        <TouchableOpacity key={event?.id} style={{flexDirection: 'row', borderWidth: 1, borderRadius: 10, borderColor: event?.eventColor === '#fff' ? customMainThemeColor : event?.eventColor, margin: 10, maxWidth: 640, alignSelf: 'center', padding: 10}}
             onPress={() => {
                 !!props?.closeModal && props?.closeModal()
                 props.navigation.navigate('RostersFormScreen', {
@@ -89,7 +90,7 @@ const CalendarEventBase = (props) => {
                 <FontAwesome5Icon
                     name={event?.eventType === 'ROSTER' ? "business-time" : 'utensils'}
                     size={36}
-                    style={[styles.buttonIconStyle, {color: event?.eventColor === '#fff' ? mainThemeColor : event?.eventColor}]}
+                    style={[styles?.buttonIconStyle(customMainThemeColor), {color: event?.eventColor === '#fff' ? customMainThemeColor : event?.eventColor}]}
                 />
                 <StyledText style={{...props?.theme?.text, marginTop: 10}}>{event?.eventName}</StyledText>
 

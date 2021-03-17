@@ -25,7 +25,7 @@ class ReportsScreen extends React.Component {
 
   render() {
     const {themeStyle} = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     return (
       <ThemeContainer>
@@ -45,7 +45,7 @@ class ReportsScreen extends React.Component {
                   <FontAwesomeIcon
                     name="bar-chart"
                     size={40}
-                    style={[styles.buttonIconStyle]}
+                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
                   />
                 } />
               <View style={styles.dynamicHorizontalPadding(6)} />
@@ -57,7 +57,7 @@ class ReportsScreen extends React.Component {
                   <Icon
                     name="md-time"
                     size={40}
-                    style={[styles.buttonIconStyle]}
+                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
                   />
                 } />
             </View>
@@ -71,7 +71,7 @@ class ReportsScreen extends React.Component {
                   <Icon
                     name="md-trending-up"
                     size={40}
-                    style={[styles.buttonIconStyle]}
+                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
                   />
                 } />
               <View style={styles.dynamicHorizontalPadding(6)} />
@@ -83,7 +83,7 @@ class ReportsScreen extends React.Component {
                   <Icon
                     name="md-today"
                     size={40}
-                    style={[styles.buttonIconStyle]}
+                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
                   />
                 } />
             </View>

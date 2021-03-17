@@ -27,7 +27,7 @@ export class GesturePassword extends Component<Props> {
                 showArrow={false}
                 color={'#1F67B9'}
                 activeColor={'#1F67B9'}
-                warningColor={'red'}
+                warningColor={'#f75336'}
                 warningDuration={0}
                 allowCross={false}
                 gestureAreaLength={this.props?.gestureAreaLength ?? 400}

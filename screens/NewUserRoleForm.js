@@ -30,7 +30,7 @@ class NewUserRoleForm extends React.Component {
       handleDeleteUserRole,
       labels
     } = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     return (
       <View>
@@ -63,7 +63,7 @@ class NewUserRoleForm extends React.Component {
           <TouchableOpacity
             onPress={handleSubmit}
           >
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
               {t('action.save')}
             </Text>
           </TouchableOpacity>
@@ -72,7 +72,7 @@ class NewUserRoleForm extends React.Component {
             <View>
               <TouchableOpacity onPress={handleEditCancel}>
                 <Text
-                  style={[styles.bottomActionButton, styles.cancelButton]}
+                  style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
                 >
                   {t('action.cancel')}
                 </Text>
@@ -83,16 +83,16 @@ class NewUserRoleForm extends React.Component {
               />
             </View>
           ) : (
-            <View>
-              <TouchableOpacity onPress={onCancel}>
-                <Text
-                  style={[styles.bottomActionButton, styles.cancelButton]}
-                >
-                  {t('action.cancel')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
+              <View>
+                <TouchableOpacity onPress={onCancel}>
+                  <Text
+                    style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+                  >
+                    {t('action.cancel')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
         </View>
       </View>
     )

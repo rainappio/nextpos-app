@@ -35,8 +35,8 @@ class TableForm extends React.Component {
   }
 
   render() {
-    const { navigation, handleSubmit, handleDeleteTable, isEdit, initialValues, tableLayout } = this.props
-    const { t } = this.context
+    const {navigation, handleSubmit, handleDeleteTable, isEdit, initialValues, tableLayout} = this.props
+    const {t, customMainThemeColor} = this.context
 
     return (
       <View style={styles.contentContainer}>
@@ -74,19 +74,19 @@ class TableForm extends React.Component {
         <View style={[styles.bottom, styles.horizontalMargin]}>
           {isEdit ? (
             <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('action.update')}
               </Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
-                {t('action.save')}
-              </Text>
-            </TouchableOpacity>
-          )}
+              <TouchableOpacity onPress={handleSubmit}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                  {t('action.save')}
+                </Text>
+              </TouchableOpacity>
+            )}
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
               {t('action.cancel')}
             </Text>
           </TouchableOpacity>

@@ -3,9 +3,9 @@ import {Text, TouchableOpacity, View, StyleSheet} from 'react-native'
 import {StyledText} from "./StyledText";
 import styles from '../styles'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {mainThemeColor} from '../styles';
 import {Button} from 'react-native-elements';
 import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
+import {LocaleContext} from '../locales/LocaleContext'
 
 /*
    Date   : 2020-10-05
@@ -18,12 +18,12 @@ import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
 
 */
 export const BottomMainActionButton = (props) => {
-
+    const {customMainThemeColor} = useContext(LocaleContext)
     return (
         <TouchableOpacity
             onPress={props?.onPress ?? (() => console.warn('no onPress'))}
         >
-            <Text style={[styles.bottomActionButton, styles.actionButton, props?.style]}>
+            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor), props?.style]}>
                 {props?.title ?? 'Submit'}
             </Text>
         </TouchableOpacity>
@@ -31,12 +31,12 @@ export const BottomMainActionButton = (props) => {
 }
 
 export const MainActionButton = (props) => {
-
+    const {customMainThemeColor} = useContext(LocaleContext)
     return (
         <TouchableOpacity
             onPress={props?.onPress ?? (() => console.warn('no onPress'))}
         >
-            <Text style={[styles.bottomActionButton, styles.actionButton, {padding: 10, marginBottom: 0, }, props?.style]}>
+            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor), {padding: 10, marginBottom: 0, }, props?.style]}>
                 {props?.title ?? 'Submit'}
             </Text>
         </TouchableOpacity>
@@ -44,13 +44,13 @@ export const MainActionButton = (props) => {
 }
 
 export const SecondActionButton = (props) => {
-
+    const {customMainThemeColor} = useContext(LocaleContext)
     return (
         <TouchableOpacity
             onPress={props?.onPress ?? (() => console.warn('no onPress'))}
             style={props?.containerStyle}
         >
-            <Text style={props?.style ?? [styles.bottomActionButton, styles.secondActionButton]}>
+            <Text style={props?.style ?? [styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(useContext(LocaleContext))]}>
                 {props?.title ?? 'Submit'}
             </Text>
         </TouchableOpacity>
@@ -58,11 +58,12 @@ export const SecondActionButton = (props) => {
 }
 
 export const MainActionFlexButton = (props) => {
+    const {customMainThemeColor} = useContext(LocaleContext)
 
     return (
         <TouchableOpacity
             onPress={props?.onPress ?? (() => console.warn('no onPress'))}
-            style={styles.flexButton}
+            style={styles?.flexButton(customMainThemeColor)}
         >
             <Text style={styles.flexButtonText}>
                 {props?.title ?? 'Submit'}
@@ -72,11 +73,11 @@ export const MainActionFlexButton = (props) => {
 }
 
 export const DeleteFlexButton = (props) => {
-
+    const {customMainThemeColor} = useContext(LocaleContext)
     return (
         <TouchableOpacity
             onPress={props?.onPress ?? (() => console.warn('no onPress'))}
-            style={[styles.flexButton, {
+            style={[styles?.flexButton(customMainThemeColor), {
                 borderColor: '#f75336',
                 color: '#fff',
                 backgroundColor: '#f75336'

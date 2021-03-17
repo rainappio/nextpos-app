@@ -2,7 +2,7 @@ import React from 'react'
 import {TouchableOpacity, View, Image, Text} from 'react-native'
 import images from '../assets/images'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext"
 import {dateToLocaleString, formatDate, normalizeTimeString} from "../actions"
@@ -274,7 +274,7 @@ class ClockIn extends React.Component {
 
   render() {
     const {client, canClockIn} = this.props
-    const {t, isTablet, themeStyle} = this.context
+    const {t, isTablet, themeStyle, customMainThemeColor} = this.context
     const {timecard, storeLocation, distance} = this.state
 
     const locationBasedService = client.clientSettings.LOCATION_BASED_SERVICE != null ? client.clientSettings.LOCATION_BASED_SERVICE.enabled : false
@@ -308,7 +308,7 @@ class ClockIn extends React.Component {
           <View style={[styles.container, {justifyContent: 'flex-start'}]}>
             <ScreenHeader backNavigation={true} title={t('timeCardTitle')} />
 
-            <View style={{flex: 1, flexDirection: 'row', borderColor: mainThemeColor, borderTopWidth: 1, marginHorizontal: -15}}>
+            <View style={{flex: 1, flexDirection: 'row', borderColor: customMainThemeColor, borderTopWidth: 1, marginHorizontal: -15}}>
               <View style={{flex: 2}}>
                 {(this.state?.timecardUserToken === null) && <View
                   style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
@@ -321,7 +321,7 @@ class ClockIn extends React.Component {
                     />
                   </View>
                   <View style={{flex: 1, justifyContent: 'flex-start', alignItems: 'center'}}>
-                    <View style={{backgroundColor: mainThemeColor, padding: 8, borderRadius: 8}}>
+                    <View style={{backgroundColor: customMainThemeColor, padding: 8, borderRadius: 8}}>
                       <Text style={{color: '#fff', fontWeight: 'bold'}}>{t('enterPasswordMsg')}</Text>
                     </View>
                   </View>
@@ -336,7 +336,7 @@ class ClockIn extends React.Component {
                   {locationBasedService && <View >
                     <View style={[styles.fieldContainer, {marginBottom: 20}]}>
                       <View style={{flex: 2}}>
-                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>{t('currentLocation')}</Text>
+                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>{t('currentLocation')}</Text>
                       </View>
                       <View style={{flex: 3}}>
                         <StyledText style={{alignSelf: 'flex-end', fontSize: 16, marginVertical: 2}}>{text}</StyledText>
@@ -345,7 +345,7 @@ class ClockIn extends React.Component {
 
                     <View style={[styles.fieldContainer, {marginBottom: 20}]}>
                       <View style={{flex: 2}}>
-                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>{t('storeLocation')}</Text>
+                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>{t('storeLocation')}</Text>
                       </View>
                       <View style={{flex: 3}}>
                         <StyledText style={{alignSelf: 'flex-end', fontSize: 16, marginVertical: 2}}>{storeLocation}</StyledText>
@@ -354,7 +354,7 @@ class ClockIn extends React.Component {
 
                     <View style={[styles.fieldContainer, {marginBottom: 20}]}>
                       <View style={{flex: 2}}>
-                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>{t('distance')}</Text>
+                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>{t('distance')}</Text>
                       </View>
                       <View style={{flex: 3}}>
                         <StyledText style={{alignSelf: 'flex-end', fontSize: 16, marginVertical: 2}}>
@@ -367,12 +367,12 @@ class ClockIn extends React.Component {
 
                   {(this.state?.timecardUserToken !== null) && <View style={{flex: 1}}>
                     <View style={styles.sectionTitleContainer}>
-                      <Text style={[styles.sectionTitleText, {color: mainThemeColor, fontSize: 24, fontWeight: 'bold'}]}>{t('timeCardStatus')}</Text>
+                      <Text style={[styles.sectionTitleText, {color: customMainThemeColor, fontSize: 24, fontWeight: 'bold'}]}>{t('timeCardStatus')}</Text>
                     </View>
 
                     <View style={[styles.fieldContainer, {marginBottom: 20, marginTop: 20}]}>
                       <View style={{flex: 2}}>
-                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>{t('timeCardStatus')}</Text>
+                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>{t('timeCardStatus')}</Text>
                       </View>
                       <View style={{flex: 3}}>
                         <StyledText style={{alignSelf: 'flex-end', fontSize: 16, marginVertical: 2}}>{this.renderTimeCardStatus(timecard.timeCardStatus)}</StyledText>
@@ -380,7 +380,7 @@ class ClockIn extends React.Component {
                     </View>
                     <View style={[styles.fieldContainer, {marginBottom: 20}]}>
                       <View style={{flex: 2}}>
-                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>{t('clockInTime')}</Text>
+                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>{t('clockInTime')}</Text>
                       </View>
                       <View style={{flex: 3}}>
                         <StyledText style={{alignSelf: 'flex-end', fontSize: 16, marginVertical: 2}}>{timecard.clockIn != null ? `${formatDate(timecard.clockIn)}` : ''}</StyledText>
@@ -390,7 +390,7 @@ class ClockIn extends React.Component {
                       <View>
                         <View style={[styles.fieldContainer, {marginBottom: 20}]}>
                           <View style={{flex: 2}}>
-                            <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>
+                            <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>
                               {t('clockOutTime')}
                             </Text>
                           </View>
@@ -400,7 +400,7 @@ class ClockIn extends React.Component {
                         </View>
                         <View style={[styles.fieldContainer, {marginBottom: 20}]}>
                           <View style={{flex: 1}}>
-                            <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>
+                            <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>
                               {t('workingHours')}
                             </Text>
                           </View>
@@ -431,12 +431,12 @@ class ClockIn extends React.Component {
               {(this.state?.timecardUserToken !== null) && (
                 <View style={[{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}]}>
                   <View >
-                    <StyledText style={{fontSize: 24, color: mainThemeColor, fontWeight: 'bold'}}>
+                    <StyledText style={{fontSize: 24, color: customMainThemeColor, fontWeight: 'bold'}}>
                       {t('greeting')}, {timecard?.displayName}
                     </StyledText>
                   </View>
                   <TouchableOpacity
-                    style={styles.squareButton}
+                    style={styles?.squareButton(customMainThemeColor)}
                     onPress={
                       timeCardStatus === 'ACTIVE'
                         ? () => this.handleClockOut(`Bearer ${this.state?.timecardUserToken}`)
@@ -456,7 +456,7 @@ class ClockIn extends React.Component {
                     </View>
                   </TouchableOpacity>
                   <View>
-                    <StyledText style={{fontSize: 24, color: mainThemeColor, fontWeight: 'bold'}}>
+                    <StyledText style={{fontSize: 24, color: customMainThemeColor, fontWeight: 'bold'}}>
                       {t(timeCardStatus === 'ACTIVE' ? 'clockOutMsg' : 'clockInMsg')}
                     </StyledText>
                   </View>
@@ -485,7 +485,7 @@ class ClockIn extends React.Component {
               {locationBasedService && <>
                 <View style={[styles.fieldContainer]}>
                   <View style={{flex: 2}}>
-                    <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>{t('currentLocation')}</Text>
+                    <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>{t('currentLocation')}</Text>
                   </View>
                   <View style={{flex: 3}}>
                     <StyledText style={{alignSelf: 'flex-end', fontSize: 16, marginVertical: 2}}>{text}</StyledText>
@@ -494,7 +494,7 @@ class ClockIn extends React.Component {
 
                 <View style={[styles.fieldContainer]}>
                   <View style={{flex: 2}}>
-                    <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>{t('storeLocation')}</Text>
+                    <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>{t('storeLocation')}</Text>
                   </View>
                   <View style={{flex: 3}}>
                     <StyledText style={{alignSelf: 'flex-end', fontSize: 16, marginVertical: 2}}>{storeLocation}</StyledText>
@@ -503,7 +503,7 @@ class ClockIn extends React.Component {
 
                 <View style={[styles.fieldContainer]}>
                   <View style={{flex: 2}}>
-                    <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>{t('distance')}</Text>
+                    <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>{t('distance')}</Text>
                   </View>
                   <View style={{flex: 3}}>
                     <StyledText style={{alignSelf: 'flex-end', fontSize: 16, marginVertical: 2}}>
@@ -522,7 +522,7 @@ class ClockIn extends React.Component {
 
                 <View style={styles.fieldContainer}>
                   <View style={{flex: 2}}>
-                    <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>{t('timeCardStatus')}</Text>
+                    <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>{t('timeCardStatus')}</Text>
                   </View>
                   <View style={{flex: 3}}>
                     <StyledText style={{alignSelf: 'flex-end', fontSize: 16, marginVertical: 2}}>{this.renderTimeCardStatus(timecard.timeCardStatus)}</StyledText>
@@ -530,7 +530,7 @@ class ClockIn extends React.Component {
                 </View>
                 <View style={styles.fieldContainer}>
                   <View style={{flex: 2}}>
-                    <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>{t('clockInTime')}</Text>
+                    <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>{t('clockInTime')}</Text>
                   </View>
                   <View style={{flex: 3}}>
                     <StyledText style={{alignSelf: 'flex-end', fontSize: 16, marginVertical: 2}}>{timecard.clockIn != null ? `${formatDate(timecard.clockIn)}` : ''}</StyledText>
@@ -540,7 +540,7 @@ class ClockIn extends React.Component {
                   <View>
                     <View style={styles.fieldContainer}>
                       <View style={{flex: 2}}>
-                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>
+                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>
                           {t('clockOutTime')}
                         </Text>
                       </View>
@@ -550,7 +550,7 @@ class ClockIn extends React.Component {
                     </View>
                     <View style={styles.fieldContainer}>
                       <View style={{flex: 1}}>
-                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: mainThemeColor}]}>
+                        <Text style={[styles.fieldTitle, {fontSize: 16, marginVertical: 2, color: customMainThemeColor}]}>
                           {t('workingHours')}
                         </Text>
                       </View>
@@ -581,12 +581,12 @@ class ClockIn extends React.Component {
             {(this.state?.timecardUserToken !== null) && (
               <View style={[{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}]}>
                 <View >
-                  <StyledText style={{fontSize: 24, color: mainThemeColor, fontWeight: 'bold'}}>
+                  <StyledText style={{fontSize: 24, color: customMainThemeColor, fontWeight: 'bold'}}>
                     {t('greeting')}, {timecard?.displayName}
                   </StyledText>
                 </View>
                 <TouchableOpacity
-                  style={styles.squareButton}
+                  style={styles?.squareButton(customMainThemeColor)}
                   onPress={
                     timeCardStatus === 'ACTIVE'
                       ? () => this.handleClockOut(`Bearer ${this.state?.timecardUserToken}`)
@@ -606,7 +606,7 @@ class ClockIn extends React.Component {
                   </View>
                 </TouchableOpacity>
                 <View>
-                  <StyledText style={{fontSize: 24, color: mainThemeColor, fontWeight: 'bold'}}>
+                  <StyledText style={{fontSize: 24, color: customMainThemeColor, fontWeight: 'bold'}}>
                     {t(timeCardStatus === 'ACTIVE' ? 'clockOutMsg' : 'clockInMsg')}
                   </StyledText>
                 </View>

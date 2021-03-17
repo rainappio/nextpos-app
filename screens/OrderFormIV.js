@@ -42,7 +42,7 @@ class OrderFormIV extends React.Component {
 
   render() {
     const {product, globalProductOffers} = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     const hasProductOptions = product.productOptions != null && product.productOptions.length > 0
     const lastOptionIndex = product.productOptions != null ? product.productOptions.length : 0
@@ -50,8 +50,8 @@ class OrderFormIV extends React.Component {
     return (
       <View style={styles.fullWidthScreen}>
         <ScreenHeader backNavigation={true}
-                      parentFullScreen={true}
-                      title={`${product.name} ($${product.price})`}
+          parentFullScreen={true}
+          title={`${product.name} ($${product.price})`}
         />
 
         {hasProductOptions && (
@@ -63,68 +63,68 @@ class OrderFormIV extends React.Component {
         )}
 
         {product.productOptions !== undefined &&
-        product.productOptions.map((prdOption, optionIndex) => {
-          const requiredOption = prdOption.required
+          product.productOptions.map((prdOption, optionIndex) => {
+            const requiredOption = prdOption.required
 
-          var ArrForTrueState = []
-          prdOption.optionValues.map((optVal, x) => {
-            ArrForTrueState.push({
-              optionName: prdOption.optionName,
-              optionValue: optVal.value,
-              optionPrice: optVal.price,
-              id: prdOption.versionId + x
+            var ArrForTrueState = []
+            prdOption.optionValues.map((optVal, x) => {
+              ArrForTrueState.push({
+                optionName: prdOption.optionName,
+                optionValue: optVal.value,
+                optionPrice: optVal.price,
+                id: prdOption.versionId + x
+              })
             })
-          })
 
-          return (
-            <View
-              key={prdOption.versionId}
-              style={styles.sectionContainer}
-            >
-              <View style={styles.sectionTitleContainer}>
-                <StyledText style={[styles.sectionTitleText]}>
-                  {prdOption.optionName}
-                </StyledText>
+            return (
+              <View
+                key={prdOption.versionId}
+                style={styles.sectionContainer}
+              >
+                <View style={styles.sectionTitleContainer}>
+                  <StyledText style={[styles.sectionTitleText]}>
+                    {prdOption.optionName}
+                  </StyledText>
+                </View>
+
+                {prdOption.multipleChoice === false ? (
+                  <View>
+                    {prdOption.optionValues.map((optVal, ix) => {
+                      let optionObj = {}
+                      optionObj['optionName'] = prdOption.optionName
+                      optionObj['optionValue'] = optVal.value
+                      optionObj['optionPrice'] = optVal.price
+                      optionObj['id'] = prdOption.id
+
+                      return (
+                        <View key={prdOption.id + ix}>
+                          <Field
+                            name={`productOptions[${optionIndex}]`}
+                            component={RadioItemObjPick}
+                            customValueOrder={optionObj}
+                            optionName={optVal.value}
+                            onCheck={(currentVal, fieldVal) => {
+                              return fieldVal !== undefined && currentVal.optionValue === fieldVal.optionValue
+                            }}
+                            validate={requiredOption ? isRequired : null}
+                          />
+                        </View>
+                      )
+                    })}
+                  </View>
+                ) : (
+                    <View>
+                      <Field
+                        name={`productOptions[${optionIndex}]`}
+                        component={CheckBoxGroupObjPick}
+                        customarr={ArrForTrueState}
+                        validate={requiredOption ? isRequired : null}
+                      />
+                    </View>
+                  )}
               </View>
-
-              {prdOption.multipleChoice === false ? (
-                <View>
-                  {prdOption.optionValues.map((optVal, ix) => {
-                    let optionObj = {}
-                    optionObj['optionName'] = prdOption.optionName
-                    optionObj['optionValue'] = optVal.value
-                    optionObj['optionPrice'] = optVal.price
-                    optionObj['id'] = prdOption.id
-
-                    return (
-                      <View key={prdOption.id + ix}>
-                        <Field
-                          name={`productOptions[${optionIndex}]`}
-                          component={RadioItemObjPick}
-                          customValueOrder={optionObj}
-                          optionName={optVal.value}
-                          onCheck={(currentVal, fieldVal) => {
-                            return fieldVal !== undefined && currentVal.optionValue === fieldVal.optionValue
-                          }}
-                          validate={requiredOption ? isRequired : null}
-                        />
-                      </View>
-                    )
-                  })}
-                </View>
-              ) : (
-                <View>
-                  <Field
-                    name={`productOptions[${optionIndex}]`}
-                    component={CheckBoxGroupObjPick}
-                    customarr={ArrForTrueState}
-                    validate={requiredOption ? isRequired : null}
-                  />
-                </View>
-              )}
-            </View>
-          )
-        })}
+            )
+          })}
 
         <View style={styles.sectionTitleContainer}>
           <StyledText style={[styles.sectionTitleText]}>
@@ -202,7 +202,7 @@ class OrderFormIV extends React.Component {
             <TouchableOpacity
               onPress={this.props.handleSubmit}
             >
-              <Text style={[[styles.bottomActionButton, styles.actionButton]]}>
+              <Text style={[[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]]}>
                 {t('action.save')}
               </Text>
             </TouchableOpacity>
@@ -214,7 +214,7 @@ class OrderFormIV extends React.Component {
                 this.props.navigation.goBack()
               }}
             >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>{t('action.cancel')}</Text>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('action.cancel')}</Text>
             </TouchableOpacity>
           </View>
         </View>

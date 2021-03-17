@@ -7,7 +7,7 @@ import {LocaleContext} from '../locales/LocaleContext'
 import AddBtn from '../components/AddBtn'
 import {getCurrentClient} from '../actions/client'
 import LoadingScreen from "./LoadingScreen"
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
@@ -134,7 +134,7 @@ class MemberFormScreen extends React.Component {
 
 
     render() {
-        const {t, themeStyle} = this.context
+        const {t, themeStyle, customMainThemeColor} = this.context
         const {handleSubmit} = this.props
 
 
@@ -254,7 +254,7 @@ class MemberFormScreen extends React.Component {
                                                         return (
                                                             <TouchableOpacity
                                                                 onPress={() => this.setState({modalVisible: true, modalOrderId: order?.orderId})}
-                                                                style={[styles.tableRowContainer, {borderColor: mainThemeColor, borderWidth: 1, borderRadius: 10, margin: 5}]}>
+                                                                style={[styles.tableRowContainer, {borderColor: customMainThemeColor, borderWidth: 1, borderRadius: 10, margin: 5}]}>
 
                                                                 <View style={[styles.tableCellView, {flex: 1}]}>
                                                                     <StyledText>{formatDate(order.orderDate)}</StyledText>
@@ -308,7 +308,7 @@ class MemberFormScreen extends React.Component {
                                         this.handleSubmit(data, this.state?.data?.id)
                                     })}
                                 >
-                                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                                         {t('action.save')}
                                     </Text>
 
@@ -318,7 +318,7 @@ class MemberFormScreen extends React.Component {
                                         this.props.navigation.goBack()
                                     }}
                                 >
-                                    <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                                         {t('action.cancel')}
                                     </Text>
                                 </TouchableOpacity>

@@ -1,7 +1,7 @@
 import React from "react";
 import {LocaleContext} from "../locales/LocaleContext";
 import {Text, TouchableOpacity, View, KeyboardAvoidingView, Animated} from "react-native";
-import styles, {mainThemeColor} from "../styles";
+import styles from "../styles";
 import {Field, reduxForm} from "redux-form";
 import InputText from "../components/InputText";
 import {isEmail, isRequired, isvalidPassword} from "../validators";
@@ -31,7 +31,7 @@ class ResetClientPasswordScreen extends React.Component {
 
   render() {
     const {showPasscodeField, showResetPasswordField, handleSubmit, handleVerifyPasscode, handleResetPassword} = this.props
-    const {t, isTablet} = this.context
+    const {t, isTablet, customMainThemeColor} = this.context
     if (isTablet) {
       return (
         <ThemeContainer>
@@ -89,7 +89,7 @@ class ResetClientPasswordScreen extends React.Component {
                         <TouchableOpacity
                           style={[{
                             borderRadius: 4,
-                            backgroundColor: mainThemeColor,
+                            backgroundColor: customMainThemeColor,
                             alignItems: 'center',
                             height: '100%',
                             flexDirection: 'row',
@@ -167,13 +167,13 @@ class ResetClientPasswordScreen extends React.Component {
 
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate('Login')}
-                  style={[styles.flexButtonSecondAction, {marginRight: 5}]}
+                  style={[styles?.flexButtonSecondAction(customMainThemeColor), {marginRight: 5}]}
                 >
-                  <Text style={styles.flexButtonSecondActionText}>
+                  <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
                     {t('action.cancel')}
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={showResetPasswordField ? () => handleResetPassword(this.state.clientEmail, this.state.resetPassword) : showPasscodeField ? () => handleVerifyPasscode(this.state.clientEmail, this.state.passcode) : handleSubmit} style={[styles.flexButton, , {marginLeft: 5}]}>
+                <TouchableOpacity onPress={showResetPasswordField ? () => handleResetPassword(this.state.clientEmail, this.state.resetPassword) : showPasscodeField ? () => handleVerifyPasscode(this.state.clientEmail, this.state.passcode) : handleSubmit} style={[styles?.flexButton(customMainThemeColor), {marginLeft: 5}]}>
                   <Text style={styles.flexButtonText}>
                     {showResetPasswordField ? t('changePassword') : showPasscodeField ? t('action.confirm') : t('action.submit')}
                   </Text>
@@ -240,7 +240,7 @@ class ResetClientPasswordScreen extends React.Component {
                         <TouchableOpacity
                           style={[{
                             borderRadius: 4,
-                            backgroundColor: mainThemeColor,
+                            backgroundColor: customMainThemeColor,
                             alignItems: 'center',
                             height: '100%',
                             flexDirection: 'row',
@@ -311,12 +311,12 @@ class ResetClientPasswordScreen extends React.Component {
               <View style={styles.bottom}>
                 <TouchableOpacity
                   onPress={showResetPasswordField ? () => handleResetPassword(this.state.clientEmail, this.state.resetPassword) : showPasscodeField ? () => handleVerifyPasscode(this.state.clientEmail, this.state.passcode) : handleSubmit}>
-                  <Text style={[styles.bottomActionButton, styles.actionButton]}>{showResetPasswordField ? t('changePassword') : showPasscodeField ? t('action.confirm') : t('action.submit')}</Text>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{showResetPasswordField ? t('changePassword') : showPasscodeField ? t('action.confirm') : t('action.submit')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate('Login')}
                 >
-                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                     {t('action.cancel')}
                   </Text>
                 </TouchableOpacity>

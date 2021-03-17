@@ -47,7 +47,7 @@ class CreateAccFormScreen extends React.Component {
 
   render() {
     const {handleSubmit} = this.props
-    const {t, isTablet} = this.context
+    const {t, isTablet, customMainThemeColor} = this.context
 
     return (
       <ThemeKeyboardAwareScrollView>
@@ -63,7 +63,7 @@ class CreateAccFormScreen extends React.Component {
 
           <View style={{minHeight: 200, paddingHorizontal: isTablet ? '15%' : 0}}>
 
-            <StyledText style={styles.welcomeText}>Let's Get Started!</StyledText>
+            <StyledText style={styles?.welcomeText(this.context)}>Let's Get Started!</StyledText>
             <View style={{paddingVertical: 5}}>
               <Field
                 name="clientName"
@@ -207,13 +207,13 @@ class CreateAccFormScreen extends React.Component {
 
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Intro')}
-              style={[styles.flexButtonSecondAction, {marginRight: 5}]}
+              style={[styles?.flexButtonSecondAction(customMainThemeColor), {marginRight: 5}]}
             >
-              <Text style={styles.flexButtonSecondActionText}>
+              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
                 {t('action.cancel')}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleSubmit} style={[styles.flexButton, , {marginLeft: 5}]}>
+            <TouchableOpacity onPress={handleSubmit} style={[styles?.flexButton(customMainThemeColor), , {marginLeft: 5}]}>
               <Text style={styles.flexButtonText}>
                 {t('signUp')}
               </Text>
@@ -222,14 +222,14 @@ class CreateAccFormScreen extends React.Component {
 
           {isTablet || <View style={[styles.bottom]}>
             <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('signUp')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Intro')}
             >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                 {t('action.cancel')}
               </Text>
             </TouchableOpacity>

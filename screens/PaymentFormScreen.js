@@ -46,7 +46,7 @@ class PaymentFormScreen extends React.Component {
 
   render() {
     const {order, navigation, handleSubmit, globalorderoffers, isSplitting} = this.props
-    const {t, appType} = this.context
+    const {t, appType, customMainThemeColor} = this.context
 
     return (
       <ThemeKeyboardAwareScrollView>
@@ -157,7 +157,7 @@ class PaymentFormScreen extends React.Component {
 
           <View style={[styles.bottom, styles.horizontalMargin]}>
             <TouchableOpacity onPress={() => handleSubmit()}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('payOrder')}
               </Text>
             </TouchableOpacity>
@@ -167,7 +167,7 @@ class PaymentFormScreen extends React.Component {
                 onPress={() => !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()}
               >
                 <Text
-                  style={[styles.bottomActionButton, styles.cancelButton]}
+                  style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
                 >
                   {t('action.cancel')}
                 </Text>

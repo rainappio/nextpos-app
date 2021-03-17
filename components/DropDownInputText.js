@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {InputAccessoryView, Keyboard, Platform, Text, TextInput, TouchableOpacity, View} from 'react-native'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {withContext} from "../helpers/contextHelper";
 import DropDownPicker from 'react-native-dropdown-picker';
 import IonIcon from 'react-native-vector-icons/Ionicons'
@@ -70,12 +70,13 @@ const DropDownInputText = ({
                     inputAccessoryViewID={name}
                     {...rest}
                     style={[
-                        styles.rootInput,
+
 
                         {height: height},
                         (alignLeft && {textAlign: 'right'}),
                         themeStyle,
-                        styles.withBorder,
+                        styles?.withBorder(rest?.locale),
+                        styles?.rootInput(rest?.locale),
                         extraStyle,
                     ]}
                 />
@@ -89,7 +90,7 @@ const DropDownInputText = ({
                             <Text
                                 style={[
                                     styles.margin_15,
-                                    {fontSize: 16, fontWeight: 'bold', color: mainThemeColor}
+                                    {fontSize: 16, fontWeight: 'bold', color: rest?.locale?.customMainThemeColor}
                                 ]}
                             >
                                 Done

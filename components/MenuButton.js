@@ -11,11 +11,12 @@ import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 class MenuButton extends Component {
 
   render() {
-    const {onPress, icon, title, theme, themeStyle, route} = this.props
+    const {onPress, icon, title, theme, themeStyle, route, customMainThemeColor} = this.props
     const restrictedFeatures = this.props?.client?.clientSubscriptionAccess?.restrictedFeatures
+
     return (
       <View style={styles.flex(1)}>
-        <TouchableOpacity style={[styles.mainSquareButton, styles.withBorder, themeStyle]} onPress={onPress}>
+        <TouchableOpacity style={[styles.mainSquareButton, styles?.withBorder(this.props.locale), themeStyle, styles?.customBorderAndBackgroundColor(this.props.locale)]} onPress={onPress}>
           <View style={{justifyContent: 'center', alignItem: 'center'}}>
             {icon}
             <StyledText style={[styles.buttonText]}>{title}</StyledText>
@@ -24,7 +25,7 @@ class MenuButton extends Component {
             <MCIcon
               name="professional-hexagon"
               size={32}
-              style={[styles.buttonIconStyle]}
+              style={[styles?.buttonIconStyle(customMainThemeColor)]}
             />
           </View>}
         </TouchableOpacity>

@@ -1,7 +1,7 @@
 import {StyledText} from "../components/StyledText";
 import {FlatList, Text, TouchableOpacity, View} from "react-native";
 import React from "react";
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import ScreenHeader from "../components/ScreenHeader";
 import SockJsClient from 'react-stomp';
 import {connect} from "react-redux";
@@ -155,6 +155,7 @@ class OrderDisplayScreen extends React.Component {
   render() {
     const {client, locale} = this.props
     const t = locale.t
+    const customMainThemeColor = locale?.customMainThemeColor
 
     const webSocketHost = `${apiRoot}/ws`
 
@@ -195,7 +196,7 @@ class OrderDisplayScreen extends React.Component {
                 <View style={{marginRight: 8}}>
                   <OptionModal
                     tabletView
-                    icon={<MaterialCommunityIcons name="filter-variant" size={32} color={mainThemeColor} />}
+                    icon={<MaterialCommunityIcons name="filter-variant" size={32} color={customMainThemeColor} />}
                     toggleModal={(flag) => this.setState({isShowModal: flag})}
                     isShowModal={this.state?.isShowModal}>
                     <View >
@@ -204,7 +205,7 @@ class OrderDisplayScreen extends React.Component {
                         paddingVertical: 8,
                         alignItems: 'center'
                       }}>
-                        <Text style={{marginLeft: 10, color: mainThemeColor, fontSize: 16, fontWeight: 'bold'}}>{t('selectWorkingArea')}</Text>
+                        <Text style={{marginLeft: 10, color: customMainThemeColor, fontSize: 16, fontWeight: 'bold'}}>{t('selectWorkingArea')}</Text>
                       </View>
                       <View style={{
                         flexDirection: 'row',
@@ -333,7 +334,7 @@ class OrderDisplayScreen extends React.Component {
               <View style={styles.sectionTitleContainer}>
                 <StyledText style={styles.sectionTitleText}>{t('totalOrders')}: {Object.keys(this.state.orders).reduce((accumulator, currentValue, currentIndex, array) => {return (accumulator + (this.state?.selectedLabels.has(currentValue) ? this.state.orders[`${currentValue}`]?.length : 0))}, 0)}</StyledText>
               </View>
-              <View style={{borderBottomWidth: 1, borderColor: mainThemeColor, paddingBottom: 10, flexDirection: 'row'}}>
+              <View style={{borderBottomWidth: 1, borderColor: customMainThemeColor, paddingBottom: 10, flexDirection: 'row'}}>
                 {renderWorkingAreas.map((workingArea, index) => {
                   let isSelected = index === this.state?.selectedLabelIndex
                   return (
@@ -342,9 +343,9 @@ class OrderDisplayScreen extends React.Component {
                         this.setState({selectedLabelIndex: index})
                         this.viewPagerRef.setPage(index)
                       }}
-                      style={[{padding: 10, borderRadius: 20, marginHorizontal: 5}, isSelected ? {backgroundColor: mainThemeColor, } : {borderColor: mainThemeColor, borderWidth: 1}]}
+                      style={[{padding: 10, borderRadius: 20, marginHorizontal: 5}, isSelected ? {backgroundColor: customMainThemeColor, } : {borderColor: customMainThemeColor, borderWidth: 1}]}
                     >
-                      <Text style={[styles.sectionBarText, isSelected ? {color: '#fff'} : {color: mainThemeColor}]}>{workingArea === 'noWorkingArea' ? t('noWorkingArea') : workingArea}</Text>
+                      <Text style={[styles?.sectionBarText(customMainThemeColor), isSelected ? {color: '#fff'} : {color: customMainThemeColor}]}>{workingArea === 'noWorkingArea' ? t('noWorkingArea') : workingArea}</Text>
                     </TouchableOpacity>
                   )
 
@@ -415,7 +416,7 @@ class OrderDisplayScreen extends React.Component {
                                     </View>
                                     <View>
                                       <View style={{marginBottom: 5, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
-                                        <View style={{width: 16, height: 16, borderRadius: 16, marginRight: 8, backgroundColor: (new Date() - new Date(item?.modifiedDate ?? new Date())) > 1800000 ? 'red' : '#86bf20'}}></View>
+                                        <View style={{width: 16, height: 16, borderRadius: 16, marginRight: 8, backgroundColor: (new Date() - new Date(item?.modifiedDate ?? new Date())) > 1800000 ? '#f75336' : '#86bf20'}}></View>
                                         <StyledText>{normalizeTimeString(item?.modifiedDate ?? new Date(), 'HH:mm:ss')}</StyledText>
                                       </View>
                                       <TouchableOpacity
@@ -423,7 +424,7 @@ class OrderDisplayScreen extends React.Component {
                                           this.prepareLineItem(item.orderId, item.lineItemId)
                                         }}
                                       >
-                                        <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.prepare')}</Text>
+                                        <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('action.prepare')}</Text>
                                       </TouchableOpacity>
                                     </View>
                                   </View>

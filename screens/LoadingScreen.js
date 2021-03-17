@@ -1,4 +1,4 @@
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {ActivityIndicator, View} from 'react-native'
 import React from 'react'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -14,7 +14,8 @@ class LoadingScreen extends React.Component {
 
   render() {
     const {theme, themeStyle} = this.props
-    const spinColor = theme === 'light' ? '#ccc' : mainThemeColor
+    const {customMainThemeColor} = this.context
+    const spinColor = customMainThemeColor
     return (
       <View style={[styles.mainContainer, {justifyContent: 'center'}, themeStyle]}>
         <ActivityIndicator size="small" color={spinColor} />

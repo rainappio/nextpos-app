@@ -52,7 +52,7 @@ class CategoryCustomizeScreen extends React.Component {
       handleSubmit,
     } = this.props
 
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     return (
       // scroll bar in the center issue: https://github.com/facebook/react-native/issues/26610
@@ -131,14 +131,14 @@ class CategoryCustomizeScreen extends React.Component {
 
           <View style={[styles.bottom, styles.horizontalMargin]}>
             <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('action.save')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
               this.props.navigation.navigate('ProductsOverview')
             }}>
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                 {t('action.cancel')}
               </Text>
             </TouchableOpacity>

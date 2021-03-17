@@ -214,7 +214,7 @@ class EinvoiceEditScreen extends React.Component {
     }
 
     render() {
-        const {t} = this.context
+        const {t, customMainThemeColor} = this.context
         const {handleSubmit} = this.props
 
 
@@ -413,13 +413,13 @@ class EinvoiceEditScreen extends React.Component {
                         <TouchableOpacity onPress={handleSubmit(data => {
                             this.handleSubmit(data, !!this.state.data)
                         })}>
-                            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                                 {t('action.save')}
                             </Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                                 {t('action.cancel')}
                             </Text>
                         </TouchableOpacity>

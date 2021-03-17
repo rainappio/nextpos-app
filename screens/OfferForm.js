@@ -4,7 +4,7 @@ import {Platform, Text, TouchableOpacity, View} from "react-native";
 import {isRequired} from "../validators";
 import InputText from "../components/InputText";
 import {LocaleContext} from "../locales/LocaleContext";
-import styles, {mainThemeColor} from "../styles";
+import styles from "../styles";
 import RNSwitch from "../components/RNSwitch";
 import DeleteBtn from "../components/DeleteBtn";
 import RenderDateTimePicker from "../components/DateTimePicker";
@@ -138,7 +138,7 @@ class OfferForm extends React.Component {
       handleActivate,
       handleDeactivate
     } = this.props;
-    const {t} = this.context;
+    const {t, customMainThemeColor} = this.context;
     const {appliesToAllProducts, products} = this.state;
 
     const offerTypes = Object.keys(this.state.offerTypes).map(key => this.state.offerTypes[key].label)
@@ -276,7 +276,7 @@ class OfferForm extends React.Component {
                   <AntDesignIcon
                     name={"pluscircle"}
                     size={22}
-                    color={mainThemeColor}
+                    color={customMainThemeColor}
                     style={[{transform: [{rotateY: "180deg"}], }, styles.justifyRight]}
                     onPress={() =>
                       this.props.navigation.navigate("ProductsOverviewforOffer", {
@@ -367,7 +367,7 @@ class OfferForm extends React.Component {
 
         <View style={[styles.bottom, styles.horizontalMargin]}>
           <TouchableOpacity onPress={handleSubmit}>
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
               {t("action.save")}
             </Text>
           </TouchableOpacity>
@@ -378,7 +378,7 @@ class OfferForm extends React.Component {
                 <TouchableOpacity
                   onPress={() => handleActivate(initialValues.offerId)}
                 >
-                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                     {t("action.activate")}
                   </Text>
                 </TouchableOpacity>
@@ -386,7 +386,7 @@ class OfferForm extends React.Component {
                   <TouchableOpacity
                     onPress={() => handleDeactivate(initialValues.offerId)}
                   >
-                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                       {t("action.deactivate")}
                     </Text>
                   </TouchableOpacity>
@@ -395,7 +395,7 @@ class OfferForm extends React.Component {
           )}
 
           <TouchableOpacity onPress={handleEditCancel}>
-            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
               {t("action.cancel")}
             </Text>
           </TouchableOpacity>

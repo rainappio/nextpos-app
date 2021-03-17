@@ -5,7 +5,7 @@ import {Accordion, List} from '@ant-design/react-native'
 import {getTableLayouts} from '../actions'
 import {MainActionButton} from '../components/ActionButtons'
 import AddBtn from '../components/AddBtn'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import {NavigationEvents} from "react-navigation";
@@ -69,7 +69,7 @@ class TableLayouts extends React.Component {
           <MaterialIcon
             name="edit"
             size={22}
-            style={[styles.listPanelIcon]}
+            style={[{color: this.context?.customMainThemeColor}]}
             onPress={() => {
               this.props.navigation.navigate('TableLayoutEdit', {
                 layoutId: layoutId

@@ -101,11 +101,11 @@ class ShiftHistory extends React.Component {
 
   render() {
     const {isLoading, haveData, shifts} = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveData) {
       return (
@@ -119,8 +119,8 @@ class ShiftHistory extends React.Component {
               }}
             />
             <ScreenHeader backNavigation={true}
-                          parentFullScreen={true}
-                          title={t('shiftHistoryTitle')}
+              parentFullScreen={true}
+              title={t('shiftHistoryTitle')}
             />
 
             <MonthPicker
@@ -130,20 +130,20 @@ class ShiftHistory extends React.Component {
                 this.setState({currentDate: date, selectedFilter: selectedFilter})
 
                 this.props.getShifts(date.format('YYYY-MM-DD'))
-              }}/>
+              }} />
 
             <View style={{flex: 5}}>
               <View style={[styles.sectionBar]}>
                 <View style={{flex: 3}}>
-                  <Text style={styles.sectionBarTextSmall}>{t('shiftStartDate')}</Text>
+                  <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('shiftStartDate')}</Text>
                 </View>
 
                 <View style={{flex: 1}}>
-                  <Text style={[styles.sectionBarTextSmall]}>{t('shiftTotal')}</Text>
+                  <Text style={[styles?.sectionBarTextSmall(customMainThemeColor)]}>{t('shiftTotal')}</Text>
                 </View>
 
                 <View style={{flex: 2, alignItems: 'flex-end'}}>
-                  <Text style={[styles.sectionBarTextSmall]}>{t('shiftStatus')}</Text>
+                  <Text style={[styles?.sectionBarTextSmall(customMainThemeColor)]}>{t('shiftStatus')}</Text>
                 </View>
               </View>
 
@@ -157,7 +157,7 @@ class ShiftHistory extends React.Component {
                     <StyledText style={styles.messageBlock}>{t('order.noOrder')}</StyledText>
                   </View>
                 }
-                //onScroll={this.handleScroll}
+              //onScroll={this.handleScroll}
               />
             </View>
           </View>

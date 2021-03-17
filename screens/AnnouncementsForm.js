@@ -5,7 +5,7 @@ import DeleteBtn from '../components/DeleteBtn'
 import InputText from '../components/InputText'
 import RenderPureCheckBox from '../components/rn-elements/PureCheckBox'
 import {isRequired} from '../validators'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import {withContext} from "../helpers/contextHelper";
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -52,7 +52,7 @@ class AnnouncementsForm extends React.Component {
       themeStyle
     } = this.props
 
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     const iconsArr = [
       {label: 'ios-attach', value: 'ios-attach'},
@@ -88,7 +88,7 @@ class AnnouncementsForm extends React.Component {
           </View>
         </View>
 
-        <View style={[styles.textAreaContainer, themeStyle, styles.withBorder, {height: 250}]}>
+        <View style={[styles.textAreaContainer, themeStyle, styles?.withBorder(this.context), {height: 250}]}>
           <Field
             component={InputText}
             name="markdownContent"
@@ -103,14 +103,14 @@ class AnnouncementsForm extends React.Component {
 
         <View style={styles.bottom}>
           <TouchableOpacity onPress={handleSubmit}>
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
               {t('action.save')}
             </Text>
           </TouchableOpacity>
 
           {isEdit ? (
             <TouchableOpacity onPress={handleEditCancel}>
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                 {t('action.cancel')}
               </Text>
             </TouchableOpacity>
@@ -118,7 +118,7 @@ class AnnouncementsForm extends React.Component {
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Announcements')}
               >
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                   {t('action.cancel')}
                 </Text>
               </TouchableOpacity>

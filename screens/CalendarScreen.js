@@ -2,7 +2,7 @@ import React from 'react'
 import {View, Text, ScrollView, TouchableOpacity, Alert} from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import MenuButton from "../components/MenuButton";
@@ -203,7 +203,7 @@ class CalendarScreen extends React.Component {
 
     render() {
         const {themeStyle, handleSubmit} = this.props
-        const {t, isTablet} = this.context
+        const {t, isTablet, customMainThemeColor} = this.context
         const timezone = TimeZoneService.getTimeZone()
 
 
@@ -224,7 +224,7 @@ class CalendarScreen extends React.Component {
                             <View style={{flexDirection: 'row'}}>
                                 <View style={{marginRight: 8}}>
                                     <OptionModal
-                                        icon={<MaterialCommunityIcons name="filter-variant" size={32} color={mainThemeColor} />}
+                                        icon={<MaterialCommunityIcons name="filter-variant" size={32} color={customMainThemeColor} />}
                                         toggleModal={(flag) => this.setState({isShowModal: flag})}
                                         isShowModal={this.state?.isShowModal}>
                                         <View style={{maxWidth: 640}}>
@@ -233,14 +233,14 @@ class CalendarScreen extends React.Component {
                                                     onPress={() => {
                                                         this.setState({searchTypeIndex: 0})
                                                     }}
-                                                    style={[{flex: 1, borderWidth: 1, borderColor: mainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginRight: 5}, (this.state?.searchTypeIndex === 0 && {backgroundColor: mainThemeColor})]}>
+                                                    style={[{flex: 1, borderWidth: 1, borderColor: customMainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginRight: 5}, (this.state?.searchTypeIndex === 0 && {backgroundColor: customMainThemeColor})]}>
                                                     <StyledText>{t('calendar.roster')}</StyledText>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity
                                                     onPress={() => {
                                                         this.setState({searchTypeIndex: 1})
                                                     }}
-                                                    style={[{flex: 1, borderWidth: 1, borderColor: mainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginLeft: 5}, (this.state?.searchTypeIndex === 1 && {backgroundColor: mainThemeColor})]}>
+                                                    style={[{flex: 1, borderWidth: 1, borderColor: customMainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginLeft: 5}, (this.state?.searchTypeIndex === 1 && {backgroundColor: customMainThemeColor})]}>
                                                     <StyledText>{t('calendar.reservation')}</StyledText>
                                                 </TouchableOpacity>
 
@@ -273,9 +273,9 @@ class CalendarScreen extends React.Component {
                                                     }}
                                                     {...{
                                                         tabsContainerStyle: {width: '100%'},
-                                                        tabStyle: {borderColor: mainThemeColor, width: '100%', backgroundColor: themeStyle.backgroundColor},
-                                                        tabTextStyle: {color: mainThemeColor},
-                                                        activeTabStyle: {backgroundColor: mainThemeColor}
+                                                        tabStyle: {borderColor: customMainThemeColor, width: '100%', backgroundColor: themeStyle.backgroundColor},
+                                                        tabTextStyle: {color: customMainThemeColor},
+                                                        activeTabStyle: {backgroundColor: customMainThemeColor}
                                                     }}
                                                 />
                                             </View>
@@ -285,7 +285,7 @@ class CalendarScreen extends React.Component {
                                                     paddingVertical: 8,
                                                     alignItems: 'center'
                                                 }}>
-                                                    <Text style={{marginLeft: 10, color: mainThemeColor, fontSize: 16, fontWeight: 'bold'}}>{t('selectWorkingArea')}</Text>
+                                                    <Text style={{marginLeft: 10, color: customMainThemeColor, fontSize: 16, fontWeight: 'bold'}}>{t('selectWorkingArea')}</Text>
                                                 </View>
                                                 <View style={{
                                                     flexDirection: 'row',
@@ -378,7 +378,7 @@ class CalendarScreen extends React.Component {
                                         {data: null, users: this.state?.users, refreshScreen: () => this.refreshScreen(), isManager: this.props?.currentUser?.roles?.includes('MANAGER')})}
                                 >
                                     <View>
-                                        <Icon name="add" size={32} color={mainThemeColor} />
+                                        <Icon name="add" size={32} color={customMainThemeColor} />
                                     </View>
                                 </TouchableOpacity>}
 
@@ -398,7 +398,7 @@ class CalendarScreen extends React.Component {
                     >
                         <View style={[themeStyle, {maxWidth: 640, alignSelf: 'center', maxHeight: '70%', width: '100%', borderRadius: 16, paddingBottom: 8}]}>
                             <View style={[styles.tableRowContainer, {justifyContent: 'center'}]}>
-                                <Text style={[styles.announcementTitle]}>{moment(this.state?.selectedDate ?? new Date()).tz(timezone).format("YYYY-MM-DD")}</Text>
+                                <Text style={[styles?.announcementTitle(customMainThemeColor)]}>{moment(this.state?.selectedDate ?? new Date()).tz(timezone).format("YYYY-MM-DD")}</Text>
                             </View>
                             <ScrollView >
                                 {this.state?.modalTasks?.map((task) => {
@@ -520,14 +520,14 @@ class CalendarScreen extends React.Component {
                                                                     this.setState({selectedDate: date?.dateString})
                                                                     task?.length > 0 && this.toggleRosterFormModal(task, true)
                                                                 }}
-                                                                style={{borderWidth: 1, borderColor: (!event?.eventColor || event?.eventColor === '#fff') ? mainThemeColor : event?.eventColor, backgroundColor: event?.eventColor ?? undefined, margin: 5, marginTop: 0, borderRadius: 5}}>
+                                                                style={{borderWidth: 1, borderColor: (!event?.eventColor || event?.eventColor === '#fff') ? customMainThemeColor : event?.eventColor, backgroundColor: event?.eventColor ?? undefined, margin: 5, marginTop: 0, borderRadius: 5}}>
                                                                 <Text style={{
                                                                     color: '#454545',
                                                                     textAlign: 'center',
                                                                 }}
                                                                     numberOfLines={1}
                                                                 >
-                                                                    {event?.eventRepeat === 'WEEKLY' && <Ionicons name="copy" color={mainThemeColor} />} {event?.eventName?.slice(0, 2)} {i18nMomentFrom} ({resourcesCount})
+                                                                    {event?.eventRepeat === 'WEEKLY' && <Ionicons name="copy" color={customMainThemeColor} />} {event?.eventName?.slice(0, 2)} {i18nMomentFrom} ({resourcesCount})
                                                                 </Text>
                                                             </TouchableOpacity> :
                                                             <TouchableOpacity
@@ -535,7 +535,7 @@ class CalendarScreen extends React.Component {
                                                                     this.setState({selectedDate: date?.dateString})
                                                                     task?.length > 0 && this.toggleRosterFormModal(task, true)
                                                                 }}
-                                                                style={{borderWidth: 1, borderColor: (!event?.eventColor || event?.eventColor === '#fff') ? mainThemeColor : event?.eventColor, backgroundColor: event?.eventColor ?? undefined, marginBottom: 5, borderRadius: 5}}>
+                                                                style={{borderWidth: 1, borderColor: (!event?.eventColor || event?.eventColor === '#fff') ? customMainThemeColor : event?.eventColor, backgroundColor: event?.eventColor ?? undefined, marginBottom: 5, borderRadius: 5}}>
                                                                 <Text style={{
                                                                     color: '#454545',
                                                                     textAlign: 'center',

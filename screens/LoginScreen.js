@@ -76,7 +76,7 @@ class LoginScreen extends React.Component {
 
   render() {
     const {handleSubmit, handleLoginAs, loginSuccess} = this.props
-    const {t, isTablet} = this.context
+    const {t, isTablet, customMainThemeColor} = this.context
     if (isTablet) {
       return (
         <ThemeKeyboardAwareScrollView>
@@ -94,7 +94,7 @@ class LoginScreen extends React.Component {
                   />
                 </View>
 
-                <StyledText style={styles.welcomeText}>{t('loginTitle')}</StyledText>
+                <StyledText style={styles?.welcomeText(this.context)}>{t('loginTitle')}</StyledText>
                 <View>
                   <View style={{marginBottom: 16}}>
                     <Field
@@ -124,7 +124,7 @@ class LoginScreen extends React.Component {
                   <TouchableOpacity
                     onPress={() => handleLoginAs()}
                   >
-                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                       {t('loginAs', {username: this.state.clientUsername})}
                     </Text>
                   </TouchableOpacity>
@@ -136,14 +136,14 @@ class LoginScreen extends React.Component {
                     handleSubmit()
                   }}
                 >
-                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                     {t('login')}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate('Intro')}
                 >
-                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                     {t('action.cancel')}
                   </Text>
                 </TouchableOpacity>
@@ -151,7 +151,7 @@ class LoginScreen extends React.Component {
                 <TouchableOpacity onPress={() => {
                   this.props.navigation.navigate('ResetClientPassword')
                 }}>
-                  <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                     {t('forgotPwd')}
                   </Text>
                 </TouchableOpacity>
@@ -159,9 +159,9 @@ class LoginScreen extends React.Component {
             </Animated.View>}
             <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
               <View style={{flex: 1, justifyContent: 'center'}}>
-                <StyledText style={styles.welcomeText}>Simplify</StyledText>
-                <StyledText style={styles.welcomeText}>Your</StyledText>
-                <StyledText style={styles.welcomeText}>Selling</StyledText>
+                <StyledText style={styles?.welcomeText(this.context)}>Simplify</StyledText>
+                <StyledText style={styles?.welcomeText(this.context)}>Your</StyledText>
+                <StyledText style={styles?.welcomeText(this.context)}>Selling</StyledText>
               </View>
             </View>
           </View>
@@ -184,7 +184,7 @@ class LoginScreen extends React.Component {
                 />
               </View>
 
-              <StyledText style={styles.welcomeText}>{t('loginTitle')}</StyledText>
+              <StyledText style={styles?.welcomeText(this.context)}>{t('loginTitle')}</StyledText>
 
               <View>
                 <View style={{marginBottom: 16}}>
@@ -215,7 +215,7 @@ class LoginScreen extends React.Component {
                 <TouchableOpacity
                   onPress={() => handleLoginAs()}
                 >
-                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                     {t('loginAs', {username: this.state.clientUsername})}
                   </Text>
                 </TouchableOpacity>
@@ -227,14 +227,14 @@ class LoginScreen extends React.Component {
                   handleSubmit()
                 }}
               >
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                   {t('login')}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Intro')}
               >
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                   {t('action.cancel')}
                 </Text>
               </TouchableOpacity>
@@ -242,7 +242,7 @@ class LoginScreen extends React.Component {
               <TouchableOpacity onPress={() => {
                 this.props.navigation.navigate('ResetClientPassword')
               }}>
-                <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                   {t('forgotPwd')}
                 </Text>
               </TouchableOpacity>

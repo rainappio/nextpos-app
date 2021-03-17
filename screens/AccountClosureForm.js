@@ -22,7 +22,7 @@ class AccountClosureForm extends React.Component {
   }
 
   render() {
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
     const {mostrecentShift, handleSubmit} = this.props
 
     const closingShiftReport = {
@@ -54,7 +54,7 @@ class AccountClosureForm extends React.Component {
         {/* Cash */}
         <View style={styles.sectionBar}>
           <View>
-            <Text style={styles.sectionBarText}>
+            <Text style={styles?.sectionBarText(customMainThemeColor)}>
               {t('shift.cashSection')}
             </Text>
           </View>
@@ -126,7 +126,7 @@ class AccountClosureForm extends React.Component {
         {/* Credit Card */}
         <View style={styles.sectionBar}>
           <View>
-            <Text style={styles.sectionBarText}>
+            <Text style={styles?.sectionBarText(customMainThemeColor)}>
               {t('shift.cardSection')}
             </Text>
           </View>
@@ -179,7 +179,7 @@ class AccountClosureForm extends React.Component {
           <TouchableOpacity
             onPress={handleSubmit}
           >
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
               {t('shift.nextAction')}
             </Text>
           </TouchableOpacity>

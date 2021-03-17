@@ -7,7 +7,7 @@ import {LocaleContext} from '../locales/LocaleContext'
 import AddBtn from '../components/AddBtn'
 import {getCurrentClient} from '../actions/client'
 import LoadingScreen from "./LoadingScreen"
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
@@ -212,7 +212,7 @@ class MemberScreen extends React.Component {
 
     Item = (item, isSearch = false) => {
         return (
-            <View style={[styles.rowFront, isSearch && {borderBottomColor: mainThemeColor}]}>
+            <View style={[styles.rowFront, isSearch && {borderBottomColor: this.contetx?.customMainThemeColor}]}>
                 <TouchableOpacity
                     onPress={() => {
                         this.props?.change(`name`, item?.name)
@@ -234,7 +234,7 @@ class MemberScreen extends React.Component {
 
     render() {
         const {navigation, offers, isLoading, handleSubmit} = this.props
-        const {t, isTablet, themeStyle} = this.context
+        const {t, isTablet, themeStyle, customMainThemeColor} = this.context
 
         if (isLoading || this.state.isLoading) {
             return (
@@ -264,7 +264,7 @@ class MemberScreen extends React.Component {
                                 <OrderDetail orderId={this.state?.modalOrderId} closeModal={() => this.setState({modalVisible: false})} />
                             </Modal>
                             <View style={{flexDirection: 'row', flex: 1}}>
-                                <View style={{flex: 1, borderRightWidth: 1, borderColor: mainThemeColor, paddingRight: 3}}>
+                                <View style={{flex: 1, borderRightWidth: 1, borderColor: customMainThemeColor, paddingRight: 3}}>
                                     <SearchBar placeholder={t('member.searchPrompt')}
                                         onChangeText={this.searchMember}
                                         onClear={() => {
@@ -280,7 +280,7 @@ class MemberScreen extends React.Component {
                                             borderWidth: 0,
                                             borderTopWidth: 0,
                                             borderBottomWidth: 0,
-                                            backgroundColor: mainThemeColor
+                                            backgroundColor: customMainThemeColor
                                         }}
                                         inputStyle={{backgroundColor: themeStyle.backgroundColor}}
                                         inputContainerStyle={{borderRadius: 0, backgroundColor: themeStyle.backgroundColor}}
@@ -308,14 +308,14 @@ class MemberScreen extends React.Component {
                                 {this.state.screenMode === 'normal' && <View style={{flex: 3, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center'}}>
                                     <Button
                                         icon={
-                                            <Icon name="md-add" size={32} color={mainThemeColor} />
+                                            <Icon name="md-add" size={32} color={customMainThemeColor} />
                                         }
                                         type='outline'
                                         raised
                                         onPress={() => this.setState({screenMode: 'newForm'})}
-                                        buttonStyle={{minWidth: 320, borderColor: mainThemeColor, backgroundColor: themeStyle.backgroundColor}}
+                                        buttonStyle={{minWidth: 320, borderColor: customMainThemeColor, backgroundColor: themeStyle.backgroundColor}}
                                         title={t('member.createMember')}
-                                        titleStyle={{marginLeft: 10, color: mainThemeColor}}
+                                        titleStyle={{marginLeft: 10, color: customMainThemeColor}}
                                     />
                                 </View>}
 
@@ -420,7 +420,7 @@ class MemberScreen extends React.Component {
                                                             return (
                                                                 <TouchableOpacity
                                                                     onPress={() => this.setState({modalVisible: true, modalOrderId: order?.orderId})}
-                                                                    style={[styles.tableRowContainer, {borderColor: mainThemeColor, borderWidth: 1, borderRadius: 10, margin: 5}]}>
+                                                                    style={[styles.tableRowContainer, {borderColor: customMainThemeColor, borderWidth: 1, borderRadius: 10, margin: 5}]}>
 
                                                                     <View style={[styles.tableCellView, {flex: 1}]}>
                                                                         <StyledText>{formatDate(order.orderDate)}</StyledText>
@@ -473,7 +473,7 @@ class MemberScreen extends React.Component {
                                                 this.handleSubmit(data, this.state?.itemData?.id)
                                             })}
                                         >
-                                            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                                            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                                                 {t('action.save')}
                                             </Text>
 
@@ -484,7 +484,7 @@ class MemberScreen extends React.Component {
                                                 this.setState({screenMode: 'normal'})
                                             }}
                                         >
-                                            <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                                            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                                                 {t('action.cancel')}
                                             </Text>
                                         </TouchableOpacity>
@@ -529,7 +529,7 @@ class MemberScreen extends React.Component {
                                             borderWidth: 0,
                                             borderTopWidth: 0,
                                             borderBottomWidth: 0,
-                                            backgroundColor: mainThemeColor
+                                            backgroundColor: customMainThemeColor
                                         }}
                                         inputStyle={{backgroundColor: themeStyle.backgroundColor}}
                                         inputContainerStyle={{borderRadius: 0, backgroundColor: themeStyle.backgroundColor}}

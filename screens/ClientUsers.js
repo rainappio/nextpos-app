@@ -1,7 +1,7 @@
 import React from 'react'
 import {AsyncStorage, FlatList, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
-import {doLogout, getClientUsrs} from '../actions'
+import {doLogout, getClientUsrs, getCurrentClient} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
@@ -23,6 +23,7 @@ class ClientUsers extends React.Component {
 
   componentDidMount() {
     this.props.getClientUsrs()
+    this.props.getCurrentClient()
     this.context.localize({
       en: {
         clientUsersTitle: 'Client Users'
@@ -46,8 +47,7 @@ class ClientUsers extends React.Component {
 
   render() {
     const {clientusers, navigation} = this.props
-    console.log('clientusers', JSON.stringify(clientusers))
-    const {t} = this.context
+    const {t, customMainThemeColor, customBackgroundColor, customSecondThemeColor} = this.context
     return (
       <ThemeContainer>
         <View style={[styles.fullWidthScreen]}>
@@ -56,7 +56,7 @@ class ClientUsers extends React.Component {
             title={t('clientUsersTitle')}
             rightComponent={
               <TouchableOpacity onPress={() => this.handleDefaultUserLogout(navigation)}>
-                <Text style={styles.sectionBarText}>
+                <Text style={styles?.sectionBarText(customSecondThemeColor)}>
                   {t('logout')}
                 </Text>
               </TouchableOpacity>
@@ -83,18 +83,23 @@ class ClientUsers extends React.Component {
                   }
                 >
                   <View style={styles.tableCellView}>
-                    <Text
-                      style={{
-                        backgroundColor: '#e7e7e7',
-                        width: 44,
-                        height: 44,
-                        borderRadius: 44,
-                        textAlign: 'center',
-                        lineHeight: 44
-                      }}
-                    >
-                      {item?.displayName[0].toUpperCase()}
-                    </Text>
+                    <View style={{
+                      backgroundColor: customMainThemeColor,
+                      width: 44,
+                      height: 44,
+                      borderRadius: 4,
+                    }}>
+                      <Text
+                        style={{
+
+                          textAlign: 'center',
+                          lineHeight: 44,
+                          color: customBackgroundColor,
+                        }}
+                      >
+                        {item?.displayName[0].toUpperCase()}
+                      </Text>
+                    </View>
                     <StyledText style={{marginLeft: 15}}>
                       {item?.displayName}
                     </StyledText>
@@ -117,6 +122,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
+  getCurrentClient: () => dispatch(getCurrentClient()),
   getClientUsrs: () => {
     dispatch(getClientUsrs())
   },

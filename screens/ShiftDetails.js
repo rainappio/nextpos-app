@@ -1,6 +1,6 @@
 import React from 'react'
 import {Text, TouchableOpacity, View, ScrollView} from 'react-native'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import {formatCurrency, formatDate, customFormatLocaleDate} from "../actions";
@@ -35,7 +35,7 @@ class ShiftDetails extends React.Component {
   }
 
   render() {
-    const {t, themeStyle} = this.context
+    const {t, themeStyle, customMainThemeColor} = this.context
     const {shift} = this.props.navigation.state.params
 
     const closingShiftReport = {
@@ -85,7 +85,7 @@ class ShiftDetails extends React.Component {
             {/* Post-Closing Entries */}
             <View style={styles.sectionBar}>
               <View>
-                <Text style={styles.sectionBarText}>
+                <Text style={styles?.sectionBarText(customMainThemeColor)}>
                   {t('shift.shiftSummary')}
                 </Text>
               </View>
@@ -130,7 +130,7 @@ class ShiftDetails extends React.Component {
             {/* Cash */}
             <View style={styles.sectionBar}>
               <View>
-                <Text style={styles.sectionBarText}>
+                <Text style={styles?.sectionBarText(customMainThemeColor)}>
                   {t('shift.cashSection')}
                 </Text>
               </View>
@@ -197,7 +197,7 @@ class ShiftDetails extends React.Component {
             <View style={styles.sectionBar}>
               <View>
                 <TouchableOpacity>
-                  <Text style={styles.sectionBarText}>
+                  <Text style={styles?.sectionBarText(customMainThemeColor)}>
                     {t('shift.cardSection')}
                   </Text>
                 </TouchableOpacity>
@@ -252,7 +252,7 @@ class ShiftDetails extends React.Component {
             {/* Invoice */}
             <View style={styles.sectionBar}>
               <View>
-                <Text style={styles.sectionBarText}>
+                <Text style={styles?.sectionBarText(customMainThemeColor)}>
                   {t('shift.invoicesTitle')}
                 </Text>
               </View>
@@ -315,10 +315,10 @@ class ShiftDetails extends React.Component {
           <TouchableOpacity style={[styles.sectionBar]}
             onPress={() => {this.setState({isShow: true})}}>
             <View style={{flex: 3, flexDirection: 'row'}}>
-              <StyledText style={[styles.sectionBarText, {marginRight: 10}]}>
+              <StyledText style={[styles?.sectionBarText(customMainThemeColor), {marginRight: 10}]}>
                 {t('shift.deleteLineItemLog')}
               </StyledText>
-              <Ionicons name="eye" size={20} color={mainThemeColor} />
+              <Ionicons name="eye" size={20} color={customMainThemeColor} />
             </View>
 
           </TouchableOpacity>
@@ -330,13 +330,13 @@ class ShiftDetails extends React.Component {
                   shiftId: shift.id
                 })
               }}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('searchShiftOrders')}</Text>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('searchShiftOrders')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 handleSendEmail(shift.id)
               }}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('shift.sendEmail')}</Text>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('shift.sendEmail')}</Text>
             </TouchableOpacity>
           </View>
 

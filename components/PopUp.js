@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Modal, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {ThemeContainer} from "./ThemeContainer";
 import {withContext} from "../helpers/contextHelper";
@@ -38,7 +38,7 @@ class PopUpBase extends Component {
       dataArr,
       themeStyle
     } = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     return (
       <ThemeContainer>
@@ -47,7 +47,7 @@ class PopUpBase extends Component {
             this.toggleModal(true)
           }}
         >
-          <Icon name="md-add" size={32} color={mainThemeColor} />
+          <Icon name="md-add" size={32} color={customMainThemeColor} />
         </TouchableOpacity>
 
         <Modal
@@ -71,8 +71,8 @@ class PopUpBase extends Component {
                 <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
                   <Text
                     style={[
-                      styles.welcomeText,
-                      styles.orange_color,
+                      styles?.welcomeText(this.context),
+                      {color: customMainThemeColor},
                       styles.mgrbtn40
                     ]}
                   >
@@ -90,7 +90,7 @@ class PopUpBase extends Component {
                           this.toggleModal(false)
                         }}
                       >
-                        <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                        <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                           {textForRoute1}
                         </Text>
                       </TouchableOpacity>
@@ -107,7 +107,7 @@ class PopUpBase extends Component {
                           this.toggleModal(false)
                         }}
                       >
-                        <Text style={[styles.bottomActionButton, styles.actionButton]}>{textForRoute2}</Text>
+                        <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{textForRoute2}</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -161,7 +161,7 @@ class CustomPopUpBase extends Component {
       themeStyle,
       params
     } = this.props
-    const {t, isTablet} = this.context
+    const {t, isTablet, customMainThemeColor} = this.context
 
     return (
       <ThemeContainer>
@@ -170,7 +170,7 @@ class CustomPopUpBase extends Component {
             this.toggleModal(true)
           }}
         >
-          <Icon name="md-add" size={32} color={mainThemeColor} />
+          <Icon name="md-add" size={32} color={customMainThemeColor} />
         </TouchableOpacity>
 
         <Modal
@@ -194,8 +194,8 @@ class CustomPopUpBase extends Component {
                 <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
                   <Text
                     style={[
-                      styles.welcomeText,
-                      styles.orange_color,
+                      styles?.welcomeText(this.context),
+                      {color: customMainThemeColor},
                       styles.mgrbtn40
                     ]}
                   >
@@ -219,7 +219,7 @@ class CustomPopUpBase extends Component {
                               this.toggleModal(false)
                             }}
                           >
-                            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                               {textForRoute?.[index] ?? 'no text'}
                             </Text>
                           </TouchableOpacity>
@@ -309,7 +309,7 @@ class SplitBillPopUpBase extends Component {
       handleSubmit,
       orderId
     } = this.props
-    const {t, isTablet} = this.context
+    const {t, isTablet, customMainThemeColor} = this.context
 
     return (
 
@@ -335,8 +335,8 @@ class SplitBillPopUpBase extends Component {
               <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
                 <Text
                   style={[
-                    styles.welcomeText,
-                    styles.orange_color,
+                    styles?.welcomeText(this.context),
+                    {color: customMainThemeColor},
                     styles.mgrbtn40
                   ]}
                 >
@@ -374,7 +374,7 @@ class SplitBillPopUpBase extends Component {
                             }
                           }}
                         >
-                          <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                          <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                             {textForRoute?.[index] ?? 'no text'}
                           </Text>
                         </TouchableOpacity>
@@ -395,7 +395,7 @@ class SplitBillPopUpBase extends Component {
                         this.toggleModal(false)
                       })}
                     >
-                      <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                      <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                         {t('splitBillPopUp.ok')}
                       </Text>
                     </TouchableOpacity>
@@ -405,7 +405,7 @@ class SplitBillPopUpBase extends Component {
                         this.toggleModal(false)
                       }}
                     >
-                      <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                      <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                         {t('action.cancel')}
                       </Text>
                     </TouchableOpacity>

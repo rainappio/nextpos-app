@@ -10,8 +10,8 @@ class TimeCardFilterForm extends React.Component {
   static contextType = LocaleContext
 
   render() {
-    const { t } = this.context
-    const { handleSubmit } = this.props
+    const {t, customMainThemeColor} = this.context
+    const {handleSubmit} = this.props
 
     const years = []
     for (let i = -5; i <= 0; i++) {
@@ -56,7 +56,7 @@ class TimeCardFilterForm extends React.Component {
             style={{flex: 1, marginLeft: 5, marginRight: 4}}
             onPress={() => handleSubmit()}
           >
-            <Text style={[styles.searchButton]}>
+            <Text style={[styles?.searchButton(customMainThemeColor)]}>
               {t('action.search')}
             </Text>
           </TouchableOpacity>

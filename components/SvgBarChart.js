@@ -2,18 +2,17 @@ import React, {Component, PureComponent} from 'react'
 import {Dimensions, StyleSheet, View} from 'react-native'
 import {Circle, G, Line, Rect, Svg, Text} from 'react-native-svg'
 import * as d3 from 'd3'
-import {mainThemeColor} from "../styles";
 import {withContext} from "../helpers/contextHelper";
 
 
 class SvgBarChart extends Component {
   render() {
 
-    const { data, legend, round, themeStyle } = this.props
+    const {data, legend, round, locale: {customMainThemeColor}, themeStyle} = this.props
 
     return (
       <View style={[styles.container]}>
-        <BarChart data={data} horizontalMargin={20} legend={legend} round={round} themeStyle={themeStyle} />
+        <BarChart data={data} horizontalMargin={20} legend={legend} round={round} themeStyle={themeStyle} customMainThemeColor={customMainThemeColor} />
       </View>
     )
   }
@@ -33,13 +32,13 @@ const GRAPH_MARGIN = 20
 const GRAPH_BAR_WIDTH = 10
 const colors = {
   axis: '#ccc',
-  bars: mainThemeColor
+  bars: (customMainThemeColor) => customMainThemeColor
 }
 
 class BarChart extends PureComponent {
 
   render() {
-    const { horizontalMargin, legend, themeStyle } = this.props
+    const {horizontalMargin, legend, themeStyle, customMainThemeColor} = this.props
 
     // Dimensions
     const svgHeight = 200
@@ -73,18 +72,18 @@ class BarChart extends PureComponent {
     const middleValue = topValue / 2
 
     return (
-      <Svg width={svgWidth} height={svgHeight + 60} style={{borderWidth: 0, borderColor: mainThemeColor}}>
+      <Svg width={svgWidth} height={svgHeight + 60} style={{borderWidth: 0, borderColor: customMainThemeColor}}>
         <G x={horizontalPadding} y={graphHeight + GRAPH_MARGIN + 30}>
           {/* Top value label */}
           <G x={graphWidth} y={-(graphHeight + GRAPH_MARGIN) - 10}>
-            <Circle cx={-80} cy={-5} r="6" fill={mainThemeColor}/>
+            <Circle cx={-80} cy={-5} r="6" fill={customMainThemeColor} />
             <Text
               //x={graphWidth}
               textAnchor="end"
               //y={y(topValue) * -1 - 30}
               fontSize={12}
               fill={fillColor}
-              //fillOpacity={0.7}
+            //fillOpacity={0.7}
             >
               {legend}
             </Text>
@@ -138,7 +137,7 @@ class BarChart extends PureComponent {
                 rx={2.5}
                 width={GRAPH_BAR_WIDTH}
                 height={y(item.value)}
-                fill={colors.bars}
+                fill={colors.bars(customMainThemeColor)}
               />
             </G>
           ))}

@@ -21,21 +21,21 @@ class PasswordResetForm extends React.Component {
   componentDidMount() {
     this.context.localize({
       en: {
-      	title: 'Please enter temporary password from your account email',
-      	newPwd: 'Enter Password',
+        title: 'Please enter a one time passcode sent to your account email.',
+        newPwd: 'Enter Password',
         resetPwd: 'Reset Password'
       },
       zh: {
-      	title: '請輸入在您的帳號信箱收到的一組臨時密碼',
-      	newPwd: '輸入密碼',
+        title: '請輸入在您的帳號信箱收到的一組臨時密碼',
+        newPwd: '輸入密碼',
         resetPwd: '重置密碼'
       }
     })
   }
 
   render() {
-  	const { handleSubmit } = this.props
-    const { t } = this.context
+    const {handleSubmit} = this.props
+    const {t, customMainThemeColor} = this.context
 
     return (
       <DismissKeyboard>
@@ -44,8 +44,8 @@ class PasswordResetForm extends React.Component {
           behavior="padding"
           enabled
         >
-          <View style={{ flex: 3, justifyContent: 'center' }}>
-            <View style={[{ position: 'absolute', top: 0 }]}>
+          <View style={{flex: 3, justifyContent: 'center'}}>
+            <View style={[{position: 'absolute', top: 0}]}>
               <Image
                 source={
                   __DEV__
@@ -56,15 +56,15 @@ class PasswordResetForm extends React.Component {
               />
             </View>
 
-						<Text>{t('title')}</Text>
-              <Field
-              	name="newpassword"
-              	component={InputText}
-              	validate={isRequired}
-              	placeholder={t('newPwd')}
-              	secureTextEntry={true}
-              	//onSubmitEditing={val => this.clientLogin(val.nativeEvent.text)}
-            	/>
+            <Text>{t('title')}</Text>
+            <Field
+              name="newpassword"
+              component={InputText}
+              validate={isRequired}
+              placeholder={t('newPwd')}
+              secureTextEntry={true}
+            //onSubmitEditing={val => this.clientLogin(val.nativeEvent.text)}
+            />
           </View>
 
           <View style={[styles.bottom]}>
@@ -74,14 +74,14 @@ class PasswordResetForm extends React.Component {
                 handleSubmit()
               }}
             >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('resetPwd')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Login')}
             >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                 {t('action.cancel')}
               </Text>
             </TouchableOpacity>

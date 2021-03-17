@@ -4,7 +4,7 @@ import {Field, reduxForm} from 'redux-form'
 import RenderDateTimePicker from '../components/DateTimePicker'
 import DropDown from '../components/DropDown'
 import {LocaleContext} from '../locales/LocaleContext'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {StyledText} from "../components/StyledText";
 import SegmentedControl from "../components/SegmentedControl";
 import InputText from '../components/InputText'
@@ -17,6 +17,7 @@ import {formatCurrency, formatDate, customFormatLocaleDate} from "../actions";
 
 export const DeleteLineItemLogModal = (props) => {
     const localeContext = useContext(LocaleContext);
+    const {customMainThemeColor} = localeContext
 
 
     useEffect(() => {
@@ -40,23 +41,23 @@ export const DeleteLineItemLogModal = (props) => {
         ><ScrollView style={[localeContext?.themeStyle, {padding: 10, borderRadius: 20, maxHeight: '50%', marginHorizontal: 10}]}>
                 <View style={styles.sectionBar}>
                     <View style={[{flex: 1}, styles.tableCellView]}>
-                        <Text style={[styles.sectionBarTextSmall]}>{localeContext?.t('order.product')}</Text>
+                        <Text style={[styles?.sectionBarTextSmall(customMainThemeColor)]}>{localeContext?.t('order.product')}</Text>
                     </View>
 
                     <View style={[{flex: 0.5}, styles.tableCellView, {justifyContent: 'flex-end'}]}
                     >
-                        <Text style={styles.sectionBarTextSmall}>{localeContext?.t('order.quantity')}</Text>
+                        <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{localeContext?.t('order.quantity')}</Text>
                     </View>
 
                     <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                        <Text style={styles.sectionBarTextSmall}>{localeContext?.t('order.total')}</Text>
+                        <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{localeContext?.t('order.total')}</Text>
                     </View>
 
                     <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                        <Text style={styles.sectionBarTextSmall}>{localeContext?.t('order.date')}</Text>
+                        <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{localeContext?.t('order.date')}</Text>
                     </View>
                     <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                        <Text style={styles.sectionBarTextSmall}>{localeContext?.t('deletedBy')}</Text>
+                        <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{localeContext?.t('deletedBy')}</Text>
                     </View>
                 </View>
                 {props?.data?.deletedLineItems?.map((item) => {

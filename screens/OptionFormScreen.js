@@ -4,7 +4,7 @@ import {Text, TouchableOpacity, View} from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign'
 import InputText from '../components/InputText'
 import RNSwitch from '../components/RNSwitch'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import {isRequired} from '../validators'
 import DeleteBtn from '../components/DeleteBtn'
@@ -82,7 +82,7 @@ class OptionFormScreen extends React.Component {
   }
 
   render() {
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
     const {handleSubmit, handleDeleteOption, initialValues} = this.props
     console.log('optionValues', initialValues?.optionValues)
 
@@ -105,7 +105,7 @@ class OptionFormScreen extends React.Component {
               <Ionicons
                 name="caret-up-outline"
                 size={32}
-                color={index > 0 ? mainThemeColor : 'gray'}
+                color={index > 0 ? customMainThemeColor : 'gray'}
 
               />
             </TouchableOpacity>
@@ -119,7 +119,7 @@ class OptionFormScreen extends React.Component {
               <Ionicons
                 name="caret-down-outline"
                 size={32}
-                color={index < fields.length - 1 ? mainThemeColor : 'gray'}
+                color={index < fields.length - 1 ? customMainThemeColor : 'gray'}
 
               />
             </TouchableOpacity>
@@ -148,7 +148,7 @@ class OptionFormScreen extends React.Component {
             <Icon
               name="minuscircleo"
               size={32}
-              color={fields.length > 1 ? mainThemeColor : 'gray'}
+              color={fields.length > 1 ? customMainThemeColor : 'gray'}
               onPress={() => {
                 if (fields.length > 1)
                   this.deleteAnimate(index, () => fields.remove(index))
@@ -175,7 +175,7 @@ class OptionFormScreen extends React.Component {
                 <IonIcon
                   name="md-add"
                   size={32}
-                  color={mainThemeColor}
+                  color={customMainThemeColor}
                   onPress={() => {
                     this.scrollViewRef?.scrollToEnd({animated: true})
                     fields.push()
@@ -264,7 +264,7 @@ class OptionFormScreen extends React.Component {
 
           <View style={[styles.bottom, styles.horizontalMargin]}>
             <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('action.save')}
               </Text>
             </TouchableOpacity>
@@ -275,7 +275,7 @@ class OptionFormScreen extends React.Component {
                 )
               }
             >
-              <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                 {t('action.cancel')}
               </Text>
             </TouchableOpacity>

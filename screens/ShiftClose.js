@@ -91,7 +91,7 @@ class ShiftClose extends React.Component {
 
   render() {
     const {loading, shift, haveData, mostRecentShift} = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     if (loading) {
       return (
@@ -200,7 +200,7 @@ class ShiftClose extends React.Component {
                   <TouchableOpacity
                     onPress={this.handleinitiateCloseShift}
                   >
-                    <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                       {t('shift.closeShift')}
                     </Text>
                   </TouchableOpacity>
@@ -210,7 +210,7 @@ class ShiftClose extends React.Component {
                       <TouchableOpacity
                         onPress={() => this.setState({isOpenShift: true})}
                       >
-                        <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                        <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                           {t('openShiftAction')}
                         </Text>
                       </TouchableOpacity>

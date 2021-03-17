@@ -6,7 +6,7 @@ import moment from "moment-timezone";
 import {CalendarEvent} from "./CalendarEvent";
 import {withContext} from "../helpers/contextHelper";
 import {LocaleContext} from '../locales/LocaleContext'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import _ from 'lodash';
 import {withNavigation} from 'react-navigation';
@@ -190,7 +190,7 @@ class RenderAgendaBase2 extends Component {
 
     render() {
         const timezone = TimeZoneService.getTimeZone()
-        const {t} = this.context
+        const {t, customMainThemeColor} = this.context
         let weekStart = moment(this.state?.selectedDate).startOf('isoWeek').tz(timezone)
         let weekEnd = moment(this.state?.selectedDate).endOf('isoWeek').tz(timezone)
         const weekEvents = this.state?.events?.filter((event) =>
@@ -211,7 +211,7 @@ class RenderAgendaBase2 extends Component {
                     disabledOpacity={0.6}
 
                     theme={{
-                        todayButtonTextColor: mainThemeColor,
+                        todayButtonTextColor: customMainThemeColor,
                     }}
                     todayBottomMargin={16}
                 >
@@ -259,7 +259,7 @@ class RenderAgendaBase2 extends Component {
                                                                     disabled={((taskDayOfWeek !== dayOfWeek) && !sameEventSeriesIdEvent)}
                                                                     onPress={() => this.handleShowEventDetail(sameEventSeriesIdEvent ?? event)}
                                                                     style={[{flex: 1, borderRightWidth: 1, borderColor: '#c7c7c7', backgroundColor: ((taskDayOfWeek !== dayOfWeek) && !sameEventSeriesIdEvent) ? undefined : event?.eventColor, }]}>
-                                                                    {taskDayOfWeek === dayOfWeek && <View style={[(event?.id === this.state?.eventDetail?.id ? {borderColor: mainThemeColor, borderWidth: 3, flex: 1} : {flex: 1})]}>{
+                                                                    {taskDayOfWeek === dayOfWeek && <View style={[(event?.id === this.state?.eventDetail?.id ? {borderColor: customMainThemeColor, borderWidth: 3, flex: 1} : {flex: 1})]}>{
                                                                         Object.keys(event?.eventResources)?.length > 0 ?
                                                                             Object.keys(event?.eventResources)?.map((workingArea) => {
                                                                                 return (
@@ -270,7 +270,7 @@ class RenderAgendaBase2 extends Component {
                                                                                 <Text style={{color: '#454545', padding: 5, }}>{t('calendar.noWorkingArea')}</Text>
                                                                             </View>
                                                                     }</View>}
-                                                                    {!!sameEventSeriesIdEvent && <View style={[(sameEventSeriesIdEvent?.id === this.state?.eventDetail?.id ? {borderColor: mainThemeColor, borderWidth: 3, flex: 1} : {flex: 1})]}>{
+                                                                    {!!sameEventSeriesIdEvent && <View style={[(sameEventSeriesIdEvent?.id === this.state?.eventDetail?.id ? {borderColor: customMainThemeColor, borderWidth: 3, flex: 1} : {flex: 1})]}>{
                                                                         Object.keys(sameEventSeriesIdEvent?.eventResources)?.length > 0 ?
                                                                             Object.keys(sameEventSeriesIdEvent?.eventResources)?.map((workingArea) => {
                                                                                 return (
@@ -300,11 +300,11 @@ class RenderAgendaBase2 extends Component {
 
                     </ScrollView>
                     {this.state?.showEventDetail &&
-                        <View style={{height: 120, backgroundColor: '#fff', borderTopWidth: 1, borderColor: mainThemeColor}}>
+                        <View style={{height: 120, backgroundColor: '#fff', borderTopWidth: 1, borderColor: customMainThemeColor}}>
                             <TouchableOpacity style={{position: 'absolute', right: 10, top: 8, zIndex: 100}}
                                 onPress={() => this.setState({showEventDetail: false})}
                             >
-                                <Ionicons name="close" size={32} color={mainThemeColor} />
+                                <Ionicons name="close" size={32} color={customMainThemeColor} />
 
                             </TouchableOpacity>
                             <TouchableOpacity style={{position: 'absolute', right: 52, top: 10, zIndex: 100}}
@@ -320,7 +320,7 @@ class RenderAgendaBase2 extends Component {
                                     })
                                 }}
                             >
-                                <FontAwesome name="edit" size={32} color={mainThemeColor} />
+                                <FontAwesome name="edit" size={32} color={customMainThemeColor} />
                             </TouchableOpacity>
                             <ScrollView >
                                 <View key={this.state?.eventDetail?.id} style={{flexDirection: 'row', margin: 10, alignSelf: 'center', padding: 10}}
@@ -333,7 +333,7 @@ class RenderAgendaBase2 extends Component {
                                         <FontAwesome5Icon
                                             name={this.state?.eventDetail?.eventType === 'ROSTER' ? "business-time" : 'utensils'}
                                             size={36}
-                                            style={[styles.buttonIconStyle]}
+                                            style={[styles?.buttonIconStyle(customMainThemeColor)]}
                                         />
                                         <Text style={{marginTop: 10, color: '#454545'}}>{this.state?.eventDetail?.eventName}</Text>
 
@@ -341,7 +341,7 @@ class RenderAgendaBase2 extends Component {
                                     <View style={{flexDirection: 'column', alignItems: 'flex-start', flex: 3}}>
 
                                         <View style={{flexWrap: 'wrap', flexDirection: 'row', marginTop: 5}}>
-                                            <Text style={{fontSize: 16, color: mainThemeColor, fontWeight: 'bold'}}>{t(`calendarEvent.eventResources`)}</Text>
+                                            <Text style={{fontSize: 16, color: customMainThemeColor, fontWeight: 'bold'}}>{t(`calendarEvent.eventResources`)}</Text>
                                         </View>
                                         {
                                             Object.keys(this.state?.eventDetail?.eventResources)?.map((workingArea) => {
@@ -426,7 +426,7 @@ class DayCalendarBase extends Component {
     render() {
         const timezone = TimeZoneService.getTimeZone()
         const dayEvents = this.state?.events?.[`${this.state?.selectedDate}`]
-        const {t} = this.context
+        const {t, customMainThemeColor} = this.context
 
 
         let todayStart = new Date(moment(this.state?.selectedDate).tz(timezone)).getTime()
@@ -441,7 +441,7 @@ class DayCalendarBase extends Component {
                 disabledOpacity={0.6}
 
                 theme={{
-                    todayButtonTextColor: mainThemeColor,
+                    todayButtonTextColor: customMainThemeColor,
                 }}
                 todayBottomMargin={16}
             >
@@ -488,7 +488,7 @@ class DayCalendarBase extends Component {
 
                                             return (
 
-                                                <TouchableOpacity style={{position: 'absolute', borderWidth: 1, borderColor: (!event?.eventColor || event?.eventColor === '#fff') ? mainThemeColor : event?.eventColor, backgroundColor: event?.eventColor ?? undefined, height: 25, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (30 * (event?.line - 1) + 10), overflow: 'hidden', borderRadius: 5, paddingHorizontal: 5, justifyContent: 'center'}}
+                                                <TouchableOpacity style={{position: 'absolute', borderWidth: 1, borderColor: (!event?.eventColor || event?.eventColor === '#fff') ? customMainThemeColor : event?.eventColor, backgroundColor: event?.eventColor ?? undefined, height: 25, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (30 * (event?.line - 1) + 10), overflow: 'hidden', borderRadius: 5, paddingHorizontal: 5, justifyContent: 'center'}}
                                                     onPress={() => {
                                                         this.props.navigation.navigate('RostersFormScreen', {
                                                             data: event,

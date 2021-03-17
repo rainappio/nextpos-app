@@ -14,7 +14,7 @@ import SegmentedControl from "../components/SegmentedControl"
 import ScreenHeader from "../components/ScreenHeader";
 import DropDown from '../components/DropDown'
 import Icon from 'react-native-vector-icons/Ionicons'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {StyledText} from "../components/StyledText";
 import {ThemeContainer} from "../components/ThemeContainer";
 
@@ -120,7 +120,7 @@ class StaffFormScreen extends React.Component {
       userRoles = [],
       currentUser
     } = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     const roleIdArr = [];
     userRoles !== undefined && userRoles.map(usrRole => roleIdArr.push({label: usrRole.roleName, value: usrRole.id}))
@@ -218,7 +218,7 @@ class StaffFormScreen extends React.Component {
             <View style={[styles.tableCellView, styles.justifyRight]}>
               <Icon name="md-create"
                 size={24}
-                color={mainThemeColor}
+                color={customMainThemeColor}
                 onPress={() => this.props.navigation.navigate('ManageUserRole')}
               />
             </View>
@@ -226,7 +226,7 @@ class StaffFormScreen extends React.Component {
 
           <View style={[styles.bottom, styles.horizontalMargin]}>
             <TouchableOpacity onPress={handleSubmit}>
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('action.save')}
               </Text>
             </TouchableOpacity>
@@ -235,7 +235,7 @@ class StaffFormScreen extends React.Component {
               <View>
                 <TouchableOpacity onPress={handleEditCancel}>
                   <Text
-                    style={[styles.bottomActionButton, styles.cancelButton]}
+                    style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
                   >
                     {t('action.cancel')}
                   </Text>
@@ -251,7 +251,7 @@ class StaffFormScreen extends React.Component {
                 <View>
                   <TouchableOpacity onPress={onCancel}>
                     <Text
-                      style={[styles.bottomActionButton, styles.cancelButton]}
+                      style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
                     >
                       {t('action.cancel')}
                     </Text>

@@ -7,7 +7,7 @@ import AddBtn from '../components/AddBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
 import DeleteBtn from '../components/DeleteBtn'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, warningMessage, successMessage, apiRoot} from '../constants/Backend'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {CheckBox, Tooltip} from 'react-native-elements'
 import ScreenHeader from "../components/ScreenHeader";
@@ -140,7 +140,7 @@ class OrdersSummaryRow extends React.Component {
     )
 
     return (
-      <Tooltip popover={tooltip} height={120} width={200} backgroundColor={mainThemeColor}>
+      <Tooltip popover={tooltip} height={120} width={200} backgroundColor={this.context?.customMainThemeColor}>
         <View>
           {state === 'OPEN' && <StyledText>{t('stateTip.open.display')}</StyledText>}
           {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(state) && (
@@ -339,7 +339,7 @@ class OrdersSummaryRow extends React.Component {
       themeStyle
     } = this.props
 
-    const {t, splitParentOrderId} = this.context
+    const {t, splitParentOrderId, customMainThemeColor} = this.context
 
     return (
       <View style={styles.fullWidthScreen}>
@@ -394,7 +394,7 @@ class OrdersSummaryRow extends React.Component {
           <View style={[styles.sectionBar]}>
             <View style={[styles.tableCellView, {flex: 6}]}>
               <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>
+                <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>
                   {t('order.product')}
                 </Text>
               </TouchableOpacity>
@@ -402,7 +402,7 @@ class OrdersSummaryRow extends React.Component {
 
             <View style={[styles.tableCellView, {flex: 2}]}>
               <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>
+                <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>
                   {t('order.quantity')}
                 </Text>
               </TouchableOpacity>
@@ -410,19 +410,19 @@ class OrdersSummaryRow extends React.Component {
 
             <View style={[styles.tableCellView, {flex: 3}]}>
               <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>{t('order.unitPrice')}</Text>
+                <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('order.unitPrice')}</Text>
               </TouchableOpacity>
             </View>
 
             <View style={[styles.tableCellView, {flex: 3}]}>
               <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>{t('order.subtotal')}</Text>
+                <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('order.subtotal')}</Text>
               </TouchableOpacity>
             </View>
 
             <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
               <TouchableOpacity>
-                <Text style={styles.sectionBarTextSmall}>{t('order.lineState')}</Text>
+                <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('order.lineState')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -483,7 +483,7 @@ class OrdersSummaryRow extends React.Component {
               renderHiddenItem={(data, rowMap) => {
                 return (
                   <View style={[styles.rowBack, themeStyle]} key={rowMap}>
-                    <View style={styles.editIcon}>
+                    <View style={styles?.editIcon(customMainThemeColor)}>
                       <TouchableOpacity
                         onPress={() => {
                           if (data.item.price === 0) {
@@ -499,7 +499,7 @@ class OrdersSummaryRow extends React.Component {
                     <View style={{width: '40%'}}>
 
                     </View>
-                    <View style={styles.editIcon}>
+                    <View style={styles?.editIcon(customMainThemeColor)}>
                       <TouchableOpacity
                         onPress={() =>
                           this.props.navigation.navigate('OrderFormIII', {
@@ -590,7 +590,7 @@ class OrdersSummaryRow extends React.Component {
                   : handleOrderSubmit(order.orderId)
               }
             >
-              <Text style={[styles.bottomActionButton, styles.actionButton]}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('submitOrder')}
               </Text>
             </TouchableOpacity>
@@ -723,7 +723,7 @@ class OrdersSummaryRow extends React.Component {
                         : this.getSplitBillByHeadCount(order?.orderId)
                   }
                 >
-                  <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('payOrder')}</Text>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('payOrder')}</Text>
                 </TouchableOpacity></View>
             </View>
 
@@ -756,7 +756,7 @@ class OrdersSummaryRow extends React.Component {
             <TouchableOpacity
               onPress={() => this.handleComplete(order.orderId)}
             >
-              <Text style={[styles.bottomActionButton, styles.secondActionButton]}>{t('order.completeOrder')}</Text>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('order.completeOrder')}</Text>
             </TouchableOpacity>
           )}
           {!['SETTLED', 'REFUNDED'].includes(order.state) && (

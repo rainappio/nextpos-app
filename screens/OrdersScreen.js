@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {formatDate, getOrdersByDateRange, getOrdersByInvoiceNumber, formatCurrency} from '../actions'
 import {ListItem} from 'react-native-elements'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {renderOrderState} from "../helpers/orderActions";
 import {NavigationEvents} from "react-navigation";
@@ -112,7 +112,7 @@ class OrdersScreen extends React.Component {
             <StyledText>${item.orderTotal}</StyledText>
           </View>
           <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-            {renderOrderState(item.state)}
+            {renderOrderState(item.state, this.context?.customMainThemeColor)}
           </View>
         </View>
       }
@@ -122,7 +122,7 @@ class OrdersScreen extends React.Component {
         })
       }
       bottomDivider
-      containerStyle={[styles.dynamicVerticalPadding(12), {padding: 0, backgroundColor: this.props.themeStyle.backgroundColor}]}
+      containerStyle={[styles.dynamicVerticalPadding(12), {padding: 0, backgroundColor: this.props.themeStyle.backgroundColor}, styles?.customBorderAndBackgroundColor(this.context)]}
     />
   )
 
@@ -145,7 +145,7 @@ class OrdersScreen extends React.Component {
 
   render() {
     const {getordersByDateRange, dateRange, isLoading, haveError, haveData, getordersByDateRangeFullData} = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor} = this.context
 
     const orders = []
     getordersByDateRange !== undefined && getordersByDateRange.forEach(order => {
@@ -212,7 +212,7 @@ class OrdersScreen extends React.Component {
                 <TouchableOpacity
                   onPress={() => this.setState({showFilter: true})}
                 >
-                  <Octicons name="kebab-horizontal" size={32} color={mainThemeColor} />
+                  <Octicons name="kebab-horizontal" size={32} color={customMainThemeColor} />
                 </TouchableOpacity>
               }
             />
@@ -235,30 +235,30 @@ class OrdersScreen extends React.Component {
               />
             </View>
             <View style={[styles.tableRowContainer, {flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
-              <StyledText style={styles.screenSubTitle}>{moment(dateRange?.zonedFromDate).format('YYYY-MM-DD')}</StyledText>
-              <StyledText style={[styles.screenSubTitle, {marginHorizontal: 0}]}>~</StyledText>
-              <StyledText style={styles.screenSubTitle}>{moment(dateRange?.zonedToDate).format('YYYY-MM-DD')}</StyledText>
+              <StyledText style={styles?.screenSubTitle(customMainThemeColor)}>{moment(dateRange?.zonedFromDate).format('YYYY-MM-DD')}</StyledText>
+              <StyledText style={[styles?.screenSubTitle(customMainThemeColor), {marginHorizontal: 0}]}>~</StyledText>
+              <StyledText style={styles?.screenSubTitle(customMainThemeColor)}>{moment(dateRange?.zonedToDate).format('YYYY-MM-DD')}</StyledText>
             </View>
             <View style={[styles.tableRowContainer, {flexDirection: 'row', justifyContent: 'flex-start'}]}>
-              <StyledText style={[styles.screenSubTitle, {marginHorizontal: 0, marginRight: 20}]}>{t('order.total')}:</StyledText>
-              <StyledText style={[styles.screenSubTitle, {marginHorizontal: 0}]}>{formatCurrency(getordersByDateRangeFullData?.ordersTotal ?? 0)}</StyledText>
+              <StyledText style={[styles?.screenSubTitle(customMainThemeColor), {marginHorizontal: 0, marginRight: 20}]}>{t('order.total')}:</StyledText>
+              <StyledText style={[styles?.screenSubTitle(customMainThemeColor), {marginHorizontal: 0}]}>{formatCurrency(getordersByDateRangeFullData?.ordersTotal ?? 0)}</StyledText>
             </View>
             <View style={{flex: 3}}>
               <View style={[styles.sectionBar]}>
                 <View style={{flex: 2}}>
-                  <Text style={styles.sectionBarTextSmall}>{t('order.orderId')}</Text>
+                  <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('order.orderId')}</Text>
                 </View>
 
                 <View style={{flex: 3}}>
-                  <Text style={styles.sectionBarTextSmall}>{t('order.date')}</Text>
+                  <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('order.date')}</Text>
                 </View>
 
                 <View style={{flex: 1}}>
-                  <Text style={[styles.sectionBarTextSmall]}>{t('order.total')}</Text>
+                  <Text style={[styles?.sectionBarTextSmall(customMainThemeColor)]}>{t('order.total')}</Text>
                 </View>
 
                 <View style={{flex: 1, alignItems: 'center'}}>
-                  <Text style={[styles.sectionBarTextSmall]}>{t('order.orderStatus')}</Text>
+                  <Text style={[styles?.sectionBarTextSmall(customMainThemeColor)]}>{t('order.orderStatus')}</Text>
                 </View>
               </View>
               <FlatList
@@ -285,7 +285,7 @@ class OrdersScreen extends React.Component {
                   <Icon
                     name={'arrow-up'}
                     size={32}
-                    style={[styles.buttonIconStyle, {marginRight: 10}]}
+                    style={[styles?.buttonIconStyle(customMainThemeColor), {marginRight: 10}]}
                   />
                 </TouchableOpacity>
               ) : null}

@@ -2,7 +2,7 @@ import React from 'react'
 import {Text, TouchableOpacity, View, Alert} from 'react-native'
 import {getTimeDifference} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import {Tooltip} from "react-native-elements";
@@ -20,7 +20,7 @@ class OrderItem extends React.PureComponent {
       handleOrderSubmit,
       handleDelete
     } = this.props
-    const {t, isTablet} = this.context
+    const {t, isTablet, customMainThemeColor} = this.context
 
     const timeDifference = getTimeDifference(order.createdTime)
     const thirtyMinutes = 30 * 60 * 1000
@@ -30,7 +30,7 @@ class OrderItem extends React.PureComponent {
     let timeDisplayColor = '#888'
 
     if (['OPEN', 'IN_PROCESS'].includes(order.state)) {
-      timeDisplayColor = timeDifference < thirtyMinutes ? mainThemeColor : 'red'
+      timeDisplayColor = timeDifference < thirtyMinutes ? customMainThemeColor : '#f75336'
     }
 
     if (!!order?.tables && order?.tables?.length > 0) {
@@ -99,9 +99,9 @@ class OrderItem extends React.PureComponent {
 
                 <View style={[styles.tableCellView, {justifyContent: 'center', flex: 1}]}>
                   <Tooltip popover={<Text>{this.context.t(`orderState.${order.state}`)}</Text>}
-                    backgroundColor={mainThemeColor}
+                    backgroundColor={customMainThemeColor}
                   >
-                    {renderOrderState(order.state)}
+                    {renderOrderState(order.state, customMainThemeColor)}
                   </Tooltip>
                 </View>
               </View>
@@ -172,9 +172,9 @@ class OrderItem extends React.PureComponent {
 
           <View style={[styles.tableCellView, {justifyContent: 'center', flex: 1}]}>
             <Tooltip popover={<Text>{this.context.t(`orderState.${order.state}`)}</Text>}
-              backgroundColor={mainThemeColor}
+              backgroundColor={customMainThemeColor}
             >
-              {renderOrderState(order.state)}
+              {renderOrderState(order.state, customMainThemeColor)}
             </Tooltip>
           </View>
         </View>

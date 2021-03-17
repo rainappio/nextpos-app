@@ -5,7 +5,7 @@ import AddBtn from '../components/AddBtn'
 import OrderStart from './OrderStart'
 import OrderItem from './OrderItem'
 import {getfetchOrderInflights, getMostRecentShiftStatus, getShiftStatus, getTableLayouts, getTablesAvailable, getTableLayout} from '../actions'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {successMessage, api, dispatchFetchRequest, apiRoot} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {handleDelete, handleOrderSubmit, handleCreateOrderSet, handleDeleteOrderSet, handleOrderAction} from '../helpers/orderActions'
@@ -185,7 +185,7 @@ class TablesScreen extends React.Component {
       themeStyle,
       orderSets
     } = this.props
-    const {t} = this.context
+    const {t, customMainThemeColor, customSecondThemeColor, customBackgroundColor} = this.context
 
 
     if (tablelayouts === undefined || tablelayouts.length === 0 || !haveData) {
@@ -221,7 +221,7 @@ class TablesScreen extends React.Component {
             </View>
             <View style={[styles.bottom, styles.horizontalMargin]}>
               <TouchableOpacity onPress={() => navigation.navigate('ShiftClose')}>
-                <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                   {t('shift.closeShift')}
                 </Text>
               </TouchableOpacity>
@@ -236,7 +236,7 @@ class TablesScreen extends React.Component {
           <KeyboardAvoidingView style={{flex: 1}} behavior="height">
             <View style={styles.modalContainer}>
               <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
-                <Text style={styles.screenSubTitle}>
+                <Text style={styles?.screenSubTitle(customMainThemeColor)}>
                   {t('openShift.title')}
                 </Text>
                 <View style={styles.tableRowContainer}>
@@ -260,7 +260,7 @@ class TablesScreen extends React.Component {
                 <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
                   <View style={{width: '45%', marginHorizontal: 5}}>
                     <TouchableOpacity onPress={() => this.handleOpenShift(this.state.openBalance)}>
-                      <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                      <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                         {t('openShift.open')}
                       </Text>
                     </TouchableOpacity>
@@ -271,7 +271,7 @@ class TablesScreen extends React.Component {
                         this.props.navigation.navigate('LoginSuccess')
                       }}
                     >
-                      <Text style={[styles.bottomActionButton, styles.cancelButton]}>
+                      <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                         {t('openShift.cancel')}
                       </Text>
                     </TouchableOpacity>
@@ -369,35 +369,34 @@ class TablesScreen extends React.Component {
                     return (<TouchableOpacity
                       disabled={this.state?.screenMode === 'joinTable'}
                       style={{
-                        borderColor: mainThemeColor,
-                        borderWidth: 0.5,
+                        borderColor: customMainThemeColor,
+                        borderWidth: 2,
                         borderBottomWidth: 0,
+                        borderLeftWidth: index === 0 ? 2 : 0,
                         padding: 4,
-                        borderTopLeftRadius: 4,
-                        borderTopRightRadius: 4,
                         width: 120,
-                        backgroundColor: this.state?.tableIndex === index ? themeStyle.color : null,
+                        backgroundColor: this.state?.tableIndex === index ? customMainThemeColor : null,
                       }}
                       onPress={() => {this.setState({tableIndex: index})}}>
-                      <StyledText style={[styles.sectionBarText, {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                      <StyledText style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
                         {tblLayout.layoutName}
                       </StyledText>
                       {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_SEAT' && (
                         <>
-                          <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                          <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
                             {t('seatingCapacity')} {tblLayout.totalCapacity}
                           </Text>
-                          <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                          <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
                             {t('availableSeats')} {floorCapacity[tblLayout.id].seatCount}
                           </Text>
                         </>
                       )}
                       {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_TABLE' && (
                         <>
-                          <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                          <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
                             {t('tableCapacity')} {tblLayout.totalTables}
                           </Text>
-                          <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                          <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
                             {t('availableTables')} {floorCapacity[tblLayout.id].tableCount}
                           </Text>
                         </>
@@ -409,21 +408,19 @@ class TablesScreen extends React.Component {
                     <TouchableOpacity
                       disabled={this.state?.screenMode === 'joinTable'}
                       style={{
-                        borderColor: mainThemeColor,
-                        borderWidth: 0.5,
+                        borderColor: customSecondThemeColor,
+                        borderWidth: 2,
                         borderBottomWidth: 0,
                         padding: 4,
-                        borderTopLeftRadius: 4,
-                        borderTopRightRadius: 4,
                         width: 120,
                         alignSelf: 'flex-end',
                         flex: 1,
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: this.state?.tableIndex === -1 ? themeStyle.color : null,
+                        backgroundColor: this.state?.tableIndex === -1 ? customSecondThemeColor : null,
                       }}
                       onPress={() => {this.setState({tableIndex: -1})}}>
-                      <Text style={[styles.sectionBarText]}>
+                      <Text style={[this.state?.tableIndex === -1 ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customSecondThemeColor))]}>
                         {t('otherOrders')}
                       </Text>
                     </TouchableOpacity>
@@ -432,7 +429,7 @@ class TablesScreen extends React.Component {
                 </View>}
                 {/* table */}
                 {this.state.tableIndex >= 0 &&
-                  <View style={[styles.ballContainer, {flex: 6}]}>
+                  <View style={[styles?.ballContainer(customMainThemeColor), {flex: 6}]}>
                     <View onLayout={(event) => {
                       let {x, y, width, height} = event.nativeEvent.layout;
                       this.setState({
@@ -441,17 +438,17 @@ class TablesScreen extends React.Component {
                       })
                     }} style={{width: '100%', height: '100%', alignSelf: 'center', flexWrap: 'wrap'}}>
                       <View style={{justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, right: 0, flexDirection: 'row'}}>
-                        <View style={{backgroundColor: '#fff', borderColor: '#BFBFBF', borderWidth: 2, height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#e7e7e7', borderColor: '#e7e7e7', borderWidth: 2, borderRadius: 12, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.OTHERS')}</StyledText>
-                        <View style={{backgroundColor: mainThemeColor, borderColor: '#BFBFBF', borderWidth: 2, height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#FFFFF5', borderColor: '#F9C31C', borderWidth: 2, borderRadius: 12, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.OPEN')}</StyledText>
-                        <View style={{backgroundColor: '#ffc818', borderRadius: 12, height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#FF6915', borderRadius: 12, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.IN_PROCESS')}</StyledText>
-                        <View style={{backgroundColor: 'red', borderRadius: 12, height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#FFFFF5', borderColor: '#f75336', borderWidth: 2, borderRadius: 12, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.OVERDUE')}</StyledText>
-                        <View style={{backgroundColor: '#86bf20', borderRadius: 12, height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#FFFFF5', borderColor: '#006B35', borderWidth: 2, borderRadius: 12, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.DELIVERED')}</StyledText>
-                        <View style={{backgroundColor: '#86bf20', height: 12, width: 12, margin: 6}}></View>
+                        <View style={{backgroundColor: '#FFFFF5', borderColor: '#e7e7e7', borderWidth: 2, borderRadius: 12, height: 12, width: 12, margin: 6}}></View>
                         <StyledText>{t('orderState.SETTLED')}</StyledText>
 
                       </View>
@@ -585,12 +582,12 @@ class TablesScreen extends React.Component {
                   tableWidth: null,
                   tableHeight: null,
                 })} style={{flex: 1, marginRight: 8}}>
-                  <Text style={[styles.bottomActionButton, styles.actionButton, {flex: 1}]}>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor), {flex: 1}]}>
                     {t('joinTable')}
                   </Text>
                 </TouchableOpacity>}
                 <TouchableOpacity onPress={() => NavigationService?.navigateToRoute('OrderDisplayScreen')} style={{flex: 1}}>
-                  <Text style={[styles.bottomActionButton, styles.actionButton, {flex: 1}]}>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor), {flex: 1}]}>
                     {t('menu.orderDisplay')}
                   </Text>
                 </TouchableOpacity>
@@ -600,12 +597,12 @@ class TablesScreen extends React.Component {
                   screenMode: 'normal', selectedOrderId: [], tableWidth: null,
                   tableHeight: null,
                 })} style={{flex: 1, marginRight: 8}}>
-                  <Text style={[styles.bottomActionButton, styles.secondActionButton, {flex: 1}]}>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context), {flex: 1}]}>
                     {t('action.cancel')}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.handleCreateOrderSet()} style={{flex: 1}}>
-                  <Text style={[styles.bottomActionButton, styles.actionButton, {flex: 1}]}>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor), {flex: 1}]}>
                     {t('action.save')}
                   </Text>
                 </TouchableOpacity>
@@ -668,18 +665,18 @@ class TablesScreen extends React.Component {
                 <View style={{}} key={idx}>
                   <View style={[styles.sectionBar, {flex: 1}]}>
                     <Text
-                      style={[styles.sectionBarText, {flex: 4}
+                      style={[styles?.sectionBarText(customMainThemeColor), {flex: 4}
                       ]}
                     >
                       {tblLayout.layoutName}
                     </Text>
                     {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_SEAT' && (
-                      <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'right', marginRight: 4}]}>
+                      <Text style={[styles?.sectionBarText(customMainThemeColor), {flex: 4, textAlign: 'right', marginRight: 4}]}>
                         {t('seatingCapacity')} {tblLayout.totalCapacity} {t('availableSeats')} {floorCapacity[tblLayout.id].seatCount}
                       </Text>
                     )}
                     {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_TABLE' && (
-                      <Text style={[styles.sectionBarText, {flex: 4, textAlign: 'right', marginRight: 4}]}>
+                      <Text style={[styles?.sectionBarText(customMainThemeColor), {flex: 4, textAlign: 'right', marginRight: 4}]}>
                         {t('tableCapacity')} {tblLayout.totalTables} {t('availableTables')} {floorCapacity[tblLayout.id].tableCount}
                       </Text>
                     )}
@@ -708,7 +705,7 @@ class TablesScreen extends React.Component {
               ))}
               <View style={styles.mgrbtn20} key='noLayout'>
                 <View style={[styles.sectionBar, {flex: 1, justifyContent: 'flex-start'}]}>
-                  <Text style={[styles.sectionBarText]}>
+                  <Text style={[styles?.sectionBarText(customMainThemeColor)]}>
                     {t('otherOrders')}
                   </Text>
                 </View>
@@ -736,7 +733,7 @@ class TablesScreen extends React.Component {
 
               <View style={[styles.bottom, styles.horizontalMargin]}>
                 <TouchableOpacity onPress={() => NavigationService?.navigateToRoute('OrderDisplayScreen')}>
-                  <Text style={[styles.bottomActionButton, styles.actionButton]}>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                     {t('menu.orderDisplay')}
                   </Text>
                 </TouchableOpacity>
@@ -784,7 +781,7 @@ const enhance = compose(
 )
 export default enhance(TablesScreen)
 
-class Draggable extends Component {
+class DraggableBase extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -911,7 +908,7 @@ class Draggable extends Component {
   }
 
 
-  renderDraggable(layoutId, table, orders, openOrderModal, index, borderColor, positionArr, screenMode) {
+  renderDraggable(layoutId, table, orders, openOrderModal, index, borderColor, positionArr, screenMode, customMainThemeColor, customSecondThemeColor, customBackgroundColor) {
     TimeAgo.addLocale(en)
     const timeAgo = new TimeAgo()
 
@@ -952,16 +949,21 @@ class Draggable extends Component {
                     }
                   }}
                   onLongPress={() => tableStatus && screenMode !== 'joinTable' && this.setState({isDraggable: true})}
-                  style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: borderColor, borderWidth: 3}, (!!tableStatus &&
+                  style={[panStyle, styles?.circle(customMainThemeColor), {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#e7e7e7', borderColor: '#e7e7e7', borderWidth: 3}, (!!tableStatus &&
                   {
 
-                    backgroundColor: tableStatus == 'OPEN' ? mainThemeColor
-                      : tableStatus == 'IN_PROCESS' ? mainThemeColor
-                        : tableStatus == 'DELIVERED' ? mainThemeColor
-                          : '#86bf20'
-                  }), (this.state.isSelected && {borderColor: `rgba(255, 0, 0, 0.5)`})]}>
-                  {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: tableOrder?.itemNeedAttention ? 'red' : '#ffc818'}}></View>}
-                  {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
+                    backgroundColor: tableStatus == 'OPEN' ? '#FFFFF5'
+                      : tableStatus == 'IN_PROCESS' ? (tableOrder?.itemNeedAttention ? '#FFFFF5' : '#FF6915')
+                        : tableStatus == 'DELIVERED' ? '#FFFFF5'
+                          : '#FFFFF5',
+                    borderColor: tableStatus == 'OPEN' ? '#F9C31C'
+                      : tableStatus == 'IN_PROCESS' ? (tableOrder?.itemNeedAttention ? '#f75336' : '#FF6915')
+                        : tableStatus == 'DELIVERED' ? '#006B35'
+                          : '#e7e7e7',
+
+                  })]}>
+                  {tableStatus === 'PAYMENT_IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><MaterialIcons name="attach-money" size={25}
+                    style={[{color: '#f75336'}]} /></View>}
                   <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Ionicons name={'ios-people'} color={'black'} size={20} />
@@ -969,7 +971,7 @@ class Draggable extends Component {
                   </View>
                   {!!tableOrder?.createdTime &&
                     <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
-                      <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? 'red' : 'black'} size={20} />
+                      <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? '#f75336' : 'black'} size={20} />
                       <StyledText style={{marginLeft: 2, color: '#000'}}>
                         {timeAgo.format(Date.now() - getTimeDifference(tableOrder?.createdTime), {flavour: 'tiny'})}
                       </StyledText>
@@ -982,16 +984,21 @@ class Draggable extends Component {
                 <TouchableOpacity
 
 
-                  style={[panStyleUnder, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: borderColor, borderWidth: 3}, (!!tableStatus &&
+                  style={[panStyleUnder, styles?.circle(customMainThemeColor), {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#e7e7e7', borderColor: '#e7e7e7', borderWidth: 3}, (!!tableStatus &&
                   {
 
-                    backgroundColor: tableStatus == 'OPEN' ? mainThemeColor
-                      : tableStatus == 'IN_PROCESS' ? mainThemeColor
-                        : tableStatus == 'DELIVERED' ? mainThemeColor
-                          : '#86bf20'
+                    backgroundColor: tableStatus == 'OPEN' ? '#FFFFF5'
+                      : tableStatus == 'IN_PROCESS' ? (tableOrder?.itemNeedAttention ? '#FFFFF5' : '#FF6915')
+                        : tableStatus == 'DELIVERED' ? '#FFFFF5'
+                          : '#FFFFF5',
+                    borderColor: tableStatus == 'OPEN' ? '#F9C31C'
+                      : tableStatus == 'IN_PROCESS' ? (tableOrder?.itemNeedAttention ? '#f75336' : '#FF6915')
+                        : tableStatus == 'DELIVERED' ? '#006B35'
+                          : '#e7e7e7',
+
                   })]}>
-                  {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: tableOrder?.itemNeedAttention ? 'red' : '#ffc818'}}></View>}
-                  {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
+                  {tableStatus === 'PAYMENT_IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><MaterialIcons name="attach-money" size={25}
+                    style={[{color: '#f75336'}]} /></View>}
                   <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}123</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Ionicons name={'ios-people'} color={'black'} size={20} />
@@ -999,7 +1006,7 @@ class Draggable extends Component {
                   </View>
                   {!!tableOrder?.createdTime &&
                     <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
-                      <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? 'red' : 'black'} size={20} />
+                      <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? '#f75336' : 'black'} size={20} />
                       <StyledText style={{marginLeft: 2, color: '#000'}}>
                         {timeAgo.format(Date.now() - getTimeDifference(tableOrder?.createdTime), {flavour: 'tiny'})}
                       </StyledText>
@@ -1031,18 +1038,22 @@ class Draggable extends Component {
                     }
                   }}
                   onLongPress={() => tableStatus && screenMode !== 'joinTable' && this.setState({isDraggable: true})}
-                  style={[panStyle, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: borderColor, borderWidth: 3}, (!!tableStatus &&
+                  style={[panStyle, styles?.circle(customMainThemeColor), {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#e7e7e7', borderColor: '#e7e7e7', borderWidth: 3}, (!!tableStatus &&
                   {
 
-                    backgroundColor: tableStatus == 'OPEN' ? mainThemeColor
-                      : tableStatus == 'IN_PROCESS' ? mainThemeColor
-                        : tableStatus == 'DELIVERED' ? mainThemeColor
-                          : '#86bf20'
+                    backgroundColor: tableStatus == 'OPEN' ? '#FFFFF5'
+                      : tableStatus == 'IN_PROCESS' ? (tableOrder?.itemNeedAttention ? '#FFFFF5' : '#FF6915')
+                        : tableStatus == 'DELIVERED' ? '#FFFFF5'
+                          : '#FFFFF5',
+                    borderColor: tableStatus == 'OPEN' ? '#F9C31C'
+                      : tableStatus == 'IN_PROCESS' ? (tableOrder?.itemNeedAttention ? '#f75336' : '#FF6915')
+                        : tableStatus == 'DELIVERED' ? '#006B35'
+                          : '#e7e7e7',
+
                   })]}>
-                  {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#ffc818'}}></View>}
-                  {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
+
                   {tableStatus === 'PAYMENT_IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><MaterialIcons name="attach-money" size={25}
-                    style={[styles.iconStyle, {color: 'red'}]} /></View>}
+                    style={[{color: '#f75336'}]} /></View>}
                   <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Ionicons name={'ios-people'} color={'black'} size={20} />
@@ -1050,7 +1061,7 @@ class Draggable extends Component {
                   </View>
                   {!!tableOrder?.createdTime &&
                     <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
-                      <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? 'red' : 'black'} size={20} />
+                      <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? '#f75336' : 'black'} size={20} />
                       <StyledText style={{marginLeft: 2, color: '#000'}}>
                         {timeAgo.format(Date.now() - getTimeDifference(tableOrder?.createdTime), {flavour: 'tiny'})}
                       </StyledText>
@@ -1063,18 +1074,21 @@ class Draggable extends Component {
 
                 <TouchableOpacity
 
-                  style={[panStyleUnder, styles.circle, {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#fff', borderColor: borderColor, borderWidth: 3}, (!!tableStatus &&
+                  style={[panStyleUnder, styles?.circle(customMainThemeColor), {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#e7e7e7', borderColor: '#e7e7e7', borderWidth: 3}, (!!tableStatus &&
                   {
 
-                    backgroundColor: tableStatus == 'OPEN' ? mainThemeColor
-                      : tableStatus == 'IN_PROCESS' ? mainThemeColor
-                        : tableStatus == 'DELIVERED' ? mainThemeColor
-                          : '#86bf20'
+                    backgroundColor: tableStatus == 'OPEN' ? '#FFFFF5'
+                      : tableStatus == 'IN_PROCESS' ? (tableOrder?.itemNeedAttention ? '#FFFFF5' : '#FF6915')
+                        : tableStatus == 'DELIVERED' ? '#FFFFF5'
+                          : '#FFFFF5',
+                    borderColor: tableStatus == 'OPEN' ? '#F9C31C'
+                      : tableStatus == 'IN_PROCESS' ? (tableOrder?.itemNeedAttention ? '#f75336' : '#FF6915')
+                        : tableStatus == 'DELIVERED' ? '#006B35'
+                          : '#e7e7e7',
+
                   })]}>
-                  {tableStatus === 'IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#ffc818'}}></View>}
-                  {tableStatus === 'DELIVERED' && <View style={{position: 'absolute', top: 0, right: 0, width: 20, height: 20, borderRadius: 50, backgroundColor: '#86bf20'}}></View>}
                   {tableStatus === 'PAYMENT_IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><MaterialIcons name="attach-money" size={25}
-                    style={[styles.iconStyle, {color: 'red'}]} /></View>}
+                    style={[{color: '#f75336'}]} /></View>}
                   <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Ionicons name={'ios-people'} color={'black'} size={20} />
@@ -1082,7 +1096,7 @@ class Draggable extends Component {
                   </View>
                   {!!tableOrder?.createdTime &&
                     <View style={[styles.tableCellView, {justifyContent: 'center'}]}>
-                      <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? 'red' : 'black'} size={20} />
+                      <FontAwesomeIcon name={'clock-o'} color={(getTimeDifference(tableOrder?.createdTime) > 30 * 60 * 1000 && tableStatus == 'OPEN') ? '#f75336' : 'black'} size={20} />
                       <StyledText style={{marginLeft: 2, color: '#000'}}>
                         {timeAgo.format(Date.now() - getTimeDifference(tableOrder?.createdTime), {flavour: 'tiny'})}
                       </StyledText>
@@ -1097,14 +1111,16 @@ class Draggable extends Component {
   }
 
   render() {
-    const {table, layoutId, orders, openOrderModal, index, borderColor, positionArr, screenMode} = this.props
+    const {table, layoutId, orders, openOrderModal, index, borderColor, positionArr, screenMode, locale: {customMainThemeColor, customSecondThemeColor, customBackgroundColor}} = this.props
     return (
       <View style={{alignItems: "flex-start", borderWidth: 0, marginBottom: 0}} ref='self'>
-        {this.renderDraggable(layoutId, table, orders, openOrderModal, index, borderColor, positionArr, screenMode)}
+        {this.renderDraggable(layoutId, table, orders, openOrderModal, index, borderColor, positionArr, screenMode, customMainThemeColor, customSecondThemeColor, customBackgroundColor)}
       </View>
     );
   }
 }
+
+const Draggable = withContext(DraggableBase)
 
 //https://snack.expo.io/@yoobidev/draggable-component
 
@@ -1158,7 +1174,7 @@ class TableSet extends Component {
             this.props?.onPress(this.props?.item?.id)
         }}
         style={[panStyle, {position: 'absolute', alignItems: 'center', justifyContent: 'center', backgroundColor: '#80808080', borderRadius: 25, width: this.state.setWidth, height: this.state.setHeight}]}>
-        {this.props?.screenMode === 'joinTable' && <FontAwesomeIcon name={'remove'} color={'red'} size={30} />}
+        {this.props?.screenMode === 'joinTable' && <FontAwesomeIcon name={'remove'} color={'#f75336'} size={30} />}
       </TouchableOpacity>
     );
   }

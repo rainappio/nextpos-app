@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {InputAccessoryView, Keyboard, Platform, Text, TextInput, TouchableOpacity, View} from 'react-native'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {withContext} from "../helpers/contextHelper";
 
 const InputText = ({
@@ -39,12 +39,12 @@ const InputText = ({
         inputAccessoryViewID={name}
         {...rest}
         style={[
-          styles.rootInput,
+          themeStyle,
 
           {height: height},
           (alignLeft && {textAlign: 'left'}),
-          themeStyle,
-          styles.withBorder,
+          styles?.rootInput(rest?.locale),
+          styles?.withBorder(rest?.locale),
           extraStyle,
         ]}
       />
@@ -57,7 +57,7 @@ const InputText = ({
             <Text
               style={[
                 styles.margin_15,
-                {fontSize: 16, fontWeight: 'bold', color: mainThemeColor}
+                {fontSize: 16, fontWeight: 'bold', color: rest?.locale?.customMainThemeColor}
               ]}
             >
               Done

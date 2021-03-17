@@ -1,9 +1,9 @@
 import {Platform, StyleSheet} from 'react-native'
 
-export const mainThemeColor = '#f18d1a'
+//export const mainThemeColor = (color = '#f18d1a') => color
 let CIRCLE_RADIUS = 50;
-//export const mainThemeColor = '#f18dee'
-//export const mainThemeColor = '#3e3d47'
+//export const mainThemeColor() = '#f18dee'
+//export const mainThemeColor() = '#3e3d47'
 
 export default StyleSheet.create({
   mainContainer: {
@@ -22,11 +22,13 @@ export default StyleSheet.create({
     marginRight: 15,
     marginBottom: 23
   },
-  selectedLabel: {
-    backgroundColor: mainThemeColor,
-    borderRadius: 10,
-    paddingLeft: 10,
-    paddingVertical: 3,
+  selectedLabel: (customMainThemeColor) => {
+    return {
+      backgroundColor: customMainThemeColor,
+      borderRadius: 10,
+      paddingLeft: 10,
+      paddingVertical: 3,
+    }
   },
   childContainer: {
     flex: 1,
@@ -53,11 +55,13 @@ export default StyleSheet.create({
     marginBottom: 5,
     marginRight: 5
   },
-  rootInput: {
+  rootInput: (context) => ({
     paddingVertical: 10,
     paddingHorizontal: 10,
-    textAlign: 'right'
-  },
+    textAlign: 'right',
+    borderRadius: 4,
+    backgroundColor: context?.customBackgroundColor
+  }),
   rootError: {
     textAlign: 'right',
     marginVertical: 3,
@@ -75,14 +79,15 @@ export default StyleSheet.create({
     height: 40,
     resizeMode: 'contain'
   },
-  welcomeText: {
+  welcomeText: (context) => ({
     textAlign: 'center',
     textTransform: 'uppercase',
     fontSize: 20,
     letterSpacing: 2,
     lineHeight: 32,
     marginVertical: 15,
-  },
+    color: context?.customMainThemeColor
+  }),
   text: {
     fontWeight: 'bold',
     marginTop: 22,
@@ -116,9 +121,6 @@ export default StyleSheet.create({
   },
   flex_dir_row: {
     flexDirection: 'row'
-  },
-  orange_color: {
-    color: mainThemeColor
   },
   half_width: {
     width: '45%'
@@ -159,8 +161,8 @@ export default StyleSheet.create({
   whiteBg: {
     backgroundColor: '#fff'
   },
-  editIcon: {
-    backgroundColor: mainThemeColor,
+  editIcon: (customMainThemeColor) => ({
+    backgroundColor: customMainThemeColor,
     width: '20%',
     //flex: 1,
     alignItems: 'center',
@@ -169,7 +171,7 @@ export default StyleSheet.create({
     //right: 38,
     paddingVertical: 8,
     paddingHorizontal: 12,
-  },
+  }),
   delIcon: {
     backgroundColor: '#f75336',
     //flex: 1,
@@ -195,11 +197,11 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  primaryText: {
+  primaryText: (customMainThemeColor) => ({
     fontSize: 22,
-    color: mainThemeColor,
+    color: customMainThemeColor,
     fontWeight: 'bold'
-  },
+  }),
   textBig: {
     fontSize: 22
   },
@@ -208,9 +210,6 @@ export default StyleSheet.create({
   },
   textBold: {
     fontWeight: 'bold'
-  },
-  orange_bg: {
-    backgroundColor: mainThemeColor
   },
   mgrtotop12: {
     marginTop: 12
@@ -264,8 +263,8 @@ export default StyleSheet.create({
   toRight: {
     textAlign: 'right'
   },
-  itemCountContainer: {
-    backgroundColor: mainThemeColor,
+  itemCountContainer: (customMainThemeColor) => ({
+    backgroundColor: customMainThemeColor,
     borderWidth: 1,
     borderColor: '#fff',
     width: 24,
@@ -275,13 +274,13 @@ export default StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center'
-  },
+  }),
   itemCountText: {
     color: '#fff',
     fontSize: 14
   },
-  shoppingBar: {
-    backgroundColor: mainThemeColor,
+  shoppingBar: (customMainThemeColor) => ({
+    backgroundColor: customMainThemeColor,
     flexDirection: 'row',
     position: 'absolute',
     bottom: 0,
@@ -289,7 +288,7 @@ export default StyleSheet.create({
     width: '100%',
     height: 45,
     paddingHorizontal: 10
-  },
+  }),
   item: {
     borderTopWidth: 1,
     borderColor: '#ddd'
@@ -331,23 +330,23 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between'
   },
-  screenTitle: {
+  screenTitle: (customMainThemeColor) => ({
     textAlign: 'center',
     textTransform: 'uppercase',
     fontSize: 22,
     //letterSpacing: 2,
-    color: mainThemeColor,
+    color: customMainThemeColor,
     fontWeight: 'bold'
-  },
-  screenSubTitle: {
+  }),
+  screenSubTitle: (customMainThemeColor) => ({
     textAlign: 'center',
     fontSize: 18,
     lineHeight: 32,
     marginHorizontal: 10,
     marginBottom: 10,
-    color: mainThemeColor,
+    color: customMainThemeColor,
     fontWeight: 'bold'
-  },
+  }),
   menuContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -356,16 +355,16 @@ export default StyleSheet.create({
     marginHorizontal: 10,
     marginBottom: 12
   },
-  squareButton: {
+  squareButton: (customMainThemeColor) => ({
     margin: 10,
-    backgroundColor: mainThemeColor,
+    backgroundColor: customMainThemeColor,
     width: '45%',
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 30,
     paddingBottom: 30,
     borderRadius: 8
-  },
+  }),
   mainSquareButton: {
     //margin: 10,
     flex: 1,
@@ -376,17 +375,17 @@ export default StyleSheet.create({
     paddingVertical: 30,
     borderRadius: 4
   },
-  buttonIconStyle: {
-    color: mainThemeColor,
+  buttonIconStyle: (customMainThemeColor) => ({
+    color: customMainThemeColor,
     alignSelf: 'center'
-  },
+  }),
   buttonText: {
     textAlign: 'center',
     marginTop: 10
   },
-  iconStyle: {
-    color: mainThemeColor
-  },
+  iconStyle: (customMainThemeColor) => ({
+    color: customMainThemeColor
+  }),
   sectionContainer: {
     justifyContent: 'center',
     marginTop: 5,
@@ -417,24 +416,24 @@ export default StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 10,
   },
-  sectionBarText: {
-    color: mainThemeColor,
+  sectionBarText: (customMainThemeColor) => ({
+    color: customMainThemeColor,
     textAlign: 'left',
     fontWeight: 'bold',
     fontSize: 17
-  },
-  sectionBarTextSmall: {
-    color: mainThemeColor,
+  }),
+  sectionBarTextSmall: (customMainThemeColor) => ({
+    color: customMainThemeColor,
     textAlign: 'left',
-  },
+  }),
   sectionContent: {
     marginBottom: 20
   },
-  announcementTitle: {
-    color: mainThemeColor,
+  announcementTitle: (customMainThemeColor) => ({
+    color: customMainThemeColor,
     fontWeight: 'bold',
     fontSize: 17
-  },
+  }),
   listPanel: {
     flex: 1,
     flexDirection: 'row',
@@ -455,9 +454,6 @@ export default StyleSheet.create({
     paddingVertical: 12,
     borderBottomWidth: 0.4,
     borderColor: '#f4f4f4'
-  },
-  listPanelIcon: {
-    color: mainThemeColor
   },
   fieldContainer: {
     flexDirection: 'row',
@@ -517,13 +513,13 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  cardLabel: isSelected => {
+  cardLabel: (isSelected, customMainThemeColor) => {
     if (isSelected) {
       return {
         flex: 1,
         alignItems: 'center',
         borderWidth: 2,
-        borderColor: mainThemeColor,
+        borderColor: customMainThemeColor,
         paddingVertical: 5
       }
     }
@@ -538,86 +534,89 @@ export default StyleSheet.create({
     }
 
   },
-  markdownContainer: {
-    backgroundColor: '#e7e7e7',
-    padding: 10
-  },
+  markdownContainer: (context) => ({
+    backgroundColor: context?.customBackgroundColor,
+    padding: 10,
+    borderColor: context?.customMainThemeColor,
+    borderWidth: 1,
+    borderRadius: 8
+  }),
   messageBlock: {
     padding: 10,
     textAlign: 'center',
     alignItems: 'center'
   },
-  searchButton: {
+  searchButton: (customMainThemeColor) => ({
     width: '100%',
     textAlign: 'center',
     fontSize: 16,
     borderRadius: 4,
     borderWidth: 1,
     padding: Platform.OS === 'ios' ? 12 : 11,
-    borderColor: mainThemeColor,
-    backgroundColor: mainThemeColor,
+    borderColor: customMainThemeColor,
+    backgroundColor: customMainThemeColor,
     color: '#fff',
     overflow: 'hidden'
-  },
+  }),
   bottom: {
     flex: 1,
     justifyContent: 'flex-end',
     marginTop: 10,
     marginBottom: 10
   },
-  flexButton: {
+  flexButton: (customMainThemeColor) => ({
     flex: 1,
     alignItems: 'center',
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: mainThemeColor,
+    borderColor: customMainThemeColor,
     justifyContent: 'center',
-    backgroundColor: mainThemeColor,
-  },
+    backgroundColor: customMainThemeColor,
+  }),
   flexButtonText: {
     textAlign: 'center',
     fontSize: 16,
     color: '#fff',
   },
-  flexButtonSecondAction: {
+  flexButtonSecondAction: (customMainThemeColor) => ({
     flex: 1,
     alignItems: 'center',
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: mainThemeColor,
+    borderColor: customMainThemeColor,
     justifyContent: 'center',
     backgroundColor: '#fff',
-    color: mainThemeColor
-  },
-  flexButtonSecondActionText: {
+    color: customMainThemeColor
+  }),
+  flexButtonSecondActionText: (customMainThemeColor) => ({
     textAlign: 'center',
     fontSize: 16,
-    color: mainThemeColor,
-  },
-  bottomActionButton: {
+    color: customMainThemeColor,
+  }),
+  bottomActionButton: (customMainThemeColor) => ({
     width: '100%',
     textAlign: 'center',
     fontSize: 16,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: mainThemeColor,
+    borderColor: customMainThemeColor,
     padding: 10,
     marginBottom: 10,
     overflow: 'hidden'
-  },
-  actionButton: {
-    borderColor: mainThemeColor,
-    backgroundColor: mainThemeColor,
+  }),
+  actionButton: (customMainThemeColor) => ({
+    borderColor: customMainThemeColor,
+    backgroundColor: customMainThemeColor,
     color: '#fff'
-  },
-  secondActionButton: {
+  }),
+  secondActionButton: (context) => ({
+    backgroundColor: context?.customBackgroundColor,
+    color: context?.customMainThemeColor,
+  }),
+  cancelButton: (customMainThemeColor) => ({
     backgroundColor: '#fff',
-    color: mainThemeColor
-  },
-  cancelButton: {
-    backgroundColor: '#fff',
-    color: mainThemeColor
-  },
+    color: customMainThemeColor
+  }),
   deleteButton: {
     borderColor: '#f75336',
     color: '#fff',
@@ -690,18 +689,18 @@ export default StyleSheet.create({
     flexDirection: 'row',
     //backgroundColor: '#f5f5f5'
   },
-  circle: {
-    backgroundColor: mainThemeColor,
+  circle: (customMainThemeColor) => ({
+    backgroundColor: customMainThemeColor,
     width: CIRCLE_RADIUS * 2,
     height: CIRCLE_RADIUS * 2,
     borderRadius: CIRCLE_RADIUS
-  },
-  ballContainer: {
+  }),
+  ballContainer: (customMainThemeColor) => ({
     flex: 1,
 
-    borderWidth: 1,
-    borderColor: mainThemeColor
-  },
+    borderWidth: 2,
+    borderColor: customMainThemeColor
+  }),
   datetimeBorder: {
     borderWidth: 1,
     padding: 8,
@@ -728,9 +727,10 @@ export default StyleSheet.create({
   flex: num => {
     return {flex: num}
   },
-  withBorder: {
-    borderWidth: 1
-  },
+  withBorder: (context) => ({
+    borderWidth: 1,
+    borderColor: context?.customBorderColor
+  }),
   withoutBorder: {
     borderWidth: 0
   },
@@ -740,4 +740,8 @@ export default StyleSheet.create({
     marginBottom: 10,
     marginHorizontal: 15
   },
+  customBorderAndBackgroundColor: (context) => ({
+    borderColor: context?.customBorderColor,
+    backgroundColor: context?.customBackgroundColor
+  })
 })

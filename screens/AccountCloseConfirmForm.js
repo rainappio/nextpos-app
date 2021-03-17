@@ -2,7 +2,7 @@ import React from 'react'
 import {Field, reduxForm} from 'redux-form'
 import {Text, TouchableOpacity, View, ScrollView} from 'react-native'
 import {formatCurrency, formatDate, dateToLocaleString, customFormatLocaleDate} from '../actions'
-import styles, {mainThemeColor} from '../styles'
+import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
 import {renderShiftStatus} from "../helpers/shiftActions";
@@ -28,7 +28,7 @@ class AccountCloseConfirmForm extends React.Component {
   }
 
   render() {
-    const {t, themeStyle} = this.context
+    const {t, themeStyle, customMainThemeColor} = this.context
     const {handleSubmit, mostrecentShift, handleAbortCloseShift} = this.props
 
     const closingShiftReport = {
@@ -87,7 +87,7 @@ class AccountCloseConfirmForm extends React.Component {
         {/* Post-Closing Entries */}
         <View style={styles.sectionBar}>
           <View>
-            <Text style={styles.sectionBarText}>
+            <Text style={styles?.sectionBarText(customMainThemeColor)}>
               {t('shift.shiftSummary')}
             </Text>
           </View>
@@ -132,7 +132,7 @@ class AccountCloseConfirmForm extends React.Component {
         {/* Cash */}
         <View style={styles.sectionBar}>
           <View>
-            <Text style={styles.sectionBarText}>
+            <Text style={styles?.sectionBarText(customMainThemeColor)}>
               {t('shift.cashSection')}
             </Text>
           </View>
@@ -197,7 +197,7 @@ class AccountCloseConfirmForm extends React.Component {
         <View style={styles.sectionBar}>
           <View>
             <TouchableOpacity>
-              <Text style={styles.sectionBarText}>
+              <Text style={styles?.sectionBarText(customMainThemeColor)}>
                 {t('shift.cardSection')}
               </Text>
             </TouchableOpacity>
@@ -254,7 +254,7 @@ class AccountCloseConfirmForm extends React.Component {
         {/* Invoice */}
         <View style={styles.sectionBar}>
           <View>
-            <Text style={styles.sectionBarText}>
+            <Text style={styles?.sectionBarText(customMainThemeColor)}>
               {t('shift.invoicesTitle')}
             </Text>
           </View>
@@ -305,10 +305,10 @@ class AccountCloseConfirmForm extends React.Component {
         <TouchableOpacity style={[styles.sectionBar]}
           onPress={() => {this.setState({isShow: true})}}>
           <View style={{flex: 3, flexDirection: 'row'}}>
-            <StyledText style={[styles.sectionBarText, {marginRight: 10}]}>
+            <StyledText style={[styles?.sectionBarText(customMainThemeColor), {marginRight: 10}]}>
               {t('shift.deleteLineItemLog')}
             </StyledText>
-            <Ionicons name="eye" size={20} color={mainThemeColor} />
+            <Ionicons name="eye" size={20} color={customMainThemeColor} />
           </View>
 
         </TouchableOpacity>
@@ -332,7 +332,7 @@ class AccountCloseConfirmForm extends React.Component {
           <TouchableOpacity
             onPress={handleSubmit}
           >
-            <Text style={[styles.bottomActionButton, styles.actionButton]}>
+            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
               {t('shift.confirmAction')}
             </Text>
           </TouchableOpacity>

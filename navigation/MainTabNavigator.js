@@ -25,7 +25,6 @@ import StaffEditScreen from '../screens/StaffEditScreen'
 import Staff from '../screens/Staff'
 import TablesScreen from '../screens/TablesScreen'
 import OrdersScreen from '../screens/OrdersScreen'
-import ReservationScreen from '../screens/ReservationScreen'
 import ReportsScreen from '../screens/ReportsScreen'
 import CategoryCustomize from '../screens/CategoryCustomize'
 import LoginScreen from '../screens/LoginScreen'
@@ -64,7 +63,6 @@ import AnnouncementsEdit from '../screens/AnnouncementsEdit'
 import PasswordReset from '../screens/PasswordReset'
 import StaffTimeCard from '../screens/StaffTimeCard'
 import UserTimeCards from '../screens/UserTimeCards'
-import UserTimeCardDetail from '../screens/UserTimeCardDetail'
 import CloseComplete from '../screens/CloseComplete'
 import AccountClose from '../screens/AccountClose'
 import AccountCloseConfirm from '../screens/AccountCloseConfirm'
@@ -218,23 +216,13 @@ Orders.navigationOptions = ({screenProps: {t}}) => ({
 
 })
 
-const Reservation = createStackNavigator({
-  Reservation: ReservationScreen
-})
-Reservation.navigationOptions = ({screenProps: {t}}) => ({
-  title: t('menu.reservations'),
-  tabBarButtonComponent: (props) => (
-    <TabBarIcon focused={props?.focused} name="ios-calendar" onPress={props?.onPress} />
-  ),
 
-})
 
 const Reports = createStackNavigator({
   Reports: ReportsScreen,
   SalesCharts: SalesCharts,
   StaffTimeCard: StaffTimeCard,
   UserTimeCards: UserTimeCards,
-  UserTimeCardDetail: UserTimeCardDetail,
   CustomerStats: CustomerStats,
   ShiftHistory: ShiftHistory,
   ShiftDetails: ShiftDetails
@@ -336,10 +324,11 @@ const tabBar = createBottomTabNavigator({
   },
   //https://stackoverflow.com/questions/42910540/react-navigation-how-to-change-tabbar-color-based-on-current-tab
   tabBarComponent: props => {
+
     return (
       <TabBarBottom
         {...props}
-        style={props.screenProps.themeStyle}
+        style={{color: props?.screenProps?.customSecondThemeColor, backgroundColor: props?.screenProps?.customTabBarBackgroundColor}}
       />
     )
   },

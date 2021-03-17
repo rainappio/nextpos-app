@@ -3,7 +3,6 @@ import {Text, TouchableOpacity, View, StyleSheet, ScrollView} from 'react-native
 import {StyledText} from "./StyledText";
 import styles from '../styles'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {mainThemeColor} from '../styles';
 import {Button} from 'react-native-elements';
 import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -22,7 +21,7 @@ import {Octicons} from '@expo/vector-icons';
 
 */
 export const InProcessOrderCard = (props) => {
-    const {t, themeStyle, isTablet} = useContext(LocaleContext);
+    const {t, themeStyle, isTablet, customMainThemeColor} = useContext(LocaleContext);
     const [isShow, setIsShow] = useState(false);
 
     return (
@@ -40,7 +39,7 @@ export const InProcessOrderCard = (props) => {
                     margin: 0, flex: 1, flexDirection: 'row'
                 }}
             >
-                <View style={{maxWidth: 640, flex: 1, borderWidth: 1, borderColor: mainThemeColor, marginHorizontal: 10, marginVertical: '15%'}}>
+                <View style={{maxWidth: 640, flex: 1, borderWidth: 1, borderColor: customMainThemeColor, marginHorizontal: 10, marginVertical: '15%'}}>
 
                     <ThemeScrollView >
                         {props?.data?.orderLineItems?.map((item) => {
@@ -72,7 +71,7 @@ export const InProcessOrderCard = (props) => {
                                             </View>
                                             <View>
                                                 <View style={{marginBottom: 5, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
-                                                    <View style={{width: 16, height: 16, borderRadius: 16, marginRight: 8, backgroundColor: (new Date() - new Date(item?.modifiedDate ?? new Date())) > 1800000 ? 'red' : '#86bf20'}}></View>
+                                                    <View style={{width: 16, height: 16, borderRadius: 16, marginRight: 8, backgroundColor: (new Date() - new Date(item?.modifiedDate ?? new Date())) > 1800000 ? '#f75336' : '#86bf20'}}></View>
                                                     <StyledText>{normalizeTimeString(item?.modifiedDate ?? new Date(), 'HH:mm:ss')}</StyledText>
                                                 </View>
                                                 <TouchableOpacity
@@ -81,7 +80,7 @@ export const InProcessOrderCard = (props) => {
                                                         setIsShow(false)
                                                     }}
                                                 >
-                                                    <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.prepare')}</Text>
+                                                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('action.prepare')}</Text>
                                                 </TouchableOpacity>
                                             </View>
                                         </View>
@@ -145,7 +144,7 @@ export const InProcessOrderCard = (props) => {
                     <View style={{height: 32}}>
                         {!!props?.data?.orderLineItems?.[4] &&
                             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                <Octicons name="kebab-horizontal" size={24} color={mainThemeColor} />
+                                <Octicons name="kebab-horizontal" size={24} color={customMainThemeColor} />
                             </View>}
                     </View>
                 </TouchableOpacity>
@@ -156,7 +155,7 @@ export const InProcessOrderCard = (props) => {
                         props?.handleDeliverOrder(props?.data?.orderId)
                     }}
                 >
-                    <Text style={[styles.bottomActionButton, styles.actionButton]}>{t('action.prepare')}</Text>
+                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('action.prepare')}</Text>
                 </TouchableOpacity>
             </View>
         </View>
