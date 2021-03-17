@@ -83,7 +83,7 @@ class TableLayouts extends React.Component {
 
   render() {
     const {navigation, tablelayouts = [], loading, themeStyle} = this.props
-    const {t, isTablet} = this.context
+    const {t, isTablet, customBackgroundColor} = this.context
 
     if (loading) {
       return (
@@ -162,7 +162,7 @@ class TableLayouts extends React.Component {
                         })
                       }}
                       bottomDivider
-                      containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor},]}
+                      containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
                     />
                   ))}
                   {tblLayout.tables.length === 0 && (
@@ -178,7 +178,7 @@ class TableLayouts extends React.Component {
 
                       }}
                       bottomDivider
-                      containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor},]}
+                      containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
                     />
                   )}
                 </List>

@@ -35,14 +35,14 @@ class WorkingAreaAdd extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
-    const { t } = this.context
+    const {navigation} = this.props
+    const {t} = this.context
 
     return (
       <ThemeContainer>
         <View style={styles.fullWidthScreen}>
-          <ScreenHeader title={t('addWorkingAreaTitle')}
-                        parentFullScreen={true}/>
+          <ScreenHeader title={t('workingAreaScreen.addWorkingAreaTitle')}
+            parentFullScreen={true} />
 
           <WorkingAreaForm
             onSubmit={this.handleSubmit}

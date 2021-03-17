@@ -475,7 +475,7 @@ class OrderFormII extends React.Component {
       productsData
     } = this.props
 
-    const {reverseThemeStyle, t, splitParentOrderId, customMainThemeColor} = this.context
+    const {reverseThemeStyle, t, splitParentOrderId, customMainThemeColor, customBackgroundColor} = this.context
     const map = new Map(Object.entries(products))
 
     let totalQuantity = 0
@@ -564,22 +564,22 @@ class OrderFormII extends React.Component {
 
               <View style={{flexDirection: 'row', flex: 1}}>
                 {/* left list */}
-                <View style={[themeStyle, styles.orderItemSideBar, {borderColor: customMainThemeColor, borderTopWidth: 1, paddingTop: 5}]}>
+                <View style={[themeStyle, styles.orderItemSideBar, {borderColor: customMainThemeColor, borderTopWidth: 1, paddingTop: 5}, styles?.customBorderAndBackgroundColor(this.context)]}>
                   <ScrollView style={{flex: 1}}>
-                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle,]}>
+                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
                       <TouchableOpacity style={[(this.state.selectedLabel === 'pinned' ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: 'pinned'})}}>
                         {this.PanelHeader(t('pinned'), '0', this.state.selectedLabel === 'pinned')}
                       </TouchableOpacity>
                     </View>
 
                     {labels.map(lbl => (
-                      <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle,]}>
+                      <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
                         <TouchableOpacity style={[(this.state.selectedLabel === lbl.label ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: lbl.label})}}>
                           {this.PanelHeader(lbl.label, '0', this.state.selectedLabel === lbl.label)}
                         </TouchableOpacity>
                       </View>
                     ))}
-                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle,]}>
+                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
                       <TouchableOpacity style={[(this.state.selectedLabel === 'ungrouped' ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: 'ungrouped'})}}>
                         {this.PanelHeader(t('product.ungrouped'), '0', this.state.selectedLabel === 'ungrouped')}
                       </TouchableOpacity>
@@ -710,7 +710,7 @@ class OrderFormII extends React.Component {
                                   ]
                                 )
                             }
-                            style={styles?.flexButtonSecondAction(customMainThemeColor)}
+                            style={styles?.flexButtonSecondAction(this.context)}
                           >
 
                             <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
@@ -777,7 +777,7 @@ class OrderFormII extends React.Component {
                                     ? warningMessage(t('lineItemCountCheck'))
                                     : this.state?.otherAction === 'printOrderDetails' ? handlePrintOrderDetails(order.orderId) : handlePrintWorkingOrder(order.orderId)
                                 }
-                                containerStyle={styles?.flexButtonSecondAction(customMainThemeColor)}
+                                containerStyle={styles?.flexButtonSecondAction(this.context)}
                                 style={styles?.flexButtonSecondActionText(customMainThemeColor)}
                                 title={t(this.state?.otherAction)}
                               />
@@ -793,7 +793,7 @@ class OrderFormII extends React.Component {
                                 ? warningMessage(t('lineItemCountCheck'))
                                 : handleOrderSubmit(order.orderId)
                             }
-                            style={[styles?.flexButtonSecondAction(customMainThemeColor), {marginBottom: 3}]}
+                            style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
                           >
                             <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
                               {t('submitOrder')}
@@ -821,7 +821,7 @@ class OrderFormII extends React.Component {
                                   ]
                                 )
                             }
-                            containerStyle={styles?.flexButtonSecondAction(customMainThemeColor)}
+                            containerStyle={styles?.flexButtonSecondAction(this.context)}
                             style={styles?.flexButtonSecondActionText(customMainThemeColor)}
                             title={t('quickCheckout')}
                           />
@@ -879,7 +879,7 @@ class OrderFormII extends React.Component {
                                     ? warningMessage(t('lineItemCountCheck'))
                                     : this.state?.otherAction === 'printOrderDetails' ? handlePrintOrderDetails(order.orderId) : handlePrintWorkingOrder(order.orderId)
                                 }
-                                containerStyle={styles?.flexButtonSecondAction(customMainThemeColor)}
+                                containerStyle={styles?.flexButtonSecondAction(this.context)}
                                 style={styles?.flexButtonSecondActionText(customMainThemeColor)}
                                 title={t(this.state?.otherAction)}
                               />
@@ -896,7 +896,7 @@ class OrderFormII extends React.Component {
                                 ? warningMessage(t('lineItemCountCheck'))
                                 : handleOrderSubmit(order.orderId)
                             }
-                            style={[styles?.flexButtonSecondAction(customMainThemeColor), {marginBottom: 3}]}
+                            style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
                           >
                             <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
                               {t('submitOrder')}
@@ -933,7 +933,7 @@ class OrderFormII extends React.Component {
                               }
                             }
                             }
-                            containerStyle={styles?.flexButtonSecondAction(customMainThemeColor)}
+                            containerStyle={styles?.flexButtonSecondAction(this.context)}
                             style={styles?.flexButtonSecondActionText(customMainThemeColor)}
                             title={t('splitBill.SpiltBillScreenTitle')}
                           />
@@ -994,7 +994,7 @@ class OrderFormII extends React.Component {
                                     ? warningMessage(t('lineItemCountCheck'))
                                     : this.state?.otherAction === 'printOrderDetails' ? handlePrintOrderDetails(order.orderId) : handlePrintWorkingOrder(order.orderId)
                                 }
-                                containerStyle={styles?.flexButtonSecondAction(customMainThemeColor)}
+                                containerStyle={styles?.flexButtonSecondAction(this.context)}
                                 style={styles?.flexButtonSecondActionText(customMainThemeColor)}
                                 title={t(this.state?.otherAction)}
                               />
@@ -1009,7 +1009,7 @@ class OrderFormII extends React.Component {
                         <View style={{flex: 1, marginLeft: 5}}>
                           <TouchableOpacity
                             onPress={() => this.handleComplete(this.props.navigation.state.params?.orderSetData?.mainOrderId ?? order.orderId)}
-                            style={styles?.flexButtonSecondAction(customMainThemeColor)}
+                            style={styles?.flexButtonSecondAction(this.context)}
                           >
                             <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>{t('order.completeOrder')}</Text>
                           </TouchableOpacity>
@@ -1187,7 +1187,7 @@ class OrderFormII extends React.Component {
                             }
                             onPress={() => this.addItemToOrder(prd.id)}
                             bottomDivider
-                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
                           />
                         ))}
                       {map.get('pinned') !== undefined &&
@@ -1203,7 +1203,7 @@ class OrderFormII extends React.Component {
                               </View>
                             }
                             bottomDivider
-                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor}]}
                           />
                         )}
                     </List>
@@ -1231,7 +1231,7 @@ class OrderFormII extends React.Component {
                             }
                             onPress={() => this.addItemToOrder(prd.id)}
                             bottomDivider
-                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor}]}
                           />
                         ))}
                         {map.get(lbl.label) !== undefined &&
@@ -1247,7 +1247,7 @@ class OrderFormII extends React.Component {
                                 </View>
                               }
                               bottomDivider
-                              containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                              containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor}]}
                             />
                           )}
                       </List>
@@ -1275,7 +1275,7 @@ class OrderFormII extends React.Component {
                             }
                             onPress={() => this.addItemToOrder(prd.id)}
                             bottomDivider
-                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor}]}
                           />
                         ))}
                       {(map.get('ungrouped') === undefined || map.get('ungrouped').length === 0) && (
@@ -1290,7 +1290,7 @@ class OrderFormII extends React.Component {
                             </View>
                           }
                           bottomDivider
-                          containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                          containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor}]}
                         />
                       )}
                     </List>

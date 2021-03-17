@@ -82,6 +82,24 @@ export const api = {
       return `${apiRoot}/timecards/${id}`
     }
   },
+  inventory: {
+    new: `${apiRoot}/inventories`,
+    getById: id => {
+      return `${apiRoot}/inventories/${id}`
+    },
+    update: (id, sku) => {
+      return `${apiRoot}/inventories/${id}/quantities/${sku}`
+    },
+    delete: id => {
+      return `${apiRoot}/inventories/${id}`
+    },
+    addQuantity: id => {
+      return `${apiRoot}/inventories/${id}/quantities`
+    },
+    deleteQuantity: (id, sku) => {
+      return `${apiRoot}/inventories/${id}/quantities/${sku}`
+    },
+  },
   product: {
     new: `${apiRoot}/products`,
     getById: id => {
@@ -349,6 +367,9 @@ export const api = {
     getTransaction: id => {
       return `${apiRoot}/orders/transactions/${id}`
     },
+    getTransactionReprint: id => {
+      return `${apiRoot}/orders/transactions/${id}?reprint=true`
+    },
   },
   table: {
     getavailTable: `${apiRoot}/orders/availableTables`
@@ -463,6 +484,8 @@ export const api = {
       return `${apiRoot}/admin/subscriptionPlans?country=${country}`
     },
     selectPlan: `${apiRoot}/clientSubscriptions`,
+    lapse: `${apiRoot}/clientSubscriptions/current/lapse`,
+    cancel: `${apiRoot}/clientSubscriptions/current/cancel`,
   },
   rosterEvent: {
     createEvents: `${apiRoot}/rosterEvents`,
@@ -580,7 +603,7 @@ export const dispatchFetchRequest = async (
   failCallback
 ) => {
 
-  return dispatchFetchRequestWithOption(endpoint, payload, {defaultMessage: true}, successCallback, failCallback)
+  return dispatchFetchRequestWithOption(endpoint, payload, {defaultMessage: true, ignoreErrorMessage: false}, successCallback, failCallback)
 }
 
 export const dispatchFetchRequestWithOption = async (
@@ -604,7 +627,7 @@ export const dispatchFetchRequestWithOption = async (
       const tokenObj = JSON.parse(token)
       payload.headers.Authorization = payload?.headers?.Authorization ?? `Bearer ${tokenObj.access_token}`
 
-      const suppressError = payload.headers['x-suppress-error']
+      const suppressError = options?.ignoreErrorMessage
       const response = await fetch(endpoint, payload)
 
       if (!response.ok) {

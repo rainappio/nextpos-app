@@ -17,6 +17,7 @@ const en = {
   selectWorkingArea: 'Working area to show',
   selectCompletedOrder: 'Show Completed Orders',
   selectUnCompletedOrder: 'Show Uncompleted Orders',
+  moreAction: 'Actions',
   general: {
     noData: 'No data'
   },
@@ -358,6 +359,7 @@ const en = {
     prefixYear: 'Prefix Year',
     prefixMonth: 'Prefix Month',
     prefix: 'Invoice Prefix',
+    reprintInvoice: 'Reprint Invoice'
   },
   roster: {
     year: 'Year',
@@ -397,13 +399,20 @@ const en = {
     select: 'Select',
     planStartDate: 'Start Date',
     planEndDate: 'End Date',
+    changeStatus: 'Change Status',
+    action: {
+      lapse: 'Lapse',
+      cancel: 'Cancel'
+    },
     statusCode: {
       SUBMITTED: 'Submitted',
       ACTIVE: 'Activated',
       ACTIVE_LAPSING: 'Active (Ending Subscription)',
       INACTIVE: 'Inactive',
       EXPIRED: 'Expired',
-      CANCELLED: 'Cancelled'
+      CANCELLED: 'Cancelled',
+      ACTIVE_RENEWING: 'Active (Renewal)',
+      LAPSED: 'Lapsed',
     },
     planCode: {
       FREE: 'Free'
@@ -492,6 +501,17 @@ const en = {
     nickname: 'Nick Name',
     updateDate: 'Last updated',
     gesturePassword: 'Gesture Password'
+  },
+  workingAreaScreen: {
+    editWorkingAreaTitle: 'Edit Working Area',
+    addWorkingAreaTitle: 'Add Working Area',
+    workingAreaName: 'Name',
+    noOfPrintCopies: 'No. of Print Copies',
+    linkedPrinters: 'Linked Printer(s)',
+    visibilityOption: 'Visibility',
+    showAll: 'Show All',
+    showInRoster: 'Show in Roster Screen',
+    showInProduct: 'Show in Product Screen',
   },
 }
 

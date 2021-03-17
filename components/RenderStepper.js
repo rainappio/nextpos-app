@@ -73,7 +73,7 @@ class RenderStepper extends React.Component {
                 readOnly={false}
                 value={value}
                 showNumber
-                inputStyle={themeStyle}
+                inputStyle={[themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}
               />
             </View>
           </View>

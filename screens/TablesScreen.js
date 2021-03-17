@@ -235,7 +235,7 @@ class TablesScreen extends React.Component {
         <ThemeContainer>
           <KeyboardAvoidingView style={{flex: 1}} behavior="height">
             <View style={styles.modalContainer}>
-              <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
+              <View style={[styles.boxShadow, styles.popUpLayout, themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
                 <Text style={styles?.screenSubTitle(customMainThemeColor)}>
                   {t('openShift.title')}
                 </Text>
@@ -543,7 +543,7 @@ class TablesScreen extends React.Component {
                     </View>
                   </View>}
                 {this.state.tableIndex === -1 &&
-                  <View style={[styles.mgrbtn20, {flex: 6}]} key='noLayout'>
+                  <View style={[styles.mgrbtn20, styles?.ballContainer(customSecondThemeColor), {flex: 6}]} key='noLayout'>
                     <View style={[styles.sectionBar, {justifyContent: 'flex-start', paddingVertical: 0, }]}>
 
                     </View>

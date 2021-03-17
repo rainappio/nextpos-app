@@ -234,7 +234,7 @@ class MemberScreen extends React.Component {
 
     render() {
         const {navigation, offers, isLoading, handleSubmit} = this.props
-        const {t, isTablet, themeStyle, customMainThemeColor} = this.context
+        const {t, isTablet, themeStyle, customMainThemeColor, customBackgroundColor} = this.context
 
         if (isLoading || this.state.isLoading) {
             return (
@@ -282,8 +282,8 @@ class MemberScreen extends React.Component {
                                             borderBottomWidth: 0,
                                             backgroundColor: customMainThemeColor
                                         }}
-                                        inputStyle={{backgroundColor: themeStyle.backgroundColor}}
-                                        inputContainerStyle={{borderRadius: 0, backgroundColor: themeStyle.backgroundColor}}
+                                        inputStyle={{backgroundColor: customBackgroundColor}}
+                                        inputContainerStyle={{borderRadius: 0, backgroundColor: customBackgroundColor}}
                                     />
 
                                     {this.state.searchResults?.length === 0 || <FlatList
@@ -313,7 +313,7 @@ class MemberScreen extends React.Component {
                                         type='outline'
                                         raised
                                         onPress={() => this.setState({screenMode: 'newForm'})}
-                                        buttonStyle={{minWidth: 320, borderColor: customMainThemeColor, backgroundColor: themeStyle.backgroundColor}}
+                                        buttonStyle={{minWidth: 320, borderColor: customMainThemeColor, backgroundColor: customBackgroundColor}}
                                         title={t('member.createMember')}
                                         titleStyle={{marginLeft: 10, color: customMainThemeColor}}
                                     />
@@ -531,8 +531,8 @@ class MemberScreen extends React.Component {
                                             borderBottomWidth: 0,
                                             backgroundColor: customMainThemeColor
                                         }}
-                                        inputStyle={{backgroundColor: themeStyle.backgroundColor}}
-                                        inputContainerStyle={{borderRadius: 0, backgroundColor: themeStyle.backgroundColor}}
+                                        inputStyle={{backgroundColor: customBackgroundColor}}
+                                        inputContainerStyle={{borderRadius: 0, backgroundColor: customBackgroundColor}}
                                     />
 
                                     {this.state.searchResults?.length === 0 || <FlatList

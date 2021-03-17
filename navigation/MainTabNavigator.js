@@ -234,6 +234,18 @@ Reports.navigationOptions = ({screenProps: {t}}) => ({
   ),
 })
 
+const Inventory = createStackNavigator({
+  Reports: ReportsScreen,
+
+})
+Inventory.navigationOptions = ({screenProps: {t, appType}}) => ({
+  title: t('menu.reporting'),
+  tabBarButtonComponent: (props) => (appType === 'retail' ?
+    <TabBarIcon focused={props?.focused} name="inventory" onPress={props?.onPress} iconLib={'MaterialIcons'} />
+    : null
+  ),
+})
+
 const Rosters = createStackNavigator({
   CalendarScreen: CalendarScreen,
   RostersFormScreen: RostersFormScreen,
@@ -287,6 +299,9 @@ const tabBar = createBottomTabNavigator({
   },
   Reports: {
     screen: Reports
+  },
+  Inventory: {
+    screen: Inventory
   },
   Rosters: {
     screen: Rosters

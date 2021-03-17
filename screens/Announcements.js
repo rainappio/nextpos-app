@@ -201,7 +201,7 @@ class RowBase extends React.Component {
       ]}>
         <View key={data.id}>
           <View
-            style={[styles.tableRowContainerWithBorder]}
+            style={[styles.tableRowContainer]}
           >
             <View style={[styles.tableCellView, {width: '10%'}]}>
               <IonIcon

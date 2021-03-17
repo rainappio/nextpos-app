@@ -69,7 +69,7 @@ class OrderFilterForm extends React.Component {
           }}
         >
           <View style={[{marginTop: 100, marginRight: 15, width: '50%', alignSelf: 'flex-end'}]}>
-            <View style={[themeStyle, {flexDirection: 'column', borderRadius: 10}]}>
+            <View style={[themeStyle, {flexDirection: 'column', borderRadius: 10}, styles?.customBorderAndBackgroundColor(this.context)]}>
               <View style={[styles.tableRowContainer]}>
                 <TouchableOpacity
                   onPress={() => {
@@ -353,7 +353,7 @@ class OrderFilterForm extends React.Component {
         }}
       >
         <View style={[{height: 300, width: '100%', alignSelf: 'flex-end'}]}>
-          <View style={[themeStyle, {flexDirection: 'column', paddingTop: 50, borderBottomRightRadius: 10, borderBottomLeftRadius: 10}]}>
+          <View style={[themeStyle, {flexDirection: 'column', paddingTop: 50, borderBottomRightRadius: 10, borderBottomLeftRadius: 10}, styles?.customBorderAndBackgroundColor(this.context)]}>
             <View style={[styles.tableRowContainer]}>
               <TouchableOpacity
                 onPress={() => {

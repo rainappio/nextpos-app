@@ -259,7 +259,7 @@ class EditPasswordPopUpBase extends Component {
             }}
           >
             <KeyboardAvoidingView behavior='position' >
-              <View style={[styles.boxShadow, styles.popUpLayout, themeStyle, {maxWidth: 640}]}>
+              <View style={[styles.boxShadow, styles.popUpLayout, themeStyle, {maxWidth: 640}, styles?.customBorderAndBackgroundColor(this.context)]}>
                 <TouchableWithoutFeedback>
                   <View>
                     <ScreenHeader backNavigation={false}
@@ -500,7 +500,7 @@ class EditGesturePasswordPopUpBase extends Component {
             }}
           >
             <KeyboardAvoidingView behavior='position' >
-              <View style={[styles.boxShadow, styles.popUpLayout, themeStyle, {maxWidth: 640}]}>
+              <View style={[styles.boxShadow, styles.popUpLayout, themeStyle, {maxWidth: 640}, styles?.customBorderAndBackgroundColor(this.context)]}>
                 <TouchableWithoutFeedback>
                   <View>
                     <ScreenHeader backNavigation={false}

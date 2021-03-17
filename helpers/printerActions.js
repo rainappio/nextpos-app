@@ -20,7 +20,6 @@ export const printMessage = (xml = null, ipAddress, successCallback, errorCallba
     soap = xml
   }
 
-  console.log(soap)
 
   const xhr = new XMLHttpRequest();
 

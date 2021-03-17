@@ -19,17 +19,22 @@ export const ScanView = (props, context) => {
 
     const handleBarCodeScanned = ({type, data}) => {
         setScanned(true);
-        if (isEInvoiceCellPhoneBarcodeValid(data))
+        if (!!props?.allType) {
             props?.successCallback(data)
-        else {
-            Alert.alert(
-                `${localeContext.t('payment.checkCarrierId')}`,
-                ` `,
-                [
-                    {text: `${localeContext.t('action.yes')}`, onPress: () => setScanned(false)}
-                ]
-            )
+        } else {
+            if (isEInvoiceCellPhoneBarcodeValid(data))
+                props?.successCallback(data)
+            else {
+                Alert.alert(
+                    `${localeContext.t('payment.checkCarrierId')}`,
+                    ` `,
+                    [
+                        {text: `${localeContext.t('action.yes')}`, onPress: () => setScanned(false)}
+                    ]
+                )
+            }
         }
+
     };
 
     if (hasPermission === null) {

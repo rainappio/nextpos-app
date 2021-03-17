@@ -167,7 +167,7 @@ class ResetClientPasswordScreen extends React.Component {
 
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate('Login')}
-                  style={[styles?.flexButtonSecondAction(customMainThemeColor), {marginRight: 5}]}
+                  style={[styles?.flexButtonSecondAction(this.context), {marginRight: 5}]}
                 >
                   <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
                     {t('action.cancel')}

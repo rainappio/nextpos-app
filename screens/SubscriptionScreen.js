@@ -24,6 +24,7 @@ import Modal from 'react-native-modal';
 import {ThemeContainer} from "../components/ThemeContainer";
 import {MaterialCommunityIcons, FontAwesome, FontAwesome5} from '@expo/vector-icons'
 import {formatDateOnly} from "../actions";
+import {PurePopUp} from '../components/PopUp'
 
 class SubscriptionScreen extends React.Component {
     static navigationOptions = {
@@ -37,7 +38,10 @@ class SubscriptionScreen extends React.Component {
             currentPosition: this.props.clientStatus?.subscription?.status === 'SUBMITTED' ? 0 : 1,
             subscription: this.props.clientStatus?.subscription,
             plans: null,
-            modalVisible: this.props?.navigation?.state?.params?.isRedirected ?? false
+            modalVisible: this.props?.navigation?.state?.params?.isRedirected ?? false,
+            agreeModalVisible: false,
+            agreeModalId: null,
+            changeStatusModalVisible: false
         }
     }
 
@@ -95,6 +99,36 @@ class SubscriptionScreen extends React.Component {
         }).then()
     }
 
+    handleLapse = () => {
+        dispatchFetchRequest(api.subscription.lapse, {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }, response => {
+            response.json().then(data => {
+                this.refreshScreen()
+            })
+        }).then()
+    }
+
+    handleCancel = () => {
+        dispatchFetchRequest(api.subscription.cancel, {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }, response => {
+            response.json().then(data => {
+                this.refreshScreen()
+            })
+        }).then()
+    }
+
     componentDidMount() {
         this.refreshScreen()
         this.context.localize({
@@ -128,8 +162,8 @@ class SubscriptionScreen extends React.Component {
 
 
     render() {
-        const {isLoading, client} = this.props
-        const {themeStyle, t, customMainThemeColor} = this.context
+        const {isLoading, client, clientStatus} = this.props
+        const {themeStyle, t, customMainThemeColor, customBackgroundColor} = this.context
         const labels = [t('subscription.submitted'), t('subscription.activated')]
 
         if (isLoading) {
@@ -292,6 +326,32 @@ class SubscriptionScreen extends React.Component {
 
                         </View>
                     </Modal>
+                    <Modal
+                        isVisible={this.state.agreeModalVisible}
+                        backdropOpacity={0.7}
+                        onBackdropPress={() => this.setState({agreeModalVisible: false})}
+                        useNativeDriver
+                        hideModalContentWhileAnimating
+                        animationIn='bounceIn'
+                        animationOut='bounceOut'
+                        style={{alignSelf: 'center', maxWidth: 640, width: '80%'}}
+                    >
+                        <View style={[{backgroundColor: customBackgroundColor, borderRadius: 20, flex: 1, flexDirection: 'column'}]}>
+                            <ScrollView style={{flex: 1}}>
+
+                            </ScrollView>
+                            <View style={{justifyContent: 'flex-end'}}>
+                                <View style={{height: 64, padding: 10, margin: 10}}>
+                                    <MainActionFlexButton
+                                        title={t('action.submit')}
+                                        onPress={() => {
+                                            this.setState({agreeModalVisible: false})
+                                            this.handleSubmit(this.state?.agreeModalId)
+                                        }} />
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
                     <View style={[styles.container, {justifyContent: 'flex-start', marginTop: 0, marginBottom: 0}]}>
                         <View style={{flexDirection: 'row', marginBottom: 16, maxWidth: 640, alignSelf: 'center'}}>
                             <StyledText style={{flex: 1, textAlign: 'left'}}>{t('subscription.currentPlan')}</StyledText>
@@ -299,7 +359,35 @@ class SubscriptionScreen extends React.Component {
                         </View>
                         <View style={{flexDirection: 'row', marginBottom: 16, maxWidth: 640, alignSelf: 'center'}}>
                             <StyledText style={{flex: 1, textAlign: 'left'}}>{t('subscription.status')}</StyledText>
-                            <StyledText style={{flex: 1, textAlign: 'right'}}>{t(`subscription.statusCode.${this.state?.subscription?.status}`)}</StyledText>
+                            <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
+                                {['SUBMITTED', 'ACTIVE_RENEWING', 'ACTIVE'].includes(this.state?.subscription?.status) && <PurePopUp
+                                    title={t('subscription.changeStatus')}
+                                    icon={<Icon name="md-create" size={20} color={customMainThemeColor} />}
+                                    isVisible={this.state.changeStatusModalVisible}
+                                    toggleModal={(visible) => this.setState({changeStatusModalVisible: visible})}
+                                >
+                                    <View
+                                        style={{width: '100%', paddingHorizontal: 5}}
+                                    >
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                if (this.state?.subscription?.status === 'SUBMITTED') {
+                                                    this.handleCancel()
+                                                    this.setState({changeStatusModalVisible: false})
+                                                } else {
+                                                    this.handleLapse()
+                                                    this.setState({changeStatusModalVisible: false})
+                                                }
+                                            }}
+                                        >
+                                            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                                                {this.state?.subscription?.status === 'SUBMITTED' ? t('subscription.action.cancel') : t('subscription.action.lapse')}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </PurePopUp>}
+                                <StyledText style={{textAlign: 'right'}}>{t(`subscription.statusCode.${this.state?.subscription?.status}`)}</StyledText>
+                            </View>
                         </View>
                         <View style={{flexDirection: 'row', marginBottom: 16, maxWidth: 640, alignSelf: 'center'}}>
                             <StyledText style={{flex: 1, textAlign: 'left'}}>{t('subscription.planStartDate')}</StyledText>
@@ -334,13 +422,15 @@ class SubscriptionScreen extends React.Component {
                                                         <StyledText style={{textAlign: 'left'}}>{item?.description}</StyledText>
                                                     </ScrollView>
                                                     </View>
-                                                    <View style={{flex: 1, alignSelf: 'flex-end'}}>
+                                                    {(this.state?.subscription?.status === 'ACTIVE' && this.state?.subscription?.subscriptionPlanId === item?.id) || <View style={{flex: 1, alignSelf: 'flex-end'}}>
                                                         <View style={{flex: 1, maxHeight: 64}}>
                                                             <MainActionFlexButton
                                                                 title={t('subscription.select')}
-                                                                onPress={() => {this.handleSubmit(item?.id)}} />
+                                                                onPress={() => {
+                                                                    this.setState({agreeModalVisible: true, agreeModalId: item?.id})
+                                                                }} />
                                                         </View>
-                                                    </View>
+                                                    </View>}
                                                 </View>
                                             </View>
                                         </View>

@@ -1,4 +1,4 @@
-import {api, dispatchFetchRequest} from '../constants/Backend'
+import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 export const FETCH_ORDERS_INFLGHT = 'FETCH_ORDERS_INFLGHT'
 export const FETCH_ORDERS_INFLGHT_SUCCESS = 'FETCH_ORDERS_INFLGHT_SUCCESS'
 export const FETCH_ORDERS_INFLGHT_FAILURE = 'FETCH_ORDERS_INFLGHT_FAILURE'
@@ -20,16 +20,18 @@ export const getfetchOrderInflights = () => {
   return dispatch => {
     dispatch(fetchOrderInflights())
 
-    dispatchFetchRequest(
+    dispatchFetchRequestWithOption(
       api.order.inflightOrders,
       {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
         headers: {
-
-          'x-suppress-error': true
         }
+      },
+      {
+        defaultMessage: true,
+        ignoreErrorMessage: true,
       },
       response => {
         response.json().then(data => {

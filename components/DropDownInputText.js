@@ -41,14 +41,14 @@ const DropDownInputText = ({
                 showArrow={true}
                 defaultValue={pickerLabels?.[0]?.value ?? null}
                 containerStyle={{flex: 1, minWidth: 50, marginRight: 10}}
-                style={{...themeStyle, justifyContent: 'flex-start'}}
+                style={{...themeStyle, justifyContent: 'flex-start', backgroundColor: rest?.customBackgroundColor, borderColor: rest?.customMainThemeColor}}
                 itemStyle={{
-                    ...themeStyle, justifyContent: 'flex-start'
+                    ...themeStyle, justifyContent: 'flex-start', backgroundColor: rest?.customBackgroundColor,
                 }}
-                labelStyle={[themeStyle, {textAlign: 'left'}]}
+                labelStyle={[themeStyle, {textAlign: 'left', backgroundColor: rest?.customBackgroundColor, }]}
                 dropDownMaxHeight={250}
                 dropDownStyle={{...themeStyle, }}
-                arrowColor={themeStyle.color}
+                arrowColor={rest?.customMainThemeColor}
                 selectedLabelStyle={{
                     padding: 0, margin: 0
                 }}

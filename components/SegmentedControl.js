@@ -11,21 +11,21 @@ const SegmentedControl = props => {
     selectedIndex,
     vertical,
     themeStyle,
-    locale: {customMainThemeColor},
+    locale: {customMainThemeColor, customBackgroundColor},
     ...rest
   } = props
 
 
   const horizontalStyleProps = {
     tabsContainerStyle: {width: '100%'},
-    tabStyle: {borderColor: customMainThemeColor, width: '100%', backgroundColor: themeStyle.backgroundColor},
+    tabStyle: {borderColor: customMainThemeColor, width: '100%', backgroundColor: customBackgroundColor},
     tabTextStyle: {color: customMainThemeColor},
     activeTabStyle: {backgroundColor: customMainThemeColor}
   }
 
   const verticalStyleProps = {
     tabsContainerStyle: {width: '100%', flexDirection: 'column'},
-    tabStyle: {borderColor: customMainThemeColor, width: '100%', backgroundColor: themeStyle.backgroundColor},
+    tabStyle: {borderColor: customMainThemeColor, width: '100%', backgroundColor: customBackgroundColor},
     tabTextStyle: {color: customMainThemeColor},
     activeTabStyle: {backgroundColor: customMainThemeColor}
   }

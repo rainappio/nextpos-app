@@ -892,7 +892,7 @@ class PaymentFormScreenTablet extends React.Component {
                                 <View style={{flex: 1, marginHorizontal: 5}}>
                                     <TouchableOpacity
                                         onPress={() => !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()}
-                                        style={styles?.flexButtonSecondAction(customMainThemeColor)}
+                                        style={styles?.flexButtonSecondAction(this.context)}
                                     >
                                         <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>{t('payment.cancel')}</Text>
                                     </TouchableOpacity>

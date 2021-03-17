@@ -88,7 +88,7 @@ class WorkingAreaEdit extends React.Component {
           <ScreenHeader backNavigation={true}
             parentFullScreen={true}
             backAction={() => this.handleEditCancel()}
-            title={t('editWorkingAreaTitle')} />
+            title={t('workingAreaScreen.editWorkingAreaTitle')} />
 
           <WorkingAreaForm
             onSubmit={this.handleUpdate}

@@ -21,12 +21,12 @@ import {Octicons} from '@expo/vector-icons';
 
 */
 export const InProcessOrderCard = (props) => {
-    const {t, themeStyle, isTablet, customMainThemeColor} = useContext(LocaleContext);
+    const {t, themeStyle, isTablet, customMainThemeColor, customBackgroundColor, customBorderColor} = useContext(LocaleContext);
     const [isShow, setIsShow] = useState(false);
 
     return (
         <View
-            style={[styles.boxShadow, themeStyle, {flex: 1, margin: 10, borderRadius: 10, flexDirection: 'row'},]}
+            style={[styles.boxShadow, themeStyle, {flex: 1, margin: 10, borderRadius: 10, flexDirection: 'row', backgroundColor: customBackgroundColor, borderColor: customBorderColor},]}
         >
             <Modal
                 isVisible={isShow}

@@ -95,7 +95,7 @@ class AnnouncementsForm extends React.Component {
             placeholder={t('markdownContent')}
             validate={isRequired}
             multiline={true}
-            height={200}
+            height={240}
             alignLeft={true}
             extraStyle={styles.withoutBorder}
           />

@@ -78,9 +78,11 @@ class CheckoutComplete extends React.Component {
 
     if (!this.state.isPrintFirst && !!this.state.printer && (!!this.state.invoiceXML || !!this.state.receiptXML)) {
       this.setState({isPrintFirst: true})
-      if (!!this.state?.invoiceXML)
-        this.handlePrint(this.state?.invoiceXML, this.state.printer.ipAddress, true)
-      this.handlePrint(this.state?.receiptXML, this.state.printer.ipAddress, false)
+      if (!!this.state?.invoiceXML) {
+        this.handleFirstPrint(this.state?.invoiceXML, this.state?.receiptXML, this.state.printer.ipAddress)
+      } else {
+        this.handlePrint(this.state?.receiptXML, this.state.printer.ipAddress, false)
+      }
     }
   }
 
@@ -144,6 +146,24 @@ class CheckoutComplete extends React.Component {
       )
     }
   }
+  handleFirstPrint = (invoiceXml, receiptXml, ipAddress) => {
+    printMessage(invoiceXml, ipAddress,
+      () => {
+        this.setState({isInvoicePrint: true})
+        printMessage(receiptXml, ipAddress, () => {
+          this.setState({isReceiptPrint: true})
+
+        }, () => {
+          this.setState({isReceiptPrint: false})
+        }
+        )
+      }, () => {
+        this.setState({isInvoicePrint: false})
+
+      }
+    )
+  }
+
 
   render() {
     const {

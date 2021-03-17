@@ -68,7 +68,7 @@ class PopUpBase extends Component {
               contentContainerStyle={[styles.modalContainer, {width: '100%'}]}
             >
               <TouchableWithoutFeedback>
-                <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
+                <View style={[styles.boxShadow, styles.popUpLayout, themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
                   <Text
                     style={[
                       styles?.welcomeText(this.context),
@@ -191,7 +191,7 @@ class CustomPopUpBase extends Component {
               contentContainerStyle={[styles.modalContainer, {width: '100%'}]}
             >
               <TouchableWithoutFeedback>
-                <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
+                <View style={[styles.boxShadow, styles.popUpLayout, themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
                   <Text
                     style={[
                       styles?.welcomeText(this.context),
@@ -332,7 +332,7 @@ class SplitBillPopUpBase extends Component {
             contentContainerStyle={[styles.modalContainer, {width: '100%'}]}
           >
             <TouchableWithoutFeedback>
-              <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
+              <View style={[styles.boxShadow, styles.popUpLayout, themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
                 <Text
                   style={[
                     styles?.welcomeText(this.context),
@@ -427,3 +427,79 @@ SplitBillPopUpBase = reduxForm({
 })(SplitBillPopUpBase)
 
 export const SplitBillPopUp = withContext(SplitBillPopUpBase)
+
+class PurePopUpBase extends Component {
+  static contextType = LocaleContext
+
+  constructor(props, context) {
+    super(props, context)
+
+    this.state = {
+      isVisible: false
+    }
+  }
+
+  toggleModal = visible => {
+    this.props?.toggleModal(visible)
+  }
+
+  render() {
+    const {
+      themeStyle,
+    } = this.props
+    const {t, isTablet, customMainThemeColor, customBackgroundColor} = this.context
+
+    return (
+      <>
+        <TouchableOpacity
+          onPress={() => {
+            this.toggleModal(true)
+          }}
+        >
+          {this.props?.icon ?? <Icon name="md-add" size={32} color={customMainThemeColor} />}
+        </TouchableOpacity>
+
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={this.props.isVisible}
+          onRequestClose={() => this.toggleModal(false)}
+        >
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.modalContainer}
+            onPressOut={() => {
+              this.toggleModal(false)
+            }}
+          >
+            <ScrollView
+              directionalLockEnabled={true}
+              contentContainerStyle={[styles.modalContainer, {width: '100%'}]}
+            >
+              <TouchableWithoutFeedback>
+                <View style={[styles.boxShadow, styles.popUpLayout, themeStyle, {backgroundColor: customBackgroundColor}, styles?.customBorderAndBackgroundColor(this.context)]}>
+                  <Text
+                    style={[
+                      styles?.welcomeText(this.context),
+                      {color: customMainThemeColor},
+                      styles.mgrbtn40
+                    ]}
+                  >
+                    {this.props?.title ?? t('newItem.new')}
+                  </Text>
+                  <View
+                    style={[styles.jc_alignIem_center, styles.flex_dir_row, {width: `${isTablet ? '50%' : '100%'}`, flexWrap: 'wrap'}]}
+                  >
+                    {this.props?.children}
+                  </View>
+                </View>
+              </TouchableWithoutFeedback>
+            </ScrollView>
+          </TouchableOpacity>
+        </Modal>
+      </>
+    )
+  }
+}
+
+export const PurePopUp = withContext(PurePopUpBase)

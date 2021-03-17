@@ -21,7 +21,7 @@ class RenderPureCheckBox extends React.Component {
       isIconAsTitle,
       meta: {error, touched, valid},
       themeStyle,
-      locale: {customMainThemeColor},
+      locale: {customMainThemeColor, customBackgroundColor, customBorderColor},
       ...rest
     } = this.props
 
@@ -46,7 +46,7 @@ class RenderPureCheckBox extends React.Component {
           uncheckedIcon={'circle'}
           checked={value === customValue}
           onPress={() => onChange(customValue)}
-          containerStyle={{backgroundColor: themeStyle.backgroundColor}}
+          containerStyle={{backgroundColor: customBackgroundColor, borderColor: customBorderColor}}
         />
         {!valid && touched && <Text style={[styles.rootError, styles.mgrtotop12, styles.centerText]}>{error}</Text>}
       </View>

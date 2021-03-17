@@ -17,14 +17,14 @@ import {handleOpenShift} from "../helpers/shiftActions";
 
 */
 export const OpenShiftScreen = (props) => {
-    const {t, themeStyle, customMainThemeColor} = useContext(LocaleContext);
+    const {t, themeStyle, customMainThemeColor, customBackgroundColor, customBorderColor} = useContext(LocaleContext);
     const [openBalance, setOpenBalance] = useState(0);
 
     return (
         <ThemeContainer>
             <KeyboardAvoidingView style={{flex: 1}} behavior="height">
                 <View style={styles.modalContainer}>
-                    <View style={[styles.boxShadow, styles.popUpLayout, themeStyle]}>
+                    <View style={[styles.boxShadow, styles.popUpLayout, themeStyle, {backgroundColor: customBackgroundColor, borderColor: customBorderColor}]}>
                         <Text style={styles?.screenSubTitle(customMainThemeColor)}>
                             {t('openShift.title')}
                         </Text>

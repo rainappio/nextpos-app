@@ -47,7 +47,7 @@ class RenderDateTimePicker extends Component {
 			themeStyle,
 			...rest
 		} = this.props
-		const {t, locale, customMainThemeColor} = this.context
+		const {t, locale, customMainThemeColor, customBorderColor} = this.context
 		const colorScheme = Appearance.getColorScheme();
 
 		const timezone = TimeZoneService.getTimeZone()
@@ -142,7 +142,7 @@ class RenderDateTimePicker extends Component {
 							flexDirection: 'row',
 							alignItems: 'center',
 							borderWidth: 1,
-							borderColor: '#c5c5c5',
+							borderColor: customBorderColor,
 							paddingVertical: 10,
 							paddingHorizontal: 5,
 							borderRadius: 4
@@ -207,7 +207,7 @@ class RenderTimePickerBase extends Component {
 			mode,
 			...rest
 		} = this.props
-		const {t, locale, customMainThemeColor} = this.context
+		const {t, locale, customMainThemeColor, customBorderColor} = this.context
 		const timezone = TimeZoneService.getTimeZone()
 		const i18nMoment = moment(!!value ? value : new Date()).tz(timezone);
 
@@ -288,7 +288,7 @@ class RenderTimePickerBase extends Component {
 							flexDirection: 'row',
 							alignItems: 'center',
 							borderWidth: 1,
-							borderColor: '#c5c5c5',
+							borderColor: customBorderColor,
 							paddingVertical: 10,
 							paddingHorizontal: 5,
 							borderRadius: 4
@@ -358,7 +358,7 @@ class RenderDatePickerBase extends Component {
 			mode,
 			...rest
 		} = this.props
-		const {t, locale, customMainThemeColor} = this.context
+		const {t, locale, customMainThemeColor, customBorderColor} = this.context
 		const timezone = TimeZoneService.getTimeZone()
 		const i18nMoment = moment(!!value ? value : new Date()).tz(timezone);
 
@@ -436,7 +436,7 @@ class RenderDatePickerBase extends Component {
 							flexDirection: 'row',
 							alignItems: 'center',
 							borderWidth: 1,
-							borderColor: '#c5c5c5',
+							borderColor: customBorderColor,
 							paddingVertical: 10,
 							paddingHorizontal: 5,
 							borderRadius: 4,

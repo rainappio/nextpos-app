@@ -203,7 +203,7 @@ class CalendarScreen extends React.Component {
 
     render() {
         const {themeStyle, handleSubmit} = this.props
-        const {t, isTablet, customMainThemeColor} = this.context
+        const {t, isTablet, customMainThemeColor, customBackgroundColor} = this.context
         const timezone = TimeZoneService.getTimeZone()
 
 
@@ -273,7 +273,7 @@ class CalendarScreen extends React.Component {
                                                     }}
                                                     {...{
                                                         tabsContainerStyle: {width: '100%'},
-                                                        tabStyle: {borderColor: customMainThemeColor, width: '100%', backgroundColor: themeStyle.backgroundColor},
+                                                        tabStyle: {borderColor: customMainThemeColor, width: '100%', backgroundColor: customBackgroundColor},
                                                         tabTextStyle: {color: customMainThemeColor},
                                                         activeTabStyle: {backgroundColor: customMainThemeColor}
                                                     }}
