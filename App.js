@@ -146,7 +146,8 @@ export default class App extends React.Component {
       customSecondThemeColor: '#f18d1a',
       customBackgroundColor: '#fff',
       customBorderColor: '#e7e7e7',
-      customTabBarBackgroundColor: '#fff'
+      customTabBarBackgroundColor: '#fff',
+      customTabBarIconColor: '#808080'
     }
 
     TimeZoneService.setClientReference(() => store.getState().client)
@@ -248,8 +249,8 @@ export default class App extends React.Component {
 
   changeCustomMainThemeColor = async (color = '#f18d1a') => {
     if (color === '#f18d1a') {
-      await AsyncStorage.setItem('customTheme', JSON.stringify({customMainThemeColor: '#f18d1a', customSecondThemeColor: '#f18d1a', customBackgroundColor: '#fff', customBorderColor: '#e7e7e7', customTabBarBackgroundColor: '#fff'}))
-      this.setState({customMainThemeColor: '#f18d1a', customSecondThemeColor: '#f18d1a', customBackgroundColor: '#fff', customBorderColor: '#e7e7e7', customTabBarBackgroundColor: '#fff'})
+      await AsyncStorage.setItem('customTheme', JSON.stringify({customMainThemeColor: '#f18d1a', customSecondThemeColor: '#f18d1a', customBackgroundColor: '#fff', customBorderColor: '#e7e7e7', customTabBarBackgroundColor: '#fff', customTabBarIconColor: '#808080'}))
+      this.setState({customMainThemeColor: '#f18d1a', customSecondThemeColor: '#f18d1a', customBackgroundColor: '#fff', customBorderColor: '#e7e7e7', customTabBarBackgroundColor: '#fff', customTabBarIconColor: '#808080'})
       if (this.state.theme === 'dark') {
 
         this.toggleTheme()
@@ -257,8 +258,8 @@ export default class App extends React.Component {
 
       }
     } else if (color === '#006B35') {
-      await AsyncStorage.setItem('customTheme', JSON.stringify({customMainThemeColor: color, customSecondThemeColor: '#FF6915', customBackgroundColor: '#FFFFF5', customBorderColor: '#006B35', customTabBarBackgroundColor: '#006B35'}))
-      this.setState({customMainThemeColor: color, customSecondThemeColor: '#FF6915', customBackgroundColor: '#FFFFF5', customBorderColor: '#006B35', customTabBarBackgroundColor: '#006B35'})
+      await AsyncStorage.setItem('customTheme', JSON.stringify({customMainThemeColor: color, customSecondThemeColor: '#FF6915', customBackgroundColor: '#FFFFF5', customBorderColor: '#006B35', customTabBarBackgroundColor: '#006B35', customTabBarIconColor: '#FFFFF5'}))
+      this.setState({customMainThemeColor: color, customSecondThemeColor: '#FF6915', customBackgroundColor: '#FFFFF5', customBorderColor: '#006B35', customTabBarBackgroundColor: '#006B35', customTabBarIconColor: '#FFFFF5'})
       if (this.state.theme === 'dark') {
 
         this.toggleTheme()
@@ -266,8 +267,8 @@ export default class App extends React.Component {
 
       }
     } else if (color === '#000') {
-      await AsyncStorage.setItem('customTheme', JSON.stringify({customMainThemeColor: '#f18d1a', customSecondThemeColor: '#f18d1a', customBackgroundColor: '#222222', customBorderColor: '#e7e7e7', customTabBarBackgroundColor: '#222222'}))
-      this.setState({customMainThemeColor: '#f18d1a', customSecondThemeColor: '#f18d1a', customBackgroundColor: '#222222', customBorderColor: '#e7e7e7', customTabBarBackgroundColor: '#222222'})
+      await AsyncStorage.setItem('customTheme', JSON.stringify({customMainThemeColor: '#f18d1a', customSecondThemeColor: '#f18d1a', customBackgroundColor: '#222222', customBorderColor: '#e7e7e7', customTabBarBackgroundColor: '#222222', customTabBarIconColor: '#808080'}))
+      this.setState({customMainThemeColor: '#f18d1a', customSecondThemeColor: '#f18d1a', customBackgroundColor: '#222222', customBorderColor: '#e7e7e7', customTabBarBackgroundColor: '#222222', customTabBarIconColor: '#808080'})
       if (this.state.theme === 'light') {
 
         this.toggleTheme()
@@ -290,7 +291,8 @@ export default class App extends React.Component {
             customSecondThemeColor: data?.customSecondThemeColor,
             customBackgroundColor: data?.customBackgroundColor,
             customBorderColor: data?.customBorderColor,
-            customTabBarBackgroundColor: data?.customTabBarBackgroundColor
+            customTabBarBackgroundColor: data?.customTabBarBackgroundColor,
+            customTabBarIconColor: data?.customTabBarIconColor
           })
         }
       })
@@ -454,7 +456,8 @@ export default class App extends React.Component {
               customSecondThemeColor: this.state?.customSecondThemeColor,
               customBackgroundColor: this.state?.customBackgroundColor,
               customBorderColor: this.state?.customBorderColor,
-              customTabBarBackgroundColor: this.state?.customTabBarBackgroundColor
+              customTabBarBackgroundColor: this.state?.customTabBarBackgroundColor,
+              customTabBarIconColor: this.state?.customTabBarIconColor
             }}>
               <LocaleContext.Provider value={this.state}>
                 <AppNavigator
@@ -476,7 +479,8 @@ export default class App extends React.Component {
                     customSecondThemeColor: this.state?.customSecondThemeColor,
                     customBackgroundColor: this.state?.customBackgroundColor,
                     customBorderColor: this.state?.customBorderColor,
-                    customTabBarBackgroundColor: this.state?.customTabBarBackgroundColor
+                    customTabBarBackgroundColor: this.state?.customTabBarBackgroundColor,
+                    customTabBarIconColor: this.state?.customTabBarIconColor
                   }}
                 />
               </LocaleContext.Provider>

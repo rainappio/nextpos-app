@@ -207,7 +207,7 @@ class CreateAccFormScreen extends React.Component {
 
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Intro')}
-              style={[styles?.flexButtonSecondAction(customMainThemeColor), {marginRight: 5}]}
+              style={[styles?.flexButtonSecondAction(this.context), {marginRight: 5}]}
             >
               <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
                 {t('action.cancel')}

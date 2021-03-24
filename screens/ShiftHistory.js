@@ -35,7 +35,7 @@ class ShiftHistory extends React.Component {
         shiftStatus: 'Status'
       },
       zh: {
-        shiftHistoryTitle: '帳歷史',
+        shiftHistoryTitle: '關帳紀錄',
         shiftStartDate: '開帳日期',
         shiftOpenedBy: '開帳員工',
         shiftTotal: '總營業額',
@@ -94,7 +94,7 @@ class ShiftHistory extends React.Component {
           })
         }
         bottomDivider
-        containerStyle={[styles.dynamicVerticalPadding(12), {padding: 0, backgroundColor: this.props.themeStyle.backgroundColor}]}
+        containerStyle={[styles.dynamicVerticalPadding(12), {padding: 0, backgroundColor: this.context?.customBackgroundColor}]}
       />
     )
   }

@@ -14,10 +14,10 @@ class LoadingScreen extends React.Component {
 
   render() {
     const {theme, themeStyle} = this.props
-    const {customMainThemeColor} = this.context
+    const {customMainThemeColor, customBackgroundColor} = this.context
     const spinColor = customMainThemeColor
     return (
-      <View style={[styles.mainContainer, {justifyContent: 'center'}, themeStyle]}>
+      <View style={[styles.mainContainer, {justifyContent: 'center'}, themeStyle, {backgroundColor: customBackgroundColor}]}>
         <ActivityIndicator size="small" color={spinColor} />
       </View>
     )

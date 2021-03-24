@@ -746,7 +746,7 @@ class RostersFormScreen extends React.Component {
                                         containerStyle={[styles?.flexButton(customMainThemeColor), styles.deleteButton]}
                                         textStyle={styles.flexButtonText}
                                         handleDeleteAction={() => this.handleDelete()} />}
-                                    <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={[styles?.flexButtonSecondAction(customMainThemeColor), {marginHorizontal: 10}]}>
+                                    <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={[styles?.flexButtonSecondAction(this.context), {marginHorizontal: 10}]}>
                                         <Text style={[styles?.flexButtonSecondActionText(customMainThemeColor)]}>
                                             {t('action.cancel')}
                                         </Text>

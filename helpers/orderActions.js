@@ -365,12 +365,11 @@ export const handleOrderAction = (id, action, successCallback = null) => {
       withCredentials: true,
       credentials: 'include',
       headers: {
-
-        'x-suppress-error': true
       },
       body: formData
     }, {
-    defaultMessage: false
+    defaultMessage: false,
+    ignoreErrorMessage: true,
   },
     response => {
       !!successCallback ? successCallback() : console.log('no successCallback')

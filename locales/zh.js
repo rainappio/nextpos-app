@@ -17,6 +17,7 @@ const zh = {
   selectWorkingArea: '顯示工作區',
   selectCompletedOrder: '顯示已完成訂單',
   selectUnCompletedOrder: '顯示未完成訂單',
+  moreAction: '操作',
   general: {
     noData: '沒有資料'
   },
@@ -363,6 +364,7 @@ const zh = {
     prefixYear: '字軌年份',
     prefixMonth: '字軌月份',
     prefix: '發票字軌',
+    reprintInvoice: '補印發票'
   },
   roster: {
     year: '年份',
@@ -402,13 +404,20 @@ const zh = {
     select: '選擇',
     planStartDate: '開始日期',
     planEndDate: '結束日期',
+    changeStatus: '修改狀態',
+    action: {
+      lapse: '取消訂閱',
+      cancel: '取消送出'
+    },
     statusCode: {
       SUBMITTED: '已送出',
       ACTIVE: '使用中',
       ACTIVE_LAPSING: '使用中(不續訂)',
-      INACTIVE: '已失效',
+      INACTIVE: '停用中',
       EXPIRED: '尚未選擇方案',
-      CANCELLED: '已取消'
+      CANCELLED: '已取消',
+      ACTIVE_RENEWING: '使用中(續約中)',
+      LAPSED: '已過期',
     },
     planCode: {
       FREE: '免費'
@@ -498,6 +507,17 @@ const zh = {
     updateDate: '最後更新',
     gesturePassword: '圖形密碼'
   },
+  workingAreaScreen: {
+    editWorkingAreaTitle: '編輯工作區',
+    addWorkingAreaTitle: '新增工作區',
+    workingAreaName: '名稱',
+    noOfPrintCopies: '預設出單張數',
+    linkedPrinters: '連結出單機設定',
+    visibilityOption: '顯示範圍設定',
+    showAll: '全部顯示',
+    showInRoster: '顯示於排班',
+    showInProduct: '顯示於產品管理',
+  }
 }
 
 export default zh

@@ -63,3 +63,8 @@ export const isNDigitsNumber = (n) => (value) => {
   else
     return undefined
 }
+
+export const isPositiveInteger = value => {
+  return (value >= 0) ? undefined : i18n.t('errors.moreThanZero')
+}
+

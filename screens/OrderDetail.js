@@ -8,7 +8,7 @@ import {handleDelete, renderOptionsAndOffer, renderOrderState, handleCancelInvoi
 import ScreenHeader from "../components/ScreenHeader";
 import OrderTopInfo from "./OrderTopInfo";
 import LoadingScreen from "./LoadingScreen";
-import {api, dispatchFetchRequestWithOption, successMessage} from "../constants/Backend";
+import {api, dispatchFetchRequestWithOption, successMessage, dispatchFetchRequest} from "../constants/Backend";
 import DeleteBtn from "../components/DeleteBtn";
 import {NavigationEvents} from "react-navigation";
 import {ThemeScrollView} from "../components/ThemeScrollView";
@@ -16,6 +16,7 @@ import {StyledText} from "../components/StyledText";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import {ThemeContainer} from "../components/ThemeContainer";
+import {printMessage} from "../helpers/printerActions";
 
 class OrderDetail extends React.Component {
   static navigationOptions = {
@@ -34,11 +35,15 @@ class OrderDetail extends React.Component {
       {label: '1', value: 'FIRST_TIME'},
       {label: '2 - 3', value: 'TWO_TO_THREE'},
       {label: '4+', value: 'MORE_THAN_THREE'}
-    ]
+    ],
+    invoiceXML: null,
+    receiptXML: null,
+    printer: null,
   }
 
   componentDidMount() {
     this.props.getOrder(this.props?.navigation?.state?.params?.orderId ?? this.props?.orderId)
+    this.getOnePrinter()
   }
 
   handleCopyOrder(order) {
@@ -56,6 +61,58 @@ class OrderDetail extends React.Component {
           orderId: copiedOrder.orderId
         })
 
+      })
+    }).then()
+  }
+
+  getOnePrinter = () => {
+    dispatchFetchRequest(
+      api.printer.getOnePrinter,
+      {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {}
+      },
+      response => {
+        response.json().then(data => {
+          this.setState({printer: data})
+        })
+      },
+      response => {
+        console.warn('getOnePrinter ERROR')
+      }
+    ).then()
+
+
+  }
+
+
+
+  handleRePrint = (order, ipAddress) => {
+    dispatchFetchRequestWithOption(api.payment.getTransactionReprint(order?.transactions?.[0]?.transactionId), {
+      method: 'GET',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }, {
+      defaultMessage: false
+    }, response => {
+      response.json().then(data => {
+
+        printMessage(data?.invoiceXML, ipAddress,
+          () => {
+            printMessage(data?.receiptXML, ipAddress, () => {
+
+            }, () => {
+            }
+            )
+          }, () => {
+
+          }
+        )
       })
     }).then()
   }
@@ -355,6 +412,13 @@ class OrderDetail extends React.Component {
               })}
 
               {!!this.props?.orderId || <View style={[styles.bottom, styles.horizontalMargin]}>
+                <TouchableOpacity
+                  onPress={() => this.handleRePrint(order, this.state.printer.ipAddress)}
+                >
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                    {t('eInvoice.reprintInvoice')}
+                  </Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => this.handleCopyOrder(order)}
                 >

@@ -54,12 +54,12 @@ export const OptionModal = (props) => {
             >
                 {(localeContext?.isTablet || !!props?.tabletView) ? <View style={[{marginTop: 100, marginRight: 15, alignSelf: 'flex-end'}]}>
 
-                    <View style={[localeContext?.themeStyle, {flexDirection: 'column', borderRadius: 10, padding: 20}]}>
+                    <View style={[localeContext?.themeStyle, {flexDirection: 'column', borderRadius: 10, padding: 20}, styles?.customBorderAndBackgroundColor(localeContext)]}>
                         {props?.children}
                     </View>
                 </View>
                     : <View style={[{width: '100%', alignSelf: 'flex-end'}]}>
-                        <View style={[localeContext?.themeStyle, {flexDirection: 'column', paddingBottom: 10, paddingTop: 50, borderBottomRightRadius: 10, borderBottomLeftRadius: 10}]}>
+                        <View style={[localeContext?.themeStyle, {flexDirection: 'column', paddingBottom: 10, paddingTop: 50, borderBottomRightRadius: 10, borderBottomLeftRadius: 10}, styles?.customBorderAndBackgroundColor(localeContext)]}>
                             {props?.children}
                         </View>
                     </View>}

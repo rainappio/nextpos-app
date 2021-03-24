@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import ProductFormScreen from './ProductFormScreen'
 import {clearProduct, getLables, getProduct, getProductOptions, getProducts, getWorkingAreas} from '../actions'
-import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
+import {api, dispatchFetchRequest, successMessage, dispatchFetchRequestWithOption} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 
 // todo: rename this file to ProductEdit.
@@ -11,12 +11,23 @@ class ProductEdit extends Component {
     header: null
   }
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      inventoryData: null
+    }
+
+  }
+
+
   componentDidMount() {
     this.props.getLables()
     this.props.load()
     this.props.getProductOptions()
     this.props.getWorkingAreas('PRODUCT')
     this.props.getProduct()
+    this.getInventory(this.props.navigation.state.params.productId)
   }
 
   handleEditCancel = () => {
@@ -84,6 +95,128 @@ class ProductEdit extends Component {
     ).then()
   }
 
+  getInventory = (productId) => {
+    dispatchFetchRequestWithOption(
+      api.inventory.getById(productId),
+      {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }, {
+      defaultMessage: false,
+      ignoreErrorMessage: true
+    },
+      response => {
+        response.json().then(data => {
+          this.setState({inventoryData: data})
+
+        })
+      },
+      response => {
+        this.setState({inventoryData: null})
+      }
+    ).then()
+  }
+
+  addInventory = (values) => {
+    const request = {quantity: {...values}}
+    let prdId = this.props.navigation.state.params.productId
+    dispatchFetchRequest(
+      api.inventory.addQuantity(prdId),
+      {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(request)
+      },
+      response => {
+        response.json().then(data => {
+          this.setState({inventoryData: data})
+        })
+      }
+    ).then()
+  }
+
+  addFirstInventory = (values) => {
+    const request = {
+      productId: this.props.navigation.state.params.productId,
+      quantity: {...values}
+    }
+    dispatchFetchRequest(
+      api.inventory.new,
+      {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(request)
+      },
+      response => {
+        response.json().then(data => {
+          this.setState({inventoryData: data})
+        })
+      }
+    ).then()
+  }
+
+  handleInventoryUpdate = (values, oldSku) => {
+    const request = {quantity: {...values}}
+    let prdId = this.props.navigation.state.params.productId
+
+    dispatchFetchRequest(api.inventory.update(prdId, oldSku), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(request)
+    }, response => {
+      response.json().then(data => {
+        this.setState({inventoryData: data})
+      })
+    }).then()
+  }
+
+  handleInventoryDelete = (oldSku) => {
+    let prdId = this.props.navigation.state.params.productId
+
+    dispatchFetchRequest(api.inventory.deleteQuantity(prdId, oldSku), {
+      method: 'DELETE',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }, response => {
+      this.getInventory(prdId)
+    }).then()
+  }
+
+  handleDeleteAllInventory = () => {
+    let prdId = this.props.navigation.state.params.productId
+
+    dispatchFetchRequest(api.inventory.delete(prdId), {
+      method: 'DELETE',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }, response => {
+      this.getInventory(prdId)
+    }).then()
+  }
+
+
   render() {
     const {
       labels,
@@ -118,6 +251,12 @@ class ProductEdit extends Component {
           isPinned={this.props.navigation.state.params.isPinned}
           productId={this.props.navigation.state.params.productId}
           handlepinToggle={this.handlepinToggle}
+          inventoryData={this.state?.inventoryData}
+          handleInventoryUpdate={this.handleInventoryUpdate}
+          addInventory={this.addInventory}
+          handleInventoryDelete={this.handleInventoryDelete}
+          handleDeleteAllInventory={this.handleDeleteAllInventory}
+          addFirstInventory={this.addFirstInventory}
         />
       )
     } else {

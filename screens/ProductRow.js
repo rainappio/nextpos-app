@@ -322,7 +322,7 @@ class ProductRow extends React.Component {
       navigation,
       themeStyle
     } = this.props
-    const {t, customMainThemeColor} = this.context
+    const {t, customMainThemeColor, customBackgroundColor} = this.context
     var getlabels = labels !== undefined && labels
     var labelsArr = [{label: t('product.pinned'), id: 'pinned'}, ...getlabels, {label: t('product.ungrouped'), id: 'ungrouped'}]
 
@@ -390,8 +390,8 @@ class ProductRow extends React.Component {
                 borderBottomWidth: 0,
                 backgroundColor: customMainThemeColor
               }}
-              inputStyle={{backgroundColor: themeStyle.backgroundColor}}
-              inputContainerStyle={{borderRadius: 0, backgroundColor: themeStyle.backgroundColor}}
+              inputStyle={{backgroundColor: customBackgroundColor}}
+              inputContainerStyle={{borderRadius: 0, backgroundColor: customBackgroundColor}}
             />
             <FlatList
               style={{maxHeight: Dimensions.get('window').height / 3}}

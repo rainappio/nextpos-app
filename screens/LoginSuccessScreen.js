@@ -331,6 +331,23 @@ class LoginSuccessScreen extends React.Component {
                   } />
               </View>
             )}
+            {(appType === 'retail' && shiftStatus !== 'ACTIVE') && (
+              <View style={[styles.menuContainer, {flex: 1}]}>
+                <MenuButton
+                  route={'ShiftClose'}
+                  onPress={() => {
+                    this.props.navigation.navigate('ShiftClose')
+                  }}
+                  title={t('openShift.title')}
+                  icon={
+                    <MaterialIcon
+                      name="play-arrow"
+                      size={40}
+                      style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                    />
+                  } />
+              </View>
+            )}
 
             <View style={[styles.menuContainer, {flex: 1}]}>
               <MenuButton

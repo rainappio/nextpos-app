@@ -578,15 +578,15 @@ export default StyleSheet.create({
     fontSize: 16,
     color: '#fff',
   },
-  flexButtonSecondAction: (customMainThemeColor) => ({
+  flexButtonSecondAction: (context) => ({
     flex: 1,
     alignItems: 'center',
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: customMainThemeColor,
+    borderColor: context?.customBorderColor,
     justifyContent: 'center',
-    backgroundColor: '#fff',
-    color: customMainThemeColor
+    backgroundColor: context?.customBackgroundColor,
+    color: context?.customMainThemeColor
   }),
   flexButtonSecondActionText: (customMainThemeColor) => ({
     textAlign: 'center',
@@ -642,28 +642,12 @@ export default StyleSheet.create({
   row: {
     flexDirection: 'column',
     alignItems: 'center',
-    borderColor: '#e7e7e7',
-    borderWidth: 1,
     flex: 1,
     marginBottom: 12,
     marginHorizontal: 10,
     borderRadius: 4,
 
-    ...Platform.select({
-      ios: {
-        //width: window.width - 30 * 2,
-        // shadowColor: 'rgba(0,0,0,0.2)',
-        // shadowOpacity: 1,
-        // shadowOffset: { height: 2, width: 2 },
-        // shadowRadius: 2
-      },
 
-      android: {
-        //width: window.width - 30 * 2,
-        elevation: 0,
-        marginVertical: 30,
-      },
-    })
   },
   list: {
     flexDirection: 'row'

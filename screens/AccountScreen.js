@@ -12,6 +12,7 @@ import ScreenHeader from "../components/ScreenHeader";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import {StyledText} from "../components/StyledText";
+import {ThemeContainer} from "../components/ThemeContainer";
 
 class AccountScreen extends React.Component {
   static navigationOptions = {
@@ -76,7 +77,7 @@ class AccountScreen extends React.Component {
     const {t} = this.context
 
     return (
-      <View style={[styles.mainContainer, themeStyle]}>
+      <ThemeContainer>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader backNavigation={true}
             parentFullScreen={true}
@@ -138,7 +139,7 @@ class AccountScreen extends React.Component {
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <StyledText>
-                2021-03-17
+                2021-03-24
               </StyledText>
             </View>
           </View>
@@ -152,7 +153,7 @@ class AccountScreen extends React.Component {
           </View>
         )}*/}
         </View>
-      </View>
+      </ThemeContainer>
     )
   }
 }

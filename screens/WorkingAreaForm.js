@@ -19,30 +19,7 @@ class WorkingAreaForm extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    context.localize({
-      en: {
-        editWorkingAreaTitle: 'Edit Working Area',
-        addWorkingAreaTitle: 'Add Working Area',
-        workingAreaName: 'Name',
-        noOfPrintCopies: 'No. of Print Copies',
-        linkedPrinters: 'Linked Printer(s)',
-        visibilityOption: 'Visibility',
-        showAll: 'Show All',
-        showInRoster: 'Show in Roster Screen',
-        showInProduct: 'Show in Product Screen',
-      },
-      zh: {
-        editWorkingAreaTitle: '編輯工作區',
-        addWorkingAreaTitle: '新增工作區',
-        workingAreaName: '名稱',
-        noOfPrintCopies: '預設出單張數',
-        linkedPrinters: '連結出單機設定',
-        visibilityOption: '顯示範圍設定',
-        showAll: '全部顯示',
-        showInRoster: '顯示於排班',
-        showInProduct: '顯示於產品管理',
-      }
-    })
+
   }
 
   render() {
@@ -54,7 +31,7 @@ class WorkingAreaForm extends React.Component {
         <View>
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, styles.flex(1)]}>
-              <StyledText style={styles.fieldTitle}>{t('workingAreaName')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('workingAreaScreen.workingAreaName')}</StyledText>
             </View>
             <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
@@ -62,21 +39,21 @@ class WorkingAreaForm extends React.Component {
                 component={InputText}
                 type="text"
                 validate={[isRequired]}
-                placeholder={t('workingAreaName')}
+                placeholder={t('workingAreaScreen.workingAreaName')}
               />
             </View>
           </View>
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, styles.flex(1)]}>
-              <StyledText style={styles.fieldTitle}>{t('noOfPrintCopies')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('workingAreaScreen.noOfPrintCopies')}</StyledText>
             </View>
             <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
                 name="noOfPrintCopies"
                 component={InputText}
                 validate={isRequired}
-                placeholder={t('noOfPrintCopies')}
+                placeholder={t('workingAreaScreen.noOfPrintCopies')}
                 keyboardType="numeric"
                 defaultvalue="1"
                 format={(value, name) => {
@@ -89,23 +66,23 @@ class WorkingAreaForm extends React.Component {
           </View>
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, styles.flex(1)]}>
-              <StyledText style={styles.fieldTitle}>{t('visibilityOption')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('workingAreaScreen.visibilityOption')}</StyledText>
             </View>
             <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
                 name="visibility"
                 component={DropDown}
-                options={[{value: 'ALL', label: t('showAll')}, {value: 'ROSTER', label: t('showInRoster')}, {value: 'PRODUCT', label: t('showInProduct')}]}
+                options={[{value: 'ALL', label: t('workingAreaScreen.showAll')}, {value: 'ROSTER', label: t('workingAreaScreen.showInRoster')}, {value: 'PRODUCT', label: t('workingAreaScreen.showInProduct')}]}
                 search
                 selection
                 fluid
-                defaultValue={isEdit ? null : {value: 'ALL', label: t('showAll')}}
+                defaultValue={isEdit ? null : {value: 'ALL', label: t('workingAreaScreen.showAll')}}
               />
             </View>
           </View>
 
           <View style={[styles.sectionTitleContainer]}>
-            <StyledText style={styles.sectionTitleText}>{t('linkedPrinters')}</StyledText>
+            <StyledText style={styles.sectionTitleText}>{t('workingAreaScreen.linkedPrinters')}</StyledText>
           </View>
 
           <Field
