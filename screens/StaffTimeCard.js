@@ -5,7 +5,7 @@ import {getTimeCards} from '../actions'
 import {warningMessage} from '../constants/Backend'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
-import StaffTimeCardFilterForm from './StaffTimeCardFilterForm'
+import {StaffTimeCardFilterForm} from './StaffTimeCardFilterForm'
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import moment from "moment";

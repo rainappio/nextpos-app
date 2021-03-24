@@ -16,124 +16,8 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import {FontAwesome} from '@expo/vector-icons';
 import {Ionicons} from '@expo/vector-icons';
 
+
 class RenderAgendaBase extends Component {
-    static contextType = LocaleContext
-    constructor(props, context) {
-        super(props, context);
-
-        const timezone = TimeZoneService.getTimeZone()
-        let itemObj = {}
-        let markObj = {}
-        props?.events?.forEach((event) => {
-            let dateKey = moment(event?.startTime ?? new Date()).tz(timezone).format("YYYY-MM-DD")
-            let today = moment(!!props?.selectedDate ? new Date(props?.selectedDate) : new Date()).tz(timezone).format("YYYY-MM-DD")
-            if (!itemObj[dateKey]) {
-                if (dateKey === today) {
-                    itemObj[dateKey] = []
-                    itemObj[dateKey].push({
-                        ...event,
-                        name: event?.id,
-                    })
-                }
-            } else {
-                itemObj[dateKey].push({
-                    ...event,
-                    name: event?.id,
-                })
-            }
-            markObj[dateKey] = {marked: true}
-        })
-        this.state = {
-            items: itemObj,
-            markedDates: markObj,
-        };
-    }
-
-    render() {
-        const timezone = TimeZoneService.getTimeZone()
-        const {t} = this.context
-        return (
-            <View style={{flex: 1, flexDirection: 'row'}}>
-                <View style={{flex: 1}}></View>
-                <View style={{flex: 7}}>
-                    <Agenda
-                        selected={this.props?.selectedDate}
-                        items={this.state.items}
-                        renderItem={this.renderItem.bind(this)}
-                        rowHasChanged={this.rowHasChanged.bind(this)}
-                        onDayPress={this.loadItems.bind(this)}
-                        onRefresh={() => console.log('refreshing...')}
-                        markedDates={this.state.markedDates}
-                        renderEmptyData={() => {
-                            return (<View style={{alignSelf: 'center', padding: 10}}>
-                                <Text style={styles.messageBlock}>{t('order.noOrder')}</Text>
-                            </View>);
-                        }}
-                        firstDay={1}
-                        theme={{
-                            'stylesheet.agenda.main': {
-                                header: {
-                                    overflow: 'hidden',
-                                    justifyContent: 'flex-end',
-                                    position: 'absolute',
-                                    height: '100%',
-                                    width: '100%'
-                                },
-
-                            }
-                        }}
-                    />
-                </View>
-            </View>
-        );
-    }
-
-    loadItems(day) {
-
-        const timezone = TimeZoneService.getTimeZone()
-        let itemObj = {}
-        this.props?.events?.forEach((event) => {
-            let dateKey = moment(event?.startTime ?? new Date()).tz(timezone).format("YYYY-MM-DD")
-            if (!itemObj[dateKey]) {
-
-                if (dateKey === day?.dateString) {
-                    itemObj[dateKey] = []
-                    itemObj[dateKey].push({
-                        ...event,
-                        name: event?.id,
-                    })
-                }
-
-            } else {
-                itemObj[dateKey].push({
-                    ...event,
-                    name: event?.id,
-                })
-            }
-
-        })
-        this.setState({
-            items: itemObj
-        })
-    }
-
-    renderItem(item, firstItemInDay) {
-        return (
-            <CalendarEvent event={item} theme={{
-                text: {
-                    color: 'black'
-                }
-            }} isManager={this.props?.isManager}
-                users={this.props?.users} refreshScreen={() => this.props?.refreshScreen()} />
-        );
-    }
-
-    rowHasChanged(r1, r2) {
-        return r1.name !== r2.name;
-    }
-}
-
-class RenderAgendaBase2 extends Component {
     static contextType = LocaleContext
     constructor(props, context) {
         super(props, context);
@@ -190,14 +74,22 @@ class RenderAgendaBase2 extends Component {
 
     render() {
         const timezone = TimeZoneService.getTimeZone()
-        const {t, customMainThemeColor} = this.context
+        const {t, customMainThemeColor, customBackgroundColor, themeStyle, complexTheme} = this.context
         let weekStart = moment(this.state?.selectedDate).startOf('isoWeek').tz(timezone)
         let weekEnd = moment(this.state?.selectedDate).endOf('isoWeek').tz(timezone)
         const weekEvents = this.state?.events?.filter((event) =>
             (moment(event?.startTime).isBetween(weekStart, weekEnd) &&
                 ((this.props?.selectedLabels.has('noWorkingArea') && Object.keys(event?.eventResources).length === 0) || (Object.keys(event?.eventResources).some((area) => this.props?.selectedLabels.has(area))))
             ))
-        console.log('weekEvents', JSON.stringify(weekEvents), this.props?.selectedLabels)
+        const customCalendarTheme = {
+            calendarBackground: customBackgroundColor,
+            monthTextColor: customMainThemeColor,
+            textMonthFontWeight: 'bold',
+            arrowColor: customMainThemeColor,
+            dayTextColor: themeStyle?.color,
+            textDisabledColor: complexTheme?.invalid?.color,
+            selectedDayBackgroundColor: customMainThemeColor
+        }
 
 
 
@@ -227,9 +119,10 @@ class RenderAgendaBase2 extends Component {
                         headerStyle={{
                             paddingLeft: 120,
                         }}
+                        theme={{...customCalendarTheme}}
                     />
 
-                    <ScrollView style={{flex: 1, backgroundColor: '#fff'}}>
+                    <ScrollView style={{flex: 1, backgroundColor: customBackgroundColor}}>
                         {[0].map(() => {
                             let eventSeriesIdArr = []
                             return (
@@ -300,7 +193,7 @@ class RenderAgendaBase2 extends Component {
 
                     </ScrollView>
                     {this.state?.showEventDetail &&
-                        <View style={{height: 120, backgroundColor: '#fff', borderTopWidth: 1, borderColor: customMainThemeColor}}>
+                        <View style={{height: 120, backgroundColor: customBackgroundColor, borderTopWidth: 1, borderColor: customMainThemeColor}}>
                             <TouchableOpacity style={{position: 'absolute', right: 10, top: 8, zIndex: 100}}
                                 onPress={() => this.setState({showEventDetail: false})}
                             >
@@ -328,14 +221,13 @@ class RenderAgendaBase2 extends Component {
                                 >
 
 
-
                                     <View style={{flexDirection: 'column', alignItems: 'center', flex: 1, maxWidth: 120}}>
                                         <FontAwesome5Icon
                                             name={this.state?.eventDetail?.eventType === 'ROSTER' ? "business-time" : 'utensils'}
                                             size={36}
                                             style={[styles?.buttonIconStyle(customMainThemeColor)]}
                                         />
-                                        <Text style={{marginTop: 10, color: '#454545'}}>{this.state?.eventDetail?.eventName}</Text>
+                                        <StyledText style={{marginTop: 10}}>{this.state?.eventDetail?.eventName}</StyledText>
 
                                     </View>
                                     <View style={{flexDirection: 'column', alignItems: 'flex-start', flex: 3}}>
@@ -346,7 +238,7 @@ class RenderAgendaBase2 extends Component {
                                         {
                                             Object.keys(this.state?.eventDetail?.eventResources)?.map((workingArea) => {
                                                 return (
-                                                    <Text style={{color: '#454545', padding: 5}}>{workingArea}: {this.state?.eventDetail?.eventResources[`${workingArea}`]?.map((staff) => staff?.resourceName).join(', ')}</Text>
+                                                    <StyledText style={{padding: 5}}>{workingArea}: {this.state?.eventDetail?.eventResources[`${workingArea}`]?.map((staff) => staff?.resourceName).join(', ')}</StyledText>
                                                 )
                                             })
                                         }
@@ -363,7 +255,7 @@ class RenderAgendaBase2 extends Component {
     }
 }
 
-export const RenderAgenda = withNavigation(withContext(RenderAgendaBase2))
+export const RenderAgenda = withNavigation(withContext(RenderAgendaBase))
 
 
 
@@ -426,18 +318,28 @@ class DayCalendarBase extends Component {
     render() {
         const timezone = TimeZoneService.getTimeZone()
         const dayEvents = this.state?.events?.[`${this.state?.selectedDate}`]
-        const {t, customMainThemeColor} = this.context
+        const {t, themeStyle, complexTheme, customMainThemeColor, customBackgroundColor} = this.context
 
 
         let todayStart = new Date(moment(this.state?.selectedDate).tz(timezone)).getTime()
         let todayEnd = new Date(moment(this.state?.selectedDate).tz(timezone).add(1, 'days')).getTime()
+
+        const customCalendarTheme = {
+            calendarBackground: customBackgroundColor,
+            monthTextColor: customMainThemeColor,
+            textMonthFontWeight: 'bold',
+            arrowColor: customMainThemeColor,
+            dayTextColor: themeStyle?.color,
+            textDisabledColor: complexTheme?.invalid?.color,
+            selectedDayBackgroundColor: customMainThemeColor
+        }
 
         return (
             <CalendarProvider
                 date={this.state?.selectedDate}
                 onDateChanged={this.onDateChanged}
                 onMonthChange={this.onMonthChange}
-                showTodayButton
+                showTodayButton={false}
                 disabledOpacity={0.6}
 
                 theme={{
@@ -450,24 +352,24 @@ class DayCalendarBase extends Component {
                     hideArrows
                     disableAllTouchEventsForDisabledDays
                     firstDay={1}
-
+                    theme={customCalendarTheme}
                 />
 
-                <ScrollView style={{flex: 1, backgroundColor: '#fff'}}>
+                <ScrollView style={{flex: 1, backgroundColor: customBackgroundColor}}>
                     <View style={{flexDirection: 'column'}}>
                         <View style={{flexDirection: 'row', borderBottomWidth: 1, borderColor: '#c7c7c7'}}>
                             <View style={{flex: 1, alignItems: 'center', borderRightWidth: 1, paddingVertical: 10, borderColor: '#c7c7c7'}}>
-                                <Text style={{color: '#454545', }}>{t('roster.resources')}</Text>
+                                <StyledText>{t('roster.resources')}</StyledText>
                             </View>
                             <View style={{flex: 2, alignItems: 'center', borderRightWidth: 1, paddingVertical: 10, borderColor: '#c7c7c7'}}>
-                                <Text style={{color: '#454545', }}>00-08</Text>
+                                <StyledText>00-08</StyledText>
                             </View>
                             <View style={{flex: 2, alignItems: 'center', borderRightWidth: 1, paddingVertical: 10, borderColor: '#c7c7c7'}}>
-                                <Text style={{color: '#454545', }}>08-16</Text>
+                                <StyledText>08-16</StyledText>
                             </View>
 
                             <View style={{flex: 2, alignItems: 'center', paddingVertical: 10, borderColor: '#c7c7c7'}}>
-                                <Text style={{color: '#454545', }}>16-24</Text>
+                                <StyledText>16-24</StyledText>
                             </View>
                         </View>
                         {dayEvents?.map((staff) => {
@@ -476,7 +378,7 @@ class DayCalendarBase extends Component {
                             return (
                                 <View style={{flexDirection: 'row', height: (30 * (maxLine) + 15), borderBottomWidth: 1, borderColor: '#c7c7c7'}}>
                                     <View style={{flex: 1, alignItems: 'center', borderRightWidth: 1, borderColor: '#c7c7c7', justifyContent: 'center'}}>
-                                        <Text style={{color: '#454545', }}>{staff?.resource}</Text>
+                                        <StyledText>{staff?.resource}</StyledText>
                                     </View>
                                     <View style={{flex: 6}}>
                                         {renderEvent?.map((event) => {

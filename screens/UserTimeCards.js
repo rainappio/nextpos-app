@@ -7,7 +7,7 @@ import {LocaleContext} from '../locales/LocaleContext'
 import {warningMessage} from '../constants/Backend'
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
-import StaffTimeCardFilterForm from "./StaffTimeCardFilterForm";
+import {UserTimeCardFilterForm} from "./StaffTimeCardFilterForm";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import moment from 'moment-timezone'
@@ -138,7 +138,7 @@ class UserTimeCards extends React.Component {
             <Text style={styles?.screenSubTitle(customMainThemeColor)}>{this.props.navigation.getParam('displayName')}</Text>
           </View>
 
-          <StaffTimeCardFilterForm
+          <UserTimeCardFilterForm
             onSubmit={this.handleFilter}
             initialValues={{
               year: this.state.selectedYear,
