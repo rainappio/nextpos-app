@@ -747,7 +747,8 @@ class OrdersSummaryRow extends React.Component {
                       : handlePrintOrderDetails(order.orderId)
                   }
                   title={t('printOrderDetails')}
-                /></View>
+                />
+                </View>
             </View>
 
           )}
