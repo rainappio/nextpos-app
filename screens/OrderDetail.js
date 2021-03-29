@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {formatCurrency, formatTime, getOrder} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
-import {handleDelete, renderOptionsAndOffer, renderOrderState, handleCancelInvoice} from "../helpers/orderActions";
+import {handleDelete, renderOptionsAndOffer, renderOrderState, handleCancelInvoice, handlePrintOrderDetails} from "../helpers/orderActions";
 import ScreenHeader from "../components/ScreenHeader";
 import OrderTopInfo from "./OrderTopInfo";
 import LoadingScreen from "./LoadingScreen";
@@ -412,13 +412,27 @@ class OrderDetail extends React.Component {
               })}
 
               {!!this.props?.orderId || <View style={[styles.bottom, styles.horizontalMargin]}>
-                <TouchableOpacity
-                  onPress={() => this.handleRePrint(order, this.state.printer.ipAddress)}
-                >
-                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                    {t('eInvoice.reprintInvoice')}
-                  </Text>
-                </TouchableOpacity>
+                <View style={{flexDirection: 'row'}}>
+
+                  <TouchableOpacity
+                    onPress={() => this.handleRePrint(order, this.state.printer.ipAddress)}
+                    style={{flex: 1, marginRight: 10}}
+                  >
+                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                      {t('eInvoice.reprintInvoice')}
+                    </Text>
+
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handlePrintOrderDetails(order.orderId)}
+                    style={{flex: 1}}
+                  >
+                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                      {t('printOrderDetails')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
                 <TouchableOpacity
                   onPress={() => this.handleCopyOrder(order)}
                 >

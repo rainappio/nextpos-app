@@ -44,6 +44,7 @@ class ProductFormScreen extends React.Component {
         productName: 'Product Name',
         internalProductName: 'Internal Product Name',
         price: 'Price',
+        costPrice: 'Cost Price',
         productLabel: 'Product Label',
         description: 'Description',
         childProducts: 'Child Products',
@@ -69,6 +70,7 @@ class ProductFormScreen extends React.Component {
         productName: '產品名稱',
         internalProductName: '內部產品名稱',
         price: '價格',
+        costPrice: '成本價',
         productLabel: '產品分類',
         description: '產品敘述',
         childProducts: '子產品',
@@ -219,6 +221,22 @@ class ProductFormScreen extends React.Component {
                 component={InputText}
                 validate={isRequired}
                 placeholder={t('price')}
+                secureTextEntry={false}
+                keyboardType={'numeric'}
+              />
+            </View>
+          </View>
+
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText style={styles.fieldTitle}>{t('costPrice')}</StyledText>
+            </View>
+            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+              <Field
+                name="costPrice"
+                component={InputText}
+                validate={isRequired}
+                placeholder={t('costPrice')}
                 secureTextEntry={false}
                 keyboardType={'numeric'}
               />
