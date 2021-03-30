@@ -517,6 +517,19 @@ const zh = {
     showAll: '全部顯示',
     showInRoster: '顯示於排班',
     showInProduct: '顯示於產品管理',
+  },
+  inventory: {
+    title: '庫存管理',
+    inventoryEditFormTitle: '編輯庫存',
+    inventoryNewFormTitle: '新增庫存',
+    sku: 'Sku',
+    name: '標籤',
+    unitOfMeasure: '單位',
+    baseUnitQuantity: '每單位個數',
+    quantity: '單位數量',
+    minimumStockLevel: '最小庫存量',
+    addInventory: '新增一筆庫存',
+    deleteAllInventory: '刪除全部庫存',
   }
 }
 

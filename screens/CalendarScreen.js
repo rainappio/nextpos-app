@@ -205,14 +205,19 @@ class CalendarScreen extends React.Component {
         const {themeStyle, handleSubmit} = this.props
         const {t, isTablet, customMainThemeColor, customBackgroundColor} = this.context
         const timezone = TimeZoneService.getTimeZone()
-
+        const customCalendarTheme = {
+            calendarBackground: customBackgroundColor,
+            monthTextColor: customMainThemeColor,
+            textMonthFontWeight: 'bold',
+            arrowColor: customMainThemeColor,
+        }
 
 
         return (
             <ThemeContainer>
                 <NavigationEvents
                     onWillFocus={() => {
-                        //this.refreshScreen()
+                        this.refreshScreen()
                     }}
                 />
 
@@ -464,7 +469,8 @@ class CalendarScreen extends React.Component {
                                         borderColor: 'gray',
                                         borderWidth: 0.5
                                     },
-                                }
+                                },
+                                ...customCalendarTheme
                             }}
                             dayComponent={({date, state, onPress}) => {
                                 let today = moment(this.state?.selectedDate ?? new Date()).tz(timezone).format("YYYY-MM-DD")
@@ -490,13 +496,13 @@ class CalendarScreen extends React.Component {
                                         <View style={{flex: 1}}>
                                             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                                                 <View style={{
-                                                    backgroundColor: isToday ? '#00adf5' : undefined, width: 24,
+                                                    backgroundColor: isToday ? customMainThemeColor : undefined, width: 24,
                                                     borderRadius: 24,
                                                     height: 24, justifyContent: 'center', alignItems: 'center'
                                                 }}>
                                                     <Text style={{
                                                         textAlign: 'center',
-                                                        color: isToday ? '#fff' : state === 'disabled' ? 'rgba(128, 128, 128, 0.5)' : 'black',
+                                                        color: isToday ? '#fff' : state === 'disabled' ? 'rgba(128, 128, 128, 0.5)' : themeStyle?.color,
 
                                                     }}>
                                                         {date.day}

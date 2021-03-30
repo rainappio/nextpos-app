@@ -3,7 +3,7 @@ import {reduxForm} from 'redux-form'
 import {LocaleContext} from '../locales/LocaleContext'
 import TimeCardFilterForm from './TimeCardFilterForm'
 
-class StaffTimeCardFilterForm extends React.Component {
+class StaffTimeCardFilterFormBase extends React.Component {
   static contextType = LocaleContext
 
   constructor(props, context) {
@@ -14,13 +14,16 @@ class StaffTimeCardFilterForm extends React.Component {
     const {handleSubmit} = this.props
 
     return (
-      <TimeCardFilterForm handleSubmit={handleSubmit}/>
+      <TimeCardFilterForm handleSubmit={handleSubmit} />
     )
   }
 }
 
-StaffTimeCardFilterForm = reduxForm({
+export const StaffTimeCardFilterForm = reduxForm({
   form: 'staffTimeCardFilterForm'
-})(StaffTimeCardFilterForm)
+})(StaffTimeCardFilterFormBase)
 
-export default StaffTimeCardFilterForm
+
+export const UserTimeCardFilterForm = reduxForm({
+  form: 'userTimeCardFilterForm'
+})(StaffTimeCardFilterFormBase)

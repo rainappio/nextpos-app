@@ -60,6 +60,7 @@ class OptionFormScreen extends React.Component {
       }
     })
   }
+
   shouldComponentUpdate(nextProps, nextState) {
     return nextState !== this.state;
   }

@@ -513,6 +513,19 @@ const en = {
     showInRoster: 'Show in Roster Screen',
     showInProduct: 'Show in Product Screen',
   },
+  inventory: {
+    title: 'Inventory Management',
+    inventoryEditFormTitle: 'Edit Inventory',
+    inventoryNewFormTitle: 'New Inventory',
+    sku: 'Sku',
+    name: 'Sku Name',
+    unitOfMeasure: 'Unit of Measure',
+    baseUnitQuantity: 'Unit Quantity',
+    quantity: 'Quantity',
+    minimumStockLevel: 'Min. Stock',
+    addInventory: 'Add Inventory',
+    deleteAllInventory: 'Delete All',
+  }
 }
 
 export default en

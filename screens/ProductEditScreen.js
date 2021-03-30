@@ -137,6 +137,7 @@ class ProductEdit extends Component {
       },
       response => {
         response.json().then(data => {
+          console.log('addInventory', JSON.stringify(data))
           this.setState({inventoryData: data})
         })
       }

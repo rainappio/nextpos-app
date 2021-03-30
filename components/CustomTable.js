@@ -50,7 +50,7 @@ const CustomTableBase = (props) => {
                     return (
                         <TouchableOpacity style={{flexDirection: 'row', padding: 8, }}
                             onPress={() => {
-                                props?.itemOnPress && props?.itemOnPress(data)
+                                props?.itemOnPress && props?.itemOnPress(data, index)
                             }}
                         >
                             {props?.tableContent?.map((content, contentIndex) => {
@@ -65,14 +65,14 @@ const CustomTableBase = (props) => {
                                 <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                                     <TouchableOpacity
                                         onPress={() => {
-                                            props?.moreActions?.[0] && props?.moreActions?.[0](data)
+                                            props?.moreActions?.[0] && props?.moreActions?.[0](data, index)
                                         }}
                                         style={{backgroundColor: customMainThemeColor, padding: 4, borderRadius: 4, marginRight: 8}}>
                                         <FontAwesome name="edit" size={20} color={customBackgroundColor} />
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         onPress={() => {
-                                            props?.moreActions?.[1] && props?.moreActions?.[1](data)
+                                            props?.moreActions?.[1] && props?.moreActions?.[1](data, index)
                                         }}
                                         style={{backgroundColor: '#f75336', padding: 4, borderRadius: 4}}>
                                         <MaterialIcons name="delete-forever" size={20} color={customBackgroundColor} />
