@@ -59,7 +59,9 @@ class InventoryOrderScreen extends React.Component {
                     supplierId: 'Supplier',
                     supplierOrderId: 'Order ID',
                     sku: 'Sku',
-                    quantity: 'Quantity'
+                    quantity: 'Quantity',
+                    productName: 'Product Name',
+                    price: 'Price',
                 }
             },
             zh: {
@@ -70,7 +72,9 @@ class InventoryOrderScreen extends React.Component {
                     supplierId: '進貨商',
                     supplierOrderId: '庫存訂單編號',
                     sku: 'Sku',
-                    quantity: '數量'
+                    quantity: '數量',
+                    price: '價格',
+                    productName: '產品名稱',
                 }
             }
         })

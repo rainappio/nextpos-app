@@ -35,7 +35,6 @@ class InventoryOrderFormScreen extends React.Component {
     constructor(props, context) {
         super(props, context)
 
-        console.log(props.navigation.state.params)
 
         this.state = {
             data: props?.navigation?.state?.params?.data ?? null,
@@ -79,7 +78,6 @@ class InventoryOrderFormScreen extends React.Component {
 
     handleSubmit = (data) => {
         let request = {...data, items: this.state?.inventoryFormValues}
-        console.log('handleSubmit', JSON.stringify(request))
         dispatchFetchRequestWithOption(
             api.inventoryOrders.new,
             {
@@ -106,7 +104,6 @@ class InventoryOrderFormScreen extends React.Component {
 
     handleUpdate = (data) => {
         let request = {...data, items: this.state?.inventoryFormValues}
-        console.log('handleSubmit', JSON.stringify(request))
         dispatchFetchRequestWithOption(
             api.inventoryOrders.getById(this.props?.navigation?.state?.params?.data?.id),
             {
@@ -134,7 +131,6 @@ class InventoryOrderFormScreen extends React.Component {
     handleInventoryFormSubmit = (values) => {
         let tempArr = [...this.state?.inventoryFormValues]
         tempArr.push(values)
-        console.log('handleInventoryFormSubmit', JSON.stringify(tempArr))
         this.setState({inventoryFormValues: tempArr})
     }
 
@@ -174,7 +170,6 @@ class InventoryOrderFormScreen extends React.Component {
     render() {
         const {t, themeStyle, isTablet, customMainThemeColor, customBackgroundColor} = this.context
         const {handleSubmit} = this.props
-        console.log('InventoryOrderFormScreen', customMainThemeColor)
 
 
 
@@ -344,9 +339,11 @@ class InventoryForm extends React.Component {
         super(props, context)
         this.state = {
             openScanView: false,
-            searchKeyword: props?.initialValues?.sku ?? null,
+            searchKeyword: props?.initialValues?.sku ?? '',
             searching: false,
             searchResults: [],
+            screenMode: 'SkuOnly',
+            inventoryId: null
         }
     }
 
@@ -366,11 +363,11 @@ class InventoryForm extends React.Component {
                 headers: {}
             }, response => {
                 response.json().then(data => {
-                    console.log('searchSku', JSON.stringify(data))
                     this.setState({
                         searchResults: data.results,
                         searching: false,
-                        searchKeyword: keyword
+                        searchKeyword: keyword,
+                        inventoryId: null
                     })
                 })
             }).then()
@@ -383,6 +380,25 @@ class InventoryForm extends React.Component {
 
     }
 
+    quickCreateProduct = (data) => {
+        let request = {...data}
+        dispatchFetchRequest(api.product.new, {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        }, response => {
+            response.json().then(data => {
+                this.props?.change(`sku`, Object.keys(data?.inventory?.inventoryQuantities)[0])
+                this.props?.change(`inventoryId`, data?.inventory?.id)
+                this.setState({searchResults: [], searchKeyword: Object.keys(data?.inventory?.inventoryQuantities)[0], screenMode: 'SkuOnly', inventoryId: data?.inventory?.id})
+            })
+        }).then()
+    }
+
     Item = (item, isSearch = false) => {
         return (
             <View style={[styles.rowFront, isSearch && {borderBottomColor: this.contetx?.customMainThemeColor}]}>
@@ -390,7 +406,7 @@ class InventoryForm extends React.Component {
                     onPress={() => {
                         this.props?.change(`sku`, item?.sku)
                         this.props?.change(`inventoryId`, item?.inventoryId)
-                        this.setState({searchResults: [], searchKeyword: item?.sku})
+                        this.setState({searchResults: [], searchKeyword: item?.sku, inventoryId: item?.inventoryId})
                     }}
                     style={{flexDirection: 'row', justifyContent: 'space-between'}}
                 >
@@ -405,141 +421,356 @@ class InventoryForm extends React.Component {
         const {t, customMainThemeColor, customBackgroundColor} = this.context
 
 
+        if (this.state?.screenMode === 'SkuOnly') {
+            return (
+                <ThemeKeyboardAwareScrollView>
+                    <View style={{paddingTop: 15}}>
+                        <ScreenHeader parentFullScreen={true}
+                            title={!!this.props?.initialValues ? t('inventory.inventoryEditFormTitle') : t('inventory.inventoryNewFormTitle')}
+                            backNavigation={false}
 
-        return (
-            <ThemeKeyboardAwareScrollView>
-                <View style={{paddingTop: 15}}>
-                    <ScreenHeader parentFullScreen={true}
-                        title={!!this.props?.initialValues ? t('inventory.inventoryEditFormTitle') : t('inventory.inventoryNewFormTitle')}
-                        backNavigation={false}
-
-                    />
-
-
-
-                    <View style={styles.tableRowContainerWithBorder}>
-                        <View style={[styles.tableCellView, {flex: 1}]}>
-                            <StyledText style={styles.fieldTitle}>{t('inventory.sku')}</StyledText>
-                        </View>
-                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                            <View style={{flex: 1, }}>
-                                <SearchBar placeholder={t('inventory.sku')}
-                                    onChangeText={this.searchSku}
-                                    onClear={() => {
-                                        this.setState({searchResults: []})
-                                    }}
-                                    value={this.state.searchKeyword}
-                                    showLoading={this.state.searching}
-                                    lightTheme={false}
-                                    // reset the container style.
-                                    containerStyle={{
-                                        padding: 4,
-                                        borderRadius: 0,
-                                        borderWidth: 0,
-                                        borderTopWidth: 0,
-                                        borderBottomWidth: 0,
-                                        backgroundColor: customMainThemeColor
-                                    }}
-                                    inputStyle={{backgroundColor: customBackgroundColor}}
-                                    inputContainerStyle={{borderRadius: 0, backgroundColor: customBackgroundColor}}
-                                />
+                        />
 
 
 
+                        <View style={styles.tableRowContainerWithBorder}>
+                            <View style={[styles.tableCellView, {flex: 1}]}>
+                                <StyledText style={styles.fieldTitle}>{t('inventory.sku')}</StyledText>
                             </View>
-                            <TouchableOpacity style={{minWidth: 64, alignItems: 'center', }}
-                                onPress={() => {
-                                    this.setState({
-                                        openScanView: !this.state.openScanView
-                                    })
-                                }}
-                            >
-                                <Icon style={{marginLeft: 10}} name="camera" size={24} color={customMainThemeColor} />
+                            <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+                                <View style={{flex: 1, }}>
+                                    <SearchBar placeholder={t('inventory.sku')}
+                                        onChangeText={this.searchSku}
+                                        onClear={() => {
+                                            this.setState({searchResults: []})
+                                        }}
+                                        value={this.state.searchKeyword}
+                                        showLoading={this.state.searching}
+                                        lightTheme={false}
+                                        // reset the container style.
+                                        containerStyle={{
+                                            padding: 4,
+                                            borderRadius: 0,
+                                            borderWidth: 0,
+                                            borderTopWidth: 0,
+                                            borderBottomWidth: 0,
+                                            backgroundColor: customMainThemeColor
+                                        }}
+                                        inputStyle={{backgroundColor: customBackgroundColor}}
+                                        inputContainerStyle={{borderRadius: 0, backgroundColor: customBackgroundColor}}
+                                    />
+
+
+
+                                </View>
+                                <TouchableOpacity style={{minWidth: 64, alignItems: 'center', }}
+                                    onPress={() => {
+                                        this.setState({
+                                            openScanView: !this.state.openScanView
+                                        })
+                                    }}
+                                >
+                                    <Icon style={{marginLeft: 10}} name="camera" size={24} color={customMainThemeColor} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
+                        {this.state.openScanView ? <View >
+                            <ScanView successCallback={(data) => {this.handleScanSuccess(data)}} style={{
+                                flex: 1,
+                                flexDirection: 'column',
+                                justifyContent: 'flex-end',
+                                borderRadius: 10,
+                                paddingVertical: '10%',
+                                alignItems: 'center'
+                            }}
+                                allType />
+                        </View> : <FlatList
+                                style={{height: 150, paddingBottom: 1}}
+                                data={this.state.searchResults}
+                                renderItem={({item}) => this.Item(item, true)}
+                                ListEmptyComponent={
+                                    <>
+                                        {!!this.state?.inventoryId || <View>
+                                            <StyledText style={styles.messageBlock}>{t('general.noData')}</StyledText>
+                                            <View style={{flexDirection: 'row', width: '100%'}}>
+                                                <TouchableOpacity
+                                                    style={{flex: 1, marginHorizontal: 10}}
+                                                    onPress={() => {}}>
+                                                    <Text
+                                                        style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+                                                    >
+                                                        {'從現有產品裡新增一筆Sku'}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={{flex: 1, marginHorizontal: 10}}
+                                                    onPress={() => {
+                                                        this.props.change(`sku`, this.state?.searchKeyword)
+                                                        this.setState({screenMode: 'newPrdSku'})
+                                                    }}>
+                                                    <Text
+                                                        style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+                                                    >
+                                                        {'新增新產品與一筆Sku'}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>}
+                                    </>
+                                }
+                            />}
+
+
+                        <View style={styles.tableRowContainerWithBorder}>
+                            <View style={[styles.tableCellView, {flex: 1}]}>
+                                <StyledText style={styles.fieldTitle}>{t('inventory.quantity')}</StyledText>
+                            </View>
+                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                <Field
+                                    name="quantity"
+                                    component={InputText}
+                                    validate={[isRequired]}
+                                    placeholder={t('inventory.quantity')}
+                                    keyboardType={`numeric`}
+                                    props={t}
+                                />
+                            </View>
+                        </View>
+                        <View style={styles.tableRowContainerWithBorder}>
+                            <View style={[styles.tableCellView, {flex: 1}]}>
+                                <StyledText style={styles.fieldTitle}>{t('order.unitPrice')}</StyledText>
+                            </View>
+                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                <Field
+                                    name="unitPrice"
+                                    component={InputText}
+                                    validate={[isRequired]}
+                                    placeholder={t('order.unitPrice')}
+                                    keyboardType={`numeric`}
+                                />
+                            </View>
+                        </View>
+
+                        <View style={{
+                            paddingVertical: 8,
+                            paddingHorizontal: 10,
+                        }}>
+
+                            <TouchableOpacity onPress={this.props?.handleSubmit(data => {
+                                if (!!this.state?.inventoryId) {
+                                    if (!!this.props?.initialValues) {
+                                        this.props?.handleUpdate(data, this.props?.initialValues?.dataIndex)
+                                        this.props?.handleCancel()
+                                    } else {
+                                        this.props?.onSubmit(data)
+                                        this.props?.reset()
+                                        this.setState({searchResults: [], searchKeyword: null})
+                                    }
+                                }
+
+                            })}>
+                                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                                    {t('action.save')}
+                                </Text>
+                            </TouchableOpacity>
+
+
+                            <TouchableOpacity onPress={() => {this.props?.handleCancel()}}>
+                                <Text
+                                    style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+                                >
+                                    {t('action.cancel')}
+                                </Text>
                             </TouchableOpacity>
                         </View>
+
                     </View>
+                </ThemeKeyboardAwareScrollView>
+            )
+        } else if (this.state?.screenMode === 'newPrdSku') {
+            return (
+                <ThemeKeyboardAwareScrollView>
+                    <View style={{paddingTop: 15}}>
+                        <ScreenHeader parentFullScreen={true}
+                            title={!!this.props?.initialValues ? t('inventory.inventoryEditFormTitle') : t('inventory.inventoryNewFormTitle')}
+                            backNavigation={false}
 
-                    {this.state.openScanView ? <View >
-                        <ScanView successCallback={(data) => {this.handleScanSuccess(data)}} style={{
-                            flex: 1,
-                            flexDirection: 'column',
-                            justifyContent: 'flex-end',
-                            borderRadius: 10,
-                            paddingVertical: '10%',
-                            alignItems: 'center'
-                        }}
-                            allType />
-                    </View> : <FlatList
-                            style={{height: 150, paddingBottom: 1}}
-                            data={this.state.searchResults}
-                            renderItem={({item}) => this.Item(item, true)}
-
-                        />}
+                        />
 
 
-                    <View style={styles.tableRowContainerWithBorder}>
-                        <View style={[styles.tableCellView, {flex: 1}]}>
-                            <StyledText style={styles.fieldTitle}>{t('inventory.quantity')}</StyledText>
+
+
+
+
+
+                        <View style={styles.tableRowContainerWithBorder}>
+                            <View style={[styles.tableCellView, {flex: 1}]}>
+                                <StyledText style={styles.fieldTitle}>{t('inventoryOrder.productName')}</StyledText>
+                            </View>
+                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                <Field
+                                    name="name"
+                                    component={InputText}
+                                    validate={[isRequired]}
+                                    placeholder={t('inventoryOrder.productName')}
+                                />
+                            </View>
                         </View>
-                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                            <Field
-                                name="quantity"
-                                component={InputText}
-                                validate={[isRequired]}
-                                placeholder={t('inventory.quantity')}
-                                keyboardType={`numeric`}
-                            />
+                        <View style={styles.tableRowContainerWithBorder}>
+                            <View style={[styles.tableCellView, {flex: 1}]}>
+                                <StyledText style={styles.fieldTitle}>{t('inventoryOrder.price')}</StyledText>
+                            </View>
+                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                <Field
+                                    name="price"
+                                    component={InputText}
+                                    validate={[isRequired]}
+                                    placeholder={t('inventoryOrder.price')}
+                                    keyboardType={`numeric`}
+                                />
+                            </View>
                         </View>
+
+                        <View style={styles.tableRowContainerWithBorder}>
+                            <View style={[styles.tableCellView, {flex: 1}]}>
+                                <StyledText style={styles.fieldTitle}>{t('inventoryOrder.sku')}</StyledText>
+                            </View>
+                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                <Field
+                                    name="sku"
+                                    component={InputText}
+                                    validate={[isRequired]}
+                                    placeholder={t('inventoryOrder.sku')}
+                                />
+                            </View>
+                        </View>
+
+
+                        <View style={{
+                            paddingVertical: 8,
+                            paddingHorizontal: 10,
+                            marginTop: 120
+                        }}>
+
+                            <TouchableOpacity onPress={this.props?.handleSubmit(data => {
+                                this.quickCreateProduct(data)
+
+                            })}>
+                                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                                    {t('action.save')}
+                                </Text>
+                            </TouchableOpacity>
+
+
+                            <TouchableOpacity onPress={() => {this.setState({screenMode: 'SkuOnly'})}}>
+                                <Text
+                                    style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+                                >
+                                    {t('action.cancel')}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+
                     </View>
-                    <View style={styles.tableRowContainerWithBorder}>
-                        <View style={[styles.tableCellView, {flex: 1}]}>
-                            <StyledText style={styles.fieldTitle}>{t('order.unitPrice')}</StyledText>
+                </ThemeKeyboardAwareScrollView>
+            )
+        } else {
+            return (
+                <ThemeKeyboardAwareScrollView>
+                    <View style={{paddingTop: 15}}>
+                        <ScreenHeader parentFullScreen={true}
+                            title={!!this.props?.initialValues ? t('inventory.inventoryEditFormTitle') : t('inventory.inventoryNewFormTitle')}
+                            backNavigation={false}
+
+                        />
+
+
+
+
+
+
+
+                        <View style={styles.tableRowContainerWithBorder}>
+                            <View style={[styles.tableCellView, {flex: 1}]}>
+                                <StyledText style={styles.fieldTitle}>{t('inventoryOrder.productName')}</StyledText>
+                            </View>
+                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                <Field
+                                    name="name"
+                                    component={InputText}
+                                    validate={[isRequired]}
+                                    placeholder={t('inventoryOrder.productName')}
+                                />
+                            </View>
                         </View>
-                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                            <Field
-                                name="unitPrice"
-                                component={InputText}
-                                validate={[isRequired]}
-                                placeholder={t('order.unitPrice')}
-                                keyboardType={`numeric`}
-                            />
+                        <View style={styles.tableRowContainerWithBorder}>
+                            <View style={[styles.tableCellView, {flex: 1}]}>
+                                <StyledText style={styles.fieldTitle}>{t('inventoryOrder.price')}</StyledText>
+                            </View>
+                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                <Field
+                                    name="price"
+                                    component={InputText}
+                                    validate={[isRequired]}
+                                    placeholder={t('inventoryOrder.price')}
+                                    keyboardType={`numeric`}
+                                />
+                            </View>
                         </View>
+
+                        <View style={styles.tableRowContainerWithBorder}>
+                            <View style={[styles.tableCellView, {flex: 1}]}>
+                                <StyledText style={styles.fieldTitle}>{t('inventoryOrder.sku')}</StyledText>
+                            </View>
+                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                <Field
+                                    name="sku"
+                                    component={InputText}
+                                    validate={[isRequired]}
+                                    placeholder={t('order.unitPrice')}
+                                    keyboardType={`numeric`}
+                                />
+                            </View>
+                        </View>
+
+
+                        <View style={{
+                            paddingVertical: 8,
+                            paddingHorizontal: 10
+                        }}>
+
+                            <TouchableOpacity onPress={this.props?.handleSubmit(data => {
+                                if (!!this.props?.initialValues) {
+                                    this.props?.handleUpdate(data, this.props?.initialValues?.dataIndex)
+                                    this.props?.handleCancel()
+                                } else {
+                                    this.props?.onSubmit(data)
+                                    this.props?.reset()
+                                    this.setState({searchResults: [], searchKeyword: null})
+                                }
+
+                            })}>
+                                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                                    {t('action.save')}
+                                </Text>
+                            </TouchableOpacity>
+
+
+                            <TouchableOpacity onPress={() => {this.props?.handleCancel()}}>
+                                <Text
+                                    style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+                                >
+                                    {t('action.cancel')}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+
                     </View>
+                </ThemeKeyboardAwareScrollView>
+            )
+        }
 
-                    <View style={{
-                        paddingVertical: 8,
-                        paddingHorizontal: 10
-                    }}>
-
-                        <TouchableOpacity onPress={this.props?.handleSubmit(data => {
-                            if (!!this.props?.initialValues) {
-                                this.props?.handleUpdate(data, this.props?.initialValues?.dataIndex)
-                                this.props?.handleCancel()
-                            } else {
-                                this.props?.onSubmit(data)
-                                this.props?.reset()
-                                this.setState({searchResults: [], searchKeyword: null})
-                            }
-
-                        })}>
-                            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                                {t('action.save')}
-                            </Text>
-                        </TouchableOpacity>
-
-
-                        <TouchableOpacity onPress={() => {this.props?.handleCancel()}}>
-                            <Text
-                                style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
-                            >
-                                {t('action.cancel')}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-
-                </View>
-            </ThemeKeyboardAwareScrollView>
-        )
     }
 }
 
