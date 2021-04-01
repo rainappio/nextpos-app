@@ -20,6 +20,7 @@ import {StyledText} from "../components/StyledText";
 import {SecondActionButton} from "../components/ActionButtons";
 import {SplitBillPopUp} from '../components/PopUp'
 import SockJsClient from 'react-stomp';
+import Colors from "../constants/Colors";
 
 class OrdersSummaryRow extends React.Component {
   static contextType = LocaleContext
@@ -142,12 +143,12 @@ class OrdersSummaryRow extends React.Component {
     return (
       <Tooltip popover={tooltip} height={120} width={200} backgroundColor={this.context?.customMainThemeColor}>
         <View>
-          {state === 'OPEN' && <StyledText>{t('stateTip.open.display')}</StyledText>}
+          {state === 'OPEN' && <StyledText style={{color: `${Colors.orderOpen}`}}>{t('stateTip.open.display')}</StyledText>}
           {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(state) && (
-            <StyledText>{t('stateTip.inProcess.display')}</StyledText>
+            <StyledText style={{color: `${Colors.orderInProcess}`}}>{t('stateTip.inProcess.display')}</StyledText>
           )}
           {state === 'DELIVERED' && (
-            <StyledText>{t('stateTip.delivered.display')}</StyledText>
+            <StyledText style={{color: `${Colors.orderDeliver}`}}>{t('stateTip.delivered.display')}</StyledText>
           )}
           {state === 'SETTLED' && <StyledText>{t('stateTip.settled.display')}</StyledText>}
         </View>
@@ -428,8 +429,17 @@ class OrdersSummaryRow extends React.Component {
           </View>
 
           <View>
+
             <SwipeListView
-              data={order.lineItems?.map((item) => {return {...item, disableRightSwipe: !!item?.associatedLineItemId, disableLeftSwipe: !!item?.associatedLineItemId}})}
+              data={
+                order.lineItems?.map((item) => {
+                  return {...item, disableRightSwipe: !!item?.associatedLineItemId, disableLeftSwipe: !!item?.associatedLineItemId}
+                }).sort((a, b) => {
+                  let sort = ["OPEN", "IN_PROCESS", "ALREADY_IN_PROCESS", "DELIVERED", "SETTLED"];
+                  return sort.indexOf(a.state) - sort.indexOf(b.state);
+                })
+              }
+
               renderItem={(data, rowMap) => (
                 <View style={[styles.rowFront, themeStyle]}>
                   <View key={rowMap} style={{marginBottom: 15}}>
@@ -748,7 +758,7 @@ class OrdersSummaryRow extends React.Component {
                   }
                   title={t('printOrderDetails')}
                 />
-                </View>
+              </View>
             </View>
 
           )}

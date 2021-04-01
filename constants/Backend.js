@@ -207,6 +207,9 @@ export const api = {
     delete: orderId => {
       return `${apiRoot}/orders/${orderId}`
     },
+    moveOrder: sourceOrderId => {
+      return `${apiRoot}/orders/${sourceOrderId}/move`
+    },
     waiveServiceCharge: (orderId, waive) => {
       return `${apiRoot}/orders/${orderId}/waiveServiceCharge?apply=${waive}`
     },

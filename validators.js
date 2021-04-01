@@ -1,27 +1,28 @@
 import validator from 'validator'
 import i18n from 'i18n-js'
+import {currentLocale} from './App'
 
 export const isRequired = value =>
   value === undefined ||
     value === '' ||
     (Array.isArray(value) && value.length === 0)
-    ? i18n.t('errors.required')
+    ? i18n.t('errors.required', {locale: currentLocale})
     : undefined
 
 export const isEmail = value =>
   value && !validator.isEmail(value)
-    ? i18n.t('errors.email')
+    ? i18n.t('errors.email', {locale: currentLocale})
     : undefined
 
 export const isvalidPassword = value =>
   value && !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/.test(value)
-    ? i18n.t('errors.clientPassword')
+    ? i18n.t('errors.clientPassword', {locale: currentLocale})
     : undefined
 
 export const isconfirmPassword = (value, allValues, props, name) => {
   return value && value === allValues?.masterPassword
     ? undefined
-    : i18n.t('errors.confirmPassword')
+    : i18n.t('errors.confirmPassword', {locale: currentLocale})
 }
 
 export const isURL = value =>
@@ -41,16 +42,16 @@ export const isAcceptRage = value =>
 export const isPercentage = value =>
   value &&
     (parseFloat(value).toFixed(2) < 0.01 || parseFloat(value).toFixed(2) > 0.99)
-    ? i18n.t('errors.percentage')
+    ? i18n.t('errors.percentage', {locale: currentLocale})
     : undefined
 
 export const isCountZero = value =>
-  value === 0 ? i18n.t('errors.moreThanZero') : undefined
+  value === 0 ? i18n.t('errors.moreThanZero', {locale: currentLocale}) : undefined
 
 
 export const isTwoBigWords = val => {
   if (!val || val?.length !== 2 || !/^[A-Z]*$/.test(val)) {
-    return i18n.t('errors.requireTwoUppercaseLetters')
+    return i18n.t('errors.requireTwoUppercaseLetters', {locale: currentLocale})
   }
   else
     return undefined
@@ -65,6 +66,6 @@ export const isNDigitsNumber = (n) => (value) => {
 }
 
 export const isPositiveInteger = value => {
-  return (value >= 0) ? undefined : i18n.t('errors.moreThanZero')
+  return (value >= 0) ? undefined : i18n.t('errors.moreThanZero', {locale: currentLocale})
 }
 
