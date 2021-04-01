@@ -53,7 +53,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import {checkExpoUpdate} from "./helpers/updateAppHelper";
 import {api, dispatchFetchRequest} from './constants/Backend'
 
-
+export let currentLocale = ""
 
 LogBox.ignoreLogs([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
@@ -110,6 +110,7 @@ function restoreAuth(dispatch) {
   }
 }
 restoreAuth(store.dispatch)
+
 
 export default class App extends React.Component {
   constructor(props) {
@@ -241,11 +242,14 @@ export default class App extends React.Component {
     console.log(`Default locale: ${Localization.locale}, current locale: ${this.state.locale}, changing to ${toLocale}`)
 
     this.setState({locale: toLocale})
+
+    currentLocale = toLocale
   }
 
   t = (scope, options) => {
     return i18n.t(scope, {locale: this.state.locale, ...options})
   }
+
 
   changeCustomMainThemeColor = async (color = '#f18d1a') => {
     if (color === '#f18d1a') {
@@ -278,6 +282,7 @@ export default class App extends React.Component {
     }
 
   }
+
 
   checkCustomTheme = async () => {
     try {

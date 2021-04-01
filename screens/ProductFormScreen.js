@@ -32,7 +32,7 @@ class ProductFormScreen extends React.Component {
     super(props, context)
     this.state = {
       inventoryModalData: null,
-      isShow: false
+      isShow: false,
     }
   }
 
@@ -211,7 +211,6 @@ class ProductFormScreen extends React.Component {
               <Field
                 name="costPrice"
                 component={InputText}
-                validate={isRequired}
                 placeholder={t('costPrice')}
                 secureTextEntry={false}
                 keyboardType={'numeric'}
@@ -386,18 +385,18 @@ class ProductFormScreen extends React.Component {
                 <DeleteBtn handleDeleteAction={handleDeleteProduct} />
               </View>
             ) : (
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.navigation.navigate('ProductsOverview')
-                  }
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate('ProductsOverview')
+                }
+              >
+                <Text
+                  style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
                 >
-                  <Text
-                    style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
-                  >
-                    {t('action.cancel')}
-                  </Text>
-                </TouchableOpacity>
-              )}
+                  {t('action.cancel')}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </ThemeKeyboardAwareScrollView>

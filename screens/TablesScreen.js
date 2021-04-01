@@ -98,6 +98,8 @@ class TablesScreen extends React.Component {
         joinTableMode: 'Join Table Mode',
         isPayingTitle: 'Order in Payment Mode',
         isPayingMsg: 'Proceed to enter payment screen.',
+        isMergingTitle: 'Merge Order',
+        isMergingMsg: 'Proceed with merging orders to the destination table?',
       },
       zh: {
         noTableLayout: '需要創建至少一個桌面跟一個桌位.',
@@ -113,6 +115,8 @@ class TablesScreen extends React.Component {
         joinTableMode: '併桌模式',
         isPayingTitle: '此訂單正在結帳流程',
         isPayingMsg: '是否進入結帳流程？',
+        isMergingTitle: '兩桌訂單將合併',
+        isMergingMsg: '是否將訂單合併到拖曳的目標桌？',
       }
     })
   }
@@ -479,6 +483,7 @@ class TablesScreen extends React.Component {
                           return (this.state?.tableWidth && !isLoading && <Draggable
                             screenMode={this.state?.screenMode}
                             borderColor={themeStyle.color === '#e7e7e7' ? '#BFBFBF' : '#BFBFBF'}
+                            t={t}
                             table={table}
                             key={table.tableId}
                             layoutId={tablelayouts[this.state.tableIndex]?.id}
@@ -791,9 +796,10 @@ class DraggableBase extends Component {
       opacity: new Animated.Value(1),
       isDraggable: false,
       tableOrder: props?.orders?.[`${props?.layoutId}`]?.find((item) => {return (item?.tableId === props?.table?.tableId || item?.tables?.some((table) => table?.tableId === props?.table?.tableId))}),
-      isSelected: false
+      isSelected: false,
     };
   }
+
 
   componentDidMount() {
     this.initPosition()
@@ -819,6 +825,25 @@ class DraggableBase extends Component {
 
         if (!toTable) {
           this.handleChangeTable(table, this.state.tableOrder)
+        } else if (toTable && toTable.state !== 'SETTLED' && this.state.tableOrder.state !== 'SETTLED') {
+          const t = this.props.t
+          Alert.alert(
+            `${t('isMergingTitle')}`,
+            `${t('isMergingMsg')}`,
+            [
+              {
+                text: `${t('action.yes')}`,
+                onPress: () => {
+                  this.handleMergeOrder(table, this.state.tableOrder, toTable)
+                }
+              },
+              {
+                text: `${t('action.no')}`,
+                onPress: () => console.log('Cancelled'),
+                style: 'cancel'
+              }
+            ]
+          )
         }
         return false
       } else {
@@ -846,7 +871,6 @@ class DraggableBase extends Component {
       otherTableArr.push(table.tableId)
       updateOrder.tableIds = otherTableArr
     }
-    console.log('updateOrder', JSON.stringify(updateOrder))
 
 
     dispatchFetchRequest(api.order.update(values.orderId), {
@@ -857,6 +881,41 @@ class DraggableBase extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(updateOrder)
+    },
+      response => {
+        response.json().then(data => {
+          this.props?.onRefresh()
+        })
+      }).then()
+  }
+
+  handleMergeOrder = (table, values, toTable) => {
+    const updateOrder = {}
+    updateOrder.orderType = values.orderType
+    updateOrder.tableIds = []
+    if (values?.tables?.length >= 1) {
+      let array = [...values?.tables]
+      let removeTable = null
+      array?.forEach((item, index) => {
+        if (item?.tableId === this.props.table?.tableId)
+          removeTable = index
+      })
+      if (removeTable !== null) {
+        array.splice(removeTable, 1);
+      }
+      let otherTableArr = array?.map((item) => item?.tableId)
+      otherTableArr.push(table.tableId)
+      updateOrder.tableIds = otherTableArr
+    }
+
+    dispatchFetchRequest(api.order.moveOrder(values.orderId), {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({targetOrderId: toTable.orderId})
     },
       response => {
         response.json().then(data => {
@@ -908,7 +967,7 @@ class DraggableBase extends Component {
   }
 
 
-  renderDraggable(layoutId, table, orders, openOrderModal, index, borderColor, positionArr, screenMode, customMainThemeColor, customSecondThemeColor, customBackgroundColor) {
+  renderDraggable(layoutId, table, orders, openOrderModal, index, borderColor, positionArr, screenMode, customMainThemeColor, customSecondThemeColor, customBackgroundColor, t) {
     TimeAgo.addLocale(en)
     const timeAgo = new TimeAgo()
 
@@ -999,7 +1058,7 @@ class DraggableBase extends Component {
                   })]}>
                   {tableStatus === 'PAYMENT_IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><MaterialIcons name="attach-money" size={25}
                     style={[{color: '#f75336'}]} /></View>}
-                  <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}123</Text>
+                  <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Ionicons name={'ios-people'} color={'black'} size={20} />
                     <Text style={{color: '#000', textAlign: 'center', }}>{` ${tableOrder?.customerCount ?? 0}(${table.capacity})`}</Text>

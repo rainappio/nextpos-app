@@ -31,6 +31,7 @@ import en from 'javascript-time-ago/locale/en';
 import {NavigationEvents} from "react-navigation";
 import {SplitBillPopUp} from '../components/PopUp'
 import SockJsClient from 'react-stomp';
+import Colors from "../constants/Colors";
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
@@ -483,6 +484,11 @@ class OrderFormII extends React.Component {
     order.lineItems !== undefined && order.lineItems.map(lineItem => {
       totalQuantity += lineItem.quantity
     })
+
+    order.lineItems !== undefined && order.lineItems?.sort((a, b) => {
+      let sort = ["OPEN", "IN_PROCESS", "ALREADY_IN_PROCESS", "DELIVERED", "SETTLED"];
+      return sort.indexOf(a.state) - sort.indexOf(b.state);
+    });
 
     TimeAgo.addLocale(en)
     const timeAgo = new TimeAgo()
@@ -1080,13 +1086,13 @@ class OrderFormII extends React.Component {
                                     </View>
                                     <View style={{position: 'absolute', bottom: '3%', left: '3%', flexDirection: 'row'}}>
                                       <View style={{marginRight: 5}}>
-                                        {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
+                                        {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: `${Colors.orderBgWhite}`, color: `${Colors.orderOpen}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
                                         {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && (
-                                          <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
+                                          <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderInProcess}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
                                         )}
-                                        {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
+                                        {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderPrepare}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
                                         {item?.state === 'DELIVERED' && (
-                                          <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
+                                          <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderDeliver}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
                                         )}
                                         {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
                                       </View>
