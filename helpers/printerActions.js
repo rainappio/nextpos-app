@@ -2,7 +2,7 @@
 
 export const printMessage = (xml = null, ipAddress, successCallback, errorCallback) => {
 
-  const url = `http://${ipAddress}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=5000`
+  const url = `http://${ipAddress}/cgi-bin/epos/service.cgi?devid=local_printer&timeout=30000`
 
   let request = `<epos-print xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">`
   request += '<text lang="en"/>'
