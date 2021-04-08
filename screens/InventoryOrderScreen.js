@@ -50,34 +50,6 @@ class InventoryOrderScreen extends React.Component {
             inventoryOrdersData: []
         }
 
-        context.localize({
-            en: {
-                inventoryOrder: {
-                    newFormTitle: 'New Inventory Order',
-                    editFormTitle: 'Edit Inventory Order',
-                    orderDate: 'Order Date',
-                    supplierId: 'Supplier',
-                    supplierOrderId: 'Order ID',
-                    sku: 'Sku',
-                    quantity: 'Quantity',
-                    productName: 'Product Name',
-                    price: 'Price',
-                }
-            },
-            zh: {
-                inventoryOrder: {
-                    newFormTitle: '新增庫存訂單',
-                    editFormTitle: '編輯庫存訂單',
-                    orderDate: '訂單日期',
-                    supplierId: '進貨商',
-                    supplierOrderId: '庫存訂單編號',
-                    sku: 'Sku',
-                    quantity: '數量',
-                    price: '價格',
-                    productName: '產品名稱',
-                }
-            }
-        })
     }
 
     componentDidMount() {

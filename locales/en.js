@@ -87,6 +87,18 @@ const en = {
   product: {
     ungrouped: 'Ungrouped',
     pinned: 'Pinned',
+    newProduct: 'New Product',
+    editProduct: 'Edit Product',
+    productName: 'Product Name',
+    internalProductName: 'Internal Product Name',
+    price: 'Price',
+    costPrice: 'Cost Price',
+    productLabel: 'Product Label',
+    description: 'Description',
+    childProducts: 'Child Products',
+    options: 'Options',
+    workingArea: 'Working Area',
+    inventoryEdit: 'Product Inventory',
   },
   order: {
     inStore: 'In Store',
@@ -339,6 +351,7 @@ const en = {
       orderFinalized: 'This order has been settled, return to table screen.',
       passwordUsed: 'Password is used',
       cannotDelete: 'Order set has been merged. Please settle the order.',
+      alreadyProcessed: 'Processed inventory order cannot be modified.',
     }
   },
   eInvoice: {
@@ -434,6 +447,15 @@ const en = {
     assign: 'Assign',
     remove: 'Remove',
   },
+  calendar: {
+    monthly: 'Monthly',
+    weekly: 'Weekly',
+    daily: 'Daily',
+    roster: 'Roster',
+    reservation: 'Reservation',
+    showMyEvent: 'Show My Events',
+    noWorkingArea: 'Not Assigned'
+  },
   membership: {
     searchNullMsg: 'Can\'t find membership. Sign up?',
     creatSuccessMsg: 'New membership created.',
@@ -518,13 +540,36 @@ const en = {
     inventoryEditFormTitle: 'Edit Inventory',
     inventoryNewFormTitle: 'New Inventory',
     sku: 'Sku',
-    name: 'Sku Name',
+    labelName: 'Label',
+    skuName: 'Sku Name',
+    searchSkuName: 'Search Sku Name',
     unitOfMeasure: 'Unit of Measure',
+    unitOfMeasureDefault: 'Default Unit: EACH',
     baseUnitQuantity: 'Unit Quantity',
+    baseUnitQuantityDefault: 'Default UnitQuantity：1',
     quantity: 'Quantity',
     minimumStockLevel: 'Min. Stock',
     addInventory: 'Add Inventory',
     deleteAllInventory: 'Delete All',
+    process: 'Process',
+    copy: 'Copy',
+    addSkuByProduct: 'Add Sku by Product',
+    addNewProductAndSku: 'Add New Product & Sku',
+    selectExistingProduct: 'Select Product',
+  },
+  inventoryOrder: {
+    newFormTitle: 'New Inventory Order',
+    editFormTitle: 'Edit Inventory Order',
+    orderDate: 'Order Date',
+    supplierId: 'Supplier',
+    supplierOrderId: 'Order ID',
+    sku: 'Sku',
+    quantity: 'Quantity',
+    productName: 'Product Name',
+    price: 'Price',
+    unitPrice: 'Unit Price',
+    disableChangeOrderTitle: 'Disabled',
+    disableChangeOrderMessage: 'Processed inventory order cannot be modified.'
   }
 }
 
