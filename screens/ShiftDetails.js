@@ -8,7 +8,7 @@ import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import Modal from 'react-native-modal';
 import {Ionicons} from '@expo/vector-icons';
-import {handleSendEmail} from "../helpers/shiftActions";
+import {handleSendEmail, handlePrintReport} from "../helpers/shiftActions";
 import {DeleteLineItemLogModal} from "../components/DeleteLineItemLogModal";
 
 class ShiftDetails extends React.Component {
@@ -331,6 +331,12 @@ class ShiftDetails extends React.Component {
                 })
               }}>
               <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('searchShiftOrders')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                handlePrintReport(shift.id)
+              }}>
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('shift.printShiftReport')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {

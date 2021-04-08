@@ -357,6 +357,9 @@ export const api = {
     sendEmail: shiftId => {
       return `${apiRoot}/shifts/${shiftId}/email`
     },
+    printReport: shiftId => {
+      return `${apiRoot}/shifts/${shiftId}/print`
+    },
   },
   tablelayout: {
     create: `${apiRoot}/tablelayouts`,

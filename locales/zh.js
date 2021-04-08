@@ -279,7 +279,9 @@ const zh = {
     shiftAborted: '關帳取消',
     shiftClosed: '已關帳',
     sendEmail: '發送關帳紀錄Email',
-    sendEmailDone: '信件已發送'
+    sendEmailDone: '信件已發送',
+    printShiftReport: '列印關帳紀錄',
+    printShiftReportDone: '關帳紀錄已列印',
   },
   preferences: {
     darkMode: '暗黑模式'
@@ -357,6 +359,7 @@ const zh = {
       passwordUsed: '密碼已被使用',
       cannotDelete: '此併桌訂單不能被刪除。請用結帳來完成訂單。',
       alreadyProcessed: '已處理的進貨單不能修改。',
+      noPrinter: '結帳出單機尚未設定',
     }
   },
   eInvoice: {

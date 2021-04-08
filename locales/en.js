@@ -275,7 +275,9 @@ const en = {
     shiftAborted: 'Closing shift aborted',
     shiftClosed: 'Shift closed',
     sendEmail: 'Send Shift Report Email',
-    sendEmailDone: 'Email has been sent'
+    sendEmailDone: 'Email has been sent',
+    printShiftReport: 'Print Shift Report',
+    printShiftReportDone: 'Shift report has been printed.',
   },
   preferences: {
     darkMode: 'Dark Mode'
@@ -352,6 +354,7 @@ const en = {
       passwordUsed: 'Password is used',
       cannotDelete: 'Order set has been merged. Please settle the order.',
       alreadyProcessed: 'Processed inventory order cannot be modified.',
+      noPrinter: 'Checkout printer is not setup.',
     }
   },
   eInvoice: {

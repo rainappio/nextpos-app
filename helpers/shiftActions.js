@@ -1,6 +1,7 @@
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from "../constants/Backend";
 import i18n from 'i18n-js'
 import NavigationService from "../navigation/NavigationService";
+import {printMessage} from "./printerActions";
 
 export const handleOpenShift = (balance, successCallback) => {
   if (!checkBalanceInput(balance)) {
@@ -129,5 +130,32 @@ export const handleSendEmail = (shiftId) => {
   },
     response => {
       successMessage(i18n.t('shift.sendEmailDone'))
+    }).then()
+}
+
+export const handlePrintReport = (shiftId) => {
+  dispatchFetchRequestWithOption(api.shift.printReport(shiftId), {
+    method: 'POST',
+    withCredentials: true,
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }, {
+    defaultMessage: false
+  },
+    response => {
+      response.json().then(printerInstructions => {
+        console.log('handleShiftPrintReport', printerInstructions)
+
+        printMessage(printerInstructions.instruction, printerInstructions.ipAddress, () => {
+          successMessage(i18n.t('shift.printShiftReportDone'))
+
+        }, () => {
+          warningMessage(i18n.t('printerWarning'))
+        }
+        )
+      }).catch((e) => console.log(e))
+
     }).then()
 }
