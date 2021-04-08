@@ -90,6 +90,18 @@ const zh = {
   product: {
     ungrouped: '未分類',
     pinned: '置頂產品',
+    newProduct: '新增產品',
+    editProduct: '修改產品',
+    productName: '產品名稱',
+    internalProductName: '內部產品名稱',
+    price: '價格',
+    costPrice: '成本價',
+    productLabel: '產品分類',
+    description: '產品敘述',
+    childProducts: '子產品',
+    options: '產品選項',
+    workingArea: '工作區',
+    inventoryEdit: '產品庫存管理',
   },
   order: {
     inStore: '內用',
@@ -344,6 +356,7 @@ const zh = {
       orderFinalized: '此訂單已被結帳，返回桌位頁面',
       passwordUsed: '密碼已被使用',
       cannotDelete: '此併桌訂單不能被刪除。請用結帳來完成訂單。',
+      alreadyProcessed: '已處理的進貨單不能修改。',
     }
   },
   eInvoice: {
@@ -439,6 +452,15 @@ const zh = {
     assign: '分配',
     remove: '移除分配',
   },
+  calendar: {
+    monthly: '月曆',
+    weekly: '周曆',
+    daily: '日曆',
+    roster: '排班',
+    reservation: '訂位',
+    showMyEvent: '顯示我的排班',
+    noWorkingArea: '尚未排班'
+  },
   membership: {
     searchNullMsg: '查無此人，是否註冊會員?',
     creatSuccessMsg: '註冊成功',
@@ -523,13 +545,37 @@ const zh = {
     inventoryEditFormTitle: '編輯庫存',
     inventoryNewFormTitle: '新增庫存',
     sku: 'Sku',
+    labelName: '標籤',
+    skuName: 'Sku名稱',
+    searchSkuName: '搜尋Sku名稱',
     name: '標籤',
     unitOfMeasure: '單位',
+    unitOfMeasureDefault: '預設單位：EACH',
     baseUnitQuantity: '每單位個數',
+    baseUnitQuantityDefault: '預設單位數量：1',
     quantity: '單位數量',
     minimumStockLevel: '最小庫存量',
     addInventory: '新增一筆庫存',
     deleteAllInventory: '刪除全部庫存',
+    process: '處理進貨單',
+    copy: '複製進貨單',
+    addSkuByProduct: '從現有產品裡新增一筆Sku',
+    addNewProductAndSku: '新增新產品與一筆Sku',
+    selectExistingProduct: '選擇產品名稱',
+  },
+  inventoryOrder: {
+    newFormTitle: '新增庫存訂單',
+    editFormTitle: '編輯庫存訂單',
+    orderDate: '訂單日期',
+    supplierId: '進貨商',
+    supplierOrderId: '庫存訂單編號',
+    sku: 'Sku',
+    quantity: '數量',
+    price: '單價',
+    unitPrice: 'Unit Price',
+    productName: '產品名稱',
+    disableChangeOrderTitle: '無法變更',
+    disableChangeOrderMessage: '已處理的進貨單不能修改。'
   }
 }
 

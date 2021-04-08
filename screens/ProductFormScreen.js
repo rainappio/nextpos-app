@@ -39,33 +39,40 @@ class ProductFormScreen extends React.Component {
   componentDidMount() {
     this.context.localize({
       en: {
-        newProduct: 'New Product',
-        editProduct: 'Edit Product',
-        productName: 'Product Name',
-        internalProductName: 'Internal Product Name',
-        price: 'Price',
-        costPrice: 'Cost Price',
-        productLabel: 'Product Label',
-        description: 'Description',
-        childProducts: 'Child Products',
-        options: 'Options',
-        workingArea: 'Working Area',
-        inventoryEdit: '庫存管理',
+        product: {
+          ungrouped: 'Ungrouped',
+          pinned: 'Pinned',
+          newProduct: 'New Product',
+          editProduct: 'Edit Product',
+          productName: 'Product Name',
+          internalProductName: 'Internal Product Name',
+          price: 'Price',
+          costPrice: 'Cost Price',
+          productLabel: 'Product Label',
+          description: 'Description',
+          childProducts: 'Child Products',
+          options: 'Options',
+          workingArea: 'Working Area',
+          inventoryEdit: 'Product Inventory',
+        }
       },
       zh: {
-        newProduct: '新增產品',
-        editProduct: '修改產品',
-        productName: '產品名稱',
-        internalProductName: '內部產品名稱',
-        price: '價格',
-        costPrice: '成本價',
-        productLabel: '產品分類',
-        description: '產品敘述',
-        childProducts: '子產品',
-        options: '產品選項',
-        workingArea: '工作區',
-        inventoryEdit: '庫存管理',
-
+        product: {
+          ungrouped: '未分類',
+          pinned: '置頂產品',
+          newProduct: '新增產品',
+          editProduct: '修改產品',
+          productName: '產品名稱',
+          internalProductName: '內部產品名稱',
+          price: '價格',
+          costPrice: '成本價',
+          productLabel: '產品分類',
+          description: '產品敘述',
+          childProducts: '子產品',
+          options: '產品選項',
+          workingArea: '工作區',
+          inventoryEdit: '產品庫存管理',
+        }
       }
     })
   }
@@ -132,7 +139,7 @@ class ProductFormScreen extends React.Component {
       <ThemeKeyboardAwareScrollView>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader parentFullScreen={true}
-            title={isEditForm ? t('editProduct') : t('newProduct')}
+            title={isEditForm ? t('product.editProduct') : t('product.newProduct')}
             backAction={() => backAction(this.props.navigation)}
 
           />
@@ -160,14 +167,14 @@ class ProductFormScreen extends React.Component {
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('productName')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('product.productName')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
               <Field
                 name="name"
                 component={InputText}
                 validate={isRequired}
-                placeholder={t('productName')}
+                placeholder={t('product.productName')}
                 secureTextEntry={false}
               />
             </View>
@@ -175,13 +182,13 @@ class ProductFormScreen extends React.Component {
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('productName')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('product.internalProductName')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
               <Field
                 name="internalName"
                 component={InputText}
-                placeholder={t('internalProductName')}
+                placeholder={t('product.internalProductName')}
                 secureTextEntry={false}
               />
             </View>
@@ -189,14 +196,14 @@ class ProductFormScreen extends React.Component {
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('price')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('product.price')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
               <Field
                 name="price"
                 component={InputText}
                 validate={isRequired}
-                placeholder={t('price')}
+                placeholder={t('product.price')}
                 secureTextEntry={false}
                 keyboardType={'numeric'}
               />
@@ -205,13 +212,13 @@ class ProductFormScreen extends React.Component {
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('costPrice')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('product.costPrice')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
               <Field
                 name="costPrice"
                 component={InputText}
-                placeholder={t('costPrice')}
+                placeholder={t('product.costPrice')}
                 secureTextEntry={false}
                 keyboardType={'numeric'}
               />
@@ -220,7 +227,7 @@ class ProductFormScreen extends React.Component {
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('productLabel')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('product.productLabel')}</StyledText>
             </View>
             <View style={{flex: 1, justifyContent: 'flex-end'}}>
               <Field
@@ -230,20 +237,20 @@ class ProductFormScreen extends React.Component {
                 search
                 selection
                 fluid
-                placeholder={{value: null, label: t('productLabel')}}
+                placeholder={{value: null, label: t('product.productLabel')}}
               />
             </View>
           </View>
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('description')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('product.description')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <Field
                 name="description"
                 component={InputText}
-                placeholder={t('description')}
+                placeholder={t('product.description')}
                 secureTextEntry={false}
               />
             </View>
@@ -252,7 +259,7 @@ class ProductFormScreen extends React.Component {
           {(!isEditForm || initialValues.productType === 'PRODUCT_SET') && (
             <View style={styles.sectionContainer}>
               <View style={styles.sectionTitleContainer}>
-                <StyledText style={styles.sectionTitleText}>{t('childProducts')}</StyledText>
+                <StyledText style={styles.sectionTitleText}>{t('product.childProducts')}</StyledText>
               </View>
 
               <View>
@@ -280,7 +287,7 @@ class ProductFormScreen extends React.Component {
                       {t('inventory.addInventory')}
                     </Text>
                   </TouchableOpacity>
-                  <StyledText style={styles.sectionTitleText}>{t('inventoryEdit')}</StyledText>
+                  <StyledText style={styles.sectionTitleText}>{t('product.inventoryEdit')}</StyledText>
                   {!!inventoryData ? <DeleteBtn handleDeleteAction={this.props?.handleDeleteAllInventory} text={t('inventory.deleteAllInventory')} /> :
                     <View>
                       <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor), {color: customBackgroundColor, backgroundColor: customBackgroundColor, borderColor: customBackgroundColor}]}>
@@ -293,7 +300,7 @@ class ProductFormScreen extends React.Component {
                   <View style={styles.tableRowContainer}>
                     <CustomTable
                       tableData={Object.values(inventoryData?.inventoryQuantities)}
-                      tableTopBar={[t('inventory.sku'), t('inventory.name'), t('inventory.unitOfMeasure'), t('inventory.baseUnitQuantity'), t('inventory.quantity'), t('inventory.minimumStockLevel')]}
+                      tableTopBar={[t('inventory.sku'), t('inventory.labelName'), t('inventory.unitOfMeasure'), t('inventory.baseUnitQuantity'), t('inventory.quantity'), t('inventory.minimumStockLevel')]}
                       tableContent={['sku', 'name', 'unitOfMeasure', 'baseUnitQuantity', 'quantity', 'minimumStockLevel']}
                       occupy={[1, 1, 1, 1, 1, 1]}
                       itemOnPress={(data) => this.handleItemPress(data)}
@@ -311,7 +318,7 @@ class ProductFormScreen extends React.Component {
 
               <View style={styles.sectionContainer}>
                 <View style={styles.sectionTitleContainer}>
-                  <StyledText style={styles.sectionTitleText}>{t('options')}</StyledText>
+                  <StyledText style={styles.sectionTitleText}>{t('product.options')}</StyledText>
                 </View>
 
                 <View>
@@ -327,7 +334,7 @@ class ProductFormScreen extends React.Component {
 
               <View style={[styles.sectionContainer]}>
                 <View style={styles.sectionTitleContainer}>
-                  <StyledText style={styles.sectionTitleText}>{t('workingArea')}</StyledText>
+                  <StyledText style={styles.sectionTitleText}>{t('product.workingArea')}</StyledText>
                 </View>
                 {workingareas !== undefined &&
                   workingareas.map(workarea => (
@@ -385,18 +392,18 @@ class ProductFormScreen extends React.Component {
                 <DeleteBtn handleDeleteAction={handleDeleteProduct} />
               </View>
             ) : (
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate('ProductsOverview')
-                }
-              >
-                <Text
-                  style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('ProductsOverview')
+                  }
                 >
-                  {t('action.cancel')}
-                </Text>
-              </TouchableOpacity>
-            )}
+                  <Text
+                    style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+                  >
+                    {t('action.cancel')}
+                  </Text>
+                </TouchableOpacity>
+              )}
           </View>
         </View>
       </ThemeKeyboardAwareScrollView>
@@ -479,14 +486,14 @@ class InventoryForm extends React.Component {
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText style={styles.fieldTitle}>{t('inventory.name')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('inventory.labelName')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
               <Field
                 name="name"
                 component={InputText}
                 validate={isRequired}
-                placeholder={t('inventory.name')}
+                placeholder={t('inventory.labelName')}
                 secureTextEntry={false}
               />
             </View>

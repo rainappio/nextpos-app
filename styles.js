@@ -546,6 +546,14 @@ export default StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center'
   },
+  searchNoDataBlock: (customMainThemeColor) => ({
+    fontSize: 32,
+    fontWeight: 'bold',
+    paddingTop: 30,
+    textAlign: 'center',
+    alignItems: 'center',
+    color: customMainThemeColor,
+  }),
   searchButton: (customMainThemeColor) => ({
     width: '100%',
     textAlign: 'center',
