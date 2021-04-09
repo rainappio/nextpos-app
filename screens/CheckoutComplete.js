@@ -78,13 +78,11 @@ class CheckoutComplete extends React.Component {
 
     if (!this.state.isPrintFirst && !!this.state.printer && (!!this.state.invoiceXML || !!this.state.receiptXML)) {
       this.setState({isPrintFirst: true})
-      if (!!this.state?.receiptXML) {
-        if (!!this.state?.invoiceXML) {
-          this.handleFirstPrint(this.state?.invoiceXML, this.state?.receiptXML, this.state.printer.ipAddress)
-        } else {
-          // cancel auto print receipt
-          // this.handlePrint(this.state?.receiptXML, this.state.printer.ipAddress, false)
-        }
+      if (!!this.state.invoiceXML) {
+        this.handlePrint(this.state?.invoiceXML, this.state.printer.ipAddress, true)
+      }
+      if (!!this.state?.receiptXML) { // (!!this.state?.invoiceXML && setting=autoPrint)
+        // this.handlePrint(this.state?.receiptXML, this.state.printer.ipAddress, false)
       }
 
     }
