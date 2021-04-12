@@ -122,6 +122,7 @@ class OrdersSummaryRow extends React.Component {
     this.setState({orderLineItems: lineItems})
   }
 
+
   renderStateToolTip = (state, t) => {
     const tooltip = (
       <View>
@@ -177,6 +178,62 @@ class OrdersSummaryRow extends React.Component {
       this.props.navigation.navigate('OrdersSummary')
       this.props.getOrder(this.props.order.orderId)
     }).then()
+  }
+
+  handleSettledDeliver = id => {
+    const lineItemIds = []
+
+    Object.keys(this.state.orderLineItems).map(id => {
+      const orderLineItem = this.state.orderLineItems[id];
+      if (orderLineItem.checked) {
+        lineItemIds.push(orderLineItem.value)
+      }
+    })
+
+    if (lineItemIds.length === 0) {
+
+      Alert.alert(
+        `${this.context.t('action.confirmMessageTitle')}`,
+        `${this.context.t('deliverAllLineItems')}`,
+        [
+          {
+            text: `${this.context.t('action.yes')}`,
+            onPress: () => {
+              console.log("settled deliver check")
+              dispatchFetchRequest(api.order.settledProcess(id), {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              },
+                response => {
+                  this.props.navigation.navigate('TablesSrc')
+                }).then()
+            }
+          },
+          {
+            text: `${this.context.t('action.no')}`,
+            onPress: () => console.log('Cancelled'),
+            style: 'cancel'
+          }
+        ]
+      )
+    } else {
+      dispatchFetchRequest(api.order.deliverLineItems(id), {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({lineItemIds: lineItemIds})
+      },
+        response => {
+          this.props.navigation.navigate('TablesSrc')
+        }).then()
+    }
   }
 
   handleDeliver = id => {
@@ -343,6 +400,15 @@ class OrdersSummaryRow extends React.Component {
       initialValues,
       themeStyle
     } = this.props
+
+    let isAllPrepared = false;
+    order.lineItems !== undefined && order.lineItems.forEach(lineItem => {
+      let stateOpen = ["IN_PROCESS", "ALREADY_IN_PROCESS", "PREPARED"];
+      if (stateOpen.includes(lineItem.state)) {
+        isAllPrepared = true
+      }
+    })
+
 
     const {t, splitParentOrderId, customMainThemeColor} = this.context
 
@@ -609,6 +675,20 @@ class OrdersSummaryRow extends React.Component {
               </Text>
             </TouchableOpacity>
           )}
+
+          {order.state === 'SETTLED' && isAllPrepared &&
+            <View style={{flex: 1}}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.handleSettledDeliver(order.orderId);
+                }}
+
+              >
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('deliverOrder')}</Text>
+              </TouchableOpacity>
+
+            </View>
+          }
 
           {order.state === 'OPEN' && (
             <SecondActionButton
