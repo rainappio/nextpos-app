@@ -582,7 +582,7 @@ class TablesScreen extends React.Component {
               </View>
 
               {this.state?.screenMode === 'normal' && <View style={{...styles.bottomButtonContainerWithoutFlex, marginTop: 0, flexDirection: 'row', minHeight: 48}}>
-                {this.state.tableIndex !== -1 && <TouchableOpacity onPress={() => this.setState({
+                {/* {this.state.tableIndex !== -1 && <TouchableOpacity onPress={() => this.setState({
                   screenMode: 'joinTable',
                   tableWidth: null,
                   tableHeight: null,
@@ -590,7 +590,7 @@ class TablesScreen extends React.Component {
                   <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor), {flex: 1}]}>
                     {t('joinTable')}
                   </Text>
-                </TouchableOpacity>}
+                </TouchableOpacity>} */}
                 <TouchableOpacity onPress={() => NavigationService?.navigateToRoute('OrderDisplayScreen')} style={{flex: 1}}>
                   <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor), {flex: 1}]}>
                     {t('menu.orderDisplay')}
