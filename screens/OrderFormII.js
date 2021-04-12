@@ -49,7 +49,7 @@ class OrderFormII extends React.Component {
         addItemSuccess: 'Added {{product}}',
         nothing: 'Nothing',
         choose: 'Choose',
-        deliverAllLineItems: 'Confirm to deliver all line items',
+        deliverAllLineItems: 'Confirm to deliver all line items?',
         lineItemCountCheck: 'At least one item is needed to submit an order.',
         submitOrder: 'Submit',
         not: 'No',
@@ -88,7 +88,7 @@ class OrderFormII extends React.Component {
         addItemSuccess: '新增了 {{product}}',
         nothing: '尚無產品',
         choose: '選擇',
-        deliverAllLineItems: '確認所有品項送餐',
+        deliverAllLineItems: '確認所有品項送餐？',
         lineItemCountCheck: '請加一個以上的產品到訂單裡.',
         submitOrder: '送單',
         not: '不',
@@ -284,6 +284,63 @@ class OrderFormII extends React.Component {
     lineItems[lineItemId] = lineItem
 
     this.setState({orderLineItems: lineItems})
+  }
+
+
+  handleSettledDeliver = id => {
+    const lineItemIds = []
+
+    Object.keys(this.state.orderLineItems).map(id => {
+      const orderLineItem = this.state.orderLineItems[id];
+      if (orderLineItem.checked) {
+        lineItemIds.push(orderLineItem.value)
+      }
+    })
+
+    if (lineItemIds.length === 0) {
+
+      Alert.alert(
+        `${this.context.t('action.confirmMessageTitle')}`,
+        `${this.context.t('deliverAllLineItems')}`,
+        [
+          {
+            text: `${this.context.t('action.yes')}`,
+            onPress: () => {
+              console.log("settled deliver check")
+              dispatchFetchRequest(api.order.settledProcess(id), {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              },
+                response => {
+                  this.props.navigation.navigate('TablesSrc')
+                }).then()
+            }
+          },
+          {
+            text: `${this.context.t('action.no')}`,
+            onPress: () => console.log('Cancelled'),
+            style: 'cancel'
+          }
+        ]
+      )
+    } else {
+      dispatchFetchRequest(api.order.deliverLineItems(id), {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({lineItemIds: lineItemIds})
+      },
+        response => {
+          this.props.navigation.navigate('TablesSrc')
+        }).then()
+    }
   }
   handleDeliver = id => {
     const lineItemIds = []
@@ -486,9 +543,18 @@ class OrderFormII extends React.Component {
     })
 
     order.lineItems !== undefined && order.lineItems?.sort((a, b) => {
-      let sort = ["OPEN", "IN_PROCESS", "ALREADY_IN_PROCESS", "DELIVERED", "SETTLED"];
+      let sort = ["OPEN", "IN_PROCESS", "ALREADY_IN_PROCESS", "PREPARED", "DELIVERED", "SETTLED"];
       return sort.indexOf(a.state) - sort.indexOf(b.state);
     });
+
+    let isAllPrepared = false;
+    order.lineItems !== undefined && order.lineItems.forEach(lineItem => {
+      let stateOpen = ["IN_PROCESS", "ALREADY_IN_PROCESS", "PREPARED"];
+      if (stateOpen.includes(lineItem.state)) {
+        isAllPrepared = true
+      }
+    })
+
 
     TimeAgo.addLocale(en)
     const timeAgo = new TimeAgo()
@@ -1006,11 +1072,25 @@ class OrderFormII extends React.Component {
                               />
                             }
                           </View>
+
                         </View>
 
                       </View>
 
-                      <View style={{flex: 1, marginHorizontal: 5, flexDirection: 'row'}}>
+                      <View style={{flex: 1, marginHorizontal: 5, flexDirection: isAllPrepared ? 'column' : 'row'}}>
+
+                        {isAllPrepared && <View style={{flex: 1, marginLeft: 5, marginBottom: 5}}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.handleSettledDeliver(order.orderId);
+                            }}
+                            style={styles?.flexButton(customMainThemeColor)}
+                          >
+                            <Text style={styles.flexButtonText}>{t('deliverOrder')}</Text>
+                          </TouchableOpacity>
+
+                        </View>
+                        }
 
                         <View style={{flex: 1, marginLeft: 5}}>
                           <TouchableOpacity
@@ -1082,6 +1162,7 @@ class OrderFormII extends React.Component {
                                       <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.productName} ${item.price}</StyledText>
                                       {!!item?.childProducts?.length > 0 && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}> - {item.childProducts.map((childProduct) => childProduct?.productName).join(',')}</StyledText>}
                                       {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.options}</StyledText>}
+                                      {!!item?.sku && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.sku}</StyledText>}
                                       {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
                                     </View>
                                     <View style={{position: 'absolute', bottom: '3%', left: '3%', flexDirection: 'row'}}>

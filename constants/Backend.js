@@ -204,6 +204,9 @@ export const api = {
     process: orderId => {
       return `${apiRoot}/orders/${orderId}/process`
     },
+    settledProcess: orderId => {
+      return `${apiRoot}/orders/${orderId}/process?action=POST_DELIVER`
+    },
     delete: orderId => {
       return `${apiRoot}/orders/${orderId}`
     },

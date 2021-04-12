@@ -129,6 +129,9 @@ class OrdersSummaryRow extends React.Component {
           {t('stateTip.open.display')}: {t('stateTip.open.note')}
         </Text>
         <Text>
+          {t('stateTip.prepared.display')}: {t('stateTip.prepared.note')}
+        </Text>
+        <Text>
           {t('stateTip.inProcess.display')}: {t('stateTip.inProcess.note')}
         </Text>
         <Text>
@@ -144,6 +147,7 @@ class OrdersSummaryRow extends React.Component {
       <Tooltip popover={tooltip} height={120} width={200} backgroundColor={this.context?.customMainThemeColor}>
         <View>
           {state === 'OPEN' && <StyledText style={{color: `${Colors.orderOpen}`}}>{t('stateTip.open.display')}</StyledText>}
+          {state === 'PREPARED' && <StyledText style={{color: `${Colors.orderPrepare}`}}>{t('stateTip.prepared.display')}</StyledText>}
           {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(state) && (
             <StyledText style={{color: `${Colors.orderInProcess}`}}>{t('stateTip.inProcess.display')}</StyledText>
           )}
@@ -435,7 +439,7 @@ class OrdersSummaryRow extends React.Component {
                 order.lineItems?.map((item) => {
                   return {...item, disableRightSwipe: !!item?.associatedLineItemId, disableLeftSwipe: !!item?.associatedLineItemId}
                 }).sort((a, b) => {
-                  let sort = ["OPEN", "IN_PROCESS", "ALREADY_IN_PROCESS", "DELIVERED", "SETTLED"];
+                  let sort = ["OPEN", "IN_PROCESS", "ALREADY_IN_PROCESS", "PREPARED", "DELIVERED", "SETTLED"];
                   return sort.indexOf(a.state) - sort.indexOf(b.state);
                 })
               }
