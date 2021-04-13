@@ -1,6 +1,6 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {Text, TouchableOpacity, View} from 'react-native'
+import {Text, TouchableOpacity, View, FlatList, Dimensions, TouchableHighlight} from 'react-native'
 import CheckBoxGroupObjPick from '../components/CheckBoxGroupObjPick'
 import RadioItemObjPick from '../components/RadioItemObjPick'
 import RenderStepper from '../components/RenderStepper'
@@ -38,6 +38,60 @@ class OrderFormIV extends React.Component {
         lineItemDiscount: '品項折扣'
       }
     })
+    this.state = {
+
+      highlightSkuIndex: null,
+      selectedSkuQuantity: 1,
+      selectedSku: '',
+      inventoryId: null,
+
+    }
+  }
+
+  componentDidMount() {
+    if (this.props?.initialValues.sku) {
+      this.setState({selectedSku: this.props?.initialValues.sku})
+    }
+    if (this.props?.initialValues.quantity) {
+      this.setState({selectedSkuQuantity: this.props?.initialValues.quantity})
+    }
+  }
+
+  InventoryItem = (item) => {
+    let isSelected = this.state.selectedSku == item.item.sku
+      || this.state.highlightSkuIndex == item.index
+
+    return (
+      <View style={[{flex: 1, marginHorizontal: 20}]}>
+        <TouchableHighlight
+          style={{flexDirection: 'row', justifyContent: 'space-between', color: this.contetx?.customMainThemeColor}}
+          onPress={() => {
+            this.props.change(`sku`, item?.item.sku)
+            this.setState({highlightSkuIndex: item.index, selectedSku: item?.item.sku})
+
+            if (!!isSelected) {
+              this.props.change(`quantity`, this.state.selectedSkuQuantity + 1)
+              this.setState({selectedSkuQuantity: (this.state.selectedSkuQuantity + 1)})
+            }
+            console.log(this.state.selectedSku, this.props.sku)
+          }}
+        >
+          <View style={[styles.flexButton(isSelected ? this.context?.customMainThemeColor : '#fff8c9')]}>
+
+            <View style={{color: isSelected ? '#fff' : '#555'}}>
+              <StyledText style={{color: isSelected ? '#fff' : '#555', paddingTop: 8, paddingBottom: 4, fontWeight: 'bold', fontSize: 16}}>{item?.item.sku}</StyledText>
+            </View>
+            <View>
+              <StyledText style={{color: isSelected ? '#fff' : '#555', paddingBottom: 8}}>{item?.item.name}</StyledText>
+            </View>
+            <View style={{borderTopWidth: 1, borderColor: isSelected ? '#fff' : '#ccc', backgroundColor: isSelected ? this.context?.customMainThemeColor : '#fff8c9', width: '100%', justifyContent: 'center', alignItems: 'center', paddingVertical: 4}}>
+              <StyledText style={{color: isSelected ? '#fff' : '#555'}}>{item?.item.quantity}</StyledText>
+            </View>
+          </View>
+
+        </TouchableHighlight>
+      </View >
+    );
   }
 
   render() {
@@ -46,6 +100,8 @@ class OrderFormIV extends React.Component {
 
     const hasProductOptions = product.productOptions != null && product.productOptions.length > 0
     const lastOptionIndex = product.productOptions != null ? product.productOptions.length : 0
+    const hasInventory = product.inventory != null
+    const inventoryData = product.inventory ? Object.values(product.inventory.inventoryQuantities) : null
 
     return (
       <View style={styles.fullWidthScreen}>
@@ -53,6 +109,30 @@ class OrderFormIV extends React.Component {
           parentFullScreen={true}
           title={`${product.name} ($${product.price})`}
         />
+
+        {hasInventory && (
+          <View style={[styles.sectionTitleContainer]}>
+            <StyledText style={styles.sectionTitleText}>
+              {t('inventory.skuName')}
+            </StyledText>
+          </View>
+        )}
+        {hasInventory && inventoryData && (
+
+          <FlatList
+            style={[styles.mgrbtn20], {
+              maxHeight: 350, paddingBottom: 20, maxWidth: Dimensions.get('window').width / 1
+            }}
+            numColumns={2}
+            data={inventoryData}
+            renderItem={(item) => this.InventoryItem(item)}
+            keyExtractor={(item) => item.name}
+            extraData={this.state.highlightSkuIndex}
+          />
+
+
+        )
+        }
 
         {hasProductOptions && (
           <View style={[styles.sectionTitleContainer]}>
@@ -170,10 +250,10 @@ class OrderFormIV extends React.Component {
           </StyledText>
         </View>
 
-        <View style={styles.sectionContainer}>
+        <View style={[styles.sectionContainer, styles.customBorderAndBackgroundColor(this.context)]}>
           {globalProductOffers != null && globalProductOffers.map(offer => (
             <View key={offer.offerId}>
-              <Field
+              <Field style={styles.customBorderAndBackgroundColor(this.context)}
                 name="lineItemDiscount"
                 component={RenderCheckBox}
                 customValue={{

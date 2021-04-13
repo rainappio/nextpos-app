@@ -173,7 +173,11 @@ class OrderFormII extends React.Component {
       }
     }, response => {
       response.json().then(product => {
-        if (product.productOptions == null || product.productOptions.length === 0) {
+        console.log("visible option check")
+        console.log("inventory check:", product.inventory)
+        if (product.productOptions == null || product.productOptions.length === 0 && product.inventory == null) {
+
+
           const orderId = this.props.navigation.state.params.orderId
           let lineItemRequest = {}
 
@@ -828,32 +832,34 @@ class OrderFormII extends React.Component {
                           }}
                           handleDeleteAction={() => handleDelete(order.orderId, () => NavigationService.navigate('TablesSrc'))}
                         />
-                        <View style={{flex: 1, marginHorizontal: 5, flexDirection: 'column'}}>
-                          <View style={{flex: 1}}>
-                            <Field
-                              name="otherAction"
-                              component={DropDown}
-                              options={this.state.otherActionOptions}
-                              onChange={(value) => {
-                                this.setState({
-                                  otherAction: value
-                                })
+                        <View style={{flex: 1, marginHorizontal: 5, flexDirection: 'row'}}>
+                          <View style={{flex: 1, flexDirection: 'column'}}>
+                            <TouchableOpacity
+                              onPress={() =>
+                                order.lineItems.length === 0
+                                  ? warningMessage(t('lineItemCountCheck'))
+                                  : handlePrintOrderDetails(order.orderId)
+                              }
+                              style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
+                            >
+                              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
+                                {t('printOrderDetails')}
+                              </Text>
+                            </TouchableOpacity>
+                            <SecondActionButton
+                              onPress={() => {
+                                order.lineItems.length === 0
+                                  ? warningMessage(t('lineItemCountCheck'))
+                                  : handlePrintWorkingOrder(order.orderId)
                               }}
-                            />
-                          </View>
-                          <View style={{flex: 1}}>
-                            {!!this.state?.otherAction &&
-                              <SecondActionButton
-                                onPress={() =>
-                                  order.lineItems.length === 0
-                                    ? warningMessage(t('lineItemCountCheck'))
-                                    : this.state?.otherAction === 'printOrderDetails' ? handlePrintOrderDetails(order.orderId) : handlePrintWorkingOrder(order.orderId)
-                                }
-                                containerStyle={styles?.flexButtonSecondAction(this.context)}
-                                style={styles?.flexButtonSecondActionText(customMainThemeColor)}
-                                title={t(this.state?.otherAction)}
-                              />
-                            }
+                              containerStyle={styles?.flexButtonSecondAction(this.context)}
+                              style={styles?.flexButtonSecondActionText(customMainThemeColor)}
+                              title={t('printWorkingOrder')}
+                            >
+                              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
+                                {t('printWorkingOrder')}
+                              </Text>
+                            </SecondActionButton>
                           </View>
                         </View>
                       </View>
@@ -931,31 +937,33 @@ class OrderFormII extends React.Component {
                           handleDeleteAction={() => handleDelete(order.orderId, () => NavigationService.navigate('TablesSrc'))}
                         />
                         <View style={{flex: 1, marginHorizontal: 5, flexDirection: 'column'}}>
-                          <View style={{flex: 1}}>
-                            <Field
-                              name="otherAction"
-                              component={DropDown}
-                              options={this.state.otherActionOptions}
-                              onChange={(value) => {
-                                this.setState({
-                                  otherAction: value
-                                })
+                          <View style={{flex: 1, flexDirection: 'column'}}>
+                            <TouchableOpacity
+                              onPress={() =>
+                                order.lineItems.length === 0
+                                  ? warningMessage(t('lineItemCountCheck'))
+                                  : handlePrintOrderDetails(order.orderId)
+                              }
+                              style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
+                            >
+                              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
+                                {t('printOrderDetails')}
+                              </Text>
+                            </TouchableOpacity>
+                            <SecondActionButton
+                              onPress={() => {
+                                order.lineItems.length === 0
+                                  ? warningMessage(t('lineItemCountCheck'))
+                                  : handlePrintWorkingOrder(order.orderId)
                               }}
-                            />
-                          </View>
-                          <View style={{flex: 1}}>
-                            {!!this.state?.otherAction &&
-                              <SecondActionButton
-                                onPress={() =>
-                                  order.lineItems.length === 0
-                                    ? warningMessage(t('lineItemCountCheck'))
-                                    : this.state?.otherAction === 'printOrderDetails' ? handlePrintOrderDetails(order.orderId) : handlePrintWorkingOrder(order.orderId)
-                                }
-                                containerStyle={styles?.flexButtonSecondAction(this.context)}
-                                style={styles?.flexButtonSecondActionText(customMainThemeColor)}
-                                title={t(this.state?.otherAction)}
-                              />
-                            }
+                              containerStyle={styles?.flexButtonSecondAction(this.context)}
+                              style={styles?.flexButtonSecondActionText(customMainThemeColor)}
+                              title={t('printWorkingOrder')}
+                            >
+                              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
+                                {t('printWorkingOrder')}
+                              </Text>
+                            </SecondActionButton>
                           </View>
                         </View>
                       </View>
@@ -1046,31 +1054,33 @@ class OrderFormII extends React.Component {
                     {order.state === 'SETTLED' && <>
                       <View style={{flex: 1, marginHorizontal: 0, flexDirection: 'row'}}>
                         <View style={{flex: 1, marginHorizontal: 5, flexDirection: 'column'}}>
-                          <View style={{flex: 1}}>
-                            <Field
-                              name="otherAction"
-                              component={DropDown}
-                              options={this.state.otherActionOptions}
-                              onChange={(value) => {
-                                this.setState({
-                                  otherAction: value
-                                })
+                          <View style={{flex: 1, flexDirection: 'column'}}>
+                            <TouchableOpacity
+                              onPress={() =>
+                                order.lineItems.length === 0
+                                  ? warningMessage(t('lineItemCountCheck'))
+                                  : handlePrintOrderDetails(order.orderId)
+                              }
+                              style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
+                            >
+                              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
+                                {t('printOrderDetails')}
+                              </Text>
+                            </TouchableOpacity>
+                            <SecondActionButton
+                              onPress={() => {
+                                order.lineItems.length === 0
+                                  ? warningMessage(t('lineItemCountCheck'))
+                                  : handlePrintWorkingOrder(order.orderId)
                               }}
-                            />
-                          </View>
-                          <View style={{flex: 1}}>
-                            {!!this.state?.otherAction &&
-                              <SecondActionButton
-                                onPress={() =>
-                                  order.lineItems.length === 0
-                                    ? warningMessage(t('lineItemCountCheck'))
-                                    : this.state?.otherAction === 'printOrderDetails' ? handlePrintOrderDetails(order.orderId) : handlePrintWorkingOrder(order.orderId)
-                                }
-                                containerStyle={styles?.flexButtonSecondAction(this.context)}
-                                style={styles?.flexButtonSecondActionText(customMainThemeColor)}
-                                title={t(this.state?.otherAction)}
-                              />
-                            }
+                              containerStyle={styles?.flexButtonSecondAction(this.context)}
+                              style={styles?.flexButtonSecondActionText(customMainThemeColor)}
+                              title={t('printWorkingOrder')}
+                            >
+                              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
+                                {t('printWorkingOrder')}
+                              </Text>
+                            </SecondActionButton>
                           </View>
 
                         </View>

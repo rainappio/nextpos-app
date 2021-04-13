@@ -409,8 +409,7 @@ class OrdersSummaryRow extends React.Component {
       }
     })
 
-
-    const {t, splitParentOrderId, customMainThemeColor} = this.context
+    const {t, splitParentOrderId, customMainThemeColor, customBackgroundColor} = this.context
 
     return (
       <View style={styles.fullWidthScreen}>
@@ -511,7 +510,7 @@ class OrdersSummaryRow extends React.Component {
               }
 
               renderItem={(data, rowMap) => (
-                <View style={[styles.rowFront, themeStyle]}>
+                <View style={[styles.rowFront, themeStyle, styles.customBorderAndBackgroundColor(this.context)]}>
                   <View key={rowMap} style={{marginBottom: 15}}>
                     <View style={styles.tableRowContainer}>
                       <View style={[styles.tableCellView, {flex: 6}]}>
@@ -549,6 +548,9 @@ class OrdersSummaryRow extends React.Component {
                       </View>
                     </View>
                     <View>
+                      {data.item?.sku && <View style={{marginLeft: 10}}>
+                        <StyledText style={{fontSize: 12}}>{data.item?.sku}</StyledText>
+                      </View>}
                       <View style={{marginLeft: 15}}>
                         {renderChildProducts(data.item)}
                       </View>
