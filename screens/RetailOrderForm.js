@@ -172,7 +172,7 @@ class RetailOrderForm extends React.Component {
             }
         }, response => {
             response.json().then(product => {
-                if (product.productOptions == null || product.productOptions.length === 0) {
+                if (product.productOptions == null || product.productOptions.length === 0 && product.inventory == null) {
                     const orderId = this.props.navigation.state.params.orderId
                     let lineItemRequest = {}
 
@@ -240,7 +240,7 @@ class RetailOrderForm extends React.Component {
             }
         }, response => {
             response.json().then(product => {
-                if (product.productOptions == null || product.productOptions.length === 0) {
+                if (product.productOptions == null || product.productOptions.length === 0 && product.inventory == null) {
                     const orderId = this.props.navigation.state.params.orderId
                     let lineItemRequest = {}
 
@@ -664,6 +664,7 @@ class RetailOrderForm extends React.Component {
                                                                             <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.productName} ${item.price}</StyledText>
                                                                             {!!item?.childProducts?.length > 0 && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}> - {item.childProducts.map((childProduct) => childProduct?.productName).join(',')}</StyledText>}
                                                                             {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.options}</StyledText>}
+                                                                            {!!item?.sku && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.sku}</StyledText>}
                                                                             {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
                                                                         </View>
                                                                         <View style={{position: 'absolute', bottom: '3%', left: '3%', flexDirection: 'row'}}>
