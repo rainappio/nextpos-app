@@ -1,7 +1,7 @@
 import React, {useState, useEffect, Component, useContext} from "react";
 import {Field, reduxForm} from 'redux-form'
 import {connect} from 'react-redux'
-import {Alert, StyleSheet, Text, TouchableHighlight, View, TouchableOpacity, KeyboardAvoidingView} from "react-native";
+import {Alert, StyleSheet, Text, TouchableHighlight, View, TouchableOpacity, KeyboardAvoidingView, FlatList, Dimensions} from "react-native";
 import {Accordion, List} from '@ant-design/react-native'
 import RenderStepper from '../components/RenderStepper'
 import {isCountZero, isRequired} from '../validators'
@@ -21,6 +21,7 @@ import BackendErrorScreen from "./BackendErrorScreen";
 import CheckBoxGroupObjPick from '../components/CheckBoxGroupObjPick'
 import RadioItemObjPick from '../components/RadioItemObjPick'
 import InputText from "../components/InputText";
+import InputNumber from "../components/InputNumber"
 import RenderCheckBox from "../components/rn-elements/CheckBox";
 import Modal from 'react-native-modal';
 
@@ -122,9 +123,12 @@ class ConnectedOrderItemOptionsBase extends React.Component {
             }
         })
 
+        console.log("new lineitem value: ", values.sku)
+
         const lineItemRequest = {
             productId: this.props.prdId,
             quantity: values.quantity,
+            sku: values.sku,
             overridePrice: values.overridePrice,
             productOptions: updatedOptions,
             productDiscount: values.lineItemDiscount.productDiscount,
@@ -173,9 +177,11 @@ class ConnectedOrderItemOptionsBase extends React.Component {
                 updatedOptions.push(option)
             }
         })
+        console.log("update lineitem value: ", values.sku)
 
         const lineItemRequest = {
             quantity: values.quantity,
+            sku: values.sku,
             productOptions: updatedOptions,
             overridePrice: values.overridePrice,
             productDiscount: values.lineItemDiscount.productDiscount,
@@ -201,6 +207,7 @@ class ConnectedOrderItemOptionsBase extends React.Component {
     render() {
         const {product, globalProductOffers, haveError, isLoading} = this.props
 
+
         const isEditLineItem = !!this.props?.isEditLineItem
         const lineItemDiscount = {
             offerId: 'NO_DISCOUNT',
@@ -210,7 +217,7 @@ class ConnectedOrderItemOptionsBase extends React.Component {
 
         const initialValues = {
             ...this.props?.modalData,
-            lineItemDiscount: lineItemDiscount
+            lineItemDiscount: lineItemDiscount,
         }
 
         if (initialValues.appliedOfferInfo != null) {
@@ -250,7 +257,7 @@ class ConnectedOrderItemOptionsBase extends React.Component {
                         <OrderItemOptions
                             onSubmit={this.handleSubmit}
                             product={product}
-                            initialValues={{lineItemDiscount: lineItemDiscount, quantity: 1}}
+                            initialValues={{lineItemDiscount: lineItemDiscount, quantity: 1, sku: null}}
                             globalProductOffers={globalProductOffers}
                             goBack={this.props.goBack}
                         />
@@ -307,7 +314,12 @@ class OrderItemOptions extends React.Component {
         })
         this.state = {
             optionActiveSections: [],
-            generalActiveSections: []
+            generalActiveSections: [],
+            highlightSkuIndex: null,
+            selectedSkuQuantity: 1,
+            selectedSku: '',
+            inventoryId: null,
+
         }
     }
 
@@ -328,6 +340,50 @@ class OrderItemOptions extends React.Component {
             })?.filter((item) => {return item !== undefined})
             this.setState({optionActiveSections: activeSectionsArr})
         }
+        if (this.props?.initialValues.sku) {
+            this.setState({selectedSku: this.props?.initialValues.sku})
+        }
+        if (this.props?.initialValues.quantity) {
+            this.setState({selectedSkuQuantity: this.props?.initialValues.quantity})
+        }
+    }
+
+    InventoryItem = (item) => {
+
+        let isSelected = this.state.selectedSku == item.item.sku
+            || this.state.highlightSkuIndex == item.index
+
+        return (
+            <View style={[{flex: 1, marginHorizontal: 20}]}>
+                <TouchableHighlight
+                    style={{flexDirection: 'row', justifyContent: 'space-between', color: this.contetx?.customMainThemeColor}}
+                    onPress={() => {
+                        this.props.change(`sku`, item?.item.sku)
+                        this.setState({highlightSkuIndex: item.index, selectedSku: item?.item.sku})
+
+                        if (!!isSelected) {
+                            this.props.change(`quantity`, this.state.selectedSkuQuantity + 1)
+                            this.setState({selectedSkuQuantity: (this.state.selectedSkuQuantity + 1)})
+                        }
+                        console.log(this.state.selectedSku, this.props.sku)
+                    }}
+                >
+                    <View style={[styles.flexButton(isSelected ? this.context?.customMainThemeColor : '#fff8c9')]}>
+
+                        <View style={{color: isSelected ? '#fff' : '#555'}}>
+                            <StyledText style={{color: isSelected ? '#fff' : '#555', paddingTop: 8, paddingBottom: 4, fontWeight: 'bold', fontSize: 16}}>{item?.item.sku}</StyledText>
+                        </View>
+                        <View>
+                            <StyledText style={{color: isSelected ? '#fff' : '#555', paddingBottom: 8}}>{item?.item.name}</StyledText>
+                        </View>
+                        <View style={{borderTopWidth: 1, borderColor: isSelected ? '#fff' : '#ccc', backgroundColor: isSelected ? this.context?.customMainThemeColor : '#fff8c9', width: '100%', justifyContent: 'center', alignItems: 'center', paddingVertical: 4}}>
+                            <StyledText style={{color: isSelected ? '#fff' : '#555'}}>{item?.item.quantity}</StyledText>
+                        </View>
+                    </View>
+
+                </TouchableHighlight>
+            </View >
+        );
     }
 
     render() {
@@ -336,17 +392,42 @@ class OrderItemOptions extends React.Component {
 
         const hasProductOptions = product.productOptions != null && product.productOptions.length > 0
         const lastOptionIndex = product.productOptions != null ? product.productOptions.length : 0
+        const hasInventory = product.inventory != null
+        const inventoryData = product.inventory ? Object.values(product.inventory.inventoryQuantities) : null
 
         return (
             <View style={[themeStyle, {height: '100%', borderRadius: 10}]}>
                 <ScreenHeader backNavigation={true}
                     parentFullScreen={true}
+                    style={{paddingTop: 20}}
                     title={`${product.name} ($${product.price})`}
                     backAction={() => {this.props.goBack()}}
                 />
                 <View style={{flex: 9}}>
                     <ThemeScrollView >
                         <View >
+
+
+                            {hasInventory && (
+                                <View style={[styles.sectionTitleContainer]}>
+                                    <StyledText style={styles.sectionTitleText}>
+                                        {t('inventory.skuName')}
+                                    </StyledText>
+                                </View>
+                            )}
+                            {hasInventory && inventoryData && (
+
+                                <FlatList
+                                    style={[styles.mgrbtn20], {
+                                        maxHeight: 350, paddingBottom: 20, maxWidth: Dimensions.get('window').width / 3
+                                    }}
+                                    numColumns={4}
+                                    data={inventoryData}
+                                    renderItem={(item) => this.InventoryItem(item)}
+                                    keyExtractor={(item) => item.name}
+                                    extraData={this.state.highlightSkuIndex}
+                                />
+                            )}
 
 
                             {hasProductOptions && (
