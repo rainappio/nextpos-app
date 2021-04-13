@@ -16,7 +16,7 @@ import {MoneyKeyboard, CardFourNumberKeyboard, CustomTitleAndDigitKeyboard, Disc
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
 import {isGuiNumberValid} from 'taiwan-id-validator2'
-import {handleDelete, handleOrderAction} from "../helpers/orderActions";
+import {handleDelete, handleOrderAction, getTableDisplayName, handlePrintOrderDetails} from "../helpers/orderActions";
 import NavigationService from "../navigation/NavigationService";
 import {NavigationEvents} from 'react-navigation'
 import {ScanView} from '../components/scanView'
@@ -437,7 +437,7 @@ class PaymentFormScreenTablet extends React.Component {
                 <View style={[styles.fullWidthScreen]}>
                     <ScreenHeader backNavigation={true}
                         parentFullScreen={true}
-                        title={t('payment.paymentTitle')}
+                        title={`${getTableDisplayName(order)} - ${t('payment.paymentTitle')}`}
                         backAction={() => {
                             !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()
                         }}
@@ -516,56 +516,56 @@ class PaymentFormScreenTablet extends React.Component {
                         </KeyboardAvoidingView>
                     </Modal>
                     <View style={{flexDirection: 'row', flex: 1}}>
-                        <View style={[styles.orderItemSideBar, themeStyle, {flex: 2, flexDirection: 'row', }]}>
+                        <View style={[styles.orderItemSideBar, themeStyle, {flex: 2, flexDirection: 'row'}]}>
                             {/* left list */}
-                            <View style={{flex: 1}}>
+                            <View style={{flex: 1, backgroundColor: this.context?.customBackgroundColor}}>
                                 <ScrollView style={{flex: 1}}>
-                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
-                                        <TouchableOpacity style={[(this.state.selectedPayLabel === 'CASH' ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1}]} onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'CASH', openTaxIDNumberKeyBoard: false, cardKeyboardResult: ['', '', '', ''], selectedCardLabel: 'OTHER', keyboardType: 'CASH'})}}>
+                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles.customBorderAndBackgroundColor(this.context)]}>
+                                        <TouchableOpacity style={[(this.state.selectedPayLabel === 'CASH' ? styles?.selectedPaymentLeftLabel(this.context) : null), {flex: 1}]} onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'CASH', openTaxIDNumberKeyBoard: false, cardKeyboardResult: ['', '', '', ''], selectedCardLabel: 'OTHER', keyboardType: 'CASH'})}}>
                                             <View style={styles.listPanel}>
-                                                <StyledText style={styles.listPanelText}>{t('payment.cashPayment')}</StyledText>
+                                                <StyledText style={[(this.state.selectedPayLabel === 'CASH' && styles.inverseText(this.context)), styles.listPanelText]}>{t('payment.cashPayment')}</StyledText>
                                             </View>
                                         </TouchableOpacity>
                                     </View>
-                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
+                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles.customBorderAndBackgroundColor(this.context)]}>
                                         <TouchableOpacity style={[(this.state.selectedPayLabel === 'CARD' ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1}]} onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'CARD', keyboardResult: 0, openTaxIDNumberKeyBoard: false, keyboardType: 'CARD'})}}>
                                             <View style={styles.listPanel}>
-                                                <StyledText style={styles.listPanelText}>{t('payment.cardPayment')}</StyledText>
+                                                <StyledText style={[(this.state.selectedPayLabel === 'CARD' && styles.inverseText(this.context)), styles.listPanelText]}>{t('payment.cardPayment')}</StyledText>
                                             </View>
                                         </TouchableOpacity>
                                     </View>
-                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
+                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles.customBorderAndBackgroundColor(this.context)]}>
                                         <TouchableOpacity style={[(this.state.haveTaxIDNumber ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {this.setState({openDiscountKeyBoard: false, haveTaxIDNumber: !this.state.haveTaxIDNumber, openTaxIDNumberKeyBoard: !this.state.haveTaxIDNumber, keyboardType: this.state.haveTaxIDNumber ? this.state.selectedPayLabel : 'TAXID'})}}>
                                             <View style={styles.listPanel}>
-                                                <StyledText style={styles.listPanelText}>{t('payment.taxIDNumber')}</StyledText>
+                                                <StyledText style={[(this.state.haveTaxIDNumber && styles.inverseText(this.context)), styles.listPanelText]}>{t('payment.taxIDNumber')}</StyledText>
                                             </View>
                                             {this.state.haveTaxIDNumber && <Icon style={{marginRight: 10}} name="times-circle" size={20} color='#f75336' />}
                                         </TouchableOpacity>
                                     </View>
-                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
+                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles.customBorderAndBackgroundColor(this.context)]}>
                                         <TouchableOpacity style={[(this.state.haveCarrierId ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {this.setState({openDiscountKeyBoard: false, haveCarrierId: !this.state.haveCarrierId, openScanView: false})}}>
                                             <View style={styles.listPanel}>
-                                                <StyledText style={styles.listPanelText}>{t('payment.carrierId')}</StyledText>
+                                                <StyledText style={[(this.state.haveCarrierId && styles.inverseText(this.context)), styles.listPanelText]}>{t('payment.carrierId')}</StyledText>
                                             </View>
                                             {this.state.haveCarrierId && <Icon style={{marginRight: 10}} name="times-circle" size={20} color='#f75336' />}
                                         </TouchableOpacity>
                                     </View>
-                                    {this.props?.isSplitByHeadCount || order?.serviceChargeEnabled && (appType === 'store') && <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
+                                    {this.props?.isSplitByHeadCount || order?.serviceChargeEnabled && (appType === 'store') && <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles.customBorderAndBackgroundColor(this.context)]}>
                                         <TouchableOpacity style={[(this.state.waiveServiceCharge ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {this.handleServiceChargePress(this.state.waiveServiceCharge)}}>
                                             <View style={styles.listPanel}>
-                                                <StyledText style={styles.listPanelText}>{t('payment.waiveServiceCharge')}</StyledText>
+                                                <StyledText style={[(this.state.waiveServiceCharge && styles.inverseText(this.context)), styles.listPanelText]}>{t('payment.waiveServiceCharge')}</StyledText>
                                             </View>
                                             {this.state.waiveServiceCharge && <Icon style={{marginRight: 10}} name="times-circle" size={20} color='#f75336' />}
                                         </TouchableOpacity>
                                     </View>}
 
-                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle]}>
+                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles.customBorderAndBackgroundColor(this.context)]}>
                                         <TouchableOpacity style={[(this.state.haveBindAccount ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1, flexDirection: 'row', alignItems: 'center'}]} onPress={() => {
                                             this.state.haveBindAccount && this.handleUpdateOrderMembership(order?.orderId)
                                             this.setState({haveBindAccount: !this.state.haveBindAccount, keyboardType: 'ACCOUNT'})
                                         }}>
                                             <View style={styles.listPanel}>
-                                                <StyledText style={styles.listPanelText}>{t(`membership.bind`)}</StyledText>
+                                                <StyledText style={[(this.state.haveBindAccount && styles.inverseText(this.context)), styles.listPanelText]}>{t(`membership.bind`)}</StyledText>
                                             </View>
                                             {this.state.haveBindAccount && <Icon style={{marginRight: 10}} name="times-circle" size={20} color='#f75336' />}
                                         </TouchableOpacity>
@@ -573,7 +573,7 @@ class PaymentFormScreenTablet extends React.Component {
                                 </ScrollView>
                             </View>
                             {/* mid content */}
-                            <View style={{flex: 2, borderRightWidth: 2, borderLeftWidth: 2, borderColor: '#b7b7b780', paddingHorizontal: 8}}>
+                            <View style={{flex: 2, borderRightWidth: 2, borderLeftWidth: 2, borderColor: '#b7b7b780', paddingHorizontal: 8, backgroundColor: this.context.customBackgroundColor}}>
                                 <ThemeKeyboardAwareScrollView style={{flex: 1}}>
                                     {this.props?.isSplitByHeadCount || <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
                                         <View style={[styles.tableCellView, {flex: 1}]}>
@@ -840,17 +840,35 @@ class PaymentFormScreenTablet extends React.Component {
                                             </TouchableOpacity>
                                         </View>
                                     }
+                                    <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding, {borderBottomWidth: 0}]}>
+                                        <View style={[styles.tableCellView, {flex: 1}]}>
+                                            <StyledText>{t('order.total')}</StyledText>
+                                        </View>
 
-                                </ThemeKeyboardAwareScrollView>
-                                <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding, {borderBottomWidth: 0}]}>
-                                    <View style={[styles.tableCellView, {flex: 1}]}>
-                                        <StyledText>{t('order.total')}</StyledText>
+                                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                            <StyledText style={styles.tableCellText}>
+                                                {formatCurrency(totalAmount)}
+                                            </StyledText>
+                                        </View>
                                     </View>
 
-                                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                                        <StyledText style={styles.tableCellText}>
-                                            {formatCurrency(totalAmount)}
-                                        </StyledText>
+                                </ThemeKeyboardAwareScrollView>
+                                <View style={{flex: 1, marginVertical: 8, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+
+                                    <View style={{flex: 0.5, marginHorizontal: 5, height: 108}}>
+                                        <TouchableOpacity
+                                            onPress={() =>
+                                                order.lineItems.length === 0
+                                                    ? warningMessage(t('lineItemCountCheck'))
+                                                    : handlePrintOrderDetails(order.orderId)
+                                            }
+                                            style={styles?.flexButtonSecondAction(this.context)}
+                                        >
+                                            <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
+                                                {t('printOrderDetails')}
+                                            </Text>
+                                        </TouchableOpacity>
+
                                     </View>
                                 </View>
                             </View>

@@ -679,7 +679,7 @@ class OrdersSummaryRow extends React.Component {
           )}
 
           {order.state === 'SETTLED' && isAllPrepared &&
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, justifyContent: 'flex-end'}}>
               <TouchableOpacity
                 onPress={() => {
                   this.handleSettledDeliver(order.orderId);

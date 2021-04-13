@@ -138,6 +138,7 @@ const en = {
     copiedFrom: 'Copy From',
     freeLineitem: 'Free',
     cancelFreeLineitem: 'Not Free',
+    tableName: 'Table Name',
 
     // order specific actions
     liveOrders: 'Receive Live Orders',

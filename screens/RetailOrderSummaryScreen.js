@@ -302,7 +302,7 @@ class RetailOrderSummaryScreen extends React.Component {
                         <SwipeListView
                             data={order.lineItems?.map((item) => {return {...item, disableRightSwipe: !!item?.associatedLineItemId, disableLeftSwipe: !!item?.associatedLineItemId}})}
                             renderItem={(data, rowMap) => (
-                                <View style={[styles.rowFront, themeStyle]}>
+                                <View style={[styles.rowFront, themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
                                     <View key={rowMap} style={{marginBottom: 15}}>
                                         <View style={styles.tableRowContainer}>
                                             <View style={[styles.tableCellView, {flex: 6}]}>

@@ -1261,9 +1261,10 @@ class OrderFormII extends React.Component {
                   onChange={this.onChange}
                   expandMultiple={true}
                   activeSections={this.state.activeSections}
+                  containerStyle={[styles.inverseBackground(this.context)]}
                 >
                   <Accordion.Panel
-                    header={this.PanelHeader(t('pinned'), '0')}
+                    header={this.PanelHeader(t('pinned'), '0', true)}
                     key="pinned"
                   >
                     <List>
@@ -1284,7 +1285,7 @@ class OrderFormII extends React.Component {
                             }
                             onPress={() => this.addItemToOrder(prd.id)}
                             bottomDivider
-                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
+                            containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                           />
                         ))}
                       {map.get('pinned') !== undefined &&
@@ -1300,7 +1301,7 @@ class OrderFormII extends React.Component {
                               </View>
                             }
                             bottomDivider
-                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor}]}
+                            containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                           />
                         )}
                     </List>
@@ -1308,7 +1309,7 @@ class OrderFormII extends React.Component {
 
                   {labels.map(lbl => (
                     <Accordion.Panel
-                      header={this.PanelHeader(lbl.label, lbl.id)}
+                      header={this.PanelHeader(lbl.label, lbl.id, true)}
                       key={lbl.id}
                     >
                       <List>
@@ -1328,7 +1329,7 @@ class OrderFormII extends React.Component {
                             }
                             onPress={() => this.addItemToOrder(prd.id)}
                             bottomDivider
-                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor}]}
+                            containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                           />
                         ))}
                         {map.get(lbl.label) !== undefined &&
@@ -1344,14 +1345,14 @@ class OrderFormII extends React.Component {
                                 </View>
                               }
                               bottomDivider
-                              containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor}]}
+                              containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                             />
                           )}
                       </List>
                     </Accordion.Panel>
                   ))}
                   <Accordion.Panel
-                    header={this.PanelHeader(t('product.ungrouped'), '0')}
+                    header={this.PanelHeader(t('product.ungrouped'), '0', true)}
                     key="ungrouped"
                   >
                     <List>
@@ -1372,7 +1373,7 @@ class OrderFormII extends React.Component {
                             }
                             onPress={() => this.addItemToOrder(prd.id)}
                             bottomDivider
-                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor}]}
+                            containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                           />
                         ))}
                       {(map.get('ungrouped') === undefined || map.get('ungrouped').length === 0) && (
@@ -1387,7 +1388,7 @@ class OrderFormII extends React.Component {
                             </View>
                           }
                           bottomDivider
-                          containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor}]}
+                          containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                         />
                       )}
                     </List>

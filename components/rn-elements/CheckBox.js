@@ -24,7 +24,7 @@ class RenderCheckBox extends React.Component {
     return (
       <View>
         <CheckBox
-          containerStyle={{borderColor: themeStyle.borderColor, backgroundColor: themeStyle.backgroundColor}}
+          containerStyle={{borderColor: themeStyle.borderColor, backgroundColor: this.context.customBackgroundColor}}
           title={
             <View style={[styles.tableRowContainer]}>
               <View style={[styles.tableCellView, styles.flex(1)]}>

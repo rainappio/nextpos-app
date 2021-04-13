@@ -59,7 +59,7 @@ export const MoneyKeyboard = (props) => {
 
     return (
         <View style={{
-            backgroundColor: '#fff',
+            backgroundColor: customBackgroundColor,
             margin: '5%',
             borderRadius: 10,
             flex: 1,
@@ -257,7 +257,7 @@ export const DiscountKeyboard = (props) => {
     if (KeyboardStatus === 1) {
         return (
             <View style={{
-                backgroundColor: '#fff',
+                backgroundColor: customBackgroundColor,
                 margin: '5%',
                 borderRadius: 10,
                 flex: 1,
@@ -300,7 +300,7 @@ export const DiscountKeyboard = (props) => {
     if (KeyboardStatus === 2) {
         return (
             <View style={{
-                backgroundColor: '#fff',
+                backgroundColor: customBackgroundColor,
                 margin: '5%',
                 borderRadius: 10,
                 flex: 1,
@@ -564,7 +564,7 @@ export const CustomTitleAndDigitKeyboard = (props) => {
 
     return (
         <View style={{
-            backgroundColor: '#fff',
+            backgroundColor: customBackgroundColor,
             margin: '5%',
             borderRadius: 10,
             flex: 1,

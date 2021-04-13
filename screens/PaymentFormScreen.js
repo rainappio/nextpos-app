@@ -10,7 +10,7 @@ import ScreenHeader from "../components/ScreenHeader";
 import CustomCheckBox from "../components/CustomCheckBox";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
-import {handleOrderAction} from "../helpers/orderActions";
+import {handleOrderAction, getTableDisplayName, handlePrintOrderDetails} from "../helpers/orderActions";
 
 class PaymentFormScreen extends React.Component {
   static navigationOptions = {
@@ -48,6 +48,7 @@ class PaymentFormScreen extends React.Component {
     const {order, navigation, handleSubmit, globalorderoffers, isSplitting} = this.props
     const {t, appType, customMainThemeColor} = this.context
 
+
     return (
       <ThemeKeyboardAwareScrollView>
         <View style={styles.fullWidthScreen}>
@@ -57,7 +58,20 @@ class PaymentFormScreen extends React.Component {
             backAction={() => {
               !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()
             }}
+
           />
+
+          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText>{t('order.tableName')}</StyledText>
+            </View>
+
+            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+              <StyledText style={styles.tableCellText}>
+                {getTableDisplayName(order)}
+              </StyledText>
+            </View>
+          </View>
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
@@ -159,6 +173,15 @@ class PaymentFormScreen extends React.Component {
             <TouchableOpacity onPress={() => handleSubmit()}>
               <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                 {t('payOrder')}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => handlePrintOrderDetails(order.orderId)}>
+              <Text
+                style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+              >
+                {t('printOrderDetails')}
               </Text>
             </TouchableOpacity>
 

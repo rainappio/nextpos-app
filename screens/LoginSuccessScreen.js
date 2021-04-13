@@ -466,7 +466,7 @@ class LoginSuccessScreen extends React.Component {
               getannouncements.results !== undefined &&
               getannouncements.results.map(getannoc =>
                 <View
-                  style={[styles.sectionContainer, styles.withBottomBorder]}
+                  style={[styles.sectionContainer]}
                   key={getannoc.id}
                 >
                   <View style={[styles.tableCellView]}>

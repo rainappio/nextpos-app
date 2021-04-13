@@ -141,6 +141,7 @@ const zh = {
     copiedFrom: '複製於',
     freeLineitem: '招待',
     cancelFreeLineitem: '取消招待',
+    tableName: '桌號',
 
     // order specific actions
     liveOrders: '打開即時訂單',
@@ -225,7 +226,7 @@ const zh = {
     checkTaxIDNumber: '請輸入正確的統一編號',
     checkAutoComplete: '輸入的現金金額小於訂單總金額，請問您想要自動補差額嗎？',
     checkCarrierId: '格式錯誤，請重新掃描',
-    carrierId: '手機條碼',
+    carrierId: '載具',
     npoBan: '愛心碼',
     checkPrintInvoice: '是否要列印電子發票'
   },
