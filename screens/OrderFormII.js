@@ -245,7 +245,7 @@ class OrderFormII extends React.Component {
       }
     }, response => {
       response.json().then(product => {
-        if (product.productOptions == null || product.productOptions.length === 0) {
+        if (product.productOptions == null || product.productOptions.length === 0 && product.inventory == null) {
           const orderId = this.props.navigation.state.params.orderId
           let lineItemRequest = {}
 

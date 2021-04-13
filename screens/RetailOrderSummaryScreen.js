@@ -340,6 +340,9 @@ class RetailOrderSummaryScreen extends React.Component {
                                             </View>
                                         </View>
                                         <View>
+                                            {data.item?.sku && <View style={{marginLeft: 10}}>
+                                                <StyledText style={{fontSize: 12}}>{data.item?.sku}</StyledText>
+                                            </View>}
                                             <View style={{marginLeft: 15}}>
                                                 {renderChildProducts(data.item)}
                                             </View>
