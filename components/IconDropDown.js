@@ -15,7 +15,7 @@ class IconDropDown extends React.Component {
             isEdit,
             meta: {error, touched, valid},
             themeStyle,
-            locale: {customMainThemeColor},
+            locale: {customMainThemeColor, customBackgroundColor, customBorderColor},
             ...rest
         } = this.props
 
@@ -31,7 +31,7 @@ class IconDropDown extends React.Component {
                 showArrow={false}
                 defaultValue={!!value ? value : 'ios-attach'}
                 containerStyle={{flex: 1, }}
-                style={{backgroundColor: '#fafafa', ...themeStyle, justifyContent: 'center'}}
+                style={{...themeStyle, justifyContent: 'center', backgroundColor: customBackgroundColor, borderColor: customBorderColor, }}
                 itemStyle={{
                     justifyContent: 'center'
                 }}

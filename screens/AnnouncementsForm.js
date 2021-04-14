@@ -76,7 +76,7 @@ class AnnouncementsForm extends React.Component {
               isEdit={isEdit}
             />
           </View>
-          <View style={{flex: 1, height: '100%'}}>
+          <View style={{flex: 1, height: '100%', color: customMainThemeColor}}>
             <Field
               component={InputText}
               name="title"

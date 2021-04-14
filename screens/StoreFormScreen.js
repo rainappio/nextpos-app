@@ -29,6 +29,7 @@ class StoreFormScreen extends React.Component {
         clientName: 'Client Name',
         clientEmail: 'Client Email',
         clientStatus: 'Status',
+        notificationEmail: 'Notification Email',
         companyName: 'Company Name',
         companyNameHint: 'e.g. Legal entity name',
         address: 'Address',
@@ -59,6 +60,7 @@ class StoreFormScreen extends React.Component {
         clientName: '商家名稱',
         clientEmail: '用戶 Email',
         clientStatus: '狀態',
+        notificationEmail: '寄送通知Email',
         companyName: '公司名稱',
         companyNameHint: '註冊公司名稱',
         address: '商家地址',
@@ -103,6 +105,8 @@ class StoreFormScreen extends React.Component {
 
   componentDidMount() {
     const client = this.props.initialValues
+
+    console.log("client data : ", client)
 
     if (client.attributes !== undefined) {
       switch (client.attributes.TABLE_AVAILABILITY_DISPLAY) {
@@ -187,8 +191,20 @@ class StoreFormScreen extends React.Component {
                   />
                 </View>
               </View>
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 2}}>
+                  <StyledText style={styles.fieldTitle}>{t('notificationEmail')}</StyledText>
+                </View>
+                <View style={{flex: 3}}>
+                  <Field
+                    name="attributes.NOTIFICATION_EMAIL"
+                    component={InputText}
+                    placeholder={t('notificationEmail')}
+                  />
+                </View>
+              </View>
 
-              <View style={styles.sectionTitleContainer}>
+              <View style={[styles.sectionTitleContainer, styles.mgrtotop20]}>
                 <StyledText style={styles.sectionTitleText}>
                   {t('invoiceData')}
                 </StyledText>
@@ -233,7 +249,7 @@ class StoreFormScreen extends React.Component {
                 </View>
               </View>
 
-              <View style={styles.sectionTitleContainer}>
+              <View style={[styles.sectionTitleContainer, styles.mgrtotop20]}>
                 <StyledText style={styles.sectionTitleText}>
                   {t('inEffectRule')}
                 </StyledText>

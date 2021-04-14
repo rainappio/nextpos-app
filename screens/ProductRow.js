@@ -119,16 +119,16 @@ class ProductRow extends React.Component {
         onPress={() => this.onSelect(item.id)}
         onLongPress={item?.id === 'ungrouped' ? null : drag}
       >
-        <View style={[styles.productPanel, {borderColor: this.context?.customMainThemeColor, borderBottomWidth: 1}]}>
+        <View style={[styles.productPanel, styles.inverseBackground(this.context), {borderColor: this.context?.customBackgroundColor, borderBottomWidth: 0.4}]}>
           <View style={[styles.flex(1)]}>
-            <StyledText style={[styles.listPanelText]}>{item.label}</StyledText>
+            <StyledText style={[styles.inverseText(this.context), styles.listPanelText]}>{item.label}</StyledText>
           </View>
           <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
             {item.id !== 'pinned' && item.id !== 'ungrouped' && (
               <MaterialIcon
                 name="edit"
                 size={22}
-                style={[styles?.iconStyle(this.context?.customMainThemeColor), {paddingHorizontal: 10}]}
+                style={[styles?.iconStyle(this.context?.customMainThemeColor), styles.inverseText(this.context), {paddingHorizontal: 10}]}
                 onPress={() => {
                   this.props.navigation.navigate('CategoryCustomize', {
                     labelId: item.id
@@ -171,7 +171,7 @@ class ProductRow extends React.Component {
       return (
         (this.state.productDragged || this.state.selectedToggleItems.get(item.productLabelId) && !this.state.labelDragged) ?
 
-          <View style={[styles.productPanel, {paddingLeft: 32}]} key={data.id}>
+          <View style={[styles.productPanel, styles.customBorderAndBackgroundColor(this.context), {paddingLeft: 32}]} key={data.id}>
             <TouchableOpacity
               style={styles.flex(1)}
               onPress={() => {
@@ -418,14 +418,14 @@ class ProductRow extends React.Component {
               }}
             />
           </View>
-          <View style={[styles.childContainer]}>
+          <View style={{flex: 1}}>
             <TouchableOpacity
               style={{height: 46}}
               onPress={() => this.onSelect('pinned')}
             >
-              <View style={[styles.productPanel, {borderColor: customMainThemeColor, borderBottomWidth: 1}]}>
+              <View style={[styles.inverseBackground(this.context), styles.productPanel, {borderColor: this.context?.customBackgroundColor, borderBottomWidth: 0.4}]}>
                 <View style={[styles.flex(1)]}>
-                  <StyledText style={[styles.listPanelText]}>{t('product.pinned')}</StyledText>
+                  <StyledText style={[styles.inverseText(this.context), styles.listPanelText]}>{t('product.pinned')}</StyledText>
                 </View>
                 <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
                   <AntDesignIcon name={this.state.selectedToggleItems.get('pinned') ? 'up' : 'down'} size={22} color="#ccc" />

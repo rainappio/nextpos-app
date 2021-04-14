@@ -30,6 +30,13 @@ export default StyleSheet.create({
       paddingVertical: 3,
     }
   },
+  selectedPaymentLeftLabel: (context) => ({
+    backgroundColor: context?.customMainThemeColor,
+    color: context?.customBackgroundColor,
+    borderRadius: 10,
+    paddingLeft: 10,
+    paddingVertical: 3,
+  }),
   childContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -735,5 +742,11 @@ export default StyleSheet.create({
   customBorderAndBackgroundColor: (context) => ({
     borderColor: context?.customBorderColor,
     backgroundColor: context?.customBackgroundColor
+  }),
+  inverseText: (context) => ({
+    color: context?.customBackgroundColor
+  }),
+  inverseBackground: (context) => ({
+    backgroundColor: context?.customMainThemeColor
   })
 })

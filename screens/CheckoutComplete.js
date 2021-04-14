@@ -428,7 +428,7 @@ class CheckoutComplete extends React.Component {
             </View>
 
             <View style={styles.bottom}>
-              <View>
+              {!!this.state.invoiceXML && <View>
                 <TouchableOpacity
                   onPress={() => {
                     if (!!this.state.printer) {
@@ -442,7 +442,7 @@ class CheckoutComplete extends React.Component {
                     {t('printInvoiceXML')}
                   </Text>
                 </TouchableOpacity>
-              </View>
+              </View>}
               <View>
                 <TouchableOpacity
                   onPress={() => {

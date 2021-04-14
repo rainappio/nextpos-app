@@ -462,22 +462,22 @@ class RetailOrderForm extends React.Component {
 
                             <View style={{flexDirection: 'row', flex: 1}}>
                                 {/* left list */}
-                                <View style={[themeStyle, styles.orderItemSideBar, {borderColor: customMainThemeColor, borderTopWidth: 1, paddingTop: 5}]}>
+                                <View style={[themeStyle, styles.orderItemSideBar, {borderColor: customMainThemeColor, borderTopWidth: 1, paddingTop: 5}, styles?.customBorderAndBackgroundColor(this.context)]}>
                                     <ScrollView style={{flex: 1}}>
-                                        <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle,]}>
+                                        <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
                                             <TouchableOpacity style={[(this.state.selectedLabel === 'pinned' ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: 'pinned'})}}>
                                                 {this.PanelHeader(t('pinned'), '0', this.state.selectedLabel === 'pinned')}
                                             </TouchableOpacity>
                                         </View>
 
                                         {labels.map(lbl => (
-                                            <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle,]}>
+                                            <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
                                                 <TouchableOpacity style={[(this.state.selectedLabel === lbl.label ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: lbl.label})}}>
                                                     {this.PanelHeader(lbl.label, '0', this.state.selectedLabel === lbl.label)}
                                                 </TouchableOpacity>
                                             </View>
                                         ))}
-                                        <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle,]}>
+                                        <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
                                             <TouchableOpacity style={[(this.state.selectedLabel === 'ungrouped' ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: 'ungrouped'})}}>
                                                 {this.PanelHeader(t('product.ungrouped'), '0', this.state.selectedLabel === 'ungrouped')}
                                             </TouchableOpacity>
@@ -753,9 +753,10 @@ class RetailOrderForm extends React.Component {
                                     onChange={this.onChange}
                                     expandMultiple={true}
                                     activeSections={this.state.activeSections}
+                                    containerStyle={[styles.inverseBackground(this.context)]}
                                 >
                                     <Accordion.Panel
-                                        header={this.PanelHeader(t('pinned'), '0')}
+                                        header={this.PanelHeader(t('pinned'), '0', true)}
                                         key="pinned"
                                     >
                                         <List>
@@ -776,7 +777,7 @@ class RetailOrderForm extends React.Component {
                                                         }
                                                         onPress={() => this.addItemToOrder(prd.id)}
                                                         bottomDivider
-                                                        containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                                                        containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                                                     />
                                                 ))}
                                             {map.get('pinned') !== undefined &&
@@ -792,7 +793,7 @@ class RetailOrderForm extends React.Component {
                                                             </View>
                                                         }
                                                         bottomDivider
-                                                        containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                                                        containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                                                     />
                                                 )}
                                         </List>
@@ -800,7 +801,7 @@ class RetailOrderForm extends React.Component {
 
                                     {labels.map(lbl => (
                                         <Accordion.Panel
-                                            header={this.PanelHeader(lbl.label, lbl.id)}
+                                            header={this.PanelHeader(lbl.label, lbl.id, true)}
                                             key={lbl.id}
                                         >
                                             <List>
@@ -820,7 +821,7 @@ class RetailOrderForm extends React.Component {
                                                         }
                                                         onPress={() => this.addItemToOrder(prd.id)}
                                                         bottomDivider
-                                                        containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                                                        containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                                                     />
                                                 ))}
                                                 {map.get(lbl.label) !== undefined &&
@@ -836,14 +837,14 @@ class RetailOrderForm extends React.Component {
                                                                 </View>
                                                             }
                                                             bottomDivider
-                                                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                                                            containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                                                         />
                                                     )}
                                             </List>
                                         </Accordion.Panel>
                                     ))}
                                     <Accordion.Panel
-                                        header={this.PanelHeader(t('product.ungrouped'), '0')}
+                                        header={this.PanelHeader(t('product.ungrouped'), '0', true)}
                                         key="ungrouped"
                                     >
                                         <List>
@@ -864,7 +865,7 @@ class RetailOrderForm extends React.Component {
                                                         }
                                                         onPress={() => this.addItemToOrder(prd.id)}
                                                         bottomDivider
-                                                        containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
+                                                        containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                                                     />
                                                 ))}
                                             {(map.get('ungrouped') === undefined || map.get('ungrouped').length === 0) && (

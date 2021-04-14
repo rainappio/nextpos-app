@@ -388,7 +388,7 @@ class OrderItemOptions extends React.Component {
 
     render() {
         const {product, globalProductOffers} = this.props
-        const {t, themeStyle, customMainThemeColor} = this.context
+        const {t, themeStyle, customMainThemeColor, customBackgroundColor} = this.context
 
         const hasProductOptions = product.productOptions != null && product.productOptions.length > 0
         const lastOptionIndex = product.productOptions != null ? product.productOptions.length : 0
@@ -396,7 +396,7 @@ class OrderItemOptions extends React.Component {
         const inventoryData = product.inventory ? Object.values(product.inventory.inventoryQuantities) : null
 
         return (
-            <View style={[themeStyle, {height: '100%', borderRadius: 10}]}>
+            <View style={[themeStyle, {height: '100%', borderRadius: 10, backgroundColor: customBackgroundColor}]}>
                 <ScreenHeader backNavigation={true}
                     parentFullScreen={true}
                     style={{paddingTop: 20}}
