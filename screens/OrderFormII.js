@@ -1307,50 +1307,57 @@ class OrderFormII extends React.Component {
                     </List>
                   </Accordion.Panel>
 
-                  {labels.map(lbl => (
-                    <Accordion.Panel
-                      header={this.PanelHeader(lbl.label, lbl.id, true)}
-                      key={lbl.id}
-                    >
-                      <List>
-                        {map.get(lbl.label).map(prd => (
-                          <ListItem
-                            key={prd.id}
-                            title={
-                              <View style={[styles.tableRowContainer]}>
-                                <View style={[styles.tableCellView, styles.flex(1)]}>
-                                  <StyledText>{prd.name}</StyledText>
-                                  {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
-                                </View>
-                                <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
-                                  <StyledText>${prd.price}</StyledText>
-                                </View>
-                              </View>
+                  {
+                    labels.map(lbl => {
+                      return (
+                        <Accordion.Panel
+                          header={this.PanelHeader(lbl.label, lbl.id, true)}
+                          key={lbl.id}
+                        >
+                          <List>
+                            {map.get(lbl.label)?.map(prd => {
+                              return (
+                                <ListItem
+                                  key={prd.id}
+                                  title={
+                                    <View style={[styles.tableRowContainer]}>
+                                      <View style={[styles.tableCellView, styles.flex(1)]}>
+                                        <StyledText>{prd.name}</StyledText>
+                                        {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
+                                      </View>
+                                      <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
+                                        <StyledText>${prd.price}</StyledText>
+                                      </View>
+                                    </View>
+                                  }
+                                  onPress={() => this.addItemToOrder(prd.id)}
+                                  bottomDivider
+                                  containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
+                                />
+                              )
                             }
-                            onPress={() => this.addItemToOrder(prd.id)}
-                            bottomDivider
-                            containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
-                          />
-                        ))}
-                        {map.get(lbl.label) !== undefined &&
-                          map.get(lbl.label).length === 0 && (
-                            <ListItem
-                              title={
-                                <View style={[styles.tableRowContainer]}>
-                                  <View style={[styles.tableCellView, styles.flex(1)]}>
-                                    <StyledText>({t('empty')})</StyledText>
+                            )}
+                            {map.get(lbl.label) !== undefined &&
+                              map.get(lbl.label).length === 0 && (
+                                <ListItem
+                                  title={
+                                    <View style={[styles.tableRowContainer]}>
+                                      <View style={[styles.tableCellView, styles.flex(1)]}>
+                                        <StyledText>({t('empty')})</StyledText>
 
-                                  </View>
+                                      </View>
 
-                                </View>
-                              }
-                              bottomDivider
-                              containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
-                            />
-                          )}
-                      </List>
-                    </Accordion.Panel>
-                  ))}
+                                    </View>
+                                  }
+                                  bottomDivider
+                                  containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
+                                />
+                              )}
+                          </List>
+                        </Accordion.Panel>
+                      )
+                    }
+                    )}
                   <Accordion.Panel
                     header={this.PanelHeader(t('product.ungrouped'), '0', true)}
                     key="ungrouped"
