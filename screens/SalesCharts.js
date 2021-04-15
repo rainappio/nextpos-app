@@ -123,8 +123,9 @@ class SalesCharts extends React.Component {
 
     this.setState({selectedRangeTypeIndex: values.dateRange})
 
-    const rangeTypeMapping = ['SHIFT', 'TODAY', 'RANGE', 'RANGE', 'RANGE']
+    const rangeTypeMapping = ['SHIFT', 'TODAY', 'WEEK', 'MONTH', 'RANGE']
     this.props.getRangedSalesReport(rangeTypeMapping[values.dateRange], searchFromDate, searchToDate)
+    this.setState({selectedRangeType: rangeTypeMapping[values.dateRange]})
   }
 
   handleRankingFilterChange = idx => {
