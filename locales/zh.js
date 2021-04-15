@@ -337,6 +337,7 @@ const zh = {
     requireEightDigits: '請輸入八位數字',
     requireTwoUppercaseLetters: '請輸入兩個大寫英文',
     requireNDigitsNumber: '請輸入{{n}}位數字',
+    expiredToken: 'Token無效或已失效',
   },
   backend: {
     POST: '儲存成功',
@@ -531,7 +532,13 @@ const zh = {
     username: '使用者代號',
     nickname: '暱稱',
     updateDate: '最後更新',
-    gesturePassword: '圖形密碼'
+    gesturePassword: '圖形密碼',
+    encodeToken: '產生登入Token',
+    tokenShareSucess: 'Token分享成功',
+    tokenShareFailed: 'Token分享失敗',
+    loginWithAccount: '帳號登入',
+    loginWithToken: 'Token登入',
+
   },
   workingAreaScreen: {
     editWorkingAreaTitle: '編輯工作區',

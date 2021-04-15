@@ -10,6 +10,8 @@ import {storage} from "../constants/Backend";
 import {StyledText} from "../components/StyledText";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
+import SegmentedControl from "../components/SegmentedControl";
+
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -24,6 +26,12 @@ class LoginScreen extends React.Component {
       clientUsername: null,
       fadeAnimation: new Animated.Value(1),
       showLoginBlock: true,
+      selectedLoginMode: this.props?.loginMode ? 0 : 1,
+      loginMode: this.props?.loginMode,
+      loginDisplayTypes: {
+        0: {label: context.t('account.loginWithAccount'), value: 'ACCOUNT'},
+        1: {label: context.t('account.loginWithToken'), value: 'TOKEN'}
+      },
     }
 
 
@@ -45,17 +53,26 @@ class LoginScreen extends React.Component {
     });
   };
 
+  handleLoginModeSelection = (index) => {
+    this.setState({
+      selectedLoginMode: index,
+      loginMode: this.state.loginDisplayTypes[index].value
+    })
+  }
+
   componentDidMount() {
     this.context.localize({
       en: {
         loginTitle: 'Login',
         forgotPwd: 'Forgot Password',
-        loginAs: 'Login as {{username}}'
+        loginAs: 'Login as {{username}}',
+        token: 'Login Token'
       },
       zh: {
         loginTitle: '登入',
         forgotPwd: '忘記密碼',
-        loginAs: '以 {{username}} 登入'
+        loginAs: '以 {{username}} 登入',
+        token: '登入Token'
       }
     })
 
@@ -75,8 +92,12 @@ class LoginScreen extends React.Component {
   }
 
   render() {
-    const {handleSubmit, handleLoginAs, loginSuccess} = this.props
+    const {handleSubmit, handleLoginAs, loginSuccess, loginMode} = this.props
     const {t, isTablet, customMainThemeColor} = this.context
+
+    const loginTypes = Object.keys(this.state.loginDisplayTypes).map(key => this.state.loginDisplayTypes[key].label)
+
+
     if (isTablet) {
       return (
         <ThemeKeyboardAwareScrollView>
@@ -95,7 +116,24 @@ class LoginScreen extends React.Component {
                 </View>
 
                 <StyledText style={styles?.welcomeText(this.context)}>{t('loginTitle')}</StyledText>
-                <View>
+
+                <View style={[styles.fieldContainer, styles.mgrbtn20]}>
+
+                  <View style={{flex: 1}}>
+                    <Field
+                      name="loginMode"
+                      component={SegmentedControl}
+                      selectedIndex={this.state.selectedLoginMode}
+                      onChange={this.handleLoginModeSelection}
+                      values={loginTypes}
+                      normalize={value => {
+                        return this.state.loginDisplayTypes[value].value
+                      }}
+                    />
+                  </View>
+                </View>
+
+                {this.state?.loginMode == 'ACCOUNT' && <View>
                   <View style={{marginBottom: 16}}>
                     <Field
                       name="username"
@@ -112,7 +150,19 @@ class LoginScreen extends React.Component {
                     placeholder={t('password')}
                     secureTextEntry={true}
                   />
+                </View>}
+                {this.state?.loginMode == 'TOKEN' && <View>
+                  <View>
+                    <Field
+                      name="token"
+                      component={InputText}
+                      validate={isRequired}
+                      placeholder={t('token')}
+                    />
+                  </View>
                 </View>
+                }
+
               </View>
 
               <View style={styles.flex(1)}>
@@ -186,7 +236,23 @@ class LoginScreen extends React.Component {
 
               <StyledText style={styles?.welcomeText(this.context)}>{t('loginTitle')}</StyledText>
 
-              <View>
+              <View style={[styles.fieldContainer, styles.mgrbtn20]}>
+
+                <View style={{flex: 1}}>
+                  <Field
+                    name="loginMode"
+                    component={SegmentedControl}
+                    selectedIndex={this.state.selectedLoginMode}
+                    onChange={this.handleLoginModeSelection}
+                    values={loginTypes}
+                    normalize={value => {
+                      return this.state.loginDisplayTypes[value].value
+                    }}
+                  />
+                </View>
+              </View>
+
+              {this.state?.loginMode == 'ACCOUNT' && <View>
                 <View style={{marginBottom: 16}}>
                   <Field
                     name="username"
@@ -203,7 +269,19 @@ class LoginScreen extends React.Component {
                   placeholder={t('password')}
                   secureTextEntry={true}
                 />
+              </View>}
+              {this.state?.loginMode == 'TOKEN' && <View>
+                <View>
+                  <Field
+                    name="token"
+                    component={InputText}
+                    validate={isRequired}
+                    placeholder={t('token')}
+                  />
+                </View>
               </View>
+              }
+
             </View>
 
             <View style={styles.flex(1)}>
