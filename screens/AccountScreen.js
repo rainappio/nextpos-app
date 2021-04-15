@@ -1,24 +1,24 @@
 import React from 'react'
-import {Alert, AsyncStorage, Text, TouchableOpacity, View} from 'react-native'
+import {Alert, AsyncStorage, Text, TouchableOpacity, View, Share} from 'react-native'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {getClientUsr} from '../actions'
 import {connect} from 'react-redux'
 import {EditPasswordPopUp, EditGesturePasswordPopUp} from '../components/EditPasswordPopUp'
 import {reduxForm} from 'redux-form'
-import {getToken} from '../constants/Backend'
+import {api, getToken, dispatchFetchRequest, storage} from '../constants/Backend'
 import Constants from "expo-constants/src/Constants";
 import ScreenHeader from "../components/ScreenHeader";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import {StyledText} from "../components/StyledText";
 import {ThemeContainer} from "../components/ThemeContainer";
+import Icon from 'react-native-vector-icons/Ionicons'
 
 class AccountScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
-
   static contextType = LocaleContext
 
   constructor(props, context) {
@@ -28,7 +28,8 @@ class AccountScreen extends React.Component {
 
     this.state = {
       objects: [],
-      updateGestureFlag: false
+      updateGestureFlag: false,
+      encodeToken: null
     }
   }
 
@@ -60,6 +61,69 @@ class AccountScreen extends React.Component {
 
   }
 
+  handleEncodeToken = async () => {
+
+    const username = await AsyncStorage.getItem(storage.clientUsername)
+    const masterPassword = await AsyncStorage.getItem(storage.clientPassword)
+
+    dispatchFetchRequest(api.encodeToken, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "username": username,
+        "password": masterPassword,
+      })
+    },
+      response => {
+        response.text().then(data => {
+          this.setState({encodeToken: data})
+        })
+      },
+    ).then()
+  }
+
+  handleShareToken = async (token) => {
+    try {
+      const result = await Share.share({
+        title: `${this.context.t(`account.encodeToken`)}`,
+        message: token,
+      });
+
+      if (result.action === Share.sharedAction) {
+        Alert.alert(
+          ``,
+          `${this.context.t(`account.tokenShareSucess`)}`,
+          [
+            {text: `${this.context.t(`action.confirm`)}`, }
+          ]
+        )
+      } else if (result.action === Share.dismissedAction) {
+        Alert.alert(
+          ``,
+          `${this.context.t(`account.tokenShareFailed`)}`,
+          [
+            {text: `${this.context.t(`action.confirm`)}`, }
+          ]
+        )
+      }
+    } catch (error) {
+
+      Alert.alert(
+        ``,
+        `${this.context.t(`action.cancel`)}`,
+        [
+          {text: `${error.message}`, }
+        ]
+      )
+
+    }
+
+  }
+
   render() {
     const storageItems = this.state.objects.map(obj => {
       return (
@@ -74,7 +138,8 @@ class AccountScreen extends React.Component {
       )
     })
     const {currentUser, themeStyle} = this.props
-    const {t} = this.context
+
+    const {t, customMainThemeColor} = this.context
 
     return (
       <ThemeContainer>
@@ -144,14 +209,50 @@ class AccountScreen extends React.Component {
             </View>
           </View>
 
-          {/*{currentUser.defaultUser && (
-          <View style={{ flex: 2, justifyContent: 'flex-end' }}>
-            <View style={[styles.fieldContainer]}>
-              <Text style={styles.fieldTitle}>Developer Section</Text>
+          {!!currentUser.defaultUser && <View style={[styles.tableRowContainerWithBorder]}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText style={styles.fieldTitle}>{t('account.encodeToken')}</StyledText>
             </View>
-            <View>{storageItems}</View>
-          </View>
-        )}*/}
+            <View style={[styles.tableCellView, {flex: 4, justifyContent: 'flex-end'}]}>
+              {this.state?.encodeToken && <TouchableOpacity
+                onPress={() => this.handleShareToken(this.state?.encodeToken)}
+                style={{paddingHorizontal: 8}}
+              >
+                <Text>{this.state?.encodeToken}</Text>
+              </TouchableOpacity>
+              }
+
+
+            </View>
+            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+              <TouchableOpacity
+                onPress={() => this.handleShareToken(this.state?.encodeToken)}
+                style={{justifyContent: 'flex-end'}}
+              >
+                <Text style={{flex: 1, paddingRight: 8}}>
+                  {this.state?.encodeToken && <Icon name='share-outline' size={24} color={customMainThemeColor} />}
+                </Text>
+
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.handleEncodeToken()}
+                style={{paddingVertical: 0}}
+              >
+                <Text style={{flex: 1}}>
+                  <Icon name={this.state?.encodeToken ? "md-create" : 'add'} size={24} color={customMainThemeColor} />
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>}
+
+          {/* {currentUser.defaultUser && (
+            <View style={{flex: 2, justifyContent: 'flex-end'}}>
+              <View style={[styles.fieldContainer]}>
+                <Text style={styles.fieldTitle}>Developer Section</Text>
+              </View>
+              <View>{storageItems}</View>
+            </View>
+          )} */}
         </View>
       </ThemeContainer>
     )

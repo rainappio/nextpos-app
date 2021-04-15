@@ -288,7 +288,7 @@ class OrderDetail extends React.Component {
               </View>
 
               <FlatList
-                style={{marginBottom: 20}}
+                style={{marginBottom: 0}}
                 data={order.lineItems}
                 renderItem={({item, index}) => (
                   <Item
@@ -298,6 +298,49 @@ class OrderDetail extends React.Component {
                 )}
                 keyExtractor={(item, index) => index.toString()}
               />
+              <View style={{marginBottom: 0}}>
+
+                <FlatList
+                  data={order.deletedLineItems}
+                  renderItem={({item, index}) => (
+                    <View>
+                      <View style={[styles.tableRowContainer]}>
+                        <View style={{flex: 2.5}}>
+                          <StyledText style={{textDecorationLine: 'line-through'}}>
+                            {formatTime(item.modifiedDate)}
+                          </StyledText>
+                        </View>
+
+                        <View
+                          style={{flex: 1.7}}
+                        >
+                          <StyledText style={{textDecorationLine: 'line-through'}}>
+                            {item.productName}
+                          </StyledText>
+                        </View>
+
+                        <View style={{flex: 0.8}}>
+                          <StyledText style={{textDecorationLine: 'line-through'}}>
+                            {item.quantity}
+                          </StyledText>
+                        </View>
+
+                        <View style={{flex: 1.2}}>
+                          <StyledText style={{textAlign: 'right', textDecorationLine: 'line-through'}}>
+                            {item.lineItemSubTotal}
+                          </StyledText>
+                        </View>
+                      </View>
+                      <View style={styles.tableRowContainer}>
+                        <View style={[styles.tableCellView, {flex: 1}]}>
+                          <StyledText style={{textDecorationLine: 'line-through'}}>{renderOptionsAndOffer(item)}</StyledText>
+                        </View>
+                      </View>
+                    </View>
+                  )}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
 
               <View style={styles.tableRowContainerWithBorder}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
@@ -440,9 +483,9 @@ class OrderDetail extends React.Component {
                     {t('order.copyOrder')}
                   </Text>
                 </TouchableOpacity>
-                <DeleteBtn
+                {order?.state !== 'DELETED' && <DeleteBtn
                   handleDeleteAction={() => handleDelete(order.orderId, () => this.props.getOrder())}
-                />
+                />}
                 {order?.transactions?.[0]?.invoiceStatus === 'PROCESSED' && <DeleteBtn
                   text={t('invoiceStatus.cancelInvoice')}
                   handleDeleteAction={() => handleCancelInvoice(order?.transactions?.[0]?.transactionId, () => this.props.getOrder())}

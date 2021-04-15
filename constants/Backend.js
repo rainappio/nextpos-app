@@ -23,6 +23,8 @@ export const api = {
   apiRoot,
   getAuthToken: `${apiRoot}/oauth/token`,
   getClientUserTokens: `${apiRoot}/clientUserTokens`,
+  encodeToken: `${apiRoot}/tokens/encode`,
+  decodeToken: `${apiRoot}/tokens/decode`,
   account: {
     sendResetPasscode: (clientEmail) => {
       return `${apiRoot}/account/sendResetPasscode?clientEmail=${clientEmail}`

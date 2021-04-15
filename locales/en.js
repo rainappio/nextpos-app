@@ -76,7 +76,9 @@ const en = {
     unpin: 'Unpin',
     pin: 'Pin',
     activate: 'Activate',
-    deactivate: 'Deactivate'
+    deactivate: 'Deactivate',
+    submit: 'Submit',
+    confirm: 'Confirm',
   },
   // ==== domain specific ====
   keyboardAction: {
@@ -332,6 +334,7 @@ const en = {
     requireFourDigits: 'Please enter 4 digits number',
     requireTwoUppercaseLetters: 'Please enter 2 uppercase letter',
     requireNDigitsNumber: `Please enter {{n}} digits number`,
+    expiredToken: 'Toke is either invalid or expired',
   },
   backend: {
     POST: 'Saved',
@@ -526,7 +529,12 @@ const en = {
     username: 'User Name',
     nickname: 'Nick Name',
     updateDate: 'Last updated',
-    gesturePassword: 'Gesture Password'
+    gesturePassword: 'Gesture Password',
+    encodeToken: 'Encode Login token',
+    tokenShareSucess: 'Token Share sucess.',
+    tokenShareFailed: 'Token Share failed.',
+    loginWithAccount: 'Account',
+    loginWithToken: 'Token',
   },
   workingAreaScreen: {
     editWorkingAreaTitle: 'Edit Working Area',

@@ -141,7 +141,7 @@ class OrderFormII extends React.Component {
         {label: context.t('printOrderDetails'), value: 'printOrderDetails'},
       ],
       otherAction: null,
-      splitBillModalVisible: false
+      splitBillModalVisible: false,
     }
     this.onChange = activeSections => {
       this.setState({activeSections: activeSections})
@@ -1250,7 +1250,7 @@ class OrderFormII extends React.Component {
         /*phone render */
         return (
           <ThemeContainer>
-            <ScrollView style={{flex: 1, marginBottom: 45}}>
+            <ScrollView style={{flex: 1, marginBottom: 45}} scrollIndicatorInsets={{right: 1}}>
               <View style={styles.container}>
                 <Text style={styles?.screenTitle(customMainThemeColor)}>
                   {t('newOrderTitle')}
