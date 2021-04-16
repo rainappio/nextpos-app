@@ -204,7 +204,7 @@ class AccountScreen extends React.Component {
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <StyledText>
-                2021-03-31
+                2021-04-16
               </StyledText>
             </View>
           </View>
