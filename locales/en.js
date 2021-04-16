@@ -160,7 +160,7 @@ const en = {
     splitBillPopUpTitle: 'Split Bill',
     splitByItem: 'By Item',
     splitByHeadCount: 'By Head Count',
-    payLeftAmount: '一次付清',
+    payLeftAmount: 'Pay All',
     completeOrder: 'Complete',
   },
   orderState: {

@@ -123,6 +123,22 @@ class PaymentFormScreenTablet extends React.Component {
     }
 
 
+    handleSplitByHeadComplete = id => {
+        const formData = new FormData()
+        formData.append('action', 'COMPLETE')
+
+        dispatchFetchRequestWithOption(api.order.process(id), {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {},
+            body: formData
+        }, {
+            defaultMessage: false
+        }, response => {
+            this.props.navigation.navigate('TablesSrc')
+        }).then()
+    }
 
     handleComplete = id => {
         if (this.props?.isSplitByHeadCount) {
@@ -132,7 +148,7 @@ class PaymentFormScreenTablet extends React.Component {
                 })
             } else {
                 this.context?.saveSplitParentOrderId(null)
-                handleDelete(this.props?.parentOrder?.orderId, () => NavigationService.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess'))
+                this.handleSplitByHeadComplete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess'))
             }
 
             return
