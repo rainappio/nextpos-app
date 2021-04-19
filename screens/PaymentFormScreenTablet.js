@@ -445,7 +445,7 @@ class PaymentFormScreenTablet extends React.Component {
 
     render() {
         const {navigation, handleSubmit, globalorderoffers, order, isSplitting} = this.props
-        const {t, themeStyle, appType, complexTheme, customMainThemeColor} = this.context
+        const {t, themeStyle, appType, complexTheme, customMainThemeColor, customBackgroundColor} = this.context
         const totalAmount = this.props?.isSplitByHeadCount ? this.props?.splitAmount : order.orderTotal
 
         return (
@@ -475,13 +475,19 @@ class PaymentFormScreenTablet extends React.Component {
                                 width: '80%',
                                 paddingTop: 20,
                                 paddingHorizontal: 20,
-                                minHeight: 200,
+                                minHeight: 236,
                                 borderWidth: 5,
                                 borderColor: customMainThemeColor,
+                                backgroundColor: customBackgroundColor,
                                 justifyContent: 'center',
                                 alignSelf: 'center',
                             }}>
                                 <View style={{flex: 1}}>
+                                    <View style={{flex: 1}}>
+                                        <StyledText style={[styles.screenSubTitle(customMainThemeColor)]}>
+                                            {t(`membership.newMembership`)}
+                                        </StyledText>
+                                    </View>
                                     <View style={{flex: 1, }}>
                                         <Field
                                             name="name"
@@ -500,8 +506,8 @@ class PaymentFormScreenTablet extends React.Component {
                                             validate={isRequired}
                                         />
                                     </View>
-                                    <View style={[{flexDirection: 'row', alignSelf: 'flex-end', flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end'}]}>
-                                        <View style={{flex: 1, marginHorizontal: 5}}>
+                                    <View style={[{flexDirection: 'row', alignSelf: 'flex-end', flex: 1, justifyContent: 'flex-end', alignItems: 'space-between', marginBottom: 8}]}>
+                                        <View style={{flex: 1, marginHorizontal: 0}}>
                                             <TouchableOpacity
                                                 onPress={() => {
                                                     this.setState({modalVisible: false})
@@ -510,7 +516,7 @@ class PaymentFormScreenTablet extends React.Component {
                                                 <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('action.cancel')}</Text>
                                             </TouchableOpacity>
                                         </View>
-                                        <View style={{flex: 1, marginHorizontal: 5}}>
+                                        <View style={{flex: 1, marginLeft: 8}}>
                                             <TouchableOpacity
                                                 onPress={handleSubmit(data => {
 
@@ -534,7 +540,7 @@ class PaymentFormScreenTablet extends React.Component {
                     <View style={{flexDirection: 'row', flex: 1}}>
                         <View style={[styles.orderItemSideBar, themeStyle, {flex: 2, flexDirection: 'row'}]}>
                             {/* left list */}
-                            <View style={{flex: 1, backgroundColor: this.context?.customBackgroundColor}}>
+                            <View style={{flex: 1, backgroundColor: customBackgroundColor}}>
                                 <ScrollView style={{flex: 1}}>
                                     <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles.customBorderAndBackgroundColor(this.context)]}>
                                         <TouchableOpacity style={[(this.state.selectedPayLabel === 'CASH' ? styles?.selectedPaymentLeftLabel(this.context) : null), {flex: 1}]} onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'CASH', openTaxIDNumberKeyBoard: false, cardKeyboardResult: ['', '', '', ''], selectedCardLabel: 'OTHER', keyboardType: 'CASH'})}}>
@@ -589,7 +595,7 @@ class PaymentFormScreenTablet extends React.Component {
                                 </ScrollView>
                             </View>
                             {/* mid content */}
-                            <View style={{flex: 2, borderRightWidth: 2, borderLeftWidth: 2, borderColor: '#b7b7b780', paddingHorizontal: 8, backgroundColor: this.context.customBackgroundColor}}>
+                            <View style={{flex: 2, borderRightWidth: 2, borderLeftWidth: 2, borderColor: '#b7b7b780', paddingHorizontal: 8, backgroundColor: customBackgroundColor}}>
                                 <ThemeKeyboardAwareScrollView style={{flex: 1}}>
                                     {this.props?.isSplitByHeadCount || <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
                                         <View style={[styles.tableCellView, {flex: 1}]}>

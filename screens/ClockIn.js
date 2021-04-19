@@ -274,7 +274,7 @@ class ClockIn extends React.Component {
 
   render() {
     const {client, canClockIn} = this.props
-    const {t, isTablet, themeStyle, customMainThemeColor} = this.context
+    const {t, isTablet, themeStyle, customMainThemeColor, customBackgroundColor} = this.context
     const {timecard, storeLocation, distance} = this.state
 
     const locationBasedService = client.clientSettings.LOCATION_BASED_SERVICE != null ? client.clientSettings.LOCATION_BASED_SERVICE.enabled : false
@@ -330,7 +330,7 @@ class ClockIn extends React.Component {
                   <View style={[styles.fieldContainer, {marginBottom: 64, marginTop: 64}]}>
 
                     <View style={{flex: 1, alignItems: 'center'}}>
-                      <StyledText style={{fontSize: 28, marginVertical: 2, fontWeight: 'bold'}}>{normalizeTimeString(this.state?.nowDate, 'YYYY/M/D dddd h:mm:ss a')}</StyledText>
+                      <StyledText style={{fontSize: 28, marginVertical: 2, fontWeight: 'bold', backgroundColor: customBackgroundColor}}>{normalizeTimeString(this.state?.nowDate, 'YYYY/M/D dddd h:mm:ss a')}</StyledText>
                     </View>
                   </View>
                   {locationBasedService && <View >
@@ -450,7 +450,7 @@ class ClockIn extends React.Component {
                         color="#fff"
                         style={[styles.centerText, styles.margin_15]}
                       />
-                      <StyledText style={[styles.centerText, styles.whiteColor]}>
+                      <StyledText style={[styles.whiteColor, styles.centerText]}>
                         {timeCardStatus === 'ACTIVE' ? t('clockOut') : t('clockIn')}
                       </StyledText>
                     </View>
@@ -476,10 +476,11 @@ class ClockIn extends React.Component {
               <View style={[styles.fieldContainer, {marginBottom: 16, marginTop: 16}]}>
 
                 <View style={{flex: 1, alignItems: 'center'}}>
-                  <Text
+                  <StyledText
                     adjustsFontSizeToFit
                     numberOfLines={1}
-                    style={[{fontSize: 24, marginVertical: 2, fontWeight: 'bold'}, themeStyle]}>{normalizeTimeString(this.state?.nowDate, 'YYYY/M/D dddd h:mm:ss a')}</Text>
+                    style={[{fontSize: 24, marginVertical: 2, fontWeight: 'bold', backgroundColor: customBackgroundColor}]}>{normalizeTimeString(this.state?.nowDate, 'YYYY/M/D dddd h:mm:ss a')}
+                  </StyledText>
                 </View>
               </View>
               {locationBasedService && <>
@@ -600,7 +601,7 @@ class ClockIn extends React.Component {
                       color="#fff"
                       style={[styles.centerText, styles.margin_15]}
                     />
-                    <StyledText style={[styles.centerText, styles.whiteColor]}>
+                    <StyledText style={[styles.whiteColor, styles.centerText]}>
                       {timeCardStatus === 'ACTIVE' ? t('clockOut') : t('clockIn')}
                     </StyledText>
                   </View>

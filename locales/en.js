@@ -102,6 +102,20 @@ const en = {
     workingArea: 'Working Area',
     inventoryEdit: 'Product Inventory',
   },
+  newOrder: {
+    newOrderTitle: 'New Order',
+    orderType: 'Order Type',
+    table: 'Table',
+    selectTable: 'Select a table',
+    noAvailableTables: 'There is no available table.',
+    ageGroup: 'Age Group',
+    male: 'Male',
+    female: 'Female',
+    kid: 'Kid',
+    visitFrequency: 'Visit Frequency',
+    peopleCount: 'People Count',
+    openOrder: 'Save Order'
+  },
   order: {
     inStore: 'In Store',
     IN_STORE: 'In Store',
@@ -162,6 +176,7 @@ const en = {
     splitByHeadCount: 'By Head Count',
     payLeftAmount: 'Pay All',
     completeOrder: 'Complete',
+    splitInvoiceDetail: 'Invoice(Status)'
   },
   orderState: {
     OPEN: 'Open',
@@ -201,7 +216,8 @@ const en = {
     PROCESSED: 'Processed',
     CANCELLED: 'Cancelled',
     VOID: 'Void',
-    cancelInvoice: 'Cancel invoice'
+    cancelInvoice: 'Cancel Invoice',
+    noSetting: 'No Set',
   },
   payment: {
     cashPayment: 'Cash',
@@ -472,6 +488,7 @@ const en = {
     bind: 'Bind Membership',
     membershipAccount: 'Membership',
     enterMembershipAccount: 'Enter Phone Number',
+    newMembership: 'New Membership',
   },
   empty: 'Empty',
   member: {

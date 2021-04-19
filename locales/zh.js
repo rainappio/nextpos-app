@@ -79,7 +79,6 @@ const zh = {
     deactivate: '停用',
     submit: '送出',
     confirm: '確認',
-
   },
   // ==== domain specific ====
   keyboardAction: {
@@ -103,11 +102,25 @@ const zh = {
     workingArea: '工作區',
     inventoryEdit: '產品庫存管理',
   },
+  newOrder: {
+    newOrderTitle: '新訂單',
+    orderType: '訂單種類',
+    table: '桌位',
+    selectTable: '選擇桌位',
+    noAvailableTables: '目前沒有空桌.',
+    ageGroup: '來客年齡層',
+    male: '男性',
+    female: '女性',
+    kid: '兒童',
+    visitFrequency: '造訪次數',
+    peopleCount: '來客數',
+    openOrder: '儲存訂單'
+  },
   order: {
     inStore: '內用',
     IN_STORE: '內用',
-    TAKE_OUT: '外帶',
     takeOut: '外帶',
+    TAKE_OUT: '外帶',
 
     ordersTitle: '訂單歷史',
     fromDate: '開始日期',
@@ -163,6 +176,7 @@ const zh = {
     splitByHeadCount: '以人頭拆帳',
     payLeftAmount: '一次付清',
     completeOrder: '結束訂單',
+    splitInvoiceDetail: '發票(狀態)'
   },
   orderState: {
     OPEN: '已開單',
@@ -202,7 +216,8 @@ const zh = {
     PROCESSED: '開立成功',
     CANCELLED: '作廢成功',
     VOID: '註銷成功',
-    cancelInvoice: '發票作廢'
+    cancelInvoice: '發票作廢',
+    noSetting: '未設定',
   },
   payment: {
     cashPayment: '現金',
@@ -475,6 +490,7 @@ const zh = {
     bind: '綁定會員',
     membershipAccount: '會員帳號',
     enterMembershipAccount: '請輸入會員帳號',
+    newMembership: '新會員',
   },
   member: {
     searchPrompt: '以聯絡電話搜尋',
