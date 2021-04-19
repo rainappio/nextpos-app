@@ -403,7 +403,8 @@ class MemberScreen extends React.Component {
                                                 style={[styles.childContainer, {borderWidth: 0}]}
                                                 sectionContainerStyle={{
                                                     borderWidth: 1, ...themeStyle,
-                                                    marginBottom: 8
+                                                    marginBottom: 8,
+                                                    backgroundColor: customBackgroundColor
                                                 }}
                                                 expandMultiple
                                             >

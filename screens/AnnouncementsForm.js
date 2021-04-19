@@ -88,7 +88,7 @@ class AnnouncementsForm extends React.Component {
           </View>
         </View>
 
-        <View style={[styles.textAreaContainer, themeStyle, styles?.withBorder(this.context), {height: 250}]}>
+        <View style={[styles.textAreaContainer, styles?.withBorder(this.context), {height: 250}]}>
           <Field
             component={InputText}
             name="markdownContent"

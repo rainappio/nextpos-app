@@ -86,31 +86,6 @@ class OrderForm extends Component {
     constructor(props, context) {
         super(props, context)
 
-        this.context.localize({
-            en: {
-                newOrderTitle: 'New Order',
-                orderType: 'Order Type',
-                table: 'Table',
-                selectTable: 'Select a table',
-                noAvailableTables: 'There is no available table.',
-                ageGroup: 'Age Group',
-                visitFrequency: 'Visit Frequency',
-                peopleCount: 'People Count',
-                openOrder: 'Save Order'
-            },
-            zh: {
-                newOrderTitle: '新訂單',
-                orderType: '訂單種類',
-                table: '桌位',
-                selectTable: '選擇桌位',
-                noAvailableTables: '目前沒有空桌.',
-                ageGroup: '來客年齡層',
-                visitFrequency: '造訪次數',
-                peopleCount: '來客數',
-                openOrder: '儲存訂單'
-            }
-        })
-
         this.state = {
             selectedTableId: null,
             selectedOrderType: null,
@@ -203,15 +178,15 @@ class OrderForm extends Component {
 
         const people = [
             {
-                label: 'Male',
+                label: t('newOrder.male'),
                 value: 'male'
             },
             {
-                label: 'Female',
+                label: t('newOrder.female'),
                 value: 'female'
             },
             {
-                label: 'Kid',
+                label: t('newOrder.kid'),
                 value: 'kid'
             }
         ]
@@ -235,7 +210,7 @@ class OrderForm extends Component {
                     }}>
                         <ScreenHeader backNavigation={true}
                             parentFullScreen={true}
-                            title={t('newOrderTitle')}
+                            title={t('newOrder.newOrderTitle')}
                             backAction={() => {this.props.goBack()}}
                         />
 
@@ -253,7 +228,7 @@ class OrderForm extends Component {
 
                         <View style={[styles.sectionContent, styles.horizontalMargin]}>
                             <View style={styles.sectionTitleContainer}>
-                                <StyledText style={styles.sectionTitleText}>{t('ageGroup')}</StyledText>
+                                <StyledText style={styles.sectionTitleText}>{t('newOrder.ageGroup')}</StyledText>
                             </View>
                             <View style={[styles.fieldContainer]}>
                                 <View style={{flex: 1}}>
@@ -273,7 +248,7 @@ class OrderForm extends Component {
 
                         <View style={[styles.sectionContent, styles.horizontalMargin]}>
                             <View style={styles.sectionTitleContainer}>
-                                <StyledText style={styles.sectionTitleText}>{t('visitFrequency')}</StyledText>
+                                <StyledText style={styles.sectionTitleText}>{t('newOrder.visitFrequency')}</StyledText>
                             </View>
                             <View style={[styles.fieldContainer]}>
                                 <View style={{flex: 1}}>
@@ -293,7 +268,7 @@ class OrderForm extends Component {
 
                         <View style={styles.sectionContent}>
                             <View style={styles.sectionTitleContainer}>
-                                <StyledText style={styles.sectionTitleText}>{t('peopleCount')}</StyledText>
+                                <StyledText style={styles.sectionTitleText}>{t('newOrder.peopleCount')}</StyledText>
                             </View>
                             <View>
                                 {people.map((people, ix) => (
@@ -336,7 +311,7 @@ class OrderForm extends Component {
                                     }}
                                 >
                                     <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                                        {t('openOrder')}
+                                        {t('newOrder.openOrder')}
                                     </Text>
                                 </TouchableOpacity>
                             </ View>

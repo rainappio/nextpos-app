@@ -19,31 +19,6 @@ class OrderForm extends Component {
   constructor(props, context) {
     super(props, context)
 
-    this.context.localize({
-      en: {
-        newOrderTitle: 'New Order',
-        orderType: 'Order Type',
-        table: 'Table',
-        selectTable: 'Select a table',
-        noAvailableTables: 'There is no available table.',
-        ageGroup: 'Age Group',
-        visitFrequency: 'Visit Frequency',
-        peopleCount: 'People Count',
-        openOrder: 'Save Order'
-      },
-      zh: {
-        newOrderTitle: '新訂單',
-        orderType: '訂單種類',
-        table: '桌位',
-        selectTable: '選擇桌位',
-        noAvailableTables: '目前沒有空桌.',
-        ageGroup: '來客年齡層',
-        visitFrequency: '造訪次數',
-        peopleCount: '來客數',
-        openOrder: '儲存訂單'
-      }
-    })
-
     this.state = {
       selectedOrderType: null,
       orderTypes: {
@@ -152,15 +127,15 @@ class OrderForm extends Component {
 
     const people = [
       {
-        label: 'Male',
+        label: t('newOrder.male'),
         value: 'male'
       },
       {
-        label: 'Female',
+        label: t('newOrder.female'),
         value: 'female'
       },
       {
-        label: 'Kid',
+        label: t('newOrder.kid'),
         value: 'kid'
       }
     ]
@@ -173,13 +148,13 @@ class OrderForm extends Component {
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
               parentFullScreen={true}
-              title={t('newOrderTitle')}
+              title={t('newOrder.newOrderTitle')}
             />
             <View style={{flexDirection: 'row', flex: 1}}>
               <Animated.View style={{flex: 1}}>
                 <View style={[styles.sectionContent, styles.horizontalMargin]}>
                   <View style={styles.sectionTitleContainer}>
-                    <StyledText style={styles.sectionTitleText}>{t('orderType')}</StyledText>
+                    <StyledText style={styles.sectionTitleText}>{t('newOrder.orderType')}</StyledText>
                   </View>
                   <View style={[styles.fieldContainer]}>
                     <View style={{flex: 1}}>
@@ -200,7 +175,7 @@ class OrderForm extends Component {
 
                 <View style={[styles.sectionContent, styles.horizontalMargin]}>
                   <View style={styles.sectionTitleContainer}>
-                    <StyledText style={styles.sectionTitleText}>{t('ageGroup')}</StyledText>
+                    <StyledText style={styles.sectionTitleText}>{t('newOrder.ageGroup')}</StyledText>
                   </View>
                   <View style={[styles.fieldContainer]}>
                     <View style={{flex: 1}}>
@@ -220,7 +195,7 @@ class OrderForm extends Component {
 
                 <View style={[styles.sectionContent, styles.horizontalMargin]}>
                   <View style={styles.sectionTitleContainer}>
-                    <StyledText style={styles.sectionTitleText}>{t('visitFrequency')}</StyledText>
+                    <StyledText style={styles.sectionTitleText}>{t('newOrder.visitFrequency')}</StyledText>
                   </View>
                   <View style={[styles.fieldContainer]}>
                     <View style={{flex: 1}}>
@@ -240,7 +215,7 @@ class OrderForm extends Component {
 
                 <View style={styles.sectionContent}>
                   <View style={styles.sectionTitleContainer}>
-                    <StyledText style={styles.sectionTitleText}>{t('peopleCount')}</StyledText>
+                    <StyledText style={styles.sectionTitleText}>{t('newOrder.peopleCount')}</StyledText>
                   </View>
                   <View>
                     {people.map((people, ix) => (
@@ -264,7 +239,7 @@ class OrderForm extends Component {
                 <ThemeScrollView>
                   <View style={{paddingHorizontal: 16}}>
                     <View style={styles.sectionTitleContainer}>
-                      <StyledText style={styles.sectionTitleText}>{t('table')}</StyledText>
+                      <StyledText style={styles.sectionTitleText}>{t('newOrder.table')}</StyledText>
                     </View>
                     {noAvailableTables && (
                       <View style={styles.sectionContent}>
@@ -314,7 +289,7 @@ class OrderForm extends Component {
                       } else {
                         Alert.alert(
                           '',
-                          `${t('noAvailableTables')}`,
+                          `${t('newOrder.noAvailableTables')}`,
                           [
                             {
                               text: `${t('action.ok')}`,
@@ -324,7 +299,7 @@ class OrderForm extends Component {
                     }}
                   >
                     <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                      {t('openOrder')}
+                      {t('newOrder.openOrder')}
                     </Text>
                   </TouchableOpacity>
                 </ View>
@@ -349,12 +324,12 @@ class OrderForm extends Component {
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
               parentFullScreen={true}
-              title={t('newOrderTitle')}
+              title={t('newOrder.newOrderTitle')}
             />
 
             <View style={[styles.sectionContent, styles.horizontalMargin]}>
               <View style={styles.sectionTitleContainer}>
-                <StyledText style={styles.sectionTitleText}>{t('orderType')}</StyledText>
+                <StyledText style={styles.sectionTitleText}>{t('newOrder.orderType')}</StyledText>
               </View>
               <View style={[styles.fieldContainer]}>
                 <View style={{flex: 1}}>
@@ -376,11 +351,11 @@ class OrderForm extends Component {
               <View style={styles.sectionContent}>
                 <View style={{paddingHorizontal: 16}}>
                   <View style={styles.sectionTitleContainer}>
-                    <StyledText style={styles.sectionTitleText}>{t('table')}</StyledText>
+                    <StyledText style={styles.sectionTitleText}>{t('newOrder.table')}</StyledText>
                   </View>
                   {noAvailableTables && (
                     <View style={styles.sectionContent}>
-                      <StyledText>{t('noAvailableTables')}</StyledText>
+                      <StyledText>{t('newOrder.noAvailableTables')}</StyledText>
                     </View>
                   )}
 
@@ -408,14 +383,14 @@ class OrderForm extends Component {
 
             {noAvailableTables && (
               <View style={styles.sectionContent}>
-                <StyledText>{t('noAvailableTables')}</StyledText>
+                <StyledText>{t('newOrder.noAvailableTables')}</StyledText>
               </View>
             )}
 
 
             <View style={[styles.sectionContent, styles.horizontalMargin]}>
               <View style={styles.sectionTitleContainer}>
-                <StyledText style={styles.sectionTitleText}>{t('ageGroup')}</StyledText>
+                <StyledText style={styles.sectionTitleText}>{t('newOrder.ageGroup')}</StyledText>
               </View>
               <View style={[styles.fieldContainer]}>
                 <View style={{flex: 1}}>
@@ -435,12 +410,12 @@ class OrderForm extends Component {
 
             <View style={[styles.sectionContent, styles.horizontalMargin]}>
               <View style={styles.sectionTitleContainer}>
-                <StyledText style={styles.sectionTitleText}>{t('visitFrequency')}</StyledText>
+                <StyledText style={styles.sectionTitleText}>{t('newOrder.visitFrequency')}</StyledText>
               </View>
               <View style={[styles.fieldContainer]}>
                 <View style={{flex: 1}}>
                   <Field
-                    name="visitFrequency"
+                    name="newOrder.visitFrequency"
                     component={SegmentedControl}
                     selectedIndex={this.state.selectedVisitFrequency}
                     onChange={this.handleVisitFrequencySelection}
@@ -455,7 +430,7 @@ class OrderForm extends Component {
 
             <View style={styles.sectionContent}>
               <View style={styles.sectionTitleContainer}>
-                <StyledText style={styles.sectionTitleText}>{t('peopleCount')}</StyledText>
+                <StyledText style={styles.sectionTitleText}>{t('newOrder.peopleCount')}</StyledText>
               </View>
               <View>
                 {people.map((people, ix) => (
@@ -489,7 +464,7 @@ class OrderForm extends Component {
                       } else {
                         Alert.alert(
                           '',
-                          `${t('noAvailableTables')}`,
+                          `${t('newOrder.noAvailableTables')}`,
                           [
                             {
                               text: `${t('action.ok')}`,
@@ -499,7 +474,7 @@ class OrderForm extends Component {
                     }}
                   >
                     <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                      {t('openOrder')}
+                      {t('newOrder.openOrder')}
                     </Text>
                   </TouchableOpacity>
                 </ View>

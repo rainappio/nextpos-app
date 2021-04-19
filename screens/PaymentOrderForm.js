@@ -222,7 +222,7 @@ class PaymentOrderForm extends React.Component {
       resetTotal
     } = this.props
 
-    const {t, appType, customMainThemeColor} = this.context
+    const {t, appType, customMainThemeColor, customBackgroundColor} = this.context
     const {paymentsTypes, selectedPaymentType, paymentsTypeslbl, handlePaymentTypeSelection} = this.props
     const totalAmount = this.props?.isSplitByHeadCount ? this.props?.splitAmount : order.orderTotal
 
@@ -277,13 +277,19 @@ class PaymentOrderForm extends React.Component {
               width: '80%',
               paddingTop: 20,
               paddingHorizontal: 20,
-              minHeight: 200,
+              minHeight: 236,
               borderWidth: 5,
               borderColor: customMainThemeColor,
+              backgroundColor: customBackgroundColor,
               justifyContent: 'center',
               alignSelf: 'center',
             }}>
               <View style={{flex: 1}}>
+                <View style={{flex: 1}}>
+                  <StyledText style={[styles.screenSubTitle(customMainThemeColor)]}>
+                    {t(`membership.newMembership`)}
+                  </StyledText>
+                </View>
                 <View style={{flex: 1, }}>
                   <Field
                     name="name"
@@ -302,8 +308,8 @@ class PaymentOrderForm extends React.Component {
                     validate={isRequired}
                   />
                 </View>
-                <View style={[{flexDirection: 'row', alignSelf: 'flex-end', flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end'}]}>
-                  <View style={{flex: 1, marginHorizontal: 5}}>
+                <View style={[{flexDirection: 'row', alignSelf: 'flex-end', flex: 1, justifyContent: 'flex-end', alignItems: 'space-between', marginBottom: 8}]}>
+                  <View style={{flex: 1, marginHorizontal: 0}}>
                     <TouchableOpacity
                       onPress={() => {
                         this.setState({modalVisible: false})
@@ -312,7 +318,7 @@ class PaymentOrderForm extends React.Component {
                       <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('action.cancel')}</Text>
                     </TouchableOpacity>
                   </View>
-                  <View style={{flex: 1, marginHorizontal: 5}}>
+                  <View style={{flex: 1, marginLeft: 8}}>
                     <TouchableOpacity
                       onPress={handleSubmit(data => {
 

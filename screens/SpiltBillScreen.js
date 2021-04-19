@@ -160,7 +160,7 @@ class SpiltBillScreen extends React.Component {
             order,
             productsData
         } = this.props
-        const {reverseThemeStyle, t, splitParentOrderId, complexTheme, themeStyle, customMainThemeColor} = this.context
+        const {reverseThemeStyle, t, splitParentOrderId, complexTheme, themeStyle, customMainThemeColor, customBackgroundColor} = this.context
 
         if (this.context.isTablet) {
             return (
@@ -218,7 +218,7 @@ class SpiltBillScreen extends React.Component {
 
                                     </View>
                                     <View style={{flex: 1}}>
-                                        <Text numberOfLines={1} style={themeStyle} > ({getTableDisplayName(order)})</Text>
+                                        <Text numberOfLines={1} style={{backgroundColor: customBackgroundColor}} > ({getTableDisplayName(order)})</Text>
                                     </View>
                                 </View>
                                 <View style={{flex: 7, paddingRight: 16}}>
@@ -499,7 +499,7 @@ class SpiltBillScreen extends React.Component {
 
                                         </View>
                                         <View style={{flex: 1}}>
-                                            <Text numberOfLines={1} style={themeStyle} > ({getTableDisplayName(order)})</Text>
+                                            <Text numberOfLines={1} style={{backgroundColor: customBackgroundColor}} > ({getTableDisplayName(order)})</Text>
                                         </View>
                                     </View>
                                     <View style={[styles.sectionBar]}>
@@ -539,7 +539,7 @@ class SpiltBillScreen extends React.Component {
                                         {order?.lineItems?.length > 0 ?
                                             order?.lineItems?.map((item, index) => {
                                                 return (
-                                                    <TouchableOpacity style={[styles.rowFront, themeStyle]} onPress={() => {this.addItem(item)}}>
+                                                    <TouchableOpacity style={[styles.rowFront, themeStyle, {backgroundColor: customBackgroundColor}]} onPress={() => {this.addItem(item)}}>
                                                         <View style={{marginBottom: 0}}>
                                                             <View style={[styles.tableRowContainer, {paddingBottom: 0}]}>
                                                                 <View style={[styles.tableCellView, {flex: 8}]}>
@@ -649,7 +649,7 @@ class SpiltBillScreen extends React.Component {
                                         {this.state.splitOrderData?.lineItems?.length > 0 ?
                                             this.state.splitOrderData?.lineItems?.map((item, index) => {
                                                 return (
-                                                    <TouchableOpacity style={[styles.rowFront, themeStyle]} onPress={() => {this.deleteItem(item)}}>
+                                                    <TouchableOpacity style={[styles.rowFront, themeStyle, {backgroundColor: customBackgroundColor}]} onPress={() => {this.deleteItem(item)}}>
                                                         <View style={{marginBottom: 0}}>
                                                             <View style={[styles.tableRowContainer, {paddingBottom: 0}]}>
                                                                 <View style={[styles.tableCellView, {flex: 8}]}>

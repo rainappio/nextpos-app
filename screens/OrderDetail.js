@@ -121,6 +121,18 @@ class OrderDetail extends React.Component {
     const {order, isLoading, haveData, complexTheme} = this.props
     const {t, customMainThemeColor} = this.context
 
+    const cashPay = []
+    const cardPay = []
+
+    order.transactions !== undefined && order.transactions.forEach(item => {
+      if (item.paymentMethod == 'CASH') {
+        cashPay.push(item)
+      }
+      if (item.paymentMethod == 'CARD') {
+        cardPay.push(item)
+      }
+    })
+
     Item = ({orderDetail, lineItemDate}) => {
       return (
         <View>
@@ -143,11 +155,127 @@ class OrderDetail extends React.Component {
               </StyledText>
             </View>
 
-            <View style={{flex: 1.2}}>
+            <View style={{flex: 1.3}}>
               <StyledText style={{textAlign: 'right'}}>
                 {orderDetail.lineItemSubTotal}
               </StyledText>
             </View>
+          </View>
+          <View style={styles.tableRowContainer}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText>{renderOptionsAndOffer(orderDetail)}</StyledText>
+            </View>
+          </View>
+        </View>
+      )
+    }
+    DelItem = ({orderDetail, lineItemDate}) => {
+      return (
+        <View>
+          <View style={[styles.tableRowContainer]}>
+            <View style={{flex: 2.5}}>
+              <StyledText style={{textDecorationLine: 'line-through'}}>
+                {formatTime(lineItemDate)}
+              </StyledText>
+            </View>
+
+            <View
+              style={{flex: 1.7}}
+            >
+              <StyledText style={{textDecorationLine: 'line-through'}}>
+                {orderDetail.productName}
+              </StyledText>
+            </View>
+
+            <View style={{flex: 0.8}}>
+              <StyledText style={{textDecorationLine: 'line-through'}}>
+                {orderDetail.quantity}
+              </StyledText>
+            </View>
+
+            <View style={{flex: 1.2}}>
+              <StyledText style={{textAlign: 'right', textDecorationLine: 'line-through'}}>
+                {orderDetail.lineItemSubTotal}
+              </StyledText>
+            </View>
+          </View>
+          <View style={styles.tableRowContainer}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText style={{textDecorationLine: 'line-through'}}>{renderOptionsAndOffer(orderDetail)}</StyledText>
+            </View>
+          </View>
+        </View>
+      )
+    }
+
+    PayItem = ({orderDetail}) => {
+      return (
+        <View>
+
+          <View style={[styles.tableRowContainer]}>
+            {orderDetail.paymentMethod == 'CASH' &&
+              <View style={{flex: 1.3}}>
+                <StyledText>
+                  {orderDetail.paymentMethod}
+                </StyledText>
+              </View>}
+            {orderDetail.paymentMethod == 'CARD' &&
+
+              <View style={{flex: 1.3}}>
+                <StyledText>
+                  {orderDetail.paymentDetails.values?.CARD_TYPE}
+                </StyledText>
+              </View>}
+
+            <View style={{flex: 1.2}}>
+              <StyledText style={{textAlign: 'center'}}>
+                {orderDetail.settleAmount}
+              </StyledText>
+            </View>
+
+            {orderDetail.paymentMethod == 'CASH' &&
+              <>
+                <View style={{flex: 1}}>
+                  <StyledText style={{textAlign: 'left'}}>
+                    {orderDetail.paymentDetails.values?.CASH}
+                  </StyledText>
+                </View>
+                <View style={{flex: 0.8}}>
+                  <StyledText style={{textAlign: 'center'}}>
+                    {orderDetail.paymentDetails.values?.CASH_CHANGE}
+                  </StyledText>
+                </View>
+              </>
+            }
+            {orderDetail.paymentMethod == 'CARD' &&
+              <>
+                <View style={{flex: 1.3}}>
+                  <StyledText style={{textAlign: 'left'}}>
+                    {orderDetail.paymentDetails.values?.LAST_FOUR_DIGITS}
+                  </StyledText>
+                </View>
+                <View style={{flex: 0.5}}>
+                </View>
+              </>
+
+            }
+            <View style={{flex: 1.7}}>
+              {orderDetail?.invoiceStatus && !orderDetail?.invoiceNumber &&
+                <StyledText style={{textAlign: 'right'}}>
+                  {orderDetail.invoiceStatus}
+                </StyledText>}
+              {orderDetail.invoiceNumber &&
+                <StyledText style={{textAlign: 'right'}}>
+                  {orderDetail.invoiceNumber}
+                </StyledText>
+
+              }
+              {!orderDetail?.invoiceStatus && !orderDetail?.invoiceNumber && <StyledText style={{textAlign: 'right'}}>
+                {t('invoiceStatus.noSetting')}
+              </StyledText>
+              }
+            </View>
+
           </View>
           <View style={styles.tableRowContainer}>
             <View style={[styles.tableCellView, {flex: 1}]}>
@@ -287,7 +415,7 @@ class OrderDetail extends React.Component {
                 </View>
               </View>
 
-              <FlatList
+              {order.lineItems && <FlatList
                 style={{marginBottom: 0}}
                 data={order.lineItems}
                 renderItem={({item, index}) => (
@@ -297,49 +425,19 @@ class OrderDetail extends React.Component {
                   />
                 )}
                 keyExtractor={(item, index) => index.toString()}
-              />
+              />}
               <View style={{marginBottom: 0}}>
 
-                <FlatList
+                {order.deletedLineItems && <FlatList
                   data={order.deletedLineItems}
                   renderItem={({item, index}) => (
-                    <View>
-                      <View style={[styles.tableRowContainer]}>
-                        <View style={{flex: 2.5}}>
-                          <StyledText style={{textDecorationLine: 'line-through'}}>
-                            {formatTime(item.modifiedDate)}
-                          </StyledText>
-                        </View>
-
-                        <View
-                          style={{flex: 1.7}}
-                        >
-                          <StyledText style={{textDecorationLine: 'line-through'}}>
-                            {item.productName}
-                          </StyledText>
-                        </View>
-
-                        <View style={{flex: 0.8}}>
-                          <StyledText style={{textDecorationLine: 'line-through'}}>
-                            {item.quantity}
-                          </StyledText>
-                        </View>
-
-                        <View style={{flex: 1.2}}>
-                          <StyledText style={{textAlign: 'right', textDecorationLine: 'line-through'}}>
-                            {item.lineItemSubTotal}
-                          </StyledText>
-                        </View>
-                      </View>
-                      <View style={styles.tableRowContainer}>
-                        <View style={[styles.tableCellView, {flex: 1}]}>
-                          <StyledText style={{textDecorationLine: 'line-through'}}>{renderOptionsAndOffer(item)}</StyledText>
-                        </View>
-                      </View>
-                    </View>
+                    <DelItem
+                      orderDetail={item}
+                      lineItemDate={item.modifiedDate}
+                    />
                   )}
                   keyExtractor={(item, index) => index.toString()}
-                />
+                />}
               </View>
 
               <View style={styles.tableRowContainerWithBorder}>
@@ -375,20 +473,83 @@ class OrderDetail extends React.Component {
                 </View>
               </View>
 
-              <FlatList
-                data={order.transactions}
-                renderItem={({item, index}) => (
-                  <View style={styles.tableRowContainerWithBorder}>
-                    <View style={[styles.tableCellView, {flex: 1}]}>
-                      <StyledText>{t('order.paymentMethod')}</StyledText>
-                    </View>
-                    <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                      <StyledText>{item.paymentMethod}</StyledText>
-                    </View>
+
+              {cashPay.length !== 0 &&
+                <View style={styles.sectionBar}>
+                  <View style={{flex: 1.3}}>
+                    <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>
+                      {t('order.paymentMethod')}
+                    </Text>
                   </View>
-                )}
-                keyExtractor={(item, index) => index.toString()}
-              />
+
+                  <View style={{flex: 1.2}}>
+                    <Text style={[styles?.sectionBarTextSmall(customMainThemeColor), {textAlign: 'center'}]}>
+                      {t('order.subtotal')}
+                    </Text>
+                  </View>
+
+
+                  <View style={{flex: 1}}>
+                    <Text style={[styles?.sectionBarTextSmall(customMainThemeColor), {textAlign: 'left'}]}>{t('payment.paid')}</Text>
+                  </View>
+                  <View style={{flex: 0.8}}>
+                    <Text style={[styles?.sectionBarTextSmall(customMainThemeColor), {textAlign: 'center'}]}>{t('payment.change')}</Text>
+                  </View>
+
+                  <View style={{flex: 1.7}}>
+                    <Text style={[styles?.sectionBarTextSmall(customMainThemeColor), {textAlign: 'right'}]}>{t('order.splitInvoiceDetail')}</Text>
+                  </View>
+
+                </View>
+              }
+              {cashPay.length !== 0 &&
+                <FlatList
+                  data={cashPay}
+                  renderItem={({item, index}) => (
+                    <PayItem
+                      orderDetail={item}
+                    />
+                  )}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              }
+              {cardPay.length !== 0 &&
+                <View style={styles.sectionBar}>
+                  <View style={{flex: 1.3}}>
+                    <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>
+                      {t('payment.cardType')}
+                    </Text>
+                  </View>
+
+                  <View style={{flex: 1.2}}>
+                    <Text style={[styles?.sectionBarTextSmall(customMainThemeColor), {textAlign: 'center'}]}>
+                      {t('order.subtotal')}
+                    </Text>
+                  </View>
+
+                  <View style={{flex: 1.3}}>
+                    <Text style={[styles?.sectionBarTextSmall(customMainThemeColor), {textAlign: 'left'}]}>{t('payment.CardNo')}</Text>
+                  </View>
+                  <View style={{flex: 0.5}}>
+                  </View>
+
+                  <View style={{flex: 1.7}}>
+                    <Text style={[styles?.sectionBarTextSmall(customMainThemeColor), {textAlign: 'right'}]}>{t('order.splitInvoiceDetail')}</Text>
+                  </View>
+
+                </View>
+              }
+              {cardPay.length !== 0 &&
+                <FlatList
+                  data={cardPay}
+                  renderItem={({item, index}) => (
+                    <PayItem
+                      orderDetail={item}
+                    />
+                  )}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              }
 
               <View style={styles.tableRowContainerWithBorder}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
