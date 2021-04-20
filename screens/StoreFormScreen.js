@@ -1,7 +1,7 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
-import {isPercentage, isRequired} from '../validators'
+import {isPercentage, isRequired, isPositiveInteger} from '../validators'
 import InputText from '../components/InputText'
 import styles from '../styles'
 import RNSwitch from '../components/RNSwitch'
@@ -36,6 +36,7 @@ class StoreFormScreen extends React.Component {
         ubn: 'UBN',
         taxInclusive: 'Tax Inclusive',
         serviceCharge: 'Service Charge %',
+        timeLimit: 'Time Limit in Min',
         tableAvailabilityDisplayTitle: 'Table Availability Display',
         orderAvailabilityDisplayTitle: 'Order Display Mode',
         tableAvailabilityDisplay: {
@@ -67,6 +68,7 @@ class StoreFormScreen extends React.Component {
         ubn: '統一編號',
         taxInclusive: '價格已含稅',
         serviceCharge: '服務費(％)',
+        timeLimit: '時間限制(分)',
         tableAvailabilityDisplayTitle: '座位顯示方式',
         orderAvailabilityDisplayTitle: '即時訂單顯示方式',
         tableAvailabilityDisplay: {
@@ -276,6 +278,27 @@ class StoreFormScreen extends React.Component {
                 <View style={{flex: 1, flexDirection: 'row-reverse'}}>
                   <Field
                     name="clientSettings.SERVICE_CHARGE.enabled"
+                    component={RNSwitch}
+                  />
+                </View>
+              </View>
+
+              <View style={[styles.fieldContainer]}>
+                <View style={{flex: 2}}>
+                  <StyledText style={styles.fieldTitle}>{t('timeLimit')}</StyledText>
+                </View>
+                <View style={{flex: 2}}>
+                  <Field
+                    name="clientSettings.TABLE_TIME_LIMIT.value"
+                    component={InputText}
+                    placeholder={t('timeLimit')}
+                    keyboardType="numeric"
+                    validate={isPositiveInteger}
+                  />
+                </View>
+                <View style={{flex: 1, flexDirection: 'row-reverse'}}>
+                  <Field
+                    name="clientSettings.TABLE_TIME_LIMIT.enabled"
                     component={RNSwitch}
                   />
                 </View>

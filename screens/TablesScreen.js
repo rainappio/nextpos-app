@@ -192,7 +192,20 @@ class TablesScreen extends React.Component {
     const {t, customMainThemeColor, customSecondThemeColor, customBackgroundColor} = this.context
 
 
-    if (tablelayouts === undefined || tablelayouts.length === 0 || !haveData) {
+    let tableTimeLimit = 0
+    let isTimeLimit = false
+
+    if (client.clientSettings?.TABLE_TIME_LIMIT !== undefined && client.clientSettings?.TABLE_TIME_LIMIT?.value !== undefined || client.clientSettings?.TABLE_TIME_LIMIT?.enabled !== undefined) {
+      tableTimeLimit = client.clientSettings?.TABLE_TIME_LIMIT?.value
+      isTimeLimit = client.clientSettings?.TABLE_TIME_LIMIT?.enabled
+    }
+
+
+    if (isLoading) {
+      return (
+        <LoadingScreen />
+      )
+    } else if (tablelayouts === undefined || tablelayouts.length === 0 || !haveData) {
       return (
         <ThemeScrollView
           refreshControl={
@@ -485,6 +498,8 @@ class TablesScreen extends React.Component {
                             borderColor={themeStyle.color === '#e7e7e7' ? '#BFBFBF' : '#BFBFBF'}
                             t={t}
                             table={table}
+                            tableTimeLimit={tableTimeLimit}
+                            isTimeLimit={isTimeLimit}
                             key={table.tableId}
                             layoutId={tablelayouts[this.state.tableIndex]?.id}
                             index={index}
@@ -564,6 +579,8 @@ class TablesScreen extends React.Component {
                                 navigation={navigation}
                                 handleOrderSubmit={handleOrderSubmit}
                                 handleDelete={handleDelete}
+                                tableTimeLimit={tableTimeLimit}
+                                isTimeLimit={isTimeLimit}
                                 key={item.orderId}
                               />
                             </View>
@@ -695,6 +712,8 @@ class TablesScreen extends React.Component {
                           navigation={navigation}
                           handleOrderSubmit={handleOrderSubmit}
                           handleDelete={handleDelete}
+                          tableTimeLimit={tableTimeLimit}
+                          isTimeLimit={isTimeLimit}
                           key={item.orderId}
                         />
                       )
@@ -723,6 +742,8 @@ class TablesScreen extends React.Component {
                         navigation={navigation}
                         handleOrderSubmit={handleOrderSubmit}
                         handleDelete={handleDelete}
+                        tableTimeLimit={tableTimeLimit}
+                        isTimeLimit={isTimeLimit}
                         key={item.orderId}
                       />
                     )
@@ -797,6 +818,8 @@ class DraggableBase extends Component {
       isDraggable: false,
       tableOrder: props?.orders?.[`${props?.layoutId}`]?.find((item) => {return (item?.tableId === props?.table?.tableId || item?.tables?.some((table) => table?.tableId === props?.table?.tableId))}),
       isSelected: false,
+      tableTimeLimit: props?.tableTimeLimit,
+      isTimeLimit: props?.isTimeLimit
     };
   }
 
@@ -979,6 +1002,9 @@ class DraggableBase extends Component {
     }
     const tableOrder = this.state.tableOrder
     const tableStatus = tableOrder?.state
+    const tableTimeLimit = this.state.tableTimeLimit * 60 * 1000
+    const isTimeLimit = this.state.isTimeLimit
+
     const selectedStyle = {
       borderColor: `rgba(255, 0, 0, ${this.state.opacity?._value})`
     }
@@ -1023,6 +1049,8 @@ class DraggableBase extends Component {
                   })]}>
                   {tableStatus === 'PAYMENT_IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><MaterialIcons name="attach-money" size={25}
                     style={[{color: '#f75336'}]} /></View>}
+                  {!!tableOrder?.createdTime && !!isTimeLimit && getTimeDifference(tableOrder?.createdTime) > tableTimeLimit && <View style={{position: 'absolute', top: 0, right: -8, width: 25, height: 25}}><FontAwesomeIcon name="exclamation-triangle" size={25}
+                    style={[{color: '#f75336'}]} /></View>}
                   <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Ionicons name={'ios-people'} color={'black'} size={20} />
@@ -1057,6 +1085,8 @@ class DraggableBase extends Component {
 
                   })]}>
                   {tableStatus === 'PAYMENT_IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><MaterialIcons name="attach-money" size={25}
+                    style={[{color: '#f75336'}]} /></View>}
+                  {!!tableOrder?.createdTime && !!isTimeLimit && getTimeDifference(tableOrder?.createdTime) > tableTimeLimit && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><FontAwesomeIcon name="exclamation-triangle" size={25}
                     style={[{color: '#f75336'}]} /></View>}
                   <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -1113,6 +1143,8 @@ class DraggableBase extends Component {
 
                   {tableStatus === 'PAYMENT_IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><MaterialIcons name="attach-money" size={25}
                     style={[{color: '#f75336'}]} /></View>}
+                  {!!tableOrder?.createdTime && !!isTimeLimit && getTimeDifference(tableOrder?.createdTime) > tableTimeLimit && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><FontAwesomeIcon name="exclamation-triangle" size={25}
+                    style={[{color: '#f75336'}]} /></View>}
                   <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Ionicons name={'ios-people'} color={'black'} size={20} />
@@ -1147,6 +1179,8 @@ class DraggableBase extends Component {
 
                   })]}>
                   {tableStatus === 'PAYMENT_IN_PROCESS' && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><MaterialIcons name="attach-money" size={25}
+                    style={[{color: '#f75336'}]} /></View>}
+                  {!!tableOrder?.createdTime && !!isTimeLimit && getTimeDifference(tableOrder?.createdTime) > tableTimeLimit && <View style={{position: 'absolute', top: 0, right: 0, width: 25, height: 25}}><FontAwesomeIcon name="exclamation-triangle" size={25}
                     style={[{color: '#f75336'}]} /></View>}
                   <Text style={{color: '#000', textAlign: 'center', }}>{table.tableName}</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>

@@ -133,6 +133,15 @@ class ProductFormScreen extends React.Component {
       inventoryData
     } = this.props
 
+    const inventoryInitial = {
+      unitOfMeasure: 'EACH',
+      baseUnitQuantity: 1,
+      minimumStockLevel: 0
+    }
+    if (!this.state.inventoryModalData) {
+      this.setState({inventoryModalData: inventoryInitial})
+    }
+
     console.log('inventoryModalData', JSON.stringify(inventoryData))
 
     return (
@@ -507,7 +516,7 @@ class InventoryForm extends React.Component {
                 name="unitOfMeasure"
                 component={InputText}
                 validate={isRequired}
-                placeholder={t('inventory.unitOfMeasure')}
+                placeholder={t('inventory.unitOfMeasureDefault')}
                 secureTextEntry={false}
               />
             </View>
@@ -521,7 +530,7 @@ class InventoryForm extends React.Component {
                 name="baseUnitQuantity"
                 component={InputText}
                 validate={[isRequired, isPositiveInteger]}
-                placeholder={t('inventory.baseUnitQuantity')}
+                placeholder={t('inventory.baseUnitQuantityDefault')}
                 keyboardType={`numeric`}
               />
             </View>

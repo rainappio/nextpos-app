@@ -188,7 +188,7 @@ class OrdersScreen extends React.Component {
                     tableName: this.state.searchFilter.tableName,
                   })
 
-                  this.props.navigation.setParams({shiftId: undefined})
+                  // this.props.navigation.setParams({shiftId: undefined})
                 } else {
                   this.props.getOrdersByInvoiceNumber(this.state?.searchFilter?.invoiceNumber ?? '')
                 }
