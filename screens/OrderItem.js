@@ -18,16 +18,24 @@ class OrderItem extends React.PureComponent {
       order,
       navigation,
       handleOrderSubmit,
-      handleDelete
+      handleDelete,
+      tableTimeLimit,
+      isTimeLimit
     } = this.props
-    const {t, isTablet, customMainThemeColor} = this.context
+    const {t, isTablet, customMainThemeColor, customBackgroundColor} = this.context
 
     const timeDifference = getTimeDifference(order.createdTime)
     const thirtyMinutes = 30 * 60 * 1000
+    const costomTimeZone = tableTimeLimit * 60 * 1000
 
     TimeAgo.addLocale(en)
     const timeAgo = new TimeAgo()
     let timeDisplayColor = '#888'
+    let timeLimitBgColor = timeDifference > costomTimeZone ? '#FEE9D7' : customBackgroundColor
+
+    if (customBackgroundColor == '#222222') {
+      timeLimitBgColor = timeDifference > costomTimeZone ? '#B85543' : customBackgroundColor
+    }
 
     if (['OPEN', 'IN_PROCESS'].includes(order.state)) {
       timeDisplayColor = timeDifference < thirtyMinutes ? customMainThemeColor : '#f75336'
@@ -38,7 +46,7 @@ class OrderItem extends React.PureComponent {
         <>
           {order.tables.map((table) => {
             return (
-              <View style={[styles.tableRowContainerWithBorder]}>
+              <View style={[styles.tableRowContainerWithBorder, isTimeLimit && {backgroundColor: timeLimitBgColor}]}>
                 <TouchableOpacity
                   style={[{flexDirection: 'row', flex: 9, marginLeft: 3}]}
                   key={order.orderId}

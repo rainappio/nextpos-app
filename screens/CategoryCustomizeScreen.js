@@ -59,7 +59,7 @@ class CategoryCustomizeScreen extends React.Component {
       <ThemeScrollView>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader parentFullScreen={true}
-            title={t('categoryTitle')}
+            title={t('productOption')}
             backAction={() => backAction(this.props.navigation)}
           />
 
