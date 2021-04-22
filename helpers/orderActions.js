@@ -123,16 +123,17 @@ export const handleOrderSubmit = id => {
   ).then()
 }
 
-export const handlePrintWorkingOrder = (orderId) => {
+export const handlePrintWorkingOrder = (orderId, lineItemIds) => {
   dispatchFetchRequestWithOption(
-    api.order.printWorkingOrder(orderId),
+    api.order.printWorkingOrder(orderId, lineItemIds),
     {
-      method: 'GET',
+      method: 'POST',
       withCredentials: true,
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
       },
+      body: JSON.stringify({lineItemIds: lineItemIds})
     }, {
     defaultMessage: false
   }, response => {
