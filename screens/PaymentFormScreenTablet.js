@@ -177,7 +177,7 @@ class PaymentFormScreenTablet extends React.Component {
                     })
                 } else {
                     this.context?.saveSplitParentOrderId(null)
-                    handleDelete(this.props?.parentOrder?.orderId, () => NavigationService.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess'))
+                    this.props.navigation.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess')
                 }
 
             } else {
