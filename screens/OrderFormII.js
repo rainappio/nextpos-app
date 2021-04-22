@@ -290,6 +290,18 @@ class OrderFormII extends React.Component {
     this.setState({orderLineItems: lineItems})
   }
 
+  handleSelectedItemPrint = (id) => {
+    const lineItemIds = []
+
+    Object.keys(this.state.orderLineItems).map(id => {
+      const orderLineItem = this.state.orderLineItems[id];
+      if (orderLineItem.checked) {
+        lineItemIds.push(orderLineItem.value)
+      }
+    })
+    handlePrintWorkingOrder(id, lineItemIds)
+  }
+
 
   handleSettledDeliver = id => {
     const lineItemIds = []
@@ -850,7 +862,7 @@ class OrderFormII extends React.Component {
                               onPress={() => {
                                 order.lineItems.length === 0
                                   ? warningMessage(t('lineItemCountCheck'))
-                                  : handlePrintWorkingOrder(order.orderId)
+                                  : this.handleSelectedItemPrint(order.orderId)
                               }}
                               containerStyle={styles?.flexButtonSecondAction(this.context)}
                               style={styles?.flexButtonSecondActionText(customMainThemeColor)}
@@ -954,7 +966,7 @@ class OrderFormII extends React.Component {
                               onPress={() => {
                                 order.lineItems.length === 0
                                   ? warningMessage(t('lineItemCountCheck'))
-                                  : handlePrintWorkingOrder(order.orderId)
+                                  : this.handleSelectedItemPrint(order.orderId)
                               }}
                               containerStyle={styles?.flexButtonSecondAction(this.context)}
                               style={styles?.flexButtonSecondActionText(customMainThemeColor)}
@@ -1071,7 +1083,7 @@ class OrderFormII extends React.Component {
                               onPress={() => {
                                 order.lineItems.length === 0
                                   ? warningMessage(t('lineItemCountCheck'))
-                                  : handlePrintWorkingOrder(order.orderId)
+                                  : this.handleSelectedItemPrint(order.orderId)
                               }}
                               containerStyle={styles?.flexButtonSecondAction(this.context)}
                               style={styles?.flexButtonSecondActionText(customMainThemeColor)}

@@ -122,6 +122,18 @@ class OrdersSummaryRow extends React.Component {
     this.setState({orderLineItems: lineItems})
   }
 
+  handleSelectedItemPrint = (id) => {
+    const lineItemIds = []
+
+    Object.keys(this.state.orderLineItems).map(id => {
+      const orderLineItem = this.state.orderLineItems[id];
+      if (orderLineItem.checked) {
+        lineItemIds.push(orderLineItem.value)
+      }
+    })
+    handlePrintWorkingOrder(id, lineItemIds)
+  }
+
 
   renderStateToolTip = (state, t) => {
     const tooltip = (
@@ -831,7 +843,7 @@ class OrdersSummaryRow extends React.Component {
                   onPress={() =>
                     order.lineItems.length === 0
                       ? warningMessage(t('lineItemCountCheck'))
-                      : handlePrintWorkingOrder(order.orderId)
+                      : this.handleSelectedItemPrint(order.orderId)
                   }
                   title={t('printWorkingOrder')}
                 /></View>

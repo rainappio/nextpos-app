@@ -208,6 +208,7 @@ const zh = {
     prepareLineItems: '品項製作完成',
     updateOrderLineItemPrice: '品項招待',
     quickCheckout: '快速結帳',
+    moveOrder: '併桌',
   },
   invoiceStatus: {
     invoiceStatus: '發票狀態',

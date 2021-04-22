@@ -208,6 +208,7 @@ const en = {
     prepareLineItems: 'Prepared Order Item',
     updateOrderLineItemPrice: 'Free Order Item',
     quickCheckout: 'Quick Checkout',
+    moveOrder: 'Move Order',
   },
   invoiceStatus: {
     invoiceStatus: 'Invoice status',
