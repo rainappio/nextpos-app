@@ -38,7 +38,12 @@ class ManageOffers extends React.Component {
         offerTypeName: {
           ORDER: 'Order',
           PRODUCT: 'Product'
-        }
+        },
+        triggerType: 'Trigger Type',
+        triggerTypeName: {
+          AT_CHECKOUT: 'At Checkout',
+          ALWAYS: 'Always'
+        },
       },
       zh: {
         manageOffersTitle: '促銷管理',
@@ -60,7 +65,12 @@ class ManageOffers extends React.Component {
         offerTypeName: {
           ORDER: '套用訂單',
           PRODUCT: '套用產品'
-        }
+        },
+        triggerType: '促銷顯示',
+        triggerTypeName: {
+          AT_CHECKOUT: '結帳時',
+          ALWAYS: '隨時'
+        },
       }
     })
     this.props.getOffers()

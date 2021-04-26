@@ -260,6 +260,7 @@ const en = {
       BALANCED: 'Balanced',
       UNBALANCED: 'Unbalanced'
     },
+    shiftDetailsTitle: 'Shift Details',
     staff: 'Staff',
     shiftSummary: 'Closing Account Summaries',
     totalCashIncome: 'Total Cash Income',
@@ -288,8 +289,8 @@ const en = {
     totalCardTransitionAmt: 'Total Card Transactions',
     totalCardInRegister: 'Actual Card Amount',
     difference: 'Difference',
-
     deleteLineItemLog: 'Deleted Line Items',
+
     // messages
     shiftOpened: 'Shift opened',
     shiftAborted: 'Closing shift aborted',
@@ -349,6 +350,7 @@ const en = {
     balanceError: 'Please enter a positive value',
     loginFailed: 'Login failed',
     requireFourDigits: 'Please enter 4 digits number',
+    requireEightDigits: 'Please enter 8 digits number',
     requireTwoUppercaseLetters: 'Please enter 2 uppercase letter',
     requireNDigitsNumber: `Please enter {{n}} digits number`,
     expiredToken: 'Toke is either invalid or expired',
@@ -396,7 +398,10 @@ const en = {
     prefixYear: 'Prefix Year',
     prefixMonth: 'Prefix Month',
     prefix: 'Invoice Prefix',
-    reprintInvoice: 'Reprint Invoice'
+    reprintInvoice: 'Reprint Invoice',
+    viewCancellableInvoice: 'View Cancellable Invoices',
+    cancelInvoice: 'Cancel Invoice',
+    cancelInvoiceConfirmMsg: 'Confirm to cancel this e-invoice？'
   },
   roster: {
     year: 'Year',

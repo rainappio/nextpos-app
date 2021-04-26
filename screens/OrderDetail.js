@@ -1,5 +1,5 @@
 import React from 'react'
-import {FlatList, Text, TouchableOpacity, View} from 'react-native'
+import {Alert, FlatList, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
 import {formatCurrency, formatTime, getOrder} from '../actions'
 import styles from '../styles'
@@ -17,6 +17,8 @@ import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {printMessage} from "../helpers/printerActions";
+import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
+
 
 class OrderDetail extends React.Component {
   static navigationOptions = {
@@ -83,11 +85,7 @@ class OrderDetail extends React.Component {
         console.warn('getOnePrinter ERROR')
       }
     ).then()
-
-
   }
-
-
 
   handleRePrint = (order, ipAddress) => {
     dispatchFetchRequestWithOption(api.payment.getTransactionReprint(order?.transactions?.[0]?.transactionId), {
@@ -115,6 +113,26 @@ class OrderDetail extends React.Component {
         )
       })
     }).then()
+  }
+
+  handleCancelOneInvoice = (transactionId) => {
+    Alert.alert(
+      `${this.props?.alertTitle ?? this.context.t('eInvoice.cancelInvoice')}`,
+      `${this.props?.alertMessage ?? this.context.t('eInvoice.cancelInvoiceConfirmMsg')}`,
+      [
+        {
+          text: `${this.context.t('action.yes')}`,
+          onPress: () => {
+            handleCancelInvoice(transactionId, () => this.props.getOrder())
+          }
+        },
+        {
+          text: `${this.context.t('action.no')}`,
+          onPress: () => console.log('Cancelled'),
+          style: 'cancel'
+        }
+      ]
+    )
   }
 
   render() {
@@ -260,19 +278,27 @@ class OrderDetail extends React.Component {
 
             }
             <View style={{flex: 1.7}}>
-              {orderDetail?.invoiceStatus && !orderDetail?.invoiceNumber &&
-                <StyledText style={{textAlign: 'right'}}>
-                  {orderDetail.invoiceStatus}
-                </StyledText>}
-              {orderDetail.invoiceNumber &&
-                <StyledText style={{textAlign: 'right'}}>
-                  {orderDetail.invoiceNumber}
-                </StyledText>
+              {orderDetail?.invoiceStatus || orderDetail?.invoiceNumber ?
 
-              }
-              {!orderDetail?.invoiceStatus && !orderDetail?.invoiceNumber && <StyledText style={{textAlign: 'right'}}>
-                {t('invoiceStatus.noSetting')}
-              </StyledText>
+                <View style={[styles.list, styles.justifyRight, {alignItems: 'center'}]}>
+                  <StyledText>
+                    {orderDetail.invoiceNumber}
+                    {orderDetail?.invoiceStatus !== 'PROCESSED' &&
+                      `(${t(`invoiceStatus.${orderDetail.invoiceStatus}`)})`
+                    }
+                  </StyledText>
+                  {orderDetail?.invoiceStatus === 'PROCESSED' &&
+                    <MCIcon name={'file-cancel'}
+                      size={25}
+                      style={[styles?.iconStyle('#f75336')]}
+                      onPress={() => this.handleCancelOneInvoice(orderDetail?.transactionId)}
+                    />
+                  }
+                </View>
+                :
+                <StyledText style={{textAlign: 'right'}}>
+                  {t('invoiceStatus.noSetting')}
+                </StyledText>
               }
             </View>
 
@@ -306,7 +332,14 @@ class OrderDetail extends React.Component {
         <ThemeContainer>
           <View style={[styles.fullWidthScreen, (!!this.props?.orderId && {marginTop: 0})]}>
             <ScreenHeader parentFullScreen={true}
-              backAction={() => !!this.props?.orderId ? this.props?.closeModal() : this.props.navigation.goBack()}
+              backAction={() => {
+                if (this.props?.navigation?.state.params.route !== 'EinvoiceStatusScreen') {
+                  !!this.props?.orderId ? this.props?.closeModal() : this.props.navigation.goBack()
+                } else {
+                  this.props.navigation.navigate('EinvoiceStatusScreen')
+                }
+              }
+              }
               title={t('order.orderDetailsTitle')} />
             <NavigationEvents
               onWillFocus={() => {
@@ -646,10 +679,6 @@ class OrderDetail extends React.Component {
                 </TouchableOpacity>
                 {order?.state !== 'DELETED' && <DeleteBtn
                   handleDeleteAction={() => handleDelete(order.orderId, () => this.props.getOrder())}
-                />}
-                {order?.transactions?.[0]?.invoiceStatus === 'PROCESSED' && <DeleteBtn
-                  text={t('invoiceStatus.cancelInvoice')}
-                  handleDeleteAction={() => handleCancelInvoice(order?.transactions?.[0]?.transactionId, () => this.props.getOrder())}
                 />}
               </View>}
             </ThemeScrollView>

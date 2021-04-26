@@ -56,7 +56,9 @@ class ClockIn extends React.Component {
         clockedOut: 'Clocked out',
         enterPasswordMsg: 'Please enter pin using the keypad',
         clockInMsg: 'Ready to start your shift!',
-        clockOutMsg: 'Ready to finish work!'
+        clockOutMsg: 'Ready to finish work!',
+        distanceCalculatingMsg: 'Calculating distance from store...',
+        distanceExceedMsg: 'The Distance is too far, please try again',
       },
       zh: {
         timeCardTitle: '員工打卡',
@@ -82,7 +84,9 @@ class ClockIn extends React.Component {
         clockedOut: '下班打卡完成',
         enterPasswordMsg: '請在右邊輸入密碼登入打卡',
         clockInMsg: '打卡上班囉',
-        clockOutMsg: '辛苦了，打卡下班囉'
+        clockOutMsg: '辛苦了，打卡下班囉',
+        distanceCalculatingMsg: '正在計算店家距離...',
+        distanceExceedMsg: '距離太遠，請重新再試',
       }
     })
 
@@ -365,7 +369,20 @@ class ClockIn extends React.Component {
                   </View>}
 
 
-                  {(this.state?.timecardUserToken !== null) && <View style={{flex: 1}}>
+
+
+                  {(locationBasedService && this.state?.timecardUserToken !== null && storeLocation === null) &&
+                    <View style={styles.sectionTitleContainer}>
+                      <Text style={[styles.sectionTitleText, {color: customMainThemeColor, fontSize: 24, fontWeight: 'bold'}]}>{t('distanceCalculatingMsg')}</Text>
+                    </View>
+                  }
+                  {(locationBasedService && this.state?.timecardUserToken !== null && distance > 200) &&
+                    <View style={styles.sectionTitleContainer}>
+                      <Text style={[styles.sectionTitleText, {color: customMainThemeColor, fontSize: 24, fontWeight: 'bold'}]}>{t('distanceExceedMsg')}</Text>
+                    </View>
+                  }
+
+                  {(!locationBasedService && this.state?.timecardUserToken !== null) || (this.state?.timecardUserToken !== null && storeLocation !== null && distance < 200) && <View style={{flex: 1}}>
                     <View style={styles.sectionTitleContainer}>
                       <Text style={[styles.sectionTitleText, {color: customMainThemeColor, fontSize: 24, fontWeight: 'bold'}]}>{t('timeCardStatus')}</Text>
                     </View>
@@ -428,7 +445,7 @@ class ClockIn extends React.Component {
                     }} />
                 </View>
               )}
-              {(this.state?.timecardUserToken !== null) && (
+              {(!locationBasedService && this.state?.timecardUserToken !== null || this.state?.timecardUserToken !== null && storeLocation !== null && distance < 200) && (
                 <View style={[{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}]}>
                   <View >
                     <StyledText style={{fontSize: 24, color: customMainThemeColor, fontWeight: 'bold'}}>
@@ -516,7 +533,19 @@ class ClockIn extends React.Component {
 
 
 
-              {(this.state?.timecardUserToken !== null) && <>
+              {(locationBasedService && this.state?.timecardUserToken !== null && storeLocation === null) &&
+                <View style={styles.sectionTitleContainer}>
+                  <Text style={[styles.sectionTitleText, {color: customMainThemeColor, fontSize: 24, fontWeight: 'bold'}]}>{t('distanceCalculatingMsg')}</Text>
+                </View>
+              }
+              {(locationBasedService && this.state?.timecardUserToken !== null && distance > 200) &&
+                <View style={styles.sectionTitleContainer}>
+                  <Text style={[styles.sectionTitleText, {color: customMainThemeColor, fontSize: 24, fontWeight: 'bold'}]}>{t('distanceExceedMsg')}</Text>
+                </View>
+              }
+
+
+              {(!locationBasedService && this.state?.timecardUserToken !== null) || (this.state?.timecardUserToken !== null && storeLocation !== null && distance < 200) && <>
                 <View style={styles.sectionTitleContainer}>
                   <StyledText style={styles.sectionTitleText}>{t('timeCardStatus')}</StyledText>
                 </View>
@@ -579,7 +608,7 @@ class ClockIn extends React.Component {
               </View>
             )}
 
-            {(this.state?.timecardUserToken !== null) && (
+            {(!locationBasedService && this.state?.timecardUserToken !== null || this.state?.timecardUserToken !== null && storeLocation !== null && distance < 200) && (
               <View style={[{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}]}>
                 <View >
                   <StyledText style={{fontSize: 24, color: customMainThemeColor, fontWeight: 'bold'}}>

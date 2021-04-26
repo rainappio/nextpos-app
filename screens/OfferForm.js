@@ -25,7 +25,8 @@ class OfferForm extends React.Component {
     super(props, context);
 
     const initialValues = this.props.initialValues
-    const selectedOfferIdx = initialValues !== undefined ? initialValues.selectedofferType : 0;
+    const selectedOfferIdx = initialValues?.offerType === 'ORDER' ? 0 : 1;
+    const selectedTriggerTypeIdx = initialValues?.triggerType === 'AT_CHECKOUT' ? 0 : 1;
     let appliesToAllProducts = false
 
     if (initialValues !== undefined && initialValues.offerType === 'PRODUCT' && initialValues.productOfferDetails.appliesToAllProducts) {
@@ -35,6 +36,11 @@ class OfferForm extends React.Component {
     this.state = {
       appliesToAllProducts: appliesToAllProducts,
       selectedOfferType: selectedOfferIdx,
+      selectedTriggerType: selectedTriggerTypeIdx,
+      triggerTypes: {
+        0: {label: context.t('triggerTypeName.AT_CHECKOUT'), value: 'AT_CHECKOUT'},
+        1: {label: context.t('triggerTypeName.ALWAYS'), value: 'ALWAYS'}
+      },
       offerTypes: {
         0: {label: context.t('offerTypeName.ORDER'), value: 'ORDER'},
         1: {label: context.t('offerTypeName.PRODUCT'), value: 'PRODUCT'}
@@ -141,6 +147,8 @@ class OfferForm extends React.Component {
     const {t, customMainThemeColor} = this.context;
     const {appliesToAllProducts, products} = this.state;
 
+
+    const triggerTypes = Object.keys(this.state.triggerTypes).map(key => this.state.triggerTypes[key].label)
     const offerTypes = Object.keys(this.state.offerTypes).map(key => this.state.offerTypes[key].label)
 
     return (
@@ -156,6 +164,24 @@ class OfferForm extends React.Component {
               placeholder={t("offerName")}
               secureTextEntry={false}
               validate={isRequired}
+            />
+          </View>
+        </View>
+
+        <View style={styles.tableRowContainerWithBorder}>
+          <View style={[{flex: 1}]}>
+            <StyledText style={styles.fieldTitle}>{t("triggerType")}</StyledText>
+          </View>
+          <View style={[styles.justifyRight, {flex: 3}]}>
+            <Field
+              name="triggerType"
+              component={SegmentedControl}
+              selectedIndex={this.state.selectedTriggerType}
+              values={triggerTypes}
+              onChange={(index) => this.setState({selectedTriggerType: index})}
+              normalize={value => {
+                return this.state.triggerTypes[value].value
+              }}
             />
           </View>
         </View>
@@ -195,6 +221,7 @@ class OfferForm extends React.Component {
                 name="startDate"
                 component={RenderDateTimePicker}
                 onChange={this.handlegetDate}
+                defaultValue={initialValues?.startDate}
                 placeholder={t("order.date")}
                 isShow={this.state.from.show}
                 showDatepicker={() => this.showDatepicker("from")}
@@ -214,6 +241,7 @@ class OfferForm extends React.Component {
                 name="endDate"
                 component={RenderDateTimePicker}
                 onChange={this.handlegetDate}
+                defaultValue={initialValues?.endDate}
                 placeholder={t("order.date")}
                 isShow={this.state.to.show}
                 showDatepicker={() => this.showDatepicker("to")}
