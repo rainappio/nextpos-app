@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Field, reduxForm} from 'redux-form'
-import {Text, TouchableOpacity, View, ScrollView, Alert, KeyboardAvoidingView, Animated} from 'react-native'
+import {Text, TouchableOpacity, View, ScrollView, Alert, KeyboardAvoidingView, Animated, Dimensions} from 'react-native'
 import {formatCurrency, getfetchglobalOrderOffers, getOrder} from '../actions'
 import RenderCheckBox from '../components/rn-elements/CheckBox'
 import styles from '../styles'
@@ -11,7 +11,6 @@ import CustomCheckBox from "../components/CustomCheckBox";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
-
 import {MoneyKeyboard, CardFourNumberKeyboard, CustomTitleAndDigitKeyboard, DiscountKeyboard} from '../components/MoneyKeyboard'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
@@ -862,37 +861,37 @@ class PaymentFormScreenTablet extends React.Component {
                                             </TouchableOpacity>
                                         </View>
                                     }
-                                    <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding, {borderBottomWidth: 0}]}>
-                                        <View style={[styles.tableCellView, {flex: 1}]}>
-                                            <StyledText>{t('order.total')}</StyledText>
-                                        </View>
+                                    <>
+                                        <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding, {borderBottomWidth: 0}]}>
+                                            <View style={[styles.tableCellView, {flex: 1}]}>
+                                                <StyledText>{t('order.total')}</StyledText>
+                                            </View>
 
-                                        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                                            <StyledText style={styles.tableCellText}>
-                                                {formatCurrency(totalAmount)}
-                                            </StyledText>
+                                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                                <StyledText style={styles.tableCellText}>
+                                                    {formatCurrency(totalAmount)}
+                                                </StyledText>
+                                            </View>
                                         </View>
-                                    </View>
+                                        <View style={{flex: 1, marginVertical: 8, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
 
+                                            <View style={{flex: 0.5, marginHorizontal: 5, height: ((Dimensions.get('window').width * 24) / 320), minHeight: 80}}>
+                                                <TouchableOpacity
+                                                    onPress={() =>
+                                                        order.lineItems.length === 0
+                                                            ? warningMessage(t('lineItemCountCheck'))
+                                                            : handlePrintOrderDetails(order.orderId)
+                                                    }
+                                                    style={styles?.flexButtonSecondAction(this.context)}
+                                                >
+                                                    <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
+                                                        {t('printOrderDetails')}
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    </>
                                 </ThemeKeyboardAwareScrollView>
-                                <View style={{flex: 1, marginVertical: 8, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
-
-                                    <View style={{flex: 0.5, marginHorizontal: 5, height: 108}}>
-                                        <TouchableOpacity
-                                            onPress={() =>
-                                                order.lineItems.length === 0
-                                                    ? warningMessage(t('lineItemCountCheck'))
-                                                    : handlePrintOrderDetails(order.orderId)
-                                            }
-                                            style={styles?.flexButtonSecondAction(this.context)}
-                                        >
-                                            <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
-                                                {t('printOrderDetails')}
-                                            </Text>
-                                        </TouchableOpacity>
-
-                                    </View>
-                                </View>
                             </View>
                         </View>
                         {/* keyboard */}

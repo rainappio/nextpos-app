@@ -1,6 +1,6 @@
 import React from 'react'
 import {reduxForm, Field} from 'redux-form'
-import {Alert, ScrollView, Text, TouchableOpacity, View, StyleSheet} from 'react-native'
+import {Alert, ScrollView, Text, TouchableOpacity, View, StyleSheet, Dimensions, PixelRatio, Platform} from 'react-native'
 import {connect} from 'react-redux'
 import {Accordion, List} from '@ant-design/react-native'
 import {getLables, getProducts, clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange, getTimeDifference} from '../actions'
@@ -384,7 +384,8 @@ class OrderFormII extends React.Component {
                 withCredentials: true,
                 credentials: 'include',
                 headers: {
-                  'Content-Type': 'application/json',
+                  // Andriod return error with wrong type
+                  // 'Content-Type': 'application/json', 
                 },
                 body: formData
               },
@@ -534,6 +535,20 @@ class OrderFormII extends React.Component {
 
       }
     ).then()
+  }
+
+  normalize = (size) => {
+    const {
+      width: SCREEN_WIDTH,
+      height: SCREEN_HEIGHT,
+    } = Dimensions.get('window');
+    const scale = SCREEN_WIDTH / 320;
+    const newSize = size * scale
+    if (Platform.OS === 'ios') {
+      return Math.round(PixelRatio.roundToNearestPixel(newSize))
+    } else {
+      return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
+    }
   }
 
 
@@ -688,7 +703,7 @@ class OrderFormII extends React.Component {
                               onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}>
                               <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
                                 {prd?.outOfStock && <View style={{position: 'absolute', alignSelf: 'center'}} >
-                                  <Icon name='cancel' color='white' style={[{fontSize: '100%', padding: 0, margin: 0}]} />
+                                  <Icon name='cancel' color='white' style={[{fontSize: this.normalize(32), padding: 0, margin: 0}]} />
                                 </View>}
                                 <View style={{alignItems: 'center'}}>
                                   <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, {fontSize: 16, fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
@@ -709,7 +724,7 @@ class OrderFormII extends React.Component {
                             onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}>
                             <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
                               {prd?.outOfStock && <View style={{position: 'absolute', alignSelf: 'center'}} >
-                                <Icon name='cancel' color='white' style={[{fontSize: '100%', padding: 0, margin: 0}]} />
+                                <Icon name='cancel' color='white' style={[{fontSize: this.normalize(32), padding: 0, margin: 0}]} />
                               </View>}
                               <View style={{alignItems: 'center'}}>
                                 <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, {fontSize: 16, fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
@@ -735,7 +750,7 @@ class OrderFormII extends React.Component {
 
                                       <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
                                         {prd?.outOfStock && <View style={{position: 'absolute', alignSelf: 'center'}} >
-                                          <Icon name='cancel' color='white' style={[{fontSize: '100%', padding: 0, margin: 0}]} />
+                                          <Icon name='cancel' color='white' style={[{fontSize: this.normalize(32), padding: 0, margin: 0}]} />
                                         </View>}
                                         <View style={{alignItems: 'center'}}>
                                           <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, {fontSize: 16, fontWeight: 'bold'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.name}</StyledText>
