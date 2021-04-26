@@ -1,5 +1,5 @@
 import React from 'react'
-import {FlatList, TouchableOpacity, View} from 'react-native'
+import {Alert, FlatList, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
 import ScreenHeader from "../components/ScreenHeader"
 import {LocaleContext} from '../locales/LocaleContext'
@@ -16,6 +16,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import {Field, reduxForm} from 'redux-form'
 import InputText from '../components/InputText'
 import {isRequired} from '../validators'
+import Modal from 'react-native-modal';
+import {formatCurrency, formatDate} from '../actions'
 
 class EinvoiceStatusScreen extends React.Component {
     static navigationOptions = {
@@ -26,7 +28,9 @@ class EinvoiceStatusScreen extends React.Component {
     constructor(props, context) {
         super(props, context)
         this.state = {
-            checkEInvoiceEligibility: false
+            checkEInvoiceEligibility: false,
+            modalVisible: false,
+            cancellableEinvoice: []
         }
 
     }
@@ -41,6 +45,7 @@ class EinvoiceStatusScreen extends React.Component {
     refreshScreen = () => {
         !!this.props?.client?.attributes?.UBN && this.getCurrentEinvoice(this.props?.client?.attributes?.UBN)
         this.checkEInvoiceEligibility()
+        this.getCancellableEinvoice()
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -63,6 +68,23 @@ class EinvoiceStatusScreen extends React.Component {
         }, response => {
             response.json().then(data => {
                 this.setState({eInvoiceData: data})
+            })
+        }).then()
+    }
+
+    getCancellableEinvoice = () => {
+        dispatchFetchRequestWithOption(api.eInvoice.cancellable, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }, {
+            defaultMessage: false
+        }, response => {
+            response.json().then(data => {
+                this.setState({cancellableEinvoice: data.orders})
             })
         }).then()
     }
@@ -102,21 +124,74 @@ class EinvoiceStatusScreen extends React.Component {
         this.props.getCurrentClient()
     }
 
-    Item = (item) => {
-        return (
-            <View style={styles.rowFront}>
-                <TouchableOpacity
-                    onPress={() => {}}
-                >
-                    <StyledText style={styles.rowFrontText}>{item.rangeIdentifier}</StyledText>
-                </TouchableOpacity>
-            </View>
-        );
-    }
+
 
     render() {
         const {navigation, isLoading, client, handleSubmit} = this.props
         const {t, customMainThemeColor} = this.context
+
+        const {cancellableEinvoice} = this.state
+
+        TableName = () => {
+            return (
+                <View style={styles.flex(1)}>
+                    <View style={[styles.tableRowContainerWithBorder, {marginHorizontal: 12}]}>
+                        <View style={{flex: 2}}>
+                            <StyledText>{t('order.orderId')}</StyledText>
+                        </View>
+                        <View style={{flex: 2}}>
+                            <StyledText>{t('order.date')}</StyledText>
+                        </View>
+                        <View style={{flex: 1}}>
+                            <StyledText>{t('newOrder.orderType')}</StyledText>
+                        </View>
+                        <View style={{flex: 1}}>
+                            <StyledText>{t('order.total')}</StyledText>
+                        </View>
+                        <View style={{flex: 1}}>
+                            <StyledText>{t('order.orderStatus')}</StyledText>
+                        </View>
+                    </View>
+                </View>
+            );
+        }
+        Item = ({item}) => {
+            return (
+                <View style={[styles.flex(1)]}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.props.navigation.navigate('OrderDetail', {
+                                orderId: item.orderId,
+                                route: 'EinvoiceStatusScreen'
+                            })
+                        }}
+                    >
+                        <View style={[styles.tableRowContainer, {marginHorizontal: 12, paddingVertical: 20}]}>
+                            <View style={{flex: 2}}>
+                                <StyledText>{item.serialId}
+                                </StyledText>
+                            </View>
+                            <View style={{flex: 2}}>
+                                <StyledText>{formatDate(item.createdTime)}
+                                </StyledText>
+                            </View>
+                            <View style={{flex: 1}}>
+                                <StyledText>{item.orderType}
+                                </StyledText>
+                            </View>
+                            <View style={{flex: 1}}>
+                                <StyledText>{formatCurrency(item.orderTotal)}
+                                </StyledText>
+                            </View>
+                            <View style={{flex: 1}}>
+                                <StyledText>{t(`orderState.${item.state}`)}
+                                </StyledText>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
 
         if (isLoading) {
             return (
@@ -204,7 +279,7 @@ class EinvoiceStatusScreen extends React.Component {
                         <View style={{flex: 1}}>
                             <StyledText style={{textAlign: 'center', fontSize: 20}}>{t('eInvoice.nowEinvoiceStatus')}</StyledText>
                         </View>
-                        <View style={{flex: 9, justifyContent: 'space-around'}}>
+                        <View style={{flex: 9, justifyContent: 'space-evenly'}}>
                             <View style={{flexDirection: 'row'}}>
                                 <StyledText style={{flex: 1, textAlign: 'left'}}>{t('eInvoice.rangeIdentifier')}</StyledText>
                                 <StyledText style={{flex: 1, textAlign: 'right'}}>{this.state?.eInvoiceData?.rangeIdentifier}</StyledText>
@@ -222,10 +297,50 @@ class EinvoiceStatusScreen extends React.Component {
                                 <StyledText style={{flex: 1, textAlign: 'right'}}>{this.state?.eInvoiceData?.numberRanges?.[0]?.remainingInvoiceNumbers}</StyledText>
                             </View>
                         </View>
-                        <View style={{flex: 9, justifyContent: 'flex-end'}}>
-                            <BottomMainActionButton title={t('eInvoice.viewAllInvoice')} onPress={() => {
-                                this.props.navigation.navigate('EinvoiceSettingScreen')
-                            }} />
+                        <Modal
+                            isVisible={this.state.modalVisible}
+                            backdropOpacity={0.7}
+                            onBackdropPress={() => this.setState({modalVisible: false})}
+                            useNativeDriver
+                            hideModalContentWhileAnimating
+                        >
+                            <View style={{flex: 1, marginHorizontal: 10}}>
+                                <ThemeScrollView style={[{borderRadius: 8}]}>
+                                    <View style={[styles.fullWidthScreen]}>
+                                        <ScreenHeader
+                                            backNavigation={false}
+                                            parentFullScreen={true}
+                                            title={t('eInvoice.viewCancellableInvoice')}
+                                        />
+                                        <View style={[styles.mgrtotop20]}>
+                                            <TableName />
+                                            <FlatList
+                                                data={cancellableEinvoice}
+                                                renderItem={({item, index}) => (
+                                                    <Item item={item} index={index} />
+                                                )}
+                                                ListEmptyComponent={() => {
+                                                    return (
+                                                        <StyledText style={[styles.messageBlock, styles.sectionContainerWithBorder, styles.primaryText(customMainThemeColor)]}>{t('general.noData')}</StyledText>
+                                                    )
+                                                }}
+                                                keyExtractor={(item, index) => index.toString()}
+                                            />
+                                        </View>
+                                    </View>
+                                </ThemeScrollView>
+                            </View>
+                        </Modal>
+                        <View style={{flex: 1, justifyContent: 'flex-end'}}>
+
+                            <View style={{flex: 1}}>
+                                <BottomMainActionButton title={t('eInvoice.viewCancellableInvoice')} onPress={() => this.setState({modalVisible: true})} />
+                            </View>
+                            <View style={{flex: 1}}>
+                                <BottomMainActionButton title={t('eInvoice.viewAllInvoice')} onPress={() => {
+                                    this.props.navigation.navigate('EinvoiceSettingScreen')
+                                }} />
+                            </View>
                         </View>
                     </View>
                 </View>

@@ -398,7 +398,10 @@ const zh = {
     prefixYear: '字軌年份',
     prefixMonth: '字軌月份',
     prefix: '發票字軌',
-    reprintInvoice: '補印發票'
+    reprintInvoice: '補印發票',
+    viewCancellableInvoice: '檢視可作廢發票',
+    cancelInvoice: '作廢發票',
+    cancelInvoiceConfirmMsg: '確認作廢此張發票？'
   },
   roster: {
     year: '年份',

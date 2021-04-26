@@ -506,6 +506,7 @@ export const api = {
     },
     checkEligibility: `${apiRoot}/einvoices/checkEligibility`,
     generateAESKey: `${apiRoot}/clients/me/aeskey`,
+    cancellable: `${apiRoot}/einvoices/cancellable`,
   },
   subscription: {
     getCurrent: `${apiRoot}/clientSubscriptions/current`,
