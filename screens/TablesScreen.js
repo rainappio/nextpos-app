@@ -1008,13 +1008,14 @@ class DraggableBase extends Component {
     const selectedStyle = {
       borderColor: `rgba(255, 0, 0, ${this.state.opacity?._value})`
     }
+
     return (
       <View >
         {
           table.position !== null
             ?
             <>
-              <Animated.View {...this.panResponder.panHandlers} style={{zIndex: 1000, opacity: this.state.opacity}}>
+              <Animated.View {...this.panResponder.panHandlers} style={{opacity: this.state.opacity}}>
                 <TouchableOpacity
 
                   onPress={() => {
@@ -1034,7 +1035,7 @@ class DraggableBase extends Component {
                     }
                   }}
                   onLongPress={() => tableStatus && screenMode !== 'joinTable' && this.setState({isDraggable: true})}
-                  style={[panStyle, styles?.circle(customMainThemeColor), {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#e7e7e7', borderColor: '#e7e7e7', borderWidth: 3}, (!!tableStatus &&
+                  style={[panStyle, styles?.circle(customMainThemeColor), {zIndex: 1000, position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#e7e7e7', borderColor: '#e7e7e7', borderWidth: 3}, (!!tableStatus &&
                   {
 
                     backgroundColor: tableStatus == 'OPEN' ? '#FFFFF5'
@@ -1106,7 +1107,7 @@ class DraggableBase extends Component {
             </>
             :
             <>
-              <Animated.View {...this.panResponder.panHandlers} style={{zIndex: 1000, opacity: this.state.opacity}}>
+              <Animated.View {...this.panResponder.panHandlers} style={{opacity: this.state.opacity}}>
 
                 <TouchableOpacity
                   onPress={() => {
@@ -1127,7 +1128,7 @@ class DraggableBase extends Component {
                     }
                   }}
                   onLongPress={() => tableStatus && screenMode !== 'joinTable' && this.setState({isDraggable: true})}
-                  style={[panStyle, styles?.circle(customMainThemeColor), {position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#e7e7e7', borderColor: '#e7e7e7', borderWidth: 3}, (!!tableStatus &&
+                  style={[panStyle, styles?.circle(customMainThemeColor), {zIndex: 1000, position: 'absolute', alignItems: 'center', justifyContent: 'space-around', backgroundColor: '#e7e7e7', borderColor: '#e7e7e7', borderWidth: 3}, (!!tableStatus &&
                   {
 
                     backgroundColor: tableStatus == 'OPEN' ? '#FFFFF5'
