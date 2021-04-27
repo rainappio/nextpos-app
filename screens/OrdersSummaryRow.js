@@ -138,19 +138,19 @@ class OrdersSummaryRow extends React.Component {
   renderStateToolTip = (state, t) => {
     const tooltip = (
       <View>
-        <Text>
+        <Text style={[styles.inverseText(this?.context)]}>
           {t('stateTip.open.display')}: {t('stateTip.open.note')}
         </Text>
-        <Text>
+        <Text style={[styles.inverseText(this?.context)]}>
           {t('stateTip.prepared.display')}: {t('stateTip.prepared.note')}
         </Text>
-        <Text>
+        <Text style={[styles.inverseText(this?.context)]}>
           {t('stateTip.inProcess.display')}: {t('stateTip.inProcess.note')}
         </Text>
-        <Text>
+        <Text style={[styles.inverseText(this?.context)]}>
           {t('stateTip.delivered.display')}: {t('stateTip.delivered.note')}
         </Text>
-        <Text>
+        <Text style={[styles.inverseText(this?.context)]}>
           {t('stateTip.settled.display')}: {t('stateTip.settled.note')}
         </Text>
       </View>

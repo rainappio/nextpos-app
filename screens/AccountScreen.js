@@ -139,7 +139,7 @@ class AccountScreen extends React.Component {
     })
     const {currentUser, themeStyle} = this.props
 
-    const {t, customMainThemeColor} = this.context
+    const {t, customMainThemeColor, customBackgroundColor} = this.context
 
     return (
       <ThemeContainer>
@@ -204,7 +204,7 @@ class AccountScreen extends React.Component {
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <StyledText>
-                2021-04-22
+                2021-04-26
               </StyledText>
             </View>
           </View>
@@ -218,7 +218,7 @@ class AccountScreen extends React.Component {
                 onPress={() => this.handleShareToken(this.state?.encodeToken)}
                 style={{paddingHorizontal: 8}}
               >
-                <Text>{this.state?.encodeToken}</Text>
+                <Text style={{color: customMainThemeColor}}>{this.state?.encodeToken}</Text>
               </TouchableOpacity>
               }
 

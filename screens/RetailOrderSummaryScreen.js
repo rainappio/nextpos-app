@@ -20,6 +20,8 @@ import {StyledText} from "../components/StyledText";
 import {SecondActionButton} from "../components/ActionButtons";
 import {SplitBillPopUp} from '../components/PopUp'
 import SockJsClient from 'react-stomp';
+import Colors from "../constants/Colors";
+
 
 class RetailOrderSummaryScreen extends React.Component {
     static contextType = LocaleContext
@@ -124,16 +126,16 @@ class RetailOrderSummaryScreen extends React.Component {
     renderStateToolTip = (state, t) => {
         const tooltip = (
             <View>
-                <Text>
+                <Text style={[styles.inverseText(this?.context)]}>
                     {t('stateTip.open.display')}: {t('stateTip.open.note')}
                 </Text>
-                <Text>
+                <Text style={[styles.inverseText(this?.context)]}>
                     {t('stateTip.inProcess.display')}: {t('stateTip.inProcess.note')}
                 </Text>
-                <Text>
+                <Text style={[styles.inverseText(this?.context)]}>
                     {t('stateTip.delivered.display')}: {t('stateTip.delivered.note')}
                 </Text>
-                <Text>
+                <Text style={[styles.inverseText(this?.context)]}>
                     {t('stateTip.settled.display')}: {t('stateTip.settled.note')}
                 </Text>
             </View>
@@ -142,12 +144,12 @@ class RetailOrderSummaryScreen extends React.Component {
         return (
             <Tooltip popover={tooltip} height={120} width={200} backgroundColor={this.context?.customMainThemeColor}>
                 <View>
-                    {state === 'OPEN' && <StyledText>{t('stateTip.open.display')}</StyledText>}
+                    {state === 'OPEN' && <StyledText style={{color: `${Colors.orderOpen}`}}>{t('stateTip.open.display')}</StyledText>}
                     {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(state) && (
-                        <StyledText>{t('stateTip.inProcess.display')}</StyledText>
+                        <StyledText style={{color: `${Colors.orderInProcess}`}}>{t('stateTip.inProcess.display')}</StyledText>
                     )}
                     {state === 'DELIVERED' && (
-                        <StyledText>{t('stateTip.delivered.display')}</StyledText>
+                        <StyledText style={{color: `${Colors.orderDeliver}`}}>{t('stateTip.delivered.display')}</StyledText>
                     )}
                     {state === 'SETTLED' && <StyledText>{t('stateTip.settled.display')}</StyledText>}
                 </View>

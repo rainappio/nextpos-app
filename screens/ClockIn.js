@@ -382,7 +382,7 @@ class ClockIn extends React.Component {
                     </View>
                   }
 
-                  {(!locationBasedService && this.state?.timecardUserToken !== null) || (this.state?.timecardUserToken !== null && storeLocation !== null && distance < 200) && <View style={{flex: 1}}>
+                  {(!locationBasedService && this.state?.timecardUserToken !== null || this.state?.timecardUserToken !== null && storeLocation !== null && distance < 200) && <View style={{flex: 1}}>
                     <View style={styles.sectionTitleContainer}>
                       <Text style={[styles.sectionTitleText, {color: customMainThemeColor, fontSize: 24, fontWeight: 'bold'}]}>{t('timeCardStatus')}</Text>
                     </View>

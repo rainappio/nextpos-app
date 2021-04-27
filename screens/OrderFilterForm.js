@@ -51,7 +51,7 @@ class OrderFilterForm extends React.Component {
 
   render() {
     const {handleSubmit, handlegetDate, change, isShow, closeModal} = this.props
-    const {t, isTablet, themeStyle, appType, customMainThemeColor} = this.context
+    const {t, isTablet, themeStyle, appType, customMainThemeColor, customBackgroundColor} = this.context
 
     if (isTablet) {
       return (
@@ -77,7 +77,7 @@ class OrderFilterForm extends React.Component {
                     this.setState({searchTypeIndex: 0})
                   }}
                   style={[{flex: 1, borderWidth: 1, borderColor: customMainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginRight: 5}, (this.state?.searchTypeIndex === 0 && {backgroundColor: customMainThemeColor})]}>
-                  <StyledText>{this.state?.searchType[0]}</StyledText>
+                  <StyledText style={this.state?.searchTypeIndex === 0 && {color: customBackgroundColor}}>{this.state?.searchType[0]}</StyledText>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -85,7 +85,7 @@ class OrderFilterForm extends React.Component {
                     this.setState({searchTypeIndex: 1})
                   }}
                   style={[{flex: 1, borderWidth: 1, borderColor: customMainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginLeft: 5}, (this.state?.searchTypeIndex === 1 && {backgroundColor: customMainThemeColor})]}>
-                  <StyledText>{this.state?.searchType[1]}</StyledText>
+                  <StyledText style={this.state?.searchTypeIndex === 1 && {color: customBackgroundColor}}>{this.state?.searchType[1]}</StyledText>
                 </TouchableOpacity>
 
               </View>
@@ -361,7 +361,7 @@ class OrderFilterForm extends React.Component {
                   this.setState({searchTypeIndex: 0})
                 }}
                 style={[{flex: 1, borderWidth: 1, borderColor: customMainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginRight: 5}, (this.state?.searchTypeIndex === 0 && {backgroundColor: customMainThemeColor})]}>
-                <StyledText>{this.state?.searchType[0]}</StyledText>
+                <StyledText style={this.state?.searchTypeIndex === 0 && {color: customBackgroundColor}}>{this.state?.searchType[0]}</StyledText>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -369,7 +369,7 @@ class OrderFilterForm extends React.Component {
                   this.setState({searchTypeIndex: 1})
                 }}
                 style={[{flex: 1, borderWidth: 1, borderColor: customMainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginLeft: 5}, (this.state?.searchTypeIndex === 1 && {backgroundColor: customMainThemeColor})]}>
-                <StyledText>{this.state?.searchType[1]}</StyledText>
+                <StyledText style={this.state?.searchTypeIndex === 1 && {color: customBackgroundColor}}>{this.state?.searchType[1]}</StyledText>
               </TouchableOpacity>
 
             </View>

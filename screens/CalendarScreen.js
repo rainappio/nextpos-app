@@ -239,14 +239,14 @@ class CalendarScreen extends React.Component {
                                                         this.setState({searchTypeIndex: 0})
                                                     }}
                                                     style={[{flex: 1, borderWidth: 1, borderColor: customMainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginRight: 5}, (this.state?.searchTypeIndex === 0 && {backgroundColor: customMainThemeColor})]}>
-                                                    <StyledText>{t('calendar.roster')}</StyledText>
+                                                    <StyledText style={this.state?.searchTypeIndex === 0 && {color: customBackgroundColor}}>{t('calendar.roster')}</StyledText>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity
                                                     onPress={() => {
                                                         this.setState({searchTypeIndex: 1})
                                                     }}
                                                     style={[{flex: 1, borderWidth: 1, borderColor: customMainThemeColor, borderRadius: 10, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, marginLeft: 5}, (this.state?.searchTypeIndex === 1 && {backgroundColor: customMainThemeColor})]}>
-                                                    <StyledText>{t('calendar.reservation')}</StyledText>
+                                                    <StyledText style={this.state?.searchTypeIndex === 1 && {color: customBackgroundColor}}>{t('calendar.reservation')}</StyledText>
                                                 </TouchableOpacity>
 
                                             </View>

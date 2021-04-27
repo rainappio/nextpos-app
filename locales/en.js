@@ -378,6 +378,7 @@ const en = {
       cannotDelete: 'Order set has been merged. Please settle the order.',
       alreadyProcessed: 'Processed inventory order cannot be modified.',
       noPrinter: 'Checkout printer is not setup.',
+      outOfStock: 'The selected product is out of stock.'
     }
   },
   eInvoice: {
@@ -553,11 +554,11 @@ const en = {
     nickname: 'Nick Name',
     updateDate: 'Last updated',
     gesturePassword: 'Gesture Password',
-    encodeToken: 'Encode Login token',
-    tokenShareSucess: 'Token Share sucess.',
-    tokenShareFailed: 'Token Share failed.',
+    encodeToken: 'Encode Staff Login Code',
+    tokenShareSucess: 'Staff Login Code Share Sucess.',
+    tokenShareFailed: 'Staff Login Code Share Failed.',
     loginWithAccount: 'Account',
-    loginWithToken: 'Token',
+    loginWithToken: 'Staff Login',
   },
   workingAreaScreen: {
     editWorkingAreaTitle: 'Edit Working Area',
