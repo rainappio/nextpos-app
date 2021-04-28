@@ -123,7 +123,7 @@ class SalesCharts extends React.Component {
 
     this.setState({selectedRangeTypeIndex: values.dateRange})
 
-    const rangeTypeMapping = ['SHIFT', 'TODAY', 'WEEK', 'MONTH', 'RANGE']
+    const rangeTypeMapping = ['SHIFT', 'TODAY', 'RANGE', 'RANGE', 'RANGE']
     this.props.getRangedSalesReport(rangeTypeMapping[values.dateRange], searchFromDate, searchToDate)
     this.setState({selectedRangeType: rangeTypeMapping[values.dateRange]})
   }
@@ -741,7 +741,7 @@ class ProductsRanking extends React.Component {
         <Modal transparent={true}
           visible={isShow}
         >
-          <View style={[styles.container, {flex: 1, backgroundColor: customMainThemeColor, borderColor: '#f75336', borderRadius: 20, opacity: 0.95}]}>
+          <View style={[styles.container, {flex: 1, backgroundColor: customMainThemeColor, borderColor: '#f75336', borderRadius: 20, opacity: 0.95, maxHeight: 860}]}>
             <View style={[styles.sectionContainer, {flex: 1}]}>
               <Text style={[styles?.screenTitle(customMainThemeColor), {color: '#fff'}]}>{t('salesRankingTitle')}</Text>
             </View>

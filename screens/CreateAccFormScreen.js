@@ -81,6 +81,7 @@ class CreateAccFormScreen extends React.Component {
                 placeholder={t('email')}
                 secureTextEntry={false}
                 autoCapitalize="none"
+                keyboardType={`email-address`}
               />
             </View>
             <View style={{paddingVertical: 5}}>
@@ -90,6 +91,8 @@ class CreateAccFormScreen extends React.Component {
                 validate={[isRequired, isvalidPassword]}
                 placeholder={t('password')}
                 secureTextEntry={true}
+                autoCapitalize='none'
+                textContentType={`newPassword`}
               />
             </View>
             <View style={{paddingVertical: 5}}>
@@ -99,7 +102,8 @@ class CreateAccFormScreen extends React.Component {
                 validate={[isRequired, isconfirmPassword]}
                 placeholder={t('confirmPassword')}
                 secureTextEntry={true}
-
+                autoCapitalize='none'
+                textContentType={`newPassword`}
               />
             </View>
 

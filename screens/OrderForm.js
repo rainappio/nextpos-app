@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {Animated, Alert, Text, TouchableOpacity, View} from 'react-native'
+import {Animated, Alert, Text, TouchableOpacity, View, ScrollView} from 'react-native'
 import RenderStepper from '../components/RenderStepper'
 import {isRequired} from '../validators'
 import styles from '../styles'
@@ -151,7 +151,7 @@ class OrderForm extends Component {
               title={t('newOrder.newOrderTitle')}
             />
             <View style={{flexDirection: 'row', flex: 1}}>
-              <Animated.View style={{flex: 1}}>
+              <Animated.ScrollView style={{flex: 1}}>
                 <View style={[styles.sectionContent, styles.horizontalMargin]}>
                   <View style={styles.sectionTitleContainer}>
                     <StyledText style={styles.sectionTitleText}>{t('newOrder.orderType')}</StyledText>
@@ -234,7 +234,7 @@ class OrderForm extends Component {
                 </View>
 
 
-              </Animated.View>
+              </Animated.ScrollView>
               {(this.state.rightFormSize._value === 0 && !this.state.isAnimating) || <Animated.View style={[{flex: this.state.rightFormSize, overflow: "hidden"}]}>
                 <ThemeScrollView>
                   <View style={{paddingHorizontal: 16}}>
