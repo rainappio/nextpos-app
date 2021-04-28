@@ -25,6 +25,9 @@ import {ThemeContainer} from "../components/ThemeContainer";
 import {MaterialCommunityIcons, FontAwesome, FontAwesome5} from '@expo/vector-icons'
 import {formatDateOnly} from "../actions";
 import {PurePopUp} from '../components/PopUp'
+import {WebView} from 'react-native-webview'
+import {CheckBox} from 'react-native-elements'
+
 
 class SubscriptionScreen extends React.Component {
     static navigationOptions = {
@@ -41,7 +44,9 @@ class SubscriptionScreen extends React.Component {
             modalVisible: this.props?.navigation?.state?.params?.isRedirected ?? false,
             agreeModalVisible: false,
             agreeModalId: null,
-            changeStatusModalVisible: false
+            changeStatusModalVisible: false,
+            isAgreeTerms: false,
+            isAgreeTipVisible: false
         }
     }
 
@@ -140,6 +145,7 @@ class SubscriptionScreen extends React.Component {
                     part1Text: '人事管理',
                     part2Text: '進階銷售功能',
                     part3Text: '特色功能',
+                    agreeSub: '同意接受服務條款'
                 }
             },
             zh: {
@@ -150,6 +156,7 @@ class SubscriptionScreen extends React.Component {
                     part1Text: '人事管理',
                     part2Text: '進階銷售功能',
                     part3Text: '特色功能',
+                    agreeSub: '同意接受服務條款'
                 }
             }
         })
@@ -336,17 +343,49 @@ class SubscriptionScreen extends React.Component {
                         animationOut='bounceOut'
                         style={{alignSelf: 'center', maxWidth: 640, width: '80%'}}
                     >
-                        <View style={[{backgroundColor: customBackgroundColor, borderRadius: 20, flex: 1, flexDirection: 'column'}]}>
-                            <ScrollView style={{flex: 1}}>
+                        <View style={[{backgroundColor: customBackgroundColor, borderRadius: 20, flex: 8, flexDirection: 'column'}]}>
+                            <View style={{flex: 6.5}}>
+                                <WebView style={{borderTopLeftRadius: 20, borderTopRightRadius: 20}} source={{uri: 'https://www.rain-app.io/privacy-1'}} />
 
-                            </ScrollView>
-                            <View style={{justifyContent: 'flex-end'}}>
+                            </View>
+                            <View style={{flex: 1, paddingHorizontal: 10, justifyContent: 'center', alignContent: 'center'}}>
+                                <View style={[styles.list, {alignContent: 'center', paddingTop: 0}]}>
+                                    <View>
+
+                                        <CheckBox
+                                            checkedIcon={'check-circle'}
+                                            uncheckedIcon={'circle'}
+                                            checked={this.state?.isAgreeTerms}
+                                            containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                                            onPress={() => {
+                                                this.setState({isAgreeTerms: !this.state?.isAgreeTerms, isAgreeTipVisible: !this.state?.isAgreeTipVisible})
+                                            }}
+                                        >
+                                        </CheckBox>
+                                    </View>
+                                    <View style={[styles.list]}>
+                                        <StyledText style={[styles.screenSubTitle(customMainThemeColor), {lineHeight: 24}]}>
+                                            {t('subscriptionAd.agreeSub')}
+                                        </StyledText>
+                                        {!!this.state.isAgreeTipVisible && <StyledText style={[styles.rootError, {textAlign: 'left', marginTop: 8}]}>
+                                            {t('errors.required')}
+                                        </StyledText>}
+
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={{justifyContent: 'flex-end', flex: 0.5}}>
                                 <View style={{height: 64, padding: 10, margin: 10}}>
                                     <MainActionFlexButton
                                         title={t('action.submit')}
                                         onPress={() => {
-                                            this.setState({agreeModalVisible: false})
-                                            this.handleSubmit(this.state?.agreeModalId)
+                                            if (!this.state?.isAgreeTerms) {
+                                                this.setState({isAgreeTipVisible: true})
+
+                                            } else {
+                                                this.setState({agreeModalVisible: false, isAgreeTipVisible: false})
+                                                this.handleSubmit(this.state?.agreeModalId)
+                                            }
                                         }} />
                                 </View>
                             </View>

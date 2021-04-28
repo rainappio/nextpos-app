@@ -66,13 +66,13 @@ class LoginScreen extends React.Component {
         loginTitle: 'Login',
         forgotPwd: 'Forgot Password',
         loginAs: 'Login as {{username}}',
-        token: 'Login Token'
+        token: 'Staff Login Code'
       },
       zh: {
         loginTitle: '登入',
         forgotPwd: '忘記密碼',
         loginAs: '以 {{username}} 登入',
-        token: '登入Token'
+        token: '員工登入碼'
       }
     })
 

@@ -85,6 +85,7 @@
     "react-native-swipe-list-view": "^2.5.0",
     "react-native-table-component": "^1.2.1",
     "react-native-web": "~0.13.12",
+    "react-native-webview": "11.0.0",
     "react-navigation": "^4.0.10",
     "react-navigation-stack": "^1.10.2",
     "react-navigation-tabs": "^2.5.6",

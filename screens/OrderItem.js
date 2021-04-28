@@ -106,7 +106,7 @@ class OrderItem extends React.PureComponent {
                 </TouchableOpacity>
 
                 <View style={[styles.tableCellView, {justifyContent: 'center', flex: 1}]}>
-                  <Tooltip popover={<Text>{this.context.t(`orderState.${order.state}`)}</Text>}
+                  <Tooltip popover={<Text style={{color: customBackgroundColor}}>{this.context.t(`orderState.${order.state}`)}</Text>}
                     backgroundColor={customMainThemeColor}
                   >
                     {renderOrderState(order.state, customMainThemeColor)}
@@ -179,7 +179,7 @@ class OrderItem extends React.PureComponent {
           </TouchableOpacity>
 
           <View style={[styles.tableCellView, {justifyContent: 'center', flex: 1}]}>
-            <Tooltip popover={<Text>{this.context.t(`orderState.${order.state}`)}</Text>}
+            <Tooltip popover={<Text style={{color: customBackgroundColor}}>{this.context.t(`orderState.${order.state}`)}</Text>}
               backgroundColor={customMainThemeColor}
             >
               {renderOrderState(order.state, customMainThemeColor)}

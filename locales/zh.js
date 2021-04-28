@@ -378,6 +378,7 @@ const zh = {
       cannotDelete: '此併桌訂單不能被刪除。請用結帳來完成訂單。',
       alreadyProcessed: '已處理的進貨單不能修改。',
       noPrinter: '結帳出單機尚未設定',
+      outOfStock: '選擇的產品已無庫存'
     }
   },
   eInvoice: {
@@ -553,11 +554,11 @@ const zh = {
     nickname: '暱稱',
     updateDate: '最後更新',
     gesturePassword: '圖形密碼',
-    encodeToken: '產生登入Token',
-    tokenShareSucess: 'Token分享成功',
-    tokenShareFailed: 'Token分享失敗',
+    encodeToken: '產生員工登入碼',
+    tokenShareSucess: '員工登入碼分享成功',
+    tokenShareFailed: '員工登入碼分享失敗',
     loginWithAccount: '帳號登入',
-    loginWithToken: 'Token登入',
+    loginWithToken: '員工登入',
 
   },
   workingAreaScreen: {
