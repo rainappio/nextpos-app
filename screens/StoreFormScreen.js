@@ -1,5 +1,5 @@
-import React from 'react'
-import {Field, reduxForm} from 'redux-form'
+import React, {Component} from 'react'
+import {Field, reduxForm, getFormMeta} from 'redux-form'
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
 import {isPercentage, isRequired, isPositiveInteger} from '../validators'
 import InputText from '../components/InputText'
@@ -14,8 +14,10 @@ import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScro
 import {StyledText} from "../components/StyledText";
 import ThemeToggleButton from "../themes/ThemeToggleButton";
 import {ThemePicker} from "../components/ThemePicker";
+import {connect} from 'react-redux';
 
-class StoreFormScreen extends React.Component {
+
+class StoreFormScreen extends Component {
   static navigationOptions = {
     header: null
   }
@@ -266,12 +268,12 @@ class StoreFormScreen extends React.Component {
                     component={InputText}
                     placeholder={t('serviceCharge')}
                     keyboardType="numeric"
-                    validate={isPercentage}
                     format={(value, name) => {
-                      return value !== undefined && value !== null ? String(value * 100) : ''
+                      return (value !== undefined && value !== null) ? String(value * 100) : String(0.1 * 100)
                     }}
-                    normalize={(value) => {
-                      return value / 100
+                    normalize={(newValue, prevValue) => {
+                      if (isNaN(newValue)) {newValue = prevValue}
+                      return (newValue / 100)
                     }}
                   />
                 </View>
@@ -294,6 +296,9 @@ class StoreFormScreen extends React.Component {
                     placeholder={t('timeLimit')}
                     keyboardType="numeric"
                     validate={isPositiveInteger}
+                    format={(value, name) => {
+                      return value !== undefined && value !== null ? String(value) : '120'
+                    }}
                   />
                 </View>
                 <View style={{flex: 1, flexDirection: 'row-reverse'}}>
@@ -443,8 +448,18 @@ class StoreFormScreen extends React.Component {
   }
 }
 
-StoreFormScreen = reduxForm({
-  form: 'storeForm'
-})(StoreFormScreen)
 
-export default StoreFormScreen
+const mapStateToProps = (state) => {
+  return {
+    formMeta: getFormMeta('storeForm')(state)
+  };
+};
+
+StoreFormScreen = reduxForm({
+  form: 'storeForm',
+})(
+  connect(mapStateToProps)(StoreFormScreen)
+)
+
+
+export default (StoreFormScreen);

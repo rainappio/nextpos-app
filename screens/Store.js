@@ -19,6 +19,25 @@ class Store extends React.Component {
   }
 
   handleSubmit = values => {
+
+    console.log("values.clientSettings = ", values.clientSettings)
+    if (!values.clientSettings.SERVICE_CHARGE) {
+      values.clientSettings.SERVICE_CHARGE = {
+        value: 0.1,
+        enable: false,
+      }
+    }
+
+    if (!values.clientSettings.TABLE_TIME_LIMIT) {
+      values.clientSettings.TABLE_TIME_LIMIT = {
+        value: 120,
+        enable: false,
+      }
+    }
+    if (!values.clientSettings.TAX_INCLUSIVE) {
+      values.clientSettings.TAX_INCLUSIVE = {enable: false}
+    }
+
     if (values.clientSettings.TAX_INCLUSIVE !== undefined) {
       values.clientSettings.TAX_INCLUSIVE.value = values.clientSettings.TAX_INCLUSIVE.enabled
     }
@@ -31,9 +50,7 @@ class Store extends React.Component {
       values.clientSettings.APPLY_CUSTOM_OFFER.value = values.clientSettings.APPLY_CUSTOM_OFFER.enabled
     }
 
-    if (!values.clientSettings.SERVICE_CHARGE.value) {
-      values.clientSettings.SERVICE_CHARGE.value = 0
-    }
+
 
     dispatchFetchRequest(api.client.update, {
       method: 'POST',

@@ -441,7 +441,8 @@ class OrderFormII extends React.Component {
         withCredentials: true,
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json'
+          // andriod run error
+          // 'Content-Type': 'application/json'
         },
         body: formData
       }, {
@@ -1169,7 +1170,7 @@ class OrderFormII extends React.Component {
                                         }
                                       }}
                                       style={{flex: 1, backgroundColor: customMainThemeColor, borderRadius: 10, paddingLeft: 5, alignItems: 'flex-start', justifyContent: 'center'}}>
-                                      <StyledText style={{width: 40}}>{item.price === 0 ? t('order.cancelFreeLineitem') : t('order.freeLineitem')}</StyledText>
+                                      <StyledText style={{width: 40, color: '#fff'}}>{item.price === 0 ? t('order.cancelFreeLineitem') : t('order.freeLineitem')}</StyledText>
                                     </TouchableOpacity>
                                   </View>
                                   <View style={{...styles.delIcon, flex: 1, borderRadius: 10}} >
