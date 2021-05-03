@@ -346,8 +346,9 @@ class TablesScreen extends React.Component {
                 this.orderRef = client
               }}
               onConnect={() => {
-                this.orderRef.sendMessage(`/async/inflightOrders/${client?.id}`)
-                console.log('onConnect')
+                (this.orderRef && this.orderRef.sendMessage) &&
+                  this.orderRef.sendMessage(`/async/inflightOrders/${client?.id}`)
+                console.log('onConnect TablesScreen tablet')
               }}
               onDisconnect={() => {
                 console.log('onDisconnect')
@@ -384,6 +385,7 @@ class TablesScreen extends React.Component {
                 {this.state?.screenMode === 'normal' && <View style={{flexDirection: 'row', width: '100%', minHeight: 80}}>
                   {tablelayouts?.map((tblLayout, index) => {
                     return (<TouchableOpacity
+                      key={index}
                       disabled={this.state?.screenMode === 'joinTable'}
                       style={{
                         borderColor: customMainThemeColor,
@@ -660,8 +662,9 @@ class TablesScreen extends React.Component {
                 this.orderRef = client
               }}
               onConnect={() => {
-                this.orderRef.sendMessage(`/async/inflightOrders/${client?.id}`)
-                console.log('onConnect')
+                (this.orderRef && this.orderRef.sendMessage) &&
+                  this.orderRef.sendMessage(`/async/inflightOrders/${client?.id}`)
+                console.log('onConnect TableScreen phone')
               }}
               onDisconnect={() => {
                 console.log('onDisconnect')

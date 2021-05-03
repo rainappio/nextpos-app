@@ -11,6 +11,7 @@ import CustomCheckBox from "../components/CustomCheckBox";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
 import {handleOrderAction, getTableDisplayName, handlePrintOrderDetails} from "../helpers/orderActions";
+import {OfferTooltip} from "../components/OfferTooltip";
 
 class PaymentFormScreen extends React.Component {
   static navigationOptions = {
@@ -91,9 +92,12 @@ class PaymentFormScreen extends React.Component {
             </View>
 
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <StyledText style={styles.tableCellText}>
-                {formatCurrency(order.discount)}
-              </StyledText>
+              <OfferTooltip
+                style={styles.tableCellText}
+                offer={order?.appliedOfferInfo}
+                discount={order?.discount}
+                t={t}
+              />
             </View>
           </View>
 

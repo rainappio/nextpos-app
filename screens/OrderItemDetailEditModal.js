@@ -106,6 +106,9 @@ class ConnectedOrderItemOptionsBase extends React.Component {
 
         const updatedOptions = []
         !!values?.productOptions && values.productOptions.map(option => {
+            if (!option.optionName) {
+                option.optionName = this.context.t('freeTextProductOption')
+            }
             if (Array.isArray(option)) {
                 if (option.length > 0) {
 
@@ -123,7 +126,6 @@ class ConnectedOrderItemOptionsBase extends React.Component {
             }
         })
 
-        console.log("new lineitem value: ", values.sku)
 
         const lineItemRequest = {
             productId: this.props.prdId,
@@ -160,7 +162,11 @@ class ConnectedOrderItemOptionsBase extends React.Component {
         const lineItemId = values.lineItemId
 
         const updatedOptions = []
+
         !!values?.productOptions && values.productOptions.map(option => {
+            if (!option.optionName) {
+                option.optionName = this.context.t('freeTextProductOption')
+            }
             if (Array.isArray(option)) {
                 if (option.length > 0) {
 
@@ -177,7 +183,6 @@ class ConnectedOrderItemOptionsBase extends React.Component {
                 updatedOptions.push(option)
             }
         })
-        console.log("update lineitem value: ", values.sku)
 
         const lineItemRequest = {
             quantity: values.quantity,
@@ -319,7 +324,6 @@ class OrderItemOptions extends React.Component {
             selectedSkuQuantity: 1,
             selectedSku: '',
             inventoryId: null,
-
         }
     }
 
@@ -523,18 +527,12 @@ class OrderItemOptions extends React.Component {
                                     <View>
                                         <View style={[styles.tableRowContainerWithBorder]}>
                                             <Field
-                                                name={`productOptions[${lastOptionIndex}]`}
+                                                name={`productOptions[${lastOptionIndex}].optionValue`}
                                                 component={InputText}
                                                 placeholder={t('freeTextProductOption')}
                                                 alignLeft={true}
                                                 format={(value, name) => {
-                                                    return value != null ? String(value.optionValue) : ''
-                                                }}
-                                                normalize={value => {
-                                                    return {
-                                                        optionName: t('freeTextProductOption'),
-                                                        optionValue: value
-                                                    }
+                                                    return value != null ? String(value) : ''
                                                 }}
                                             />
                                         </View>

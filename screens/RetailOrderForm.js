@@ -31,6 +31,8 @@ import en from 'javascript-time-ago/locale/en';
 import {NavigationEvents} from "react-navigation";
 import {SplitBillPopUp} from '../components/PopUp'
 import SockJsClient from 'react-stomp';
+import {OfferTooltip} from "../components/OfferTooltip";
+
 
 class RetailOrderForm extends React.Component {
     static navigationOptions = {
@@ -729,7 +731,11 @@ class RetailOrderForm extends React.Component {
                                         </View>
                                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                                             <StyledText >{t('order.discount')}</StyledText>
-                                            <StyledText >${order?.discount}</StyledText>
+                                            <OfferTooltip
+                                                offer={order?.appliedOfferInfo}
+                                                discount={order?.discount}
+                                                t={t}
+                                            />
                                         </View>
                                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                                             <StyledText >{t('order.serviceCharge')}</StyledText>

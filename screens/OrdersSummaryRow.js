@@ -21,6 +21,7 @@ import {SecondActionButton} from "../components/ActionButtons";
 import {SplitBillPopUp} from '../components/PopUp'
 import SockJsClient from 'react-stomp';
 import Colors from "../constants/Colors";
+import {OfferTooltip} from "../components/OfferTooltip";
 
 class OrdersSummaryRow extends React.Component {
   static contextType = LocaleContext
@@ -410,7 +411,8 @@ class OrdersSummaryRow extends React.Component {
       label,
       order,
       initialValues,
-      themeStyle
+      themeStyle,
+      printers = [],
     } = this.props
 
     let isAllPrepared = false;
@@ -446,14 +448,16 @@ class OrdersSummaryRow extends React.Component {
             onMessage={(data) => {
               if (data === `${order?.orderId}.order.orderChanged`) {
                 this.props.getOrder(order?.orderId)
+                console.log("get phone")
               }
             }}
             ref={(client) => {
               this.orderFormRef = client
             }}
             onConnect={() => {
-              this.orderFormRef.sendMessage(`/async/order/${order?.orderId}`)
-              console.log('onConnect')
+              (this.orderFormRef && this.orderFormRef.sendMessage) &&
+                this.orderFormRef.sendMessage(`/async/order/${order?.orderId}`)
+              console.log('onConnect phone')
             }}
             onDisconnect={() => {
               console.log('onDisconnect')
@@ -587,7 +591,7 @@ class OrdersSummaryRow extends React.Component {
                           }
                         }
                         }>
-                        <StyledText style={{width: 40}}>{data.item.price === 0 ? t('order.cancelFreeLineitem') : t('order.freeLineitem')}</StyledText>
+                        <StyledText style={{width: 40, color: '#fff'}}>{data.item.price === 0 ? t('order.cancelFreeLineitem') : t('order.freeLineitem')}</StyledText>
                       </TouchableOpacity>
                     </View>
                     <View style={{width: '40%'}}>
@@ -645,9 +649,11 @@ class OrdersSummaryRow extends React.Component {
                 <StyledText>{t('order.discount')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                <StyledText>
-                  ${order.discount}
-                </StyledText>
+                <OfferTooltip
+                  offer={order?.appliedOfferInfo}
+                  discount={order?.discount}
+                  t={t}
+                />
               </View>
             </View>
 
@@ -709,23 +715,25 @@ class OrdersSummaryRow extends React.Component {
               onPress={() =>
                 order.lineItems.length === 0
                   ? warningMessage(t('lineItemCountCheck'))
-                  : Alert.alert(
-                    `${t('quickCheckoutPrint')}`,
-                    ``,
-                    [
-                      {
-                        text: `${this.context.t('action.yes')}`,
-                        onPress: async () => {
-                          await handleQuickCheckout(order, true)
+                  : printers.length === 0 ?
+                    handleQuickCheckout(order, false)
+                    : Alert.alert(
+                      `${t('quickCheckoutPrint')}`,
+                      ``,
+                      [
+                        {
+                          text: `${this.context.t('action.yes')}`,
+                          onPress: async () => {
+                            await handleQuickCheckout(order, true)
+                          }
+                        },
+                        {
+                          text: `${this.context.t('action.no')}`,
+                          onPress: async () => await handleQuickCheckout(order, false),
+                          style: 'cancel'
                         }
-                      },
-                      {
-                        text: `${this.context.t('action.no')}`,
-                        onPress: async () => await handleQuickCheckout(order, false),
-                        style: 'cancel'
-                      }
-                    ]
-                  )
+                      ]
+                    )
               }
               title={t('quickCheckout')}
             />
@@ -737,23 +745,25 @@ class OrdersSummaryRow extends React.Component {
                   onPress={() =>
                     order.lineItems.length === 0
                       ? warningMessage(t('lineItemCountCheck'))
-                      : Alert.alert(
-                        `${t('quickCheckoutPrint')}`,
-                        ``,
-                        [
-                          {
-                            text: `${this.context.t('action.yes')}`,
-                            onPress: async () => {
-                              await handleQuickCheckout(order, true)
+                      : printers.length === 0 ?
+                        handleQuickCheckout(order, false)
+                        : Alert.alert(
+                          `${t('quickCheckoutPrint')}`,
+                          ``,
+                          [
+                            {
+                              text: `${this.context.t('action.yes')}`,
+                              onPress: async () => {
+                                await handleQuickCheckout(order, true)
+                              }
+                            },
+                            {
+                              text: `${this.context.t('action.no')}`,
+                              onPress: async () => await handleQuickCheckout(order, false),
+                              style: 'cancel'
                             }
-                          },
-                          {
-                            text: `${this.context.t('action.no')}`,
-                            onPress: async () => await handleQuickCheckout(order, false),
-                            style: 'cancel'
-                          }
-                        ]
-                      )
+                          ]
+                        )
                   }
                   title={t('quickCheckout')}
                 /></View>
@@ -879,15 +889,19 @@ class OrdersSummaryRow extends React.Component {
   }
 }
 
+const mapStateToProps = state => ({
+  printers: state.printers.data.printers,
+})
 const mapDispatchToProps = (dispatch, props) => ({
   clearOrder: () => dispatch(clearOrder(props.order.orderId)),
   getOrder: id => dispatch(getOrder(id)),
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
-  getOrdersByDateRange: () => dispatch(getOrdersByDateRange())
+  getOrdersByDateRange: () => dispatch(getOrdersByDateRange()),
+  getPrinters: () => dispatch(getPrinters()),
 })
 
 const enhance = compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withContext
 )
 export default enhance(OrdersSummaryRow)

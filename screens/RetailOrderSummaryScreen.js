@@ -21,6 +21,7 @@ import {SecondActionButton} from "../components/ActionButtons";
 import {SplitBillPopUp} from '../components/PopUp'
 import SockJsClient from 'react-stomp';
 import Colors from "../constants/Colors";
+import {OfferTooltip} from "../components/OfferTooltip";
 
 
 class RetailOrderSummaryScreen extends React.Component {
@@ -427,9 +428,11 @@ class RetailOrderSummaryScreen extends React.Component {
                                 <StyledText>{t('order.discount')}</StyledText>
                             </View>
                             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                                <StyledText>
-                                    ${order.discount}
-                                </StyledText>
+                                <OfferTooltip
+                                    offer={order?.appliedOfferInfo}
+                                    discount={order?.discount}
+                                    t={t}
+                                />
                             </View>
                         </View>
 
