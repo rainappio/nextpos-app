@@ -22,6 +22,7 @@ import {ScanView} from '../components/scanView'
 import InputText from '../components/InputText'
 import {isRequired} from '../validators'
 import Modal from 'react-native-modal';
+import {OfferTooltip} from "../components/OfferTooltip";
 
 class PaymentFormScreenTablet extends React.Component {
     static navigationOptions = {
@@ -620,9 +621,12 @@ class PaymentFormScreenTablet extends React.Component {
                                                 </View>
 
                                                 <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                                                    <StyledText style={styles.tableCellText}>
-                                                        {formatCurrency(order.discount)}
-                                                    </StyledText>
+                                                    <OfferTooltip
+                                                        style={styles.tableCellText}
+                                                        offer={order?.appliedOfferInfo}
+                                                        discount={order?.discount}
+                                                        t={t}
+                                                    />
                                                 </View>
 
                                             </TouchableOpacity>

@@ -215,18 +215,12 @@ class OrderFormIV extends React.Component {
         <View style={[styles.tableRowContainerWithBorder]}>
           <View style={[{flex: 1}]}>
             <Field
-              name={`productOptions[${lastOptionIndex}]`}
+              name={`productOptions[${lastOptionIndex}].optionValue`}
               component={InputText}
               placeholder={t('freeTextProductOption')}
               alignLeft={true}
               format={(value, name) => {
-                return value != null ? String(value.optionValue) : ''
-              }}
-              normalize={value => {
-                return {
-                  optionName: t('freeTextProductOption'),
-                  optionValue: value
-                }
+                return value != null ? String(value) : ''
               }}
             />
           </View>

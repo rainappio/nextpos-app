@@ -155,6 +155,8 @@ const en = {
     freeLineitem: 'Free',
     cancelFreeLineitem: 'Not Free',
     tableName: 'Table Name',
+    activeOffer: 'Active Offer',
+    noActiveOffer: 'No Active Offer',
 
     // order specific actions
     liveOrders: 'Receive Live Orders',

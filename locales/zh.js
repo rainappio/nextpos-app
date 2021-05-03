@@ -155,6 +155,8 @@ const zh = {
     freeLineitem: '招待',
     cancelFreeLineitem: '取消招待',
     tableName: '桌號',
+    activeOffer: '套用促銷',
+    noActiveOffer: '暫無套用促銷',
 
     // order specific actions
     liveOrders: '打開即時訂單',

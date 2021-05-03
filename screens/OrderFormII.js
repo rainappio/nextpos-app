@@ -3,7 +3,7 @@ import {reduxForm, Field} from 'redux-form'
 import {Alert, ScrollView, Text, TouchableOpacity, View, StyleSheet, Dimensions, PixelRatio, Platform} from 'react-native'
 import {connect} from 'react-redux'
 import {Accordion, List} from '@ant-design/react-native'
-import {getLables, getProducts, clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange, getTimeDifference} from '../actions'
+import {getLables, getProducts, clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange, getTimeDifference, getPrinters} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -32,6 +32,7 @@ import {NavigationEvents} from "react-navigation";
 import {SplitBillPopUp} from '../components/PopUp'
 import SockJsClient from 'react-stomp';
 import Colors from "../constants/Colors";
+import {OfferTooltip} from "../components/OfferTooltip";
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
@@ -562,7 +563,8 @@ class OrderFormII extends React.Component {
       order,
       themeStyle,
       orderIsLoading,
-      productsData
+      productsData,
+      printers = [],
     } = this.props
 
     const {reverseThemeStyle, t, splitParentOrderId, customMainThemeColor, customBackgroundColor} = this.context
@@ -613,21 +615,23 @@ class OrderFormII extends React.Component {
             <View style={{...styles.fullWidthScreen, marginBottom: 0}}>
               <NavigationEvents
                 onWillFocus={() => {
-                  this.props.getOrder()
+                  this.props.getOrder(order?.orderId)
                 }}
               />
               <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/order/${order?.orderId}`]}
                 onMessage={(data) => {
                   if (data === `${order?.orderId}.order.orderChanged`) {
-                    this.props.getOrder()
+                    this.props.getOrder(order?.orderId)
+                    console.log("get tablet")
                   }
                 }}
                 ref={(client) => {
                   this.orderFormRef = client
                 }}
                 onConnect={() => {
-                  this.orderFormRef.sendMessage(`/async/order/${order?.orderId}`)
-                  console.log('onConnect')
+                  (this.orderFormRef && this.orderFormRef.sendMessage) &&
+                    this.orderFormRef.sendMessage(`/async/order/${order?.orderId}`)
+                  console.log('onConnect tablet')
                 }}
                 onDisconnect={() => {
                   console.log('onDisconnect')
@@ -794,25 +798,28 @@ class OrderFormII extends React.Component {
                         <View style={{flex: 1, marginHorizontal: 5}}>
                           <TouchableOpacity
                             onPress={() =>
+
                               order.lineItems.length === 0
                                 ? warningMessage(t('lineItemCountCheck'))
-                                : Alert.alert(
-                                  `${t('quickCheckoutPrint')}`,
-                                  ``,
-                                  [
-                                    {
-                                      text: `${this.context.t('action.yes')}`,
-                                      onPress: async () => {
-                                        await handleQuickCheckout(order, true)
+                                : printers.length === 0 ?
+                                  handleQuickCheckout(order, false)
+                                  : Alert.alert(
+                                    `${t('quickCheckoutPrint')}`,
+                                    ``,
+                                    [
+                                      {
+                                        text: `${this.context.t('action.yes')}`,
+                                        onPress: async () => {
+                                          await handleQuickCheckout(order, true)
+                                        }
+                                      },
+                                      {
+                                        text: `${this.context.t('action.no')}`,
+                                        onPress: async () => await handleQuickCheckout(order, false),
+                                        style: 'cancel'
                                       }
-                                    },
-                                    {
-                                      text: `${this.context.t('action.no')}`,
-                                      onPress: async () => await handleQuickCheckout(order, false),
-                                      style: 'cancel'
-                                    }
-                                  ]
-                                )
+                                    ]
+                                  )
                             }
                             style={styles?.flexButtonSecondAction(this.context)}
                           >
@@ -909,23 +916,26 @@ class OrderFormII extends React.Component {
                             onPress={() =>
                               order.lineItems.length === 0
                                 ? warningMessage(t('lineItemCountCheck'))
-                                : Alert.alert(
-                                  `${t('quickCheckoutPrint')}`,
-                                  ``,
-                                  [
-                                    {
-                                      text: `${this.context.t('action.yes')}`,
-                                      onPress: async () => {
-                                        await handleQuickCheckout(order, true)
+                                : printers.length === 0 ?
+                                  handleQuickCheckout(order, false)
+
+                                  : Alert.alert(
+                                    `${t('quickCheckoutPrint')}`,
+                                    ``,
+                                    [
+                                      {
+                                        text: `${this.context.t('action.yes')}`,
+                                        onPress: async () => {
+                                          await handleQuickCheckout(order, true)
+                                        }
+                                      },
+                                      {
+                                        text: `${this.context.t('action.no')}`,
+                                        onPress: async () => await handleQuickCheckout(order, false),
+                                        style: 'cancel'
                                       }
-                                    },
-                                    {
-                                      text: `${this.context.t('action.no')}`,
-                                      onPress: async () => await handleQuickCheckout(order, false),
-                                      style: 'cancel'
-                                    }
-                                  ]
-                                )
+                                    ]
+                                  )
                             }
                             containerStyle={styles?.flexButtonSecondAction(this.context)}
                             style={styles?.flexButtonSecondActionText(customMainThemeColor)}
@@ -1253,7 +1263,11 @@ class OrderFormII extends React.Component {
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                       <StyledText >{t('order.discount')}</StyledText>
-                      <StyledText >${order?.discount}</StyledText>
+                      <OfferTooltip
+                        offer={order?.appliedOfferInfo}
+                        discount={order?.discount}
+                        t={t}
+                      />
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                       <StyledText >{t('order.serviceCharge')}</StyledText>
@@ -1495,7 +1509,8 @@ const mapStateToProps = state => ({
   isLoading: state.products.loading,
   order: state.order.data,
   orderIsLoading: state.order.loading,
-  productsData: state.products
+  productsData: state.products,
+  printers: state.printers.data.printers,
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -1506,6 +1521,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
   getOrdersByDateRange: () => dispatch(getOrdersByDateRange()),
   clearOrder: () => dispatch(clearOrder(props.navigation.state.params.orderId)),
+  getPrinters: () => dispatch(getPrinters()),
 })
 
 OrderFormII = reduxForm({
