@@ -379,8 +379,9 @@ class CalendarScreen extends React.Component {
                                     </OptionModal>
                                 </View>
                                 {this.props?.currentUser?.roles?.includes('MANAGER') && <TouchableOpacity
-                                    onPress={() => this.props?.navigation.navigate('RostersFormScreen',
-                                        {data: null, users: this.state?.users, refreshScreen: () => this.refreshScreen(), isManager: this.props?.currentUser?.roles?.includes('MANAGER')})}
+                                    onPress={() =>
+                                        this.props?.navigation.navigate('RostersFormScreen',
+                                            {data: {startTime: this.state?.selectedDate, endTime: this.state?.selectedDate, repeatEndDate: this.state?.selectedDate}, users: this.state?.users, refreshScreen: () => this.refreshScreen(), isManager: this.props?.currentUser?.roles?.includes('MANAGER')})}
                                 >
                                     <View>
                                         <Icon name="add" size={32} color={customMainThemeColor} />
@@ -406,9 +407,9 @@ class CalendarScreen extends React.Component {
                                 <Text style={[styles?.announcementTitle(customMainThemeColor)]}>{moment(this.state?.selectedDate ?? new Date()).tz(timezone).format("YYYY-MM-DD")}</Text>
                             </View>
                             <ScrollView >
-                                {this.state?.modalTasks?.map((task) => {
+                                {this.state?.modalTasks?.map((task, index) => {
                                     return (
-                                        <CalendarEvent event={task} isManager={this.props?.currentUser?.roles?.includes('MANAGER')}
+                                        <CalendarEvent key={index} event={task} isManager={this.props?.currentUser?.roles?.includes('MANAGER')}
                                             users={this.state?.users} closeModal={() => this.toggleRosterFormModal([], false)} refreshScreen={() => this.refreshScreen()} />
                                     )
                                 })}
@@ -533,7 +534,18 @@ class CalendarScreen extends React.Component {
                                                                 }}
                                                                     numberOfLines={1}
                                                                 >
+                                                                    {event?.eventSeriesMainEvent && <MaterialCommunityIcons
+                                                                        name="clock-start"
+                                                                        size={20}
+                                                                        style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                                                                    />}
+                                                                    {event?.isolated && <Ionicons
+                                                                        name="pin"
+                                                                        size={18}
+                                                                        style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                                                                    />}
                                                                     {event?.eventRepeat === 'WEEKLY' && <Ionicons name="copy" color={customMainThemeColor} />} {event?.eventName?.slice(0, 2)} {i18nMomentFrom} ({resourcesCount})
+
                                                                 </Text>
                                                             </TouchableOpacity> :
                                                             <TouchableOpacity
@@ -542,10 +554,10 @@ class CalendarScreen extends React.Component {
                                                                     task?.length > 0 && this.toggleRosterFormModal(task, true)
                                                                 }}
                                                                 style={{borderWidth: 1, borderColor: (!event?.eventColor || event?.eventColor === '#fff') ? customMainThemeColor : event?.eventColor, backgroundColor: event?.eventColor ?? undefined, marginBottom: 5, borderRadius: 5}}>
-                                                                <Text style={{
+                                                                <Text style={[{
                                                                     color: '#454545',
                                                                     textAlign: 'center',
-                                                                }}
+                                                                }, event?.eventSeriesMainEvent && {fontWeight: 'bold'}, event?.isolated && {fontStyle: 'italic'}]}
                                                                     numberOfLines={1}
                                                                 >
                                                                     {event?.eventName?.slice(0, 1)} {phoneI18nMomentFrom}
