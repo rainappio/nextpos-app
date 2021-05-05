@@ -18,7 +18,7 @@ import ThemeToggleButton from "../themes/ThemeToggleButton";
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import {number} from 'prop-types'
 import DeleteBtn from '../components/DeleteBtn'
-import RenderDateTimePicker, {RenderTimePicker} from '../components/DateTimePicker'
+import RenderDateTimePicker, {RenderTimePicker, RenderDatePicker} from '../components/DateTimePicker'
 import TimeZoneService from "../helpers/TimeZoneService";
 import {Accordion, List} from '@ant-design/react-native'
 import {ThemeScrollView} from "../components/ThemeScrollView";
@@ -98,7 +98,12 @@ class RostersFormScreen extends React.Component {
             activeSections: [],
             labels: [],
             isManager: props?.currentUser?.roles?.includes('MANAGER') ?? false,
-            hasWorkingAreaDistribute: false
+            hasWorkingAreaDistribute: false,
+            hasCrossDate: (new Date(props.navigation?.state?.params?.data?.startTime).getDate() < new Date(props.navigation?.state?.params?.data?.endTime).getDate()) ?? false,
+            showStartDatePicker: false,
+            formStartTime: props.navigation?.state?.params?.data?.startTime ?? null,
+            formEndTime: props.navigation?.state?.params?.data?.endTime ?? null,
+            formRepeatEndDate: props.navigation?.state?.params?.data?.repeatEndDate ?? null,
         }
 
         context.localize({
@@ -117,7 +122,10 @@ class RostersFormScreen extends React.Component {
                     confirmDeleteAll: 'Delete all events in the series?',
                     eventColor: 'Event Color',
                     workingAreaDistribute: 'Select Working Area',
-                    repeatEndDate: 'Repeat End Date'
+                    repeatEndDate: 'Repeat End Date',
+                    crossDateShift: 'Next Day',
+                    date: 'Date',
+                    time: 'Time',
                 },
             },
             zh: {
@@ -135,7 +143,10 @@ class RostersFormScreen extends React.Component {
                     confirmDeleteAll: '是否刪除同週期排班?',
                     eventColor: '排程顏色',
                     workingAreaDistribute: '工作區選擇',
-                    repeatEndDate: '重複至'
+                    repeatEndDate: '重複至',
+                    crossDateShift: '跨日班',
+                    date: '日期',
+                    time: '時間',
                 },
             }
         })
@@ -147,9 +158,14 @@ class RostersFormScreen extends React.Component {
 
     componentDidMount() {
         if (!!this.props.navigation?.state?.params?.data) {
+            this.props?.change(`startDate`, new Date(this.props.navigation?.state?.params?.data?.startTime))
             this.props?.change(`startTime`, new Date(this.props.navigation?.state?.params?.data?.startTime))
             this.props?.change(`endTime`, new Date(this.props.navigation?.state?.params?.data?.endTime))
             this.props?.change(`repeatEndDate`, new Date(this.props.navigation?.state?.params?.data?.repeatEndDate ?? new Date()))
+        }
+        if (!!this.state?.hasCrossDate) {
+            console.log("orgin hasCrossDate=", this.state?.hasCrossDate)
+            this.props?.change(`isCrossDate`, this.state?.hasCrossDate)
         }
         this.getLabels()
     }
@@ -195,13 +211,23 @@ class RostersFormScreen extends React.Component {
                 })
             }
         })
+
+        let crossTime = moment(values[`endTime`]).tz(timezone)
+        console.log("origin crossTime = ", crossTime)
+        let isCrossState = Date.parse(moment(values[`startTime`])).valueOf() > Date.parse(moment(values[`endTime`])).valueOf()
+        let isInitialCross = new Date(values[`startTime`]).getDate() < new Date(values[`endTime`]).getDate()
+
+        if (isCrossState && !isInitialCross) {
+            crossTime.add(1, 'days').add(8, 'hours') // UTC+0 & GMT+8
+            console.log("crossTime = ", crossTime)
+        }
         if (!isEdit) {
             let request = {
                 eventName: values?.title,
                 eventRepeat: ['NONE', 'DAILY', 'WEEKLY'][this.state?.repeatType ?? 0],
                 repeatEndDate: moment(!!values[`repeatEndDate`] ? values[`repeatEndDate`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
                 startTime: moment(!!values[`startTime`] ? values[`startTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
-                endTime: moment(!!values[`endTime`] ? values[`endTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
+                endTime: (isCrossState) ? moment(crossTime) : moment(values[`endTime`] ? values[`endTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
                 eventColor: this.state?.eventColor,
                 workingAreaToUsernames: {}
             }
@@ -211,7 +237,7 @@ class RostersFormScreen extends React.Component {
                     request.workingAreaToUsernames[`${label?.labelName}`] = users?.map((item) => {return item?.username})
                 }
             })
-            console.log('request', JSON.stringify(request))
+            console.log('request not Edit', JSON.stringify(request))
             dispatchFetchRequest(api.rosterEvent.createEvents, {
                 method: 'POST',
                 withCredentials: true,
@@ -234,7 +260,7 @@ class RostersFormScreen extends React.Component {
                 repeatEndDate: moment(!!values[`repeatEndDate`] ? values[`repeatEndDate`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
                 applyToSeries: false,
                 startTime: moment(!!values[`startTime`] ? values[`startTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
-                endTime: moment(!!values[`endTime`] ? values[`endTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
+                endTime: (isCrossState) ? moment(crossTime) : moment(values[`endTime`] ? values[`endTime`] : new Date()).format("YYYY-MM-DDTHH:mm:ss"),
                 eventColor: this.state?.eventColor,
                 workingAreaToUsernames: !!values?.workingAreaDistribute ? {} : null
             }
@@ -247,7 +273,7 @@ class RostersFormScreen extends React.Component {
                 })
             }
 
-            if ((this.state?.data?.eventRepeat === 'WEEKLY' || this.state?.data?.eventRepeat === 'DAILY') && (this.state?.data?.eventRepeat === request.eventRepeat)) {
+            if ((this.state?.data?.eventRepeat === 'WEEKLY' || this.state?.data?.eventRepeat === 'DAILY') && (this.state?.data?.eventRepeat === request.eventRepeat) && (!this.state?.data?.isolated)) {
                 Alert.alert(
                     ``,
                     `${this.context.t('rostersForm.confirmEditAll')}`,
@@ -299,7 +325,7 @@ class RostersFormScreen extends React.Component {
                     ]
                 )
             } else {
-                console.log('request', JSON.stringify(request))
+                console.log('request is edit', JSON.stringify(request))
                 dispatchFetchRequest(api.rosterEvent.getEventsById(this.state?.data?.id), {
                     method: 'POST',
                     withCredentials: true,
@@ -425,16 +451,56 @@ class RostersFormScreen extends React.Component {
     }
 
 
-    handlegetDate = (event, selectedDate) => {
+    handleGetStartDate = (event, selectedDate) => {
+        this.setState({formStartTime: new Date(selectedDate), formEndTime: new Date(selectedDate)})
+        this.props?.change(`startTime`, new Date(selectedDate))
+        this.props?.change(`endTime`, new Date(selectedDate))
+
+        if (new Date(selectedDate).getDate() > new Date(this.state?.formRepeatEndDate).getDate()) {
+            this.props?.change(`repeatEndDate`, new Date(selectedDate))
+            this.setState({formRepeatEndDate: new Date(selectedDate)})
+        }
+    }
+    handleGetRepeatDate = (event, selectedDate) => {
+        this.setState({formRepeatEndDate: new Date(selectedDate)})
         console.log(`selected date: ${selectedDate}`)
     }
-    handlegetFromDate = (event, selectedDate) => {
-        console.log(`selected from date: ${selectedDate}`)
-        this.props?.change(`endTime`, new Date(selectedDate))
-        //this.props?.change(`repeatEndDate`, new Date(selectedDate))
+
+    handleGetFromDate = (event, selectedDate) => {
+
+        let minTime = new Date(selectedDate)
+        let maxTime = minTime.setHours(minTime.getHours() + 1)
+
+        if (moment(selectedDate) > moment(this.state?.formEndTime)) {
+            this.props?.change(`endTime`, new Date(maxTime))
+            this.setState({formStartTime: minTime, formEndTime: new Date(maxTime)})
+
+        } else {
+            this.setState({formStartTime: minTime})
+        }
+    }
+    handleGetToDate = (event, selectedDate) => {
+        console.log(`selected date: ${selectedDate}`)
+
+        if (moment(this.state?.formStartTime) > moment(selectedDate) || (new Date(this.state?.formStartTime).getDate() < new Date(selectedDate).getDate())) {
+            console.log("hasCrossDate = ", true)
+            this.setState({hasCrossDate: true})
+        } else {
+            console.log("hasCrossDate = ", false)
+            this.setState({hasCrossDate: false})
+        }
+        this.props?.change(`isCrossDate`, this.state.hasCrossDate)
+        this.setState({formEndTime: new Date(selectedDate)})
+
     }
 
-    showFromDatepicker = (index) => {
+    showStartDatePicker = () => {
+        this.setState({
+            showStartDatePicker: !this.state?.showStartDatePicker
+        })
+    };
+
+    showFromDatePicker = (index) => {
         let showFromDateArr = [...this.state.showFromDate]
         showFromDateArr[index] = !showFromDateArr[index]
         this.setState({
@@ -442,7 +508,7 @@ class RostersFormScreen extends React.Component {
         })
     };
 
-    showToDatepicker = (index) => {
+    showToDatePicker = (index) => {
         let showToDateArr = [...this.state.showToDate]
         showToDateArr[index] = !showToDateArr[index]
         this.setState({
@@ -450,14 +516,14 @@ class RostersFormScreen extends React.Component {
         })
     };
 
-    showEndDatepicker = () => {
+    showEndDatePicker = () => {
         this.setState({
             showEndDate: !this.state?.showEndDate
         })
     };
 
     render() {
-        const {t, themeStyle, isTablet, customMainThemeColor} = this.context
+        const {t, themeStyle, isTablet, customMainThemeColor, customBackgroundColor} = this.context
         const {handleSubmit} = this.props
         const timezone = TimeZoneService.getTimeZone()
         console.log('data', JSON.stringify(this.state?.data))
@@ -502,42 +568,73 @@ class RostersFormScreen extends React.Component {
                                                             <StyledText>{this.props.navigation?.state?.params?.data?.eventName ?? t('rostersForm.morningShift')}</StyledText>}
                                                     </View>
                                                 </View>
-                                                <View style={styles.fieldContainer}>
+                                                <View style={[styles.fieldContainer]}>
                                                     <View style={[styles.tableCellView, {flex: 1}]}>
-                                                        <StyledText style={styles.fieldTitle}>{t('roster.startTime')}</StyledText>
+                                                        <StyledText style={styles.fieldTitle}>{t('rostersForm.date')}</StyledText>
                                                     </View>
                                                     <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-
                                                         {this.state?.isManager ? <Field
-                                                            name={`startTime`}
-                                                            component={RenderDateTimePicker}
-                                                            onChange={this.handlegetFromDate}
+                                                            name={`startDate`}
+                                                            component={RenderDatePicker}
+                                                            onChange={this.handleGetStartDate}
                                                             placeholder={t('order.fromDate')}
-                                                            isShow={this.state.showFromDate?.[index] ?? false}
-                                                            showDatepicker={() => this.showFromDatepicker(index)}
-                                                            defaultValue={this.state?.data?.startTime ?? new Date()}
+                                                            isShow={this.state?.showStartDatePicker ?? false}
+                                                            showDatepicker={() => this.showStartDatePicker()}
                                                             readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}
                                                         /> :
-                                                            <StyledText>{moment(this.state?.data?.startTime ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
+                                                            <StyledText>{moment(this.state?.data?.startTime ?? new Date()).tz(timezone).format("YYYY-MM-DD")}</StyledText>}
                                                     </View>
                                                 </View>
                                                 <View style={styles.fieldContainer}>
                                                     <View style={[styles.tableCellView, {flex: 1}]}>
-                                                        <StyledText style={styles.fieldTitle}>{t('roster.endTime')}</StyledText>
+                                                        <StyledText style={styles.fieldTitle}>{t('rostersForm.time')}</StyledText>
                                                     </View>
-                                                    <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-
-                                                        {this.state?.isManager ? <Field
-                                                            name={`endTime`}
-                                                            component={RenderDateTimePicker}
-                                                            onChange={this.handlegetDate}
-                                                            isShow={this.state.showToDate?.[index] ?? false}
-                                                            showDatepicker={() => this.showToDatepicker(index)}
-                                                            defaultValue={this.state?.data?.endTime ?? new Date()}
+                                                    {this.state?.isManager ? <View style={[styles.tableCellView, {flex: 0.95, justifyContent: 'flex-end'}]}>
+                                                        <Field
+                                                            name={`startTime`}
+                                                            component={RenderTimePicker}
+                                                            onChange={this.handleGetFromDate}
+                                                            placeholder={t('order.fromDate')}
+                                                            isShow={this.state.showFromDate?.[index] ?? false}
+                                                            showDatepicker={() => this.showFromDatePicker(index)}
                                                             readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}
-                                                        /> :
-                                                            <StyledText>{moment(this.state?.data?.endTime ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
+                                                        /></View> : <View style={[styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                                                            <StyledText>{moment(this.state?.data?.startTime ?? new Date()).tz(timezone).format("HH:mm")}</StyledText>
+                                                        </View>}
+                                                    {this.state?.isManager ?
+                                                        <View style={[styles.tableCellView, {flex: 0.1, justifyContent: 'flex-end'}]}>
+                                                            <StyledText> ~ </StyledText>
+                                                        </View> : <View style={[styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                                                            <StyledText> ~ </StyledText>
+                                                        </View>}
+                                                    {this.state?.isManager ? <View style={[styles.tableCellView, {flex: 0.95, justifyContent: 'flex-end'}]}><Field
+                                                        name={`endTime`}
+                                                        component={RenderTimePicker}
+                                                        onChange={this.handleGetToDate}
+                                                        isShow={this.state.showToDate?.[index] ?? false}
+                                                        showDatepicker={() => this.showToDatePicker(index)}
+                                                        readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}
+                                                    />
+                                                    </View> :
+                                                        <View style={[styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                                                            <StyledText>{moment(this.state?.data?.endTime ?? new Date()).tz(timezone).format("HH:mm")}</StyledText>
+                                                        </View>}
+                                                </View>
+                                                <View style={styles.fieldContainer}>
+                                                    <View style={[styles.tableCellView, {flex: 1}]}>
+                                                        <StyledText style={styles.fieldTitle}>{t('rostersForm.crossDateShift')}</StyledText>
                                                     </View>
+                                                    {this.state?.isManager ?
+                                                        <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-start'}]}>
+                                                            <Field
+                                                                name="isCrossDate"
+                                                                component={RNSwitch}
+                                                                onChange={(flag) => this.setState({hasCrossDate: flag})}
+                                                            />
+                                                        </View> : <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+                                                            <StyledText>{this.state?.hasCrossDate ? t('action.yes') : t('action.no')}</StyledText>
+                                                        </View>
+                                                    }
                                                 </View>
                                                 {this.state?.isManager && <><View style={styles.fieldContainer}>
                                                     <View style={[styles.tableCellView, {flex: 1}]}>
@@ -550,6 +647,7 @@ class RostersFormScreen extends React.Component {
                                                             onChange={(val) => {this.setState({repeatType: val})}}
                                                             values={[t('rostersForm.NONE'), t('rostersForm.DAILY'), t('rostersForm.WEEKLY')]}
                                                             selectedIndex={this.state?.repeatType}
+                                                            enabled={!!this.state.data?.eventName ? (this.state?.data?.eventSeriesMainEvent) : true}
                                                         />
                                                     </View>
                                                 </View>
@@ -561,11 +659,12 @@ class RostersFormScreen extends React.Component {
 
                                                             {this.state?.isManager ? <Field
                                                                 name={`repeatEndDate`}
-                                                                component={RenderDateTimePicker}
-                                                                onChange={this.handlegetDate}
+                                                                component={RenderDatePicker}
+                                                                onChange={this.handleGetRepeatDate}
                                                                 isShow={this.state?.showEndDate ?? false}
-                                                                showDatepicker={() => this.showEndDatepicker()}
+                                                                showDatepicker={() => this.showEndDatePicker()}
                                                                 defaultValue={this.state?.data?.repeatEndDate ?? new Date()}
+                                                                readonly={!!this.state.data?.eventName ? (!this.state?.data?.eventSeriesMainEvent) : false}
                                                                 validate={(value, allValues, props, name) => {
                                                                     if (!!allValues?.startTime && !!value && (new Date(allValues?.startTime).getMonth() !== new Date(value).getMonth())) {
                                                                         console.log('validate', value, allValues)
@@ -573,7 +672,7 @@ class RostersFormScreen extends React.Component {
                                                                     }
                                                                 }}
                                                             /> :
-                                                                <StyledText>{moment(this.state?.data?.repeatEndDate ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
+                                                                <StyledText>{moment(this.state?.data?.repeatEndDate ?? new Date()).tz(timezone).format("YYYY-MM-DD")}</StyledText>}
                                                         </View>
                                                     </View>}
                                                 </>}
@@ -606,7 +705,7 @@ class RostersFormScreen extends React.Component {
                                                     </View> :
                                                         <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
                                                             <TouchableOpacity
-                                                                style={[{backgroundColor: this.state?.eventColor}, {width: 40, height: 40, borderRadius: 40}]} ></TouchableOpacity>
+                                                                style={[{backgroundColor: this.state?.eventColor}, this.state?.eventColor === '#fff' ? {width: 30, height: 30, borderRadius: 30, borderColor: customMainThemeColor, borderWidth: 1} : {width: 30, height: 30, borderRadius: 30}]}></TouchableOpacity>
                                                         </View>}
                                                 </View>
                                             </View>
@@ -614,7 +713,7 @@ class RostersFormScreen extends React.Component {
                                         </View>)
                                     })}
                                 </View>
-                                {!!this.state?.data && <View style={[styles.fieldContainer, {alignItems: 'center', paddingVertical: 10}]}>
+                                {!!this.state?.data?.eventName && <View style={[styles.fieldContainer, {alignItems: 'center', paddingVertical: 10}]}>
 
                                     <View style={{marginRight: 10}}>
                                         <Field
@@ -625,7 +724,7 @@ class RostersFormScreen extends React.Component {
                                     </View>
                                     <StyledText style={{fontWeight: 'bold'}}>{t('rostersForm.workingAreaDistribute')}</StyledText>
                                 </View>}
-                                {(!!this.state?.data && this.state?.hasWorkingAreaDistribute) ? <ThemeScrollView style={{flex: 1}}>
+                                {(!!this.state?.data?.eventName && this.state?.hasWorkingAreaDistribute) ? <ThemeScrollView style={{flex: 1}}>
                                     {this.state?.isManager ? <Accordion
                                         onChange={(activeSections) => this.setState({activeSections: activeSections})}
                                         activeSections={this.state?.activeSections}
@@ -677,7 +776,7 @@ class RostersFormScreen extends React.Component {
                                                                     this.setState({labels: tempLabels})
                                                                 }}
                                                                 bottomDivider
-                                                                containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: themeStyle.backgroundColor},]}
+                                                                containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: customBackgroundColor},]}
                                                             />
                                                         ))}
                                                         {label?.resources?.length === 0 && (
@@ -693,7 +792,7 @@ class RostersFormScreen extends React.Component {
 
                                                                 }}
                                                                 bottomDivider
-                                                                containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor},]}
+                                                                containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
                                                             />
                                                         )}
                                                     </List>
@@ -734,7 +833,7 @@ class RostersFormScreen extends React.Component {
                                                             this.setState({labels: tempLabels})
                                                         }}
                                                         bottomDivider
-                                                        containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: themeStyle.backgroundColor},]}
+                                                        containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: customBackgroundColor},]}
                                                     />
                                                 )
                                             })}
@@ -742,7 +841,7 @@ class RostersFormScreen extends React.Component {
                                 </ThemeScrollView> : <View style={{flex: 1}}></View>}
                                 <View style={[{marginTop: 30, justifyContent: 'flex-end', flexDirection: 'row', flex: 1, maxHeight: 50}]}>
 
-                                    {!!this.state.data && this.state?.isManager && <DeleteBtn
+                                    {!!this.state.data?.eventName && this.state?.isManager && <DeleteBtn
                                         containerStyle={[styles?.flexButton(customMainThemeColor), styles.deleteButton]}
                                         textStyle={styles.flexButtonText}
                                         handleDeleteAction={() => this.handleDelete()} />}
@@ -757,7 +856,7 @@ class RostersFormScreen extends React.Component {
                                         onPress={
                                             this.state?.isManager ?
                                                 handleSubmit(data => {
-                                                    this.handleSubmit(data, !!this.state.data)
+                                                    this.handleSubmit(data, !!this.state.data?.eventName)
                                                 }) :
                                                 () => this.handleStaffSubmit()}>
                                         <Text style={[styles.flexButtonText]}>
@@ -771,7 +870,7 @@ class RostersFormScreen extends React.Component {
 
                         </View>
                     </View>
-                </ThemeContainer>
+                </ThemeContainer >
 
             )
         }
@@ -816,42 +915,80 @@ class RostersFormScreen extends React.Component {
                                                         <StyledText>{this.props.navigation?.state?.params?.data?.eventName ?? t('rostersForm.morningShift')}</StyledText>}
                                                 </View>
                                             </View>
-                                            <View style={styles.fieldContainer}>
+                                            <View style={[styles.fieldContainer]}>
                                                 <View style={[styles.tableCellView, {flex: 1}]}>
-                                                    <StyledText style={styles.fieldTitle}>{t('roster.startTime')}</StyledText>
+                                                    <StyledText style={styles.fieldTitle}>{t('rostersForm.date')}</StyledText>
                                                 </View>
                                                 <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
 
                                                     {this.state?.isManager ? <Field
-                                                        name={`startTime`}
-                                                        component={RenderDateTimePicker}
-                                                        onChange={this.handlegetFromDate}
+                                                        name={`startDate`}
+                                                        component={RenderDatePicker}
+                                                        onChange={this.handleGetStartDate}
                                                         placeholder={t('order.fromDate')}
-                                                        isShow={this.state.showFromDate?.[index] ?? false}
-                                                        showDatepicker={() => this.showFromDatepicker(index)}
-                                                        defaultValue={this.state?.data?.startTime ?? new Date()}
+                                                        isShow={this.state.showStartDatePicker ?? false}
+                                                        showDatepicker={() => this.showStartDatePicker()}
                                                         readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}
                                                     /> :
-                                                        <StyledText>{moment(this.state?.data?.startTime ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
+                                                        <StyledText>{moment(this.state?.data?.startTime ?? new Date()).tz(timezone).format("YYYY-MM-DD")}</StyledText>}
                                                 </View>
                                             </View>
                                             <View style={styles.fieldContainer}>
                                                 <View style={[styles.tableCellView, {flex: 1}]}>
-                                                    <StyledText style={styles.fieldTitle}>{t('roster.endTime')}</StyledText>
+                                                    <StyledText style={styles.fieldTitle}>{t('rostersForm.time')}</StyledText>
                                                 </View>
-                                                <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-
-                                                    {this.state?.isManager ? <Field
-                                                        name={`endTime`}
-                                                        component={RenderDateTimePicker}
-                                                        onChange={this.handlegetDate}
-                                                        isShow={this.state.showToDate?.[index] ?? false}
-                                                        showDatepicker={() => this.showToDatepicker(index)}
-                                                        defaultValue={this.state?.data?.endTime ?? new Date()}
+                                                {this.state?.isManager ? <View style={[styles.tableCellView, {flex: 0.95, justifyContent: 'flex-end'}]}>
+                                                    <Field
+                                                        name={`startTime`}
+                                                        component={RenderTimePicker}
+                                                        onChange={this.handleGetFromDate}
+                                                        placeholder={t('order.fromDate')}
+                                                        isShow={this.state.showFromDate?.[index] ?? false}
+                                                        showDatepicker={() => this.showFromDatePicker(index)}
                                                         readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}
-                                                    /> :
-                                                        <StyledText>{moment(this.state?.data?.endTime ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
+                                                    />
+                                                </View> : <View style={[styles.tableCellView, {justifyContent: 'flex-end'}]}>
+                                                        <StyledText>{moment(this.state?.data?.startTime ?? new Date()).tz(timezone).format("HH:mm")}</StyledText>
+                                                    </View>
+                                                }
+                                                {this.state?.isManager ? <View style={[styles.tableCellView, {flex: 0.1}]}>
+                                                    <StyledText> ~ </StyledText>
+                                                </View> : <View style={[{justifyContent: 'center'}]}>
+                                                        <StyledText> ~ </StyledText>
+                                                    </View>
+                                                }
+                                                {this.state?.isManager ? <View style={[styles.tableCellView, {flex: 0.95, justifyContent: 'flex-end'}]}>
+
+                                                    <Field
+                                                        name={`endTime`}
+                                                        component={RenderTimePicker}
+                                                        onChange={this.handleGetToDate}
+                                                        isShow={this.state.showToDate?.[index] ?? false}
+                                                        showDatepicker={() => this.showToDatePicker(index)}
+                                                        readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}
+                                                    />
                                                 </View>
+                                                    :
+                                                    <View style={[{justifyContent: 'flex-end'}]}>
+                                                        <StyledText>{moment(this.state?.data?.endTime ?? new Date()).tz(timezone).format("HH:mm")}</StyledText>
+                                                    </View>}
+                                            </View>
+                                            <View style={styles.fieldContainer}>
+                                                <View style={[styles.tableCellView, {flex: 1}]}>
+                                                    <StyledText style={styles.fieldTitle}>{t('rostersForm.crossDateShift')}</StyledText>
+                                                </View>
+                                                {this.state?.isManager ?
+                                                    <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-start'}]}>
+                                                        <Field
+                                                            name="isCrossDate"
+                                                            component={RNSwitch}
+                                                            onChange={(flag) => this.setState({hasCrossDate: flag})}
+
+                                                        />
+                                                    </View> : <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+                                                        <StyledText>{this.state?.hasCrossDate ? t('action.yes') : t('action.no')}</StyledText>
+                                                    </View>
+                                                }
                                             </View>
                                             {this.state?.isManager && <><View style={styles.fieldContainer}>
                                                 <View style={[styles.tableCellView, {flex: 1}]}>
@@ -864,6 +1001,7 @@ class RostersFormScreen extends React.Component {
                                                         onChange={(val) => {this.setState({repeatType: val})}}
                                                         values={[t('rostersForm.NONE'), t('rostersForm.DAILY'), t('rostersForm.WEEKLY')]}
                                                         selectedIndex={this.state?.repeatType}
+                                                        enabled={!!this.state.data?.eventName ? (this.state?.data?.eventSeriesMainEvent) : true}
                                                     />
                                                 </View>
                                             </View>
@@ -875,11 +1013,12 @@ class RostersFormScreen extends React.Component {
 
                                                         {this.state?.isManager ? <Field
                                                             name={`repeatEndDate`}
-                                                            component={RenderDateTimePicker}
-                                                            onChange={this.handlegetDate}
+                                                            component={RenderDatePicker}
+                                                            onChange={this.handleGetRepeatDate}
                                                             isShow={this.state?.showEndDate ?? false}
-                                                            showDatepicker={() => this.showEndDatepicker()}
+                                                            showDatepicker={() => this.showEndDatePicker()}
                                                             defaultValue={this.state?.data?.repeatEndDate ?? new Date()}
+                                                            readonly={!!this.state.data?.eventName ? (!this.state?.data?.eventSeriesMainEvent) : false}
                                                             validate={(value, allValues, props, name) => {
                                                                 if (!!allValues?.startTime && !!value && (new Date(allValues?.startTime).getMonth() !== new Date(value).getMonth())) {
                                                                     console.log('validate', value, allValues)
@@ -887,7 +1026,7 @@ class RostersFormScreen extends React.Component {
                                                                 }
                                                             }}
                                                         /> :
-                                                            <StyledText>{moment(this.state?.data?.repeatEndDate ?? new Date()).tz(timezone).format("YYYY-MM-DD HH:mm")}</StyledText>}
+                                                            <StyledText>{moment(this.state?.data?.repeatEndDate ?? new Date()).tz(timezone).format("YYYY-MM-DD")}</StyledText>}
                                                     </View>
                                                 </View>}
                                             </>}
@@ -920,7 +1059,8 @@ class RostersFormScreen extends React.Component {
                                                 </View> :
                                                     <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
                                                         <TouchableOpacity
-                                                            style={[{backgroundColor: this.state?.eventColor}, {width: 40, height: 40, borderRadius: 40}]} ></TouchableOpacity>
+                                                            style={[{backgroundColor: this.state?.eventColor}, this.state?.eventColor === '#fff' ? {width: 30, height: 30, borderRadius: 30, borderColor: customMainThemeColor, borderWidth: 1} : {width: 30, height: 30, borderRadius: 30}]}>
+                                                        </TouchableOpacity>
                                                     </View>}
                                             </View>
                                         </View>
@@ -990,7 +1130,7 @@ class RostersFormScreen extends React.Component {
                                                                 this.setState({labels: tempLabels})
                                                             }}
                                                             bottomDivider
-                                                            containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: themeStyle.backgroundColor},]}
+                                                            containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: customBackgroundColor},]}
                                                         />
                                                     ))}
                                                     {label?.resources?.length === 0 && (
@@ -1006,7 +1146,7 @@ class RostersFormScreen extends React.Component {
 
                                                             }}
                                                             bottomDivider
-                                                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor},]}
+                                                            containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
                                                         />
                                                     )}
                                                 </List>
@@ -1047,7 +1187,7 @@ class RostersFormScreen extends React.Component {
                                                         this.setState({labels: tempLabels})
                                                     }}
                                                     bottomDivider
-                                                    containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: themeStyle.backgroundColor},]}
+                                                    containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: customBackgroundColor},]}
                                                 />
                                             )
                                         })}
@@ -1057,7 +1197,7 @@ class RostersFormScreen extends React.Component {
                                 {this.state.uneditable || <TouchableOpacity onPress={
                                     this.state?.isManager ?
                                         handleSubmit(data => {
-                                            this.handleSubmit(data, !!this.state.data)
+                                            this.handleSubmit(data, !!this.state.data?.eventName)
                                         }) :
                                         () => this.handleStaffSubmit()}>
                                     <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>

@@ -130,6 +130,10 @@ class OfferForm extends React.Component {
     if (this.props.onChange) {
       this.props.onChange(this.state);
     }
+    if (!!this.props?.initialValues?.startDate) {
+      this.props?.change(`startDate`, new Date(this.props.initialValues?.startDate))
+      this.props?.change(`endDate`, new Date(this.props.initialValues?.endDate))
+    }
   }
 
   render() {
@@ -221,7 +225,7 @@ class OfferForm extends React.Component {
                 name="startDate"
                 component={RenderDateTimePicker}
                 onChange={this.handlegetDate}
-                defaultValue={initialValues?.startDate}
+                defaultValue={initialValues?.startDate ?? new Date()}
                 placeholder={t("order.date")}
                 isShow={this.state.from.show}
                 showDatepicker={() => this.showDatepicker("from")}
@@ -241,7 +245,7 @@ class OfferForm extends React.Component {
                 name="endDate"
                 component={RenderDateTimePicker}
                 onChange={this.handlegetDate}
-                defaultValue={initialValues?.endDate}
+                defaultValue={initialValues?.endDate ?? new Date()}
                 placeholder={t("order.date")}
                 isShow={this.state.to.show}
                 showDatepicker={() => this.showDatepicker("to")}
@@ -253,8 +257,8 @@ class OfferForm extends React.Component {
             <View style={{marginLeft: -10, marginRight: -10}}>
               <DateTimeFilterControlledForm
                 showAndroidDateTimeOnly={true}
-                endDate={initialValues.endDate}
-                startDate={initialValues.startDate}
+                endDate={initialValues.endDate ?? new Date()}
+                startDate={initialValues.startDate ?? new Date()}
               />
             </View>
           )}
@@ -272,6 +276,7 @@ class OfferForm extends React.Component {
                   component={SegmentedControl}
                   selectedIndex={this.state.selectedOfferType}
                   values={offerTypes}
+                  enabled={!isEditForm}
                   onChange={this.handleIndexChange}
                   normalize={value => {
                     return this.state.offerTypes[value].value

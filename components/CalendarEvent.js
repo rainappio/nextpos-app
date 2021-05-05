@@ -103,9 +103,9 @@ const CalendarEventBase = (props) => {
                 </View>
 
 
-                {labels?.map((label) => {
+                {labels?.map((label, index) => {
                     return (
-                        <View style={{flexDirection: 'row'}}>
+                        <View style={{flexDirection: 'row'}} key={index}>
                             <StyledText style={{...props?.theme?.textm, marginVertical: 5, fontWeight: 'bold'}}>{label?.name} </StyledText>
                             <View style={{flexDirection: 'row', flex: 1, flexWrap: 'wrap', }}>
                                 {event?.eventResources?.[`${label?.name}`]?.map((item) => {
