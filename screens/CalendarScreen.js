@@ -381,7 +381,7 @@ class CalendarScreen extends React.Component {
                                 {this.props?.currentUser?.roles?.includes('MANAGER') && <TouchableOpacity
                                     onPress={() =>
                                         this.props?.navigation.navigate('RostersFormScreen',
-                                            {data: {startTime: this.state?.selectedDate, endTime: this.state?.selectedDate, repeatEndDate: this.state?.selectedDate}, users: this.state?.users, refreshScreen: () => this.refreshScreen(), isManager: this.props?.currentUser?.roles?.includes('MANAGER')})}
+                                            {data: {startTime: new Date(this.state?.selectedDate), endTime: moment(new Date(this.state?.selectedDate)).add(1, 'hours'), repeatEndDate: this.state?.selectedDate}, users: this.state?.users, refreshScreen: () => this.refreshScreen(), isManager: this.props?.currentUser?.roles?.includes('MANAGER')})}
                                 >
                                     <View>
                                         <Icon name="add" size={32} color={customMainThemeColor} />
@@ -523,6 +523,7 @@ class CalendarScreen extends React.Component {
                                                         }
                                                         return (isTablet ?
                                                             <TouchableOpacity
+                                                                key={event.id}
                                                                 onPress={() => {
                                                                     this.setState({selectedDate: date?.dateString})
                                                                     task?.length > 0 && this.toggleRosterFormModal(task, true)

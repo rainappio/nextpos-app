@@ -452,6 +452,7 @@ class RostersFormScreen extends React.Component {
 
 
     handleGetStartDate = (event, selectedDate) => {
+        console.log(`selected start day: ${selectedDate}`)
         this.setState({formStartTime: new Date(selectedDate), formEndTime: new Date(selectedDate)})
         this.props?.change(`startTime`, new Date(selectedDate))
         this.props?.change(`endTime`, new Date(selectedDate))
@@ -467,6 +468,7 @@ class RostersFormScreen extends React.Component {
     }
 
     handleGetFromDate = (event, selectedDate) => {
+        console.log(`selected start time: ${selectedDate}`)
 
         let minTime = new Date(selectedDate)
         let maxTime = minTime.setHours(minTime.getHours() + 1)
@@ -480,16 +482,16 @@ class RostersFormScreen extends React.Component {
         }
     }
     handleGetToDate = (event, selectedDate) => {
-        console.log(`selected date: ${selectedDate}`)
+        console.log(`selected end time: ${selectedDate}`)
 
         if (moment(this.state?.formStartTime) > moment(selectedDate) || (new Date(this.state?.formStartTime).getDate() < new Date(selectedDate).getDate())) {
-            console.log("hasCrossDate = ", true)
             this.setState({hasCrossDate: true})
+            this.props?.change(`isCrossDate`, true)
         } else {
-            console.log("hasCrossDate = ", false)
             this.setState({hasCrossDate: false})
+            this.props?.change(`isCrossDate`, false)
         }
-        this.props?.change(`isCrossDate`, this.state.hasCrossDate)
+
         this.setState({formEndTime: new Date(selectedDate)})
 
     }
@@ -577,6 +579,7 @@ class RostersFormScreen extends React.Component {
                                                             name={`startDate`}
                                                             component={RenderDatePicker}
                                                             onChange={this.handleGetStartDate}
+                                                            defaultValue={this.state?.data?.startTime ?? new Date()}
                                                             placeholder={t('order.fromDate')}
                                                             isShow={this.state?.showStartDatePicker ?? false}
                                                             showDatepicker={() => this.showStartDatePicker()}
@@ -594,6 +597,7 @@ class RostersFormScreen extends React.Component {
                                                             name={`startTime`}
                                                             component={RenderTimePicker}
                                                             onChange={this.handleGetFromDate}
+                                                            defaultValue={this.state?.data?.startTime ?? new Date()}
                                                             placeholder={t('order.fromDate')}
                                                             isShow={this.state.showFromDate?.[index] ?? false}
                                                             showDatepicker={() => this.showFromDatePicker(index)}
@@ -611,6 +615,7 @@ class RostersFormScreen extends React.Component {
                                                         name={`endTime`}
                                                         component={RenderTimePicker}
                                                         onChange={this.handleGetToDate}
+                                                        defaultValue={this.state?.data?.endTime ?? new Date()}
                                                         isShow={this.state.showToDate?.[index] ?? false}
                                                         showDatepicker={() => this.showToDatePicker(index)}
                                                         readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}
@@ -889,7 +894,9 @@ class RostersFormScreen extends React.Component {
                                         return null
                                     return (<View style={{
                                         flexDirection: 'row'
-                                    }}>
+                                    }}
+                                        key={index}
+                                    >
 
                                         <View style={{flex: 15, flexDirection: 'column'}}>
 
@@ -925,6 +932,7 @@ class RostersFormScreen extends React.Component {
                                                         name={`startDate`}
                                                         component={RenderDatePicker}
                                                         onChange={this.handleGetStartDate}
+                                                        defaultValue={this.state?.data?.startTime ?? new Date()}
                                                         placeholder={t('order.fromDate')}
                                                         isShow={this.state.showStartDatePicker ?? false}
                                                         showDatepicker={() => this.showStartDatePicker()}
@@ -937,11 +945,12 @@ class RostersFormScreen extends React.Component {
                                                 <View style={[styles.tableCellView, {flex: 1}]}>
                                                     <StyledText style={styles.fieldTitle}>{t('rostersForm.time')}</StyledText>
                                                 </View>
-                                                {this.state?.isManager ? <View style={[styles.tableCellView, {flex: 0.95, justifyContent: 'flex-end'}]}>
+                                                {this.state?.isManager ? <View style={[styles.tableCellView, {flex: 0.9, justifyContent: 'flex-end'}]}>
                                                     <Field
                                                         name={`startTime`}
                                                         component={RenderTimePicker}
                                                         onChange={this.handleGetFromDate}
+                                                        defaultValue={this.state?.data?.startTime ?? new Date()}
                                                         placeholder={t('order.fromDate')}
                                                         isShow={this.state.showFromDate?.[index] ?? false}
                                                         showDatepicker={() => this.showFromDatePicker(index)}
@@ -951,18 +960,18 @@ class RostersFormScreen extends React.Component {
                                                         <StyledText>{moment(this.state?.data?.startTime ?? new Date()).tz(timezone).format("HH:mm")}</StyledText>
                                                     </View>
                                                 }
-                                                {this.state?.isManager ? <View style={[styles.tableCellView, {flex: 0.1}]}>
+                                                {this.state?.isManager ? <View style={[styles.tableCellView, styles.jc_alignIem_center, {flex: 0.2}]}>
                                                     <StyledText> ~ </StyledText>
-                                                </View> : <View style={[{justifyContent: 'center'}]}>
+                                                </View> : <View>
                                                         <StyledText> ~ </StyledText>
                                                     </View>
                                                 }
-                                                {this.state?.isManager ? <View style={[styles.tableCellView, {flex: 0.95, justifyContent: 'flex-end'}]}>
-
+                                                {this.state?.isManager ? <View style={[styles.tableCellView, {flex: 0.9, justifyContent: 'flex-end'}]}>
                                                     <Field
                                                         name={`endTime`}
                                                         component={RenderTimePicker}
                                                         onChange={this.handleGetToDate}
+                                                        defaultValue={this.state?.data?.endTime ?? new Date()}
                                                         isShow={this.state.showToDate?.[index] ?? false}
                                                         showDatepicker={() => this.showToDatePicker(index)}
                                                         readonly={index <= this.state.rosterEntriesLength - 1 ? true : false}

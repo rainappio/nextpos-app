@@ -174,14 +174,15 @@ class RenderTimePickerBase extends Component {
 	constructor(props, context) {
 		super(props, context)
 		this.state = {
-			result: !!this.props?.input?.value ? this.props?.input?.value : new Date()
+			result: !!this.props?.input?.value ? this.props?.input?.value : !!this.props?.defaultValue ? new Date(this.props?.defaultValue) : new Date()
 		}
 	}
 
 	componentDidMount() {
+		console.log("time picker:", this.props?.input?.value)
 		this.props?.input?.onChange(
 			!!this.props?.input?.value ? this.props?.input?.value
-				: !!this.props?.defaultValue ? this.props?.defaultValue : new Date())
+				: !!this.props?.defaultValue ? new Date(this.props?.defaultValue) : new Date())
 	}
 
 	handleChange = (result) => {
@@ -326,14 +327,15 @@ class RenderDatePickerBase extends Component {
 	constructor(props, context) {
 		super(props, context)
 		this.state = {
-			result: !!this.props?.input?.value ? this.props?.input?.value : new Date()
+			result: !!this.props?.input?.value ? this.props?.input?.value :
+				!!this.props?.defaultValue ? new Date(this.props?.defaultValue) : new Date()
 		}
 	}
 
 	componentDidMount() {
 		this.props?.input?.onChange(
 			!!this.props?.input?.value ? this.props?.input?.value
-				: !!this.props?.defaultValue ? this.props?.defaultValue : new Date())
+				: !!this.props?.defaultValue ? new Date(this.props?.defaultValue) : new Date())
 	}
 
 	handleChange = (result) => {

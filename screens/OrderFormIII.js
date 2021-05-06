@@ -34,17 +34,9 @@ class OrderFormIII extends React.Component {
         option.optionName = this.context.t('freeTextProductOption')
       }
       if (Array.isArray(option)) {
-        if (option.length > 0) {
 
-          const optionValues = option.map(o => {
-            return o.optionValue
-          })
+        updatedOptions.push(...option)
 
-          updatedOptions.push({
-            optionName: option[0].optionName,
-            optionValue: optionValues.join()
-          })
-        }
       } else {
         updatedOptions.push(option)
       }
@@ -89,17 +81,8 @@ class OrderFormIII extends React.Component {
         option.optionName = this.context.t('freeTextProductOption')
       }
       if (Array.isArray(option)) {
-        if (option.length > 0) {
 
-          const optionValues = option.map(o => {
-            return o.optionValue
-          })
-
-          updatedOptions.push({
-            optionName: option[0].optionName,
-            optionValue: optionValues.join()
-          })
-        }
+        updatedOptions.push(...option)
       } else {
         updatedOptions.push(option)
       }
