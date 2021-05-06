@@ -104,23 +104,15 @@ class ConnectedOrderItemOptionsBase extends React.Component {
     handleSubmit = values => {
         const orderId = this.props.navigation.state.params.orderId
 
+        console.log("check values.productOptions=", values.productOptions)
         const updatedOptions = []
         !!values?.productOptions && values.productOptions.map(option => {
             if (!option.optionName) {
                 option.optionName = this.context.t('freeTextProductOption')
             }
             if (Array.isArray(option)) {
-                if (option.length > 0) {
 
-                    const optionValues = option.map(o => {
-                        return o.optionValue
-                    })
-
-                    updatedOptions.push({
-                        optionName: option[0].optionName,
-                        optionValue: optionValues.join()
-                    })
-                }
+                updatedOptions.push(...option)
             } else {
                 updatedOptions.push(option)
             }
@@ -136,6 +128,7 @@ class ConnectedOrderItemOptionsBase extends React.Component {
             productDiscount: values.lineItemDiscount.productDiscount,
             discountValue: values.lineItemDiscount.discount
         }
+        console.log("submit lineItemRequest= ", lineItemRequest)
 
         dispatchFetchRequest(
             api.order.newLineItem(orderId),
@@ -163,22 +156,14 @@ class ConnectedOrderItemOptionsBase extends React.Component {
 
         const updatedOptions = []
 
+        console.log("check values.productOptions=", values.productOptions)
         !!values?.productOptions && values.productOptions.map(option => {
             if (!option.optionName) {
                 option.optionName = this.context.t('freeTextProductOption')
             }
             if (Array.isArray(option)) {
-                if (option.length > 0) {
 
-                    const optionValues = option.map(o => {
-                        return o.optionValue
-                    })
-
-                    updatedOptions.push({
-                        optionName: option[0].optionName,
-                        optionValue: optionValues.join()
-                    })
-                }
+                updatedOptions.push(...option)
             } else {
                 updatedOptions.push(option)
             }
@@ -192,6 +177,8 @@ class ConnectedOrderItemOptionsBase extends React.Component {
             productDiscount: values.lineItemDiscount.productDiscount,
             discountValue: values.lineItemDiscount.discount
         }
+
+        console.log("update lineItemRequest= ", lineItemRequest)
 
         dispatchFetchRequest(api.order.updateLineItem(orderId, lineItemId), {
             method: 'PATCH',
