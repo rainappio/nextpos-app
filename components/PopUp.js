@@ -208,6 +208,7 @@ class CustomPopUpBase extends Component {
                       return (
                         <View
                           style={{width: '100%', paddingHorizontal: 5}}
+                          key={index}
                         >
                           <TouchableOpacity
                             onPress={() => {
