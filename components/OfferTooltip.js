@@ -41,7 +41,7 @@ export const OfferTooltip = ({offer, t, discount, style}) => {
       height={60} width={160} backgroundColor={customMainThemeColor}
       popover={renderOfferToolTip()}
     >
-      <StyledText style={[...passedStyles]}>${discount}</StyledText>
+      <Text style={[...passedStyles, {borderWidth: 0.5, borderColor: customMainThemeColor, color: customMainThemeColor, borderRadius: 2, paddingHorizontal: 2}]}>${discount}</Text>
     </Tooltip>
   )
 }

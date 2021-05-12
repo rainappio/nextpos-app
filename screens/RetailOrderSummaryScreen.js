@@ -244,8 +244,10 @@ class RetailOrderSummaryScreen extends React.Component {
                             this.orderFormRef = client
                         }}
                         onConnect={() => {
-                            this.orderFormRef.sendMessage(`/async/order/${order?.orderId}`)
-                            console.log('onConnect')
+                            (this.orderFormRef && this.orderFormRef.sendMessage) ?
+                                this.orderFormRef.sendMessage(`/async/order/${order?.orderId}`)
+                                :
+                                console.log('onConnect retail phone error')
                         }}
                         onDisconnect={() => {
                             console.log('onDisconnect')

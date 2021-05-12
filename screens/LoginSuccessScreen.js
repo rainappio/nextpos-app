@@ -9,12 +9,13 @@ import {doLogout, formatDateObj, getAnnouncements, getClientUsr, getCurrentClien
 import styles from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
 import {NavigationEvents} from 'react-navigation'
-import {getToken, api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
+import {getToken, api, dispatchFetchRequestWithOption, successMessage, dispatchFetchRequest} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {Avatar} from 'react-native-elements'
 import Markdown from 'react-native-markdown-display'
 import {handleDelete, handleOrderSubmit} from "../helpers/orderActions";
 import MenuButton from "../components/MenuButton";
+import MenuFlatButton from "../components/MenuFlatButton";
 import LoadingScreen from "./LoadingScreen";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
@@ -74,7 +75,9 @@ class LoginSuccessScreen extends React.Component {
         addTable: 'Add Table',
         addWorkingArea: 'Add Working Area',
         markAsReadPrompt: 'Dismiss',
-        continueOrder: 'Continue Order'
+        continueOrder: 'Continue Order',
+        quickTakeOut: 'Quick Take Out',
+        continueTakeOut: 'Continue Take Out',
       },
       zh: {
         welcome: '歡迎,',
@@ -90,7 +93,9 @@ class LoginSuccessScreen extends React.Component {
         addTable: '新增桌位',
         addWorkingArea: '新增工作區',
         markAsReadPrompt: '不再顯示此公告',
-        continueOrder: '繼續訂單'
+        continueOrder: '繼續訂單',
+        quickTakeOut: '快速外帶',
+        continueTakeOut: '繼續外帶',
       }
     })
     // <NavigationEvent> component in the render function takes care of loading user info.
@@ -183,6 +188,29 @@ class LoginSuccessScreen extends React.Component {
     this.setState({modalVisible: false})
   }
 
+  handleQuickTakeOut = () => {
+
+    const createOrder = {}
+    createOrder.orderType = 'TAKE_OUT'
+
+    dispatchFetchRequest(api.order.new, {
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(createOrder)
+    },
+      response => {
+        response.json().then(data => {
+          this.props.navigation.navigate(this.context.appType === 'store' ? 'OrderFormII' : 'RetailOrderForm', {
+            orderId: data.orderId
+          })
+        })
+      }).then()
+  }
+
   render() {
     const {
       doLogout,
@@ -197,7 +225,7 @@ class LoginSuccessScreen extends React.Component {
       printers = [],
       order
     } = this.props
-    const {t, appType, customMainThemeColor} = this.context
+    const {t, isTablet, appType, customMainThemeColor} = this.context
     const {username, loggedIn, tokenExpiry} = this.state
 
     if (haveError) {
@@ -331,6 +359,20 @@ class LoginSuccessScreen extends React.Component {
                   } />
               </View>
             )}
+            {shiftStatus === 'ACTIVE' && (
+              <View style={[styles.menuContainer, {flex: 1}]}>
+                <MenuButton
+                  onPress={() => this.handleQuickTakeOut()}
+                  title={t('quickTakeOut')}
+                  icon={
+                    <MaterialIcon
+                      name="play-arrow"
+                      size={40}
+                      style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                    />
+                  } />
+              </View>
+            )}
             {(appType === 'retail' && shiftStatus !== 'ACTIVE') && (
               <View style={[styles.menuContainer, {flex: 1}]}>
                 <MenuButton
@@ -349,8 +391,28 @@ class LoginSuccessScreen extends React.Component {
               </View>
             )}
 
+            {(isTablet || (!isTablet && shiftStatus !== 'ACTIVE')) &&
+              <View style={[styles.menuContainer, {flex: 1}]}>
+                <MenuButton
+                  route='ClockIn'
+                  onPress={() =>
+                    NavigationService?.navigateToRoute('ClockIn', {
+                      authClientUserName: username
+                    })}
+                  title={t('menu.timecard')}
+                  icon={
+                    <FontAwesomeIcon
+                      name="clock-o"
+                      size={40}
+                      style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                    />
+                  } />
+              </View>
+            }
+          </View>
+          {!isTablet && shiftStatus === 'ACTIVE' &&
             <View style={[styles.menuContainer, {flex: 1}]}>
-              <MenuButton
+              <MenuFlatButton
                 route='ClockIn'
                 onPress={() =>
                   NavigationService?.navigateToRoute('ClockIn', {
@@ -360,13 +422,12 @@ class LoginSuccessScreen extends React.Component {
                 icon={
                   <FontAwesomeIcon
                     name="clock-o"
-                    size={40}
+                    size={32}
                     style={[styles?.buttonIconStyle(customMainThemeColor)]}
                   />
                 } />
-
             </View>
-          </View>
+          }
           <View style={[styles.flex(2), {margin: 10}]}>
             {(client?.localClientStatus?.noCategory
               || client?.localClientStatus?.noTableLayout

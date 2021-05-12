@@ -450,6 +450,7 @@ class OrderItemOptions extends React.Component {
 
                                         return (
                                             <Accordion.Panel
+                                                key={optionIndex}
                                                 header={<View style={styles.listPanel}>
                                                     <StyledText style={styles.listPanelText}>{prdOption.optionName}</StyledText>
                                                 </View>}

@@ -12,7 +12,6 @@ import SegmentedControl from "../components/SegmentedControl";
 import AntDesignIcon from "react-native-vector-icons/AntDesign";
 import RenderPureCheckBox from "../components/rn-elements/PureCheckBox";
 import {api, dispatchFetchRequest} from "../constants/Backend";
-import DateTimeFilterControlledForm from "./DateTimeFilterControlledForm";
 import {StyledText} from "../components/StyledText";
 
 class OfferForm extends React.Component {
@@ -53,7 +52,9 @@ class OfferForm extends React.Component {
       },
       to: {
         show: false
-      }
+      },
+      offerStartDate: initialValues.startDate ?? null,
+      offerEndDate: initialValues.endDate ?? null,
     };
   }
 
@@ -66,10 +67,22 @@ class OfferForm extends React.Component {
         products: this.props.selectedProducts !== undefined ? this.props.selectedProducts : selectedProducts
       });
     }
+    if (!!this.props?.initialValues?.startDate) {
+      this.props?.change(`startDate`, new Date(this.props.initialValues?.startDate))
+      this.props?.change(`endDate`, new Date(this.props.initialValues?.endDate))
+    }
   }
 
-  handlegetDate = (event, selectedDate) => {
+  handlegetStartDate = (event, selectedDate) => {
     console.log(`selected datetime: ${selectedDate}`);
+    this.setState({offerStartDate: new Date(selectedDate), offerEndDate: new Date(selectedDate)})
+    this.props?.change(`startDate`, new Date(selectedDate))
+    this.props?.change(`endDate`, new Date(selectedDate))
+  };
+  handlegetEndDate = (event, selectedDate) => {
+    console.log(`selected datetime: ${selectedDate}`);
+    this.setState({offerEndDate: new Date(selectedDate)})
+    this.props?.change(`endDate`, new Date(selectedDate))
   };
 
   showDatepicker = which => {
@@ -130,10 +143,7 @@ class OfferForm extends React.Component {
     if (this.props.onChange) {
       this.props.onChange(this.state);
     }
-    if (!!this.props?.initialValues?.startDate) {
-      this.props?.change(`startDate`, new Date(this.props.initialValues?.startDate))
-      this.props?.change(`endDate`, new Date(this.props.initialValues?.endDate))
-    }
+
   }
 
   render() {
@@ -218,50 +228,41 @@ class OfferForm extends React.Component {
           </View>
         </View>
 
-        {Platform.OS === "ios" ? (
-          <View style={[styles.tableRowContainer]}>
-            <View style={[styles.tableCellView, {flex: 2}]}>
-              <Field
-                name="startDate"
-                component={RenderDateTimePicker}
-                onChange={this.handlegetDate}
-                defaultValue={initialValues?.startDate ?? new Date()}
-                placeholder={t("order.date")}
-                isShow={this.state.from.show}
-                showDatepicker={() => this.showDatepicker("from")}
-                readonly={!this.state.dateBound}
-              />
-            </View>
-            <View
-              style={[
-                styles.tableCellView,
-                {flex: 0.2, justifyContent: "center"}
-              ]}
-            >
-              <Text>-</Text>
-            </View>
-            <View style={[styles.tableCellView, {flex: 2}]}>
-              <Field
-                name="endDate"
-                component={RenderDateTimePicker}
-                onChange={this.handlegetDate}
-                defaultValue={initialValues?.endDate ?? new Date()}
-                placeholder={t("order.date")}
-                isShow={this.state.to.show}
-                showDatepicker={() => this.showDatepicker("to")}
-                readonly={!this.state.dateBound}
-              />
-            </View>
+        <View style={[styles.tableRowContainer]}>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Field
+              name="startDate"
+              component={RenderDateTimePicker}
+              onChange={this.handlegetStartDate}
+              defaultValue={this.state?.startDate ?? new Date()}
+              placeholder={t("order.date")}
+              isShow={this.state.from.show}
+              showDatepicker={() => this.showDatepicker("from")}
+              readonly={!this.state.dateBound}
+            />
           </View>
-        ) : (
-            <View style={{marginLeft: -10, marginRight: -10}}>
-              <DateTimeFilterControlledForm
-                showAndroidDateTimeOnly={true}
-                endDate={initialValues.endDate ?? new Date()}
-                startDate={initialValues.startDate ?? new Date()}
-              />
-            </View>
-          )}
+          <View
+            style={[
+              styles.tableCellView,
+              {flex: 0.2, justifyContent: "center"}
+            ]}
+          >
+            <Text>-</Text>
+          </View>
+          <View style={[styles.tableCellView, {flex: 2}]}>
+            <Field
+              name="endDate"
+              component={RenderDateTimePicker}
+              onChange={this.handlegetEndDate}
+              defaultValue={this.state?.endDate ?? new Date()}
+              placeholder={t("order.date")}
+              isShow={this.state.to.show}
+              showDatepicker={() => this.showDatepicker("to")}
+              readonly={!this.state.dateBound}
+            />
+          </View>
+        </View>
+
 
         <View style={[styles.sectionContainer, styles.horizontalMargin,]}>
           <View style={[styles.sectionContainer]}>

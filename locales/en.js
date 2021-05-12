@@ -116,6 +116,45 @@ const en = {
     peopleCount: 'People Count',
     openOrder: 'Save Order'
   },
+  orderForm: {
+    newOrderTitle: 'New Order',
+    pinned: 'Pinned',
+    addItemSuccess: 'Added {{product}}',
+    nothing: 'Nothing',
+    choose: 'Choose',
+    deliverAllLineItems: 'Confirm to deliver all line items?',
+    lineItemCountCheck: 'At least one item is needed to submit an order.',
+    submitOrder: 'Submit',
+    not: 'No',
+    quickCheckout: 'Quick checkout',
+    backToTables: 'Back to Tables',
+    deleteOrder: 'Delete',
+    selectItemToDeliver: 'Please select a line item to deliver',
+    deliverOrder: 'Deliver',
+    payOrder: 'Payment',
+    stateTip: {
+      open: {
+        display: 'Open',
+        note: 'Order is open'
+      },
+      inProcess: {
+        display: 'Prep',
+        note: 'Preparing order'
+      },
+      prepared: {
+        display: 'Prepared',
+        note: 'order prepared'
+      },
+      delivered: {
+        display: 'Deliver',
+        note: 'Order is delivered'
+      },
+      settled: {
+        display: 'Paid',
+        note: 'Order is paid'
+      }
+    },
+  },
   order: {
     inStore: 'In Store',
     IN_STORE: 'In Store',

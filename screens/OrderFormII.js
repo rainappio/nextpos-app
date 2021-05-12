@@ -43,86 +43,6 @@ class OrderFormII extends React.Component {
   constructor(props, context) {
     super(props, context)
     this.myRef = React.createRef();
-    context.localize({
-      en: {
-        newOrderTitle: 'New Order',
-        pinned: 'Pinned',
-        addItemSuccess: 'Added {{product}}',
-        nothing: 'Nothing',
-        choose: 'Choose',
-        deliverAllLineItems: 'Confirm to deliver all line items?',
-        lineItemCountCheck: 'At least one item is needed to submit an order.',
-        submitOrder: 'Submit',
-        not: 'No',
-        quickCheckout: 'Quick checkout',
-        backToTables: 'Back to Tables',
-        deleteOrder: 'Delete',
-        selectItemToDeliver: 'Please select a line item to deliver',
-        deliverOrder: 'Deliver',
-        payOrder: 'Payment',
-        stateTip: {
-          open: {
-            display: 'Open',
-            note: 'Order is open'
-          },
-          inProcess: {
-            display: 'Prep',
-            note: 'Preparing order'
-          },
-          prepared: {
-            display: 'Prepared',
-            note: 'order prepared'
-          },
-          delivered: {
-            display: 'Deliver',
-            note: 'Order is delivered'
-          },
-          settled: {
-            display: 'Paid',
-            note: 'Order is paid'
-          }
-        },
-      },
-      zh: {
-        newOrderTitle: '新訂單',
-        pinned: '置頂產品',
-        addItemSuccess: '新增了 {{product}}',
-        nothing: '尚無產品',
-        choose: '選擇',
-        deliverAllLineItems: '確認所有品項送餐？',
-        lineItemCountCheck: '請加一個以上的產品到訂單裡.',
-        submitOrder: '送單',
-        not: '不',
-        quickCheckout: '快速結帳',
-        backToTables: '回到座位區',
-        deleteOrder: '刪除',
-        selectItemToDeliver: '請選擇品項送餐',
-        deliverOrder: '送餐完畢',
-        payOrder: '付款',
-        stateTip: {
-          open: {
-            display: '開單',
-            note: '開啟了訂單'
-          },
-          inProcess: {
-            display: '準備中',
-            note: '訂單已送出準備中'
-          },
-          prepared: {
-            display: '準備完成',
-            note: '訂單已準備完成'
-          },
-          delivered: {
-            display: '已送餐',
-            note: '訂單已送達'
-          },
-          settled: {
-            display: '已結帳',
-            note: '訂單已付款完畢'
-          }
-        },
-      }
-    })
 
     this.state = {
       activeSections: [0],
@@ -197,7 +117,7 @@ class OrderFormII extends React.Component {
               body: JSON.stringify(lineItemRequest)
             }, {defaultMessage: false},
             response => {
-              successMessage(this.context.t('addItemSuccess', {product: product.name}))
+              successMessage(this.context.t('orderForm.addItemSuccess', {product: product.name}))
               this.props.getOrder(orderId)
             }
           ).then()
@@ -318,7 +238,7 @@ class OrderFormII extends React.Component {
 
       Alert.alert(
         `${this.context.t('action.confirmMessageTitle')}`,
-        `${this.context.t('deliverAllLineItems')}`,
+        `${this.context.t('orderForm.deliverAllLineItems')}`,
         [
           {
             text: `${this.context.t('action.yes')}`,
@@ -375,7 +295,7 @@ class OrderFormII extends React.Component {
 
       Alert.alert(
         `${this.context.t('action.confirmMessageTitle')}`,
-        `${this.context.t('deliverAllLineItems')}`,
+        `${this.context.t('orderForm.deliverAllLineItems')}`,
         [
           {
             text: `${this.context.t('action.yes')}`,
@@ -641,7 +561,7 @@ class OrderFormII extends React.Component {
               <ScreenHeader backNavigation={true}
                 backAction={() => this.props.navigation.navigate('TablesSrc')}
                 parentFullScreen={true}
-                title={t('newOrderTitle')}
+                title={t('orderForm.newOrderTitle')}
               />
               <OrderTopInfo order={order} />
               <OrderItemDetailEditModal
@@ -676,12 +596,12 @@ class OrderFormII extends React.Component {
                   <ScrollView style={{flex: 1}}>
                     <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
                       <TouchableOpacity style={[(this.state.selectedLabel === 'pinned' ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: 'pinned'})}}>
-                        {this.PanelHeader(t('pinned'), '0', this.state.selectedLabel === 'pinned')}
+                        {this.PanelHeader(t('orderForm.pinned'), '0', this.state.selectedLabel === 'pinned')}
                       </TouchableOpacity>
                     </View>
 
-                    {labels.map(lbl => (
-                      <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
+                    {labels.map((lbl, index) => (
+                      <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles?.customBorderAndBackgroundColor(this.context)]} key={index}>
                         <TouchableOpacity style={[(this.state.selectedLabel === lbl.label ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: lbl.label})}}>
                           {this.PanelHeader(lbl.label, '0', this.state.selectedLabel === lbl.label)}
                         </TouchableOpacity>
@@ -700,10 +620,11 @@ class OrderFormII extends React.Component {
                     <ScrollView style={{flex: 1}}>
 
                       {(this.state?.selectedLabel === 'pinned' && map.get('pinned') !== undefined && map.get('pinned')?.length > 0) ?
-                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get('pinned').map(prd => {
+                        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get('pinned').map((prd) => {
                           return (
 
                             <TouchableOpacity style={[{width: '22%', marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, {backgroundColor: '#d6d6d6'}, (prd?.outOfStock && {backgroundColor: 'gray'})]}
+                              key={prd.id}
                               onPress={() => prd?.outOfStock ? this.handleItemOutOfStock(prd.id, prd?.outOfStock) : this.addItemToOrder(prd.id)}
                               onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}>
                               <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
@@ -719,7 +640,7 @@ class OrderFormII extends React.Component {
                               </View>
                             </TouchableOpacity>
                           )
-                        })}</View> : this.state?.selectedLabel === 'pinned' ? <StyledText style={{alignSelf: 'center'}}>{t('nothing')}</StyledText> : null}
+                        })}</View> : this.state?.selectedLabel === 'pinned' ? <StyledText style={{alignSelf: 'center'}}>{t('orderForm.nothing')}</StyledText> : null}
 
                       {(this.state?.selectedLabel === 'ungrouped' && map.get('ungrouped') !== undefined && map.get('ungrouped')?.length > 0) ?
                         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get('ungrouped').map(prd => (
@@ -739,7 +660,7 @@ class OrderFormII extends React.Component {
                               <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>${prd.price}</StyledText>
                             </View>
                           </TouchableOpacity>
-                        ))}</View> : this.state?.selectedLabel === 'ungrouped' ? <StyledText style={{alignSelf: 'center'}}>{t('nothing')}</StyledText> : null}
+                        ))}</View> : this.state?.selectedLabel === 'ungrouped' ? <StyledText style={{alignSelf: 'center'}}>{t('orderForm.nothing')}</StyledText> : null}
 
                       {labels.map(lbl => {
                         if (this.state?.selectedLabel === lbl.label) {
@@ -751,6 +672,7 @@ class OrderFormII extends React.Component {
                                     <TouchableOpacity style={[{width: '22%', marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, {backgroundColor: '#d6d6d6'}, (prd?.outOfStock && {backgroundColor: 'gray'})]}
                                       onPress={() => prd?.outOfStock ? this.handleItemOutOfStock(prd.id, prd?.outOfStock) : this.addItemToOrder(prd.id)}
                                       onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}
+                                      key={prd.id}
                                     >
 
                                       <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
@@ -766,7 +688,7 @@ class OrderFormII extends React.Component {
                                       </View>
                                     </TouchableOpacity>
                                   )
-                                })}</View> : <StyledText style={{alignSelf: 'center'}}>{t('nothing')}</StyledText>}
+                                })}</View> : <StyledText style={{alignSelf: 'center'}}>{t('orderForm.nothing')}</StyledText>}
                             </>
 
                           )
@@ -800,7 +722,7 @@ class OrderFormII extends React.Component {
                             onPress={() =>
 
                               order.lineItems.length === 0
-                                ? warningMessage(t('lineItemCountCheck'))
+                                ? warningMessage(t('orderForm.lineItemCountCheck'))
                                 : printers.length === 0 ?
                                   handleQuickCheckout(order, false)
                                   : Alert.alert(
@@ -825,7 +747,7 @@ class OrderFormII extends React.Component {
                           >
 
                             <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
-                              {t('quickCheckout')}
+                              {t('orderForm.quickCheckout')}
                             </Text>
                           </TouchableOpacity>
                         </View>
@@ -835,13 +757,13 @@ class OrderFormII extends React.Component {
                           <TouchableOpacity
                             onPress={() =>
                               order.lineItems.length === 0
-                                ? warningMessage(t('lineItemCountCheck'))
+                                ? warningMessage(t('orderForm.lineItemCountCheck'))
                                 : handleOrderSubmit(order.orderId)
                             }
                             style={styles?.flexButton(customMainThemeColor)}
                           >
                             <Text style={styles.flexButtonText}>
-                              {t('submitOrder')}
+                              {t('orderForm.submitOrder')}
                             </Text>
                           </TouchableOpacity>
                         </View>
@@ -872,7 +794,7 @@ class OrderFormII extends React.Component {
                             <TouchableOpacity
                               onPress={() =>
                                 order.lineItems.length === 0
-                                  ? warningMessage(t('lineItemCountCheck'))
+                                  ? warningMessage(t('orderForm.lineItemCountCheck'))
                                   : handlePrintOrderDetails(order.orderId)
                               }
                               style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
@@ -884,7 +806,7 @@ class OrderFormII extends React.Component {
                             <SecondActionButton
                               onPress={() => {
                                 order.lineItems.length === 0
-                                  ? warningMessage(t('lineItemCountCheck'))
+                                  ? warningMessage(t('orderForm.lineItemCountCheck'))
                                   : this.handleSelectedItemPrint(order.orderId)
                               }}
                               containerStyle={styles?.flexButtonSecondAction(this.context)}
@@ -903,19 +825,19 @@ class OrderFormII extends React.Component {
                           <TouchableOpacity
                             onPress={() =>
                               order.lineItems.length === 0
-                                ? warningMessage(t('lineItemCountCheck'))
+                                ? warningMessage(t('orderForm.lineItemCountCheck'))
                                 : handleOrderSubmit(order.orderId)
                             }
                             style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
                           >
                             <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
-                              {t('submitOrder')}
+                              {t('orderForm.submitOrder')}
                             </Text>
                           </TouchableOpacity>
                           <SecondActionButton
                             onPress={() =>
                               order.lineItems.length === 0
-                                ? warningMessage(t('lineItemCountCheck'))
+                                ? warningMessage(t('orderForm.lineItemCountCheck'))
                                 : printers.length === 0 ?
                                   handleQuickCheckout(order, false)
 
@@ -939,7 +861,7 @@ class OrderFormII extends React.Component {
                             }
                             containerStyle={styles?.flexButtonSecondAction(this.context)}
                             style={styles?.flexButtonSecondActionText(customMainThemeColor)}
-                            title={t('quickCheckout')}
+                            title={t('orderForm.quickCheckout')}
                           />
                         </View>
                         <View style={{flex: 1, marginLeft: 5}}>
@@ -949,7 +871,7 @@ class OrderFormII extends React.Component {
                             }}
                             style={styles?.flexButton(customMainThemeColor)}
                           >
-                            <Text style={styles.flexButtonText}>{t('deliverOrder')}</Text>
+                            <Text style={styles.flexButtonText}>{t('orderForm.deliverOrder')}</Text>
                           </TouchableOpacity>
                         </View>
                       </View>
@@ -979,7 +901,7 @@ class OrderFormII extends React.Component {
                             <TouchableOpacity
                               onPress={() =>
                                 order.lineItems.length === 0
-                                  ? warningMessage(t('lineItemCountCheck'))
+                                  ? warningMessage(t('orderForm.lineItemCountCheck'))
                                   : handlePrintOrderDetails(order.orderId)
                               }
                               style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
@@ -991,7 +913,7 @@ class OrderFormII extends React.Component {
                             <SecondActionButton
                               onPress={() => {
                                 order.lineItems.length === 0
-                                  ? warningMessage(t('lineItemCountCheck'))
+                                  ? warningMessage(t('orderForm.lineItemCountCheck'))
                                   : this.handleSelectedItemPrint(order.orderId)
                               }}
                               containerStyle={styles?.flexButtonSecondAction(this.context)}
@@ -1011,13 +933,13 @@ class OrderFormII extends React.Component {
                           <TouchableOpacity
                             onPress={() =>
                               order.lineItems.length === 0
-                                ? warningMessage(t('lineItemCountCheck'))
+                                ? warningMessage(t('orderForm.lineItemCountCheck'))
                                 : handleOrderSubmit(order.orderId)
                             }
                             style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
                           >
                             <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
-                              {t('submitOrder')}
+                              {t('orderForm.submitOrder')}
                             </Text>
                           </TouchableOpacity>
                           <SecondActionButton
@@ -1060,7 +982,7 @@ class OrderFormII extends React.Component {
                           <TouchableOpacity
                             onPress={() =>
                               order.lineItems.length === 0
-                                ? warningMessage(t('lineItemCountCheck'))
+                                ? warningMessage(t('orderForm.lineItemCountCheck'))
                                 : (!!this.props.navigation.state.params?.orderSetData && this.props.navigation.state.params?.orderSetData?.status !== 'MERGED')
                                   ? Alert.alert(
                                     `${this.context.t('order.mergeOrderTitle')}`,
@@ -1083,7 +1005,7 @@ class OrderFormII extends React.Component {
                             }
                             style={styles?.flexButton(customMainThemeColor)}
                           >
-                            <Text style={styles.flexButtonText}>{t('payOrder')}</Text>
+                            <Text style={styles.flexButtonText}>{t('orderForm.payOrder')}</Text>
                           </TouchableOpacity>
                         </View>
                       </View>
@@ -1096,7 +1018,7 @@ class OrderFormII extends React.Component {
                             <TouchableOpacity
                               onPress={() =>
                                 order.lineItems.length === 0
-                                  ? warningMessage(t('lineItemCountCheck'))
+                                  ? warningMessage(t('orderForm.lineItemCountCheck'))
                                   : handlePrintOrderDetails(order.orderId)
                               }
                               style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
@@ -1108,7 +1030,7 @@ class OrderFormII extends React.Component {
                             <SecondActionButton
                               onPress={() => {
                                 order.lineItems.length === 0
-                                  ? warningMessage(t('lineItemCountCheck'))
+                                  ? warningMessage(t('orderForm.lineItemCountCheck'))
                                   : this.handleSelectedItemPrint(order.orderId)
                               }}
                               containerStyle={styles?.flexButtonSecondAction(this.context)}
@@ -1134,7 +1056,7 @@ class OrderFormII extends React.Component {
                             }}
                             style={styles?.flexButton(customMainThemeColor)}
                           >
-                            <Text style={styles.flexButtonText}>{t('deliverOrder')}</Text>
+                            <Text style={styles.flexButtonText}>{t('orderForm.deliverOrder')}</Text>
                           </TouchableOpacity>
 
                         </View>
@@ -1167,6 +1089,7 @@ class OrderFormII extends React.Component {
                                 disableLeftSwipe={!!item?.associatedLineItemId}
                                 disableRightSwipe={!!item?.associatedLineItemId}
                                 ref={(e) => this[`ref_${index}`] = e}
+                                key={index}
                               >
                                 <View style={{flex: 1, marginBottom: '3%', borderRadius: 10, width: '100%', flexDirection: 'row'}}>
                                   <View style={{flex: 1, borderRadius: 10}} >
@@ -1215,15 +1138,15 @@ class OrderFormII extends React.Component {
                                     </View>
                                     <View style={{position: 'absolute', bottom: '3%', left: '3%', flexDirection: 'row'}}>
                                       <View style={{marginRight: 5}}>
-                                        {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: `${Colors.orderBgWhite}`, color: `${Colors.orderOpen}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
+                                        {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: `${Colors.orderBgWhite}`, color: `${Colors.orderOpen}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.open.display')}</StyledText>}
                                         {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && (
-                                          <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderInProcess}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
+                                          <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderInProcess}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.inProcess.display')}</StyledText>
                                         )}
-                                        {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderPrepare}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
+                                        {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderPrepare}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.prepared.display')}</StyledText>}
                                         {item?.state === 'DELIVERED' && (
-                                          <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderDeliver}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
+                                          <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderDeliver}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.delivered.display')}</StyledText>
                                         )}
-                                        {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
+                                        {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.settled.display')}</StyledText>}
                                       </View>
                                       <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>
                                         {timeAgo.format(Date.now() - getTimeDifference(item?.createdDate), {flavour: 'narrow'})}
@@ -1245,7 +1168,7 @@ class OrderFormII extends React.Component {
                                         }}
                                         style={{width: '100%', }}
                                       >
-                                        <StyledText style={{...{backgroundColor: '#d6d6d6', color: '#fff'}, padding: 5, backgroundColor: '#808080', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1, width: '100%', textAlign: 'center'}}>{t('choose')}</StyledText>
+                                        <StyledText style={{...{backgroundColor: '#d6d6d6', color: '#fff'}, padding: 5, backgroundColor: '#808080', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1, width: '100%', textAlign: 'center'}}>{t('orderForm.choose')}</StyledText>
                                       </TouchableOpacity>}
                                     </View>
                                   </View>
@@ -1253,7 +1176,7 @@ class OrderFormII extends React.Component {
                               </SwipeRow>
                             )
                           })
-                          : <StyledText style={{alignSelf: 'center'}}>{t('nothing')}</StyledText>}
+                          : <StyledText style={{alignSelf: 'center'}}>{t('orderForm.nothing')}</StyledText>}
                       </ScrollView>
                     </View>}
                   <View style={{flex: 1, marginVertical: 5, justifyContent: 'space-between', paddingLeft: 10}}>
@@ -1295,7 +1218,7 @@ class OrderFormII extends React.Component {
             <ScrollView style={{flex: 1, marginBottom: 45}} scrollIndicatorInsets={{right: 1}}>
               <View style={styles.container}>
                 <Text style={styles?.screenTitle(customMainThemeColor)}>
-                  {t('newOrderTitle')}
+                  {t('orderForm.newOrderTitle')}
                 </Text>
               </View>
               <View style={styles.childContainer}>
@@ -1306,7 +1229,7 @@ class OrderFormII extends React.Component {
                   containerStyle={[styles.inverseBackground(this.context)]}
                 >
                   <Accordion.Panel
-                    header={this.PanelHeader(t('pinned'), '0', true)}
+                    header={this.PanelHeader(t('orderForm.pinned'), '0', true)}
                     key="pinned"
                   >
                     <List>

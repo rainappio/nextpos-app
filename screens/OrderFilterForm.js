@@ -202,9 +202,9 @@ class OrderFilterForm extends React.Component {
                     </View>
                     <StyledText>{t('allSelected')}</StyledText>
                   </View>
-                  {this.state?.statusOptions?.map((status) => {
+                  {this.state?.statusOptions?.map((status, index) => {
                     return (
-                      <View style={{
+                      <View key={index} style={{
                         flexDirection: 'row',
                         paddingVertical: 8,
                         alignItems: 'center',
@@ -486,9 +486,9 @@ class OrderFilterForm extends React.Component {
                   </View>
                   <StyledText>{t('allSelected')}</StyledText>
                 </View>
-                {this.state?.statusOptions?.map((status) => {
+                {this.state?.statusOptions?.map((status, index) => {
                   return (
-                    <View style={{
+                    <View key={index} style={{
                       flexDirection: 'row',
                       paddingVertical: 8,
                       alignItems: 'center',
