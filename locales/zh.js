@@ -116,6 +116,45 @@ const zh = {
     peopleCount: '來客數',
     openOrder: '儲存訂單'
   },
+  orderForm: {
+    newOrderTitle: '新訂單',
+    pinned: '置頂產品',
+    addItemSuccess: '新增了 {{product}}',
+    nothing: '尚無產品',
+    choose: '選擇',
+    deliverAllLineItems: '確認所有品項送餐？',
+    lineItemCountCheck: '請加一個以上的產品到訂單裡.',
+    submitOrder: '送單',
+    not: '不',
+    quickCheckout: '快速結帳',
+    backToTables: '回到座位區',
+    deleteOrder: '刪除',
+    selectItemToDeliver: '請選擇品項送餐',
+    deliverOrder: '送餐完畢',
+    payOrder: '付款',
+    stateTip: {
+      open: {
+        display: '開單',
+        note: '開啟了訂單'
+      },
+      inProcess: {
+        display: '準備中',
+        note: '訂單已送出準備中'
+      },
+      prepared: {
+        display: '準備完成',
+        note: '訂單已準備完成'
+      },
+      delivered: {
+        display: '已送餐',
+        note: '訂單已送達'
+      },
+      settled: {
+        display: '已結帳',
+        note: '訂單已付款完畢'
+      }
+    },
+  },
   order: {
     inStore: '內用',
     IN_STORE: '內用',

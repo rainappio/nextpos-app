@@ -41,6 +41,8 @@ class CategoryCustomizeScreen extends React.Component {
         workingArea: '工作區'
       }
     })
+
+    this.props.change(`appliesToProducts`, true)
   }
 
   render() {

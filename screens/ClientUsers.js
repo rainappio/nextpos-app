@@ -7,6 +7,8 @@ import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
+import {ThemeScrollView} from "../components/ThemeScrollView";
+
 
 class ClientUsers extends React.Component {
   static navigationOptions = {
@@ -63,7 +65,7 @@ class ClientUsers extends React.Component {
             }
           />
 
-          <View style={[styles.horizontalMargin, {marginTop: 80}]}>
+          <ThemeScrollView style={[styles.horizontalMargin, {marginTop: 28}]}>
             <FlatList
               data={clientusers}
               renderItem={({item}) => (
@@ -109,7 +111,7 @@ class ClientUsers extends React.Component {
               numColumns={2}
               keyExtractor={(item, index) => index.toString()}
             />
-          </View>
+          </ThemeScrollView>
         </View>
       </ThemeContainer>
     )

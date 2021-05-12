@@ -2,7 +2,7 @@ import React from 'react'
 import {FlatList, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
-import {formatDate, getOrdersByDateRange, getOrdersByInvoiceNumber, formatCurrency} from '../actions'
+import {formatDate, dateToLocaleString, formatDateOnly, formatTime, getOrdersByDateRange, getOrdersByInvoiceNumber, formatCurrency} from '../actions'
 import {ListItem} from 'react-native-elements'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -18,7 +18,7 @@ import {compose} from "redux";
 import {withContext} from "../helpers/contextHelper";
 import {StyledText} from "../components/StyledText";
 import BackendErrorScreen from "./BackendErrorScreen";
-import {Octicons} from '@expo/vector-icons';
+import {Octicons, FontAwesome5} from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 
 
@@ -105,8 +105,14 @@ class OrdersScreen extends React.Component {
           <View style={[styles.tableCellView, {flex: 2}]}>
             <StyledText>{item.serialId}</StyledText>
           </View>
-          <View style={[styles.tableCellView, {flex: 3}]}>
-            <StyledText>{formatDate(item.createdTime)}</StyledText>
+          <View style={[{flex: 3}]}>
+            <StyledText>{formatDateOnly(item.createdTime)}</StyledText>
+            <View style={[{flexDirection: 'row'}]} >
+              <StyledText>{formatTime(item.createdTime)}, </StyledText>
+              <StyledText>{formatTime(item.modifiedDate)}
+                {(new Date(item.modifiedDate).getDate() > new Date(item.createdTime).getDate()) && `(+)`}
+              </StyledText>
+            </View>
           </View>
           <View style={[styles.tableCellView, {flex: 1}]}>
             <StyledText>${item.orderTotal}</StyledText>
