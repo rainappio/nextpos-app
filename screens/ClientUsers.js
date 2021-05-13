@@ -51,7 +51,8 @@ class ClientUsers extends React.Component {
     const {clientusers, navigation} = this.props
     const {t, customMainThemeColor, customBackgroundColor, customSecondThemeColor} = this.context
     return (
-      <ThemeContainer>
+
+      <ThemeScrollView>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader backNavigation={!!navigation?.actions?.pop}
             parentFullScreen={true}
@@ -65,7 +66,7 @@ class ClientUsers extends React.Component {
             }
           />
 
-          <ThemeScrollView style={[styles.horizontalMargin, {marginTop: 28}]}>
+          <View style={[styles.horizontalMargin, {marginTop: 28}]}>
             <FlatList
               data={clientusers}
               renderItem={({item}) => (
@@ -111,9 +112,9 @@ class ClientUsers extends React.Component {
               numColumns={2}
               keyExtractor={(item, index) => index.toString()}
             />
-          </ThemeScrollView>
+          </View>
         </View>
-      </ThemeContainer>
+      </ThemeScrollView>
     )
   }
 }
