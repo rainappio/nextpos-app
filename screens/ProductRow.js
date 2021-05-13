@@ -6,7 +6,7 @@ import {CustomPopUp} from '../components/PopUp'
 import {getLables, getProducts} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
-import {api, dispatchFetchRequest} from '../constants/Backend'
+import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import ScreenHeader from "../components/ScreenHeader";
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
@@ -198,7 +198,7 @@ class ProductRow extends React.Component {
       return (
         (this.state.productDragged || this.state.selectedToggleItems.get(data.productLabelId) && !this.state.labelDragged && !this.state.isDragging) ?
           <View style={[styles.productPanel, styles.customBorderAndBackgroundColor(this.context), {paddingVertical: 0, paddingLeft: 0}]} key={data.id}>
-            {this.state.productDragged && data.productLabelId !== 'ungrouped' && <TouchableOpacity
+            {this.state.productDragged && <TouchableOpacity
               style={[styles.jc_alignIem_center, {backgroundColor: '#f75336', width: 60, marginRight: 4}]}
               onLongPress={drag}
             >
@@ -246,7 +246,6 @@ class ProductRow extends React.Component {
 
     const from = data?.from;
     const to = data?.to;
-    const labelIdToUpdate = oldData?.[from]?.id
     console.log("action check : ", from, to)
     if (from === to) {
       return null
@@ -285,7 +284,7 @@ class ProductRow extends React.Component {
         }
       }
 
-      dispatchFetchRequest(
+      dispatchFetchRequestWithOption(
         api.productLabel.changeProductLabel(oldData?.[from]?.id),
         {
           method: 'POST',
@@ -296,22 +295,80 @@ class ProductRow extends React.Component {
           },
           body: JSON.stringify({productLabelId: preLabel?.id})
         },
+        {
+          defaultMessage: false,
+        },
         response => {
-          oldData.splice(to, 0, oldData[from])
-          if (from > to) {oldData.splice((from + 1), 1)}
-          if (from < to) {oldData.splice((from), 1)}
+        }
+      ).then(() => {
 
-          let newLabelIndexArr = []
-          let newProductIndexArr = []
-          oldData.forEach((item, index) => {
-            if (item.aType === 'LABEL') {newLabelIndexArr.push(index)}
-            if (item.aType === 'PRODUCT') {newProductIndexArr.push(index)}
-          })
-          this.setState({lableIndexArray: newLabelIndexArr, productIndexArr: newProductIndexArr})
-          console.log("sort product")
+        oldData.splice(to, 0, oldData[from])
+        if (from > to) {oldData.splice((from + 1), 1)}
+        if (from < to) {oldData.splice((from), 1)}
+
+        let newLabelIndexArr = []
+        let newProductIndexArr = []
+        oldData.forEach((item, index) => {
+          if (item.aType === 'LABEL') {newLabelIndexArr.push(index)}
+          if (item.aType === 'PRODUCT') {newProductIndexArr.push(index)}
+        })
+        this.setState({lableIndexArray: newLabelIndexArr, productIndexArr: newProductIndexArr})
+        console.log("change product label")
+
+        let sortProducts = [], productIdsToUpdate = [], testArr = []
+        if (oldData?.[from]?.productLabelId == preLabel?.id) {
+          sortProducts = oldData.slice(labelIndexArr[index] + 1, labelIndexArr[index + 1])
+          productIdsToUpdate = []
+          sortProducts.forEach((item) => productIdsToUpdate.push(item.id))
+          sortProducts.forEach((item) => testArr.push(item.name))
+          console.log("same label: ", testArr)
+        }
+        else {
+          if (from > to) {
+            sortProducts = oldData.slice(labelIndexArr[index] + 1, (labelIndexArr[index + 1] + 1))
+          }
+          if (from < to) {
+            if (oldData?.[labelIndexArr[index]].name) {
+              sortProducts = oldData.slice(labelIndexArr[index], (labelIndexArr[index + 1]))
+            } else {
+              sortProducts = oldData.slice(labelIndexArr[index] - 1, (labelIndexArr[index + 1])).filter((item) => item.aType === 'PRODUCT')
+            }
+          }
+          productIdsToUpdate = []
+          sortProducts.forEach((item) => productIdsToUpdate.push(item.id))
+          sortProducts.forEach((item) => testArr.push(item.name))
+          console.log("change label: ", testArr)
 
         }
-      ).then()
+
+        dispatchFetchRequestWithOption(
+          api.product.sortSameLabelPrdList(productIdsToUpdate),
+          {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({productIds: productIdsToUpdate})
+          },
+          {
+            defaultMessage: false,
+          },
+          response => {
+          }
+        ).then(() => {
+          let newProductIndexArr = []
+          oldData.forEach((item, index) => {
+            if (item.aType === 'PRODUCT') {newProductIndexArr.push(index)}
+          })
+          this.setState({productIndexArr: newProductIndexArr})
+          console.log("sort product")
+        }
+        )
+
+      })
+
     }
   }
 
@@ -348,7 +405,7 @@ class ProductRow extends React.Component {
           labelIdsToUpdate.push(item.id)
         }
       })
-      dispatchFetchRequest(
+      dispatchFetchRequestWithOption(
         api.productLabel.sortPrdLabelList(labelIdsToUpdate),
         {
           method: 'POST',
@@ -358,6 +415,9 @@ class ProductRow extends React.Component {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({productLabelIds: labelIdsToUpdate})
+        },
+        {
+          defaultMessage: false,
         },
         response => {
           this.props.getLables()

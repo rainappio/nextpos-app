@@ -140,7 +140,10 @@ export const api = {
     },
     toggleOutOfStock: id => {
       return `${apiRoot}/products/${id}/toggleOutOfStock`
-    }
+    },
+    sortSameLabelPrdList: productIds => {
+      return `${apiRoot}/products/ordering`
+    },
   },
   productLabel: {
     getById: id => {
