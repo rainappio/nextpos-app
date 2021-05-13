@@ -253,9 +253,14 @@ class ProductRow extends React.Component {
 
     if (labelIndexArr?.includes(from)) {
 
-      oldData.splice(to, 0, oldData[from])
-      if (from > to) {oldData.splice((from + 1), 1)}
-      if (from < to) {oldData.splice((from), 1)}
+      if (from > to) {
+        oldData.splice(to, 0, oldData[from])
+        oldData.splice((from + 1), 1)
+      }
+      else if (from < to) {
+        oldData.splice((to + 1), 0, oldData[from])
+        oldData.splice((from), 1)
+      }
 
       let newLabelIndexArr = []
       let newProductIndexArr = []
@@ -302,9 +307,14 @@ class ProductRow extends React.Component {
         }
       ).then(() => {
 
-        oldData.splice(to, 0, oldData[from])
-        if (from > to) {oldData.splice((from + 1), 1)}
-        if (from < to) {oldData.splice((from), 1)}
+        if (from > to) {
+          oldData.splice(to, 0, oldData[from])
+          oldData.splice((from + 1), 1)
+        }// EX: from 2 to 3, add item at 4 & delete 2
+        else if (from < to) {
+          oldData.splice((to + 1), 0, oldData[from])
+          oldData.splice((from), 1)
+        }
 
         let newLabelIndexArr = []
         let newProductIndexArr = []
