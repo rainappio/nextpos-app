@@ -336,7 +336,7 @@ class TablesScreen extends React.Component {
                 this.loadLocalization()
               }}
             />
-            <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/inflightOrders/${client?.id}`]}
+            <SockJsClient url={`${apiRoot}/ws`} topics={[`/topic/inflightOrders/${client?.id}`]}
               onMessage={(data) => {
                 if (data === `${client?.id}.inflightOrders.ordersChanged`) {
                   this.props.getfetchOrderInflights()
@@ -346,8 +346,8 @@ class TablesScreen extends React.Component {
                 this.orderRef = client
               }}
               onConnect={() => {
-                (this.orderRef && this.orderRef.sendMessage) &&
-                  this.orderRef.sendMessage(`/async/inflightOrders/${client?.id}`)
+                // (this.orderRef && this.orderRef.sendMessage) &&
+                //   this.orderRef.sendMessage(`/async/inflightOrders/${client?.id}`)
                 console.log('onConnect TablesScreen tablet')
               }}
               onDisconnect={() => {
@@ -652,7 +652,7 @@ class TablesScreen extends React.Component {
                 this.loadLocalization()
               }}
             />
-            <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/inflightOrders/${client?.id}`]}
+            <SockJsClient url={`${apiRoot}/ws`} topics={[`/topic/inflightOrders/${client?.id}`]}
               onMessage={(data) => {
                 if (data === `${client?.id}.inflightOrders.ordersChanged`) {
                   this.props.getfetchOrderInflights()
@@ -662,12 +662,10 @@ class TablesScreen extends React.Component {
                 this.orderRef = client
               }}
               onConnect={() => {
-                (this.orderRef && this.orderRef.sendMessage) &&
-                  this.orderRef.sendMessage(`/async/inflightOrders/${client?.id}`)
-                console.log('onConnect TableScreen phone')
+                console.log(`onConnect ${Device.deviceName}`)
               }}
               onDisconnect={() => {
-                console.log('onDisconnect')
+                console.log(`onDisconnect ${Device.deviceName}`)
               }}
               debug={false}
             />

@@ -234,7 +234,7 @@ class RetailOrderSummaryScreen extends React.Component {
                             )
                         }
                     />
-                    <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/order/${order?.orderId}`]}
+                    <SockJsClient url={`${apiRoot}/ws`} topics={[`/topic/order/${order?.orderId}`]}
                         onMessage={(data) => {
                             if (data === `${order?.orderId}.order.orderChanged`) {
                                 this.props.getOrder(order?.orderId)
@@ -244,10 +244,7 @@ class RetailOrderSummaryScreen extends React.Component {
                             this.orderFormRef = client
                         }}
                         onConnect={() => {
-                            (this.orderFormRef && this.orderFormRef.sendMessage) ?
-                                this.orderFormRef.sendMessage(`/async/order/${order?.orderId}`)
-                                :
-                                console.log('onConnect retail phone error')
+                          console.log('onConnect')
                         }}
                         onDisconnect={() => {
                             console.log('onDisconnect')

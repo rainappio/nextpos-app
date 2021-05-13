@@ -444,7 +444,7 @@ class OrdersSummaryRow extends React.Component {
               )
             }
           />
-          <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/order/${order?.orderId}`]}
+          <SockJsClient url={`${apiRoot}/ws`} topics={[`/topic/order/${order?.orderId}`]}
             onMessage={(data) => {
               if (data === `${order?.orderId}.order.orderChanged`) {
                 this.props.getOrder(order?.orderId)
@@ -455,14 +455,12 @@ class OrdersSummaryRow extends React.Component {
               this.orderFormRef = client
             }}
             onConnect={() => {
-              (this.orderFormRef && this.orderFormRef.sendMessage) &&
-                this.orderFormRef.sendMessage(`/async/order/${order?.orderId}`)
               console.log('onConnect phone')
             }}
             onDisconnect={() => {
               console.log('onDisconnect')
             }}
-            debug={false}
+            debug={true}
           />
           <SplitBillPopUp
             navigation={this.props.navigation}

@@ -167,7 +167,7 @@ class OrderDisplayScreen extends React.Component {
 
     return (
       <ThemeContainer>
-        <SockJsClient url={webSocketHost} topics={[`/dest/${webSocketUrlPath}/${client?.id}`]}
+        <SockJsClient url={webSocketHost} topics={[`/topic/${webSocketUrlPath}/${client?.id}`]}
           onMessage={(data) => {
             if (data?.needAlert) {
               playSound()
@@ -178,9 +178,6 @@ class OrderDisplayScreen extends React.Component {
             this.clientRef = client
           }}
           onConnect={() => {
-            if (this.state?.firstTimeConnect) {
-              this.clientRef.sendMessage(`/async/${webSocketUrlPath}/${client?.id}`);
-            }
             this.setState({socketConnected: true})
           }}
           onDisconnect={() => {
