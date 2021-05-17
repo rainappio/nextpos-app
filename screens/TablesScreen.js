@@ -1,4 +1,4 @@
-import React, {Component, useContext, useState, useEffect} from 'react'
+import React, {Component, useContext, useState, useEffect, forwardRef} from 'react'
 import {Animated, PanResponder, FlatList, RefreshControl, Text, TouchableOpacity, View, Dimensions, KeyboardAvoidingView, Alert} from 'react-native'
 import {connect} from 'react-redux'
 import AddBtn from '../components/AddBtn'
@@ -21,7 +21,6 @@ import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import StyledTextInput from "../components/StyledTextInput";
 import {withAnchorPoint} from 'react-native-anchor-point';
-import * as Device from 'expo-device';
 import {style} from 'd3';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -31,8 +30,9 @@ import en from 'javascript-time-ago/locale/en';
 import NewOrderModal from './NewOrderModal';
 import {getInitialTablePosition, getTablePosition, getSetPosition} from "../helpers/tableAction";
 import NavigationService from "../navigation/NavigationService";
-import SockJsClient from 'react-stomp';
 import {MaterialIcons} from '@expo/vector-icons';
+import {RealTimeOrderUpdate} from '../components/RealTimeOrderUpdate'
+
 
 class TablesScreen extends React.Component {
   static navigationOptions = {
@@ -175,6 +175,13 @@ class TablesScreen extends React.Component {
     })
   }
 
+  handleOnMessage = (data, id) => {
+    if (data === `${id}.inflightOrders.ordersChanged`) {
+      console.log("refresh table")
+      this.props.getfetchOrderInflights()
+    }
+  }
+
   render() {
     const {
       navigation,
@@ -199,6 +206,7 @@ class TablesScreen extends React.Component {
       tableTimeLimit = client.clientSettings?.TABLE_TIME_LIMIT?.value
       isTimeLimit = client.clientSettings?.TABLE_TIME_LIMIT?.enabled
     }
+
 
 
     if (isLoading) {
@@ -336,24 +344,10 @@ class TablesScreen extends React.Component {
                 this.loadLocalization()
               }}
             />
-            <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/inflightOrders/${client?.id}`]}
-              onMessage={(data) => {
-                if (data === `${client?.id}.inflightOrders.ordersChanged`) {
-                  this.props.getfetchOrderInflights()
-                }
-              }}
-              ref={(client) => {
-                this.orderRef = client
-              }}
-              onConnect={() => {
-                (this.orderRef && this.orderRef.sendMessage) &&
-                  this.orderRef.sendMessage(`/async/inflightOrders/${client?.id}`)
-                console.log('onConnect TablesScreen tablet')
-              }}
-              onDisconnect={() => {
-                console.log('onDisconnect')
-              }}
-              debug={false}
+            <RealTimeOrderUpdate
+              topics={`/topic/inflightOrders/${client?.id}`}
+              handleOnMessage={this.handleOnMessage}
+              id={client?.id}
             />
 
             <View style={[styles.fullWidthScreen]}>
@@ -652,24 +646,10 @@ class TablesScreen extends React.Component {
                 this.loadLocalization()
               }}
             />
-            <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/inflightOrders/${client?.id}`]}
-              onMessage={(data) => {
-                if (data === `${client?.id}.inflightOrders.ordersChanged`) {
-                  this.props.getfetchOrderInflights()
-                }
-              }}
-              ref={(client) => {
-                this.orderRef = client
-              }}
-              onConnect={() => {
-                (this.orderRef && this.orderRef.sendMessage) &&
-                  this.orderRef.sendMessage(`/async/inflightOrders/${client?.id}`)
-                console.log('onConnect TableScreen phone')
-              }}
-              onDisconnect={() => {
-                console.log('onDisconnect')
-              }}
-              debug={false}
+            <RealTimeOrderUpdate
+              topics={`/topic/inflightOrders/${client?.id}`}
+              handleOnMessage={this.handleOnMessage}
+              id={client?.id}
             />
 
             <View style={styles.fullWidthScreen}>

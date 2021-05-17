@@ -19,9 +19,10 @@ import {compose} from "redux";
 import {StyledText} from "../components/StyledText";
 import {SecondActionButton} from "../components/ActionButtons";
 import {SplitBillPopUp} from '../components/PopUp'
-import SockJsClient from 'react-stomp';
 import Colors from "../constants/Colors";
 import {OfferTooltip} from "../components/OfferTooltip";
+import {RealTimeOrderUpdate} from '../components/RealTimeOrderUpdate'
+
 
 class OrdersSummaryRow extends React.Component {
   static contextType = LocaleContext
@@ -400,6 +401,13 @@ class OrdersSummaryRow extends React.Component {
     }).then()
   }
 
+  handleOnMessage = (data, id) => {
+    if (data === `${id}.order.orderChanged`) {
+      console.log("refresh order")
+      this.props.getOrder(this.props.order.orderId)
+    }
+  }
+
   render() {
     const {
       products = [],
@@ -444,25 +452,10 @@ class OrdersSummaryRow extends React.Component {
               )
             }
           />
-          <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/order/${order?.orderId}`]}
-            onMessage={(data) => {
-              if (data === `${order?.orderId}.order.orderChanged`) {
-                this.props.getOrder(order?.orderId)
-                console.log("get phone")
-              }
-            }}
-            ref={(client) => {
-              this.orderFormRef = client
-            }}
-            onConnect={() => {
-              (this.orderFormRef && this.orderFormRef.sendMessage) &&
-                this.orderFormRef.sendMessage(`/async/order/${order?.orderId}`)
-              console.log('onConnect phone')
-            }}
-            onDisconnect={() => {
-              console.log('onDisconnect')
-            }}
-            debug={false}
+          <RealTimeOrderUpdate
+            topics={`/topic/order/${order?.orderId}`}
+            handleOnMessage={this.handleOnMessage}
+            id={order?.orderId}
           />
           <SplitBillPopUp
             navigation={this.props.navigation}

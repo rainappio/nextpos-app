@@ -419,7 +419,8 @@ const en = {
       cannotDelete: 'Order set has been merged. Please settle the order.',
       alreadyProcessed: 'Processed inventory order cannot be modified.',
       noPrinter: 'Checkout printer is not setup.',
-      outOfStock: 'The selected product is out of stock.'
+      outOfStock: 'The selected product is out of stock.',
+      inactiveOffer: 'The resolved offer is not active',
     }
   },
   eInvoice: {
