@@ -30,9 +30,9 @@ import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import {NavigationEvents} from "react-navigation";
 import {SplitBillPopUp} from '../components/PopUp'
-import SockJsClient from 'react-stomp';
 import Colors from "../constants/Colors";
 import {OfferTooltip} from "../components/OfferTooltip";
+import {RealTimeOrderUpdate} from '../components/RealTimeOrderUpdate'
 
 class OrderFormII extends React.Component {
   static navigationOptions = {
@@ -306,7 +306,7 @@ class OrderFormII extends React.Component {
                 credentials: 'include',
                 headers: {
                   // Andriod return error with wrong type
-                  // 'Content-Type': 'application/json', 
+                  // 'Content-Type': 'application/json',
                 },
                 body: formData
               },
@@ -348,7 +348,7 @@ class OrderFormII extends React.Component {
       }
     }, response => {
       this.props.navigation.navigate('OrderFormII')
-      this.props.getOrder(this.props.order.orderId)
+      this.props.getOrder(orderId)
     }).then()
   }
 
@@ -373,7 +373,7 @@ class OrderFormII extends React.Component {
         const message = isFree ? 'order.free' : 'order.cancelFree'
         successMessage(this.context.t(message))
         this.props.navigation.navigate('OrderFormII')
-        this.props.getOrder(this.props.order.orderId)
+        this.props.getOrder(orderId)
       })
     }).then()
   }
@@ -389,7 +389,7 @@ class OrderFormII extends React.Component {
       body: JSON.stringify({orderId: orderId})
     }, response => {
       response.json().then(data => {
-        this.props.getOrder(this.props.order.orderId)
+        this.props.getOrder(orderId)
       })
     }).then(() => handleOrderAction(this.props.order?.orderId, 'ENTER_PAYMENT', () => this.props.navigation.navigate('Payment', {
       order: this.props.order
@@ -473,6 +473,13 @@ class OrderFormII extends React.Component {
     }
   }
 
+  handleOnMessage = (data, id) => {
+    if (data === `${id}.order.orderChanged`) {
+      console.log("refresh order")
+      this.props.getOrder(this.props.navigation.state.params.orderId)
+    }
+  }
+
 
   render() {
     const {
@@ -535,28 +542,13 @@ class OrderFormII extends React.Component {
             <View style={{...styles.fullWidthScreen, marginBottom: 0}}>
               <NavigationEvents
                 onWillFocus={() => {
-                  this.props.getOrder(order?.orderId)
+                  this.props.getOrder(this.props.navigation.state.params.orderId)
                 }}
               />
-              <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/order/${order?.orderId}`]}
-                onMessage={(data) => {
-                  if (data === `${order?.orderId}.order.orderChanged`) {
-                    this.props.getOrder(order?.orderId)
-                    console.log("get tablet")
-                  }
-                }}
-                ref={(client) => {
-                  this.orderFormRef = client
-                }}
-                onConnect={() => {
-                  (this.orderFormRef && this.orderFormRef.sendMessage) &&
-                    this.orderFormRef.sendMessage(`/async/order/${order?.orderId}`)
-                  console.log('onConnect tablet')
-                }}
-                onDisconnect={() => {
-                  console.log('onDisconnect')
-                }}
-                debug={false}
+              <RealTimeOrderUpdate
+                topics={`/topic/order/${this.props.navigation.state.params.orderId}`}
+                handleOnMessage={this.handleOnMessage}
+                id={this.props.navigation.state.params.orderId}
               />
               <ScreenHeader backNavigation={true}
                 backAction={() => this.props.navigation.navigate('TablesSrc')}

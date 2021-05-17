@@ -44,9 +44,9 @@ class OrderItem extends React.PureComponent {
     if (!!order?.tables && order?.tables?.length > 0) {
       return (
         <>
-          {order.tables.map((table) => {
+          {order.tables.map((table, index) => {
             return (
-              <View key={table.id} style={[styles.tableRowContainerWithBorder, isTimeLimit && {backgroundColor: timeLimitBgColor}]}>
+              <View key={index} style={[styles.tableRowContainerWithBorder, isTimeLimit && {backgroundColor: timeLimitBgColor}]}>
                 <TouchableOpacity
                   style={[{flexDirection: 'row', flex: 9, marginLeft: 3}]}
                   key={order.orderId}

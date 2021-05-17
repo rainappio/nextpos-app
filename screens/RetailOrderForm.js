@@ -30,9 +30,8 @@ import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import {NavigationEvents} from "react-navigation";
 import {SplitBillPopUp} from '../components/PopUp'
-import SockJsClient from 'react-stomp';
 import {OfferTooltip} from "../components/OfferTooltip";
-
+import {RealTimeOrderUpdate} from '../components/RealTimeOrderUpdate'
 
 class RetailOrderForm extends React.Component {
     static navigationOptions = {
@@ -218,7 +217,7 @@ class RetailOrderForm extends React.Component {
             }
         }, response => {
             this.props.navigation.navigate('RetailOrderForm')
-            this.props.getOrder(this.props.order.orderId)
+            this.props.getOrder(orderId)
         }).then()
     }
 
@@ -242,7 +241,7 @@ class RetailOrderForm extends React.Component {
                 const message = isFree ? 'order.free' : 'order.cancelFree'
                 successMessage(this.context.t(message))
                 this.props.navigation.navigate('RetailOrderForm')
-                this.props.getOrder(this.props.order.orderId)
+                this.props.getOrder(orderId)
             })
         }).then()
     }
@@ -293,6 +292,11 @@ class RetailOrderForm extends React.Component {
             return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
         }
     }
+    handleOnMessage = (data, id) => {
+        if (data === `${id}.order.orderChanged`) {
+            this.props.getOrder(this.props.navigation.state.params.orderId)
+        }
+    }
 
 
     render() {
@@ -341,28 +345,13 @@ class RetailOrderForm extends React.Component {
                         <View style={{...styles.fullWidthScreen, marginBottom: 0}}>
                             <NavigationEvents
                                 onWillFocus={() => {
-                                    this.props.getOrder()
+                                    this.props.getOrder(this.props.navigation.state.params.orderId)
                                 }}
                             />
-                            <SockJsClient url={`${apiRoot}/ws`} topics={[`/dest/order/${order?.orderId}`]}
-                                onMessage={(data) => {
-                                    if (data === `${order?.orderId}.order.orderChanged`) {
-                                        this.props.getOrder()
-                                    }
-                                }}
-                                ref={(client) => {
-                                    this.orderFormRef = client
-                                }}
-                                onConnect={() => {
-                                    (this.orderFormRef && this.orderFormRef.sendMessage) ?
-                                        this.orderFormRef.sendMessage(`/async/order/${order?.orderId}`)
-                                        :
-                                        console.log('onConnect retail tablet error')
-                                }}
-                                onDisconnect={() => {
-                                    console.log('onDisconnect')
-                                }}
-                                debug={false}
+                            <RealTimeOrderUpdate
+                                topics={`/topic/order/${this.props.navigation.state.params.orderId}`}
+                                handleOnMessage={this.handleOnMessage}
+                                id={this.props.navigation.state.params.orderId}
                             />
                             <ScreenHeader backNavigation={true}
                                 backAction={() => this.props.navigation.navigate('LoginSuccess')}

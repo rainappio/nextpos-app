@@ -419,7 +419,8 @@ const zh = {
       cannotDelete: '此併桌訂單不能被刪除。請用結帳來完成訂單。',
       alreadyProcessed: '已處理的進貨單不能修改。',
       noPrinter: '結帳出單機尚未設定',
-      outOfStock: '選擇的產品已無庫存'
+      outOfStock: '選擇的產品已無庫存',
+      inactiveOffer: '目前選用的促銷未啟用',
     }
   },
   eInvoice: {

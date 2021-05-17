@@ -3,7 +3,6 @@ import {FlatList, Text, TouchableOpacity, View} from "react-native";
 import React from "react";
 import styles from '../styles'
 import ScreenHeader from "../components/ScreenHeader";
-import SockJsClient from 'react-stomp';
 import {connect} from "react-redux";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {ThemeContainer} from "../components/ThemeContainer";
@@ -22,6 +21,7 @@ import {ScrollView} from "react-native-gesture-handler";
 import {Pages} from 'react-native-pages'
 import ViewPager from '@react-native-community/viewpager';
 import {InProcessOrderCard} from "../components/InProcessOrderCard";
+import {RealTimeOrderUpdate} from '../components/RealTimeOrderUpdate'
 
 class OrderDisplayScreen extends React.Component {
   static navigationOptions = {
@@ -152,12 +152,17 @@ class OrderDisplayScreen extends React.Component {
       }).then()
   }
 
+  handleOnMessage = (data, id) => {
+    if (data?.needAlert) {
+      playSound()
+    }
+    this.setState({receiving: true, orders: data?.results, needAlert: data?.needAlert, firstTimeConnect: false})
+  }
+
   render() {
     const {client, locale} = this.props
     const t = locale.t
     const customMainThemeColor = locale?.customMainThemeColor
-
-    const webSocketHost = `${apiRoot}/ws`
 
 
     const renderWorkingAreas = Object.keys(this.state.orders)?.filter((workingArea) => this.state?.selectedLabels.has(workingArea))
@@ -167,26 +172,10 @@ class OrderDisplayScreen extends React.Component {
 
     return (
       <ThemeContainer>
-        <SockJsClient url={webSocketHost} topics={[`/dest/${webSocketUrlPath}/${client?.id}`]}
-          onMessage={(data) => {
-            if (data?.needAlert) {
-              playSound()
-            }
-            this.setState({receiving: true, orders: data?.results, needAlert: data?.needAlert, firstTimeConnect: false})
-          }}
-          ref={(client) => {
-            this.clientRef = client
-          }}
-          onConnect={() => {
-            if (this.state?.firstTimeConnect) {
-              this.clientRef.sendMessage(`/async/${webSocketUrlPath}/${client?.id}`);
-            }
-            this.setState({socketConnected: true})
-          }}
-          onDisconnect={() => {
-            this.setState({socketConnected: false})
-          }}
-          debug={false}
+        <RealTimeOrderUpdate
+          topics={`/topic/${webSocketUrlPath}/${client?.id}`}
+          handleOnMessage={this.handleOnMessage}
+          id={client?.id}
         />
         <View style={styles.fullWidthScreen}>
           <ScreenHeader parentFullScreen={true}
