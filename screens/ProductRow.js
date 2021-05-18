@@ -327,7 +327,7 @@ class ProductRow extends React.Component {
 
         let sortProducts = [], productIdsToUpdate = [], testArr = []
         if (oldData?.[from]?.productLabelId == preLabel?.id) {
-          sortProducts = oldData.slice(labelIndexArr[index] + 1, labelIndexArr[index + 1])
+          sortProducts = oldData.slice(labelIndexArr[index] + 1, labelIndexArr[index + 1]).filter((item) => item.aType === 'PRODUCT')
           productIdsToUpdate = []
           sortProducts.forEach((item) => productIdsToUpdate.push(item.id))
           sortProducts.forEach((item) => testArr.push(item.name))
