@@ -335,11 +335,11 @@ class ProductRow extends React.Component {
         }
         else {
           if (from > to) {
-            sortProducts = oldData.slice(labelIndexArr[index] + 1, (labelIndexArr[index + 1] + 1))
+            sortProducts = oldData.slice(labelIndexArr[index] + 1, (labelIndexArr[index + 1] + 1)).filter((item) => item.aType === 'PRODUCT')
           }
           if (from < to) {
             if (oldData?.[labelIndexArr[index]].name) {
-              sortProducts = oldData.slice(labelIndexArr[index], (labelIndexArr[index + 1]))
+              sortProducts = oldData.slice(labelIndexArr[index], (labelIndexArr[index + 1])).filter((item) => item.aType === 'PRODUCT')
             } else {
               sortProducts = oldData.slice(labelIndexArr[index] - 1, (labelIndexArr[index + 1])).filter((item) => item.aType === 'PRODUCT')
             }

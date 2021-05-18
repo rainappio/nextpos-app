@@ -1,6 +1,8 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
 import {AsyncStorage, Image, Keyboard, Text, TouchableOpacity, View, Animated} from 'react-native'
+import {Avatar} from 'react-native-elements'
+import Modal from 'react-native-modal';
 import {isEmail, isRequired} from '../validators'
 import InputText from '../components/InputText'
 import styles from '../styles'
@@ -11,6 +13,10 @@ import {StyledText} from "../components/StyledText";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import SegmentedControl from "../components/SegmentedControl";
+import {ThemeScrollView} from "../components/ThemeScrollView";
+import {FontAwesome5} from '@expo/vector-icons';
+import {SwipeListView} from 'react-native-swipe-list-view'
+import DeleteBtn from '../components/DeleteBtn'
 
 
 class LoginScreen extends React.Component {
@@ -23,7 +29,6 @@ class LoginScreen extends React.Component {
     super(props, context)
 
     this.state = {
-      clientUsername: null,
       fadeAnimation: new Animated.Value(1),
       showLoginBlock: true,
       selectedLoginMode: this.props?.loginMode ? 0 : 1,
@@ -32,9 +37,9 @@ class LoginScreen extends React.Component {
         0: {label: context.t('account.loginWithAccount'), value: 'ACCOUNT'},
         1: {label: context.t('account.loginWithToken'), value: 'TOKEN'}
       },
+      modalVisible: false,
+      usedLoginUsers: [],
     }
-
-
   }
 
   fadeIn = () => {
@@ -65,22 +70,26 @@ class LoginScreen extends React.Component {
       en: {
         loginTitle: 'Login',
         forgotPwd: 'Forgot Password',
-        loginAs: 'Login as {{username}}',
-        token: 'Staff Login Code'
+        token: 'Staff Login Code',
+        usedLoginAccounts: 'Recent Login Accounts',
       },
       zh: {
         loginTitle: '登入',
         forgotPwd: '忘記密碼',
-        loginAs: '以 {{username}} 登入',
-        token: '員工登入碼'
+        token: '員工登入碼',
+        usedLoginAccounts: '常用登入帳戶',
       }
     })
 
+
     const removeLoginAs = this.props.navigation.getParam('removeLoginAs');
 
+    if (removeLoginAs) {
+      AsyncStorage.removeItem('usedLoginAccounts')
+    }
     if (!removeLoginAs) {
-      AsyncStorage.getItem(storage.clientUsername).then(value => {
-        this.setState({clientUsername: value})
+      AsyncStorage.getItem('usedLoginAccounts').then(value => {
+        this.setState({usedLoginUsers: JSON.parse(value)})
       })
     }
   }
@@ -91,20 +100,115 @@ class LoginScreen extends React.Component {
     }
   }
 
+  handleDeleteAccountInfo = (item, index) => {
+    let changedUsers = this.state.usedLoginUsers
+    changedUsers.splice(index, 1)
+    this.setState({usedLoginUsers: changedUsers})
+
+    AsyncStorage.setItem('usedLoginAccounts', JSON.stringify(changedUsers))
+  }
+
+  Item = (item, rowMap) => {
+    return (
+      <View key={rowMap} style={[styles.tableRowContainerWithBorder, {paddingHorizontal: 20, backgroundColor: this?.context?.customBackgroundColor}]}>
+        <TouchableOpacity style={[styles.tableCellView]}
+          onPress={() => {
+            this.props?.handleLoginUsedAccount(item.clientUsername, item.clientPassword)
+          }}>
+          <View style={[styles.tableCellView]}>
+            <Avatar
+              rounded
+              title={item?.clientUsername.charAt(0).toUpperCase()}
+              size="medium"
+              overlayContainerStyle={[{backgroundColor: this?.context?.customMainThemeColor}]}
+              titleStyle={styles.whiteColor}
+            />
+          </View>
+          <View style={[styles.tableCellView, {paddingHorizontal: 16}]}>
+            <StyledText style={styles.sectionBarText(this?.context?.customMainThemeColor)}>{item?.clientUsername}</StyledText>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   render() {
-    const {handleSubmit, handleLoginAs, loginSuccess, loginMode} = this.props
+    const {handleSubmit, loginSuccess, loginMode} = this.props
     const {t, isTablet, customMainThemeColor} = this.context
 
     const loginTypes = Object.keys(this.state.loginDisplayTypes).map(key => this.state.loginDisplayTypes[key].label)
+
 
 
     if (isTablet) {
       return (
         <ThemeKeyboardAwareScrollView>
           <View style={[styles.container, {flexDirection: 'row'}]}>
+            <Modal
+              isVisible={this.state.modalVisible}
+              animationIn='fadeInDown'
+              animationOut='fadeOutUp'
+              backdropOpacity={0.7}
+              onBackdropPress={() => this.setState({modalVisible: false})}
+              useNativeDriver
+              hideModalContentWhileAnimating
+              style={{
+                margin: 40, flex: 1, justifyContent: 'flex-start'
+              }}
+            >
+              <View style={[{minWidth: 600, marginTop: 100, flex: 1, alignSelf: 'center'}]}>
+                <ThemeScrollView style={[{borderRadius: 8, padding: 0, flexDirection: 'row'}]}>
+                  <View style={[styles.withBottomBorder, styles.jc_alignIem_center, {marginTop: 20, paddingVertical: 12, flexDirection: 'row'}]}>
+                    <View style={{marginBottom: 10}}>
+                      <FontAwesome5
+                        name="history"
+                        size={16}
+                        style={[styles.buttonIconStyle(customMainThemeColor)]}
+                      />
+                    </View>
+                    <View>
+                      <StyledText style={[styles.screenSubTitle(customMainThemeColor)]}>
+                        {t('usedLoginAccounts')}
+                      </StyledText>
+                    </View>
+                  </View>
+                  <View style={[styles.flex(1)]}>
+                    <SwipeListView
+                      data={this.state.usedLoginUsers}
+                      renderItem={({item, rowMap}) => this.Item(item, rowMap)
+                      }
+                      ListEmptyComponent={() => {
+                        return (
+                          <StyledText style={[styles.messageBlock, styles.sectionContainer, styles.primaryText(customMainThemeColor)]}>{t('general.noData')}</StyledText>
+                        )
+                      }}
+                      keyExtractor={(data, rowMap) => rowMap.toString()}
+                      renderHiddenItem={(data, rowMap) => {
+                        return (
+                          <View style={[styles.flexRow, styles.flex(1), {justifyContent: 'flex-end'}]} key={rowMap}>
+                            <View style={[styles.delIcon]}>
+                              <DeleteBtn
+                                handleDeleteAction={() =>
+                                  this.handleDeleteAccountInfo(
+                                    data.item,
+                                    data.index
+                                  )
+                                }
+                                islineItemDelete={true}
+                              />
+                            </View>
+                          </View>
+                        )
+                      }}
+                      rightOpenValue={-120}
+                    />
+                  </View>
+                </ThemeScrollView>
+              </View>
+            </Modal>
             {this.state.showLoginBlock && <Animated.View style={{flex: 1, flexDirection: 'column', opacity: this.state.fadeAnimation}}>
               <View style={{flex: 1}}>
-                <View>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', alignItems: 'center', }}>
                   <Image
                     source={
                       __DEV__
@@ -113,6 +217,17 @@ class LoginScreen extends React.Component {
                     }
                     style={styles.welcomeImage}
                   />
+                  <View>
+                    <TouchableOpacity
+                      style={[styles.jc_alignIem_center, {borderRadius: 50, width: 40, height: 40, paddingVertical: 4}]}
+                      onPress={() => this.setState({modalVisible: true})}>
+                      <FontAwesome5
+                        name="user-clock"
+                        size={24}
+                        style={[styles.buttonIconStyle(customMainThemeColor)]}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
 
                 <StyledText style={styles?.welcomeText(this.context)}>{t('loginTitle')}</StyledText>
@@ -170,15 +285,6 @@ class LoginScreen extends React.Component {
               </View>
 
               <View style={[styles.bottom]}>
-                {this.state.clientUsername != null && (
-                  <TouchableOpacity
-                    onPress={() => handleLoginAs()}
-                  >
-                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                      {t('loginAs', {username: this.state.clientUsername})}
-                    </Text>
-                  </TouchableOpacity>
-                )}
 
                 <TouchableOpacity
                   onPress={() => {
@@ -221,9 +327,71 @@ class LoginScreen extends React.Component {
     else {
       return (
         <ThemeKeyboardAwareScrollView>
-          <View style={styles.container}>
+          <View style={[styles.container]}>
+            <Modal
+              isVisible={this.state.modalVisible}
+              animationIn='fadeInDown'
+              animationOut='fadeOutUp'
+              backdropOpacity={0.7}
+              onBackdropPress={() => this.setState({modalVisible: false})}
+              useNativeDriver
+              hideModalContentWhileAnimating
+              style={{
+                margin: 40, flex: 1, justifyContent: 'flex-start'
+              }}
+            >
+              <View style={[{minWidth: 320, marginTop: 100, flex: 1, alignSelf: 'center'}]}>
+                <ThemeScrollView style={[{borderRadius: 8, padding: 0, flexDirection: 'row'}]}>
+                  <View style={[styles.withBottomBorder, styles.jc_alignIem_center, {marginTop: 20, paddingVertical: 12, flexDirection: 'row'}]}>
+                    <View style={{marginBottom: 10}}>
+                      <FontAwesome5
+                        name="history"
+                        size={16}
+                        style={[styles.buttonIconStyle(customMainThemeColor)]}
+                      />
+                    </View>
+                    <View>
+                      <StyledText style={[styles.screenSubTitle(customMainThemeColor)]}>
+                        {`Used Login Account`}
+                      </StyledText>
+                    </View>
+                  </View>
+                  <View style={[styles.flex(1)]}>
+                    <SwipeListView
+                      data={this.state.usedLoginUsers}
+                      renderItem={({item, rowMap}) => this.Item(item, rowMap)
+                      }
+                      ListEmptyComponent={() => {
+                        return (
+                          <StyledText style={[styles.messageBlock, styles.sectionContainerWithBorder, styles.primaryText(customMainThemeColor)]}>{t('general.noData')}</StyledText>
+                        )
+                      }}
+                      keyExtractor={(data, rowMap) => rowMap.toString()}
+                      renderHiddenItem={(data, rowMap) => {
+                        return (
+                          <View style={[styles.flexRow, styles.flex(1), {justifyContent: 'flex-end'}]} key={rowMap}>
+                            <View style={[styles.delIcon]}>
+                              <DeleteBtn
+                                handleDeleteAction={() =>
+                                  this.handleDeleteAccountInfo(
+                                    data.item,
+                                    data.index
+                                  )
+                                }
+                                islineItemDelete={true}
+                              />
+                            </View>
+                          </View>
+                        )
+                      }}
+                      rightOpenValue={-120}
+                    />
+                  </View>
+                </ThemeScrollView>
+              </View>
+            </Modal>
             <View style={{flex: 1}}>
-              <View>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', alignItems: 'center', }}>
                 <Image
                   source={
                     __DEV__
@@ -232,6 +400,17 @@ class LoginScreen extends React.Component {
                   }
                   style={styles.welcomeImage}
                 />
+                <View>
+                  <TouchableOpacity
+                    style={[styles.jc_alignIem_center, {borderRadius: 50, width: 40, height: 40, paddingVertical: 4}]}
+                    onPress={() => this.setState({modalVisible: true})}>
+                    <FontAwesome5
+                      name="user-clock"
+                      size={24}
+                      style={[styles.buttonIconStyle(customMainThemeColor)]}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
 
               <StyledText style={styles?.welcomeText(this.context)}>{t('loginTitle')}</StyledText>
@@ -289,16 +468,6 @@ class LoginScreen extends React.Component {
             </View>
 
             <View style={[styles.bottom]}>
-              {this.state.clientUsername != null && (
-                <TouchableOpacity
-                  onPress={() => handleLoginAs()}
-                >
-                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                    {t('loginAs', {username: this.state.clientUsername})}
-                  </Text>
-                </TouchableOpacity>
-              )}
-
               <TouchableOpacity
                 onPress={() => {
                   Keyboard.dismiss()

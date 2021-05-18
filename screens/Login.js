@@ -21,19 +21,30 @@ class Login extends React.Component {
       loginMode: 'ACCOUNT',
     }
   }
+  handleSaveUsedLogin = async (username, password) => {
+    const usedLoginList = await AsyncStorage.getItem('usedLoginAccounts').then(req => JSON.parse(req) ?? [])
 
-  handleLoginAs = async () => {
+    let isRepeat = usedLoginList?.some(value => value.clientUsername === username)
 
-    const username = await AsyncStorage.getItem(storage.clientUsername)
-    const masterPassword = await AsyncStorage.getItem(storage.clientPassword)
+    if (!isRepeat || isRepeat == undefined) {
+      let user = {
+        clientUsername: username,
+        clientPassword: password
+      }
+      usedLoginList.push(user)
+      await AsyncStorage.setItem('usedLoginAccounts', JSON.stringify(usedLoginList))
+    }
+  }
+
+  handleLoginUsedAccount = async (username, password) => {
 
     const values = {
       username: username,
-      masterPassword: masterPassword
+      masterPassword: password
     }
-
     await this.handleSubmit(values)
   }
+
 
   handleSubmit = async values => {
 
@@ -104,6 +115,8 @@ class Login extends React.Component {
           // this is used for LoginSuccessScreen.
           res.username = res.cli_userName
 
+          this.handleSaveUsedLogin(res.cli_userName, res.cli_masterPwd)
+
           await AsyncStorage.setItem('token', JSON.stringify(res))
           this.props.dispatch(doLoggedIn(res.access_token))
           this.props.navigation.navigate('ClientUsers')
@@ -155,6 +168,8 @@ class Login extends React.Component {
         // this is used for LoginSuccessScreen.
         res.username = res.cli_userName
 
+        this.handleSaveUsedLogin(res.cli_userName, res.cli_masterPwd)
+
         await AsyncStorage.setItem('token', JSON.stringify(res))
         this.props.dispatch(doLoggedIn(res.access_token))
         this.props.navigation.navigate('ClientUsers')
@@ -169,7 +184,7 @@ class Login extends React.Component {
     return (
       <LoginScreen
         onSubmit={this.handleSubmit}
-        handleLoginAs={this.handleLoginAs}
+        handleLoginUsedAccount={this.handleLoginUsedAccount}
         loginSuccess={this.state.loginSuccess}
         loginMode={this.state.loginMode}
       />
