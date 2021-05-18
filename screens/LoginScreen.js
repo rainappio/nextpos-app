@@ -352,7 +352,7 @@ class LoginScreen extends React.Component {
                     </View>
                     <View>
                       <StyledText style={[styles.screenSubTitle(customMainThemeColor)]}>
-                        {`Used Login Account`}
+                        {t('usedLoginAccounts')}
                       </StyledText>
                     </View>
                   </View>
