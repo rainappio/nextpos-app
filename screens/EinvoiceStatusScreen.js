@@ -45,7 +45,7 @@ class EinvoiceStatusScreen extends React.Component {
     refreshScreen = () => {
         !!this.props?.client?.attributes?.UBN && this.getCurrentEinvoice(this.props?.client?.attributes?.UBN)
         this.checkEInvoiceEligibility()
-        this.getCancellableEinvoice()
+        !!this.props?.client?.attributes?.UBN && this.getCancellableEinvoice()
     }
 
     componentDidUpdate(prevProps, prevState) {

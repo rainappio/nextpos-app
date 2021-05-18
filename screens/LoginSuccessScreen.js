@@ -228,6 +228,8 @@ class LoginSuccessScreen extends React.Component {
     const {t, isTablet, appType, customMainThemeColor} = this.context
     const {username, loggedIn, tokenExpiry} = this.state
 
+    const userBadge = (!!currentUser?.displayName && currentUser.displayName.charAt(0).toUpperCase()) ?? ''
+
     if (haveError) {
       return <BackendErrorScreen />
     }
@@ -317,7 +319,7 @@ class LoginSuccessScreen extends React.Component {
             <View style={[{flex: 1, marginTop: 6, alignItems: 'flex-end'}]}>
               <Avatar
                 rounded
-                title={!!currentUser?.displayName && currentUser.displayName.charAt(0).toUpperCase()}
+                title={userBadge}
                 size="small"
                 overlayContainerStyle={[{backgroundColor: customMainThemeColor}]}
                 titleStyle={styles.whiteColor}
