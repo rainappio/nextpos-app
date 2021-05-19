@@ -550,6 +550,7 @@ class CalendarScreen extends React.Component {
                                                                 </Text>
                                                             </TouchableOpacity> :
                                                             <TouchableOpacity
+                                                                key={event.id}
                                                                 onPress={() => {
                                                                     this.setState({selectedDate: date?.dateString})
                                                                     task?.length > 0 && this.toggleRosterFormModal(task, true)

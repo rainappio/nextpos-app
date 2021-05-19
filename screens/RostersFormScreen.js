@@ -185,7 +185,11 @@ class RostersFormScreen extends React.Component {
                     labels: (data?.workingAreas?.map((label) => {
                         return ({
                             labelName: label?.name,
-                            resources: this.props.navigation?.state?.params?.users?.map((user) => {return {...user, isSelected: this.props.navigation?.state?.params?.data?.eventResources?.[`${label?.name}`]?.some((eventResource) => eventResource?.resourceId === user?.id)}}),
+                            resources: this.props.navigation?.state?.params?.users?.map((user) => {
+                                if (user.workingAreaIds.includes(label?.id) || (!user.workingAreaIds.length && !user.defaultUser)) {
+                                    return {...user, isSelected: this.props.navigation?.state?.params?.data?.eventResources?.[`${label?.name}`]?.some((eventResource) => eventResource?.resourceId === user?.id)}
+                                }
+                            }).filter(user => user),
                             labelIsSelected: this.props.navigation?.state?.params?.data?.eventResources?.[`${label?.name}`]?.some((eventResource) => eventResource?.resourceId === this.props?.currentUser?.id)
                         })
                     }))
@@ -542,7 +546,7 @@ class RostersFormScreen extends React.Component {
                                     {this.state.rosterEntries?.map((item, index) => {
                                         if (item === undefined)
                                             return null
-                                        return (<View style={{
+                                        return (<View key={index} style={{
                                             flexDirection: 'row'
                                         }}>
 
@@ -753,6 +757,7 @@ class RostersFormScreen extends React.Component {
                                                     <List>
                                                         {label?.resources?.map((user, userIndex) => (
                                                             <ListItem
+                                                                key={userIndex}
                                                                 title={
                                                                     <View style={[styles.tableRowContainer]}>
                                                                         <View style={[styles.tableCellView]}>
@@ -1111,6 +1116,7 @@ class RostersFormScreen extends React.Component {
                                                 <List>
                                                     {label?.resources?.map((user, userIndex) => (
                                                         <ListItem
+                                                            key={userIndex}
                                                             title={
                                                                 <View style={[styles.tableRowContainer]}>
                                                                     <View style={[styles.tableCellView]}>
