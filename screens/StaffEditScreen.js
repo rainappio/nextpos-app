@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import StaffFormScreen from './StaffFormScreen'
-import {clearClientUser, getClientUsr, getClientUsrs, getUserRoles} from '../actions'
+import {clearClientUser, getClientUsr, getClientUsrs, getUserRoles, getWorkingAreas} from '../actions'
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 
@@ -19,6 +19,7 @@ class StaffEditScreen extends Component {
   async componentDidMount() {
     await this.getClientUsr(this.props.navigation.state.params.staffname)
     this.props.getUserRoles()
+    this.props.getWorkingAreas()
   }
 
   handleEditCancel = () => {
@@ -77,7 +78,8 @@ class StaffEditScreen extends Component {
       navigation,
       haveData,
       haveError,
-      userRoles
+      userRoles,
+      workingareas
     } = this.props
     const {isEditForm, clientuser, isLoading, } = this.state
 
@@ -101,6 +103,7 @@ class StaffEditScreen extends Component {
           isEditForm={isEditForm}
           navigation={navigation}
           initialValues={clientuser}
+          workingareas={workingareas}
           handleEditCancel={this.handleEditCancel}
           onSubmit={this.handleUpdate}
           userRoles={userRoles}
@@ -117,7 +120,9 @@ const mapStateToProps = state => ({
   haveData: state.clientuser.haveData,
   haveError: state.clientuser.haveError,
   isLoading: state.clientuser.loading,
-  userRoles: state.userroles.data.userRoles
+  userRoles: state.userroles.data.userRoles,
+  workingareas: state.workingareas.data.workingAreas,
+
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -126,7 +131,8 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(getClientUsr(props.navigation.state.params.staffname)),
   clearClient: () => dispatch(clearClientUser()),
   getClientUsrs: () => dispatch(getClientUsrs()),
-  getUserRoles: () => dispatch(getUserRoles())
+  getUserRoles: () => dispatch(getUserRoles()),
+  getWorkingAreas: () => dispatch(getWorkingAreas())
 })
 
 export default connect(

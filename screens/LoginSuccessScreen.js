@@ -228,7 +228,7 @@ class LoginSuccessScreen extends React.Component {
     const {t, isTablet, appType, customMainThemeColor} = this.context
     const {username, loggedIn, tokenExpiry} = this.state
 
-    const userBadge = (!!currentUser?.displayName && currentUser.displayName.charAt(0).toUpperCase()) ?? ''
+    const userBadge = currentUser?.displayName?.charAt(0).toUpperCase() ?? ''
 
     if (haveError) {
       return <BackendErrorScreen />

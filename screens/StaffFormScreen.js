@@ -1,6 +1,6 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {Keyboard, Text, TouchableOpacity, View} from 'react-native'
+import {Keyboard, Text, TouchableOpacity, View, FlatList} from 'react-native'
 import {connect} from 'react-redux'
 import {isRequired, isNDigitsNumber} from '../validators'
 import InputText from '../components/InputText'
@@ -16,7 +16,9 @@ import DropDown from '../components/DropDown'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../styles'
 import {StyledText} from "../components/StyledText";
-import {ThemeContainer} from "../components/ThemeContainer";
+import {RenderRadioBtnMulti} from '../components/RadioItem'
+import {ThemeScrollView} from "../components/ThemeScrollView";
+
 
 
 class StaffFormScreen extends React.Component {
@@ -61,6 +63,7 @@ class StaffFormScreen extends React.Component {
         noRole: 'No Role Selected',
         editRole: 'Manage Roles',
         roleId: 'User Role',
+        staffWorkingAreas: 'Staff Working Areas',
 
       },
       zh: {
@@ -81,11 +84,14 @@ class StaffFormScreen extends React.Component {
         noRole: '未選',
         editRole: '管理權限',
         roleId: '使用者權限',
+        staffWorkingAreas: '員工工作區',
       }
     })
   }
+
   shouldComponentUpdate(nextProps, nextState) {
-    return nextState !== this.state;
+    return nextState !== this.state ||
+      nextProps != this.props
   }
 
   handleDelete = values => {
@@ -118,6 +124,7 @@ class StaffFormScreen extends React.Component {
       initialValues,
       onCancel,
       userRoles = [],
+      workingareas = [],
       currentUser
     } = this.props
     const {t, customMainThemeColor} = this.context
@@ -127,7 +134,7 @@ class StaffFormScreen extends React.Component {
     const roles = Object.keys(this.state.roles).map(key => this.state.roles[key].label)
 
     return (
-      <ThemeContainer>
+      <ThemeScrollView>
         <View style={styles.fullWidthScreen}>
           <View>
             <ScreenHeader title={t('staffTitle')}
@@ -224,6 +231,25 @@ class StaffFormScreen extends React.Component {
             </View>
           </View> */}
 
+          <View style={[styles.sectionContainerWithBorder, {marginTop: 28, paddingBottom: 16, marginBottom: 0, alignItems: 'center'}]}>
+            <StyledText style={styles.sectionTitleText}>{t('staffWorkingAreas')}</StyledText>
+          </View>
+          {workingareas && <FlatList
+            data={workingareas}
+            renderItem={({item}) => (
+
+              <View style={[styles.tableRowContainerWithBorder]}>
+                <Field
+                  name="workingAreaIds"
+                  component={RenderRadioBtnMulti}
+                  customValue={item.id}
+                  optionName={item.name}
+                />
+              </View>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />}
+
           <View style={[styles.bottom, styles.horizontalMargin]}>
             <TouchableOpacity onPress={handleSubmit}>
               <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
@@ -260,7 +286,7 @@ class StaffFormScreen extends React.Component {
               )}
           </View>
         </View>
-      </ThemeContainer>
+      </ThemeScrollView>
     )
   }
 }
