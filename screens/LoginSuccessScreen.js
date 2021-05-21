@@ -64,7 +64,7 @@ class LoginSuccessScreen extends React.Component {
       en: {
         welcome: 'Welcome,',
         loggedIn: 'Logged in at',
-        quickOrder: 'Quick Order',
+        quickOrder: 'In Store',
         ownerRemark: '\'s Owner',
         clientStatusTitle: 'Please complete the following settings',
         addTableLayout: 'Add Table Layout',
@@ -76,13 +76,13 @@ class LoginSuccessScreen extends React.Component {
         addWorkingArea: 'Add Working Area',
         markAsReadPrompt: 'Dismiss',
         continueOrder: 'Continue Order',
-        quickTakeOut: 'Quick Take Out',
+        quickTakeOut: 'Take Out',
         continueTakeOut: 'Continue Take Out',
       },
       zh: {
         welcome: '歡迎,',
         loggedIn: '登入時間:',
-        quickOrder: '快速訂單',
+        quickOrder: '內用',
         ownerRemark: '老闆',
         clientStatusTitle: '請完成下列設定',
         addTableLayout: '新增樓面',
@@ -94,7 +94,7 @@ class LoginSuccessScreen extends React.Component {
         addWorkingArea: '新增工作區',
         markAsReadPrompt: '不再顯示此公告',
         continueOrder: '繼續訂單',
-        quickTakeOut: '快速外帶',
+        quickTakeOut: '外帶',
         continueTakeOut: '繼續外帶',
       }
     })
@@ -205,7 +205,8 @@ class LoginSuccessScreen extends React.Component {
       response => {
         response.json().then(data => {
           this.props.navigation.navigate(this.context.appType === 'store' ? 'OrderFormII' : 'RetailOrderForm', {
-            orderId: data.orderId
+            orderId: data.orderId,
+            route: 'LoginSuccess'
           })
         })
       }).then()
@@ -348,7 +349,9 @@ class LoginSuccessScreen extends React.Component {
                       (!!order && order?.orderType === 'TAKE_OUT' && ['OPEN', 'IN_PROCESS', 'DELIVERED', 'PAYMENT_IN_PROCESS'].includes(order?.state)) ? 'RetailOrderForm' : 'RetailOrderStart', {
                       handleOrderSubmit: handleOrderSubmit,
                       handleDelete: handleDelete,
-                      orderId: order?.orderId
+                      orderId: order?.orderId,
+                      orderType: 'IN_STORE',
+                      route: 'LoginSuccess'
                     })
                   }}
                   title={(appType === 'retail' && !!order && order?.orderType === 'TAKE_OUT' && order?.state === 'OPEN') ? t('continueOrder') : t('quickOrder')}

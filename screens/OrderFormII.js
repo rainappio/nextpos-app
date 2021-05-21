@@ -23,7 +23,7 @@ import {handleDelete, handleOrderSubmit, handleQuickCheckout, revertSplitOrder, 
 import {SwipeRow} from 'react-native-swipe-list-view'
 import ScreenHeader from "../components/ScreenHeader";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import {SecondActionButton} from "../components/ActionButtons";
+import {MainActionFlexButton, SecondActionButton} from "../components/ActionButtons";
 import {printMessage} from "../helpers/printerActions";
 import DropDown from "../components/DropDown";
 import TimeAgo from 'javascript-time-ago';
@@ -117,7 +117,7 @@ class OrderFormII extends React.Component {
               body: JSON.stringify(lineItemRequest)
             }, {defaultMessage: false},
             response => {
-              successMessage(this.context.t('orderForm.addItemSuccess', {product: product.name}))
+              successMessage(this.context.t('orderForm.addItemSuccess', {quantity: 1, product: product.name}))
               this.props.getOrder(orderId)
             }
           ).then()
@@ -735,31 +735,33 @@ class OrderFormII extends React.Component {
                                     ]
                                   )
                             }
-                            style={styles?.flexButtonSecondAction(this.context)}
+                            style={[styles?.flexButtonSecondAction(this.context), (order.orderType === 'TAKE_OUT') && styles?.flexButton(customMainThemeColor)]}
                           >
 
-                            <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
+                            <Text style={[styles?.flexButtonSecondActionText(customMainThemeColor), (order.orderType === 'TAKE_OUT') && styles?.flexButtonText]}>
                               {t('orderForm.quickCheckout')}
                             </Text>
                           </TouchableOpacity>
                         </View>
                       </View>
-                      <View style={{flex: 1, marginHorizontal: 5}}>
-                        <View style={{flex: 1}}>
-                          <TouchableOpacity
-                            onPress={() =>
-                              order.lineItems.length === 0
-                                ? warningMessage(t('orderForm.lineItemCountCheck'))
-                                : handleOrderSubmit(order.orderId)
-                            }
-                            style={styles?.flexButton(customMainThemeColor)}
-                          >
-                            <Text style={styles.flexButtonText}>
-                              {t('orderForm.submitOrder')}
-                            </Text>
-                          </TouchableOpacity>
+                      {(order.orderType !== 'TAKE_OUT') &&
+                        <View style={{flex: 1, marginHorizontal: 5}}>
+                          <View style={{flex: 1}}>
+                            <TouchableOpacity
+                              onPress={() =>
+                                order.lineItems.length === 0
+                                  ? warningMessage(t('orderForm.lineItemCountCheck'))
+                                  : handleOrderSubmit(order.orderId)
+                              }
+                              style={styles?.flexButton(customMainThemeColor)}
+                            >
+                              <Text style={styles.flexButtonText}>
+                                {t('orderForm.submitOrder')}
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
                         </View>
-                      </View>
+                      }
                     </>
                     }
                     {order.state === 'IN_PROCESS' && <>
@@ -813,59 +815,92 @@ class OrderFormII extends React.Component {
                         </View>
                       </View>
                       <View style={{flex: 1, marginHorizontal: 5, flexDirection: 'row'}}>
-                        <View style={{flex: 1, flexDirection: 'column'}}>
-                          <TouchableOpacity
-                            onPress={() =>
-                              order.lineItems.length === 0
-                                ? warningMessage(t('orderForm.lineItemCountCheck'))
-                                : handleOrderSubmit(order.orderId)
-                            }
-                            style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
-                          >
-                            <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
-                              {t('orderForm.submitOrder')}
-                            </Text>
-                          </TouchableOpacity>
-                          <SecondActionButton
-                            onPress={() =>
-                              order.lineItems.length === 0
-                                ? warningMessage(t('orderForm.lineItemCountCheck'))
-                                : printers.length === 0 ?
-                                  handleQuickCheckout(order, false)
+                        {order.orderType !== 'TAKE_OUT' &&
+                          <View style={{flex: 1, flexDirection: 'column'}}>
+                            <TouchableOpacity
+                              onPress={() =>
+                                order.lineItems.length === 0
+                                  ? warningMessage(t('orderForm.lineItemCountCheck'))
+                                  : handleOrderSubmit(order.orderId)
+                              }
+                              style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
+                            >
+                              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
+                                {t('orderForm.submitOrder')}
+                              </Text>
+                            </TouchableOpacity>
+                            <SecondActionButton
+                              onPress={() =>
+                                order.lineItems.length === 0
+                                  ? warningMessage(t('orderForm.lineItemCountCheck'))
+                                  : printers.length === 0 ?
+                                    handleQuickCheckout(order, false)
 
-                                  : Alert.alert(
-                                    `${t('quickCheckoutPrint')}`,
-                                    ``,
-                                    [
-                                      {
-                                        text: `${this.context.t('action.yes')}`,
-                                        onPress: async () => {
-                                          await handleQuickCheckout(order, true)
+                                    : Alert.alert(
+                                      `${t('quickCheckoutPrint')}`,
+                                      ``,
+                                      [
+                                        {
+                                          text: `${this.context.t('action.yes')}`,
+                                          onPress: async () => {
+                                            await handleQuickCheckout(order, true)
+                                          }
+                                        },
+                                        {
+                                          text: `${this.context.t('action.no')}`,
+                                          onPress: async () => await handleQuickCheckout(order, false),
+                                          style: 'cancel'
                                         }
-                                      },
-                                      {
-                                        text: `${this.context.t('action.no')}`,
-                                        onPress: async () => await handleQuickCheckout(order, false),
-                                        style: 'cancel'
-                                      }
-                                    ]
-                                  )
-                            }
-                            containerStyle={styles?.flexButtonSecondAction(this.context)}
-                            style={styles?.flexButtonSecondActionText(customMainThemeColor)}
-                            title={t('orderForm.quickCheckout')}
-                          />
-                        </View>
-                        <View style={{flex: 1, marginLeft: 5}}>
-                          <TouchableOpacity
-                            onPress={() => {
-                              this.handleDeliver(order.orderId);
-                            }}
-                            style={styles?.flexButton(customMainThemeColor)}
-                          >
-                            <Text style={styles.flexButtonText}>{t('orderForm.deliverOrder')}</Text>
-                          </TouchableOpacity>
-                        </View>
+                                      ]
+                                    )
+                              }
+                              containerStyle={styles?.flexButtonSecondAction(this.context)}
+                              style={styles?.flexButtonSecondActionText(customMainThemeColor)}
+                              title={t('orderForm.quickCheckout')}
+                            />
+                          </View>
+                        }
+                        {order.orderType !== 'TAKE_OUT' ?
+                          <View style={{flex: 1, marginLeft: 5}}>
+                            <TouchableOpacity
+                              onPress={() => {
+                                this.handleDeliver(order.orderId);
+                              }}
+                              style={styles?.flexButton(customMainThemeColor)}
+                            >
+                              <Text style={styles.flexButtonText}>{t('orderForm.deliverOrder')}</Text>
+                            </TouchableOpacity>
+                          </View>
+                          :
+                          <View style={{flex: 1, marginLeft: 0}}>
+                            <MainActionFlexButton
+                              onPress={() =>
+                                order.lineItems.length === 0
+                                  ? warningMessage(t('orderForm.lineItemCountCheck'))
+                                  : printers.length === 0 ?
+                                    handleQuickCheckout(order, false)
+                                    : Alert.alert(
+                                      `${t('quickCheckoutPrint')}`,
+                                      ``,
+                                      [
+                                        {
+                                          text: `${this.context.t('action.yes')}`,
+                                          onPress: async () => {
+                                            await handleQuickCheckout(order, true)
+                                          }
+                                        },
+                                        {
+                                          text: `${this.context.t('action.no')}`,
+                                          onPress: async () => await handleQuickCheckout(order, false),
+                                          style: 'cancel'
+                                        }
+                                      ]
+                                    )
+                              }
+                              title={t('orderForm.quickCheckout')}
+                            />
+                          </View>
+                        }
                       </View>
                     </>
                     }
@@ -1385,6 +1420,7 @@ class OrderFormII extends React.Component {
                   onPress={() =>
                     this.props.navigation.navigate('OrdersSummary', {
                       orderId: this.props.navigation.state.params.orderId,
+                      route: this.props?.navigation?.state?.params?.route ?? null,
                       onSubmit: this.props.navigation.state.params.onSubmit,
                       handleDelete: this.props.navigation.state.params.handleDelete
                     })

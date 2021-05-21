@@ -102,7 +102,8 @@ class OrderForm extends Component {
     this.setState({isAnimating: true})
     Animated.timing(this.state.rightFormSize, {
       toValue: to,
-      duration: 500
+      duration: 500,
+      useNativeDriver: false
     }).start(() => this.setState({isAnimating: false}))
   }
 
@@ -147,6 +148,13 @@ class OrderForm extends Component {
         <ThemeContainer>
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
+              backAction={() => {
+                if (this.props?.navigation?.state?.params?.route) {
+                  this.props.navigation.navigate(`${this.props?.navigation?.state.params.route}`)
+                } else {
+                  this.props.navigation.goBack()
+                }
+              }}
               parentFullScreen={true}
               title={t('newOrder.newOrderTitle')}
             />
@@ -173,7 +181,7 @@ class OrderForm extends Component {
                 </View>
 
 
-                <View style={[styles.sectionContent, styles.horizontalMargin]}>
+                {/* <View style={[styles.sectionContent, styles.horizontalMargin]}>
                   <View style={styles.sectionTitleContainer}>
                     <StyledText style={styles.sectionTitleText}>{t('newOrder.ageGroup')}</StyledText>
                   </View>
@@ -191,9 +199,9 @@ class OrderForm extends Component {
                       />
                     </View>
                   </View>
-                </View>
+                </View> */}
 
-                <View style={[styles.sectionContent, styles.horizontalMargin]}>
+                {/* <View style={[styles.sectionContent, styles.horizontalMargin]}>
                   <View style={styles.sectionTitleContainer}>
                     <StyledText style={styles.sectionTitleText}>{t('newOrder.visitFrequency')}</StyledText>
                   </View>
@@ -211,7 +219,7 @@ class OrderForm extends Component {
                       />
                     </View>
                   </View>
-                </View>
+                </View> */}
 
                 <View style={styles.sectionContent}>
                   <View style={styles.sectionTitleContainer}>
@@ -248,9 +256,9 @@ class OrderForm extends Component {
                     )}
 
                     {noAvailableTables ||
-                      layoutList?.map((layout) => {
+                      layoutList?.map((layout, index) => {
                         return (
-                          <View>
+                          <View key={index}>
                             <View style={[complexTheme.shade, {flex: 1, marginTop: 12, height: 36, alignItems: 'center', justifyContent: 'center'}]}>
                               <StyledText style={{fontSize: 18, }}>{layout}</StyledText>
                             </View>
@@ -307,7 +315,11 @@ class OrderForm extends Component {
                 <View style={{flex: 1, marginHorizontal: 5}}>
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.goBack()
+                      if (this.props?.navigation?.state?.params?.route) {
+                        this.props.navigation.navigate(`${this.props?.navigation?.state.params.route}`)
+                      } else {
+                        this.props.navigation.goBack()
+                      }
                     }}
                   >
                     <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('action.cancel')}</Text>
@@ -323,6 +335,13 @@ class OrderForm extends Component {
         <ThemeScrollView>
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
+              backAction={() => {
+                if (this.props?.navigation?.state?.params?.route) {
+                  this.props.navigation.navigate(`${this.props?.navigation?.state.params.route}`)
+                } else {
+                  this.props.navigation.goBack()
+                }
+              }}
               parentFullScreen={true}
               title={t('newOrder.newOrderTitle')}
             />
@@ -388,7 +407,7 @@ class OrderForm extends Component {
             )}
 
 
-            <View style={[styles.sectionContent, styles.horizontalMargin]}>
+            {/* <View style={[styles.sectionContent, styles.horizontalMargin]}>
               <View style={styles.sectionTitleContainer}>
                 <StyledText style={styles.sectionTitleText}>{t('newOrder.ageGroup')}</StyledText>
               </View>
@@ -406,9 +425,9 @@ class OrderForm extends Component {
                   />
                 </View>
               </View>
-            </View>
+            </View> */}
 
-            <View style={[styles.sectionContent, styles.horizontalMargin]}>
+            {/* <View style={[styles.sectionContent, styles.horizontalMargin]}>
               <View style={styles.sectionTitleContainer}>
                 <StyledText style={styles.sectionTitleText}>{t('newOrder.visitFrequency')}</StyledText>
               </View>
@@ -426,7 +445,7 @@ class OrderForm extends Component {
                   />
                 </View>
               </View>
-            </View>
+            </View> */}
 
             <View style={styles.sectionContent}>
               <View style={styles.sectionTitleContainer}>
@@ -482,7 +501,11 @@ class OrderForm extends Component {
                 <View style={{flex: 1, marginHorizontal: 5}}>
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.goBack()
+                      if (this.props?.navigation?.state?.params?.route) {
+                        this.props.navigation.navigate(`${this.props?.navigation?.state.params.route}`)
+                      } else {
+                        this.props.navigation.goBack()
+                      }
                     }}
                   >
                     <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('action.cancel')}</Text>

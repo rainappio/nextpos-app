@@ -42,7 +42,8 @@ class OrderDisplayScreen extends React.Component {
       labels: [],
       selectedLabels: new Set(),
       isDragStart: false,
-      selectedLabelIndex: 0
+      selectedLabelIndex: 0,
+      webSocketUrlPath: props?.client?.attributes?.ORDER_DISPLAY_MODE === 'ORDER' ? `realtimeOrders` : `realtimeOrderLineItems`
     }
   }
 
@@ -157,24 +158,32 @@ class OrderDisplayScreen extends React.Component {
       playSound()
     }
     this.setState({receiving: true, orders: data?.results, needAlert: data?.needAlert, firstTimeConnect: false})
+
+    console.log("order display update")
+  }
+
+  handleOnConnect = (ref) => {
+    if (!!this.state.firstTimeConnect) {
+      ref.sendMessage(`/async/${this.state.webSocketUrlPath}/${this.props?.client.id}`)
+      console.log("order display connect")
+    }
   }
 
   render() {
     const {client, locale} = this.props
-    const t = locale.t
-    const customMainThemeColor = locale?.customMainThemeColor
+    const {t, customMainThemeColor} = this.context
 
 
     const renderWorkingAreas = Object.keys(this.state.orders)?.filter((workingArea) => this.state?.selectedLabels.has(workingArea))
     const isOrderMode = (client?.attributes?.ORDER_DISPLAY_MODE === 'ORDER')
-    const webSocketUrlPath = isOrderMode ? `realtimeOrders` : `realtimeOrderLineItems`
 
 
     return (
       <ThemeContainer>
         <RealTimeOrderUpdate
-          topics={`/topic/${webSocketUrlPath}/${client?.id}`}
+          topics={`/topic/${this.state.webSocketUrlPath}/${client?.id}`}
           handleOnMessage={this.handleOnMessage}
+          handleOnConnect={this.handleOnConnect}
           id={client?.id}
         />
         <View style={styles.fullWidthScreen}>

@@ -151,9 +151,6 @@ export const api = {
     },
     getAll: `${apiRoot}/labels`,
     new: `${apiRoot}/labels`,
-    sortPrdList: prdLabelId => {
-      return `${apiRoot}/labels/${prdLabelId}/order`
-    },
     sortPrdLabelList: prdLabelIds => {
       return `${apiRoot}/labels/ordering`
     },

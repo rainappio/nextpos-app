@@ -79,6 +79,7 @@ const en = {
     deactivate: 'Deactivate',
     submit: 'Submit',
     confirm: 'Confirm',
+    addQty: 'Add {{quantity}}',
   },
   // ==== domain specific ====
   keyboardAction: {
@@ -119,7 +120,7 @@ const en = {
   orderForm: {
     newOrderTitle: 'New Order',
     pinned: 'Pinned',
-    addItemSuccess: 'Added {{product}}',
+    addItemSuccess: 'Added {{quantity}} {{product}}',
     nothing: 'Nothing',
     choose: 'Choose',
     deliverAllLineItems: 'Confirm to deliver all line items?',

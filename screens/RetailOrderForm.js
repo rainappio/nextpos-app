@@ -112,7 +112,7 @@ class RetailOrderForm extends React.Component {
                             body: JSON.stringify(lineItemRequest)
                         }, {defaultMessage: false},
                         response => {
-                            successMessage(this.context.t('orderForm.addItemSuccess', {product: product.name}))
+                            successMessage(this.context.t('orderForm.addItemSuccess', {quantity: 1, product: product.name}))
                             this.props.getOrder(orderId)
                         }
                     ).then()

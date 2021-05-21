@@ -17,7 +17,7 @@ import NavigationService from "../navigation/NavigationService";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import {StyledText} from "../components/StyledText";
-import {SecondActionButton} from "../components/ActionButtons";
+import {MainActionButton, SecondActionButton} from "../components/ActionButtons";
 import {SplitBillPopUp} from '../components/PopUp'
 import Colors from "../constants/Colors";
 import {OfferTooltip} from "../components/OfferTooltip";
@@ -436,7 +436,7 @@ class OrdersSummaryRow extends React.Component {
     return (
       <View style={styles.fullWidthScreen}>
         <View style={{flex: 1}}>
-          <ScreenHeader backNavigation={true}
+          <ScreenHeader backNavigation={(this.props?.navigation?.state?.params?.route == 'LoginSuccess' && order.orderType === 'TAKE_OUT') ? false : true}
             parentFullScreen={true}
             backAction={() => this.handleCancel(order.orderId)}
             title={t('orderSummaryTitle')}
@@ -675,7 +675,7 @@ class OrdersSummaryRow extends React.Component {
         </View>
 
         <View style={[styles.bottom, styles.horizontalMargin]}>
-          {['OPEN', 'IN_PROCESS', 'DELIVERED'].includes(order.state) && (
+          {['OPEN', 'IN_PROCESS', 'DELIVERED'].includes(order.state) && (order.orderType !== 'TAKE_OUT') && (
             <TouchableOpacity
               onPress={() =>
                 order.lineItems.length === 0
@@ -703,8 +703,8 @@ class OrdersSummaryRow extends React.Component {
             </View>
           }
 
-          {order.state === 'OPEN' && (
-            <SecondActionButton
+          {order.state === 'OPEN' && order.orderType !== 'TAKE_OUT' &&
+            (<SecondActionButton
               onPress={() =>
                 order.lineItems.length === 0
                   ? warningMessage(t('lineItemCountCheck'))
@@ -730,8 +730,37 @@ class OrdersSummaryRow extends React.Component {
               }
               title={t('quickCheckout')}
             />
-          )}
-          {order.state === 'IN_PROCESS' && (
+            )}
+          {order.state !== 'SETTLED' && order.orderType === 'TAKE_OUT' &&
+            (<MainActionButton
+              style={{marginBottom: 10}}
+              onPress={() =>
+                order.lineItems.length === 0
+                  ? warningMessage(t('orderForm.lineItemCountCheck'))
+                  : printers.length === 0 ?
+                    handleQuickCheckout(order, false)
+                    : Alert.alert(
+                      `${t('quickCheckoutPrint')}`,
+                      ``,
+                      [
+                        {
+                          text: `${this.context.t('action.yes')}`,
+                          onPress: async () => {
+                            await handleQuickCheckout(order, true)
+                          }
+                        },
+                        {
+                          text: `${this.context.t('action.no')}`,
+                          onPress: async () => await handleQuickCheckout(order, false),
+                          style: 'cancel'
+                        }
+                      ]
+                    )
+              }
+              title={t('quickCheckout')}
+            />
+            )}
+          {order.state === 'IN_PROCESS' && order.orderType !== 'TAKE_OUT' && (
             <View style={{flexDirection: 'row'}}>
               <View style={{flex: 1, marginRight: 10}}>
                 <SecondActionButton
