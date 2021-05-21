@@ -1,8 +1,9 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
+import {Field, reduxForm, formValueSelector} from 'redux-form'
+import {connect} from 'react-redux'
 import {Text, TouchableOpacity, View, FlatList, Dimensions, TouchableHighlight} from 'react-native'
 import CheckBoxGroupObjPick from '../components/CheckBoxGroupObjPick'
-import RadioItemObjPick from '../components/RadioItemObjPick'
+import RadioItemObjPick, {RadioLineItemObjPick} from '../components/RadioItemObjPick'
 import RenderStepper from '../components/RenderStepper'
 import {isCountZero, isRequired} from '../validators'
 import styles from '../styles'
@@ -12,6 +13,8 @@ import {withNavigation} from "react-navigation";
 import InputText from "../components/InputText";
 import RenderCheckBox from "../components/rn-elements/CheckBox";
 import {StyledText} from "../components/StyledText";
+
+
 
 class OrderFormIV extends React.Component {
   static navigationOptions = {
@@ -180,7 +183,7 @@ class OrderFormIV extends React.Component {
                         <View key={prdOption.id + ix}>
                           <Field
                             name={`productOptions[${optionIndex}]`}
-                            component={RadioItemObjPick}
+                            component={RadioLineItemObjPick}
                             customValueOrder={optionObj}
                             optionName={optVal.value}
                             onCheck={(currentVal, fieldVal) => {
@@ -277,7 +280,7 @@ class OrderFormIV extends React.Component {
               onPress={this.props.handleSubmit}
             >
               <Text style={[[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]]}>
-                {t('action.save')}
+                {t('action.addQty', {quantity: this.props?.quantity})}
               </Text>
             </TouchableOpacity>
           </View>
@@ -300,5 +303,16 @@ class OrderFormIV extends React.Component {
 OrderFormIV = reduxForm({
   form: 'OrderFormIV'
 })(OrderFormIV)
+
+const selector = formValueSelector('OrderFormIV')
+
+OrderFormIV = connect(
+  state => {
+    const quantity = selector(state, 'quantity')
+    return {
+      quantity,
+    }
+  }
+)(OrderFormIV)
 
 export default withNavigation(OrderFormIV)

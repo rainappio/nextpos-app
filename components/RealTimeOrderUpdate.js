@@ -14,6 +14,12 @@ class RealTimeOrderUpdateBase extends Component {
     super(props, context)
   }
 
+  handleOnConnection = (ref) => {
+    if (this.props?.handleOnConnect || this.props?.handleOnConnect !== undefined) {
+      this.props?.handleOnConnect(ref)
+    }
+  }
+
   render() {
     const {
       meta,
@@ -21,6 +27,7 @@ class RealTimeOrderUpdateBase extends Component {
       handleOnMessage,
       id,
     } = this.props;
+
 
     return (
       <SockJsClient url={url} topics={[topics]}
@@ -32,6 +39,7 @@ class RealTimeOrderUpdateBase extends Component {
           this.orderFormRef = client
         }}
         onConnect={() => {
+          this.handleOnConnection(this.orderFormRef)
           console.log(`onConnect: ${Device.osName}-${Device.osVersion}`)
         }}
         onDisconnect={() => {

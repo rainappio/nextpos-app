@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {getGlobalProductOffers, getOrder, getProduct} from '../actions'
 import OrderFormIV from './OrderFormIV'
 import {LocaleContext} from '../locales/LocaleContext'
-import {api, dispatchFetchRequest} from '../constants/Backend'
+import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
@@ -64,6 +64,7 @@ class OrderFormIII extends React.Component {
         body: JSON.stringify(lineItemRequest)
       },
       response => {
+        successMessage(this.context.t('orderForm.addItemSuccess', {quantity: values.quantity, product: this.props?.product.name}))
         this.props.navigation.goBack()
         this.props.getOrder(orderId)
       }

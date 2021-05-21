@@ -1,5 +1,5 @@
 import React, {useState, useEffect, Component, useContext} from "react";
-import {Field, reduxForm} from 'redux-form'
+import {Field, reduxForm, formValueSelector} from 'redux-form'
 import {connect} from 'react-redux'
 import {Alert, StyleSheet, Text, TouchableHighlight, View, TouchableOpacity, KeyboardAvoidingView, FlatList, Dimensions} from "react-native";
 import {Accordion, List} from '@ant-design/react-native'
@@ -12,14 +12,14 @@ import SegmentedControl from "../components/SegmentedControl";
 import ScreenHeader from "../components/ScreenHeader";
 import {StyledText} from "../components/StyledText";
 import {ThemeScrollView} from "../components/ThemeScrollView";
-import {api, dispatchFetchRequest} from '../constants/Backend'
+import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {getGlobalProductOffers, getOrder, getProduct} from '../actions';
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
 
 import CheckBoxGroupObjPick from '../components/CheckBoxGroupObjPick'
-import RadioItemObjPick from '../components/RadioItemObjPick'
+import RadioItemObjPick, {RadioLineItemObjPick} from '../components/RadioItemObjPick'
 import InputText from "../components/InputText";
 import InputNumber from "../components/InputNumber"
 import RenderCheckBox from "../components/rn-elements/CheckBox";
@@ -142,7 +142,7 @@ class ConnectedOrderItemOptionsBase extends React.Component {
                 body: JSON.stringify(lineItemRequest)
             },
             response => {
-
+                successMessage(this.context.t('orderForm.addItemSuccess', {quantity: values.quantity, product: this.props?.product.name}))
                 this.props.getOrder(orderId)
                 this.props.goBack()
             }
@@ -189,7 +189,7 @@ class ConnectedOrderItemOptionsBase extends React.Component {
             },
             body: JSON.stringify(lineItemRequest)
         }, response => {
-
+            successMessage(this.context.t('orderForm.addItemSuccess', {quantity: values.quantity, product: this.props?.product.name}))
             this.props.getOrder(orderId)
             this.props.goBack()
 
@@ -474,13 +474,14 @@ class OrderItemOptions extends React.Component {
                                                                     <View key={prdOption.id + ix}>
                                                                         <Field
                                                                             name={`productOptions[${optionIndex}]`}
-                                                                            component={RadioItemObjPick}
+                                                                            component={RadioLineItemObjPick}
                                                                             customValueOrder={optionObj}
                                                                             optionName={optVal.value}
                                                                             onCheck={(currentVal, fieldVal) => {
                                                                                 return fieldVal !== undefined && currentVal.optionValue === fieldVal.optionValue
                                                                             }}
                                                                             validate={requiredOption ? isRequired : null}
+                                                                            style={{flex: 1}}
                                                                         />
                                                                     </View>
                                                                 )
@@ -595,7 +596,7 @@ class OrderItemOptions extends React.Component {
                             onPress={this.props.handleSubmit}
                         >
                             <Text style={[[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]]}>
-                                {t('action.save')}
+                                {t('action.addQty', {quantity: this.props?.quantity})}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -610,6 +611,17 @@ class OrderItemOptions extends React.Component {
 OrderItemOptions = reduxForm({
     form: 'OrderItemOptions'
 })(OrderItemOptions)
+
+const selector = formValueSelector('OrderItemOptions')
+
+OrderItemOptions = connect(
+    state => {
+        const quantity = selector(state, 'quantity')
+        return {
+            quantity,
+        }
+    }
+)(OrderItemOptions)
 
 
 export default OrderItemDetailEditModal;

@@ -22,7 +22,7 @@ class CheckBoxGroupObjPick extends React.Component {
 
     const checkBoxes =
       customarr !== undefined &&
-      customarr.map(ca => {
+      customarr.map((ca, index) => {
         const arrFind = [...this.props.input.value]
 
         const onChange = (checked) => {
@@ -41,23 +41,34 @@ class CheckBoxGroupObjPick extends React.Component {
             key={ca.id}
           >
             <View style={[styles.tableCellView, {flex: 2}]}>
-              <StyledText>{ca.name === undefined ? ca.optionValue : ca.name}</StyledText>
-            </View>
-
-            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <CheckBox
-                containerStyle={{margin: 0, padding: 0}}
+              <Checkbox
+                key={ca.optionValue}
                 onChange={e => onChange(e.target.checked)}
-                checkedIcon={'check-circle'}
-                uncheckedIcon={'circle'}
                 checked={!!arrFind.find(item => item?.optionValue === ca.optionValue)}
                 onPress={() => {
                   onChange(!arrFind.find(item => item?.optionValue === ca.optionValue))
                 }}
+                style={{position: 'absolute', right: 0, opacity: 0}}
               >
-              </CheckBox>
+                <StyledText>{ca.name === undefined ? ca.optionValue : ca.name}</StyledText>
+
+
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                  <CheckBox
+                    containerStyle={{margin: 0, padding: 0}}
+                    onChange={e => onChange(e.target.checked)}
+                    checkedIcon={'check-circle'}
+                    uncheckedIcon={'circle'}
+                    checked={!!arrFind.find(item => item?.optionValue === ca.optionValue)}
+                    onPress={() => {
+                      onChange(!arrFind.find(item => item?.optionValue === ca.optionValue))
+                    }}
+                  >
+                  </CheckBox>
+                </View>
+                {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
+              </Checkbox>
             </View>
-            {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
           </View>
         )
       })

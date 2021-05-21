@@ -46,7 +46,8 @@ class OrderStart extends React.Component {
       response => {
         response.json().then(data => {
           this.props.navigation.navigate(this.context.appType === 'store' ? 'OrderFormII' : 'RetailOrderForm', {
-            orderId: data.orderId
+            orderId: data.orderId,
+            route: this.props?.navigation?.state?.params?.route ?? null
           })
         })
       }).then()
@@ -60,6 +61,7 @@ class OrderStart extends React.Component {
       female: 0,
       kid: 0
     }
+
 
     let tablesMap = {}
 
@@ -82,7 +84,7 @@ class OrderStart extends React.Component {
             onSubmit={this.handleSubmit}
             navigation={navigation}
             tablesMap={tablesMap}
-            initialValues={initialValues}
+            initialValues={{...initialValues, orderType: navigation?.state?.params?.orderType ?? null}}
           /> :
           <RetailStartOrderForm
             onSubmit={this.handleSubmit}

@@ -79,6 +79,7 @@ const zh = {
     deactivate: '停用',
     submit: '送出',
     confirm: '確認',
+    addQty: '加入 {{quantity}} 個',
   },
   // ==== domain specific ====
   keyboardAction: {
@@ -119,7 +120,7 @@ const zh = {
   orderForm: {
     newOrderTitle: '新訂單',
     pinned: '置頂產品',
-    addItemSuccess: '新增了 {{product}}',
+    addItemSuccess: '新增了 {{quantity}} {{product}}',
     nothing: '尚無產品',
     choose: '選擇',
     deliverAllLineItems: '確認所有品項送餐？',

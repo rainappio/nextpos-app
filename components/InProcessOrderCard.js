@@ -26,7 +26,7 @@ export const InProcessOrderCard = (props) => {
 
     return (
         <View
-            style={[styles.boxShadow, themeStyle, {flex: 1, margin: 10, borderRadius: 10, flexDirection: 'row', backgroundColor: customBackgroundColor, borderColor: customBorderColor},]}
+            style={[styles.boxShadow, {flex: 1, margin: 10, borderRadius: 10, flexDirection: 'row', backgroundColor: customBackgroundColor, borderColor: customBorderColor},]}
         >
             <Modal
                 isVisible={isShow}
@@ -42,9 +42,9 @@ export const InProcessOrderCard = (props) => {
                 <View style={{maxWidth: 640, flex: 1, borderWidth: 1, borderColor: customMainThemeColor, marginHorizontal: 10, marginVertical: '15%'}}>
 
                     <ThemeScrollView >
-                        {props?.data?.orderLineItems?.map((item) => {
+                        {props?.data?.orderLineItems?.map((item, index) => {
                             return (
-                                <TouchableOpacity style={[styles.sectionContainerWithBorder, {flexDirection: 'row', marginBottom: 5, paddingHorizontal: 10, alignItems: 'center'}]}
+                                <TouchableOpacity key={index} style={[styles.sectionContainerWithBorder, {flexDirection: 'row', marginBottom: 5, paddingHorizontal: 10, alignItems: 'center'}]}
                                 >
 
                                     <View style={{flex: 4}}>
@@ -111,34 +111,34 @@ export const InProcessOrderCard = (props) => {
                 <TouchableOpacity onLongPress={props?.onLongPress} onPress={() => setIsShow(true)}>
                     <View style={{height: 32}}>
                         {!!props?.data?.orderLineItems?.[0] &&
-                            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                <Text numberOfLines={1} style={[themeStyle, {width: isTablet ? 130 : 70}]}>{props?.data?.orderLineItems?.[0]?.displayName}</Text>
-                                <Text style={[themeStyle, {paddingHorizontal: 10, fontWeight: 'bold', color: props?.data?.orderLineItems?.[0]?.quantity > 1 ? '#f75336' : themeStyle?.color}]}>{props?.data?.orderLineItems?.[0]?.quantity}</Text>
-                                <Text numberOfLines={1} style={[themeStyle, {flex: 1}]}>{props?.data?.orderLineItems?.[0]?.options}</Text>
+                            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: customBackgroundColor}}>
+                                <Text numberOfLines={1} style={[{width: isTablet ? 130 : 70}]}>{props?.data?.orderLineItems?.[0]?.displayName}</Text>
+                                <Text style={[{paddingHorizontal: 10, fontWeight: 'bold', color: props?.data?.orderLineItems?.[0]?.quantity > 1 ? '#f75336' : themeStyle?.color}]}>{props?.data?.orderLineItems?.[0]?.quantity}</Text>
+                                <Text numberOfLines={1} style={[{flex: 1}]}>{props?.data?.orderLineItems?.[0]?.options}</Text>
                             </View>}
                     </View>
                     <View style={{height: 32}}>
                         {!!props?.data?.orderLineItems?.[1] &&
                             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                <Text numberOfLines={1} style={[themeStyle, {width: isTablet ? 130 : 70}]}>{props?.data?.orderLineItems?.[1]?.displayName}</Text>
-                                <Text style={[themeStyle, {paddingHorizontal: 10, fontWeight: 'bold', color: props?.data?.orderLineItems?.[1]?.quantity > 1 ? '#f75336' : themeStyle?.color}]}>{props?.data?.orderLineItems?.[1]?.quantity}</Text>
-                                <Text numberOfLines={1} style={[themeStyle, {flex: 1}]}>{props?.data?.orderLineItems?.[1]?.options}</Text>
+                                <Text numberOfLines={1} style={[{width: isTablet ? 130 : 70}]}>{props?.data?.orderLineItems?.[1]?.displayName}</Text>
+                                <Text style={[{paddingHorizontal: 10, fontWeight: 'bold', color: props?.data?.orderLineItems?.[1]?.quantity > 1 ? '#f75336' : themeStyle?.color}]}>{props?.data?.orderLineItems?.[1]?.quantity}</Text>
+                                <Text numberOfLines={1} style={[{flex: 1}]}>{props?.data?.orderLineItems?.[1]?.options}</Text>
                             </View>}
                     </View>
                     <View style={{height: 32}}>
                         {!!props?.data?.orderLineItems?.[2] &&
                             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                <Text numberOfLines={1} style={[themeStyle, {width: isTablet ? 130 : 70}]}>{props?.data?.orderLineItems?.[2]?.displayName}</Text>
-                                <Text style={[themeStyle, {paddingHorizontal: 10, fontWeight: 'bold', color: props?.data?.orderLineItems?.[2]?.quantity > 1 ? '#f75336' : themeStyle?.color}]}>{props?.data?.orderLineItems?.[2]?.quantity}</Text>
-                                <Text numberOfLines={1} style={[themeStyle, {flex: 1}]}>{props?.data?.orderLineItems?.[2]?.options}</Text>
+                                <Text numberOfLines={1} style={[{width: isTablet ? 130 : 70}]}>{props?.data?.orderLineItems?.[2]?.displayName}</Text>
+                                <Text style={[{paddingHorizontal: 10, fontWeight: 'bold', color: props?.data?.orderLineItems?.[2]?.quantity > 1 ? '#f75336' : themeStyle?.color}]}>{props?.data?.orderLineItems?.[2]?.quantity}</Text>
+                                <Text numberOfLines={1} style={[{flex: 1}]}>{props?.data?.orderLineItems?.[2]?.options}</Text>
                             </View>}
                     </View>
                     <View style={{height: 32}}>
                         {!!props?.data?.orderLineItems?.[3] &&
                             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                <Text numberOfLines={1} style={[themeStyle, {width: isTablet ? 130 : 70}]}>{props?.data?.orderLineItems?.[3]?.displayName}</Text>
-                                <Text style={[themeStyle, {paddingHorizontal: 10, fontWeight: 'bold', color: props?.data?.orderLineItems?.[3]?.quantity > 1 ? '#f75336' : themeStyle?.color}]}>{props?.data?.orderLineItems?.[3]?.quantity}</Text>
-                                <Text numberOfLines={1} style={[themeStyle, {flex: 1}]}>{props?.data?.orderLineItems?.[3]?.options}</Text>
+                                <Text numberOfLines={1} style={[{width: isTablet ? 130 : 70}]}>{props?.data?.orderLineItems?.[3]?.displayName}</Text>
+                                <Text style={[{paddingHorizontal: 10, fontWeight: 'bold', color: props?.data?.orderLineItems?.[3]?.quantity > 1 ? '#f75336' : themeStyle?.color}]}>{props?.data?.orderLineItems?.[3]?.quantity}</Text>
+                                <Text numberOfLines={1} style={[{flex: 1}]}>{props?.data?.orderLineItems?.[3]?.options}</Text>
                             </View>}
                     </View>
                     <View style={{height: 32}}>

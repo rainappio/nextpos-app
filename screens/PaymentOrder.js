@@ -74,7 +74,8 @@ class PaymentOrder extends React.Component {
         })
       } else {
         this.context?.saveSplitParentOrderId(null)
-        this.handleSplitByHeadComplete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess'))
+        this.handleSplitByHeadComplete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess'))
+        console.log("route: complete 1")
 
       }
 
@@ -102,12 +103,14 @@ class PaymentOrder extends React.Component {
             })
           } else {
             this.context?.saveSplitParentOrderId(null)
-            this.props.navigation.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess')
+            this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess')
+            console.log("route: complete 2")
           }
 
         } else {
           this.context?.saveSplitParentOrderId(null)
-          this.props.navigation.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess')
+          this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess')
+          console.log("route: complete 3", this.props?.order?.orderType)
         }
       }).then()
     }
@@ -163,7 +166,8 @@ class PaymentOrder extends React.Component {
         })
       }, response => {
         this.context?.saveSplitParentOrderId(null)
-        this.props.navigation.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess')
+        this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess')
+        console.log("route: props submit")
       }).then()
     }
     // const transactionObj = {
