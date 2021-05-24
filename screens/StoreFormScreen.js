@@ -15,6 +15,7 @@ import {StyledText} from "../components/StyledText";
 import ThemeToggleButton from "../themes/ThemeToggleButton";
 import {ThemePicker} from "../components/ThemePicker";
 import {connect} from 'react-redux';
+import RNSwitchPayGroup from "../components/RNSwitchPayGroup"
 
 
 class StoreFormScreen extends Component {
@@ -58,6 +59,7 @@ class StoreFormScreen extends Component {
         locationBasedService: 'Location Based Clock In',
         applyOffer: 'Apply Offer',
         uiPreferences: 'UI Preferences',
+        paymentMethods: 'Payment Methods',
       },
       zh: {
         clientName: '商家名稱',
@@ -90,6 +92,7 @@ class StoreFormScreen extends Component {
         locationBasedService: '位置打卡功能',
         applyOffer: '套用促銷',
         uiPreferences: '介面喜好',
+        paymentMethods: '付款方式'
       }
     })
 
@@ -136,7 +139,7 @@ class StoreFormScreen extends Component {
 
   render() {
     const {t, customMainThemeColor, changeCustomMainThemeColor, theme, toggleTheme} = this.context
-    const {handleSubmit} = this.props
+    const {handleSubmit, paymentMethods} = this.props
 
     const tableDisplayTypes = Object.keys(this.state.tableDisplayTypes).map(key => this.state.tableDisplayTypes[key].label)
     const orderDisplayTypes = Object.keys(this.state.orderDisplayTypes).map(key => this.state.orderDisplayTypes[key].label)
@@ -360,6 +363,22 @@ class StoreFormScreen extends Component {
                     return this.state.orderDisplayTypes[value].value
                   }}
                 />
+              </View>
+            </View>
+
+
+            <View style={styles.sectionContainer}>
+              <View style={styles.sectionTitleContainer}>
+                <StyledText style={styles.sectionTitleText}>{t('paymentMethods')}</StyledText>
+              </View>
+              <View style={{flex: 1}}>
+                {!!paymentMethods &&
+                  <Field
+                    name="paymentMethods"
+                    component={RNSwitchPayGroup}
+                    customarr={paymentMethods?.results}
+                  />
+                }
               </View>
             </View>
 

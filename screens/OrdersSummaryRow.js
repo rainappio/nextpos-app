@@ -902,7 +902,13 @@ class OrdersSummaryRow extends React.Component {
           )}
           {!['SETTLED', 'REFUNDED'].includes(order.state) && (
             <DeleteBtn
-              handleDeleteAction={() => handleDelete(order.orderId, () => NavigationService.navigate('TablesSrc'))}
+              handleDeleteAction={() => handleDelete(order.orderId, () => {
+                if (order.orderType === 'TAKE_OUT') {
+                  NavigationService.navigate('LoginSuccess')
+                } else {
+                  NavigationService.navigate('TablesSrc')
+                }
+              })}
             />
           )}
         </View>

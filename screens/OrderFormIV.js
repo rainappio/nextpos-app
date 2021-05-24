@@ -13,6 +13,8 @@ import {withNavigation} from "react-navigation";
 import InputText from "../components/InputText";
 import RenderCheckBox from "../components/rn-elements/CheckBox";
 import {StyledText} from "../components/StyledText";
+import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
+
 
 
 
@@ -107,194 +109,200 @@ class OrderFormIV extends React.Component {
     const inventoryData = product.inventory ? Object.values(product.inventory.inventoryQuantities) : null
 
     return (
-      <View style={styles.fullWidthScreen}>
+      <View style={[styles.fullWidthScreen]}>
         <ScreenHeader backNavigation={true}
           parentFullScreen={true}
           title={`${product.name} ($${product.price})`}
         />
+        <ThemeKeyboardAwareScrollView style={{height: '100%'}}>
 
-        {hasInventory && (
-          <View style={[styles.sectionTitleContainer]}>
-            <StyledText style={styles.sectionTitleText}>
-              {t('inventory.skuName')}
-            </StyledText>
-          </View>
-        )}
-        {hasInventory && inventoryData && (
+          {hasInventory && (
+            <View style={[styles.sectionTitleContainer]}>
+              <StyledText style={styles.sectionTitleText}>
+                {t('inventory.skuName')}
+              </StyledText>
+            </View>
+          )}
+          {hasInventory && inventoryData && (
 
-          <FlatList
-            style={[styles.mgrbtn20], {
-              maxHeight: 350, paddingBottom: 20, maxWidth: Dimensions.get('window').width / 1
-            }}
-            numColumns={2}
-            data={inventoryData}
-            renderItem={(item) => this.InventoryItem(item)}
-            keyExtractor={(item) => item.name}
-            extraData={this.state.highlightSkuIndex}
-          />
-
-
-        )
-        }
-
-        {hasProductOptions && (
-          <View style={[styles.sectionTitleContainer]}>
-            <StyledText style={styles.sectionTitleText}>
-              {t('productOptions')}
-            </StyledText>
-          </View>
-        )}
-
-        {product.productOptions !== undefined &&
-          product.productOptions.map((prdOption, optionIndex) => {
-            const requiredOption = prdOption.required
-
-            var ArrForTrueState = []
-            prdOption.optionValues.map((optVal, x) => {
-              ArrForTrueState.push({
-                optionName: prdOption.optionName,
-                optionValue: optVal.value,
-                optionPrice: optVal.price,
-                id: prdOption.versionId + x
-              })
-            })
-
-            return (
-              <View
-                key={prdOption.versionId}
-                style={styles.sectionContainer}
-              >
-                <View style={styles.sectionTitleContainer}>
-                  <StyledText style={[styles.sectionTitleText]}>
-                    {prdOption.optionName}
-                  </StyledText>
-                </View>
-
-                {prdOption.multipleChoice === false ? (
-                  <View>
-                    {prdOption.optionValues.map((optVal, ix) => {
-                      let optionObj = {}
-                      optionObj['optionName'] = prdOption.optionName
-                      optionObj['optionValue'] = optVal.value
-                      optionObj['optionPrice'] = optVal.price
-                      optionObj['id'] = prdOption.id
-
-                      return (
-                        <View key={prdOption.id + ix}>
-                          <Field
-                            name={`productOptions[${optionIndex}]`}
-                            component={RadioLineItemObjPick}
-                            customValueOrder={optionObj}
-                            optionName={optVal.value}
-                            onCheck={(currentVal, fieldVal) => {
-                              return fieldVal !== undefined && currentVal.optionValue === fieldVal.optionValue
-                            }}
-                            validate={requiredOption ? isRequired : null}
-                          />
-                        </View>
-                      )
-                    })}
-                  </View>
-                ) : (
-                    <View>
-                      <Field
-                        name={`productOptions[${optionIndex}]`}
-                        component={CheckBoxGroupObjPick}
-                        customarr={ArrForTrueState}
-                        validate={requiredOption ? isRequired : null}
-                      />
-                    </View>
-                  )}
-              </View>
-            )
-          })}
-
-        <View style={styles.sectionTitleContainer}>
-          <StyledText style={[styles.sectionTitleText]}>
-            {t('freeTextProductOption')}
-          </StyledText>
-        </View>
-
-        <View style={[styles.tableRowContainerWithBorder]}>
-          <View style={[{flex: 1}]}>
-            <Field
-              name={`productOptions[${lastOptionIndex}].optionValue`}
-              component={InputText}
-              placeholder={t('freeTextProductOption')}
-              alignLeft={true}
-              format={(value, name) => {
-                return value != null ? String(value) : ''
+            <FlatList
+              style={[styles.mgrbtn20], {
+                maxHeight: 350, paddingBottom: 20, maxWidth: Dimensions.get('window').width / 1
               }}
+              numColumns={2}
+              data={inventoryData}
+              renderItem={(item) => this.InventoryItem(item)}
+              keyExtractor={(item) => item.name}
+              extraData={this.state.highlightSkuIndex}
             />
+
+
+          )
+          }
+
+          {hasProductOptions && (
+            <View style={[styles.sectionTitleContainer]}>
+              <StyledText style={styles.sectionTitleText}>
+                {t('productOptions')}
+              </StyledText>
+            </View>
+          )}
+
+          {product.productOptions !== undefined &&
+            product.productOptions.map((prdOption, optionIndex) => {
+              const requiredOption = prdOption.required
+
+              var ArrForTrueState = []
+              prdOption.optionValues.map((optVal, x) => {
+                ArrForTrueState.push({
+                  optionName: prdOption.optionName,
+                  optionValue: optVal.value,
+                  optionPrice: optVal.price,
+                  id: prdOption.versionId + x
+                })
+              })
+
+              return (
+                <View
+                  key={prdOption.versionId}
+                  style={styles.sectionContainer}
+                >
+                  <View style={styles.sectionTitleContainer}>
+                    <StyledText style={[styles.sectionTitleText]}>
+                      {prdOption.optionName}
+                    </StyledText>
+                  </View>
+
+                  {prdOption.multipleChoice === false ? (
+                    <View>
+                      {prdOption.optionValues.map((optVal, ix) => {
+                        let optionObj = {}
+                        optionObj['optionName'] = prdOption.optionName
+                        optionObj['optionValue'] = optVal.value
+                        optionObj['optionPrice'] = optVal.price
+                        optionObj['id'] = prdOption.id
+
+                        return (
+                          <View key={prdOption.id + ix}>
+                            <Field
+                              name={`productOptions[${optionIndex}]`}
+                              component={RadioLineItemObjPick}
+                              customValueOrder={optionObj}
+                              optionName={optVal.value}
+                              onCheck={(currentVal, fieldVal) => {
+                                return fieldVal !== undefined && currentVal.optionValue === fieldVal.optionValue
+                              }}
+                              validate={requiredOption ? isRequired : null}
+                            />
+                          </View>
+                        )
+                      })}
+                    </View>
+                  ) : (
+                      <View>
+                        <Field
+                          name={`productOptions[${optionIndex}]`}
+                          component={CheckBoxGroupObjPick}
+                          customarr={ArrForTrueState}
+                          validate={requiredOption ? isRequired : null}
+                        />
+                      </View>
+                    )}
+                </View>
+              )
+            })}
+
+          <View style={styles.sectionTitleContainer}>
+            <StyledText style={[styles.sectionTitleText]}>
+              {t('freeTextProductOption')}
+            </StyledText>
           </View>
-        </View>
 
-        <View style={[styles.tableRowContainerWithBorder]}>
-          <View style={[{flex: 1}]}>
-            <Field
-              name={`overridePrice`}
-              component={InputText}
-              placeholder={t('overridePrice')}
-              keyboardType='numeric'
-              alignLeft={true}
-            />
-          </View>
-        </View>
-
-        <View style={styles.sectionTitleContainer}>
-          <StyledText style={[styles.sectionTitleText]}>
-            {t('lineItemDiscount')}
-          </StyledText>
-        </View>
-
-        <View style={[styles.sectionContainer, styles.customBorderAndBackgroundColor(this.context)]}>
-          {globalProductOffers != null && globalProductOffers.map(offer => (
-            <View key={offer.offerId}>
-              <Field style={styles.customBorderAndBackgroundColor(this.context)}
-                name="lineItemDiscount"
-                component={RenderCheckBox}
-                customValue={{
-                  offerId: offer.offerId,
-                  productDiscount: offer.offerId,
-                  discount: offer.discountValue
+          <View style={[styles.tableRowContainerWithBorder]}>
+            <View style={[{flex: 1}]}>
+              <Field
+                name={`productOptions[${lastOptionIndex}].optionValue`}
+                component={InputText}
+                placeholder={t('freeTextProductOption')}
+                alignLeft={true}
+                format={(value, name) => {
+                  return value != null ? String(value) : ''
                 }}
-                optionName={offer.offerName}
-                defaultValueDisplay={(customValue, value) => String(customValue.productDiscount === value.productDiscount ? value.discount : 0)}
               />
             </View>
-          ))}
-        </View>
-
-        <View style={styles.tableRowContainerWithBorder}>
-          <Field
-            name="quantity"
-            component={RenderStepper}
-            optionName={t('quantity')}
-            validate={[isRequired, isCountZero]}
-          />
-        </View>
-
-        <View style={[styles.bottom, styles.dynamicVerticalPadding(20), styles.horizontalMargin, {flexDirection: 'row'}]}>
-          <View style={{flex: 1, marginHorizontal: 5}}>
-            <TouchableOpacity
-              onPress={this.props.handleSubmit}
-            >
-              <Text style={[[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]]}>
-                {t('action.addQty', {quantity: this.props?.quantity})}
-              </Text>
-            </TouchableOpacity>
           </View>
 
-          <View style={{flex: 1, marginHorizontal: 5}}>
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.goBack()
-              }}
-            >
-              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('action.cancel')}</Text>
-            </TouchableOpacity>
+          <View style={[styles.tableRowContainerWithBorder]}>
+            <View style={[{flex: 1}]}>
+              <Field
+                name={`overridePrice`}
+                component={InputText}
+                placeholder={t('overridePrice')}
+                keyboardType='numeric'
+                alignLeft={true}
+              />
+            </View>
+          </View>
+
+          <View style={styles.sectionTitleContainer}>
+            <StyledText style={[styles.sectionTitleText]}>
+              {t('lineItemDiscount')}
+            </StyledText>
+          </View>
+
+          <View style={[styles.sectionContainer, styles.customBorderAndBackgroundColor(this.context)]}>
+            {globalProductOffers != null && globalProductOffers.map(offer => (
+              <View key={offer.offerId}>
+                <Field style={styles.customBorderAndBackgroundColor(this.context)}
+                  name="lineItemDiscount"
+                  component={RenderCheckBox}
+                  customValue={{
+                    offerId: offer.offerId,
+                    productDiscount: offer.offerId,
+                    discount: offer.discountValue
+                  }}
+                  optionName={offer.offerName}
+                  defaultValueDisplay={(customValue, value) => String(customValue.productDiscount === value.productDiscount ? value.discount : 0)}
+                />
+              </View>
+            ))}
+          </View>
+
+        </ThemeKeyboardAwareScrollView>
+
+        <View style={[{position: 'relative', bottom: 0}]}>
+          <View style={styles.tableRowContainerWithBorder}>
+            <Field
+              name="quantity"
+              component={RenderStepper}
+              optionName={t('quantity')}
+              validate={[isRequired, isCountZero]}
+            />
+          </View>
+
+          <View style={[styles.bottom, styles.dynamicVerticalPadding(20), styles.horizontalMargin, {flexDirection: 'row'}]}>
+            <View style={{flex: 1, marginHorizontal: 5}}>
+              <TouchableOpacity
+                onPress={this.props.handleSubmit}
+              >
+                <Text style={[[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]]}>
+                  {t('action.addQty', {quantity: this.props?.quantity})}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{flex: 1, marginHorizontal: 5}}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.goBack()
+                }}
+              >
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>{t('action.cancel')}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
+
       </View>
     )
   }

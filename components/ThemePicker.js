@@ -35,9 +35,10 @@ export const ThemePicker = (props) => {
     }
     return (
         <View style={[styles.tableCellView, {justifyContent: 'space-between'}, props?.style]}>
-            {props?.colors && props?.colors.map((color) => {
+            {props?.colors && props?.colors.map((color, index) => {
                 return (
                     <TouchableOpacity
+                        key={index}
                         onPress={() => handleSelectColor(color)}
                         style={[{backgroundColor: color}, isSelected(color) ? {width: 40, height: 40, borderRadius: 40, borderColor: color, borderWidth: 3} : {width: 30, height: 30, borderRadius: 30, borderColor: color, borderWidth: 1}]} ></TouchableOpacity>
                 )

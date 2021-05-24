@@ -39,6 +39,7 @@ export const api = {
     update: `${apiRoot}/clients/me`,
     info: `${apiRoot}/clients/me/info`,
     changeClientType: `${apiRoot}/clients/me/clientType`,
+    getPaymentMethodsList: `${apiRoot}/settings/paymentMethods`,
   },
   clientUser: {
     new: `${apiRoot}/clients/me/users`,

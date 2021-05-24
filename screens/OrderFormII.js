@@ -707,7 +707,13 @@ class OrderFormII extends React.Component {
                             fontSize: 16,
                             color: '#fff',
                           }}
-                          handleDeleteAction={() => handleDelete(order.orderId, () => NavigationService.navigate('TablesSrc'))}
+                          handleDeleteAction={() => handleDelete(order.orderId, () => {
+                            if (order.orderType === 'TAKE_OUT') {
+                              NavigationService.navigate('LoginSuccess')
+                            } else {
+                              NavigationService.navigate('TablesSrc')
+                            }
+                          })}
                         />
                         <View style={{flex: 1, marginHorizontal: 5}}>
                           <TouchableOpacity
@@ -781,7 +787,13 @@ class OrderFormII extends React.Component {
                             fontSize: 16,
                             color: '#fff',
                           }}
-                          handleDeleteAction={() => handleDelete(order.orderId, () => NavigationService.navigate('TablesSrc'))}
+                          handleDeleteAction={() => handleDelete(order.orderId, () => {
+                            if (order.orderType === 'TAKE_OUT') {
+                              NavigationService.navigate('LoginSuccess')
+                            } else {
+                              NavigationService.navigate('TablesSrc')
+                            }
+                          })}
                         />
                         <View style={{flex: 1, marginHorizontal: 5, flexDirection: 'row'}}>
                           <View style={{flex: 1, flexDirection: 'column'}}>
@@ -921,7 +933,13 @@ class OrderFormII extends React.Component {
                             fontSize: 16,
                             color: '#fff',
                           }}
-                          handleDeleteAction={() => handleDelete(order.orderId, () => NavigationService.navigate('TablesSrc'))}
+                          handleDeleteAction={() => handleDelete(order.orderId, () => {
+                            if (order.orderType === 'TAKE_OUT') {
+                              NavigationService.navigate('LoginSuccess')
+                            } else {
+                              NavigationService.navigate('TablesSrc')
+                            }
+                          })}
                         />
                         <View style={{flex: 1, marginHorizontal: 5, flexDirection: 'column'}}>
                           <View style={{flex: 1, flexDirection: 'column'}}>
