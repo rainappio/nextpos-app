@@ -50,6 +50,14 @@ const en = {
     member: 'Membership',
     changeToStore: 'Hospitality Mode',
     changeToRetail: 'Retail Mode',
+    paymentMethods: {
+      CASH: 'Cash',
+      CARD: 'Card',
+      LINE_PAY: 'Line Pay',
+      JKO: 'JKO Pay',
+      UBER_EATS: 'Uber Eats',
+      FOOD_PANDA: 'Foodpanda',
+    }
   },
   newItem: {
     new: 'New',

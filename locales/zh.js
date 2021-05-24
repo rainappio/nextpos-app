@@ -50,6 +50,14 @@ const zh = {
     member: '會員管理',
     changeToStore: '切換商店版',
     changeToRetail: '切換零售版',
+    paymentMethods: {
+      CASH: '現金',
+      CARD: '信用卡',
+      LINE_PAY: 'Line Pay',
+      JKO: '街口支付',
+      UBER_EATS: 'Uber Eats',
+      FOOD_PANDA: '熊貓外送',
+    }
   },
   newItem: {
     new: '新增',

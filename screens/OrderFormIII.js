@@ -8,6 +8,7 @@ import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
+import {View} from 'react-native'
 
 class OrderFormIII extends React.Component {
   static navigationOptions = {
@@ -114,6 +115,7 @@ class OrderFormIII extends React.Component {
 
   render() {
     const {product, globalProductOffers, haveError, isLoading} = this.props
+    const {customBackgroundColor} = this.context
 
     const isEditLineItem = this.props.navigation.getParam('lineItem') != null
     const lineItemDiscount = {
@@ -151,7 +153,7 @@ class OrderFormIII extends React.Component {
       )
     }
     return (
-      <ThemeKeyboardAwareScrollView>
+      <View style={{flex: 1, backgroundColor: customBackgroundColor}}>
         {isEditLineItem ? (
           <OrderFormIV
             onSubmit={this.handleUpdate}
@@ -167,7 +169,7 @@ class OrderFormIII extends React.Component {
               globalProductOffers={globalProductOffers}
             />
           )}
-      </ThemeKeyboardAwareScrollView>
+      </View>
     )
   }
 }

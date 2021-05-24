@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {api, dispatchFetchRequest} from '../constants/Backend'
-import {getCurrentClient} from '../actions/client'
+import {getCurrentClient, getPaymentMethods} from '../actions'
 import StoreFormScreen from './StoreFormScreen'
 import LoadingScreen from "./LoadingScreen";
 
@@ -16,6 +16,7 @@ class Store extends React.Component {
 
   componentDidMount() {
     this.props.getCurrentClient()
+    this.props.getPaymentMethods()
   }
 
   handleSubmit = values => {
@@ -49,7 +50,9 @@ class Store extends React.Component {
     if (values.clientSettings.APPLY_CUSTOM_OFFER !== undefined) {
       values.clientSettings.APPLY_CUSTOM_OFFER.value = values.clientSettings.APPLY_CUSTOM_OFFER.enabled
     }
+    const updatePaymentIds = values.paymentMethods.map(item => item.id)
 
+    values = {...values, 'paymentMethodIds': updatePaymentIds}
 
 
     dispatchFetchRequest(api.client.update, {
@@ -64,10 +67,13 @@ class Store extends React.Component {
       response => {
         this.props.navigation.navigate('SettingScr')
       }).then()
+
+
   }
 
   render() {
-    const {client, navigation, loading, haveData} = this.props
+    const {client, navigation, loading, haveData, paymentMethods} = this.props
+
 
     if (loading) {
       return (
@@ -79,6 +85,7 @@ class Store extends React.Component {
           initialValues={client}
           onSubmit={this.handleSubmit}
           navigation={navigation}
+          paymentMethods={paymentMethods}
         />
       )
     } else {
@@ -90,12 +97,15 @@ class Store extends React.Component {
 const mapStateToProps = state => ({
   client: state.client.data,
   loading: state.client.loading,
-  haveData: state.client.haveData
+  haveData: state.client.haveData,
+  paymentMethods: state.paymentMethods.data
+
 })
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getCurrentClient: () => dispatch(getCurrentClient())
+  getCurrentClient: () => dispatch(getCurrentClient()),
+  getPaymentMethods: () => dispatch(getPaymentMethods())
 })
 
 export default connect(

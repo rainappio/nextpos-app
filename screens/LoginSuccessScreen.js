@@ -378,7 +378,7 @@ class LoginSuccessScreen extends React.Component {
                   } />
               </View>
             )}
-            {(appType === 'retail' && shiftStatus !== 'ACTIVE') && (
+            {(shiftStatus !== 'ACTIVE') && (
               <View style={[styles.menuContainer, {flex: 1}]}>
                 <MenuButton
                   route={'ShiftClose'}

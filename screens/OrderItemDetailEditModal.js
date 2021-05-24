@@ -567,18 +567,18 @@ class OrderItemOptions extends React.Component {
 
                             </Accordion>
 
-                            <View style={styles.tableRowContainerWithBorder}>
-                                <Field
-                                    name="quantity"
-                                    component={RenderStepper}
-                                    optionName={t('quantity')}
-                                    validate={[isRequired, isCountZero]}
-                                />
-                            </View>
-
-
                         </View>
                     </ThemeScrollView>
+                </View>
+                <View style={styles.tableRowContainerWithBorder}>
+                    <View style={{paddingHorizontal: 10}}>
+                        <Field
+                            name="quantity"
+                            component={RenderStepper}
+                            optionName={t('quantity')}
+                            validate={[isRequired, isCountZero]}
+                        />
+                    </View>
                 </View>
                 <View style={[styles.bottom, styles.dynamicVerticalPadding(20), styles.horizontalMargin, {flexDirection: 'row', alignSelf: 'flex-end', flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end'}]}>
                     <View style={{flex: 1, marginHorizontal: 5}}>
