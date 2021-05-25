@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Alert} from 'react-native'
-import {getOrder} from '../actions'
+import {getOrder, getCurrentClient} from '../actions'
 import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
 import PaymentOrderForm from './PaymentOrderForm'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -24,7 +24,8 @@ class PaymentOrder extends React.Component {
       dynamicTotal: 0,
       paymentsTypes: {
         0: {label: context.t('payment.cashPayment'), value: 'CASH'},
-        1: {label: context.t('payment.cardPayment'), value: 'CARD'}
+        1: {label: context.t('payment.cardPayment'), value: 'CARD'},
+        2: {label: context.t('payment.mobilePayment'), value: 'MOBILE'},
       },
       selectedPaymentType: 0
     }
@@ -32,6 +33,7 @@ class PaymentOrder extends React.Component {
 
   componentDidMount() {
     this.props.getOrder()
+    this.props.getCurrentClient()
   }
 
   handlePaymentTypeSelection = (index) => {
@@ -214,6 +216,10 @@ class PaymentOrder extends React.Component {
       transactionObj.paymentDetails['LAST_FOUR_DIGITS'] = values.cardNumber
       this.props.navigation.state.params?.isSplitByHeadCount && (transactionObj.settleAmount = this.props.navigation.state.params?.splitAmount)
     }
+    if (values.paymentMethod === 'MOBILE') {
+      transactionObj.paymentMethod = values.mobilePayType
+      this.props.navigation.state.params?.isSplitByHeadCount && (transactionObj.settleAmount = this.props.navigation.state.params?.splitAmount)
+    }
 
     if (!!values?.carrierId && !!values?.taxIdNumber) {
       Alert.alert(
@@ -237,6 +243,14 @@ class PaymentOrder extends React.Component {
           }
         ]
       )
+    } else if (values.paymentMethod === 'MOBILE' && !values.mobilePayType) {
+      Alert.alert(
+        `${this.context.t('payment.checkmobilePayType')}`,
+        ` `,
+        [
+          {text: `${this.context.t('action.yes')}`, onPress: () => console.log("OK Pressed")}
+        ]
+      )
     } else {
       fetchApi(transactionObj)
     }
@@ -246,7 +260,7 @@ class PaymentOrder extends React.Component {
   }
 
   render() {
-    const {isLoading, order} = this.props
+    const {isLoading, order, client} = this.props
     const {paymentsTypes, selectedPaymentType} = this.state
     const paymentsTypeslbl = Object.keys(paymentsTypes).map(key => paymentsTypes[key].label)
 
@@ -260,6 +274,7 @@ class PaymentOrder extends React.Component {
         <PaymentOrderForm
           onSubmit={this.checkAutoComplete}
           order={order}
+          client={client}
           navigation={this.props.navigation}
           addNum={this.addNum}
           resetTotal={this.resetTotal}
@@ -284,10 +299,12 @@ const mapStateToProps = state => ({
   haveData: state.order.haveData,
   haveError: state.order.haveError,
   isLoading: state.order.loading,
+  client: state.client.data,
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
-  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
+  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId)),
+  getCurrentClient: () => dispatch(getCurrentClient()),
 })
 export default connect(
   mapStateToProps,

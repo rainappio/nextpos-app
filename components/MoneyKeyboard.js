@@ -266,9 +266,10 @@ export const DiscountKeyboard = (props) => {
                 alignItems: 'center'
             }}>
                 {props?.title && <Text style={{fontSize: 28, fontWeight: 'bold'}}>{props?.title}</Text>}
-                {props?.globalorderoffers?.map((item) => (
+                {props?.globalorderoffers?.map((item, index) => (
 
                     <Button
+                        key={index}
                         title={item?.offerName}
                         raised
                         containerStyle={{
@@ -710,3 +711,80 @@ const styles = StyleSheet.create({
         fontSize: 20,
     })
 });
+
+
+/*
+   Date   : 2021-05-24
+   Author : Loxi
+   Content: props
+                initialValue={null}
+                getResult={()=>{}}
+                title={""}
+                client
+            
+*/
+export const MobilePayKeyboard = (props) => {
+    const localeContext = useContext(LocaleContext);
+    const {t, customMainThemeColor, customBackgroundColor} = localeContext
+
+    const mobilePayList = props?.client.paymentMethods.filter((item) => item.paymentKey !== 'CARD' && item.paymentKey !== 'CASH')
+
+    const labelNameOutput = (result) => {
+        !!props?.getResult ? props?.getResult(result) : console.warn("need getResult()")
+    }
+
+    return (
+        <View style={{
+            backgroundColor: customBackgroundColor,
+            margin: '5%',
+            borderRadius: 10,
+            flex: 1,
+
+            paddingVertical: '10%',
+            alignItems: 'center'
+        }}>
+            {props?.title && <Text style={{fontSize: 28, fontWeight: 'bold'}}>{props?.title}</Text>}
+
+            {!!mobilePayList.length ?
+                <>
+                    {mobilePayList.map((item) => (
+
+                        <Button
+                            key={item?.id}
+                            title={t(`settings.paymentMethods.${item?.paymentKey}`)}
+                            raised
+                            containerStyle={{
+                                marginVertical: '5%',
+                                padding: 0,
+                                justifyContent: 'center',
+                                height: '10%',
+                                flexDirection: 'row'
+                            }}
+                            buttonStyle={{
+                                flex: 1,
+                                width: '100%',
+                                margin: 0,
+                                borderRadius: 10,
+                                backgroundColor: customMainThemeColor,
+                            }}
+                            onPress={() => {
+                                labelNameOutput(item?.paymentKey)
+                            }}
+
+                        />
+                    )
+                    )
+                    }
+                </>
+                :
+                <View style={[{marginTop: 28}]}>
+                    <StyledText style={[{color: customMainThemeColor, fontSize: 24}]}>
+                        {t('payment.mobilePaymentNoSet')}
+
+                    </StyledText>
+                </View>
+            }
+        </View>
+    )
+
+}

@@ -294,7 +294,12 @@ const zh = {
     checkCarrierId: '格式錯誤，請重新掃描',
     carrierId: '載具',
     npoBan: '愛心碼',
-    checkPrintInvoice: '是否要列印電子發票'
+    checkPrintInvoice: '是否要列印電子發票',
+    mobilePayment: '行動支付',
+    mobilePayType: '行動支付種類',
+    mobilePayOptions: '行動支付選項',
+    checkmobilePayType: '請選擇行動支付方式',
+    mobilePaymentNoSet: '未設定',
   },
   timecard: {
     hours: '小時',

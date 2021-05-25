@@ -294,7 +294,12 @@ const en = {
     checkCarrierId: 'Mobile carrier format is incorrect, please rescan.',
     carrierId: 'Mobile Carrier',
     npoBan: 'Donate Number',
-    checkPrintInvoice: 'Print electronic invoice?'
+    checkPrintInvoice: 'Print electronic invoice?',
+    mobilePayment: 'Mobile Pay',
+    mobilePayType: 'Mobile Pay Type',
+    mobilePayOptions: 'Mobile Pay Options',
+    checkmobilePayType: 'Please choose mobile pay method.',
+    mobilePaymentNoSet: 'No set.',
   },
   timecard: {
     hours: 'Hour(s)',

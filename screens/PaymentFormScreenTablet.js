@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Field, reduxForm} from 'redux-form'
 import {Text, TouchableOpacity, View, ScrollView, Alert, KeyboardAvoidingView, Animated, Dimensions} from 'react-native'
-import {formatCurrency, getfetchglobalOrderOffers, getOrder} from '../actions'
+import {formatCurrency, getfetchglobalOrderOffers, getOrder, getCurrentClient} from '../actions'
 import RenderCheckBox from '../components/rn-elements/CheckBox'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -11,7 +11,7 @@ import CustomCheckBox from "../components/CustomCheckBox";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
-import {MoneyKeyboard, CardFourNumberKeyboard, CustomTitleAndDigitKeyboard, DiscountKeyboard} from '../components/MoneyKeyboard'
+import {MoneyKeyboard, CardFourNumberKeyboard, CustomTitleAndDigitKeyboard, DiscountKeyboard, MobilePayKeyboard} from '../components/MoneyKeyboard'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
 import {isGuiNumberValid} from 'taiwan-id-validator2'
@@ -40,6 +40,7 @@ class PaymentFormScreenTablet extends React.Component {
             taxIDNumberKeyBoardResult: [],
             selectedPayLabel: 'CASH',
             selectedCardLabel: 'OTHER',
+            selectedMobilePayLabel: null,
             haveTaxIDNumber: false,
             openTaxIDNumberKeyBoard: false,
             haveCarrierId: false,
@@ -59,6 +60,7 @@ class PaymentFormScreenTablet extends React.Component {
     }
 
     componentDidMount() {
+        this.props.getCurrentClient()
         this.props.getfetchglobalOrderOffers()
         this.props.getOrder(this.props.order.orderId)
         this.setState({waiveServiceCharge: this.props.order?.serviceCharge === 0})
@@ -221,6 +223,10 @@ class PaymentFormScreenTablet extends React.Component {
         if (this.state.selectedPayLabel === 'CARD') {
             transactionObj.paymentDetails['CARD_TYPE'] = this.state.selectedCardLabel
             transactionObj.paymentDetails['LAST_FOUR_DIGITS'] = this.state.cardKeyboardResult.join('')
+            this.props?.isSplitByHeadCount && (transactionObj.settleAmount = this.props?.splitAmount)
+        }
+        if (this.state.selectedPayLabel === 'MOBILE') {
+            transactionObj.paymentMethod = this.state.selectedMobilePayLabel
             this.props?.isSplitByHeadCount && (transactionObj.settleAmount = this.props?.splitAmount)
         }
 
@@ -452,7 +458,7 @@ class PaymentFormScreenTablet extends React.Component {
     }
 
     render() {
-        const {navigation, handleSubmit, globalorderoffers, order, isSplitting} = this.props
+        const {navigation, handleSubmit, globalorderoffers, order, isSplitting, client} = this.props
         const {t, themeStyle, appType, complexTheme, customMainThemeColor, customBackgroundColor} = this.context
         const totalAmount = this.props?.isSplitByHeadCount ? this.props?.splitAmount : order.orderTotal
 
@@ -561,6 +567,13 @@ class PaymentFormScreenTablet extends React.Component {
                                         <TouchableOpacity style={[(this.state.selectedPayLabel === 'CARD' ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1}]} onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'CARD', keyboardResult: 0, openTaxIDNumberKeyBoard: false, keyboardType: 'CARD'})}}>
                                             <View style={styles.listPanel}>
                                                 <StyledText style={[(this.state.selectedPayLabel === 'CARD' && styles.inverseText(this.context)), styles.listPanelText]}>{t('payment.cardPayment')}</StyledText>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles.customBorderAndBackgroundColor(this.context)]}>
+                                        <TouchableOpacity style={[(this.state.selectedPayLabel === 'MOBILE' ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1}]} onPress={() => {this.setState({openDiscountKeyBoard: false, selectedPayLabel: 'MOBILE', keyboardResult: 0, openTaxIDNumberKeyBoard: false, keyboardType: 'MOBILE'})}}>
+                                            <View style={styles.listPanel}>
+                                                <StyledText style={[(this.state.selectedPayLabel === 'MOBILE' && styles.inverseText(this.context)), styles.listPanelText]}>{t('payment.mobilePayment')}</StyledText>
                                             </View>
                                         </TouchableOpacity>
                                     </View>
@@ -751,14 +764,29 @@ class PaymentFormScreenTablet extends React.Component {
                                                     <Icon name="cc-mastercard" size={24} color={customMainThemeColor} />
                                                     <StyledText>MasterCard</StyledText>
                                                 </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    </View>}
 
+                                    {this.state.selectedPayLabel === 'MOBILE' && <View>
 
+                                        <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                                            <View style={[styles.tableCellView, {flex: 1}]}>
+                                                <StyledText>{t('payment.mobilePayType')}</StyledText>
+                                            </View>
+
+                                            <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end', }]}>
+                                                <TouchableOpacity onPress={() => {this.setState({openDiscountKeyBoard: false, keyboardResult: 0, openTaxIDNumberKeyBoard: false, keyboardType: 'MOBILE'})}}>
+
+                                                    <StyledText style={styles.tableCellText}>
+                                                        {!!this.state.selectedMobilePayLabel && t(`settings.paymentMethods.${this.state.selectedMobilePayLabel}`)}
+                                                    </StyledText>
+                                                </TouchableOpacity>
 
                                             </View>
                                         </View>
-
-
                                     </View>}
+
                                     {this.state.haveTaxIDNumber && <View>
                                         <TouchableOpacity onPress={() => {this.setState({openTaxIDNumberKeyBoard: true, keyboardType: 'TAXID'})}} style={[styles.tableRowContainerWithBorder, styles.verticalPadding, {flexDirection: 'column'}]}>
                                             <View style={{flexDirection: 'row'}}>
@@ -930,6 +958,12 @@ class PaymentFormScreenTablet extends React.Component {
                                     }}
                                     order={order}
                                 />}
+                                {this.state.keyboardType === 'MOBILE' && <MobilePayKeyboard
+                                    client={client}
+                                    title={t('payment.mobilePayOptions')}
+                                    getResult={(result) => {this.setState({selectedMobilePayLabel: result})}}
+                                    order={order}
+                                />}
                                 {this.state.keyboardType === 'ACCOUNT' && <CustomTitleAndDigitKeyboard
                                     title={t(`membership.enterMembershipAccount`)}
                                     digit={100}
@@ -954,6 +988,14 @@ class PaymentFormScreenTablet extends React.Component {
                                             if (this.state.haveTaxIDNumber && !isGuiNumberValid(this.state.taxIDNumberKeyBoardResult.join(''))) {
                                                 Alert.alert(
                                                     `${t('payment.checkTaxIDNumber')}`,
+                                                    ` `,
+                                                    [
+                                                        {text: `${t('action.yes')}`, onPress: () => console.log("OK Pressed")}
+                                                    ]
+                                                )
+                                            } else if (this.state.selectedPayLabel === 'MOBILE' && !this.state.selectedMobilePayLabel) {
+                                                Alert.alert(
+                                                    `${t('payment.checkmobilePayType')}`,
                                                     ` `,
                                                     [
                                                         {text: `${t('action.yes')}`, onPress: () => console.log("OK Pressed")}
@@ -998,11 +1040,13 @@ class PaymentFormScreenTablet extends React.Component {
 const mapStateToProps = (state, props) => ({
     globalorderoffers: state.globalorderoffers.data.results,
     order: state.order.data,
+    client: state.client.data,
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
     getOrder: () => dispatch(getOrder(props.order.orderId)),
-    getfetchglobalOrderOffers: () => dispatch(getfetchglobalOrderOffers())
+    getfetchglobalOrderOffers: () => dispatch(getfetchglobalOrderOffers()),
+    getCurrentClient: () => dispatch(getCurrentClient()),
 })
 
 export default connect(
