@@ -148,7 +148,9 @@ class PaymentFormScreenTablet extends React.Component {
                 })
             } else {
                 this.context?.saveSplitParentOrderId(null)
-                this.handleSplitByHeadComplete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess'))
+                this.handleSplitByHeadComplete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess'))
+
+                console.log("route: tb complete 1", this.props?.order?.orderType)
             }
 
             return
@@ -177,12 +179,16 @@ class PaymentFormScreenTablet extends React.Component {
                     })
                 } else {
                     this.context?.saveSplitParentOrderId(null)
-                    this.props.navigation.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess')
+                    this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess')
+
+                    console.log("route: tb complete 2", this.props?.order?.orderType)
                 }
 
             } else {
                 this.context?.saveSplitParentOrderId(null)
-                this.props.navigation.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess')
+                this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess')
+
+                console.log("route: tb complete 3", this.props?.order?.orderType)
             }
         }).then()
     }
@@ -273,7 +279,9 @@ class PaymentFormScreenTablet extends React.Component {
             })
         }, response => {
             this.context?.saveSplitParentOrderId(null)
-            this.props.navigation.navigate(this.context?.appType === 'store' ? 'TablesSrc' : 'LoginSuccess')
+            this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess')
+
+            console.log("route: tb props", this.props?.order?.orderType)
         }).then()
     }
 

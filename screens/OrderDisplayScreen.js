@@ -145,7 +145,8 @@ class OrderDisplayScreen extends React.Component {
       withCredentials: true,
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json',
+        // Andriod return error with wrong type
+        // 'Content-Type': 'application/json',
       },
       body: formData
     },
