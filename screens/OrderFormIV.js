@@ -270,8 +270,8 @@ class OrderFormIV extends React.Component {
 
         </ThemeKeyboardAwareScrollView>
 
-        <View style={[{position: 'relative', bottom: 0}]}>
-          <View style={styles.tableRowContainerWithBorder}>
+        <View style={[{position: 'relative', bottom: 0, maxHeight: 100}]}>
+          <View style={[styles.tableRowContainerWithBorder]}>
             <Field
               name="quantity"
               component={RenderStepper}
@@ -280,8 +280,8 @@ class OrderFormIV extends React.Component {
             />
           </View>
 
-          <View style={[styles.bottom, styles.dynamicVerticalPadding(20), styles.horizontalMargin, {flexDirection: 'row'}]}>
-            <View style={{flex: 1, marginHorizontal: 5}}>
+          <View style={[styles.tableRowContainerWithBorder]}>
+            <View style={[{flex: 1, marginHorizontal: 5}]}>
               <TouchableOpacity
                 onPress={this.props.handleSubmit}
               >
@@ -291,7 +291,7 @@ class OrderFormIV extends React.Component {
               </TouchableOpacity>
             </View>
 
-            <View style={{flex: 1, marginHorizontal: 5}}>
+            <View style={[{flex: 1, marginHorizontal: 5}]}>
               <TouchableOpacity
                 onPress={() => {
                   this.props.navigation.goBack()
@@ -303,7 +303,7 @@ class OrderFormIV extends React.Component {
           </View>
         </View>
 
-      </View>
+      </View >
     )
   }
 }
