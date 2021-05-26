@@ -157,7 +157,7 @@ class RetailStartOrderForm extends Component {
 
 
 
-                                <View style={[styles.sectionContent, styles.horizontalMargin]}>
+                                {/* <View style={[styles.sectionContent, styles.horizontalMargin]}>
                                     <View style={styles.sectionTitleContainer}>
                                         <StyledText style={styles.sectionTitleText}>{t('ageGroup')}</StyledText>
                                     </View>
@@ -195,7 +195,7 @@ class RetailStartOrderForm extends Component {
                                             />
                                         </View>
                                     </View>
-                                </View>
+                                </View> */}
 
                                 <View style={styles.sectionContent}>
                                     <View style={styles.sectionTitleContainer}>
@@ -354,7 +354,7 @@ class RetailStartOrderForm extends Component {
                         )}
 
 
-                        <View style={[styles.sectionContent, styles.horizontalMargin]}>
+                        {/* <View style={[styles.sectionContent, styles.horizontalMargin]}>
                             <View style={styles.sectionTitleContainer}>
                                 <StyledText style={styles.sectionTitleText}>{t('ageGroup')}</StyledText>
                             </View>
@@ -392,7 +392,7 @@ class RetailStartOrderForm extends Component {
                                     />
                                 </View>
                             </View>
-                        </View>
+                        </View> */}
 
                         <View style={styles.sectionContent}>
                             <View style={styles.sectionTitleContainer}>

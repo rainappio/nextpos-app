@@ -141,6 +141,7 @@ class OrderDetail extends React.Component {
 
     const cashPay = []
     const cardPay = []
+    const otherPay = []
 
     order.transactions !== undefined && order.transactions.forEach(item => {
       if (item.paymentMethod == 'CASH') {
@@ -148,6 +149,9 @@ class OrderDetail extends React.Component {
       }
       if (item.paymentMethod == 'CARD') {
         cardPay.push(item)
+      }
+      if (item.paymentMethod !== 'CASH' && item.paymentMethod !== 'CARD') {
+        otherPay.push(item)
       }
     })
 
@@ -238,10 +242,15 @@ class OrderDetail extends React.Component {
                 </StyledText>
               </View>}
             {orderDetail.paymentMethod == 'CARD' &&
-
               <View style={{flex: 1.3}}>
                 <StyledText>
                   {orderDetail.paymentDetails.values?.CARD_TYPE}
+                </StyledText>
+              </View>}
+            {orderDetail.paymentMethod !== 'CASH' && orderDetail.paymentMethod !== 'CARD' &&
+              <View style={{flex: 1.3}}>
+                <StyledText>
+                  {t(`settings.paymentMethods.${orderDetail.paymentMethod}`)}
                 </StyledText>
               </View>}
 
@@ -575,6 +584,37 @@ class OrderDetail extends React.Component {
               {cardPay.length !== 0 &&
                 <FlatList
                   data={cardPay}
+                  renderItem={({item, index}) => (
+                    <PayItem
+                      orderDetail={item}
+                    />
+                  )}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              }
+              {otherPay.length !== 0 &&
+                <View style={styles.sectionBar}>
+                  <View style={{flex: 1.3}}>
+                    <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>
+                      {t('order.paymentMethod')}
+                    </Text>
+                  </View>
+
+                  <View style={{flex: 3}}>
+                    <Text style={[styles?.sectionBarTextSmall(customMainThemeColor), {textAlign: 'center'}]}>
+                      {t('order.subtotal')}
+                    </Text>
+                  </View>
+
+                  <View style={{flex: 1.7}}>
+                    <Text style={[styles?.sectionBarTextSmall(customMainThemeColor), {textAlign: 'right'}]}>{t('order.splitInvoiceDetail')}</Text>
+                  </View>
+
+                </View>
+              }
+              {otherPay.length !== 0 &&
+                <FlatList
+                  data={otherPay}
                   renderItem={({item, index}) => (
                     <PayItem
                       orderDetail={item}

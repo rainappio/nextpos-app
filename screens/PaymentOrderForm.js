@@ -16,6 +16,7 @@ import {ScanView} from '../components/scanView'
 import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
 import Modal from 'react-native-modal';
 import {isRequired} from '../validators'
+import {RadioLineItemObjPick} from '../components/RadioItemObjPick'
 
 class PaymentOrderForm extends React.Component {
   static navigationOptions = {
@@ -219,23 +220,20 @@ class PaymentOrderForm extends React.Component {
       handleSubmit,
       order,
       addNum,
-      resetTotal
+      resetTotal,
+      client
     } = this.props
 
     const {t, appType, customMainThemeColor, customBackgroundColor} = this.context
     const {paymentsTypes, selectedPaymentType, paymentsTypeslbl, handlePaymentTypeSelection} = this.props
     const totalAmount = this.props?.isSplitByHeadCount ? this.props?.splitAmount : order.orderTotal
 
+    const mobilePayList = client?.paymentMethods.filter((item) => item.paymentKey !== 'CARD' && item.paymentKey !== 'CASH')
+
+
     const TaxInputAndBottomBtns = (props) => {
-
-
-
-
       return (
         <View >
-
-
-
           <View style={styles.bottom}>
             <TouchableOpacity onPress={() => props.handleSubmit()}>
               <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
@@ -491,6 +489,34 @@ class PaymentOrderForm extends React.Component {
                 </View>
               </View>
             }
+            {
+              selectedPaymentType === 2 &&
+              <View>
+                <View style={styles.sectionContainer}>
+                  {!!mobilePayList && mobilePayList?.map((item, index) => (
+                    <View style={[{flex: 1}]}
+                      key={item.id + index}>
+                      <Field
+                        name="mobilePayType"
+                        component={RadioLineItemObjPick}
+                        customValueOrder={item.paymentKey}
+                        optionName={t(`settings.paymentMethods.${item.paymentKey}`)}
+                        onCheck={(currentVal, fieldVal) => {
+                          return fieldVal !== undefined && currentVal === fieldVal
+                        }}
+                      />
+                    </View>
+                  ))}
+                  {!mobilePayList.length &&
+                    <View style={[styles.fieldContainer, styles.jc_alignIem_center]}>
+                      <StyledText style={[{color: customMainThemeColor, fontSize: 18}]}>
+                        {t('payment.mobilePaymentNoSet')}
+                      </StyledText>
+                    </View>
+                  }
+                </View>
+              </View>
+            }
 
             <View style={styles.fieldContainer}>
               <View style={{flex: 2}}>
@@ -594,7 +620,8 @@ class PaymentOrderForm extends React.Component {
 const mapStateToProps = (state, props) => ({
   initialValues: {
     cash: '' + props.dynamicTotal,
-    paymentMethod: props.selectedPaymentType === 0 ? 'CASH' : 'CARD',
+    paymentMethod: props.selectedPaymentType === 0 ? 'CASH' :
+      props.selectedPaymentType === 1 ? 'CARD' : 'MOBILE',
     phoneNumber: props?.order?.membership?.phoneNumber ?? undefined
   }
 })
