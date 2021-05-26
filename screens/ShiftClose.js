@@ -22,37 +22,6 @@ class ShiftClose extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    context.localize({
-      en: {
-        shiftTitle: 'Manage Shift',
-        shiftStatus: 'Current Shift Status',
-        openAt: 'Open at',
-        openBalance: 'Open Balance',
-        openBy: 'Open by',
-        closedAt: 'Closed at',
-        closedBalance: 'Close Balance',
-        difference: 'Cash Difference',
-        closedBy: 'Closed by',
-        cash: 'Open/Close Cash',
-        openShiftAction: 'Open Shift',
-        closeShiftAction: 'Close Shift'
-      },
-      zh: {
-        shiftTitle: '開關帳',
-        shiftStatus: '目前帳狀態',
-        openAt: '開帳時間',
-        openBalance: '開帳現金',
-        openBy: '開帳員工',
-        closedAt: '關帳時間',
-        closedBalance: '關帳現金',
-        difference: '現金差額',
-        closedBy: '關帳員工',
-        cash: '開關帳現金',
-        openShiftAction: '開帳',
-        closeShiftAction: '關帳'
-      }
-    })
-
     this.state = {
       balance: 0,
       isOpenShift: false
@@ -119,13 +88,13 @@ class ShiftClose extends React.Component {
               }}
             />
             <ScreenHeader parentFullScreen={true}
-              title={t('shiftTitle')} />
+              title={t('shift.shiftTitle')} />
 
             <View style={{flex: 3, justifyContent: 'center'}}>
               <View style={styles.tableRowContainerWithBorder}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
                   <StyledText style={[styles.fieldTitle]}>
-                    {t('shiftStatus')}
+                    {t('shift.shiftStatus')}
                   </StyledText>
                 </View>
                 <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -138,7 +107,7 @@ class ShiftClose extends React.Component {
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
                       <StyledText style={[styles.fieldTitle]}>
-                        {t('closedAt')}
+                        {t('shift.closedAt')}
                       </StyledText>
                     </View>
                     <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -148,7 +117,7 @@ class ShiftClose extends React.Component {
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
                       <StyledText style={[styles.fieldTitle]}>
-                        {t('closedBy')}
+                        {t('shift.closedBy')}
                       </StyledText>
                     </View>
                     <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -163,7 +132,7 @@ class ShiftClose extends React.Component {
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
                       <StyledText style={[styles.fieldTitle]}>
-                        {t('openAt')}
+                        {t('shift.openAt')}
                       </StyledText>
                     </View>
                     <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -173,7 +142,7 @@ class ShiftClose extends React.Component {
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
                       <StyledText style={[styles.fieldTitle]}>
-                        {t('openBalance')}
+                        {t('shift.openBalance')}
                       </StyledText>
                     </View>
                     <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -183,7 +152,7 @@ class ShiftClose extends React.Component {
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
                       <StyledText style={[styles.fieldTitle]}>
-                        {t('openBy')}
+                        {t('shift.openBy')}
                       </StyledText>
                     </View>
                     <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
@@ -211,7 +180,7 @@ class ShiftClose extends React.Component {
                         onPress={() => this.setState({isOpenShift: true})}
                       >
                         <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                          {t('openShiftAction')}
+                          {t('shift.openShiftAction')}
                         </Text>
                       </TouchableOpacity>
 

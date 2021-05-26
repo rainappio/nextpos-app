@@ -294,7 +294,12 @@ const zh = {
     checkCarrierId: '格式錯誤，請重新掃描',
     carrierId: '載具',
     npoBan: '愛心碼',
-    checkPrintInvoice: '是否要列印電子發票'
+    checkPrintInvoice: '是否要列印電子發票',
+    mobilePayment: '行動支付',
+    mobilePayType: '行動支付種類',
+    mobilePayOptions: '行動支付選項',
+    checkmobilePayType: '請選擇行動支付方式',
+    mobilePaymentNoSet: '未設定',
   },
   timecard: {
     hours: '小時',
@@ -349,6 +354,20 @@ const zh = {
     sendEmailDone: '信件已發送',
     printShiftReport: '列印關帳紀錄',
     printShiftReportDone: '關帳紀錄已列印',
+
+    // open/close
+    shiftTitle: '開關帳',
+    shiftStatus: '目前帳狀態',
+    openAt: '開帳時間',
+    openBalance: '開帳現金',
+    openBy: '開帳員工',
+    closedAt: '關帳時間',
+    closedBalance: '關帳現金',
+    difference: '現金差額',
+    closedBy: '關帳員工',
+    cash: '開關帳現金',
+    openShiftAction: '開帳',
+    closeShiftAction: '關帳'
   },
   preferences: {
     darkMode: '暗黑模式'
