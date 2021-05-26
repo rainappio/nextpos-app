@@ -294,7 +294,12 @@ const en = {
     checkCarrierId: 'Mobile carrier format is incorrect, please rescan.',
     carrierId: 'Mobile Carrier',
     npoBan: 'Donate Number',
-    checkPrintInvoice: 'Print electronic invoice?'
+    checkPrintInvoice: 'Print electronic invoice?',
+    mobilePayment: 'Mobile Pay',
+    mobilePayType: 'Mobile Pay Type',
+    mobilePayOptions: 'Mobile Pay Options',
+    checkmobilePayType: 'Please choose mobile pay method.',
+    mobilePaymentNoSet: 'No set.',
   },
   timecard: {
     hours: 'Hour(s)',
@@ -349,6 +354,20 @@ const en = {
     sendEmailDone: 'Email has been sent',
     printShiftReport: 'Print Shift Report',
     printShiftReportDone: 'Shift report has been printed.',
+
+    // open/close
+    shiftTitle: 'Manage Shift',
+    shiftStatus: 'Current Shift Status',
+    openAt: 'Open at',
+    openBalance: 'Open Balance',
+    openBy: 'Open by',
+    closedAt: 'Closed at',
+    closedBalance: 'Close Balance',
+    difference: 'Cash Difference',
+    closedBy: 'Closed by',
+    cash: 'Open/Close Cash',
+    openShiftAction: 'Open Shift',
+    closeShiftAction: 'Close Shift'
   },
   preferences: {
     darkMode: 'Dark Mode'

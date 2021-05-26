@@ -72,11 +72,13 @@ export const formatTime = date => {
   }
 
   const dateObj = useDateObj(date)
-  return dateObj.toLocaleTimeString('en-TW', {
-    dateStyle: 'long',
-    //timeZone: timezone
-    hour12: false
-  })
+
+  return moment(dateObj).format('HH:mm:ss')
+  // return dateObj.toLocaleTimeString('en-TW', {
+  //   dateStyle: 'long',
+  //   //timeZone: timezone
+  //   hour12: false
+  // })
 }
 
 export const getTimeDifference = date => {
