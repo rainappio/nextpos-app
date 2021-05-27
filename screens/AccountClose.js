@@ -26,7 +26,7 @@ class AccountClose extends React.Component {
       withCredentials: true,
       credentials: 'include',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(values)
+      body: JSON.stringify({closingBalances: values})
     }, {
       defaultMessage: false
     }, response => {
@@ -41,14 +41,11 @@ class AccountClose extends React.Component {
     const {t} = this.context
     const {loading, haveData, mostRecentShift} = this.props
 
-    const initialValues = {
-      cash: mostRecentShift.close.closingBalances['CASH'],
-      card: mostRecentShift.close.closingBalances['CARD']
-    }
+    const initialValues = mostRecentShift.close.closingBalances
 
     if (loading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     }
 

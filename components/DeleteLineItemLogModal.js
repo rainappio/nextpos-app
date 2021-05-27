@@ -62,7 +62,7 @@ export const DeleteLineItemLogModal = (props) => {
                 </View>
                 {props?.data?.deletedLineItems?.map((item) => {
                     return (
-                        <View style={styles.tableRowContainerWithBorder}>
+                        <View key={item.lineItemId} style={styles.tableRowContainerWithBorder}>
                             <View style={[{flex: 1, flexWrap: 'wrap'}, styles.tableCellView]}>
                                 <StyledText style={[styles.tableCellView]}>{item?.productName} </StyledText>
                                 <StyledText style={[styles.tableCellView]}>{item?.total === 0 && `(${localeContext?.t('order.freeLineitem')})`}</StyledText>

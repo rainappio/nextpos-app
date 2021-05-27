@@ -483,6 +483,10 @@ export default StyleSheet.create({
   dynamicVerticalPadding: val => {
     return {paddingVertical: val}
   },
+  withTopBorder: {
+    borderTopWidth: 1,
+    borderColor: '#e7e7e7'
+  },
   withBottomBorder: {
     borderBottomWidth: 1,
     borderColor: '#e7e7e7'

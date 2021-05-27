@@ -163,8 +163,9 @@ class SalesCharts extends React.Component {
       haveSDData
     } = this.props
     const {t, isTablet, customMainThemeColor} = this.context
-    const containSalesData = haveData && getrangedSalesReport.salesByRange !== undefined
+    const containSalesData = haveData && getrangedSalesReport?.salesByRange !== undefined
 
+    let allCancelledTotal = getrangedSalesReport?.salesByPaymentMethods?.map((item) => (item.status === 'CANCELLED' && item.orderTotal) ? item.orderTotal : 0).reduce((a, b) => a + b)
 
     let rangedSalesData = {}
     let rankingData
@@ -310,25 +311,19 @@ class SalesCharts extends React.Component {
                   </View>
                 </View>
 
-                <View style={styles.tableRowContainer}>
-                  <View style={styles.tableCellView}>
-                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+                {getrangedSalesReport?.salesByPaymentMethods?.map((item, index) => (
+                  <View key={item.paymentMethod + index} style={styles.tableRowContainer}>
+                    <View style={styles.tableCellView}>
+                      <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t(`settings.paymentMethods.${item?.paymentMethod}`)}</StyledText>
+                    </View>
+                    <View style={[styles.tableCellView, styles.justifyRight]}>
+                      <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CREATED' ? item?.orderTotal : 0)}</StyledText>
+                    </View>
                   </View>
-                  <View style={[styles.tableCellView, styles.justifyRight]}>
-                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CASH')?.orderTotal ?? 0)}</StyledText>
-                  </View>
-                </View>
+                ))}
 
-                <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
-                  <View style={styles.tableCellView}>
-                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
-                  </View>
-                  <View style={[styles.tableCellView, styles.justifyRight]}>
-                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CARD')?.orderTotal ?? 0)}</StyledText>
-                  </View>
-                </View>
 
-                <View style={styles.tableRowContainer}>
+                <View style={[styles.tableRowContainer, styles.withTopBorder]}>
                   <View style={styles.tableCellView}>
                     <StyledText style={styles.tableCellText}>{t('serviceChargeTotal')}</StyledText>
                   </View>
@@ -337,25 +332,18 @@ class SalesCharts extends React.Component {
                   </View>
                 </View>
 
-                <View style={styles.tableRowContainer}>
-                  <View style={styles.tableCellView}>
-                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+                {getrangedSalesReport?.salesByPaymentMethods?.map((item, index) => (
+                  <View key={item.paymentMethod + index} style={styles.tableRowContainer}>
+                    <View style={styles.tableCellView}>
+                      <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t(`settings.paymentMethods.${item?.paymentMethod}`)}</StyledText>
+                    </View>
+                    <View style={[styles.tableCellView, styles.justifyRight]}>
+                      <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CREATED' ? item?.serviceCharge : 0)}</StyledText>
+                    </View>
                   </View>
-                  <View style={[styles.tableCellView, styles.justifyRight]}>
-                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CASH')?.serviceCharge ?? 0)}</StyledText>
-                  </View>
-                </View>
+                ))}
 
-                <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
-                  <View style={styles.tableCellView}>
-                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
-                  </View>
-                  <View style={[styles.tableCellView, styles.justifyRight]}>
-                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CARD')?.serviceCharge ?? 0)}</StyledText>
-                  </View>
-                </View>
-
-                <View style={styles.tableRowContainer}>
+                <View style={[styles.tableRowContainer, styles.withTopBorder]}>
                   <View style={[styles.tableCellView]}>
                     <StyledText style={styles.tableCellText}>{t('discountTotal')}</StyledText>
                   </View>
@@ -364,50 +352,38 @@ class SalesCharts extends React.Component {
                   </View>
                 </View>
 
-                <View style={styles.tableRowContainer}>
-                  <View style={styles.tableCellView}>
-                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+                {getrangedSalesReport?.salesByPaymentMethods?.map((item, index) => (
+                  <View key={item.paymentMethod + index} style={styles.tableRowContainer}>
+                    <View style={styles.tableCellView}>
+                      <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t(`settings.paymentMethods.${item?.paymentMethod}`)}</StyledText>
+                    </View>
+                    <View style={[styles.tableCellView, styles.justifyRight]}>
+                      <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CREATED' ? item?.discount : 0)}</StyledText>
+                    </View>
                   </View>
-                  <View style={[styles.tableCellView, styles.justifyRight]}>
-                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CASH')?.discount ?? 0)}</StyledText>
-                  </View>
-                </View>
+                ))}
 
-                <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
-                  <View style={styles.tableCellView}>
-                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
-                  </View>
-                  <View style={[styles.tableCellView, styles.justifyRight]}>
-                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CARD')?.discount ?? 0)}</StyledText>
-                  </View>
-                </View>
 
-                <View style={styles.tableRowContainer}>
+                <View style={[styles.tableRowContainer, styles.withTopBorder]}>
                   <View style={[styles.tableCellView]}>
                     <StyledText style={styles.tableCellText}>{t('cancelledTotal')}</StyledText>
                   </View>
                   <View style={[styles.tableCellView, styles.justifyRight]}>
-                    <StyledText style={styles.tableCellText}>{formatCurrency((getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CARD')?.orderTotal ?? 0) + (getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CASH')?.orderTotal ?? 0))}</StyledText>
+                    <StyledText style={styles.tableCellText}>{formatCurrency(allCancelledTotal)}</StyledText>
                   </View>
                 </View>
 
-                <View style={styles.tableRowContainer}>
-                  <View style={styles.tableCellView}>
-                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+                {getrangedSalesReport?.salesByPaymentMethods?.map((item, index) => (
+                  <View key={item.paymentMethod + index} style={styles.tableRowContainer}>
+                    <View style={styles.tableCellView}>
+                      <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t(`settings.paymentMethods.${item?.paymentMethod}`)}</StyledText>
+                    </View>
+                    <View style={[styles.tableCellView, styles.justifyRight]}>
+                      <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CANCELLED' ? item?.discount : 0)}</StyledText>
+                    </View>
                   </View>
-                  <View style={[styles.tableCellView, styles.justifyRight]}>
-                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CASH')?.orderTotal ?? 0)}</StyledText>
-                  </View>
-                </View>
+                ))}
 
-                <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
-                  <View style={styles.tableCellView}>
-                    <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
-                  </View>
-                  <View style={[styles.tableCellView, styles.justifyRight]}>
-                    <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CARD')?.orderTotal ?? 0)}</StyledText>
-                  </View>
-                </View>
 
               </View>
               <View style={{paddingHorizontal: 8, flex: 1}}>
@@ -529,25 +505,19 @@ class SalesCharts extends React.Component {
               </View>
             </View>
 
-            <View style={styles.tableRowContainer}>
-              <View style={styles.tableCellView}>
-                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+            {getrangedSalesReport?.salesByPaymentMethods?.map((item, index) => (
+              <View key={item.paymentMethod + index} style={styles.tableRowContainer}>
+                <View style={styles.tableCellView}>
+                  <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t(`settings.paymentMethods.${item?.paymentMethod}`)}</StyledText>
+                </View>
+                <View style={[styles.tableCellView, styles.justifyRight]}>
+                  <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CREATED' ? item?.orderTotal : 0)}</StyledText>
+                </View>
               </View>
-              <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CASH')?.orderTotal ?? 0)}</StyledText>
-              </View>
-            </View>
+            ))}
 
-            <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
-              <View style={styles.tableCellView}>
-                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CARD')?.orderTotal ?? 0)}</StyledText>
-              </View>
-            </View>
 
-            <View style={styles.tableRowContainer}>
+            <View style={[styles.tableRowContainer, styles.withTopBorder]}>
               <View style={styles.tableCellView}>
                 <StyledText style={styles.tableCellText}>{t('serviceChargeTotal')}</StyledText>
               </View>
@@ -556,25 +526,19 @@ class SalesCharts extends React.Component {
               </View>
             </View>
 
-            <View style={styles.tableRowContainer}>
-              <View style={styles.tableCellView}>
-                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+            {getrangedSalesReport?.salesByPaymentMethods?.map((item, index) => (
+              <View key={item.paymentMethod + index} style={styles.tableRowContainer}>
+                <View style={styles.tableCellView}>
+                  <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t(`settings.paymentMethods.${item?.paymentMethod}`)}</StyledText>
+                </View>
+                <View style={[styles.tableCellView, styles.justifyRight]}>
+                  <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CREATED' ? item?.serviceCharge : 0)}</StyledText>
+                </View>
               </View>
-              <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CASH')?.serviceCharge ?? 0)}</StyledText>
-              </View>
-            </View>
+            ))}
 
-            <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
-              <View style={styles.tableCellView}>
-                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CARD')?.serviceCharge ?? 0)}</StyledText>
-              </View>
-            </View>
 
-            <View style={styles.tableRowContainer}>
+            <View style={[styles.tableRowContainer, styles.withTopBorder]}>
               <View style={[styles.tableCellView]}>
                 <StyledText style={styles.tableCellText}>{t('discountTotal')}</StyledText>
               </View>
@@ -583,50 +547,38 @@ class SalesCharts extends React.Component {
               </View>
             </View>
 
-            <View style={styles.tableRowContainer}>
-              <View style={styles.tableCellView}>
-                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+            {getrangedSalesReport?.salesByPaymentMethods?.map((item, index) => (
+              <View key={item.paymentMethod + index} style={styles.tableRowContainer}>
+                <View style={styles.tableCellView}>
+                  <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t(`settings.paymentMethods.${item?.paymentMethod}`)}</StyledText>
+                </View>
+                <View style={[styles.tableCellView, styles.justifyRight]}>
+                  <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CREATED' ? item?.discount : 0)}</StyledText>
+                </View>
               </View>
-              <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CASH')?.discount ?? 0)}</StyledText>
-              </View>
-            </View>
+            ))}
 
-            <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
-              <View style={styles.tableCellView}>
-                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CREATED' && item?.paymentMethod === 'CARD')?.discount ?? 0)}</StyledText>
-              </View>
-            </View>
 
-            <View style={styles.tableRowContainer}>
+            <View style={[styles.tableRowContainer, styles.withTopBorder]}>
               <View style={[styles.tableCellView]}>
                 <StyledText style={styles.tableCellText}>{t('cancelledTotal')}</StyledText>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={styles.tableCellText}>{formatCurrency((getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CARD')?.orderTotal ?? 0) + (getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CASH')?.orderTotal ?? 0))}</StyledText>
+                <StyledText style={styles.tableCellText}>{formatCurrency(allCancelledTotal)}</StyledText>
               </View>
             </View>
 
-            <View style={styles.tableRowContainer}>
-              <View style={styles.tableCellView}>
-                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cashSection')}</StyledText>
+            {getrangedSalesReport?.salesByPaymentMethods?.map((item, index) => (
+              <View key={item.paymentMethod + index} style={styles.tableRowContainer}>
+                <View style={styles.tableCellView}>
+                  <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t(`settings.paymentMethods.${item?.paymentMethod}`)}</StyledText>
+                </View>
+                <View style={[styles.tableCellView, styles.justifyRight]}>
+                  <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CANCELLED' ? item?.orderTotal : 0)}</StyledText>
+                </View>
               </View>
-              <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CASH')?.orderTotal ?? 0)}</StyledText>
-              </View>
-            </View>
+            ))}
 
-            <View style={[styles.tableRowContainer, styles.withBottomBorder]}>
-              <View style={styles.tableCellView}>
-                <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t('shift.cardSection')}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={styles.tableCellText}>{formatCurrency(getrangedSalesReport?.salesByPaymentMethods?.find((item) => item?.id?.status === 'CANCELLED' && item?.paymentMethod === 'CARD')?.orderTotal ?? 0)}</StyledText>
-              </View>
-            </View>
 
           </View>
 

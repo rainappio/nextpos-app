@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react';
-import {Text, TouchableOpacity, View, StyleSheet, KeyboardAvoidingView} from 'react-native'
+import {Text, TouchableOpacity, View, StyleSheet, KeyboardAvoidingView, Keyboard} from 'react-native'
 import {StyledText} from "../components/StyledText";
 import styles from '../styles'
 import {ThemeContainer} from "../components/ThemeContainer";
@@ -42,13 +42,18 @@ export const OpenShiftScreen = (props) => {
                                         setOpenBalance(value)
                                     }
                                     placeholder={t('openShift.enterAmount')}
+                                    blurOnSubmit={true}
                                     keyboardType={`numeric`}
                                 />
                             </View>
                         </View>
                         <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
                             <View style={{width: '45%', marginHorizontal: 5}}>
-                                <TouchableOpacity onPress={() => handleOpenShift(openBalance, () => props?.handleOpenShift())}>
+                                <TouchableOpacity onPress={() => {
+                                    Keyboard.dismiss()
+                                    handleOpenShift(openBalance, () => props?.handleOpenShift())
+                                }
+                                }>
                                     <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                                         {t('openShift.open')}
                                     </Text>
