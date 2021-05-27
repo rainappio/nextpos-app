@@ -45,9 +45,9 @@ const RenderTable = (props) => {
           </View>
         </View>
         <ScrollView style={{flex: 1}} nestedScrollEnabled>
-          {zippedData?.map((item) => {
+          {zippedData?.map((item, index) => {
             return (
-              <View style={{flexDirection: 'row', padding: 8, }}>
+              <View key={index} style={{flexDirection: 'row', padding: 8, }}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
                   <StyledText>{item?.[0]}</StyledText>
                 </View>

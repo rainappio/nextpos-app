@@ -44,6 +44,10 @@ class ShiftDetails extends React.Component {
       orderCountByState: {}
 
     }
+    let allPaymentMethod = []
+    let allDiscount = 0
+    let allServiceCharge = 0
+    let allClosingAmount = 0
 
     if (shift.close.closingShiftReport !== null) {
       closingShiftReport.totalOrderCount = shift.close.closingShiftReport.totalOrderCount
@@ -53,23 +57,25 @@ class ShiftDetails extends React.Component {
       closingShiftReport.totalByPaymentMethod = shift.close.closingShiftReport.totalByPaymentMethod
     }
 
+    if (shift.close.closingBalances != null) {
+      allPaymentMethod = Object.entries(shift.close.closingBalances).sort((a, b) => {
+        let sort = ["CASH", "CARD", "LINE_PAY", "JKO", "UBER_EATS", "FOOD_PANDA"];
+        return sort.indexOf(a[0]) - sort.indexOf(b[0]);
+      })
+    }
+
+
+    if (shift.close.closingShiftReport != null && shift.close.closingShiftReport.totalByPaymentMethod != null) {
+
+      allDiscount = Object.values(shift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.discount))?.reduce((a, b) => a + b)
+      allServiceCharge = Object.values(shift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.serviceCharge))?.reduce((a, b) => a + b)
+      allClosingAmount = Object.values(shift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.orderTotal))?.reduce((a, b) => a + b)
+    }
+
     if (shift.close.closingShiftReport !== null && shift.close.closingShiftReport.orderCountByState !== null) {
       closingShiftReport.orderCountByState = shift.close.closingShiftReport.orderCountByState
     }
 
-    const cashTotal = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.orderTotal : 0
-    const actualCashAmount = shift.close.closingBalances.hasOwnProperty('CASH') ? shift.close.closingBalances.CASH.closingBalance : 0
-    const cashUnbalanceReason = shift.close.closingBalances.hasOwnProperty('CASH') && shift.close.closingBalances.CASH.unbalanceReason
-    const cashDifference = actualCashAmount - (cashTotal + shift.open.balance)
-    const cardTotal = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.orderTotal : 0
-    const actualCardAmount = shift.close.closingBalances.hasOwnProperty('CARD') ? shift.close.closingBalances.CARD.closingBalance : 0
-    const cardUnbalanceReason = shift.close.closingBalances.hasOwnProperty('CARD') && shift.close.closingBalances.CARD.unbalanceReason
-    const cardDifference = actualCardAmount - cardTotal
-
-    const cashDiscount = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.discount : 0
-    const cardDiscount = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.discount : 0
-    const cashServiceCharge = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.serviceCharge : 0
-    const cardServiceCharge = closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.serviceCharge : 0
     console.log('shift', JSON.stringify(shift))
     return (
       <ThemeScrollView>
@@ -94,160 +100,103 @@ class ShiftDetails extends React.Component {
             <View style={styles.tableRowContainerWithBorder}>
               <View style={{flex: 3}}>
                 <StyledText style={[styles.fieldTitle]}>
-                  {t('shift.totalCashIncome')}
-                </StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <StyledText>{formatCurrency(cashTotal)}</StyledText>
-              </View>
-            </View>
-
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={{flex: 3}}>
-                <StyledText style={[styles.fieldTitle]}>
-                  {t('shift.totalCreditCardIncome')}
-                </StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <StyledText>{formatCurrency(cardTotal)}</StyledText>
-              </View>
-            </View>
-
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={{flex: 3}}>
-                <StyledText style={[styles.fieldTitle]}>
                   {t('shift.totalClosingAmount')}
                 </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
                 <StyledText>
-                  {formatCurrency(cashTotal + cardTotal)}
+                  {formatCurrency(allClosingAmount)}
                 </StyledText>
               </View>
             </View>
+
+            {!!allPaymentMethod && (allPaymentMethod).map(([key, value]) => {
+              return (
+                <View key={key} style={styles.tableRowContainerWithBorder}>
+                  <View style={{flex: 3}}>
+                    <StyledText style={[styles.fieldTitle]}>
+                      {t(`settings.paymentMethods.${key}`)}
+                    </StyledText>
+                  </View>
+                  <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                    <StyledText>{formatCurrency(value.expectedBalance)}</StyledText>
+                  </View>
+                </View>
+              )
+            })}
             {/* #Post-Closing Entries */}
 
-            {/* Cash */}
-            <View style={styles.sectionBar}>
-              <View>
-                <Text style={styles?.sectionBarText(customMainThemeColor)}>
-                  {t('shift.cashSection')}
-                </Text>
-              </View>
-            </View>
+            {!!allPaymentMethod && (allPaymentMethod).map(([key, value]) => {
+              return (
+                <View key={key} style={{flex: 1}}>
 
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 2}]}>
-                <StyledText style={[styles.fieldTitle]}>
-                  {t('shift.startingCash')}
-                </StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <StyledText>{formatCurrency(shift.open.balance)}</StyledText>
-              </View>
-            </View>
+                  <View style={styles.sectionBar}>
+                    <View>
+                      <Text style={styles?.sectionBarText(customMainThemeColor)}>
+                        {t(`settings.paymentMethods.${key}`)}
+                      </Text>
+                    </View>
+                  </View>
 
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 2}]}>
-                <StyledText style={[styles.fieldTitle]}>
-                  {t('shift.totalCashTransitionAmt')}
-                </StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <StyledText>{formatCurrency(cashTotal)}</StyledText>
-              </View>
-            </View>
+                  {key === 'CASH' && <View style={[styles.tableRowContainerWithBorder]}>
+                    <View style={[styles.tableCellView, {flex: 2}]}>
+                      <StyledText style={[styles.fieldTitle]}>
+                        {t('shift.startingCash')}
+                      </StyledText>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                      <StyledText>{formatCurrency(shift.open.balance)}</StyledText>
+                    </View>
+                  </View>}
 
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 2}]}>
-                <StyledText style={[styles.fieldTitle]}>
-                  {t('shift.totalCashInRegister')}
-                </StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <StyledText>{formatCurrency(actualCashAmount)}</StyledText>
-              </View>
-            </View>
+                  <View style={[styles.tableRowContainerWithBorder]}>
+                    <View style={[styles.tableCellView, {flex: 2}]}>
+                      <StyledText style={[styles.fieldTitle]}>
+                        {t('shift.expectedBalance')}
+                      </StyledText>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                      <StyledText>{formatCurrency(value.expectedBalance)}
+                      </StyledText>
+                    </View>
+                  </View>
 
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 2}]}>
-                <StyledText style={[styles.fieldTitle]}>
-                  {t('shift.difference')}
-                </StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <StyledText>{formatCurrency(cashDifference)}
-                </StyledText>
-              </View>
-            </View>
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[styles.tableCellView, {flex: 2}]}>
+                      <StyledText style={[styles.fieldTitle]}>
+                        {t('shift.closingBalance')}
+                      </StyledText>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                      <StyledText>{formatCurrency(value.closingBalance)}</StyledText>
+                    </View>
+                  </View>
 
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 2}]}>
-                <StyledText style={[styles.fieldTitle]}>
-                  {t('shift.remark')}
-                </StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <StyledText>{cashUnbalanceReason}</StyledText>
-              </View>
-            </View>
-            {/* #Cash */}
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[styles.tableCellView, {flex: 2}]}>
+                      <StyledText style={[styles.fieldTitle]}>
+                        {t('shift.difference')}
+                      </StyledText>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                      <StyledText>{formatCurrency(value.difference)}</StyledText>
+                    </View>
+                  </View>
+                  <View style={styles.tableRowContainerWithBorder}>
+                    <View style={[styles.tableCellView, {flex: 2}]}>
+                      <StyledText style={[styles.fieldTitle]}>
+                        {t('shift.remark')}
+                      </StyledText>
+                    </View>
+                    <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                      <StyledText>{value.unbalanceReason}</StyledText>
+                    </View>
+                  </View>
+                </View>
+              )
+            })
+            }
 
-            {/* Credit Card */}
-            <View style={styles.sectionBar}>
-              <View>
-                <TouchableOpacity>
-                  <Text style={styles?.sectionBarText(customMainThemeColor)}>
-                    {t('shift.cardSection')}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 2}]}>
-                <StyledText style={[styles.fieldTitle]}>
-                  {t('shift.totalCardTransitionAmt')}
-                </StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <StyledText>{formatCurrency(cardTotal)}</StyledText>
-              </View>
-            </View>
-
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 2}]}>
-                <StyledText style={[styles.fieldTitle]}>
-                  {t('shift.totalCardInRegister')}
-                </StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <StyledText>{formatCurrency(actualCardAmount)}</StyledText>
-              </View>
-            </View>
-
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 2}]}>
-                <StyledText style={[styles.fieldTitle]}>
-                  {t('shift.difference')}
-                </StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <StyledText>{formatCurrency(cardDifference)}</StyledText>
-              </View>
-            </View>
-
-            <View style={styles.tableRowContainerWithBorder}>
-              <View style={[styles.tableCellView, {flex: 2}]}>
-                <StyledText style={[styles.fieldTitle]}>
-                  {t('shift.remark')}
-                </StyledText>
-              </View>
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <StyledText>{cardUnbalanceReason}</StyledText>
-              </View>
-            </View>
-            {/* #Credit Card */}
 
             {/* Invoice */}
             <View style={styles.sectionBar}>
@@ -287,7 +236,7 @@ class ShiftDetails extends React.Component {
                 </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <StyledText>{formatCurrency(cashDiscount + cardDiscount)}</StyledText>
+                <StyledText>{formatCurrency(allDiscount)}</StyledText>
               </View>
             </View>
             <View style={styles.tableRowContainerWithBorder}>
@@ -297,7 +246,7 @@ class ShiftDetails extends React.Component {
                 </StyledText>
               </View>
               <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                <StyledText>{formatCurrency(cashServiceCharge + cardServiceCharge)}</StyledText>
+                <StyledText>{formatCurrency(allServiceCharge)}</StyledText>
               </View>
             </View>
             {/* #Invoice */}

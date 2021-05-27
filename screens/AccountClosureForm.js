@@ -25,12 +25,13 @@ class AccountClosureForm extends React.Component {
     const {t, customMainThemeColor} = this.context
     const {mostrecentShift, handleSubmit} = this.props
 
-    const closingShiftReport = {
-      totalByPaymentMethod: {}
-    }
+    let allPaymentMethod = []
 
-    if (mostrecentShift.close.closingShiftReport !== null && mostrecentShift.close.closingShiftReport.totalByPaymentMethod !== null) {
-      closingShiftReport.totalByPaymentMethod = mostrecentShift.close.closingShiftReport.totalByPaymentMethod
+    if (mostrecentShift.close.closingBalances !== null) {
+      allPaymentMethod = Object.entries(mostrecentShift.close.closingBalances).sort((a, b) => {
+        let sort = ["CASH", "CARD", "LINE_PAY", "JKO", "UBER_EATS", "FOOD_PANDA"];
+        return sort.indexOf(a[0]) - sort.indexOf(b[0]);
+      })
     }
 
     return (
@@ -51,129 +52,80 @@ class AccountClosureForm extends React.Component {
           </View>
         </View>
 
-        {/* Cash */}
-        <View style={styles.sectionBar}>
-          <View>
-            <Text style={styles?.sectionBarText(customMainThemeColor)}>
-              {t('shift.cashSection')}
-            </Text>
-          </View>
-        </View>
-
-        <View style={[styles.tableRowContainerWithBorder]}>
-          <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
-              {t('shift.startingCash')}
-            </StyledText>
-          </View>
-          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(mostrecentShift.open.balance)}</StyledText>
-          </View>
-        </View>
-
-        <View style={[styles.tableRowContainerWithBorder]}>
-          <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
-              {t('shift.totalCashTransitionAmt')}
-            </StyledText>
-          </View>
-          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{formatCurrency(closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH') ? closingShiftReport.totalByPaymentMethod.CASH.orderTotal : 0)}
-            </StyledText>
-          </View>
-        </View>
-
-        <View style={styles.tableRowContainerWithBorder}>
-          <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
-              {t('shift.totalCashInRegister')}
-            </StyledText>
-          </View>
-          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <Field
-              name="cash.closingBalance"
-              component={InputText}
-              keyboardType={`numeric`}
-              placeholder={t('shift.enterAmount')}
-              clearTextOnFocus={true}
-              format={(value, name) => {
-                return value != null ? String(value) : ''
-              }}
-            />
-          </View>
-        </View>
-
-        <View style={styles.tableRowContainerWithBorder}>
-          <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
-              {t('shift.remark')}
-            </StyledText>
-          </View>
-          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <Field
-              name="cash.unbalanceReason"
-              component={InputText}
-              placeholder={t('shift.enterRemark')}
-              height={35}
-            />
-          </View>
-
-        </View>
-
-        {/* #Cash */}
 
 
-        {/* Credit Card */}
-        <View style={styles.sectionBar}>
-          <View>
-            <Text style={styles?.sectionBarText(customMainThemeColor)}>
-              {t('shift.cardSection')}
-            </Text>
-          </View>
-        </View>
+        {!!allPaymentMethod && (allPaymentMethod).map(([key, value]) => {
+          return (
+            <View key={key} style={{flex: 1}}>
 
-        <View style={styles.tableRowContainerWithBorder}>
-          <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
-              {t('shift.totalCardTransitionAmt')}
-            </StyledText>
-          </View>
-          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>
-              {formatCurrency(closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD') ? closingShiftReport.totalByPaymentMethod.CARD.orderTotal : 0)}
-            </StyledText>
-          </View>
-        </View>
+              <View style={styles.sectionBar}>
+                <View>
+                  <Text style={styles?.sectionBarText(customMainThemeColor)}>
+                    {t(`settings.paymentMethods.${key}`)}
+                  </Text>
+                </View>
+              </View>
 
-        <View style={styles.tableRowContainerWithBorder}>
-          <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText style={[styles.fieldTitle]}>
-              {t('shift.totalCardInRegister')}
-            </StyledText>
-          </View>
-          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <Field
-              name="card.closingBalance"
-              component={InputText}
-              keyboardType={`numeric`}
-              placeholder={t('shift.enterAmount')}
-              clearTextOnFocus={true}
-              format={(value, name) => {
-                return value != null ? String(value) : ''
-              }}
-            />
-          </View>
-        </View>
+              {key === 'CASH' && <View style={[styles.tableRowContainerWithBorder]}>
+                <View style={[styles.tableCellView, {flex: 2}]}>
+                  <StyledText style={[styles.fieldTitle]}>
+                    {t('shift.startingCash')}
+                  </StyledText>
+                </View>
+                <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                  <StyledText>{formatCurrency(mostrecentShift.open.balance)}</StyledText>
+                </View>
+              </View>}
 
-        <View style={styles.tableRowContainerWithBorder}>
-          <View style={{flex: 1}}>
-            <Field
-              name="card.unbalanceReason"
-              component={InputText}
-              placeholder={t('shift.remark')}
-            />
-          </View>
-        </View>
+              <View style={[styles.tableRowContainerWithBorder]}>
+                <View style={[styles.tableCellView, {flex: 2}]}>
+                  <StyledText style={[styles.fieldTitle]}>
+                    {t('shift.totalCashTransitionAmt')}
+                  </StyledText>
+                </View>
+                <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                  <StyledText>{formatCurrency(value.expectedBalance)}
+                  </StyledText>
+                </View>
+              </View>
+
+              <View style={styles.tableRowContainerWithBorder}>
+                <View style={[styles.tableCellView, {flex: 2}]}>
+                  <StyledText style={[styles.fieldTitle]}>
+                    {t('shift.totalCashInRegister')}
+                  </StyledText>
+                </View>
+                <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                  <Field
+                    name={`${key}.closingBalance`}
+                    component={InputText}
+                    keyboardType={`numeric`}
+                    placeholder={t('shift.enterAmount')}
+                    clearTextOnFocus={true}
+                    format={(value, name) => {
+                      return value != null ? String(value) : ''
+                    }}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.tableRowContainerWithBorder}>
+                <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                  <Field
+                    name={`${key}.unbalanceReason`}
+                    component={InputText}
+                    placeholder={t('shift.remark')}
+                    height={35}
+                    format={(value, name) => {
+                      return value != null ? String(value) : ''
+                    }}
+                  />
+                </View>
+              </View>
+            </View>
+          )
+        })
+        }
 
         <View style={[styles.bottom, styles.horizontalMargin]}>
           <TouchableOpacity
@@ -189,7 +141,6 @@ class AccountClosureForm extends React.Component {
             buttonTitle='shift.abortAction'
           />
         </View>
-        {/* #Credit Card */}
 
       </ThemeKeyboardAwareScrollView>
     )

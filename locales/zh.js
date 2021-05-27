@@ -345,6 +345,8 @@ const zh = {
     totalCardInRegister: '實際刷卡營業額',
     difference: '差額',
     deleteLineItemLog: '刪除品項紀錄',
+    expectedBalance: '營業額',
+    closingBalance: '關帳金額',
 
     // messages
     shiftOpened: '已開帳',
@@ -363,7 +365,6 @@ const zh = {
     openBy: '開帳員工',
     closedAt: '關帳時間',
     closedBalance: '關帳現金',
-    difference: '現金差額',
     closedBy: '關帳員工',
     cash: '開關帳現金',
     openShiftAction: '開帳',

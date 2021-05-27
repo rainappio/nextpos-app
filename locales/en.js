@@ -345,6 +345,8 @@ const en = {
     totalCardInRegister: 'Actual Card Amount',
     difference: 'Difference',
     deleteLineItemLog: 'Deleted Line Items',
+    expectedBalance: 'Expected Balance',
+    closingBalance: 'Closing Balance',
 
     // messages
     shiftOpened: 'Shift opened',
@@ -363,7 +365,6 @@ const en = {
     openBy: 'Open by',
     closedAt: 'Closed at',
     closedBalance: 'Close Balance',
-    difference: 'Cash Difference',
     closedBy: 'Closed by',
     cash: 'Open/Close Cash',
     openShiftAction: 'Open Shift',
