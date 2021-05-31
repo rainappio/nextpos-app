@@ -210,6 +210,7 @@ export const api = {
     process: orderId => {
       return `${apiRoot}/orders/${orderId}/process`
     },
+    markAllAsPrepared: `${apiRoot}/orders/markAllAsPrepared`,
     settledProcess: orderId => {
       return `${apiRoot}/orders/${orderId}/process?action=POST_DELIVER`
     },

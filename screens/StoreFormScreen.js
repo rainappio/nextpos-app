@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Field, reduxForm, getFormMeta} from 'redux-form'
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
+import {ScrollView, Text, TouchableOpacity, View, Alert} from 'react-native'
 import {isPercentage, isRequired, isPositiveInteger} from '../validators'
 import InputText from '../components/InputText'
 import styles from '../styles'
@@ -16,6 +16,8 @@ import ThemeToggleButton from "../themes/ThemeToggleButton";
 import {ThemePicker} from "../components/ThemePicker";
 import {connect} from 'react-redux';
 import RNSwitchPayGroup from "../components/RNSwitchPayGroup"
+import Icon from 'react-native-vector-icons/Ionicons'
+import * as Device from 'expo-device';
 
 
 class StoreFormScreen extends Component {
@@ -56,10 +58,19 @@ class StoreFormScreen extends Component {
         country: 'Country',
         timezone: 'Timezone',
         featureToggle: 'Features',
-        locationBasedService: 'Location Based Clock In',
+        locationBasedService: 'Location Based Time Card',
         applyOffer: 'Apply Offer',
         uiPreferences: 'UI Preferences',
         paymentMethods: 'Payment Methods',
+        timeCardDeviceSetting: {
+          title: 'Time Card Device',
+          noSet: 'No Set Device',
+          reset: 'Reset Device',
+          resetMsg: 'Reset time card Device info?',
+          newSet: 'Set New Device',
+          setMsg: 'Set current device as time card device?',
+
+        },
       },
       zh: {
         clientName: '商家名稱',
@@ -92,7 +103,15 @@ class StoreFormScreen extends Component {
         locationBasedService: '位置打卡功能',
         applyOffer: '套用促銷',
         uiPreferences: '介面喜好',
-        paymentMethods: '付款方式'
+        paymentMethods: '付款方式',
+        timeCardDeviceSetting: {
+          title: '打卡機',
+          noSet: '目前未設定打卡機',
+          reset: '重置打卡機',
+          resetMsg: '是否重置現在設定的打卡機？',
+          newSet: '設定新打卡機',
+          setMsg: '將本裝置設為打卡機?',
+        },
       }
     })
 
@@ -107,6 +126,7 @@ class StoreFormScreen extends Component {
         0: {label: context.t('orderDisplayMode.LINE_ITEM'), value: 'LINE_ITEM'},
         1: {label: context.t('orderDisplayMode.ORDER'), value: 'ORDER'}
       },
+      timeCardDevice: this.props?.initialValues?.attributes?.TIME_CARD_DEVICE ?? null
     }
   }
 
@@ -137,9 +157,50 @@ class StoreFormScreen extends Component {
     this.setState({selectedOrderDisplayType: index})
   }
 
+  handleSetTimeCardDevice = () => {
+    Alert.alert(
+      `${this.props?.alertTitle ?? this.context.t('timeCardDeviceSetting.newSet')}`,
+      `${this.props?.alertMessage ?? this.context.t('timeCardDeviceSetting.setMsg')}`,
+      [
+        {
+          text: `${this.context.t('action.yes')}`,
+          onPress: () => {
+            this.props.change(`attributes.TIME_CARD_DEVICE`, Device.deviceName)
+            this.setState({timeCardDevice: Device.deviceName})
+          }
+        },
+        {
+          text: `${this.context.t('action.no')}`,
+          onPress: () => console.log('Cancelled'),
+          style: 'cancel'
+        }
+      ]
+    )
+  }
+  handleResetTimeCardDevice = () => {
+    Alert.alert(
+      `${this.props?.alertTitle ?? this.context.t('timeCardDeviceSetting.reset')}`,
+      `${this.props?.alertMessage ?? this.context.t('timeCardDeviceSetting.resetMsg')}`,
+      [
+        {
+          text: `${this.context.t('action.yes')}`,
+          onPress: () => {
+            this.props.change(`attributes.TIME_CARD_DEVICE`, null)
+            this.setState({timeCardDevice: null})
+          }
+        },
+        {
+          text: `${this.context.t('action.no')}`,
+          onPress: () => console.log('Cancelled'),
+          style: 'cancel'
+        }
+      ]
+    )
+  }
+
   render() {
-    const {t, customMainThemeColor, changeCustomMainThemeColor, theme, toggleTheme} = this.context
-    const {handleSubmit, paymentMethods} = this.props
+    const {isTablet, t, customMainThemeColor, changeCustomMainThemeColor, theme, toggleTheme} = this.context
+    const {handleSubmit, paymentMethods, deviceInfo} = this.props
 
     const tableDisplayTypes = Object.keys(this.state.tableDisplayTypes).map(key => this.state.tableDisplayTypes[key].label)
     const orderDisplayTypes = Object.keys(this.state.orderDisplayTypes).map(key => this.state.orderDisplayTypes[key].label)
@@ -418,17 +479,40 @@ class StoreFormScreen extends Component {
                 </View>
               </View>
 
-              <View style={styles.fieldContainer}>
-                <View style={{flex: 1}}>
-                  <StyledText style={styles.fieldTitle}>{t('applyOffer')}</StyledText>
+
+              <View style={[styles.fieldContainer, {marginTop: 8}]}>
+                <View style={{flex: 2}}>
+                  <StyledText style={styles.fieldTitle}>{t('timeCardDeviceSetting.title')}</StyledText>
                 </View>
-                <View style={[styles.alignRight]}>
+                <View style={isTablet ? {flex: 2.7} : {flex: 2.2}}>
                   <Field
-                    name="clientSettings.APPLY_CUSTOM_OFFER.enabled"
-                    component={RNSwitch}
+                    name="attributes.TIME_CARD_DEVICE"
+                    component={InputText}
+                    placeholder={this.state.timeCardDevice ?? t('timeCardDeviceSetting.noSet')}
+                    editable={false}
                   />
                 </View>
+                <View style={[isTablet ? {flex: 0.3} : {flex: 0.8}, {flexDirection: 'row-reverse'}]}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.handleSetTimeCardDevice()
+                    }}>
+                    <StyledText>
+                      <Icon name={this.state.timeCardDevice ? "md-create" : 'add'} size={24} color={customMainThemeColor} />
+                    </StyledText>
+                  </TouchableOpacity>
+                  {this.state.timeCardDevice && <TouchableOpacity
+                    style={{marginRight: 8}}
+                    onPress={() => {
+                      this.handleResetTimeCardDevice()
+                    }}>
+                    <StyledText>
+                      <Icon name="md-trash-sharp" size={24} color={customMainThemeColor} />
+                    </StyledText>
+                  </TouchableOpacity>}
+                </View>
               </View>
+
             </View>
 
             <View style={styles.sectionContainer}>
