@@ -1,5 +1,5 @@
 import {StyledText} from "../components/StyledText";
-import {FlatList, Text, TouchableOpacity, View} from "react-native";
+import {FlatList, Text, TouchableOpacity, View, Alert} from "react-native";
 import React from "react";
 import styles from '../styles'
 import ScreenHeader from "../components/ScreenHeader";
@@ -53,11 +53,15 @@ class OrderDisplayScreen extends React.Component {
         receivingText: 'Receiving',
         totalOrders: 'Total Pending Orders',
         tablesName: 'Table Name',
+        markAllpreparedTitle: 'Mark All as Prepared',
+        markAllPreparedMsg: 'Mark all orders/line items as prepared?'
       },
       zh: {
         receivingText: '接收訂單中',
         totalOrders: '等待處理訂單',
         tablesName: '桌位',
+        markAllpreparedTitle: '全部標記準備完成',
+        markAllPreparedMsg: '是否將所有訂單及品項標記為準備完成？'
       }
     })
     this.getLabels()
@@ -153,6 +157,36 @@ class OrderDisplayScreen extends React.Component {
       response => {
       }).then()
   }
+  handlePrepareAll = () => {
+
+    Alert.alert(
+      `${this.context.t('markAllpreparedTitle')}`,
+      `${this.context.t('markAllPreparedMsg')}`,
+      [
+        {
+          text: `${this.context.t('action.yes')}`,
+          onPress: () => {
+            console.log("all prepared check")
+            dispatchFetchRequest(api.order.markAllAsPrepared, {
+              method: 'POST',
+              withCredentials: true,
+              credentials: 'include',
+              headers: {
+              },
+            },
+              response => {
+              }).then()
+          }
+        },
+        {
+          text: `${this.context.t('action.no')}`,
+          onPress: () => console.log('Cancelled'),
+          style: 'cancel'
+        }
+      ]
+    )
+
+  }
 
   handleOnMessage = (data, id) => {
     if (data?.needAlert) {
@@ -190,51 +224,31 @@ class OrderDisplayScreen extends React.Component {
         <View style={styles.fullWidthScreen}>
           <ScreenHeader parentFullScreen={true}
             title={t('menu.orderDisplay')}
-            rightComponent={isOrderMode ? null :
+            rightComponent={
               <View style={{flexDirection: 'row'}}>
                 <View style={{marginRight: 8}}>
-                  <OptionModal
-                    tabletView
-                    icon={<MaterialCommunityIcons name="filter-variant" size={32} color={customMainThemeColor} />}
-                    toggleModal={(flag) => this.setState({isShowModal: flag})}
-                    isShowModal={this.state?.isShowModal}>
-                    <View >
-                      <View style={{
-                        flexDirection: 'row',
-                        paddingVertical: 8,
-                        alignItems: 'center'
-                      }}>
-                        <Text style={{marginLeft: 10, color: customMainThemeColor, fontSize: 16, fontWeight: 'bold'}}>{t('selectWorkingArea')}</Text>
-                      </View>
-                      <View style={{
-                        flexDirection: 'row',
-                        paddingVertical: 8,
-                        alignItems: 'center'
-                      }}>
-                        <View>
-                          <CheckBox
-                            checkedIcon={'check-circle'}
-                            uncheckedIcon={'circle'}
-                            checked={this.state?.selectedLabels?.size === this.state?.labels?.length + 1}
-                            containerStyle={{margin: 0, padding: 0, minWidth: 0}}
-                            onPress={() => {
-                              let tempSet = new Set()
-                              if (this.state?.selectedLabels?.size === this.state?.labels?.length + 1) {
-                                tempSet = new Set()
-                              } else {
-                                let labelsArr = [...this.state?.labels]
-                                labelsArr.push('noWorkingArea')
-                                tempSet = new Set([...labelsArr])
-                              }
-                              this.setState({selectedLabels: tempSet})
-                            }}
-                          >
-                          </CheckBox>
-                        </View>
-                        <StyledText>{t('allSelected')}</StyledText>
-                      </View>
-                      {this.state?.labels?.map((workingArea) => {
-                        return (
+                  <TouchableOpacity onPress={() => {this.handlePrepareAll()}}>
+                    <StyledText>
+                      <MaterialCommunityIcons name="text-box-check-outline" size={32} color={customMainThemeColor} />
+                    </StyledText>
+                  </TouchableOpacity>
+                </View>
+                {!isOrderMode &&
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{marginRight: 8}}>
+                      <OptionModal
+                        tabletView
+                        icon={<MaterialCommunityIcons name="filter-variant" size={32} color={customMainThemeColor} />}
+                        toggleModal={(flag) => this.setState({isShowModal: flag})}
+                        isShowModal={this.state?.isShowModal}>
+                        <View >
+                          <View style={{
+                            flexDirection: 'row',
+                            paddingVertical: 8,
+                            alignItems: 'center'
+                          }}>
+                            <Text style={{marginLeft: 10, color: customMainThemeColor, fontSize: 16, fontWeight: 'bold'}}>{t('selectWorkingArea')}</Text>
+                          </View>
                           <View style={{
                             flexDirection: 'row',
                             paddingVertical: 8,
@@ -244,52 +258,83 @@ class OrderDisplayScreen extends React.Component {
                               <CheckBox
                                 checkedIcon={'check-circle'}
                                 uncheckedIcon={'circle'}
-                                checked={this.state?.selectedLabels?.has(workingArea)}
+                                checked={this.state?.selectedLabels?.size === this.state?.labels?.length + 1}
                                 containerStyle={{margin: 0, padding: 0, minWidth: 0}}
                                 onPress={() => {
-                                  let tempSet = new Set(this.state?.selectedLabels)
-                                  if (this.state?.selectedLabels?.has(workingArea)) {
-                                    tempSet.delete(workingArea)
+                                  let tempSet = new Set()
+                                  if (this.state?.selectedLabels?.size === this.state?.labels?.length + 1) {
+                                    tempSet = new Set()
                                   } else {
-                                    tempSet.add(workingArea)
+                                    let labelsArr = [...this.state?.labels]
+                                    labelsArr.push('noWorkingArea')
+                                    tempSet = new Set([...labelsArr])
                                   }
                                   this.setState({selectedLabels: tempSet})
                                 }}
                               >
                               </CheckBox>
                             </View>
-                            <StyledText>{workingArea}</StyledText>
+                            <StyledText>{t('allSelected')}</StyledText>
                           </View>
-                        )
-                      })}
-                      <View style={{
-                        flexDirection: 'row',
-                        paddingVertical: 8,
-                        alignItems: 'center'
-                      }}>
-                        <View>
-                          <CheckBox
-                            checkedIcon={'check-circle'}
-                            uncheckedIcon={'circle'}
-                            checked={this.state?.selectedLabels?.has('noWorkingArea')}
-                            containerStyle={{margin: 0, padding: 0, minWidth: 0}}
-                            onPress={() => {
-                              let tempSet = new Set(this.state?.selectedLabels)
-                              if (this.state?.selectedLabels?.has('noWorkingArea')) {
-                                tempSet.delete('noWorkingArea')
-                              } else {
-                                tempSet.add('noWorkingArea')
-                              }
-                              this.setState({selectedLabels: tempSet})
-                            }}
-                          >
-                          </CheckBox>
+                          {this.state?.labels?.map((workingArea) => {
+                            return (
+                              <View style={{
+                                flexDirection: 'row',
+                                paddingVertical: 8,
+                                alignItems: 'center'
+                              }}>
+                                <View>
+                                  <CheckBox
+                                    checkedIcon={'check-circle'}
+                                    uncheckedIcon={'circle'}
+                                    checked={this.state?.selectedLabels?.has(workingArea)}
+                                    containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                                    onPress={() => {
+                                      let tempSet = new Set(this.state?.selectedLabels)
+                                      if (this.state?.selectedLabels?.has(workingArea)) {
+                                        tempSet.delete(workingArea)
+                                      } else {
+                                        tempSet.add(workingArea)
+                                      }
+                                      this.setState({selectedLabels: tempSet})
+                                    }}
+                                  >
+                                  </CheckBox>
+                                </View>
+                                <StyledText>{workingArea}</StyledText>
+                              </View>
+                            )
+                          })}
+                          <View style={{
+                            flexDirection: 'row',
+                            paddingVertical: 8,
+                            alignItems: 'center'
+                          }}>
+                            <View>
+                              <CheckBox
+                                checkedIcon={'check-circle'}
+                                uncheckedIcon={'circle'}
+                                checked={this.state?.selectedLabels?.has('noWorkingArea')}
+                                containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                                onPress={() => {
+                                  let tempSet = new Set(this.state?.selectedLabels)
+                                  if (this.state?.selectedLabels?.has('noWorkingArea')) {
+                                    tempSet.delete('noWorkingArea')
+                                  } else {
+                                    tempSet.add('noWorkingArea')
+                                  }
+                                  this.setState({selectedLabels: tempSet})
+                                }}
+                              >
+                              </CheckBox>
+                            </View>
+                            <StyledText>{t('noWorkingArea')}</StyledText>
+                          </View>
                         </View>
-                        <StyledText>{t('noWorkingArea')}</StyledText>
-                      </View>
+                      </OptionModal>
                     </View>
-                  </OptionModal>
-                </View>
+                  </View>
+                }
               </View>
             }
           />

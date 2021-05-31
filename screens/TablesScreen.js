@@ -1,5 +1,5 @@
 import React, {Component, useContext, useState, useEffect, forwardRef} from 'react'
-import {Animated, PanResponder, FlatList, RefreshControl, Text, TouchableOpacity, View, Dimensions, KeyboardAvoidingView, Alert} from 'react-native'
+import {Animated, PanResponder, FlatList, RefreshControl, Text, TouchableOpacity, View, Dimensions, KeyboardAvoidingView, Alert, Keyboard} from 'react-native'
 import {connect} from 'react-redux'
 import AddBtn from '../components/AddBtn'
 import OrderStart from './OrderStart'
@@ -278,13 +278,17 @@ class TablesScreen extends React.Component {
                         this.setState({openBalance: value})
                       }
                       placeholder={t('openShift.enterAmount')}
+                      blurOnSubmit={true}
                       keyboardType={`numeric`}
                     />
                   </View>
                 </View>
                 <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
                   <View style={{width: '45%', marginHorizontal: 5}}>
-                    <TouchableOpacity onPress={() => this.handleOpenShift(this.state.openBalance)}>
+                    <TouchableOpacity onPress={() => {
+                      Keyboard.dismiss()
+                      this.handleOpenShift(this.state.openBalance)
+                    }}>
                       <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                         {t('openShift.open')}
                       </Text>

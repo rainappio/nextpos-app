@@ -1,6 +1,6 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {AsyncStorage, Image, Keyboard, Text, TouchableOpacity, View, Animated} from 'react-native'
+import {AsyncStorage, Image, Keyboard, Text, TouchableOpacity, View, Animated, Dimensions} from 'react-native'
 import {Avatar} from 'react-native-elements'
 import Modal from 'react-native-modal';
 import {isEmail, isRequired} from '../validators'
@@ -156,8 +156,8 @@ class LoginScreen extends React.Component {
                 margin: 40, flex: 1, justifyContent: 'flex-start'
               }}
             >
-              <View style={[{minWidth: 600, marginTop: 100, flex: 1, alignSelf: 'center'}]}>
-                <ThemeScrollView style={[{borderRadius: 8, padding: 0, flexDirection: 'row'}]}>
+              <View style={[{width: ((Dimensions.get('window').width / 2) - 40), marginTop: 100, flex: 1, alignSelf: 'center'}]}>
+                <ThemeScrollView style={[{borderRadius: 8, padding: 0, flexDirection: 'row', width: ((Dimensions.get('window').width / 2) - 40)}]}>
                   <View style={[styles.withBottomBorder, styles.jc_alignIem_center, {marginTop: 20, paddingVertical: 12, flexDirection: 'row'}]}>
                     <View style={{marginBottom: 10}}>
                       <FontAwesome5
@@ -340,8 +340,8 @@ class LoginScreen extends React.Component {
                 margin: 40, flex: 1, justifyContent: 'flex-start'
               }}
             >
-              <View style={[{minWidth: 320, marginTop: 100, flex: 1, alignSelf: 'center'}]}>
-                <ThemeScrollView style={[{borderRadius: 8, padding: 0, flexDirection: 'row'}]}>
+              <View style={[{width: (Dimensions.get('window').width - 40), maxHeight: (Dimensions.get('window').height / 1.5), marginTop: 100, flex: 1, alignSelf: 'center'}]}>
+                <ThemeScrollView style={[{borderRadius: 8, padding: 0, flexDirection: 'row', width: (Dimensions.get('window').width - 40)}]}>
                   <View style={[styles.withBottomBorder, styles.jc_alignIem_center, {marginTop: 20, paddingVertical: 12, flexDirection: 'row'}]}>
                     <View style={{marginBottom: 10}}>
                       <FontAwesome5
