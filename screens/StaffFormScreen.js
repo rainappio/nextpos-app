@@ -30,8 +30,8 @@ class StaffFormScreen extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    const selectedRoleIndex = this.props.initialValues !== undefined ? this.props.initialValues.selectedRole : 0
-    console.log('props', this.props.initialValues)
+    const selectedRoleIndex = this.props?.initialValues !== undefined ? this.props?.initialValues?.selectedRole : 0
+    // console.log('props', this.props.initialValues)
 
     this.state = {
       selectedRole: selectedRoleIndex,
@@ -90,8 +90,14 @@ class StaffFormScreen extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextState !== this.state ||
-      nextProps != this.props
+    if (!!this.props?.isEditForm) {
+
+      return nextState !== this.state ||
+        nextProps != this.props
+    } else {
+
+      return nextState !== this.state
+    }
   }
 
   handleDelete = values => {
@@ -164,7 +170,7 @@ class StaffFormScreen extends React.Component {
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
                 {isEditForm ? (
-                  <EditPasswordPopUp name={initialValues.username} />
+                  <EditPasswordPopUp name={initialValues?.username} />
                 ) : (
                     <Field
                       name="password"

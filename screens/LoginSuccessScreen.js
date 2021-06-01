@@ -416,8 +416,9 @@ class LoginSuccessScreen extends React.Component {
             }
           </View>
           {!isTablet && shiftStatus === 'ACTIVE' &&
-            <View style={[styles.menuContainer, {flex: 1, maxHeight: 80}]}>
+            <View style={[styles.menuContainer, {flex: 1}]}>
               <MenuFlatButton
+                style={{maxHeight: 80}}
                 route='ClockIn'
                 onPress={() =>
                   NavigationService?.navigateToRoute('ClockIn', {
