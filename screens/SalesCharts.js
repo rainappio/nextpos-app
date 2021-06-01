@@ -166,7 +166,16 @@ class SalesCharts extends React.Component {
     const containSalesData = haveData && getrangedSalesReport?.salesByRange !== undefined
 
 
-    let allCancelledTotal = ((getrangedSalesReport?.salesByPaymentMethods.length) && getrangedSalesReport?.salesByPaymentMethods.map((item) => (item?.status === 'CANCELLED' && item?.orderTotal) ? item?.orderTotal : 0).reduce((a, b) => a + b)) ?? 0
+    let allCancelledTotal = 0
+
+    if (getrangedSalesReport?.salesByPaymentMethods !== null && getrangedSalesReport?.salesByPaymentMethods !== undefined) {
+      if (!!getrangedSalesReport.salesByPaymentMethods.length) {
+
+        getrangedSalesReport?.salesByPaymentMethods.map((item) => (item?.status === 'CANCELLED' && item?.orderTotal) ? item?.orderTotal : 0).reduce((a, b) => a + b)
+      }
+    }
+
+
 
     let rangedSalesData = {}
     let rankingData
