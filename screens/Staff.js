@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import StaffFormScreen from './StaffFormScreen'
-import {getClientUsrs, getUserRoles} from '../actions'
+import {getClientUsrs, getUserRoles, getWorkingAreas} from '../actions'
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 
@@ -12,6 +12,7 @@ class Staff extends React.Component {
 
   componentDidMount() {
     this.props.getUserRoles()
+    this.props.getWorkingAreas()
   }
 
   handleCancel = () => {
@@ -41,7 +42,7 @@ class Staff extends React.Component {
   }
 
   render() {
-    const { navigation, userRoles, isLoading } = this.props
+    const {navigation, userRoles, isLoading, workingareas} = this.props
 
     if (isLoading) {
       return (
@@ -55,6 +56,7 @@ class Staff extends React.Component {
         navigation={navigation}
         onCancel={this.handleCancel}
         userRoles={userRoles}
+        workingareas={workingareas}
       />
     )
   }
@@ -62,13 +64,15 @@ class Staff extends React.Component {
 
 const mapStateToProps = state => ({
   userRoles: state.userroles.data.userRoles,
-  isLoading: state.userroles.loading
+  isLoading: state.userroles.loading,
+  workingareas: state.workingareas.data.workingAreas,
 })
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
   getClientUsrs: () => dispatch(getClientUsrs()),
-  getUserRoles: () => dispatch(getUserRoles())
+  getUserRoles: () => dispatch(getUserRoles()),
+  getWorkingAreas: () => dispatch(getWorkingAreas())
 })
 
 export default connect(
