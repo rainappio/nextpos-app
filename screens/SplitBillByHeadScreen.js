@@ -262,18 +262,18 @@ class SplitBillByHeadScreen extends React.Component {
                                                                         this.toggleOrderLineItem(item.lineItemId);
                                                                     }}
                                                                 >
-                                                                    <StyledText style={{...{backgroundColor: '#d6d6d6', color: '#000'}, padding: 5, backgroundColor: 'gray', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1}}>{t('choose')}</StyledText>
+                                                                    <StyledText style={{...{backgroundColor: '#d6d6d6', color: '#000'}, padding: 5, backgroundColor: 'gray', shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1}}>{t('orderForm.choose')}</StyledText>
                                                                 </TouchableOpacity>}
                                                                 <View>
-                                                                    {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.open.display')}</StyledText>}
+                                                                    {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.open.display')}</StyledText>}
                                                                     {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && (
-                                                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.inProcess.display')}</StyledText>
+                                                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.inProcess.display')}</StyledText>
                                                                     )}
-                                                                    {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.prepared.display')}</StyledText>}
+                                                                    {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.prepared.display')}</StyledText>}
                                                                     {item?.state === 'DELIVERED' && (
-                                                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.delivered.display')}</StyledText>
+                                                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.delivered.display')}</StyledText>
                                                                     )}
-                                                                    {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('stateTip.settled.display')}</StyledText>}
+                                                                    {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.settled.display')}</StyledText>}
                                                                 </View>
                                                                 <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.lineItemSubTotal}</StyledText>
                                                             </View>
@@ -351,7 +351,7 @@ class SplitBillByHeadScreen extends React.Component {
                                                                             </View>
                                                                             : <View style={{flex: 1, margin: 16}}>
                                                                                 <MainActionFlexButton
-                                                                                    title={t('payOrder')}
+                                                                                    title={t('orderForm.payOrder')}
                                                                                     onPress={() => {
                                                                                         this.props.navigation.navigate('Payment', {
                                                                                             order: order,
@@ -618,7 +618,7 @@ class SplitBillByHeadScreen extends React.Component {
                                                                     </View>
                                                                     : <View style={{flex: 1, margin: 8}}>
                                                                         <MainActionFlexButton
-                                                                            title={t('payOrder')}
+                                                                            title={t('orderForm.payOrder')}
                                                                             onPress={() => {
                                                                                 this.props.navigation.navigate('PaymentOrder', {
                                                                                     orderId: order.orderId,
