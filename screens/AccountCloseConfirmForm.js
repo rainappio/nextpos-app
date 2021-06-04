@@ -53,9 +53,15 @@ class AccountCloseConfirmForm extends React.Component {
 
     if (mostrecentShift.close.closingShiftReport != null && mostrecentShift.close.closingShiftReport.totalByPaymentMethod != null) {
 
-      allDiscount = Object.values(mostrecentShift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.discount))?.reduce((a, b) => a + b)
-      allServiceCharge = Object.values(mostrecentShift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.serviceCharge))?.reduce((a, b) => a + b)
-      allClosingAmount = Object.values(mostrecentShift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.orderTotal))?.reduce((a, b) => a + b)
+      let checkLen = Object.keys(mostrecentShift.close.closingShiftReport.totalByPaymentMethod).length
+
+      if (!!checkLen) {
+
+        allDiscount = Object.values(mostrecentShift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.discount))?.reduce((a, b) => a + b)
+        allServiceCharge = Object.values(mostrecentShift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.serviceCharge))?.reduce((a, b) => a + b)
+        allClosingAmount = Object.values(mostrecentShift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.orderTotal))?.reduce((a, b) => a + b)
+      }
+
     }
 
     if (mostrecentShift.close.closingShiftReport != null && mostrecentShift.close.closingShiftReport.orderCountByState != null) {

@@ -67,9 +67,14 @@ class ShiftDetails extends React.Component {
 
     if (shift.close.closingShiftReport != null && shift.close.closingShiftReport.totalByPaymentMethod != null) {
 
-      allDiscount = Object.values(shift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.discount))?.reduce((a, b) => a + b)
-      allServiceCharge = Object.values(shift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.serviceCharge))?.reduce((a, b) => a + b)
-      allClosingAmount = Object.values(shift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.orderTotal))?.reduce((a, b) => a + b)
+      let checkLen = Object.keys(shift.close.closingShiftReport.totalByPaymentMethod).length
+
+      if (!!checkLen) {
+
+        allDiscount = Object.values(shift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.discount))?.reduce((a, b) => a + b)
+        allServiceCharge = Object.values(shift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.serviceCharge))?.reduce((a, b) => a + b)
+        allClosingAmount = Object.values(shift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.orderTotal))?.reduce((a, b) => a + b)
+      }
     }
 
     if (shift.close.closingShiftReport !== null && shift.close.closingShiftReport.orderCountByState !== null) {
