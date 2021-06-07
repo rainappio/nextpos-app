@@ -752,5 +752,16 @@ export default StyleSheet.create({
   }),
   inverseBackground: (context) => ({
     backgroundColor: context?.customMainThemeColor
-  })
+  }),
+  reservationFormTitle: (customMainThemeColor) => ({
+    color: customMainThemeColor,
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginVertical: 8,
+    paddingHorizontal: 4,
+  }),
+  reservationFormContainer: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 })

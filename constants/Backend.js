@@ -572,6 +572,24 @@ export const api = {
       return `${apiRoot}/rosterPlans/${pid}/events/${eid}/resources`
     },
   },
+  reservation: {
+    create: `${apiRoot}/reservations`,
+    update: (id) => {
+      return `${apiRoot}/reservations/${id}`
+    },
+    cancel: (id) => {
+      return `${apiRoot}/reservations/${id}`
+    },
+    getReservationByDate: (date, status) => {
+      return `${apiRoot}/reservations?reservationDate=${date}&reservationStatus=${status}`
+    },
+    getAvailableTables: (date) => {
+      return `${apiRoot}/reservations/availableTables?reservationDate=${date}`
+    },
+    getReservationById: (id) => {
+      return `${apiRoot}/reservations/${id}`
+    },
+  },
   membership: {
     get: (id) => {
       return `${apiRoot}/memberships/${id}`

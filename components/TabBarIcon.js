@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Colors from '../constants/Colors'
 import {withContext} from "../helpers/contextHelper";
 import {MaterialIcons} from '@expo/vector-icons';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 
 class TabBarIcon extends React.Component {
   render() {
@@ -20,9 +21,17 @@ class TabBarIcon extends React.Component {
       color: this.props.focused ? customSecondThemeColor : customTabBarIconColor,
       onPress: this.props.onPress
     }
+
     if (iconLib === 'MaterialIcons') {
       return (
         <MaterialIcons
+          {...elementProps}
+        />
+      )
+    }
+    if (iconLib === 'MaterialCommunityIcons') {
+      return (
+        <MaterialCommunityIcons
           {...elementProps}
         />
       )
