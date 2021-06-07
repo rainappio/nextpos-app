@@ -97,6 +97,9 @@ import RetailCheckoutComplete from '../screens/RetailCheckoutComplete'
 import InventoryScreen from '../screens/InventoryScreen'
 import InventoryOrderScreen from '../screens/InventoryOrderScreen'
 import InventoryOrderFormScreen from '../screens/InventoryOrderFormScreen'
+import ReservationScreen from '../screens/ReservationScreen'
+import ReservationFormScreen from '../screens/ReservationFormScreen'
+import ReservationConfirmScreen from '../screens/ReservationConfirmScreen'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -265,6 +268,23 @@ Rosters.navigationOptions = ({screenProps: {t}}) => ({
   },
 })
 
+const Reservation = createStackNavigator({
+  Reservation: ReservationScreen,
+  ReservationFormScreen: ReservationFormScreen,
+  ReservationConfirmScreen: ReservationConfirmScreen,
+})
+
+const testVisible = true
+
+Reservation.navigationOptions = ({screenProps: {t}}) => ({
+  title: t('menu.Reservation'),
+  tabBarButtonComponent: (props) => (
+    !testVisible ?
+      <TabBarIcon focused={props?.focused} name="calendar-check" iconLib="MaterialCommunityIcons" onPress={props?.onPress} />
+      : null
+  ),
+})
+
 const tabBar = createBottomTabNavigator({
   Home: {
     screen: Home,
@@ -307,6 +327,9 @@ const tabBar = createBottomTabNavigator({
   },
   Inventory: {
     screen: Inventory
+  },
+  Reservation: {
+    screen: Reservation
   },
   Rosters: {
     screen: Rosters

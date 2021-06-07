@@ -399,6 +399,7 @@ class RenderDatePickerBase extends Component {
 								mode={mode ?? "date"}
 								is24Hour={true}
 								display="inline"
+								minimumDate={this.props.minimumDate ?? null}
 								onChange={(e, selectedDate) => {
 									console.log(`on change date: ${selectedDate} ${e.nativeEvent.timestamp}`)
 
@@ -420,6 +421,7 @@ class RenderDatePickerBase extends Component {
 							value={!!value ? this.state?.result : new Date()}
 							mode={mode ?? "date"}
 							is24Hour={true}
+							minimumDate={this.props.minimumDate ?? null}
 							display="default"
 							onChange={(e, selectedDate) => {
 								console.log(`on change date: ${selectedDate} ${e.nativeEvent.timestamp}`)

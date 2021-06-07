@@ -679,7 +679,30 @@ const zh = {
     productName: '產品名稱',
     disableChangeOrderTitle: '無法變更',
     disableChangeOrderMessage: '已處理的進貨單不能修改。'
-  }
+  },
+  reservation: {
+    reservationTitle: '訂位',
+    date: '預約日期',
+    time: '預約時間',
+    timeBlock: {
+      morning: '早上',
+      noon: '中午',
+      evening: '晚上'
+    },
+    hours: '時',
+    minutes: '分',
+    peopleCount: '總人數',
+    adult: '成人',
+    kid: '孩童',
+    contactInfo: '聯絡資訊',
+    name: '名稱',
+    phone: '電話號碼',
+    otherNote: '其他備註',
+    table: '桌號',
+    next: '下一步',
+    noTable: '未選(候補)',
+    cancelActionContext: '取消訂位並返回首頁？',
+  },
 }
 
 export default zh

@@ -677,7 +677,30 @@ const en = {
     unitPrice: 'Unit Price',
     disableChangeOrderTitle: 'Disabled',
     disableChangeOrderMessage: 'Processed inventory order cannot be modified.'
-  }
+  },
+  reservation: {
+    reservationTitle: 'Reservation',
+    date: 'Reservation Date',
+    time: 'Reservation Time',
+    timeBlock: {
+      morning: 'Morning',
+      noon: 'Noon',
+      evening: 'Evening'
+    },
+    hours: 'Hours',
+    minutes: 'Minutes',
+    peopleCount: 'People Count',
+    adult: 'Adult',
+    kid: 'Kid',
+    contactInfo: 'Contact Info',
+    name: 'Name',
+    phone: 'Phone Number',
+    otherNote: 'Other Note',
+    table: 'Table',
+    next: 'Next',
+    noTable: 'None (Waiting)',
+    cancelActionContext: 'Cancel reservation and return to home screen?',
+  },
 }
 
 export default en
