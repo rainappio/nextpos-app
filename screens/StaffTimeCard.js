@@ -90,12 +90,17 @@ class StaffTimeCard extends React.Component {
             <StyledText>{displayName}</StyledText>
           </View>
 
-          <View style={[styles.tableCellView, {flex: 2}]}>
+          <View style={[styles.tableCellView, {flex: 1.5}]}>
             <StyledText>{timecard.totalShifts}</StyledText>
           </View>
 
-          <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-            <StyledText>{timecard.totalHours.toFixed(2)}</StyledText>
+          <View style={[styles.tableCellView, {flex: 3.5, justifyContent: 'flex-end'}]}>
+            <StyledText>
+              {timecard.hours} {t('timecard.hours')}&nbsp;
+            </StyledText>
+            <StyledText>
+              {timecard.minutes} {t('timecard.minutes')}
+            </StyledText>
           </View>
         </TouchableOpacity>
       )
@@ -135,11 +140,11 @@ class StaffTimeCard extends React.Component {
                 <Text style={[styles?.sectionBarText(customMainThemeColor)]}>{t('firstColTitle')}</Text>
               </View>
 
-              <View style={[styles.tableCellView, {flex: 2}]}>
+              <View style={[styles.tableCellView, {flex: 1.5}]}>
                 <Text style={[styles?.sectionBarText(customMainThemeColor)]}>{t('secColTitle')}</Text>
               </View>
 
-              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+              <View style={[styles.tableCellView, {flex: 3.5, justifyContent: 'flex-end'}]}>
                 <Text style={[styles?.sectionBarText(customMainThemeColor), {textAlign: 'right'}]}>{t('thirdColTitle')}</Text>
               </View>
             </View>
