@@ -302,8 +302,8 @@ const en = {
     mobilePaymentNoSet: 'No set.',
   },
   timecard: {
-    hours: 'Hour(s)',
-    minutes: 'Minute(s)'
+    hours: 'hours',
+    minutes: 'mins'
   },
   shift: {
     closeShift: 'Close Shift',
