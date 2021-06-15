@@ -21,17 +21,6 @@ class PrinternKDS extends React.Component {
   constructor(props, context) {
     super(props, context)
 
-    context.localize({
-      en: {
-        printerTitle: 'Printer',
-        workingAreaTitle: 'Working Area',
-      },
-      zh: {
-        printerTitle: '出單機',
-        workingAreaTitle: '工作區',
-      }
-    })
-
     this.state = {
       activeSections: []
     }
@@ -87,7 +76,7 @@ class PrinternKDS extends React.Component {
           <View>
             <View style={styles.sectionBar}>
               <Text style={styles?.sectionBarText(customMainThemeColor)}>
-                {t('printerTitle')}
+                {t('printer.printerTitle')}
               </Text>
 
             </View>
@@ -122,7 +111,7 @@ class PrinternKDS extends React.Component {
 
             <View style={styles.sectionBar}>
               <Text style={styles?.sectionBarText(customMainThemeColor)}>
-                {t('workingAreaTitle')}
+                {t('printer.workingAreaTitle')}
               </Text>
             </View>
 

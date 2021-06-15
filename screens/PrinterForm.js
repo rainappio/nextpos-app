@@ -20,34 +20,8 @@ class PrinterForm extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    context.localize({
-      en: {
-        editPrinterTitle: 'Edit Printer',
-        addPrinterTitle: 'Add Printer',
-        printerName: 'Printer Name',
-        ipAddress: 'IP Address',
-        serviceType: {
-          title: 'Service Type',
-          workingArea: 'Working Area',
-          checkout: 'Checkout'
-        },
-        testPrint: 'Test Printer'
-      },
-      zh: {
-        editPrinterTitle: '編輯出單機',
-        addPrinterTitle: '新增出單機',
-        printerName: '出單機名稱',
-        ipAddress: 'IP地址',
-        serviceType: {
-          title: '綁定區域',
-          workingArea: '工作區',
-          checkout: '結帳區'
-        },
-        testPrint: '測試出單機'
-      }
-    })
   }
+
 
   handleTestPrint = (ipAddress) => {
     printMessage(null, ipAddress, () => {
@@ -68,7 +42,7 @@ class PrinterForm extends React.Component {
         <View>
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, styles.flex(1)]}>
-              <StyledText style={styles.fieldTitle}>{t('printerName')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('printer.printerName')}</StyledText>
             </View>
             <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
@@ -76,21 +50,21 @@ class PrinterForm extends React.Component {
                 component={InputText}
                 type="text"
                 validate={[isRequired]}
-                placeholder={t('printerName')}
+                placeholder={t('printer.printerName')}
               />
             </View>
           </View>
 
           <View style={styles.tableRowContainerWithBorder}>
             <View style={[styles.tableCellView, styles.flex(1)]}>
-              <StyledText style={styles.fieldTitle}>{t('ipAddress')}</StyledText>
+              <StyledText style={styles.fieldTitle}>{t('printer.ipAddress')}</StyledText>
             </View>
             <View style={[styles.tableCellView, styles.justifyRight]}>
               <Field
                 name="ipAddress"
                 component={InputText}
                 validate={isRequired}
-                placeholder={t('ipAddress')}
+                placeholder={t('printer.ipAddress')}
                 keyboardType="numeric"
                 onChange={(value) => this.setState({ipAddress: value})}
               />
@@ -98,7 +72,7 @@ class PrinterForm extends React.Component {
           </View>
 
           <View style={[styles.sectionTitleContainer]}>
-            <StyledText style={styles.sectionTitleText}>{t('serviceType.title')}</StyledText>
+            <StyledText style={styles.sectionTitleText}>{t('printer.serviceType.title')}</StyledText>
           </View>
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
@@ -106,7 +80,7 @@ class PrinterForm extends React.Component {
               name="serviceTypes"
               component={RenderRadioBtnMulti}
               customValue="WORKING_AREA"
-              optionName={t('serviceType.workingArea')}
+              optionName={t('printer.serviceType.workingArea')}
             />
           </View>
 
@@ -115,7 +89,7 @@ class PrinterForm extends React.Component {
               name="serviceTypes"
               component={RenderRadioBtnMulti}
               customValue="CHECKOUT"
-              optionName={t('serviceType.checkout')}
+              optionName={t('printer.serviceType.checkout')}
             />
           </View>
         </View>
@@ -128,7 +102,7 @@ class PrinterForm extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {this.handleTestPrint(ipAddress)}}>
             <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-              {t('testPrint')}
+              {t('printer.testPrint')}
             </Text>
           </TouchableOpacity>
           {isEdit ? (

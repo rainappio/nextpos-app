@@ -36,14 +36,14 @@ class PrinterAdd extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
-    const { t } = this.context
+    const {navigation} = this.props
+    const {t} = this.context
 
     return (
       <ThemeContainer>
         <View style={styles.fullWidthScreen}>
-          <ScreenHeader title={t('addPrinterTitle')}
-                        parentFullScreen={true}/>
+          <ScreenHeader title={t('printer.addPrinterTitle')}
+            parentFullScreen={true} />
 
           <PrinterForm navigation={navigation} onSubmit={this.handleSubmit} />
         </View>

@@ -699,8 +699,25 @@ const en = {
     table: 'Table',
     next: 'Next',
     noTable: 'None (Waiting)',
+    booked: 'Booked',
+    waiting: 'Waiting',
     cancelActionContext: 'Cancel reservation and return to home screen?',
+    deleteActionContext: 'Confirm to delete this reservation?',
   },
+  printer: {
+    printerTitle: 'Printer',
+    workingAreaTitle: 'Working Area',
+    editPrinterTitle: 'Edit Printer',
+    addPrinterTitle: 'Add Printer',
+    printerName: 'Printer Name',
+    ipAddress: 'IP Address',
+    serviceType: {
+      title: 'Service Type',
+      workingArea: 'Working Area',
+      checkout: 'Checkout'
+    },
+    testPrint: 'Test Printer',
+  }
 }
 
 export default en
