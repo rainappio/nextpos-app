@@ -27,6 +27,7 @@ class ReservationConfirmScreen extends React.Component {
       handleCancel,
       handleCreateReservation,
       initialValues,
+      isEdit,
       reservationDate,
       tableNames
     } = this.props.navigation.state.params
@@ -105,15 +106,19 @@ class ReservationConfirmScreen extends React.Component {
             </View>
 
             <View style={[styles.bottom, styles.horizontalMargin]}>
-              <TouchableOpacity onPress={handleCreateReservation}>
+              <TouchableOpacity onPress={() => {
+                handleCreateReservation(isEdit)
+              }}>
                 <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                   {t('action.save')}
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={handleCancel}>
+              <TouchableOpacity onPress={() => {
+                handleCancel(isEdit)
+              }}>
                 <Text
-                  style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+                  style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context), (isEdit && styles.deleteButton)]}
                 >
                   {t('action.cancel')}
                 </Text>

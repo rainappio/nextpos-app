@@ -17,11 +17,12 @@ class ReservationScreen extends React.Component {
     super(props, context)
     this.state = {
       nextStep: false,
-      initialValues: null
+      initialValues: null,
     }
   }
 
-  handleCreateReservation = () => {
+  handleCreateReservation = (isEdit) => {
+
     let values = this.state.initialValues
 
     let request = {
@@ -33,7 +34,6 @@ class ReservationScreen extends React.Component {
       kid: values?.kid ?? 0,
       note: values?.note ?? ''
     }
-
     dispatchFetchRequestWithOption(
       api.reservation.create,
       {
@@ -61,7 +61,7 @@ class ReservationScreen extends React.Component {
     this.setState({initialValues: values, nextStep: true})
   }
 
-  handleEditCancel = () => {
+  handleEditCancel = (isEdit) => {
     Alert.alert(
       ``,
       `${this.context.t('reservation.cancelActionContext')}`,
@@ -88,12 +88,13 @@ class ReservationScreen extends React.Component {
     return (
       <ThemeContainer>
         <ReservationFormScreen
+          isEdit={false}
           onSubmit={this.handleSubmit}
           handleNextStep={this.handleNextStep}
           handleCreateReservation={this.handleCreateReservation}
           handleCancel={this.handleEditCancel}
           nextStep={this.state.nextStep}
-          initialValues={this.state.initialValues}
+          initialValues={this.props.navigation?.state?.params?.data}
           navigation={navigation}
         />
       </ThemeContainer>

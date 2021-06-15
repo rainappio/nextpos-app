@@ -98,6 +98,7 @@ import InventoryScreen from '../screens/InventoryScreen'
 import InventoryOrderScreen from '../screens/InventoryOrderScreen'
 import InventoryOrderFormScreen from '../screens/InventoryOrderFormScreen'
 import ReservationScreen from '../screens/ReservationScreen'
+import ReservationEditScreen from '../screens/ReservationEditScreen'
 import ReservationFormScreen from '../screens/ReservationFormScreen'
 import ReservationConfirmScreen from '../screens/ReservationConfirmScreen'
 
@@ -268,19 +269,20 @@ Rosters.navigationOptions = ({screenProps: {t}}) => ({
   },
 })
 
-const Reservation = createStackNavigator({
-  Reservation: ReservationScreen,
+const Reservations = createStackNavigator({
+  ReservationScreen: ReservationScreen,
+  ReservationEditScreen: ReservationEditScreen,
   ReservationFormScreen: ReservationFormScreen,
   ReservationConfirmScreen: ReservationConfirmScreen,
 })
 
-const testVisible = true
+const testVisible = false
 
-Reservation.navigationOptions = ({screenProps: {t}}) => ({
+Reservations.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.Reservation'),
   tabBarButtonComponent: (props) => (
-    !testVisible ?
-      <TabBarIcon focused={props?.focused} name="calendar-check" iconLib="MaterialCommunityIcons" onPress={props?.onPress} />
+    testVisible ?
+      <TabBarIcon focused={props?.focused} name="calendar-check" iconLib="MaterialCommunityIcons" onPress={() => NavigationService?.navigateToRoute('ReservationScreen', null, props?.onPress)} />
       : null
   ),
 })
@@ -328,8 +330,8 @@ const tabBar = createBottomTabNavigator({
   Inventory: {
     screen: Inventory
   },
-  Reservation: {
-    screen: Reservation
+  Reservations: {
+    screen: Reservations
   },
   Rosters: {
     screen: Rosters

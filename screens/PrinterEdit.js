@@ -84,7 +84,7 @@ class PrinterEdit extends React.Component {
     return (
       <ThemeContainer>
         <View style={styles.fullWidthScreen}>
-          <ScreenHeader title={t('editPrinterTitle')}
+          <ScreenHeader title={t('printer.editPrinterTitle')}
             parentFullScreen={true} />
 
           <PrinterForm

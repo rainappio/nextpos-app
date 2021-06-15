@@ -583,6 +583,9 @@ export const api = {
     getReservationByDate: (date, status) => {
       return `${apiRoot}/reservations?reservationDate=${date}&reservationStatus=${status}`
     },
+    getReservationByMonth: (year, month) => {
+      return `${apiRoot}/reservations/byMonth?yearMonth=${year}-${month}`
+    },
     getAvailableTables: (date) => {
       return `${apiRoot}/reservations/availableTables?reservationDate=${date}`
     },

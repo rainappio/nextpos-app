@@ -701,8 +701,25 @@ const zh = {
     table: '桌號',
     next: '下一步',
     noTable: '未選(候補)',
+    booked: '訂位',
+    waiting: '候補',
     cancelActionContext: '取消訂位並返回首頁？',
+    deleteActionContext: '是否要刪除此筆訂位資料？',
   },
+  printer: {
+    printerTitle: '出單機',
+    workingAreaTitle: '工作區',
+    editPrinterTitle: '編輯出單機',
+    addPrinterTitle: '新增出單機',
+    printerName: '出單機名稱',
+    ipAddress: 'IP地址',
+    serviceType: {
+      title: '綁定區域',
+      workingArea: '工作區',
+      checkout: '結帳區'
+    },
+    testPrint: '測試出單機',
+  }
 }
 
 export default zh
