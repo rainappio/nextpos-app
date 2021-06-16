@@ -6,7 +6,7 @@ import {ListItem, CheckBox} from "react-native-elements";
 import {connect} from 'react-redux'
 import {compose} from "redux";
 import {withContext} from "../helpers/contextHelper";
-import {isRequired} from '../validators'
+import {isRequired, isNDigitsNumber} from '../validators'
 import InputText from '../components/InputText'
 import {getTableLayouts, getTablesAvailable, getTableLayout, getfetchOrderInflights} from '../actions'
 import {getInitialTablePosition, getTablePosition, getSetPosition} from "../helpers/tableAction";
@@ -28,6 +28,7 @@ import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import moment from 'moment-timezone'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 
 
 class ReservationFormScreen extends React.Component {
@@ -95,7 +96,7 @@ class ReservationFormScreen extends React.Component {
 
   loadInfo = () => {
     if (!!this.props?.initialValues) {
-      this.props.change(`date`, moment(this.props?.initialValues?.reservationStartDate).format('YYYY-MM-DD'))
+      this.props.change(`date`, this.props?.initialValues?.reservationStartDate)
       this.setState({reservationDate: moment(this.props?.initialValues?.reservationStartDate).format('YYYY-MM-DD')})
 
       if (!!this.props?.initialValues.id) {
@@ -110,10 +111,11 @@ class ReservationFormScreen extends React.Component {
         this.handleCheckAvailableTables(this.props?.initialValues?.hour, this.props?.initialValues?.minutes)
       }
 
-    } else {
-      this.props.change(`people`, 0)
-      this.props.change(`kid`, 0)
     }
+    // else {
+    //   this.props.change(`people`, 0)
+    //   this.props.change(`kid`, 0)
+    // }
 
     this.props.getTableLayouts()
     this.props.getfetchOrderInflights()
@@ -437,7 +439,6 @@ class ReservationFormScreen extends React.Component {
                             name={`date`}
                             component={RenderDatePicker}
                             onChange={this.handleGetReservationDate}
-                            defaultValue={this.state?.reservationDate ?? new Date()}
                             minimumDate={moment().toDate()}
                             isShow={this.state?.showDatePicker ?? false}
                             showDatepicker={() => this.showDatePicker()}
@@ -537,7 +538,7 @@ class ReservationFormScreen extends React.Component {
                                 <Field
                                   name="phoneNumber"
                                   component={InputText}
-                                  validate={isRequired}
+                                  validate={[isRequired, isNDigitsNumber(10)]}
                                   placeholder={t('reservation.phone')}
                                   keyboardType={'numeric'}
                                 />
@@ -679,7 +680,7 @@ class ReservationFormScreen extends React.Component {
                 title={t('reservation.reservationTitle')}
                 parentFullScreen={true} />
 
-              <ThemeScrollView>
+              <ThemeKeyboardAwareScrollView>
                 <>
                   <View style={styles.tableRowContainer}>
                     <View style={[styles.tableCellView, styles.flex(1)]}>
@@ -879,7 +880,7 @@ class ReservationFormScreen extends React.Component {
                             <Field
                               name="phoneNumber"
                               component={InputText}
-                              validate={isRequired}
+                              validate={[isRequired, isNDigitsNumber(10)]}
                               placeholder={t('reservation.phone')}
                               keyboardType={'numeric'}
                             />
@@ -909,7 +910,7 @@ class ReservationFormScreen extends React.Component {
 
                 </>
 
-              </ThemeScrollView>
+              </ThemeKeyboardAwareScrollView>
 
             </View>
           </ThemeContainer>

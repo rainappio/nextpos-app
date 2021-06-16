@@ -590,8 +590,9 @@ class CalendarScreen extends React.Component {
 
                                         return -(new Date(b.reservationStartDate) - new Date(a.reservationStartDate));
                                     }) : []
-                                    bookedCount = task.length > 0 ? task.map((event) => event.status === 'BOOKED').reduce((a, b) => a + b) : 0
-                                    waitingCount = task.length > 0 ? task.map((event) => event.status === 'WAITING').reduce((a, b) => a + b) : 0
+
+                                    bookedCount = task.length > 0 ? task.map((event) => event.status === 'BOOKED' ? 1 : 0).reduce((a, b) => a + b) : 0
+                                    waitingCount = task.length > 0 ? task.map((event) => event.status === 'WAITING' ? 1 : 0).reduce((a, b) => a + b) : 0
 
                                 }
 
