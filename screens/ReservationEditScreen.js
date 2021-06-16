@@ -19,8 +19,6 @@ class ReservationEditScreen extends React.Component {
       nextStep: false,
       initialValues: this.props.navigation?.state?.params?.data ?? null,
       timeBlock: this.props.navigation?.state?.params?.timeBlock ?? null,
-      hour: this.props.navigation?.state?.params?.hour ?? null,
-      mins: this.props.navigation?.state?.params?.mins ?? null,
     }
   }
 
@@ -157,8 +155,6 @@ class ReservationEditScreen extends React.Component {
           nextStep={this.state.nextStep}
           initialValues={this.state.initialValues}
           timeBlock={this.state.timeBlock}
-          hour={this.state.hour}
-          mins={this.state.mins}
           navigation={navigation}
         />
       </ThemeContainer>

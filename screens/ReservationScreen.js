@@ -17,7 +17,7 @@ class ReservationScreen extends React.Component {
     super(props, context)
     this.state = {
       nextStep: false,
-      initialValues: null,
+      initialValues: this.props.navigation?.state?.params?.data ?? null,
     }
   }
 
@@ -94,7 +94,7 @@ class ReservationScreen extends React.Component {
           handleCreateReservation={this.handleCreateReservation}
           handleCancel={this.handleEditCancel}
           nextStep={this.state.nextStep}
-          initialValues={this.props.navigation?.state?.params?.data}
+          initialValues={this.state.initialValues}
           navigation={navigation}
         />
       </ThemeContainer>
