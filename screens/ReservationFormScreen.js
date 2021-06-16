@@ -96,7 +96,7 @@ class ReservationFormScreen extends React.Component {
 
   loadInfo = () => {
     if (!!this.props?.initialValues) {
-      this.props.change(`date`, this.props?.initialValues?.reservationStartDate)
+      this.props.change(`date`, new Date(this.props?.initialValues?.reservationStartDate))
       this.setState({reservationDate: moment(this.props?.initialValues?.reservationStartDate).format('YYYY-MM-DD')})
 
       if (!!this.props?.initialValues.id) {
@@ -538,7 +538,11 @@ class ReservationFormScreen extends React.Component {
                                 <Field
                                   name="phoneNumber"
                                   component={InputText}
-                                  validate={[isRequired, isNDigitsNumber(10)]}
+                                  onChange={val => {
+                                    if (val.length === 10)
+                                      Keyboard.dismiss()
+                                  }}
+                                  validate={isRequired}
                                   placeholder={t('reservation.phone')}
                                   keyboardType={'numeric'}
                                 />
@@ -717,7 +721,7 @@ class ReservationFormScreen extends React.Component {
                     <View style={[styles.flex(1), styles.fieldContainer, {flexWrap: 'wrap'}]}>
                       {!!this.state.hoursArr && this.state.hoursArr?.map((item, index) => (
                         <Field
-                          key={index}
+                          key={item + index}
                           name="hour"
                           component={RadioReservationTimePick}
                           customValueOrder={item}
@@ -738,7 +742,7 @@ class ReservationFormScreen extends React.Component {
                       <View style={[styles.flex(2), styles.fieldContainer]}>
                         {!!this.state.minutesArr && this.state.minutesArr?.map((item, index) => (
                           <Field
-                            key={index}
+                            key={item + index}
                             name="minutes"
                             component={RadioReservationTimePick}
                             customValueOrder={item}
@@ -880,7 +884,11 @@ class ReservationFormScreen extends React.Component {
                             <Field
                               name="phoneNumber"
                               component={InputText}
-                              validate={[isRequired, isNDigitsNumber(10)]}
+                              onChange={val => {
+                                if (val.length === 10)
+                                  Keyboard.dismiss()
+                              }}
+                              validate={isRequired}
                               placeholder={t('reservation.phone')}
                               keyboardType={'numeric'}
                             />
