@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import {EditPasswordPopUp, EditGesturePasswordPopUp} from '../components/EditPasswordPopUp'
 import {reduxForm} from 'redux-form'
 import {api, getToken, dispatchFetchRequest, storage} from '../constants/Backend'
-import Constants from "expo-constants/src/Constants";
+import Constants from "expo-constants";
 import ScreenHeader from "../components/ScreenHeader";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";

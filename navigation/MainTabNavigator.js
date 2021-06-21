@@ -1,10 +1,12 @@
 import React from 'react'
-import {Platform} from 'react-native'
+import {Platform, Text, Dimensions, View} from 'react-native'
 import NavigationService from "../navigation/NavigationService";
 import {createStackNavigator} from 'react-navigation-stack'
 import {createBottomTabNavigator} from 'react-navigation-tabs'
+import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createSwitchNavigator, StackActions} from 'react-navigation'
 import TabBarIcon from '../components/TabBarIcon'
+import Icon from 'react-native-vector-icons/Ionicons'
 import HomeScreen from '../screens/HomeScreen'
 import SettingsScreen from '../screens/SettingsScreen'
 import IntroAppScreen from '../screens/IntroAppScreen'
@@ -97,10 +99,12 @@ import RetailCheckoutComplete from '../screens/RetailCheckoutComplete'
 import InventoryScreen from '../screens/InventoryScreen'
 import InventoryOrderScreen from '../screens/InventoryOrderScreen'
 import InventoryOrderFormScreen from '../screens/InventoryOrderFormScreen'
+import ReservationCalendarScreen from '../screens/ReservationCalendarScreen'
 import ReservationScreen from '../screens/ReservationScreen'
 import ReservationEditScreen from '../screens/ReservationEditScreen'
 import ReservationFormScreen from '../screens/ReservationFormScreen'
 import ReservationConfirmScreen from '../screens/ReservationConfirmScreen'
+import ReservationSetting from '../screens/ReservationSetting'
 
 const Home = createStackNavigator({
   LoginSuccess: LoginSuccessScreen,
@@ -269,16 +273,104 @@ Rosters.navigationOptions = ({screenProps: {t}}) => ({
   },
 })
 
+
+
+
+
+
 const Reservations = createStackNavigator({
   ReservationScreen: ReservationScreen,
+  ReservationCalendarScreen: ReservationCalendarScreen,
+  ReservationSetting: ReservationSetting,
   ReservationEditScreen: ReservationEditScreen,
   ReservationFormScreen: ReservationFormScreen,
   ReservationConfirmScreen: ReservationConfirmScreen,
 })
 
-const testVisible = false
+
+const testVisible = true
 
 Reservations.navigationOptions = ({screenProps: {t}}) => ({
+  title: t('menu.Reservation'),
+  tabBarButtonComponent: (props) => (
+    testVisible ?
+      <TabBarIcon focused={props?.focused} name="calendar-check" iconLib="MaterialCommunityIcons" onPress={() => NavigationService?.navigateToRoute('ReservationScreen', null, props?.onPress)} />
+      : null
+  ),
+})
+
+class Hidden extends React.Component {
+  render() {
+    return null;
+  }
+}
+class LabelIcon extends React.Component {
+  render() {
+    const {focused, tintColor} = this.props
+    return (
+      <View style={{padding: 24}}>
+        <Icon name={this.props.name} size={28} focused={focused} color={focused ? tintColor : '#f18d1a'} />
+      </View>
+    )
+  }
+}
+const ReservationScreens = createDrawerNavigator({
+
+  ReservationScreen: {
+    screen: ReservationScreen,
+    navigationOptions: {
+      title: null,
+      drawerLabel: ({focused, tintColor}) => (
+        <LabelIcon focused={focused} tintColor={tintColor} name='create-outline' />
+      ),
+    }
+  },
+  ReservationCalendarScreen: {
+    screen: ReservationCalendarScreen,
+    navigationOptions: {
+      title: null,
+      drawerLabel: ({focused, tintColor}) => (
+        <LabelIcon focused={focused} tintColor={tintColor} name='md-calendar-sharp' />
+      ),
+    }
+  },
+  ReservationSetting: {
+    screen: ReservationSetting,
+    navigationOptions: {
+      title: null,
+      drawerLabel: ({focused, tintColor}) => (
+        <LabelIcon focused={focused} tintColor={tintColor} name='md-settings' />
+      ),
+    }
+  },
+  ReservationEditScreen: {
+    screen: ReservationEditScreen,
+    navigationOptions: {
+      drawerLabel: <Hidden />
+    },
+  },
+  ReservationFormScreen: {
+    screen: ReservationFormScreen,
+    navigationOptions: {
+      drawerLabel: <Hidden />
+    },
+  },
+  ReservationConfirmScreen: {
+    screen: ReservationConfirmScreen,
+    navigationOptions: {
+      drawerLabel: <Hidden />
+    },
+  },
+}, {
+  drawerBackgroundColor: '#222',
+  overlayColor: 1,
+  drawerType: 'slide',
+  drawerWidth: 80,
+  edgeWidth: 200,
+
+})
+
+ReservationScreens.navigationOptions = ({screenProps: {t}}) => ({
   title: t('menu.Reservation'),
   tabBarButtonComponent: (props) => (
     testVisible ?
@@ -331,7 +423,7 @@ const tabBar = createBottomTabNavigator({
     screen: Inventory
   },
   Reservations: {
-    screen: Reservations
+    screen: ReservationScreens,
   },
   Rosters: {
     screen: Rosters
@@ -391,7 +483,10 @@ export default createSwitchNavigator({
   Login: Login,
   LoginScreen: LoginScreen,
   ResetClientPassword: ResetClientPassword,
+  ReservationScreens: {
+    screen: ReservationScreens
+  },
   tabBar: {
     screen: tabBar // Calling the tabNavigator, wich contains the other stackNavigators
-  }
+  },
 })

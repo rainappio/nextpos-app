@@ -5,6 +5,10 @@ import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
 import ReservationFormScreen from './ReservationFormScreen'
 import {connect} from 'react-redux'
+import Icon from 'react-native-vector-icons/Ionicons'
+import styles from '../styles'
+
+
 
 
 class ReservationEditScreen extends React.Component {
@@ -17,9 +21,21 @@ class ReservationEditScreen extends React.Component {
     super(props, context)
     this.state = {
       nextStep: false,
-      initialValues: this.props.navigation?.state?.params?.data ?? null,
-      timeBlock: this.props.navigation?.state?.params?.timeBlock ?? null,
+      initialValues: null,
+      timeBlock: null,
     }
+  }
+  componentDidMount() {
+    this.checkPropsChange()
+  }
+  componentDidUpdate(prevProps, prevState) {
+
+    if (prevProps.navigation?.state?.params?.initialValues.id !== this.props.navigation?.state?.params?.initialValues.id || prevState.initialValues !== this.props.navigation?.state?.params?.initialValues) {
+      this.checkPropsChange()
+    }
+  }
+  checkPropsChange = () => {
+    this.setState({initialValues: this.props.navigation?.state?.params?.initialValues, nextStep: false, timeBlock: this.props.navigation?.state?.params?.timeBlock})
   }
 
   handleCreateReservation = (isEdit) => {
@@ -48,8 +64,8 @@ class ReservationEditScreen extends React.Component {
           body: JSON.stringify(request)
         }, {defaultMessage: true},
         response => {
+          this.props.navigation.navigate('ReservationCalendarScreen')
 
-          this.props.navigation.navigate('LoginSuccess')
         }
       ).then()
     } else {
@@ -57,6 +73,8 @@ class ReservationEditScreen extends React.Component {
     }
   }
   handleUpdateReservation = (request, id) => {
+
+    console.log("check update=", request)
 
     dispatchFetchRequestWithOption(
       api.reservation.update(id),
@@ -70,10 +88,11 @@ class ReservationEditScreen extends React.Component {
         body: JSON.stringify(request)
       }, {defaultMessage: true},
       response => {
-
-        this.props.navigation.navigate('LoginSuccess')
+        this.props.navigation.navigate('ReservationCalendarScreen')
       }
-    ).then()
+    ).then(
+
+    )
   }
 
   handleDeleteReservation = () => {
@@ -93,7 +112,9 @@ class ReservationEditScreen extends React.Component {
                 headers: {},
               }, {defaultMessage: true},
               response => {
-                this.props.navigation.navigate('LoginSuccess')
+                this.handleReset()
+                this.props.navigation.navigate('ReservationCalendarScreen')
+
               }
             ).then()
           }
@@ -107,6 +128,9 @@ class ReservationEditScreen extends React.Component {
     )
   }
 
+  handleReset = () => {
+    this.setState({initialValues: null, nextStep: false})
+  }
   handleNextStep = (value) => {
     this.setState({nextStep: value})
   }
@@ -125,7 +149,8 @@ class ReservationEditScreen extends React.Component {
           {
             text: `${this.context.t('action.yes')}`,
             onPress: () => {
-              this.props.navigation.navigate('LoginSuccess')
+              this.handleReset()
+              this.props.navigation.navigate('ReservationCalendarScreen')
             }
           },
           {
@@ -143,18 +168,20 @@ class ReservationEditScreen extends React.Component {
 
   render() {
     const {navigation} = this.props
+    const {t, isTablet, customMainThemeColor, customBackgroundColor} = this.context
 
     return (
       <ThemeContainer>
         <ReservationFormScreen
           isEdit={true}
           onSubmit={this.handleSubmit}
+          handleReset={this.handleReset}
           handleNextStep={this.handleNextStep}
           handleCreateReservation={this.handleCreateReservation}
           handleCancel={this.handleEditCancel}
           nextStep={this.state.nextStep}
-          initialValues={this.state.initialValues}
-          timeBlock={this.state.timeBlock}
+          initialValues={this.props.navigation?.state?.params?.initialValues}
+          timeBlock={this.props.navigation?.state?.params?.timeBlock}
           navigation={navigation}
         />
       </ThemeContainer>
