@@ -40,7 +40,7 @@ import FlashMessage from 'react-native-flash-message'
 import {LocaleContext} from './locales/LocaleContext'
 import NavigationService from "./navigation/NavigationService";
 import * as Sentry from 'sentry-expo';
-import Constants from "expo-constants/src/Constants";
+import Constants from "expo-constants";
 import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
 import {activateKeepAwake, useKeepAwake} from "expo-keep-awake";

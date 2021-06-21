@@ -555,7 +555,8 @@ const en = {
     roster: 'Roster',
     reservation: 'Reservation',
     showMyEvent: 'Show My Events',
-    noWorkingArea: 'Not Assigned'
+    noWorkingArea: 'Not Assigned',
+    calendarOptions: 'Calendar Options',
   },
   membership: {
     searchNullMsg: 'Can\'t find membership. Sign up?',

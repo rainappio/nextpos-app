@@ -555,7 +555,8 @@ const zh = {
     roster: '排班',
     reservation: '訂位',
     showMyEvent: '顯示我的排班',
-    noWorkingArea: '尚未排班'
+    noWorkingArea: '尚未排班',
+    calendarOptions: '日程表選項',
   },
   membership: {
     searchNullMsg: '查無此人，是否註冊會員?',

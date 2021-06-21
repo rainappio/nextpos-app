@@ -48,21 +48,21 @@ class ReservationFormScreen extends React.Component {
       tableHeight: null,
       isTablet: context?.isTablet,
       tableIndex: 0,
-      selectedTimeBlock: this.props?.initialValues?.selectedTimeBlock ?? 0,
+      selectedTimeBlock: props?.timeBlock ?? 0,
       timeBlocks: {
         0: {value: 'MORNING', label: context.t('reservation.timeBlock.morning')},
         1: {value: 'NOON', label: context.t('reservation.timeBlock.noon')},
         2: {value: 'EVENING', label: context.t('reservation.timeBlock.evening')},
       },
       showDatePicker: false,
-      reservationDate: moment(this.props?.initialValues?.reservationStartDate).format('YYYY-MM-DD') ?? null,
+      reservationDate: moment(props?.initialValues?.reservationStartDate).format('YYYY-MM-DD') ?? null,
       hoursArr: null,
       minutesArr: ['15', '30', '45', '00'],
-      selectedHour: this.props?.initialValues?.hour ?? null,
-      selectedMinutes: this.props?.initialValues?.minutes ?? null,
+      selectedHour: props?.initialValues?.hour ?? null,
+      selectedMinutes: props?.initialValues?.minutes ?? null,
       timeViewSize: new Animated.Value(0),
       isAnimating: false,
-      isGetTables: !!this.props?.isEdit ?? false,
+      isGetTables: !!props?.isEdit ?? false,
       people: [
         {label: context.t('reservation.adult'), value: 'people'},
         {label: context.t('reservation.kid'), value: 'kid'}
@@ -77,6 +77,10 @@ class ReservationFormScreen extends React.Component {
   componentDidMount() {
 
     this.loadInfo()
+    this.props.getTableLayouts()
+    this.props.getfetchOrderInflights()
+    this.props.getAvailableTables()
+
     this.context.localize({
       en: {
         noTableLayout:
@@ -94,32 +98,42 @@ class ReservationFormScreen extends React.Component {
     })
   }
 
-  loadInfo = () => {
-    if (!!this.props?.initialValues) {
-      this.props.change(`date`, new Date(this.props?.initialValues?.reservationStartDate))
-      this.setState({reservationDate: moment(this.props?.initialValues?.reservationStartDate).format('YYYY-MM-DD')})
+  componentDidUpdate(prevProps, prevState) {
 
-      if (!!this.props?.initialValues.id) {
+    if (prevProps.initialValues !== this.props.initialValues || prevState.reservationDate !== this.state.reservationDate) {
+      this.loadInfo()
+    }
+  }
+
+  loadInfo = () => {
+    let data = this.props?.initialValues
+    if (!!data) {
+      this.props.change(`date`, data?.reservationStartDate ?? data?.date)
+      this.setState({reservationDate: moment(data?.reservationStartDate ?? data?.date).format('YYYY-MM-DD')})
+
+      if (!!data.id) {
+        this.props.change(`id`, data.id)
+        this.props.change(`hour`, data?.hour)
+        this.props.change(`minutes`, data?.minutes)
+        this.props.change(`people`, data?.people)
+        this.props.change(`kid`, data?.kid)
+        this.props.change(`name`, data?.name)
+        this.props.change(`phoneNumber`, data?.phoneNumber)
+        this.props.change(`note`, data?.note)
+
         let idArray = [], nameArr = []
-        !!this.props?.initialValues?.tables && this.props?.initialValues?.tables.forEach((table) => {
+        !!data?.tables && data?.tables.forEach((table) => {
           idArray.push(table.tableId)
           nameArr.push(table.tableName)
         })
-        this.setState({selectedTableIds: idArray, selectedTableNames: nameArr})
+        this.props.change(`tableIds`, idArray)
+        this.setState({selectedTableIds: idArray, selectedTableNames: nameArr, selectedTimeBlock: this.props?.timeBlock, selectedHour: data?.hour, selectedMinutes: data?.minutes})
 
+        this.handleHourSelection(this.props?.timeBlock)
         this.viewResize(1)
-        this.handleCheckAvailableTables(this.props?.initialValues?.hour, this.props?.initialValues?.minutes)
+        this.handleCheckAvailableTables(data?.hour, data?.minutes)
       }
-
     }
-    // else {
-    //   this.props.change(`people`, 0)
-    //   this.props.change(`kid`, 0)
-    // }
-
-    this.props.getTableLayouts()
-    this.props.getfetchOrderInflights()
-    this.props.getAvailableTables()
   }
 
   getTransform = () => {
@@ -130,9 +144,20 @@ class ReservationFormScreen extends React.Component {
   };
 
   handleGetReservationDate = (event, selectedDate) => {
-    this.setState({
-      reservationDate: moment(selectedDate).format('YYYY-MM-DD')
-    })
+
+    if (!!this.state.selectedHour && !!this.state.selectedMinutes) {
+      let timezone = TimeZoneService.getTimeZone()
+      let dateStr = `${moment(selectedDate).format('YYYY-MM-DD')} ${this.state.selectedHour}:${this.state.selectedMinutes}`
+      let checkDate = moment(dateStr).tz(timezone).format('YYYY-MM-DDTHH:mm:ss')
+      this.props.change(`checkDate`, checkDate)
+      this.setState({reservationDate: moment(checkDate).format('YYYY-MM-DD')})
+    } else {
+
+      this.setState({
+        reservationDate: moment(selectedDate).format('YYYY-MM-DD')
+      })
+    }
+
   }
   showDatePicker = () => {
     this.setState({
@@ -186,8 +211,10 @@ class ReservationFormScreen extends React.Component {
 
   handleCheckAvailableTables = (hour, mins) => {
 
+
+    let date = this.state.reservationDate ?? moment(this.props?.initialValues?.reservationStartDate).format('YYYY-MM-DD')
     let timezone = TimeZoneService.getTimeZone()
-    let dateStr = `${this.state.reservationDate} ${hour}:${mins}`
+    let dateStr = `${date} ${hour}:${mins}`
     let checkDate = moment(dateStr).tz(timezone).format('YYYY-MM-DDTHH:mm:ss')
 
     this.props.change(`checkDate`, checkDate)
@@ -236,7 +263,6 @@ class ReservationFormScreen extends React.Component {
   }
 
   handleCheckForm = (value) => {
-
     this.props.navigation.navigate('ReservationConfirmScreen', {
       handleCancel: this.props.handleCancel,
       handleCreateReservation: this.props.handleCreateReservation,
@@ -259,6 +285,7 @@ class ReservationFormScreen extends React.Component {
       initialValues,
       nextStep,
       isEdit,
+      handleReset,
       handleNextStep,
       handleSubmit,
       handleCancel,
@@ -331,7 +358,8 @@ class ReservationFormScreen extends React.Component {
                 backNavigation={true}
                 backAction={() => {
                   if (!nextStep) {
-                    navigation.navigate('LoginSuccess')
+                    handleReset()
+                    navigation.navigate('ReservationCalendarScreen')
                   } else {
                     handleNextStep(false)
                   }
@@ -588,7 +616,7 @@ class ReservationFormScreen extends React.Component {
                           <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.time')}</StyledText>
                         </View>
                         <View style={[styles.tableCellView, styles.justifyRight]}>
-                          <StyledText style={[styles.reservationFormContainer]}>{initialValues.hour}:{initialValues.minutes}</StyledText>
+                          <StyledText style={[styles.reservationFormContainer]}>{this.state.selectedHour}:{this.state.selectedMinutes}</StyledText>
                         </View>
                       </View>
 
@@ -613,7 +641,7 @@ class ReservationFormScreen extends React.Component {
                           <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.peopleCount')}</StyledText>
                         </View>
                         <View style={[styles.tableCellView, styles.justifyRight]}>
-                          <StyledText style={[styles.reservationFormContainer]}>{t('reservation.adult')}: {initialValues.people}, {t('reservation.kid')}: {initialValues.kid}</StyledText>
+                          <StyledText style={[styles.reservationFormContainer]}>{t('reservation.adult')}: {initialValues.people ?? 0}, {t('reservation.kid')}: {initialValues.kid ?? 0}</StyledText>
                         </View>
                       </View>
                       <View style={styles.tableRowContainerWithBorder}>
@@ -676,7 +704,8 @@ class ReservationFormScreen extends React.Component {
                 backNavigation={true}
                 backAction={() => {
                   if (!nextStep) {
-                    navigation.navigate('LoginSuccess')
+                    handleReset()
+                    navigation.navigate('ReservationCalendarScreen')
                   } else {
                     handleNextStep(false)
                   }

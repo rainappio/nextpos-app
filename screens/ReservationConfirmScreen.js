@@ -79,7 +79,7 @@ class ReservationConfirmScreen extends React.Component {
                 <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.peopleCount')}</StyledText>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={[styles.reservationFormContainer]}>{t('reservation.adult')}: {initialValues?.people}, {t('reservation.kid')}: {initialValues?.kid}</StyledText>
+                <StyledText style={[styles.reservationFormContainer]}>{t('reservation.adult')}: {initialValues?.people ?? 0}, {t('reservation.kid')}: {initialValues?.kid ?? 0}</StyledText>
               </View>
             </View>
             <View style={styles.tableRowContainerWithBorder}>

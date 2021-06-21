@@ -129,12 +129,14 @@ const CalendarEventBase = (props) => {
                     if (event?.status !== 'CANCELLED') {
                         !!props?.closeModal && props?.closeModal()
                         props.navigation.navigate('ReservationEditScreen', {
-                            data: {
+                            initialValues: {
                                 ...event,
                                 selectedTimeBlock: moment(event.reservationStartDate).tz(timezone).format('HH') <= 10 ? 0 : (moment(event.reservationStartDate).tz(timezone).format('HH') > 10 && moment(event.reservationStartDate).tz(timezone).format('HH') <= 16) ? 1 : 2,
                                 hour: moment(event.reservationStartDate).tz(timezone).format('HH'),
                                 minutes: moment(event.reservationStartDate).tz(timezone).format('mm'),
+                                isEdit: true
                             },
+                            refreshScreen: () => {props?.refreshScreen()},
                         })
                     }
                 }}

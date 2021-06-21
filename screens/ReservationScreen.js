@@ -47,11 +47,15 @@ class ReservationScreen extends React.Component {
       }, {defaultMessage: true},
       response => {
 
-        this.props.navigation.navigate('LoginSuccess')
+        this.props.navigation.navigate('ReservationCalendarScreen')
+        // this.props.navigation.goBack()
       }
     ).then()
   }
 
+  handleReset = () => {
+    this.setState({initialValues: null, nextStep: false})
+  }
   handleNextStep = (value) => {
     this.setState({nextStep: value})
   }
@@ -69,7 +73,8 @@ class ReservationScreen extends React.Component {
         {
           text: `${this.context.t('action.yes')}`,
           onPress: () => {
-            this.props.navigation.navigate('LoginSuccess')
+            this.handleReset()
+            this.props.navigation.navigate('ReservationCalendarScreen')
           }
         },
         {
@@ -90,6 +95,7 @@ class ReservationScreen extends React.Component {
         <ReservationFormScreen
           isEdit={false}
           onSubmit={this.handleSubmit}
+          handleReset={this.handleReset}
           handleNextStep={this.handleNextStep}
           handleCreateReservation={this.handleCreateReservation}
           handleCancel={this.handleEditCancel}

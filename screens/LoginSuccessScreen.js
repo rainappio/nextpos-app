@@ -1,5 +1,5 @@
 import React from 'react'
-import {Image, Text, TouchableOpacity, View, Alert} from 'react-native'
+import {Image, Text, TouchableOpacity, View, Alert, Dimensions} from 'react-native'
 import {connect} from 'react-redux'
 import {Field, reduxForm} from 'redux-form'
 import IonIcon from 'react-native-vector-icons/Ionicons'
@@ -27,6 +27,8 @@ import Modal from 'react-native-modal';
 import {Pages} from 'react-native-pages'
 import {CheckBox} from 'react-native-elements'
 import {checkExpoUpdate} from "../helpers/updateAppHelper";
+import {ThemePicker} from "../components/ThemePicker";
+
 
 class LoginSuccessScreen extends React.Component {
   static navigationOptions = {
@@ -617,7 +619,11 @@ export class HiddenMenu extends React.Component {
   }
 
   render() {
-    let {t, theme} = this.context
+    let {isTablet, t, theme, changeCustomMainThemeColor, changeLanguage, changeAppType, appType, } = this.context
+
+    const optionWidth = isTablet ? (Dimensions.get('window').width) / 4
+      : (Dimensions.get('window').width) / 1.2
+
 
     return (
       <Modal
@@ -638,11 +644,13 @@ export class HiddenMenu extends React.Component {
           <View
             style={[
               styles.jc_alignIem_center,
-              styles.flex_dir_row,
+              styles.boxShadow,
               {
                 position: 'absolute',
                 top: 100,
-                width: '100%',
+                right: 8,
+                width: optionWidth,
+                borderRadius: 8,
                 backgroundColor: complexTheme[theme].overlay.backgroundColor,
                 opacity: 1,
                 zIndex: 10
@@ -678,9 +686,66 @@ export class HiddenMenu extends React.Component {
                 {t('changeUser')}
               </Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.jc_alignIem_center,
+                styles.paddingTopBtn20,
+                {flex: 1}
+              ]}
+              onPress={() => {
+                changeLanguage()
+              }}
+            >
+              <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+                <Text style={{...complexTheme[theme].overlay, paddingRight: 8}}>
+                  <MaterialIcon name="language"
+                    size={20}
+                    style={[styles?.buttonIconStyle(complexTheme[theme].overlay)]}
+                  />
+                </Text>
+                <Text style={complexTheme[theme].overlay}>
+                  {t('settings.language')}
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.jc_alignIem_center,
+                styles.paddingTopBtn20,
+                {flex: 1}
+              ]}
+              onPress={() => {
+                changeAppType()
+              }}
+            >
+              <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
+                <Text style={{...complexTheme[theme].overlay, paddingRight: 8}}>
+
+                  <MaterialIcon name="autorenew"
+                    size={20}
+                    style={[styles?.buttonIconStyle(complexTheme[theme].overlay)]}
+                  />
+                </Text>
+                <Text style={complexTheme[theme].overlay}>
+                  {appType === 'store' ? t('settings.changeToRetail') : t('settings.changeToStore')}
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            <View style={[styles.fieldContainer, styles.paddingTopBtn20, {justifyContent: 'center'}]}>
+              <ThemePicker
+                style={{width: 200}}
+                colors={['#f18d1a', '#006B35', '#000']}
+                handleSelectColor={(color) => {
+                  changeCustomMainThemeColor(color)
+                }}
+              />
+            </View>
           </View>
         </TouchableOpacity>
-      </Modal>
+      </Modal >
     )
   }
 }

@@ -109,7 +109,6 @@ class RenderAgendaBase extends Component {
                 >
 
                     <ExpandableCalendar
-                        hideArrows
                         disableAllTouchEventsForDisabledDays
                         firstDay={1}
                         disableWeekScroll={true}
@@ -150,7 +149,7 @@ class RenderAgendaBase extends Component {
                                                             let sameEventSeriesIdEvent = weekEvents.find((item) => ((item.eventSeriesId === event.eventSeriesId) && (item.id !== event.id) && (moment(item?.startTime).tz(timezone).isoWeekday() === dayOfWeek)))
 
                                                             return (
-                                                                <TouchableOpacity
+                                                                <TouchableOpacity key={dayOfWeek}
                                                                     disabled={((taskDayOfWeek !== dayOfWeek) && !sameEventSeriesIdEvent)}
                                                                     onPress={() => this.handleShowEventDetail(sameEventSeriesIdEvent ?? event)}
                                                                     style={[{flex: 1, borderRightWidth: 1, borderColor: '#c7c7c7', backgroundColor: ((taskDayOfWeek !== dayOfWeek) && !sameEventSeriesIdEvent) ? undefined : event?.eventColor, }]}>
@@ -585,6 +584,7 @@ class DayCalendarBase extends Component {
                 onMonthChange={this.onMonthChange}
                 showTodayButton={false}
                 disabledOpacity={0.6}
+                disableWeekScroll={true}
 
                 theme={{
                     todayButtonTextColor: customMainThemeColor,
@@ -593,7 +593,6 @@ class DayCalendarBase extends Component {
             >
 
                 <ExpandableCalendar
-                    hideArrows
                     disableAllTouchEventsForDisabledDays
                     firstDay={1}
                     theme={customCalendarTheme}
@@ -620,7 +619,7 @@ class DayCalendarBase extends Component {
                             let formatDayEvents = staff?.events?.map((item) => {return {...item, start: new Date(item?.startTime).getTime(), end: new Date(item?.endTime).getTime(), line: 1}})
                             let [renderEvent, maxLine] = getLine(formatDayEvents)
                             return (
-                                <View style={{flexDirection: 'row', height: (30 * (maxLine) + 15), borderBottomWidth: 1, borderColor: '#c7c7c7'}}>
+                                <View key={staff?.id} style={{flexDirection: 'row', height: (30 * (maxLine) + 15), borderBottomWidth: 1, borderColor: '#c7c7c7'}}>
                                     <View style={{flex: 1, alignItems: 'center', borderRightWidth: 1, borderColor: '#c7c7c7', justifyContent: 'center'}}>
                                         <StyledText>{staff?.resource}</StyledText>
                                     </View>
@@ -765,7 +764,20 @@ class ReservationEventBase extends Component {
             response.json().then(async (data) => {
                 this.setState({reservations: data?.results})
             })
-        }).then()
+        }).then(
+            dispatchFetchRequest(api.reservation.getReservationByDate(date, status), {
+                method: 'GET',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }, response => {
+                response.json().then(async (data) => {
+                    this.setState({reservations: [...this.state.reservations, data?.results]})
+                })
+            }).then()
+        )
     }
     changeReservationMode = () => {
 
@@ -887,7 +899,7 @@ class ReservationEventBase extends Component {
 
 
                                                                     let isLineTable = false
-                                                                    event?.tables.forEach((eventTable) => {
+                                                                    event?.tables && event?.tables.forEach((eventTable) => {
                                                                         if (eventTable.tableId === table.tableId) {
                                                                             isLineTable = true
                                                                         }
@@ -900,7 +912,7 @@ class ReservationEventBase extends Component {
                                                                             <TouchableOpacity
                                                                                 onPress={() => {
                                                                                     this.props.navigation.navigate('ReservationEditScreen', {
-                                                                                        data: {
+                                                                                        initialValues: {
                                                                                             ...event,
                                                                                             selectedTimeBlock: eventHour <= 10 ? 0 : (moment(event.reservationStartDate).tz(timezone).format('HH') > 10 && eventHour <= 16) ? 1 : 2,
                                                                                             hour: eventHour,
@@ -953,7 +965,7 @@ class ReservationEventBase extends Component {
                                             <TouchableOpacity
                                                 onPress={() => {
                                                     this.props.navigation.navigate('ReservationEditScreen', {
-                                                        data: {
+                                                        initialValues: {
                                                             ...event,
                                                             selectedTimeBlock: eventHour <= 10 ? 0 : (moment(event.reservationStartDate).tz(timezone).format('HH') > 10 && eventHour <= 16) ? 1 : 2,
                                                             hour: eventHour,
@@ -961,7 +973,7 @@ class ReservationEventBase extends Component {
                                                         },
                                                     })
                                                 }}
-                                                key={event.id} style={{position: 'absolute', borderWidth: 1, borderColor: customMainThemeColor, backgroundColor: customBackgroundColor, height: 64, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (64 * (eventIndex) + ((eventIndex + 1) * 2)), overflow: 'hidden', borderRadius: 15, paddingHorizontal: 5, justifyContent: 'center', zIndex: 9}}
+                                                key={eventIndex} style={{position: 'absolute', borderWidth: 1, borderColor: customMainThemeColor, backgroundColor: customBackgroundColor, height: 64, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (64 * (eventIndex) + ((eventIndex + 1) * 2)), overflow: 'hidden', borderRadius: 15, paddingHorizontal: 5, justifyContent: 'center', zIndex: 9}}
 
                                             >
                                                 <StyledText style={{color: customMainThemeColor}}>{event?.name}
@@ -1086,7 +1098,6 @@ class ReservationDayEventBase extends Component {
             >
 
                 <ExpandableCalendar
-                    hideArrows
                     disableAllTouchEventsForDisabledDays={false}
                     firstDay={1}
                     theme={customCalendarTheme}
@@ -1107,9 +1118,9 @@ class ReservationDayEventBase extends Component {
                             return (
 
                                 <TouchableOpacity key={event?.id} onPress={() => {
-                                    if (event.status !== 'CANCELLED') {
+                                    if (event.status !== 'CANCELLED' || event.status !== 'CONFIRMED') {
                                         this.props.navigation.navigate('ReservationEditScreen', {
-                                            data: {
+                                            initialValues: {
                                                 ...event,
                                                 selectedTimeBlock: eventHour <= 10 ? 0 : (moment(event.reservationStartDate).tz(timezone).format('HH') > 10 && eventHour <= 16) ? 1 : 2,
                                                 hour: eventHour,
