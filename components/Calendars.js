@@ -742,16 +742,16 @@ class ReservationEventBase extends Component {
         this.setState({selectedDate: tempDate})
         this.props?.changeSelectedDate(tempDate)
 
-        this.getReservationEventsByDate(tempDate, 'BOOKED')
+        this.getReservationEventsByDate(tempDate, '')
     };
 
 
 
     onMonthChange = (date, updateSource) => {
-        this.getReservationEventsByDate(date?.dateString, 'BOOKED')
+        this.getReservationEventsByDate(date?.dateString, '')
     };
 
-    getReservationEventsByDate = (date = this.state.selectedDate, status = 'BOOKED') => {
+    getReservationEventsByDate = (date = this.state.selectedDate, status = '') => {
 
         dispatchFetchRequest(api.reservation.getReservationByDate(date, status), {
             method: 'GET',
@@ -762,37 +762,28 @@ class ReservationEventBase extends Component {
             },
         }, response => {
             response.json().then(async (data) => {
-                this.setState({reservations: data?.results})
-            })
-        }).then(
-            dispatchFetchRequest(api.reservation.getReservationByDate(date, status), {
-                method: 'GET',
-                withCredentials: true,
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            }, response => {
-                response.json().then(async (data) => {
-                    this.setState({reservations: [...this.state.reservations, data?.results]})
+
+                let result = data?.results.filter((event) => {
+                    return (
+                        this.state.isBookedMode ? (event.status !== 'WAITING' && event.status !== 'CANCELLED') : event.status === 'WAITING' || event.status === 'CANCELLED')
                 })
-            }).then()
-        )
+                this.setState({reservations: result})
+            })
+        }).then()
     }
     changeReservationMode = () => {
 
         this.setState({isBookedMode: !this.state.isBookedMode})
-        this.getReservationEventsByDate(this.state.selectedDate, !this.state.isBookedMode ? 'BOOKED' : 'WAITING')
-
+        this.getReservationEventsByDate(this.state.selectedDate, '')
     }
-
 
 
     render() {
         const timezone = TimeZoneService.getTimeZone()
-        const dayEvents = this.state?.reservations?.sort(function (a, b) {
+        const dayEvents = this.state?.reservations?.filter((event) => (moment(event.reservationStartDate).format('YYYY-MM-DD') === this.state?.selectedDate)).sort(function (a, b) {
             return -(new Date(b.reservationStartDate) - new Date(a.reservationStartDate));
         }) ?? []
+
 
 
         const {t, themeStyle, complexTheme, customMainThemeColor, customBackgroundColor} = this.context
@@ -897,6 +888,8 @@ class ReservationEventBase extends Component {
                                                                     let endDuration = (todayEnd - endAt) / 86400000
                                                                     let widthDuration = (endAt - startAt) / 86400000
 
+                                                                    let statusColor = event.status === 'BOOKED' ? '#006B35' : event.status === 'CONFIRMED' ? '#F18D1A' : '#F75336'
+
 
                                                                     let isLineTable = false
                                                                     event?.tables && event?.tables.forEach((eventTable) => {
@@ -911,16 +904,18 @@ class ReservationEventBase extends Component {
                                                                         return (
                                                                             <TouchableOpacity
                                                                                 onPress={() => {
-                                                                                    this.props.navigation.navigate('ReservationEditScreen', {
-                                                                                        initialValues: {
-                                                                                            ...event,
-                                                                                            selectedTimeBlock: eventHour <= 10 ? 0 : (moment(event.reservationStartDate).tz(timezone).format('HH') > 10 && eventHour <= 16) ? 1 : 2,
-                                                                                            hour: eventHour,
-                                                                                            minutes: eventMins,
-                                                                                        },
-                                                                                    })
+                                                                                    if (event?.status === 'BOOKED') {
+                                                                                        this.props.navigation.navigate('ReservationEditScreen', {
+                                                                                            initialValues: {
+                                                                                                ...event,
+                                                                                                selectedTimeBlock: eventHour <= 10 ? 0 : (moment(event.reservationStartDate).tz(timezone).format('HH') > 10 && eventHour <= 16) ? 1 : 2,
+                                                                                                hour: eventHour,
+                                                                                                minutes: eventMins,
+                                                                                            },
+                                                                                        })
+                                                                                    }
                                                                                 }}
-                                                                                key={event.id} style={{position: 'absolute', borderWidth: 1, borderColor: customBackgroundColor, backgroundColor: customMainThemeColor, height: 64, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (4 * ((layoutIndex + 1) * (tableIndex + 1)) - (tableIndex * 4) + 4), overflow: 'hidden', borderRadius: 15, paddingHorizontal: 5, justifyContent: 'center', zIndex: 9}}
+                                                                                key={event.id} style={{position: 'absolute', borderWidth: 1, borderColor: customBackgroundColor, backgroundColor: statusColor, height: 64, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (4 * ((layoutIndex + 1) * (tableIndex + 1)) - (tableIndex * 4) + 4), overflow: 'hidden', borderRadius: 15, paddingHorizontal: 5, justifyContent: 'center', zIndex: 9}}
 
                                                                             >
                                                                                 <StyledText style={{color: customBackgroundColor}}>{event?.name}
@@ -961,28 +956,32 @@ class ReservationEventBase extends Component {
                                         let eventHour = moment(event.reservationStartDate).tz(timezone).format('HH')
                                         let eventMins = moment(event.reservationStartDate).tz(timezone).format('mm')
 
+                                        let statusColor = event.status === 'WAITING' ? '#006B35' : '#f75336'
+
                                         return (
                                             <TouchableOpacity
                                                 onPress={() => {
-                                                    this.props.navigation.navigate('ReservationEditScreen', {
-                                                        initialValues: {
-                                                            ...event,
-                                                            selectedTimeBlock: eventHour <= 10 ? 0 : (moment(event.reservationStartDate).tz(timezone).format('HH') > 10 && eventHour <= 16) ? 1 : 2,
-                                                            hour: eventHour,
-                                                            minutes: eventMins,
-                                                        },
-                                                    })
+                                                    if (event.status === 'WAITING') {
+                                                        this.props.navigation.navigate('ReservationEditScreen', {
+                                                            initialValues: {
+                                                                ...event,
+                                                                selectedTimeBlock: eventHour <= 10 ? 0 : (moment(event.reservationStartDate).tz(timezone).format('HH') > 10 && eventHour <= 16) ? 1 : 2,
+                                                                hour: eventHour,
+                                                                minutes: eventMins,
+                                                            },
+                                                        })
+                                                    }
                                                 }}
-                                                key={eventIndex} style={{position: 'absolute', borderWidth: 1, borderColor: customMainThemeColor, backgroundColor: customBackgroundColor, height: 64, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (64 * (eventIndex) + ((eventIndex + 1) * 2)), overflow: 'hidden', borderRadius: 15, paddingHorizontal: 5, justifyContent: 'center', zIndex: 9}}
+                                                key={eventIndex} style={{position: 'absolute', borderWidth: 1, borderColor: statusColor, backgroundColor: customBackgroundColor, height: 64, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (64 * (eventIndex) + ((eventIndex + 1) * 2)), overflow: 'hidden', borderRadius: 15, paddingHorizontal: 5, justifyContent: 'center', zIndex: 9}}
 
                                             >
-                                                <StyledText style={{color: customMainThemeColor}}>{event?.name}
+                                                <StyledText style={{color: statusColor}}>{event?.name}
                                                 </StyledText>
-                                                <StyledText style={{color: customMainThemeColor}}>{moment(event?.reservationStartDate).tz(timezone).format("HH:mm")}
+                                                <StyledText style={{color: statusColor}}>{moment(event?.reservationStartDate).tz(timezone).format("HH:mm")}
                                                 </StyledText>
                                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                                    <Ionicons name={'ios-people'} color={customMainThemeColor} size={16} />
-                                                    <StyledText style={{color: customMainThemeColor, marginLeft: 4}}>
+                                                    <Ionicons name={'ios-people'} color={statusColor} size={16} />
+                                                    <StyledText style={{color: statusColor, marginLeft: 4}}>
                                                         {event.people + event.kid}</StyledText>
                                                 </View>
                                             </TouchableOpacity>

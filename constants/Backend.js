@@ -592,6 +592,9 @@ export const api = {
     getReservationById: (id) => {
       return `${apiRoot}/reservations/${id}`
     },
+    sendNotification: (id) => {
+      return `${apiRoot}/${id}/sendNotification`
+    },
   },
   membership: {
     get: (id) => {

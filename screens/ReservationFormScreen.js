@@ -48,7 +48,7 @@ class ReservationFormScreen extends React.Component {
       tableHeight: null,
       isTablet: context?.isTablet,
       tableIndex: 0,
-      selectedTimeBlock: props?.timeBlock ?? 0,
+      selectedTimeBlock: props?.initialValues?.selectedTimeBlock ?? 0,
       timeBlocks: {
         0: {value: 'MORNING', label: context.t('reservation.timeBlock.morning')},
         1: {value: 'NOON', label: context.t('reservation.timeBlock.noon')},
@@ -108,8 +108,9 @@ class ReservationFormScreen extends React.Component {
   loadInfo = () => {
     let data = this.props?.initialValues
     if (!!data) {
-      this.props.change(`date`, data?.reservationStartDate ?? data?.date)
-      this.setState({reservationDate: moment(data?.reservationStartDate ?? data?.date).format('YYYY-MM-DD')})
+
+      this.props.change(`reservationStartDate`, new Date(data?.reservationStartDate))
+      this.setState({reservationDate: moment(data?.reservationStartDate).format('YYYY-MM-DD')})
 
       if (!!data.id) {
         this.props.change(`id`, data.id)
@@ -127,9 +128,9 @@ class ReservationFormScreen extends React.Component {
           nameArr.push(table.tableName)
         })
         this.props.change(`tableIds`, idArray)
-        this.setState({selectedTableIds: idArray, selectedTableNames: nameArr, selectedTimeBlock: this.props?.timeBlock, selectedHour: data?.hour, selectedMinutes: data?.minutes})
+        this.setState({selectedTableIds: idArray, selectedTableNames: nameArr, selectedTimeBlock: data?.selectedTimeBlock, selectedHour: data?.hour, selectedMinutes: data?.minutes})
 
-        this.handleHourSelection(this.props?.timeBlock)
+        this.handleHourSelection(data?.selectedTimeBlock)
         this.viewResize(1)
         this.handleCheckAvailableTables(data?.hour, data?.minutes)
       }
@@ -211,7 +212,6 @@ class ReservationFormScreen extends React.Component {
 
   handleCheckAvailableTables = (hour, mins) => {
 
-
     let date = this.state.reservationDate ?? moment(this.props?.initialValues?.reservationStartDate).format('YYYY-MM-DD')
     let timezone = TimeZoneService.getTimeZone()
     let dateStr = `${date} ${hour}:${mins}`
@@ -271,6 +271,19 @@ class ReservationFormScreen extends React.Component {
       reservationDate: this.state.reservationDate,
       tableNames: this.state.selectedTableNames,
     })
+  }
+  handleResetForm = () => {
+    this.props.change(`id`, null)
+    this.props.change(`checkDate`, new Date())
+    // this.props.change(`reservationStartDate`, new Date())
+    this.props.change(`hour`, null)
+    this.props.change(`minutes`, null)
+    this.props.change(`people`, 0)
+    this.props.change(`kid`, 0)
+    this.props.change(`name`, null)
+    this.props.change(`phoneNumber`, null)
+    this.props.change(`note`, null)
+    this.props.change(`tableIds`, null)
   }
 
 
@@ -358,6 +371,7 @@ class ReservationFormScreen extends React.Component {
                 backNavigation={true}
                 backAction={() => {
                   if (!nextStep) {
+                    this.handleResetForm()
                     handleReset()
                     navigation.navigate('ReservationCalendarScreen')
                   } else {
@@ -464,7 +478,7 @@ class ReservationFormScreen extends React.Component {
                         </View>
                         <View style={[styles.tableCellView, styles.justifyRight]}>
                           <Field
-                            name={`date`}
+                            name={`reservationStartDate`}
                             component={RenderDatePicker}
                             onChange={this.handleGetReservationDate}
                             minimumDate={moment().toDate()}
@@ -704,6 +718,7 @@ class ReservationFormScreen extends React.Component {
                 backNavigation={true}
                 backAction={() => {
                   if (!nextStep) {
+                    this.handleResetForm()
                     handleReset()
                     navigation.navigate('ReservationCalendarScreen')
                   } else {
@@ -721,7 +736,7 @@ class ReservationFormScreen extends React.Component {
                     </View>
                     <View style={[styles.tableCellView, styles.justifyRight]}>
                       <Field
-                        name={`date`}
+                        name={`reservationStartDate`}
                         component={RenderDatePicker}
                         onChange={this.handleGetReservationDate}
                         minimumDate={moment().toDate()}
@@ -1037,7 +1052,7 @@ class TableMapBase extends Component {
     }
 
     const tableSize = 72
-    const isAvailable = this.state.availableTables?.find((item) => item === table.tableId)
+    const isAvailable = this.props.availableTables?.find((item) => item === table.tableId) || this.state.availableTables?.find((item) => item === table.tableId)
     const isSelected = (this.props?.selectedTableIds.indexOf(table.tableId) > -1)
 
 
@@ -1055,7 +1070,9 @@ class TableMapBase extends Component {
                     this.props.handleChooseTable(table.tableId, table.tableName)
                     if (isSelected) {
                       tableList.push(table.tableId)
-                      this.setState({availableTables: tableList})
+                      this.setState((state) => {
+                        return {availableTables: state.availableTables = tableList}
+                      })
                     }
                   }
                 }}

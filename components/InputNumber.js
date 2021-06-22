@@ -12,19 +12,19 @@ const InputNumber = ({
     value,
     minValue
   },
-  customVal,
   meta: {error, touched, valid},
   themeStyle,
   locale: {customMainThemeColor, customBackgroundColor, customBorderColor},
   ...rest
-}) => (
+}) => {
+  return (
     <View>
       <NumericInput
         onChange={onChange}
-        onSubmitEditing={onSubmitEditing}
+        onSubmitEditing={() => onSubmitEditing}
         onFocus={onFocus}
-        value={parseInt(value)}
-        initValue={customVal}
+        value={parseInt(value, 10)}
+        initValue={value}
         minValue={minValue}
         inputStyle={{
           color: customMainThemeColor
@@ -37,4 +37,5 @@ const InputNumber = ({
       {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
     </View>
   )
+}
 export default withContext(InputNumber)
