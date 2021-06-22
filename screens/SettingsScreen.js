@@ -183,35 +183,8 @@ class SettingsScreen extends React.Component {
         }
       />,
 
-      <MenuButton
-        route=''
-        onPress={() => changeLanguage()}
-        title={t('settings.language')}
-        icon={
-          <MaterialIcon
-            name="language"
-            size={40}
-            style={[styles?.buttonIconStyle(customMainThemeColor)]}
-          />
-        }
-      />,
-
-      <MenuButton
-        route=''
-        onPress={() => changeAppType()}
-        title={appType === 'store' ? t('settings.changeToRetail') : t('settings.changeToStore')}
-        icon={
-          <Entypo name="cycle"
-            size={40}
-            style={[styles?.buttonIconStyle(customMainThemeColor)]}
-          />
-        }
-      />,
     ]
 
-    if (appType === 'retail') {
-      menuButtonsArr.splice(menuButtonsArr.findIndex((item) => item?.props?.route === 'TableLayouts'), 1)
-    }
 
 
     return (

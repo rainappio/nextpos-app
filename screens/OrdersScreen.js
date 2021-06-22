@@ -1,5 +1,5 @@
 import React from 'react'
-import {FlatList, Text, TouchableOpacity, View} from 'react-native'
+import {FlatList, Text, TouchableOpacity, View, Dimensions} from 'react-native'
 import {connect} from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {formatDate, dateToLocaleString, formatDateOnly, formatTime, getOrdersByDateRange, getOrdersByInvoiceNumber, formatCurrency} from '../actions'
@@ -151,7 +151,7 @@ class OrdersScreen extends React.Component {
 
   render() {
     const {getordersByDateRange, dateRange, isLoading, haveError, haveData, getordersByDateRangeFullData} = this.props
-    const {t, customMainThemeColor} = this.context
+    const {t, isTablet, customMainThemeColor, customBackgroundColor} = this.context
 
     const orders = []
     getordersByDateRange !== undefined && getordersByDateRange.forEach(order => {
@@ -240,17 +240,23 @@ class OrdersScreen extends React.Component {
                 getSelectedStatus={(data) => this.setState({selectedStatusOptions: data})}
               />
             </View>
-            <View style={[styles.tableRowContainer, {flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
-              <StyledText style={styles?.screenSubTitle(customMainThemeColor)}>{moment(dateRange?.zonedFromDate).format('YYYY-MM-DD')}</StyledText>
-              <StyledText style={[styles?.screenSubTitle(customMainThemeColor), {marginHorizontal: 0}]}>~</StyledText>
-              <StyledText style={styles?.screenSubTitle(customMainThemeColor)}>{moment(dateRange?.zonedToDate).format('YYYY-MM-DD')}</StyledText>
+
+            <View style={[styles.flex(1), {alignItems: 'center', justifyContent: 'center'}]}>
+              <View style={[styles.markdownContainer(this.context), styles.shadowContainer(customBackgroundColor), {margin: 'auto', width: isTablet ? (Dimensions.get('window').width / 2.5) : (Dimensions.get('window').width / 1) - 32}]}>
+                <View style={[{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
+                  <StyledText style={[styles?.screenSubTitle(customMainThemeColor)]}>{moment(dateRange?.zonedFromDate).format('YYYY-MM-DD')}</StyledText>
+                  <StyledText style={[styles?.screenSubTitle(customMainThemeColor), {margin: 0}]}>~</StyledText>
+                  <StyledText style={styles?.screenSubTitle(customMainThemeColor)}>{moment(dateRange?.zonedToDate).format('YYYY-MM-DD')}</StyledText>
+                </View>
+                <View style={[{flexDirection: 'row', justifyContent: 'center'}]}>
+                  <StyledText style={[styles?.screenSubTitle(customMainThemeColor), {marginHorizontal: 0}]}>{t('order.total')}:</StyledText>
+                  <StyledText style={[styles?.screenSubTitle(customMainThemeColor), {marginHorizontal: 0}]}>{formatCurrency(getordersByDateRangeFullData?.ordersTotal ?? 0)}</StyledText>
+                </View>
+              </View>
             </View>
-            <View style={[styles.tableRowContainer, {flexDirection: 'row', justifyContent: 'flex-start'}]}>
-              <StyledText style={[styles?.screenSubTitle(customMainThemeColor), {marginHorizontal: 0, marginRight: 20}]}>{t('order.total')}:</StyledText>
-              <StyledText style={[styles?.screenSubTitle(customMainThemeColor), {marginHorizontal: 0}]}>{formatCurrency(getordersByDateRangeFullData?.ordersTotal ?? 0)}</StyledText>
-            </View>
-            <View style={{flex: 3}}>
-              <View style={[styles.sectionBar]}>
+
+            <View style={[styles.flex(3), {marginHorizontal: 16, justifyContent: 'center', }]}>
+              <View style={[styles.sectionBar, styles.shadowContainer(customBackgroundColor), {borderRadius: 8, marginVertical: 8, borderWidth: 1, backgroundColor: customBackgroundColor}]}>
                 <View style={{flex: 2}}>
                   <Text style={styles?.sectionBarTextSmall(customMainThemeColor)}>{t('order.orderId')}</Text>
                 </View>

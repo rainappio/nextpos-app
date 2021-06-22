@@ -584,7 +584,7 @@ class OrderFormII extends React.Component {
 
               <View style={{flexDirection: 'row', flex: 1}}>
                 {/* left list */}
-                <View style={[themeStyle, styles.orderItemSideBar, {borderColor: customMainThemeColor, borderTopWidth: 1, paddingTop: 5}, styles?.customBorderAndBackgroundColor(this.context)]}>
+                <View style={[themeStyle, styles.orderItemSideBar, styles?.customBorderAndBackgroundColor(this.context), {borderColor: customMainThemeColor, borderTopWidth: 1, paddingTop: 5}]}>
                   <ScrollView style={{flex: 1}}>
                     <View style={[styles.tableRowContainer, styles.tableCellView, styles.flex(1), themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}>
                       <TouchableOpacity style={[(this.state.selectedLabel === 'pinned' ? styles?.selectedLabel(customMainThemeColor) : null), {flex: 1}]} onPress={() => {this.setState({selectedLabel: 'pinned'})}}>

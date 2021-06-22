@@ -228,7 +228,7 @@ class LoginSuccessScreen extends React.Component {
       printers = [],
       order
     } = this.props
-    const {t, isTablet, appType, customMainThemeColor} = this.context
+    const {t, isTablet, appType, customMainThemeColor, customBackgroundColor} = this.context
     const {username, loggedIn, tokenExpiry} = this.state
 
     const userBadge = currentUser?.displayName?.charAt(0).toUpperCase() ?? ''
@@ -359,7 +359,7 @@ class LoginSuccessScreen extends React.Component {
                   title={(appType === 'retail' && !!order && order?.orderType === 'TAKE_OUT' && order?.state === 'OPEN') ? t('continueOrder') : t('quickOrder')}
                   icon={
                     <MaterialIcon
-                      name="play-arrow"
+                      name="local-dining"
                       size={40}
                       style={[styles?.buttonIconStyle(customMainThemeColor)]}
                     />
@@ -373,7 +373,7 @@ class LoginSuccessScreen extends React.Component {
                   title={t('quickTakeOut')}
                   icon={
                     <MaterialIcon
-                      name="play-arrow"
+                      name="delivery-dining"
                       size={40}
                       style={[styles?.buttonIconStyle(customMainThemeColor)]}
                     />
@@ -533,27 +533,32 @@ class LoginSuccessScreen extends React.Component {
               </View>}
             {
               getannouncements.results !== undefined &&
-              getannouncements.results.map(getannoc =>
-                <View
-                  style={[styles.sectionContainer]}
-                  key={getannoc.id}
-                >
-                  <View style={[styles.tableCellView]}>
-                    <IonIcon
-                      name={getannoc.titleIcon}
-                      size={32}
-                      color={customMainThemeColor}
-                    />
-                    <StyledText style={[styles?.announcementTitle(customMainThemeColor), {marginLeft: 10}]}>
-                      {getannoc.title}
-                    </StyledText>
-                  </View>
+              getannouncements.results.map((getannoc, index) =>
+                <View key={getannoc.id}>
+                  <View
+                    style={[styles.markdownContainer(this.context), styles.shadowContainer(customBackgroundColor), styles.sectionContainer,]}
+                  >
+                    <View style={[styles.tableCellView]}>
+                      <IonIcon
+                        name={getannoc.titleIcon}
+                        size={32}
+                        color={customMainThemeColor}
+                      />
+                      <StyledText style={[styles?.announcementTitle(customMainThemeColor), {marginLeft: 10}]}>
+                        {getannoc.title}
+                      </StyledText>
+                    </View>
 
-                  <View style={styles.markdownContainer(this.context)}>
-                    <Markdown style={themeStyle}>
-                      {getannoc.markdownContent}
-                    </Markdown>
+                    <View style={[styles.markdownContainer(this.context), styles.shadowContainer(customBackgroundColor),]}>
+                      <Markdown style={themeStyle}>
+                        {getannoc.markdownContent}
+                      </Markdown>
+                    </View>
+
+
                   </View>
+                  {(index !== getannouncements.results.length - 1) && <View style={{borderBottomWidth: 1, borderBottomColor: customMainThemeColor, marginTop: 8, marginBottom: 12}}>
+                  </View>}
                 </View>
               )
             }
@@ -698,12 +703,14 @@ export class HiddenMenu extends React.Component {
               }}
             >
               <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-                <Text style={{...complexTheme[theme].overlay, paddingRight: 8}}>
-                  <MaterialIcon name="language"
-                    size={20}
-                    style={[styles?.buttonIconStyle(complexTheme[theme].overlay)]}
-                  />
-                </Text>
+                <View style={{paddingRight: 8}}>
+                  <Text style={complexTheme[theme].overlay}>
+                    <MaterialIcon name="language"
+                      size={20}
+                      style={[styles?.buttonIconStyle(complexTheme[theme].overlay)]}
+                    />
+                  </Text>
+                </View>
                 <Text style={complexTheme[theme].overlay}>
                   {t('settings.language')}
                 </Text>
@@ -721,13 +728,15 @@ export class HiddenMenu extends React.Component {
               }}
             >
               <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
-                <Text style={{...complexTheme[theme].overlay, paddingRight: 8}}>
+                <View style={{paddingRight: 8}}>
+                  <Text style={complexTheme[theme].overlay}>
 
-                  <MaterialIcon name="autorenew"
-                    size={20}
-                    style={[styles?.buttonIconStyle(complexTheme[theme].overlay)]}
-                  />
-                </Text>
+                    <MaterialIcon name="autorenew"
+                      size={20}
+                      style={[styles?.buttonIconStyle(complexTheme[theme].overlay)]}
+                    />
+                  </Text>
+                </View>
                 <Text style={complexTheme[theme].overlay}>
                   {appType === 'store' ? t('settings.changeToRetail') : t('settings.changeToStore')}
                 </Text>

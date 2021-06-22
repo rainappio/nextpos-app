@@ -185,8 +185,9 @@ class RowBase extends React.Component {
     if (this.props.active !== nextProps.active) {
       Animated.timing(this._active, {
         duration: 300,
+        useNativeDriver: false,
         easing: Easing.bounce,
-        toValue: Number(nextProps.active)
+        toValue: Number(nextProps.active),
       }).start()
     }
   }
@@ -199,7 +200,7 @@ class RowBase extends React.Component {
         styles.row,
         this._style,
       ]}>
-        <View key={data.id}>
+        <View key={data.id} style={[styles.markdownContainer(this.props?.locale), styles.shadowContainer(this.props?.locale.customBackgroundColor)]}>
           <View
             style={[styles.tableRowContainer]}
           >
@@ -230,7 +231,7 @@ class RowBase extends React.Component {
             </View>
           </View>
 
-          <View style={styles.markdownContainer(this.props?.locale)}>
+          <View style={[styles.markdownContainer(this.props?.locale), styles.shadowContainer(this.props?.locale.customBackgroundColor)]}>
             <Markdown>
               {data.markdownContent}
             </Markdown>

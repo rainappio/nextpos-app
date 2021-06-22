@@ -552,6 +552,14 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8
   }),
+  shadowContainer: (customBackgroundColor) => ({
+    shadowColor: customBackgroundColor !== '#222222' ? '#e7e7e7' : '#000', shadowOffset: {width: 0, height: 4}, shadowOpacity: 1,
+    shadowRadius: 2,
+    borderWidth: 1,
+    borderColor: customBackgroundColor !== '#222222' ? '#e7e7e7' : '#000',
+    elevation: 4,
+    marginTop: 8
+  }),
   messageBlock: {
     padding: 10,
     textAlign: 'center',
