@@ -12,8 +12,6 @@ import moment from "moment-timezone";
 import DropDown from "../components/DropDown";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
-import ThemeToggleButton from "../themes/ThemeToggleButton";
-import {ThemePicker} from "../components/ThemePicker";
 import {connect} from 'react-redux';
 import RNSwitchPayGroup from "../components/RNSwitchPayGroup"
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -511,22 +509,6 @@ class StoreFormScreen extends Component {
                     </StyledText>
                   </TouchableOpacity>}
                 </View>
-              </View>
-
-            </View>
-
-            <View style={styles.sectionContainer}>
-              <View style={styles.sectionTitleContainer}>
-                <StyledText style={styles.sectionTitleText}>{t('uiPreferences')}</StyledText>
-              </View>
-              <View style={[styles.fieldContainer, {justifyContent: 'center'}]}>
-                <ThemePicker
-                  style={{width: 200}}
-                  colors={['#f18d1a', '#006B35', '#000']}
-                  handleSelectColor={(color) => {
-                    changeCustomMainThemeColor(color)
-                  }}
-                />
               </View>
 
             </View>

@@ -329,7 +329,7 @@ class DraggableBase extends Component {
     const numberX = {...this.state.pan.x};
     const numberY = {...this.state.pan.y};
 
-    dispatchFetchRequest(api.tablelayout.updateTablePosition(layoutId, tableId), {
+    dispatchFetchRequestWithOption(api.tablelayout.updateTablePosition(layoutId, tableId), {
       method: 'POST',
       withCredentials: true,
       credentials: 'include',
@@ -337,6 +337,8 @@ class DraggableBase extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({x: getModNum(numberX._value, 10) / windowWidth, y: getModNum(numberY._value, 10) / windowHeight})
+    }, {
+      defaultMessage: false
     }, response => {
       this.props.getTableLayouts()
     }).then()
