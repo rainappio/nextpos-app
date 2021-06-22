@@ -704,12 +704,10 @@ export class HiddenMenu extends React.Component {
             >
               <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
                 <View style={{paddingRight: 8}}>
-                  <Text style={complexTheme[theme].overlay}>
-                    <MaterialIcon name="language"
-                      size={20}
-                      style={[styles?.buttonIconStyle(complexTheme[theme].overlay)]}
-                    />
-                  </Text>
+                  <MaterialIcon name="language"
+                    size={20}
+                    style={complexTheme[theme].overlay}
+                  />
                 </View>
                 <Text style={complexTheme[theme].overlay}>
                   {t('settings.language')}
@@ -729,13 +727,10 @@ export class HiddenMenu extends React.Component {
             >
               <View style={[styles.jc_alignIem_center, styles.flex_dir_row]}>
                 <View style={{paddingRight: 8}}>
-                  <Text style={complexTheme[theme].overlay}>
-
-                    <MaterialIcon name="autorenew"
-                      size={20}
-                      style={[styles?.buttonIconStyle(complexTheme[theme].overlay)]}
-                    />
-                  </Text>
+                  <MaterialIcon name="autorenew"
+                    size={20}
+                    style={complexTheme[theme].overlay}
+                  />
                 </View>
                 <Text style={complexTheme[theme].overlay}>
                   {appType === 'store' ? t('settings.changeToRetail') : t('settings.changeToStore')}

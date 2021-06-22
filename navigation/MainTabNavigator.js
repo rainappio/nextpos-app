@@ -316,21 +316,21 @@ class LabelIcon extends React.Component {
 }
 const ReservationScreens = createDrawerNavigator({
 
-  ReservationScreen: {
-    screen: ReservationScreen,
-    navigationOptions: {
-      title: null,
-      drawerLabel: ({focused, tintColor}) => (
-        <LabelIcon focused={focused} tintColor={tintColor} name='create-outline' />
-      ),
-    }
-  },
   ReservationCalendarScreen: {
     screen: ReservationCalendarScreen,
     navigationOptions: {
       title: null,
       drawerLabel: ({focused, tintColor}) => (
         <LabelIcon focused={focused} tintColor={tintColor} name='md-calendar-sharp' />
+      ),
+    }
+  },
+  ReservationScreen: {
+    screen: ReservationScreen,
+    navigationOptions: {
+      title: null,
+      drawerLabel: ({focused, tintColor}) => (
+        <LabelIcon focused={focused} tintColor={tintColor} name='create-outline' />
       ),
     }
   },
@@ -366,7 +366,7 @@ const ReservationScreens = createDrawerNavigator({
   overlayColor: 1,
   drawerType: 'slide',
   drawerWidth: 80,
-  edgeWidth: 200,
+  edgeWidth: 400,
 
 })
 

@@ -66,7 +66,6 @@ class TableForm extends React.Component {
               type="up-down"
               placeholder={t('tableCapacity')}
               minValue={1}
-              customVal={isEdit && initialValues.capacity}
             />
           </View>
         </View>

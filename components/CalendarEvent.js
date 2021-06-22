@@ -126,7 +126,7 @@ const CalendarEventBase = (props) => {
         return (
             <TouchableOpacity key={event?.id} style={{flexDirection: 'row', borderWidth: 1, borderRadius: 10, borderColor: customMainThemeColor, margin: 10, maxWidth: 640, alignSelf: 'center', padding: 10}}
                 onPress={() => {
-                    if (event?.status !== 'CANCELLED') {
+                    if (event?.status === 'BOOKED' || event?.status === 'WAITING') {
                         !!props?.closeModal && props?.closeModal()
                         props.navigation.navigate('ReservationEditScreen', {
                             initialValues: {

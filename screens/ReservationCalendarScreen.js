@@ -73,7 +73,7 @@ class ReservationCalendarScreen extends React.Component {
 
         this.props.getTableLayouts()
         this.getReservationEvents(new Date(this.state?.selectedDate ?? new Date()).getFullYear(), moment(new Date(this.state?.selectedDate ?? new Date())).format('MM'))
-        this.getReservationEventsByDate(this.state?.selectedDate, 'BOOKED')
+        this.getReservationEventsByDate(this.state?.selectedDate, '')
     }
 
     getReservationEvents = async (year = new Date().getFullYear(), month = moment(new Date()).format('MM')) => {
@@ -98,8 +98,7 @@ class ReservationCalendarScreen extends React.Component {
         }).then().catch(() => this.setState({isLoading: false}))
     }
 
-    getReservationEventsByDate = async (date = this.state.selectedDate, status = 'BOOKED') => {
-
+    getReservationEventsByDate = async (date = this.state.selectedDate, status = '') => {
         await dispatchFetchRequest(api.reservation.getReservationByDate(date, status), {
             method: 'GET',
             withCredentials: true,
@@ -111,20 +110,7 @@ class ReservationCalendarScreen extends React.Component {
             response.json().then(async (data) => {
                 this.setState({reservationEventsByDate: data?.results})
             })
-        }).then(
-            await dispatchFetchRequest(api.reservation.getReservationByDate(date, 'CONFIRMED'), {
-                method: 'GET',
-                withCredentials: true,
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            }, response => {
-                response.json().then(async (data) => {
-                    this.setState({reservationEventsByDate: [...this.state.reservationEventsByDate, data?.results]})
-                })
-            }).then()
-        )
+        }).then()
 
 
     }
@@ -200,7 +186,7 @@ class ReservationCalendarScreen extends React.Component {
                                         icon={<MaterialCommunityIcons name="filter-variant" size={32} color={customMainThemeColor} />}
                                         toggleModal={(flag) => this.setState({isShowModal: flag})}
                                         isShowModal={this.state?.isShowModal}>
-                                        <View style={{maxWidth: 360}}>
+                                        <View style={{maxWidth: 420, alignContent: 'center'}}>
                                             <View style={[styles.tableRowContainer]}>
 
                                                 <StyledText style={[styles.screenSubTitle(customMainThemeColor), {flex: 1, alignItems: 'center', justifyContent: 'center'}]}>{t('calendar.calendarOptions')}
@@ -336,6 +322,7 @@ class ReservationCalendarScreen extends React.Component {
                                     let task = []
                                     let bookedCount = 0
                                     let waitingCount = 0
+                                    let cancellledCount = 0
 
 
                                     unsortTask = !!this.state?.reservationEvents
@@ -349,8 +336,9 @@ class ReservationCalendarScreen extends React.Component {
                                         return -(new Date(b.reservationStartDate) - new Date(a.reservationStartDate));
                                     }) : []
 
-                                    bookedCount = task.length > 0 ? task.map((event) => event.status === 'BOOKED' ? 1 : 0).reduce((a, b) => a + b) : 0
+                                    bookedCount = task.length > 0 ? task.map((event) => (event.status === 'BOOKED' || event.status === 'CONFIRMED' || event.status === 'SEATED') ? 1 : 0).reduce((a, b) => a + b) : 0
                                     waitingCount = task.length > 0 ? task.map((event) => event.status === 'WAITING' ? 1 : 0).reduce((a, b) => a + b) : 0
+                                    cancelledCount = task.length > 0 ? task.map((event) => event.status === 'CANCELLED' ? 1 : 0).reduce((a, b) => a + b) : 0
 
 
 
@@ -404,6 +392,14 @@ class ReservationCalendarScreen extends React.Component {
                                                                 >
                                                                     {isTablet ? t('reservation.waiting') : 'W'}: {waitingCount}
                                                                 </Text>
+                                                                <Text style={{
+                                                                    color: '#454545',
+                                                                    textAlign: 'center',
+                                                                }}
+                                                                    numberOfLines={2}
+                                                                >
+                                                                    {isTablet ? t('reservation.cancellled') : C}: {cancelledCount}
+                                                                </Text>
                                                             </TouchableOpacity>}
 
                                                     </ScrollView>
@@ -423,7 +419,7 @@ class ReservationCalendarScreen extends React.Component {
 
                         {(!!isTablet) ?
 
-                            <ReservationEvent reservations={this.state?.reservationEventsByDate} tablelayouts={tablelayouts} selectedDate={this.state?.selectedDate} refreshScreen={() => this.refreshScreen()} changeSelectedDate={(date) => this.setState({selectedDate: date})} />
+                            <ReservationEvent reservations={this.state?.reservationEvents.filter((event) => (event.status !== 'WAITING' && event.status !== 'CANCELLED'))} tablelayouts={tablelayouts} selectedDate={this.state?.selectedDate} refreshScreen={() => this.refreshScreen()} changeSelectedDate={(date) => this.setState({selectedDate: date})} />
 
                             :
 

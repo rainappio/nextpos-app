@@ -22,9 +22,9 @@ class ReservationEditScreen extends React.Component {
     this.state = {
       nextStep: false,
       initialValues: null,
-      timeBlock: null,
     }
   }
+
   componentDidMount() {
     this.checkPropsChange()
   }
@@ -35,7 +35,7 @@ class ReservationEditScreen extends React.Component {
     }
   }
   checkPropsChange = () => {
-    this.setState({initialValues: this.props.navigation?.state?.params?.initialValues, nextStep: false, timeBlock: this.props.navigation?.state?.params?.timeBlock})
+    this.setState({initialValues: this.props.navigation?.state?.params?.initialValues, nextStep: false})
   }
 
   handleCreateReservation = (isEdit) => {
@@ -180,8 +180,7 @@ class ReservationEditScreen extends React.Component {
           handleCreateReservation={this.handleCreateReservation}
           handleCancel={this.handleEditCancel}
           nextStep={this.state.nextStep}
-          initialValues={this.props.navigation?.state?.params?.initialValues}
-          timeBlock={this.props.navigation?.state?.params?.timeBlock}
+          initialValues={this.state.initialValues ?? this.props.navigation?.state?.params?.initialValues}
           navigation={navigation}
         />
       </ThemeContainer>

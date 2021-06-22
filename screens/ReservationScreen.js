@@ -17,8 +17,21 @@ class ReservationScreen extends React.Component {
     super(props, context)
     this.state = {
       nextStep: false,
-      initialValues: this.props.navigation?.state?.params?.data ?? null,
+      initialValues: this.props.navigation?.state?.params?.initialValues ?? null,
     }
+  }
+
+  componentDidMount() {
+    this.checkPropsChange()
+  }
+  componentDidUpdate(prevProps, prevState) {
+
+    if (prevProps.navigation?.state?.params?.initialValues.id !== this.props.navigation?.state?.params?.initialValues.id || prevState.initialValues !== this.props.navigation?.state?.params?.initialValues) {
+      this.checkPropsChange()
+    }
+  }
+  checkPropsChange = () => {
+    this.setState({initialValues: this.props.navigation?.state?.params?.initialValues, nextStep: false})
   }
 
   handleCreateReservation = (isEdit) => {
@@ -48,7 +61,6 @@ class ReservationScreen extends React.Component {
       response => {
 
         this.props.navigation.navigate('ReservationCalendarScreen')
-        // this.props.navigation.goBack()
       }
     ).then()
   }
@@ -100,7 +112,7 @@ class ReservationScreen extends React.Component {
           handleCreateReservation={this.handleCreateReservation}
           handleCancel={this.handleEditCancel}
           nextStep={this.state.nextStep}
-          initialValues={this.state.initialValues}
+          initialValues={this.state.initialValues ?? this.props.navigation?.state?.params?.initialValues}
           navigation={navigation}
         />
       </ThemeContainer>
