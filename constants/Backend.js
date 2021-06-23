@@ -593,8 +593,9 @@ export const api = {
       return `${apiRoot}/reservations/${id}`
     },
     sendNotification: (id) => {
-      return `${apiRoot}/${id}/sendNotification`
+      return `${apiRoot}/reservations/${id}/sendNotification`
     },
+    settings: `${apiRoot}/reservationSettings/me`
   },
   membership: {
     get: (id) => {

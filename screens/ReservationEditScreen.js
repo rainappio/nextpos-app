@@ -64,6 +64,7 @@ class ReservationEditScreen extends React.Component {
           body: JSON.stringify(request)
         }, {defaultMessage: true},
         response => {
+          this.handleReset()
           this.props.navigation.navigate('ReservationCalendarScreen')
 
         }
@@ -88,10 +89,73 @@ class ReservationEditScreen extends React.Component {
         body: JSON.stringify(request)
       }, {defaultMessage: true},
       response => {
+        this.handleReset()
         this.props.navigation.navigate('ReservationCalendarScreen')
       }
     ).then(
 
+    )
+  }
+  handleSendNotification = () => {
+    Alert.alert(
+      ``,
+      `${this.context.t('reservation.sendActionContext', {phoneNumber: this.state.initialValues.phoneNumber})}`,
+      [
+        {
+          text: `${this.context.t('action.yes')}`,
+          onPress: () => {
+
+            let values = this.state.initialValues
+            let request = {
+              reservationDate: values?.checkDate,
+              name: values.name,
+              phoneNumber: values.phoneNumber,
+              tableIds: values.tableIds,
+              people: values?.people ?? 0,
+              kid: values?.kid ?? 0,
+              note: values?.note ?? ''
+            }
+            dispatchFetchRequestWithOption(
+              api.reservation.update(values.id),
+              {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(request)
+              }, {defaultMessage: true},
+              response => {
+              }
+            ).then(() => {
+              dispatchFetchRequestWithOption(
+                api.reservation.sendNotification(values.id),
+                {
+                  method: 'POST',
+                  withCredentials: true,
+                  credentials: 'include',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                }, {defaultMessage: false},
+                response => {
+                  this.handleReset()
+                  this.props.navigation.navigate('ReservationCalendarScreen')
+                }
+              ).then()
+            })
+
+
+
+          }
+        },
+        {
+          text: `${this.context.t('action.no')}`,
+          onPress: () => console.log('Cancelled'),
+          style: 'cancel'
+        }
+      ]
     )
   }
 
@@ -178,6 +242,7 @@ class ReservationEditScreen extends React.Component {
           handleReset={this.handleReset}
           handleNextStep={this.handleNextStep}
           handleCreateReservation={this.handleCreateReservation}
+          handleSendNotification={this.handleSendNotification}
           handleCancel={this.handleEditCancel}
           nextStep={this.state.nextStep}
           initialValues={this.state.initialValues ?? this.props.navigation?.state?.params?.initialValues}
