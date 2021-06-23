@@ -59,7 +59,7 @@ class ReservationScreen extends React.Component {
         body: JSON.stringify(request)
       }, {defaultMessage: true},
       response => {
-
+        this.handleReset()
         this.props.navigation.navigate('ReservationCalendarScreen')
       }
     ).then()

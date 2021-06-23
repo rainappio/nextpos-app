@@ -398,7 +398,7 @@ class ReservationCalendarScreen extends React.Component {
                                                                 }}
                                                                     numberOfLines={2}
                                                                 >
-                                                                    {isTablet ? t('reservation.cancellled') : C}: {cancelledCount}
+                                                                    {isTablet ? t('reservation.cancellled') : 'C'}: {cancelledCount}
                                                                 </Text>
                                                             </TouchableOpacity>}
 

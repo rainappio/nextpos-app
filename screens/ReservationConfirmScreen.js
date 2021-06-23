@@ -30,6 +30,13 @@ class ReservationConfirmScreen extends React.Component {
           <ScreenHeader
             backNavigation={true}
             title={t('reservation.reservationTitle')}
+            backAction={() => {
+              if (this.props.navigation?.state.params?.isEdit) {
+                this.props.navigation.navigate('ReservationEditScreen')
+              } else {
+                this.props.navigation.navigate('ReservationScreen')
+              }
+            }}
             parentFullScreen={true} />
           <ThemeScrollView>
             <View style={[styles.tableRowContainerWithBorder]}>
@@ -104,6 +111,14 @@ class ReservationConfirmScreen extends React.Component {
                   {t('action.save')}
                 </Text>
               </TouchableOpacity>
+
+              {this.props.navigation?.state.params?.isEdit && <TouchableOpacity onPress={() => {
+                this.props.navigation?.state.params?.handleSendNotification()
+              }}>
+                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
+                  {t('reservation.sendNotification')}
+                </Text>
+              </TouchableOpacity>}
 
               <TouchableOpacity onPress={() => {
                 this.props.navigation.state.params?.handleCancel(this.props.navigation?.state.params?.isEdit)

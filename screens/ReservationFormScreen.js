@@ -100,7 +100,7 @@ class ReservationFormScreen extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
 
-    if (prevProps.initialValues !== this.props.initialValues || prevState.reservationDate !== this.state.reservationDate) {
+    if (prevProps.initialValues !== this.props.initialValues) {
       this.loadInfo()
     }
   }
@@ -132,7 +132,7 @@ class ReservationFormScreen extends React.Component {
 
         this.handleHourSelection(data?.selectedTimeBlock)
         this.viewResize(1)
-        this.handleCheckAvailableTables(data?.hour, data?.minutes)
+        this.handleCheckAvailableTables(moment(data?.reservationStartDate).format('YYYY-MM-DD'), data?.hour, data?.minutes)
       }
     }
   }
@@ -147,11 +147,9 @@ class ReservationFormScreen extends React.Component {
   handleGetReservationDate = (event, selectedDate) => {
 
     if (!!this.state.selectedHour && !!this.state.selectedMinutes) {
-      let timezone = TimeZoneService.getTimeZone()
-      let dateStr = `${moment(selectedDate).format('YYYY-MM-DD')} ${this.state.selectedHour}:${this.state.selectedMinutes}`
-      let checkDate = moment(dateStr).tz(timezone).format('YYYY-MM-DDTHH:mm:ss')
-      this.props.change(`checkDate`, checkDate)
-      this.setState({reservationDate: moment(checkDate).format('YYYY-MM-DD')})
+      this.props.change(`reservationStartDate`, new Date(selectedDate))
+      this.setState({reservationDate: moment(selectedDate).format('YYYY-MM-DD')})
+      this.handleCheckAvailableTables(moment(selectedDate).format('YYYY-MM-DD'), this.state.selectedHour, this.state.selectedMinutes)
     } else {
 
       this.setState({
@@ -190,13 +188,13 @@ class ReservationFormScreen extends React.Component {
       this.viewResize(1)
     }
     if (!!this.state.selectedMinutes) {
-      this.handleCheckAvailableTables(value, this.state.selectedMinutes)
+      this.handleCheckAvailableTables(this.state.reservationDate, value, this.state.selectedMinutes)
     }
     this.setState({selectedHour: value})
   }
   handleMinuteCheck = (value) => {
     this.setState({selectedMinutes: value})
-    this.handleCheckAvailableTables(this.state.selectedHour, value)
+    this.handleCheckAvailableTables(this.state.reservationDate, this.state.selectedHour, value)
 
   }
 
@@ -210,9 +208,8 @@ class ReservationFormScreen extends React.Component {
   }
 
 
-  handleCheckAvailableTables = (hour, mins) => {
+  handleCheckAvailableTables = (date, hour, mins) => {
 
-    let date = this.state.reservationDate ?? moment(this.props?.initialValues?.reservationStartDate).format('YYYY-MM-DD')
     let timezone = TimeZoneService.getTimeZone()
     let dateStr = `${date} ${hour}:${mins}`
     let checkDate = moment(dateStr).tz(timezone).format('YYYY-MM-DDTHH:mm:ss')
@@ -266,6 +263,7 @@ class ReservationFormScreen extends React.Component {
     this.props.navigation.navigate('ReservationConfirmScreen', {
       handleCancel: this.props.handleCancel,
       handleCreateReservation: this.props.handleCreateReservation,
+      handleSendNotification: this.props?.handleSendNotification,
       initialValues: value,
       isEdit: this.props.isEdit,
       reservationDate: this.state.reservationDate,
@@ -274,8 +272,7 @@ class ReservationFormScreen extends React.Component {
   }
   handleResetForm = () => {
     this.props.change(`id`, null)
-    this.props.change(`checkDate`, new Date())
-    // this.props.change(`reservationStartDate`, new Date())
+    this.props.change(`checkDate`, null)
     this.props.change(`hour`, null)
     this.props.change(`minutes`, null)
     this.props.change(`people`, 0)
@@ -303,6 +300,7 @@ class ReservationFormScreen extends React.Component {
       handleSubmit,
       handleCancel,
       handleCreateReservation,
+      handleSendNotification
     } = this.props
 
     const {t, customMainThemeColor, customBackgroundColor} = this.context
@@ -690,6 +688,14 @@ class ReservationFormScreen extends React.Component {
                           </Text>
                         </TouchableOpacity>
 
+                        {isEdit && <TouchableOpacity onPress={() => {
+                          handleSendNotification()
+                        }}>
+                          <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
+                            {t('reservation.sendNotification')}
+                          </Text>
+                        </TouchableOpacity>
+                        }
                         <TouchableOpacity onPress={() => {
                           handleCancel(isEdit)
                         }}>
@@ -717,13 +723,9 @@ class ReservationFormScreen extends React.Component {
               <ScreenHeader
                 backNavigation={true}
                 backAction={() => {
-                  if (!nextStep) {
-                    this.handleResetForm()
-                    handleReset()
-                    navigation.navigate('ReservationCalendarScreen')
-                  } else {
-                    handleNextStep(false)
-                  }
+                  this.handleResetForm()
+                  handleReset()
+                  navigation.navigate('ReservationCalendarScreen')
                 }}
                 title={t('reservation.reservationTitle')}
                 parentFullScreen={true} />
