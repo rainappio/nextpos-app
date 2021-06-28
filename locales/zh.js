@@ -74,6 +74,7 @@ const zh = {
     save: '儲存',
     search: '搜尋',
     update: '更新',
+    edit: '編輯',
     cancel: '取消',
     delete: '刪除',
     prepare: '準備完成',
@@ -683,6 +684,8 @@ const zh = {
   },
   reservation: {
     reservationTitle: '訂位',
+    reservationViewTitle: '訂位資訊',
+    reservationCalendarTitle: '訂位管理',
     date: '預約日期',
     time: '預約時間',
     timeBlock: {
@@ -701,15 +704,22 @@ const zh = {
     otherNote: '其他備註',
     table: '桌號',
     next: '下一步',
+    cancelReservation: '取消訂位',
     noTable: '未選(候補)',
     booked: '訂位',
     waiting: '候補',
-    cancellled: '取消',
+    cancelled: '取消',
     seated: '入座',
     sendNotification: '寄送簡訊',
     sendActionContext: '是否發送訂位簡訊至客人的手機: {{phoneNumber}} ?',
-    cancelActionContext: '取消訂位並返回首頁？',
+    cancelActionContext: '是否取消訂位，並返回訂位管理列表？',
+    cancelEditActionContext: '是否放棄已編輯的欄位，並返回訂位資訊頁？',
     deleteActionContext: '是否要刪除此筆訂位資料？',
+  },
+  reservationSetting: {
+    reservationSettingTitle: '訂位設定',
+    durationMinutes: '用餐時間(分)',
+    nonReservableTables: '未開放訂位桌',
   },
   printer: {
     printerTitle: '出單機',
@@ -724,6 +734,22 @@ const zh = {
       checkout: '結帳區'
     },
     testPrint: '測試出單機',
+  },
+  tableVisual: {
+    noTableLayout: '需要創建至少一個桌面跟一個桌位.',
+    noInflightOrders: '此樓面沒有訂單',
+    shiftClosing: '請先完成關帳',
+    otherOrders: '其他訂單',
+    seatingCapacity: '總座位',
+    tableCapacity: '總桌數',
+    availableSeats: '空位',
+    availableTables: '空桌',
+    joinTable: '併桌',
+    joinTableMode: '併桌模式',
+    isPayingTitle: '此訂單正在結帳流程',
+    isPayingMsg: '是否進入結帳流程？',
+    isMergingTitle: '兩桌訂單將合併',
+    isMergingMsg: '是否將訂單合併到拖曳的目標桌？',
   }
 }
 

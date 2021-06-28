@@ -105,26 +105,19 @@ class ReservationConfirmScreen extends React.Component {
 
             <View style={[styles.bottom, styles.horizontalMargin]}>
               <TouchableOpacity onPress={() => {
-                this.props.navigation.state.params?.handleCreateReservation(this.props.navigation?.state.params?.isEdit)
+                this.props.navigation.state.params?.handleSaveReservation(this.props.navigation?.state.params?.isEdit)
               }}>
                 <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                   {t('action.save')}
                 </Text>
               </TouchableOpacity>
 
-              {this.props.navigation?.state.params?.isEdit && <TouchableOpacity onPress={() => {
-                this.props.navigation?.state.params?.handleSendNotification()
-              }}>
-                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
-                  {t('reservation.sendNotification')}
-                </Text>
-              </TouchableOpacity>}
 
               <TouchableOpacity onPress={() => {
-                this.props.navigation.state.params?.handleCancel(this.props.navigation?.state.params?.isEdit)
+                this.props.navigation.state.params?.handleCancel()
               }}>
                 <Text
-                  style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context), (this.props.navigation?.state.params?.isEdit && styles.deleteButton)]}
+                  style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
                 >
                   {t('action.cancel')}
                 </Text>

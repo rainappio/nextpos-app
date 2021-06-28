@@ -104,6 +104,7 @@ import ReservationScreen from '../screens/ReservationScreen'
 import ReservationEditScreen from '../screens/ReservationEditScreen'
 import ReservationFormScreen from '../screens/ReservationFormScreen'
 import ReservationConfirmScreen from '../screens/ReservationConfirmScreen'
+import ReservationViewScreen from '../screens/ReservationViewScreen'
 import ReservationSetting from '../screens/ReservationSetting'
 
 const Home = createStackNavigator({
@@ -342,6 +343,12 @@ const ReservationScreens = createDrawerNavigator({
         <LabelIcon focused={focused} tintColor={tintColor} name='md-settings' />
       ),
     }
+  },
+  ReservationViewScreen: {
+    screen: ReservationViewScreen,
+    navigationOptions: {
+      drawerLabel: <Hidden />
+    },
   },
   ReservationEditScreen: {
     screen: ReservationEditScreen,

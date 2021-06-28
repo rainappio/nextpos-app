@@ -29,6 +29,7 @@ import {compose} from "redux";
 import {connect} from 'react-redux'
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {getTableLayouts, getTableLayout} from '../actions'
+import LoadingScreen from "./LoadingScreen";
 
 class ReservationCalendarScreen extends React.Component {
     static navigationOptions = {
@@ -41,6 +42,7 @@ class ReservationCalendarScreen extends React.Component {
         const timezone = TimeZoneService.getTimeZone()
         this.state = {
             isLoading: true,
+            isDateEventLoading: false,
             calendarMode: 'month',
             selectedDate: moment(new Date()).tz(timezone).format("YYYY-MM-DD"),
             isShowModal: false,
@@ -99,6 +101,8 @@ class ReservationCalendarScreen extends React.Component {
     }
 
     getReservationEventsByDate = async (date = this.state.selectedDate, status = '') => {
+
+        this.setState({isDateEventLoading: true})
         await dispatchFetchRequest(api.reservation.getReservationByDate(date, status), {
             method: 'GET',
             withCredentials: true,
@@ -108,7 +112,7 @@ class ReservationCalendarScreen extends React.Component {
             },
         }, response => {
             response.json().then(async (data) => {
-                this.setState({reservationEventsByDate: data?.results})
+                this.setState({isDateEventLoading: false, reservationEventsByDate: data?.results})
             })
         }).then()
 
@@ -126,8 +130,11 @@ class ReservationCalendarScreen extends React.Component {
         })
     }
 
-    toggleReservationFormModal = (task, flag) => {
-        this.setState({showReservationFormModal: flag, modalTasks: task})
+    toggleReservationFormModal = (date, flag) => {
+        if (!!date) {
+            this.getReservationEventsByDate(date, '')
+        }
+        this.setState({showReservationFormModal: flag})
     }
 
     handleMonthChange = async (year = new Date().getFullYear(), month = moment(new Date()).format('MM'), callback) => {
@@ -178,7 +185,7 @@ class ReservationCalendarScreen extends React.Component {
                 <View style={[styles.fullWidthScreen, {marginBottom: 0}]}>
                     <ScreenHeader backNavigation={false}
                         parentFullScreen={true}
-                        title={t('calendarEvent.screenTitle')}
+                        title={t('reservation.reservationCalendarTitle')}
                         rightComponent={
                             <View style={{flexDirection: 'row'}}>
                                 <View style={{marginRight: 8}}>
@@ -238,9 +245,9 @@ class ReservationCalendarScreen extends React.Component {
                         hideModalContentWhileAnimating
                         animationIn='fadeInDown'
                         animationOut='fadeOutUp'
-                        onBackdropPress={() => this.toggleReservationFormModal([], false)}
+                        onBackdropPress={() => this.toggleReservationFormModal(null, false)}
                         style={{
-                            margin: 0, justifyContent: 'center'
+                            margin: 0, justifyContent: 'center', flex: 1
                         }}
                     >
                         <View style={[themeStyle, {maxWidth: 640, alignSelf: 'center', maxHeight: '70%', width: '100%', borderRadius: 16, paddingBottom: 8}]}>
@@ -248,10 +255,11 @@ class ReservationCalendarScreen extends React.Component {
                                 <Text style={[styles?.announcementTitle(customMainThemeColor)]}>{moment(this.state?.selectedDate ?? new Date()).tz(timezone).format("YYYY-MM-DD")}</Text>
                             </View>
                             <ScrollView >
-                                {this.state?.modalTasks?.map((task, index) => {
+                                {this.state?.isDateEventLoading && <LoadingScreen />}
+                                {!this.state?.isDateEventLoading && !!this.state?.reservationEventsByDate && this.state?.reservationEventsByDate?.map((task, index) => {
                                     return (
                                         <CalendarEvent key={index} event={task}
-                                            closeModal={() => this.toggleReservationFormModal([], false)} refreshScreen={() => this.refreshScreen()} />
+                                            closeModal={() => this.toggleReservationFormModal(null, false)} refreshScreen={() => this.refreshScreen()} />
                                     )
                                 })}
                             </ScrollView>
@@ -322,8 +330,7 @@ class ReservationCalendarScreen extends React.Component {
                                     let task = []
                                     let bookedCount = 0
                                     let waitingCount = 0
-                                    let cancellledCount = 0
-
+                                    let cancelledCount = 0
 
                                     unsortTask = !!this.state?.reservationEvents
                                         ? this.state?.reservationEvents?.filter((event) => {
@@ -339,8 +346,6 @@ class ReservationCalendarScreen extends React.Component {
                                     bookedCount = task.length > 0 ? task.map((event) => (event.status === 'BOOKED' || event.status === 'CONFIRMED' || event.status === 'SEATED') ? 1 : 0).reduce((a, b) => a + b) : 0
                                     waitingCount = task.length > 0 ? task.map((event) => event.status === 'WAITING' ? 1 : 0).reduce((a, b) => a + b) : 0
                                     cancelledCount = task.length > 0 ? task.map((event) => event.status === 'CANCELLED' ? 1 : 0).reduce((a, b) => a + b) : 0
-
-
 
                                     return (
 
@@ -371,8 +376,9 @@ class ReservationCalendarScreen extends React.Component {
                                                         {unsortTask.length > 0 &&
                                                             <TouchableOpacity
                                                                 onPress={() => {
+
                                                                     this.setState({selectedDate: date?.dateString})
-                                                                    task?.length > 0 && this.toggleReservationFormModal(task, true)
+                                                                    task?.length > 0 && this.toggleReservationFormModal(date?.dateString, true)
                                                                 }}
                                                                 style={{borderWidth: 1, borderColor: customMainThemeColor, backgroundColor: customBackgroundColor, margin: 5, paddingVertical: 4, borderRadius: 5}}
                                                             >
@@ -398,7 +404,7 @@ class ReservationCalendarScreen extends React.Component {
                                                                 }}
                                                                     numberOfLines={2}
                                                                 >
-                                                                    {isTablet ? t('reservation.cancellled') : 'C'}: {cancelledCount}
+                                                                    {isTablet ? t('reservation.cancelled') : 'C'}: {cancelledCount}
                                                                 </Text>
                                                             </TouchableOpacity>}
 
