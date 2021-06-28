@@ -74,6 +74,7 @@ const en = {
     save: 'Save',
     search: 'Search',
     update: 'Update',
+    edit: 'Edit',
     cancel: 'Cancel',
     delete: 'Delete',
     prepare: 'Prepared',
@@ -681,6 +682,8 @@ const en = {
   },
   reservation: {
     reservationTitle: 'Reservation',
+    reservationViewTitle: 'Reservation Info',
+    reservationCalendarTitle: 'Reservation Events',
     date: 'Reservation Date',
     time: 'Reservation Time',
     timeBlock: {
@@ -699,6 +702,7 @@ const en = {
     otherNote: 'Other Note',
     table: 'Table',
     next: 'Next',
+    cancelReservation: 'Cancel Reservation',
     noTable: 'None (Waiting)',
     booked: 'Booked',
     waiting: 'Waiting',
@@ -706,8 +710,14 @@ const en = {
     seated: 'Seated',
     sendNotification: 'Send SMS',
     sendActionContext: 'Send confirm notification to phone: {{phoneNumber}} ?',
-    cancelActionContext: 'Cancel reservation and return to home screen?',
+    cancelActionContext: 'Cancel changes and return to reservation events list?',
+    cancelEditActionContext: 'Discard changes and return to reservation info?',
     deleteActionContext: 'Confirm to delete this reservation?',
+  },
+  reservationSetting: {
+    reservationSettingTitle: 'Reservation Settings',
+    durationMinutes: 'Table Duration (Min)',
+    nonReservableTables: 'Non Reservable Tables',
   },
   printer: {
     printerTitle: 'Printer',
@@ -722,7 +732,24 @@ const en = {
       checkout: 'Checkout'
     },
     testPrint: 'Test Printer',
-  }
+  },
+  tableVisual: {
+    noTableLayout:
+      'You need to define at least one table layout and one table.',
+    noInflightOrders: 'No order on this table layout',
+    shiftClosing: 'Please close shift first',
+    otherOrders: 'Other Orders',
+    seatingCapacity: 'Seats',
+    tableCapacity: 'Tables',
+    availableSeats: 'Vacant',
+    availableTables: 'Vacant',
+    joinTable: 'Join Table',
+    joinTableMode: 'Join Table Mode',
+    isPayingTitle: 'Order in Payment Mode',
+    isPayingMsg: 'Proceed to enter payment screen.',
+    isMergingTitle: 'Merge Order',
+    isMergingMsg: 'Proceed with merging orders to the destination table?',
+  },
 }
 
 export default en

@@ -1,6 +1,8 @@
 import React from 'react'
 import {ScrollView, View, Alert} from 'react-native'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
+import {clearReservation} from '../actions'
+import {NavigationEvents} from "react-navigation";
 import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
 import ReservationFormScreen from './ReservationFormScreen'
@@ -22,22 +24,17 @@ class ReservationScreen extends React.Component {
   }
 
   componentDidMount() {
+    this.props.clearReservation()
     this.checkPropsChange()
   }
-  componentDidUpdate(prevProps, prevState) {
 
-    if (prevProps.navigation?.state?.params?.initialValues.id !== this.props.navigation?.state?.params?.initialValues.id || prevState.initialValues !== this.props.navigation?.state?.params?.initialValues) {
-      this.checkPropsChange()
-    }
-  }
   checkPropsChange = () => {
-    this.setState({initialValues: this.props.navigation?.state?.params?.initialValues, nextStep: false})
+    this.setState({initialValues: this.props.navigation?.state?.params?.initialValues ?? null, nextStep: false})
   }
 
   handleCreateReservation = (isEdit) => {
 
     let values = this.state.initialValues
-
     let request = {
       reservationDate: values?.checkDate,
       name: values.name,
@@ -77,7 +74,7 @@ class ReservationScreen extends React.Component {
     this.setState({initialValues: values, nextStep: true})
   }
 
-  handleEditCancel = (isEdit) => {
+  handleCreateCancel = () => {
     Alert.alert(
       ``,
       `${this.context.t('reservation.cancelActionContext')}`,
@@ -104,13 +101,19 @@ class ReservationScreen extends React.Component {
 
     return (
       <ThemeContainer>
+        <NavigationEvents
+          onWillFocus={() => {
+            this.props.clearReservation()
+            this.checkPropsChange()
+          }}
+        />
         <ReservationFormScreen
           isEdit={false}
           onSubmit={this.handleSubmit}
           handleReset={this.handleReset}
           handleNextStep={this.handleNextStep}
-          handleCreateReservation={this.handleCreateReservation}
-          handleCancel={this.handleEditCancel}
+          handleSaveReservation={this.handleCreateReservation}
+          handleCancel={this.handleCreateCancel}
           nextStep={this.state.nextStep}
           initialValues={this.state.initialValues ?? this.props.navigation?.state?.params?.initialValues}
           navigation={navigation}
@@ -124,8 +127,10 @@ class ReservationScreen extends React.Component {
 const mapStateToProps = state => ({
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
+  clearReservation: () => dispatch(clearReservation()),
+
 })
 
 

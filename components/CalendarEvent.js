@@ -126,19 +126,11 @@ const CalendarEventBase = (props) => {
         return (
             <TouchableOpacity key={event?.id} style={{flexDirection: 'row', borderWidth: 1, borderRadius: 10, borderColor: customMainThemeColor, margin: 10, maxWidth: 640, alignSelf: 'center', padding: 10}}
                 onPress={() => {
-                    if (event?.status === 'BOOKED' || event?.status === 'WAITING') {
-                        !!props?.closeModal && props?.closeModal()
-                        props.navigation.navigate('ReservationEditScreen', {
-                            initialValues: {
-                                ...event,
-                                selectedTimeBlock: moment(event.reservationStartDate).tz(timezone).format('HH') <= 10 ? 0 : (moment(event.reservationStartDate).tz(timezone).format('HH') > 10 && moment(event.reservationStartDate).tz(timezone).format('HH') <= 16) ? 1 : 2,
-                                hour: moment(event.reservationStartDate).tz(timezone).format('HH'),
-                                minutes: moment(event.reservationStartDate).tz(timezone).format('mm'),
-                                isEdit: true
-                            },
-                            refreshScreen: () => {props?.refreshScreen()},
-                        })
-                    }
+                    !!props?.closeModal && props?.closeModal()
+                    props.navigation.navigate('ReservationViewScreen', {
+                        reservationId: event.id,
+                    })
+
                 }}
             >
 

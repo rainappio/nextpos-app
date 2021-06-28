@@ -15,6 +15,7 @@ import {LocaleContext} from '../locales/LocaleContext'
 import SegmentedControl from "../components/SegmentedControl"
 import RenderStepper from '../components/RenderStepper'
 import ScreenHeader from "../components/ScreenHeader";
+import {NavigationEvents} from "react-navigation";
 import LoadingScreen from "./LoadingScreen";
 import {RenderDatePicker} from '../components/DateTimePicker'
 import TimeZoneService from "../helpers/TimeZoneService";
@@ -48,18 +49,18 @@ class ReservationFormScreen extends React.Component {
       tableHeight: null,
       isTablet: context?.isTablet,
       tableIndex: 0,
-      selectedTimeBlock: props?.initialValues?.selectedTimeBlock ?? 0,
+      selectedTimeBlock: null,
       timeBlocks: {
         0: {value: 'MORNING', label: context.t('reservation.timeBlock.morning')},
         1: {value: 'NOON', label: context.t('reservation.timeBlock.noon')},
         2: {value: 'EVENING', label: context.t('reservation.timeBlock.evening')},
       },
       showDatePicker: false,
-      reservationDate: moment(props?.initialValues?.reservationStartDate).format('YYYY-MM-DD') ?? null,
+      reservationDate: null,
       hoursArr: null,
       minutesArr: ['15', '30', '45', '00'],
-      selectedHour: props?.initialValues?.hour ?? null,
-      selectedMinutes: props?.initialValues?.minutes ?? null,
+      selectedHour: null,
+      selectedMinutes: null,
       timeViewSize: new Animated.Value(0),
       isAnimating: false,
       isGetTables: !!props?.isEdit ?? false,
@@ -81,58 +82,46 @@ class ReservationFormScreen extends React.Component {
     this.props.getfetchOrderInflights()
     this.props.getAvailableTables()
 
-    this.context.localize({
-      en: {
-        noTableLayout:
-          'You need to define at least one table layout and one table.',
-        tableCapacity: 'Tables',
-        availableSeats: 'Vacant',
-        availableTables: 'Vacant',
-      },
-      zh: {
-        noTableLayout: '需要創建至少一個桌面跟一個桌位.',
-        tableCapacity: '總桌數',
-        availableSeats: '空位',
-        availableTables: '空桌',
-      }
-    })
   }
 
   componentDidUpdate(prevProps, prevState) {
 
-    if (prevProps.initialValues !== this.props.initialValues) {
+    if (!this.props.isEdit && (prevProps.initialValues !== this.props.initialValues)) {
       this.loadInfo()
     }
   }
 
   loadInfo = () => {
     let data = this.props?.initialValues
-    if (!!data) {
 
-      this.props.change(`reservationStartDate`, new Date(data?.reservationStartDate))
+    if (data) {
+      this.props.change(`reservationStartDate`, data?.reservationStartDate)
       this.setState({reservationDate: moment(data?.reservationStartDate).format('YYYY-MM-DD')})
 
       if (!!data.id) {
         this.props.change(`id`, data.id)
-        this.props.change(`hour`, data?.hour)
-        this.props.change(`minutes`, data?.minutes)
-        this.props.change(`people`, data?.people)
-        this.props.change(`kid`, data?.kid)
-        this.props.change(`name`, data?.name)
-        this.props.change(`phoneNumber`, data?.phoneNumber)
-        this.props.change(`note`, data?.note)
 
-        let idArray = [], nameArr = []
+        let idArray = [], nameArr = [], selectedTimeBlock = 0
         !!data?.tables && data?.tables.forEach((table) => {
           idArray.push(table.tableId)
           nameArr.push(table.tableName)
         })
         this.props.change(`tableIds`, idArray)
-        this.setState({selectedTableIds: idArray, selectedTableNames: nameArr, selectedTimeBlock: data?.selectedTimeBlock, selectedHour: data?.hour, selectedMinutes: data?.minutes})
 
-        this.handleHourSelection(data?.selectedTimeBlock)
+        let timezone = TimeZoneService.getTimeZone()
+        let eventDate = moment(data?.reservationStartDate).tz(timezone).format('YYYY-MM-DD')
+        let eventHour = moment(data?.reservationStartDate).tz(timezone).format('HH')
+        let eventMins = moment(data?.reservationStartDate).tz(timezone).format('mm')
+        selectedTimeBlock = eventHour <= 10 ? 0 : 10 < eventHour < 17 ? 1 : 2
+
+        this.setState({selectedTableIds: idArray, selectedTableNames: nameArr, reservationDate: eventDate, selectedTimeBlock: selectedTimeBlock, selectedHour: eventHour, selectedMinutes: eventMins})
+
+        this.props.change(`hour`, eventHour)
+        this.props.change(`minutes`, eventMins)
+
+        this.handleHourSelection(selectedTimeBlock)
         this.viewResize(1)
-        this.handleCheckAvailableTables(moment(data?.reservationStartDate).format('YYYY-MM-DD'), data?.hour, data?.minutes)
+        this.handleCheckAvailableTables(moment(data?.reservationStartDate).format('YYYY-MM-DD'), eventHour, eventMins)
       }
     }
   }
@@ -195,7 +184,6 @@ class ReservationFormScreen extends React.Component {
   handleMinuteCheck = (value) => {
     this.setState({selectedMinutes: value})
     this.handleCheckAvailableTables(this.state.reservationDate, this.state.selectedHour, value)
-
   }
 
   viewResize = (to) => {
@@ -226,11 +214,37 @@ class ReservationFormScreen extends React.Component {
     },
       response => {
         response.json().then(data => {
-          this.setState({availableTables: data.results})
+          this.setState({availableTables: data.results, isGetTables: true})
+          // this.handleCheckConflictTables(data.results, checkDate, timezone)
+
         })
-      }).then(
-        this.setState({isGetTables: true})
-      )
+      }).then()
+
+  }
+  handleCheckConflictTables = (availableTables, checkDate, timezone) => {
+
+    let initTime = moment(this.props.initialValues.reservationStartDate).tz(timezone).format('YYYY-MM-DDTHH:mm:ss')
+    let tableIds = this.state.selectedTableIds
+    let tableNames = this.state.selectedTableNames
+    let conflictTables = []
+
+    if (initTime !== checkDate) {
+      tableIds && tableIds.forEach((table) => {
+        if (availableTables.indexOf(table) < 0) {
+          conflictTables.push(table)
+        }
+      })
+      conflictTables.length > 0 && conflictTables.forEach((table) => {
+        tableIds.splice(tableIds.indexOf(table), 1)
+        tableNames.splice(tableNames.indexOf(table), 1)
+      })
+      this.props.change(`tableIds`, tableIds)
+      this.setState({selectedTableIds: tableIds, selectedTableNames: tableNames})
+      console.log("conflict?", conflictTables, tableIds, tableNames)
+    }
+
+
+
   }
 
   handleChooseTable = (id, name) => {
@@ -262,8 +276,7 @@ class ReservationFormScreen extends React.Component {
   handleCheckForm = (value) => {
     this.props.navigation.navigate('ReservationConfirmScreen', {
       handleCancel: this.props.handleCancel,
-      handleCreateReservation: this.props.handleCreateReservation,
-      handleSendNotification: this.props?.handleSendNotification,
+      handleSaveReservation: this.props.handleSaveReservation,
       initialValues: value,
       isEdit: this.props.isEdit,
       reservationDate: this.state.reservationDate,
@@ -281,6 +294,7 @@ class ReservationFormScreen extends React.Component {
     this.props.change(`phoneNumber`, null)
     this.props.change(`note`, null)
     this.props.change(`tableIds`, null)
+    this.props.handleNextStep(false)
   }
 
 
@@ -299,7 +313,7 @@ class ReservationFormScreen extends React.Component {
       handleNextStep,
       handleSubmit,
       handleCancel,
-      handleCreateReservation,
+      handleSaveReservation,
       handleSendNotification
     } = this.props
 
@@ -321,7 +335,7 @@ class ReservationFormScreen extends React.Component {
               title={t('reservation.reservationTitle')}
             />
             <View>
-              <StyledText style={styles.messageBlock}>{t('noTableLayout')}</StyledText>
+              <StyledText style={styles.messageBlock}>{t('tableVisual.noTableLayout')}</StyledText>
             </View>
             <View style={[styles.bottom, styles.horizontalMargin]}>
               <TouchableOpacity onPress={() => navigation.navigate('TableLayouts')}>
@@ -335,7 +349,6 @@ class ReservationFormScreen extends React.Component {
       )
     } else {
 
-      let tableDisplay = 'SHOW_TABLE'
       const floorCapacity = {}
       const tablesMap = {}
 
@@ -365,17 +378,29 @@ class ReservationFormScreen extends React.Component {
         return (
           <ThemeScrollView>
             <View style={styles.fullWidthScreen}>
+              <NavigationEvents
+                onWillFocus={() => {
+                  if (!this.props.isEdit) {
+                    this.handleResetForm()
+                  }
+                }}
+              />
               <ScreenHeader
                 backNavigation={true}
                 backAction={() => {
-                  if (!nextStep) {
+                  if (!nextStep && !isEdit) {
                     this.handleResetForm()
                     handleReset()
                     navigation.navigate('ReservationCalendarScreen')
-                  } else {
+                  }
+                  if (nextStep) {
                     handleNextStep(false)
                   }
-
+                  if (!nextStep && isEdit) {
+                    this.handleResetForm()
+                    handleReset()
+                    navigation.navigate('ReservationViewScreen')
+                  }
                 }}
                 title={t('reservation.reservationTitle')}
                 parentFullScreen={true} />
@@ -402,10 +427,10 @@ class ReservationFormScreen extends React.Component {
                         {floorCapacity[tblLayout.id] !== undefined && (
                           <>
                             <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
-                              {t('tableCapacity')} {tblLayout.totalTables}
+                              {t('tableVisual.tableCapacity')} {tblLayout.totalTables}
                             </Text>
                             <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
-                              {t('availableTables')} {floorCapacity[tblLayout.id].tableCount}
+                              {t('tableVisual.availableTables')} {floorCapacity[tblLayout.id].tableCount}
                             </Text>
                           </>
                         )}
@@ -466,7 +491,7 @@ class ReservationFormScreen extends React.Component {
                     </View>}
                 </View>
 
-                <View style={[styles.flex(1), {marginLeft: 20, justifyContent: 'flex-start', }]}>
+                <View style={[styles.flex(1), {marginLeft: 20, justifyContent: 'flex-start', maxHeight: '100%'}]}>
                   {!nextStep &&
                     <>
 
@@ -499,7 +524,7 @@ class ReservationFormScreen extends React.Component {
                       </View>
 
                       <View style={[styles.withBottomBorder]}>
-                        <View style={[styles.sectionTitleContainer]}>
+                        <View style={[styles.sectionTitleContainer, {marginBottom: 4}]}>
                           <StyledText style={[styles.sectionTitleText]}>{t('reservation.hours')}</StyledText>
                         </View>
                         <View style={[styles.flex(2), styles.fieldContainer, {flexWrap: 'wrap'}]}>
@@ -519,8 +544,8 @@ class ReservationFormScreen extends React.Component {
                       </View>
                       {(!!this.state.isAnimating && this.state.timeViewSize._value !== 1) && <LoadingScreen />}
                       {(!this.state.isAnimating && this.state.timeViewSize._value === 1) &&
-                        <Animated.View style={[styles.withBottomBorder, {marginBottom: 12}]}>
-                          <View style={[styles.sectionTitleContainer]}>
+                        <Animated.View style={[styles.withBottomBorder, {marginBottom: 4}]}>
+                          <View style={[styles.sectionTitleContainer, {marginBottom: 4}]}>
                             <StyledText style={styles.sectionTitleText}>{t('reservation.minutes')}</StyledText>
                           </View>
                           <View style={[styles.flex(2), styles.fieldContainer]}>
@@ -542,8 +567,8 @@ class ReservationFormScreen extends React.Component {
                       <View style={[styles.bottom, styles.horizontalMargin]}>
                         {this.state.isGetTables &&
                           <>
-                            <View style={[{marginBottom: 12}]}>
-                              <View style={styles.sectionTitleContainer}>
+                            <View style={[{marginBottom: 8}]}>
+                              <View style={[styles.sectionTitleContainer, {marginVertical: 0}]}>
                                 <StyledText style={styles.sectionTitleText}>{t('reservation.peopleCount')}</StyledText>
                               </View>
                               <View>
@@ -563,7 +588,7 @@ class ReservationFormScreen extends React.Component {
                             </View>
 
                             <View style={[styles.withBottomBorder, styles.sectionContent]}>
-                              <View style={[styles.sectionTitleContainer]}>
+                              <View style={[styles.sectionTitleContainer, {marginBottom: 12}]}>
                                 <StyledText style={styles.sectionTitleText}>{t('reservation.contactInfo')}</StyledText>
                               </View>
                               <View style={[styles.flex(1), styles.fieldContainer]}>
@@ -605,6 +630,15 @@ class ReservationFormScreen extends React.Component {
                                   {t('reservation.next')}
                                 </Text>
                               </TouchableOpacity>
+                              {isEdit && <TouchableOpacity onPress={() => {
+                                navigation.navigate('ReservationViewScreen')
+                              }}>
+                                <Text
+                                  style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+                                >
+                                  {t('action.cancel')}
+                                </Text>
+                              </TouchableOpacity>}
                             </View>
                           </>
                         }
@@ -681,26 +715,18 @@ class ReservationFormScreen extends React.Component {
 
                       <View style={[styles.bottom, styles.horizontalMargin]}>
                         <TouchableOpacity onPress={() => {
-                          handleCreateReservation(isEdit)
+                          handleSaveReservation()
                         }}>
                           <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                             {t('action.save')}
                           </Text>
                         </TouchableOpacity>
 
-                        {isEdit && <TouchableOpacity onPress={() => {
-                          handleSendNotification()
-                        }}>
-                          <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
-                            {t('reservation.sendNotification')}
-                          </Text>
-                        </TouchableOpacity>
-                        }
                         <TouchableOpacity onPress={() => {
                           handleCancel(isEdit)
                         }}>
                           <Text
-                            style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context), (isEdit && styles.deleteButton)]}
+                            style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
                           >
                             {t('action.cancel')}
                           </Text>
@@ -720,12 +746,26 @@ class ReservationFormScreen extends React.Component {
         return (
           <ThemeContainer>
             <View style={styles.fullWidthScreen}>
+              <NavigationEvents
+                onWillFocus={() => {
+                  if (!this.props.isEdit) {
+                    this.handleResetForm()
+                  }
+                }}
+              />
               <ScreenHeader
                 backNavigation={true}
                 backAction={() => {
-                  this.handleResetForm()
-                  handleReset()
-                  navigation.navigate('ReservationCalendarScreen')
+                  if (!isEdit) {
+                    this.handleResetForm()
+                    handleReset()
+                    navigation.navigate('ReservationCalendarScreen')
+                  }
+                  if (isEdit) {
+                    this.handleResetForm()
+                    handleReset()
+                    navigation.navigate('ReservationViewScreen')
+                  }
                 }}
                 title={t('reservation.reservationTitle')}
                 parentFullScreen={true} />
@@ -1018,6 +1058,12 @@ class TableMapBase extends Component {
     };
   }
 
+  componentDidUpdate(prevProps, prevState) {
+
+    if (prevProps.availableTables !== this.props.availableTables) {
+      this.initPosition()
+    }
+  }
 
   componentDidMount() {
     this.initPosition()
@@ -1055,7 +1101,12 @@ class TableMapBase extends Component {
 
     const tableSize = 72
     const isAvailable = this.props.availableTables?.find((item) => item === table.tableId) || this.state.availableTables?.find((item) => item === table.tableId)
-    const isSelected = (this.props?.selectedTableIds.indexOf(table.tableId) > -1)
+    const isSelected = !!this.props?.selectedTableIds && (this.props?.selectedTableIds.indexOf(table.tableId) > -1)
+
+
+
+    const isConflict = false
+
 
 
     return (
@@ -1072,13 +1123,11 @@ class TableMapBase extends Component {
                     this.props.handleChooseTable(table.tableId, table.tableName)
                     if (isSelected) {
                       tableList.push(table.tableId)
-                      this.setState((state) => {
-                        return {availableTables: state.availableTables = tableList}
-                      })
+                      this.setState({availableTables: tableList})
                     }
                   }
                 }}
-                style={[panStyle, {zIndex: 1000, position: 'absolute', alignItems: 'center', justifyContent: 'space-around', width: tableSize, height: tableSize, borderRadius: 50}, (!isAvailable || (!isAvailable && !isSelected)) ? {backgroundColor: '#f75336'} : {backgroundColor: '#e7e7e7'}, isSelected && selectedStyle]}>
+                style={[panStyle, {zIndex: 1000, position: 'absolute', alignItems: 'center', justifyContent: 'space-around', width: tableSize, height: tableSize, borderRadius: 50}, (!isAvailable && !isConflict) ? {backgroundColor: '#f75336'} : (isConflict) ? {backgroundColor: '#f18d1a'} : {backgroundColor: '#e7e7e7'}, (isSelected && !isConflict) && selectedStyle,]}>
 
                 <Text style={{color: '#222', textAlign: 'center'}, isSelected && {color: customBackgroundColor}}>{table.tableName}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>

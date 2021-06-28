@@ -904,16 +904,10 @@ class ReservationEventBase extends Component {
                                                                         return (
                                                                             <TouchableOpacity
                                                                                 onPress={() => {
-                                                                                    if (event?.status === 'BOOKED') {
-                                                                                        this.props.navigation.navigate('ReservationEditScreen', {
-                                                                                            initialValues: {
-                                                                                                ...event,
-                                                                                                selectedTimeBlock: eventHour <= 10 ? 0 : (moment(event.reservationStartDate).tz(timezone).format('HH') > 10 && eventHour <= 16) ? 1 : 2,
-                                                                                                hour: eventHour,
-                                                                                                minutes: eventMins,
-                                                                                            },
-                                                                                        })
-                                                                                    }
+                                                                                    this.props.navigation.navigate('ReservationViewScreen', {
+                                                                                        reservationId: event.id
+                                                                                    })
+
                                                                                 }}
                                                                                 key={event.id} style={{position: 'absolute', borderWidth: 1, borderColor: customBackgroundColor, backgroundColor: statusColor, height: 64, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (4 * ((layoutIndex + 1) * (tableIndex + 1)) - (tableIndex * 4) + 4), overflow: 'hidden', borderRadius: 15, paddingHorizontal: 5, justifyContent: 'center', zIndex: 9}}
 
@@ -961,16 +955,10 @@ class ReservationEventBase extends Component {
                                         return (
                                             <TouchableOpacity
                                                 onPress={() => {
-                                                    if (event.status === 'WAITING') {
-                                                        this.props.navigation.navigate('ReservationEditScreen', {
-                                                            initialValues: {
-                                                                ...event,
-                                                                selectedTimeBlock: eventHour <= 10 ? 0 : (moment(event.reservationStartDate).tz(timezone).format('HH') > 10 && eventHour <= 16) ? 1 : 2,
-                                                                hour: eventHour,
-                                                                minutes: eventMins,
-                                                            },
-                                                        })
-                                                    }
+                                                    this.props.navigation.navigate('ReservationViewScreen', {
+                                                        reservationId: event.id
+                                                    })
+
                                                 }}
                                                 key={eventIndex} style={{position: 'absolute', borderWidth: 1, borderColor: statusColor, backgroundColor: customBackgroundColor, height: 64, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (64 * (eventIndex) + ((eventIndex + 1) * 2)), overflow: 'hidden', borderRadius: 15, paddingHorizontal: 5, justifyContent: 'center', zIndex: 9}}
 
@@ -1117,16 +1105,9 @@ class ReservationDayEventBase extends Component {
                             return (
 
                                 <TouchableOpacity key={event?.id} onPress={() => {
-                                    if (event.status !== 'CANCELLED' || event.status !== 'CONFIRMED') {
-                                        this.props.navigation.navigate('ReservationEditScreen', {
-                                            initialValues: {
-                                                ...event,
-                                                selectedTimeBlock: eventHour <= 10 ? 0 : (moment(event.reservationStartDate).tz(timezone).format('HH') > 10 && eventHour <= 16) ? 1 : 2,
-                                                hour: eventHour,
-                                                minutes: eventMins,
-                                            },
-                                        })
-                                    }
+                                    this.props.navigation.navigate('ReservationViewScreen', {
+                                        reservationId: event.id
+                                    })
                                 }
                                 }>
                                     <View style={{flexDirection: 'row', flex: 6, justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, borderBottomWidth: 1, borderColor: '#e7e7e7'}}>

@@ -63,13 +63,10 @@ class TablesScreen extends React.Component {
       ordersInflight: null,
       ordersInflightWSConnected: false
     }
-
-
   }
 
   componentDidMount() {
     this.loadInfo()
-    this.loadLocalization()
   }
 
   loadInfo = () => {
@@ -81,45 +78,7 @@ class TablesScreen extends React.Component {
     this.props.getCurrentClient()
   }
 
-  loadLocalization = () => {
-    this.context.localize({
-      en: {
-        noTableLayout:
-          'You need to define at least one table layout and one table.',
-        noInflightOrders: 'No order on this table layout',
-        shiftClosing: 'Please close shift first',
 
-        otherOrders: 'Other Orders',
-        seatingCapacity: 'Seats',
-        tableCapacity: 'Tables',
-        availableSeats: 'Vacant',
-        availableTables: 'Vacant',
-        joinTable: 'Join Table',
-        joinTableMode: 'Join Table Mode',
-        isPayingTitle: 'Order in Payment Mode',
-        isPayingMsg: 'Proceed to enter payment screen.',
-        isMergingTitle: 'Merge Order',
-        isMergingMsg: 'Proceed with merging orders to the destination table?',
-      },
-      zh: {
-        noTableLayout: '需要創建至少一個桌面跟一個桌位.',
-        noInflightOrders: '此樓面沒有訂單',
-        shiftClosing: '請先完成關帳',
-
-        otherOrders: '其他訂單',
-        seatingCapacity: '總座位',
-        tableCapacity: '總桌數',
-        availableSeats: '空位',
-        availableTables: '空桌',
-        joinTable: '併桌',
-        joinTableMode: '併桌模式',
-        isPayingTitle: '此訂單正在結帳流程',
-        isPayingMsg: '是否進入結帳流程？',
-        isMergingTitle: '兩桌訂單將合併',
-        isMergingMsg: '是否將訂單合併到拖曳的目標桌？',
-      }
-    })
-  }
 
   onRefresh = async () => {
     this.setState({refreshing: true})
@@ -229,7 +188,7 @@ class TablesScreen extends React.Component {
               parentFullScreen={true}
               title={t('menu.tables')}
             />
-            <StyledText style={styles.messageBlock}>{t('noTableLayout')}</StyledText>
+            <StyledText style={styles.messageBlock}>{t('tableVisual.noTableLayout')}</StyledText>
           </View>
         </ThemeScrollView>
       )
@@ -242,7 +201,7 @@ class TablesScreen extends React.Component {
               title={t('menu.tables')}
             />
             <View>
-              <StyledText style={styles.messageBlock}>{t('shiftClosing')}</StyledText>
+              <StyledText style={styles.messageBlock}>{t('tableVisual.shiftClosing')}</StyledText>
             </View>
             <View style={[styles.bottom, styles.horizontalMargin]}>
               <TouchableOpacity onPress={() => navigation.navigate('ShiftClose')}>
@@ -345,7 +304,6 @@ class TablesScreen extends React.Component {
             <NavigationEvents
               onWillFocus={async () => {
                 await this.loadInfo()
-                this.loadLocalization()
               }}
             />
             <RealTimeOrderUpdate
@@ -356,7 +314,7 @@ class TablesScreen extends React.Component {
 
             <View style={[styles.fullWidthScreen]}>
               <ScreenHeader backNavigation={false}
-                title={t(`${this.state?.screenMode === 'normal' ? 'menu.tables' : 'joinTableMode'}`)}
+                title={t(`${this.state?.screenMode === 'normal' ? 'menu.tables' : 'tableVisual.joinTableMode'}`)}
                 parentFullScreen={true}
                 rightComponent={
                   this.state?.screenMode === 'normal' ? <AddBtn
@@ -401,20 +359,20 @@ class TablesScreen extends React.Component {
                       {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_SEAT' && (
                         <>
                           <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
-                            {t('seatingCapacity')} {tblLayout.totalCapacity}
+                            {t('tableVisual.seatingCapacity')} {tblLayout.totalCapacity}
                           </Text>
                           <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
-                            {t('availableSeats')} {floorCapacity[tblLayout.id].seatCount}
+                            {t('tableVisual.availableSeats')} {floorCapacity[tblLayout.id].seatCount}
                           </Text>
                         </>
                       )}
                       {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_TABLE' && (
                         <>
                           <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
-                            {t('tableCapacity')} {tblLayout.totalTables}
+                            {t('tableVisual.tableCapacity')} {tblLayout.totalTables}
                           </Text>
                           <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
-                            {t('availableTables')} {floorCapacity[tblLayout.id].tableCount}
+                            {t('tableVisual.availableTables')} {floorCapacity[tblLayout.id].tableCount}
                           </Text>
                         </>
                       )}
@@ -438,7 +396,7 @@ class TablesScreen extends React.Component {
                       }}
                       onPress={() => {this.setState({tableIndex: -1})}}>
                       <Text style={[this.state?.tableIndex === -1 ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customSecondThemeColor))]}>
-                        {t('otherOrders')}
+                        {t('tableVisual.otherOrders')}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -530,8 +488,8 @@ class TablesScreen extends React.Component {
                                 })
                                 order.state === 'PAYMENT_IN_PROCESS'
                                   ? Alert.alert(
-                                    `${t('isPayingTitle')}`,
-                                    `${t('isPayingMsg')}`,
+                                    `${t('tableVisual.isPayingTitle')}`,
+                                    `${t('tableVisual.isPayingMsg')}`,
                                     [
                                       {
                                         text: `${t('action.yes')}`,
@@ -588,7 +546,7 @@ class TablesScreen extends React.Component {
                         }}
                         ListEmptyComponent={
                           <View>
-                            <StyledText style={styles.messageBlock}>{t('noInflightOrders')}</StyledText>
+                            <StyledText style={styles.messageBlock}>{t('tableVisual.noInflightOrders')}</StyledText>
                           </View>
                         }
                         keyExtractor={(item, idx) => item.orderId}
@@ -605,7 +563,7 @@ class TablesScreen extends React.Component {
                   tableHeight: null,
                 })} style={{flex: 1, marginRight: 8}}>
                   <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor), {flex: 1}]}>
-                    {t('joinTable')}
+                    {t('tableVisual.joinTable')}
                   </Text>
                 </TouchableOpacity>} */}
                 <TouchableOpacity onPress={() => NavigationService?.navigateToRoute('OrderDisplayScreen')} style={{flex: 1}}>
@@ -647,7 +605,6 @@ class TablesScreen extends React.Component {
             <NavigationEvents
               onWillFocus={() => {
                 this.loadInfo()
-                this.loadLocalization()
               }}
             />
             <RealTimeOrderUpdate
@@ -681,12 +638,12 @@ class TablesScreen extends React.Component {
                     </Text>
                     {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_SEAT' && (
                       <Text style={[styles?.sectionBarText(customMainThemeColor), {flex: 4, textAlign: 'right', marginRight: 4}]}>
-                        {t('seatingCapacity')} {tblLayout.totalCapacity} {t('availableSeats')} {floorCapacity[tblLayout.id].seatCount}
+                        {t('tableVisual.seatingCapacity')} {tblLayout.totalCapacity} {t('tableVisual.availableSeats')} {floorCapacity[tblLayout.id].seatCount}
                       </Text>
                     )}
                     {floorCapacity[tblLayout.id] !== undefined && tableDisplay === 'SHOW_TABLE' && (
                       <Text style={[styles?.sectionBarText(customMainThemeColor), {flex: 4, textAlign: 'right', marginRight: 4}]}>
-                        {t('tableCapacity')} {tblLayout.totalTables} {t('availableTables')} {floorCapacity[tblLayout.id].tableCount}
+                        {t('tableVisual.tableCapacity')} {tblLayout.totalTables} {t('tableVisual.availableTables')} {floorCapacity[tblLayout.id].tableCount}
                       </Text>
                     )}
                   </View>
@@ -707,7 +664,7 @@ class TablesScreen extends React.Component {
                     }}
                     ListEmptyComponent={
                       <View>
-                        <StyledText style={styles.messageBlock}>{t('noInflightOrders')}</StyledText>
+                        <StyledText style={styles.messageBlock}>{t('tableVisual.noInflightOrders')}</StyledText>
                       </View>
                     }
                     keyExtractor={(item, idx) => item.orderId}
@@ -717,7 +674,7 @@ class TablesScreen extends React.Component {
               <View style={styles.mgrbtn20} key='noLayout'>
                 <View style={[styles.sectionBar, {flex: 1, justifyContent: 'flex-start'}]}>
                   <Text style={[styles?.sectionBarText(customMainThemeColor)]}>
-                    {t('otherOrders')}
+                    {t('tableVisual.otherOrders')}
                   </Text>
                 </View>
                 <FlatList
@@ -737,7 +694,7 @@ class TablesScreen extends React.Component {
                   }}
                   ListEmptyComponent={
                     <View>
-                      <StyledText style={styles.messageBlock}>{t('noInflightOrders')}</StyledText>
+                      <StyledText style={styles.messageBlock}>{t('tableVisual.noInflightOrders')}</StyledText>
                     </View>
                   }
                   keyExtractor={(item, idx) => item.orderId}
@@ -838,8 +795,8 @@ class DraggableBase extends Component {
         } else if (toTable && toTable.state !== 'SETTLED' && this.state.tableOrder.state !== 'SETTLED') {
           const t = this.props.t
           Alert.alert(
-            `${t('isMergingTitle')}`,
-            `${t('isMergingMsg')}`,
+            `${t('tableVisual.isMergingTitle')}`,
+            `${t('tableVisual.isMergingMsg')}`,
             [
               {
                 text: `${t('action.yes')}`,
