@@ -48,7 +48,14 @@ class ReservationViewForm extends React.Component {
 
     this.props.getTableLayouts()
     this.props.getReservation()
-
+    if (this.props.reservation?.tables) {
+      this.handleSetTableIndex(this.props.reservation?.tables)
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.reservation?.tables !== this.props.reservation?.tables) {
+      this.handleSetTableIndex(this.props.reservation?.tables)
+    }
   }
 
   handleSendNotification = (reservation) => {
@@ -71,7 +78,6 @@ class ReservationViewForm extends React.Component {
                 },
               }, {defaultMessage: false},
               response => {
-                this.handleReset()
                 this.props.navigation.navigate('ReservationCalendarScreen')
               }
             ).then()
@@ -86,7 +92,7 @@ class ReservationViewForm extends React.Component {
     )
   }
 
-  handleDeleteReservation = () => {
+  handleDeleteReservation = (id) => {
     Alert.alert(
       ``,
       `${this.context.t('reservation.deleteActionContext')}`,
@@ -95,7 +101,7 @@ class ReservationViewForm extends React.Component {
           text: `${this.context.t('action.yes')}`,
           onPress: () => {
             dispatchFetchRequestWithOption(
-              api.reservation.update(this.props.navigation?.state?.params?.id),
+              api.reservation.update(id),
               {
                 method: 'DELETE',
                 withCredentials: true,
@@ -103,7 +109,6 @@ class ReservationViewForm extends React.Component {
                 headers: {},
               }, {defaultMessage: true},
               response => {
-                this.handleReset()
                 this.props.navigation.navigate('ReservationCalendarScreen')
 
               }
@@ -119,13 +124,32 @@ class ReservationViewForm extends React.Component {
     )
   }
 
+  handleSetTableIndex = (tables) => {
+    if (tables && tables.length > 0 && this.state.isTablet) {
+      let id = tables[0].tableId
+      let layoutId = id.slice(0, 36)
+
+      let tabIndex = this.props.tablelayouts.findIndex((layout) =>
+        layout.id === layoutId)
+      this.setState({tableIndex: tabIndex})
+    }
+    if (tables && tables.length > 0 && !this.state.isTablet) {
+      let layoutIds = []
+      layoutIds = tables.map((table) => table.tableId.slice(0, 36))
+      let layoutArr = [...new Set(layoutIds)]
+      this.props.tablelayouts.forEach((layout, index) => {
+        if (layoutArr.includes(layout.id)) {
+          this.handleChooseLayout(index)
+        }
+      })
+    }
+  }
+
   handleChooseLayout = (value) => {
     let arr = this.state.activeTableLayout
 
-    if (arr.length !== 0 && arr.includes(value)) {
+    if (!arr.includes(value)) {
       arr.push(value)
-    } else {
-      arr.splice(arr.indexOf(value), 1)
     }
     this.setState({activeTableLayout: arr})
   }
@@ -167,6 +191,7 @@ class ReservationViewForm extends React.Component {
         floorCapacity[layout.id].seatCount = seatCount
         floorCapacity[layout.id].tableCount = tableCount
       })
+
 
 
       if (!!this?.state?.isTablet) {
@@ -328,15 +353,26 @@ class ReservationViewForm extends React.Component {
                           }
                         </View>
                       </View>
+                      <View style={styles.tableRowContainerWithBorder}>
+                        <View style={[styles.tableCellView, styles.flex(1)]}>
+                          <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.status')}</StyledText>
+                        </View>
+                        <View style={[styles.tableCellView, styles.justifyRight]}>
+                          <StyledText style={[styles.reservationFormContainer]}>{t(`reservation.statusTip.${reservation?.status}`)}</StyledText>
+                        </View>
+                      </View>
 
-                      <View style={[styles.bottom, styles.horizontalMargin]}>
-                        <TouchableOpacity onPress={() => {
-                          navigation.navigate('ReservationEditScreen', {reservationId: reservation.id})
-                        }}>
-                          <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                            {t('action.edit')}
-                          </Text>
-                        </TouchableOpacity>
+                      <View style={[styles.bottom,
+                      styles.horizontalMargin]}>
+                        {(reservation.status == 'BOOKED' || reservation.status == 'WAITING') &&
+                          <TouchableOpacity onPress={() => {
+                            navigation.navigate('ReservationEditScreen', {reservationId: reservation.id})
+                          }}>
+                            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                              {t('action.edit')}
+                            </Text>
+                          </TouchableOpacity>
+                        }
 
                         <TouchableOpacity onPress={() => {
                           this.handleSendNotification(reservation)
@@ -346,15 +382,17 @@ class ReservationViewForm extends React.Component {
                           </Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => {
-                          this.handleDeleteReservation()
-                        }}>
-                          <Text
-                            style={[styles?.bottomActionButton(customMainThemeColor), styles.deleteButton]}
-                          >
-                            {t('action.cancel')}
-                          </Text>
-                        </TouchableOpacity>
+                        {(reservation.status == 'BOOKED' || reservation.status == 'WAITING') &&
+                          <TouchableOpacity onPress={() => {
+                            this.handleDeleteReservation(reservation.id)
+                          }}>
+                            <Text
+                              style={[styles?.bottomActionButton(customMainThemeColor), styles.deleteButton]}
+                            >
+                              {t('reservation.cancelReservation')}
+                            </Text>
+                          </TouchableOpacity>
+                        }
 
                       </View>
                     </>
@@ -449,6 +487,14 @@ class ReservationViewForm extends React.Component {
                         }
                       </View>
                     </View>
+                    <View style={styles.tableRowContainerWithBorder}>
+                      <View style={[styles.tableCellView, styles.flex(1)]}>
+                        <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.status')}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView, styles.justifyRight]}>
+                        <StyledText style={[styles.reservationFormContainer]}>{t(`reservation.statusTip.${reservation?.status}`)}</StyledText>
+                      </View>
+                    </View>
 
                     <View style={[styles.bottom, styles.horizontalMargin]}>
                       {(reservation.status == 'BOOKED' || reservation.status == 'WAITING') && <TouchableOpacity onPress={() => {
@@ -469,7 +515,7 @@ class ReservationViewForm extends React.Component {
 
                       {(reservation.status == 'BOOKED' || reservation.status == 'WAITING') &&
                         <TouchableOpacity onPress={() => {
-                          this.handleDeleteReservation()
+                          this.handleDeleteReservation(reservation.id)
                         }}>
                           <Text
                             style={[styles?.bottomActionButton(customMainThemeColor), styles.deleteButton]}

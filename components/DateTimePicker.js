@@ -344,7 +344,7 @@ class RenderDatePickerBase extends Component {
 
 	componentDidUpdate(prevProps, prevState) {
 		if (prevProps?.isShow !== this.props?.isShow && this.props?.isShow) {
-			this.setState({result: !!this.props?.input?.value ? this.props?.input?.value : new Date()})
+			this.setState({result: !!this.props?.input?.value ? new Date(this.props?.input?.value) : new Date()})
 		}
 	}
 

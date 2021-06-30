@@ -706,10 +706,17 @@ const zh = {
     next: '下一步',
     cancelReservation: '取消訂位',
     noTable: '未選(候補)',
+    status: '訂單狀態',
     booked: '訂位',
     waiting: '候補',
     cancelled: '取消',
-    seated: '入座',
+    statusTip: {
+      BOOKED: '訂位',
+      WAITING: '候補',
+      CONFIRMED: '已確認',
+      CANCELLED: '已取消',
+      SEATED: '已入座'
+    },
     sendNotification: '寄送簡訊',
     sendActionContext: '是否發送訂位簡訊至客人的手機: {{phoneNumber}} ?',
     cancelActionContext: '是否取消訂位，並返回訂位管理列表？',
