@@ -723,6 +723,7 @@ const en = {
   },
   reservationSetting: {
     reservationSettingTitle: 'Reservation Settings',
+    webLink: 'Reservation Web Link',
     durationMinutes: 'Table Duration (Min)',
     nonReservableTables: 'Non Reservable Tables',
   },

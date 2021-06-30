@@ -36,6 +36,7 @@ class StoreFormScreen extends Component {
         companyName: 'Company Name',
         companyNameHint: 'e.g. Legal entity name',
         address: 'Address',
+        phoneNumber: 'Phone Number',
         ubn: 'UBN',
         taxInclusive: 'Tax Inclusive',
         serviceCharge: 'Service Charge %',
@@ -78,6 +79,7 @@ class StoreFormScreen extends Component {
         companyName: '公司名稱',
         companyNameHint: '註冊公司名稱',
         address: '商家地址',
+        phoneNumber: '聯絡電話',
         ubn: '統一編號',
         taxInclusive: '價格已含稅',
         serviceCharge: '服務費(％)',
@@ -298,6 +300,19 @@ class StoreFormScreen extends Component {
                     name="attributes.ADDRESS"
                     component={InputText}
                     placeholder={t('address')}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 2}}>
+                  <StyledText style={styles.fieldTitle}>{t('phoneNumber')}</StyledText>
+                </View>
+                <View style={{flex: 3}}>
+                  <Field
+                    name="attributes.PHONE_NUMBER"
+                    component={InputText}
+                    placeholder={t('phoneNumber')}
                   />
                 </View>
               </View>
