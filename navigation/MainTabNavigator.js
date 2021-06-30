@@ -326,15 +326,6 @@ const ReservationScreens = createDrawerNavigator({
       ),
     }
   },
-  ReservationScreen: {
-    screen: ReservationScreen,
-    navigationOptions: {
-      title: null,
-      drawerLabel: ({focused, tintColor}) => (
-        <LabelIcon focused={focused} tintColor={tintColor} name='create-outline' />
-      ),
-    }
-  },
   ReservationSetting: {
     screen: ReservationSetting,
     navigationOptions: {
@@ -342,6 +333,13 @@ const ReservationScreens = createDrawerNavigator({
       drawerLabel: ({focused, tintColor}) => (
         <LabelIcon focused={focused} tintColor={tintColor} name='md-settings' />
       ),
+    }
+  },
+  ReservationScreen: {
+    screen: ReservationScreen,
+    navigationOptions: {
+      title: null,
+      drawerLabel: <Hidden />,
     }
   },
   ReservationViewScreen: {

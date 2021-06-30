@@ -780,18 +780,14 @@ class ReservationEventBase extends Component {
 
     render() {
         const timezone = TimeZoneService.getTimeZone()
-        const dayEvents = this.state?.reservations?.filter((event) => (moment(event.reservationStartDate).format('YYYY-MM-DD') === this.state?.selectedDate)).sort(function (a, b) {
-            return -(new Date(b.reservationStartDate) - new Date(a.reservationStartDate));
-        }) ?? []
-
-
+        const dayEvents = this.state?.reservations?.filter((event) => (moment(event.reservationStartDate).format('YYYY-MM-DD') === this.state?.selectedDate)) ?? []
 
         const {t, themeStyle, complexTheme, customMainThemeColor, customBackgroundColor} = this.context
         const {tablelayouts} = this.props
 
 
-        let todayStart = new Date(moment(this.state?.selectedDate).tz(timezone)).getTime()
-        let todayEnd = new Date(moment(this.state?.selectedDate).tz(timezone).add(1, 'days')).getTime()
+        let todayStart = this.state?.selectedDate && new Date(moment(this.state?.selectedDate).tz(timezone)).getTime()
+        let todayEnd = this.state?.selectedDate && new Date(moment(this.state?.selectedDate).tz(timezone).add(1, 'days')).getTime()
 
         const customCalendarTheme = {
             calendarBackground: customBackgroundColor,

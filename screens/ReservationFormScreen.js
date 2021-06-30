@@ -112,8 +112,9 @@ class ReservationFormScreen extends React.Component {
         let eventDate = moment(data?.reservationStartDate).tz(timezone).format('YYYY-MM-DD')
         let eventHour = moment(data?.reservationStartDate).tz(timezone).format('HH')
         let eventMins = moment(data?.reservationStartDate).tz(timezone).format('mm')
-        selectedTimeBlock = eventHour <= 10 ? 0 : 10 < eventHour < 17 ? 1 : 2
+        selectedTimeBlock = eventHour <= 10 ? 0 : eventHour > 10 && eventHour < 17 ? 1 : 2
 
+        this.handlesetTableIndex(idArray)
         this.setState({selectedTableIds: idArray, selectedTableNames: nameArr, reservationDate: eventDate, selectedTimeBlock: selectedTimeBlock, selectedHour: eventHour, selectedMinutes: eventMins})
 
         this.props.change(`hour`, eventHour)
@@ -202,9 +203,12 @@ class ReservationFormScreen extends React.Component {
     let dateStr = `${date} ${hour}:${mins}`
     let checkDate = moment(dateStr).tz(timezone).format('YYYY-MM-DDTHH:mm:ss')
 
+    console.log("check date", dateStr)
     this.props.change(`checkDate`, checkDate)
 
-    dispatchFetchRequestWithOption(api.reservation.getAvailableTables(checkDate), {
+    let reservationId = this.props?.initialValues?.id != undefined ? this.props?.initialValues?.id : null
+
+    dispatchFetchRequestWithOption(api.reservation.getAvailableTables(checkDate, reservationId), {
       method: 'GET',
       withCredentials: true,
       credentials: 'include',
@@ -215,36 +219,63 @@ class ReservationFormScreen extends React.Component {
       response => {
         response.json().then(data => {
           this.setState({availableTables: data.results, isGetTables: true})
-          // this.handleCheckConflictTables(data.results, checkDate, timezone)
+          this.handleCheckConflictTables(data.results)
 
         })
       }).then()
 
   }
-  handleCheckConflictTables = (availableTables, checkDate, timezone) => {
+  handleCheckConflictTables = (availableTables) => {
 
-    let initTime = moment(this.props.initialValues.reservationStartDate).tz(timezone).format('YYYY-MM-DDTHH:mm:ss')
     let tableIds = this.state.selectedTableIds
     let tableNames = this.state.selectedTableNames
     let conflictTables = []
 
-    if (initTime !== checkDate) {
-      tableIds && tableIds.forEach((table) => {
-        if (availableTables.indexOf(table) < 0) {
-          conflictTables.push(table)
+    tableIds && tableIds.forEach((table) => {
+      if (availableTables.indexOf(table) < 0) {
+        conflictTables.push(table)
+      }
+    })
+    conflictTables.length > 0 && conflictTables.forEach((table) => {
+      tableIds.splice(tableIds.indexOf(table), 1)
+      tableNames.splice(tableNames.indexOf(this.handleGetTableName(table)), 1)
+    })
+    this.props.change(`tableIds`, tableIds)
+    this.setState({selectedTableIds: tableIds, selectedTableNames: tableNames})
+
+  }
+
+  handleGetTableName = (id) => {
+    let layoutId = id.slice(0, 36)
+    let target = null
+
+    this.props.tablelayouts.forEach((layout) => {
+      if (layout.id === layoutId) {
+        target = layout.tables.find((table) => table.tableId === id)
+      }
+    })
+    return target.tableName
+  }
+
+  handlesetTableIndex = (ids) => {
+    if (ids && ids.length > 0 && this.state.isTablet) {
+
+      let layoutId = ids[0].slice(0, 36)
+      let tabIndex = this.props.tablelayouts.findIndex((layout) =>
+        layout.id === layoutId)
+
+      this.setState({tableIndex: tabIndex})
+    }
+    if (ids && ids.length > 0 && !this.state.isTablet) {
+      let layoutIds = []
+      layoutIds = ids.map((id) => id.slice(0, 36))
+      let layoutArr = [...new Set(layoutIds)]
+      this.props.tablelayouts.forEach((layout, index) => {
+        if (layoutArr.includes(layout.id)) {
+          this.handleChooseLayout(index)
         }
       })
-      conflictTables.length > 0 && conflictTables.forEach((table) => {
-        tableIds.splice(tableIds.indexOf(table), 1)
-        tableNames.splice(tableNames.indexOf(table), 1)
-      })
-      this.props.change(`tableIds`, tableIds)
-      this.setState({selectedTableIds: tableIds, selectedTableNames: tableNames})
-      console.log("conflict?", conflictTables, tableIds, tableNames)
     }
-
-
-
   }
 
   handleChooseTable = (id, name) => {
@@ -265,10 +296,8 @@ class ReservationFormScreen extends React.Component {
   handleChooseLayout = (value) => {
     let arr = this.state.activeTableLayout
 
-    if (arr.length !== 0 && arr.includes(value)) {
+    if (!arr.includes(value)) {
       arr.push(value)
-    } else {
-      arr.splice(arr.indexOf(value), 1)
     }
     this.setState({activeTableLayout: arr})
   }
@@ -294,6 +323,7 @@ class ReservationFormScreen extends React.Component {
     this.props.change(`phoneNumber`, null)
     this.props.change(`note`, null)
     this.props.change(`tableIds`, null)
+    this.setState({selectedTableIds: [], selectedTableNames: [], reservationDate: moment(this.props?.initialValues.reservationStartDate ?? new Date()).format('YYYY-MM-DD'), selectedTimeBlock: 0, selectedHour: null, selectedMinutes: null})
     this.props.handleNextStep(false)
   }
 
@@ -314,7 +344,6 @@ class ReservationFormScreen extends React.Component {
       handleSubmit,
       handleCancel,
       handleSaveReservation,
-      handleSendNotification
     } = this.props
 
     const {t, customMainThemeColor, customBackgroundColor} = this.context
@@ -365,7 +394,6 @@ class ReservationFormScreen extends React.Component {
           seatCount += table.capacity
           tableCount += 1
         })
-
         floorCapacity[layout.id] = {}
         floorCapacity[layout.id].seatCount = seatCount
         floorCapacity[layout.id].tableCount = tableCount
@@ -380,7 +408,7 @@ class ReservationFormScreen extends React.Component {
             <View style={styles.fullWidthScreen}>
               <NavigationEvents
                 onWillFocus={() => {
-                  if (!this.props.isEdit) {
+                  if (!this.props.isEdit && !nextStep) {
                     this.handleResetForm()
                   }
                 }}
@@ -493,7 +521,7 @@ class ReservationFormScreen extends React.Component {
 
                 <View style={[styles.flex(1), {marginLeft: 20, justifyContent: 'flex-start', maxHeight: '100%'}]}>
                   {!nextStep &&
-                    <>
+                    <ThemeKeyboardAwareScrollView>
 
                       <View style={styles.tableRowContainer}>
                         <View style={[styles.tableCellView, styles.flex(1)]}>
@@ -644,7 +672,7 @@ class ReservationFormScreen extends React.Component {
                         }
                       </View>
 
-                    </>
+                    </ThemeKeyboardAwareScrollView>
                   }
 
                   {nextStep &&
@@ -748,7 +776,7 @@ class ReservationFormScreen extends React.Component {
             <View style={styles.fullWidthScreen}>
               <NavigationEvents
                 onWillFocus={() => {
-                  if (!this.props.isEdit) {
+                  if (!this.props.isEdit && !nextStep) {
                     this.handleResetForm()
                   }
                 }}
@@ -991,6 +1019,7 @@ class ReservationFormScreen extends React.Component {
                         <View>
                           <TouchableOpacity onPress={handleSubmit(value => {
                             handleSubmit()
+                            handleNextStep(true)
                             this.handleCheckForm(value)
                           })}>
                             <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
@@ -1017,6 +1046,7 @@ class ReservationFormScreen extends React.Component {
 
 const mapStateToProps = state => ({
   tablelayouts: state.tablelayouts.data.tableLayouts,
+  tablelayout: state.tablelayout.data,
   haveData: state.tablelayouts.haveData,
   haveError: state.ordersinflight.haveError || state.tablelayouts.haveError,
   isLoading: state.ordersinflight.loading || state.tablelayouts.loading,
@@ -1100,13 +1130,8 @@ class TableMapBase extends Component {
     }
 
     const tableSize = 72
-    const isAvailable = this.props.availableTables?.find((item) => item === table.tableId) || this.state.availableTables?.find((item) => item === table.tableId)
-    const isSelected = !!this.props?.selectedTableIds && (this.props?.selectedTableIds.indexOf(table.tableId) > -1)
-
-
-
-    const isConflict = false
-
+    const isAvailable = this.props.availableTables?.find((item) => item === table.tableId)
+    const isSelected = !!this.props?.selectedTableIds && ((this.props?.selectedTableIds.indexOf(table.tableId) > -1) && isAvailable)
 
 
     return (
@@ -1118,16 +1143,11 @@ class TableMapBase extends Component {
               <TouchableOpacity
 
                 onPress={() => {
-                  let tableList = this.state.availableTables
-                  if (isAvailable || (!isAvailable && isSelected)) {
+                  if (isAvailable) {
                     this.props.handleChooseTable(table.tableId, table.tableName)
-                    if (isSelected) {
-                      tableList.push(table.tableId)
-                      this.setState({availableTables: tableList})
-                    }
                   }
                 }}
-                style={[panStyle, {zIndex: 1000, position: 'absolute', alignItems: 'center', justifyContent: 'space-around', width: tableSize, height: tableSize, borderRadius: 50}, (!isAvailable && !isConflict) ? {backgroundColor: '#f75336'} : (isConflict) ? {backgroundColor: '#f18d1a'} : {backgroundColor: '#e7e7e7'}, (isSelected && !isConflict) && selectedStyle,]}>
+                style={[panStyle, {zIndex: 1000, position: 'absolute', alignItems: 'center', justifyContent: 'space-around', width: tableSize, height: tableSize, borderRadius: 50}, (!isAvailable) ? {backgroundColor: '#f75336'} : {backgroundColor: '#e7e7e7'}, isSelected && selectedStyle]}>
 
                 <Text style={{color: '#222', textAlign: 'center'}, isSelected && {color: customBackgroundColor}}>{table.tableName}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
