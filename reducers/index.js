@@ -39,6 +39,7 @@ import {reducer as permissionReducer} from './permissions'
 import {reducer as orderOfferReducer} from './orderOffer'
 import {reducer as paymentMethodsReducer} from './paymentMethods'
 import {reducer as reservationReducer} from './reservation'
+import {reducer as reservationSettingsReducer} from './reservationSettings'
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -85,5 +86,6 @@ const rootReducer = combineReducers({
   orderOffer: orderOfferReducer,
   paymentMethods: paymentMethodsReducer,
   reservation: reservationReducer,
+  reservationSettings: reservationSettingsReducer,
 })
 export default rootReducer

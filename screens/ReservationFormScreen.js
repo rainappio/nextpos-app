@@ -323,7 +323,9 @@ class ReservationFormScreen extends React.Component {
     this.props.change(`phoneNumber`, null)
     this.props.change(`note`, null)
     this.props.change(`tableIds`, null)
-    this.setState({selectedTableIds: [], selectedTableNames: [], reservationDate: moment(this.props?.initialValues.reservationStartDate ?? new Date()).format('YYYY-MM-DD'), selectedTimeBlock: 0, selectedHour: null, selectedMinutes: null})
+    this.setState({selectedTableIds: [], selectedTableNames: [], reservationDate: moment(this.props?.initialValues.reservationStartDate ?? new Date()).format('YYYY-MM-DD'), selectedTimeBlock: 0, selectedHour: null, selectedMinutes: null, isGetTables: false})
+    this.handleHourSelection(0)
+    this.viewResize(0)
     this.props.handleNextStep(false)
   }
 
@@ -510,7 +512,7 @@ class ReservationFormScreen extends React.Component {
                             )
                           })
                         }
-                        {this.state?.tableWidth && !isLoading && !this.state?.availableTables &&
+                        {this.state?.tableWidth && !isLoading && !this.state.isGetTables &&
                           <View style={[styles.flex(1), styles.jc_alignIem_center, {backgroundColor: '#eee', width: '100%'}]}>
                             <StyledText style={[styles.primaryText(customMainThemeColor)]}>{'Please Select Time'}</StyledText>
                           </View>
@@ -1026,6 +1028,15 @@ class ReservationFormScreen extends React.Component {
                               {t('reservation.next')}
                             </Text>
                           </TouchableOpacity>
+                          {isEdit && <TouchableOpacity onPress={() => {
+                            handleCancel(isEdit)
+                          }}>
+                            <Text
+                              style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+                            >
+                              {t('action.cancel')}
+                            </Text>
+                          </TouchableOpacity>}
                         </View>
                       </>
                     }

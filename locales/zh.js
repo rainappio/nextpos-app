@@ -725,6 +725,7 @@ const zh = {
   },
   reservationSetting: {
     reservationSettingTitle: '訂位設定',
+    webLink: '線上訂位連結',
     durationMinutes: '用餐時間(分)',
     nonReservableTables: '未開放訂位桌',
   },
