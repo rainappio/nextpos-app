@@ -5,7 +5,6 @@ import CategoryCustomizeScreen from './CategoryCustomizeScreen'
 import {clearLabel, getLabel, getLables, getProductOptions, getProducts, getWorkingAreas} from '../actions'
 import styles from '../styles'
 import {api, dispatchFetchRequest} from '../constants/Backend'
-import {NavigationEvents} from 'react-navigation'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
 
@@ -18,10 +17,16 @@ class CategoryCustomize extends React.Component {
     this.props.getProductOptions()
     this.props.getWorkingAreas()
     this.props.getLabel()
+    this._getProductOptions = this.props.navigation.addListener('focus', () => {
+      this.props.getProductOptions()
+    })
+  }
+  componentWillUnmount() {
+    this._getProductOptions()
   }
 
   handleSubmit = values => {
-    const labelId = this.props.navigation.state.params.labelId
+    const labelId = this.props.route.params.labelId
 
     dispatchFetchRequest(api.productLabel.getById(labelId), {
       method: 'POST',
@@ -41,7 +46,7 @@ class CategoryCustomize extends React.Component {
   }
 
   handleDelete = () => {
-    const labelId = this.props.navigation.state.params.labelId
+    const labelId = this.props.route.params.labelId
 
     dispatchFetchRequest(api.productLabel.delete(labelId), {
       method: 'DELETE',
@@ -64,6 +69,7 @@ class CategoryCustomize extends React.Component {
   render() {
     const {
       navigation,
+      route,
       prodctoptions,
       workingareas,
       label,
@@ -89,17 +95,13 @@ class CategoryCustomize extends React.Component {
     }
     return (
       <View style={{flex: 1}}>
-        <NavigationEvents
-          onWillFocus={() => {
-            this.props.getProductOptions()
-          }}
-        />
         <CategoryCustomizeScreen
           isEditForm={true}
           onSubmit={this.handleSubmit}
           handleDelete={this.handleDelete}
           navigation={navigation}
-          labelName={navigation.state.params.labelName}
+          route={route}
+          labelName={route.params.labelName}
           initialValues={label}
           prodctoptions={prodctoptions}
           workingareas={workingareas}
@@ -124,7 +126,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   getWorkingAreas: () => dispatch(getWorkingAreas('PRODUCT')),
   getProductOptions: () => dispatch(getProductOptions()),
   clearLabel: () => dispatch(clearLabel()),
-  getLabel: () => dispatch(getLabel(props.navigation.state.params.labelId)),
+  getLabel: () => dispatch(getLabel(props.route.params.labelId)),
   getLables: () => dispatch(getLables()),
   getProducts: () => dispatch(getProducts())
 })

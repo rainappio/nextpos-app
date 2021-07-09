@@ -5,7 +5,6 @@ import {formatDate, getShifts} from '../actions'
 import {ListItem} from 'react-native-elements'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
-import {NavigationEvents} from "react-navigation";
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import {renderShiftStatus} from "../helpers/shiftActions";
@@ -51,6 +50,13 @@ class ShiftHistory extends React.Component {
 
   componentDidMount() {
     this.props.getShifts()
+    this._getShift = this.props.navigation.addListener('focus', () => {
+      const dateToUse = this.state.currentDate.format('YYYY-MM-DD')
+      this.props.getShifts(dateToUse)
+    })
+  }
+  componentWillUnmount() {
+    this._getShift()
   }
 
   keyExtractor = (order, index) => index.toString()
@@ -111,13 +117,6 @@ class ShiftHistory extends React.Component {
       return (
         <ThemeScrollView>
           <View style={[styles.fullWidthScreen]}>
-            <NavigationEvents
-              onWillFocus={() => {
-                const dateToUse = this.state.currentDate.format('YYYY-MM-DD')
-
-                this.props.getShifts(dateToUse)
-              }}
-            />
             <ScreenHeader backNavigation={true}
               parentFullScreen={true}
               title={t('shiftHistoryTitle')}

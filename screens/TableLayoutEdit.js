@@ -22,11 +22,11 @@ class TableLayoutEdit extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getTableLayout(this.props.navigation.state.params.layoutId)
+    this.props.getTableLayout(this.props.route.params.layoutId)
   }
 
   handleEditCancel = () => {
-    this.props.clearTableLayout(this.props.navigation.state.params.layoutId)
+    this.props.clearTableLayout(this.props.route.params.layoutId)
     this.props.navigation.navigate('TableLayouts')
   }
 
@@ -59,32 +59,33 @@ class TableLayoutEdit extends React.Component {
   render() {
     const {
       navigation,
+      route,
       tablelayout,
       haveData,
       haveError,
       isLoading
     } = this.props
-    const { t } = this.context
+    const {t} = this.context
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     }
     return (
-    	<ThemeScrollView>
+      <ThemeScrollView>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader title={t('editTableLayoutTitle')}
-                        parentFullScreen={true}
-                        rightComponent={
-                          <AddBtn
-                            onPress={() =>
-                              this.props.navigation.navigate('TableAdd', {
-                                layoutId: tablelayout.id
-                              })
-                            }
-                          />
-                        }
+            parentFullScreen={true}
+            rightComponent={
+              <AddBtn
+                onPress={() =>
+                  this.props.navigation.navigate('TableAdd', {
+                    layoutId: tablelayout.id
+                  })
+                }
+              />
+            }
           />
 
           <TableLayoutForm
@@ -93,6 +94,7 @@ class TableLayoutEdit extends React.Component {
             initialValues={tablelayout}
             isEdit={true}
             navigation={navigation}
+            route={route}
             handleEditCancel={this.handleEditCancel}
           />
         </View>

@@ -40,7 +40,7 @@ class InventoryScreen extends React.Component {
                         <View style={[styles.menuContainer]}>
                             <MenuButton
                                 route='InventoryOrderScreen'
-                                onPress={() => NavigationService?.navigateToRoute('InventoryOrderScreen')}
+                                onPress={() => NavigationService?.navigateToRoute('InventoryOrderScreen', {screen: 'InventoryOrderScreen'})}
                                 title={t('inventory.title')}
                                 icon={
                                     <Ionicons

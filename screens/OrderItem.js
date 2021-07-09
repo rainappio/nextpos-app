@@ -54,8 +54,8 @@ class OrderItem extends React.PureComponent {
 
                     order.state === 'PAYMENT_IN_PROCESS'
                       ? Alert.alert(
-                        `${t('isPayingTitle')}`,
-                        `${t('isPayingMsg')}`,
+                        `${t('tableVisual.isPayingTitle')}`,
+                        `${t('tableVisual.isPayingMsg')}`,
                         [
                           {
                             text: `${t('action.yes')}`,
@@ -127,8 +127,8 @@ class OrderItem extends React.PureComponent {
 
               order.state === 'PAYMENT_IN_PROCESS'
                 ? Alert.alert(
-                  `${t('isPayingTitle')}`,
-                  `${t('isPayingMsg')}`,
+                  `${t('tableVisual.isPayingTitle')}`,
+                  `${t('tableVisual.isPayingMsg')}`,
                   [
                     {
                       text: `${t('action.yes')}`,

@@ -7,7 +7,6 @@ import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {handleOpenShift, renderShiftStatus} from "../helpers/shiftActions";
 import ScreenHeader from "../components/ScreenHeader";
-import {NavigationEvents} from "react-navigation";
 import LoadingScreen from "./LoadingScreen";
 import {StyledText} from "../components/StyledText";
 import {ThemeContainer} from "../components/ThemeContainer";
@@ -31,6 +30,13 @@ class ShiftClose extends React.Component {
   componentDidMount() {
     this.props.getShiftStatus()
     this.props.getMostRecentShiftStatus()
+    this._getShift = this.props.navigation.addListener('focus', () => {
+      this.props.getShiftStatus()
+      this.props.getMostRecentShiftStatus()
+    })
+  }
+  componentWillUnmount() {
+    this._getShift()
   }
 
   handleOpenShift = (balance) => {
@@ -81,12 +87,6 @@ class ShiftClose extends React.Component {
       return (
         <ThemeContainer>
           <View style={[styles.fullWidthScreen]}>
-            <NavigationEvents
-              onWillFocus={() => {
-                this.props.getShiftStatus()
-                this.props.getMostRecentShiftStatus()
-              }}
-            />
             <ScreenHeader parentFullScreen={true}
               title={t('shift.shiftTitle')} />
 

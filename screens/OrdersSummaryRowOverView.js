@@ -4,13 +4,15 @@ import OrdersSummaryRow from './OrdersSummaryRow'
 export const OrdersSummaryRowOverView = (
   {
     order,
-    navigation
+    navigation,
+    route
   }) => {
 
   return (
     <OrdersSummaryRow
       order={order}
       navigation={navigation}
+      route={route}
       initialValues={order}
     />
   )

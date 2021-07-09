@@ -60,6 +60,7 @@ const OrderItemDetailEditModal = (props) => {
                 <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={0}>
                     <ConnectedOrderItemOptions
                         navigation={props.navigation}
+                        route={props.route}
                         prdId={props.prdId}
                         initialValues={{
                             male: 0,
@@ -97,12 +98,12 @@ class ConnectedOrderItemOptionsBase extends React.Component {
     componentDidMount() {
 
         this.props.getProduct()
-        this.props.getOrder(this.props.navigation.state.params.orderId)
+        this.props.getOrder(this.props.route.params.orderId)
         this.props.getGlobalProductOffers()
     }
 
     handleSubmit = values => {
-        const orderId = this.props.navigation.state.params.orderId
+        const orderId = this.props.route.params.orderId
 
         console.log("check values.productOptions=", values.productOptions)
         const updatedOptions = []
@@ -151,7 +152,7 @@ class ConnectedOrderItemOptionsBase extends React.Component {
 
     handleUpdate = values => {
 
-        const orderId = this.props?.navigation?.state?.params?.orderId
+        const orderId = this.props?.route?.params?.orderId
         const lineItemId = values.lineItemId
 
         const updatedOptions = []
@@ -270,7 +271,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch, props) => ({
     dispatch,
     getProduct: () => dispatch(getProduct(props.prdId)),
-    getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId)),
+    getOrder: () => dispatch(getOrder(props.route.params.orderId)),
     getGlobalProductOffers: () => dispatch(getGlobalProductOffers())
 })
 

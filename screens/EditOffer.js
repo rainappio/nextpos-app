@@ -27,7 +27,7 @@ class EditOffer extends Component {
   };
 
   componentDidMount() {
-    this.props.getOrderOffer(this.props.navigation.state.params.offerId);
+    this.props.getOrderOffer(this.props.route.params.offerId);
   }
 
   handleonChange = (data) => {
@@ -43,8 +43,8 @@ class EditOffer extends Component {
   handleSubmit = values => {
     values.productIds = [];
     values.productLabelIds = [];
-    const offerId = this.props.navigation.state.params.offerId;
-    const { products } = this.state;
+    const offerId = this.props.route.params.offerId;
+    const {products} = this.state;
 
     if (!values.dateBound) {
       values.startDate = null
@@ -83,7 +83,7 @@ class EditOffer extends Component {
   };
 
   handleDeleteOffer = () => {
-    var offerId = this.props.navigation.state.params.offerId;
+    var offerId = this.props.route.params.offerId;
     dispatchFetchRequest(
       api.order.deleteOrderOfferById(offerId),
       {
@@ -145,12 +145,12 @@ class EditOffer extends Component {
   };
 
   render() {
-    const { t } = this.context;
-    const { orderOffer, isLoading, haveData } = this.props;
+    const {t} = this.context;
+    const {orderOffer, isLoading, haveData} = this.props;
 
     const selectedProducts =
-      this.props.navigation.state.params !== undefined &&
-      this.props.navigation.state.params.updatedProducts;
+      this.props.route.params !== undefined &&
+      this.props.route.params.updatedProducts;
 
     const initialValues = {...orderOffer}
 
@@ -171,25 +171,25 @@ class EditOffer extends Component {
     } else if (haveData) {
       return (
         <ThemeKeyboardAwareScrollView>
-            <View style={styles.fullWidthScreen}>
-              <ScreenHeader
-                title={t("editOfferTitle")}
-                parentFullScreen={true}
-                backAction={this.handleEditCancel}
-              />
-              <OfferForm
-                initialValues={initialValues}
-                handleEditCancel={this.handleEditCancel}
-                isEditForm={true}
-                onSubmit={this.handleSubmit}
-                handleDeleteOffer={this.handleDeleteOffer}
-                navigation={this.props.navigation}
-                handleActivate={this.handleActivate}
-                handleDeactivate={this.handleDeactivate}
-                selectedProducts={selectedProducts}
-                onChange={this.handleonChange}
-              />
-            </View>
+          <View style={styles.fullWidthScreen}>
+            <ScreenHeader
+              title={t("editOfferTitle")}
+              parentFullScreen={true}
+              backAction={this.handleEditCancel}
+            />
+            <OfferForm
+              initialValues={initialValues}
+              handleEditCancel={this.handleEditCancel}
+              isEditForm={true}
+              onSubmit={this.handleSubmit}
+              handleDeleteOffer={this.handleDeleteOffer}
+              navigation={this.props.navigation}
+              handleActivate={this.handleActivate}
+              handleDeactivate={this.handleDeactivate}
+              selectedProducts={selectedProducts}
+              onChange={this.handleonChange}
+            />
+          </View>
         </ThemeKeyboardAwareScrollView>
       );
     } else {

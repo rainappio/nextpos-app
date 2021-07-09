@@ -2,7 +2,7 @@ import styles from '../styles'
 import {Text, TouchableOpacity, View} from 'react-native'
 import React from 'react'
 import {LocaleContext} from '../locales/LocaleContext'
-import {withNavigation} from "react-navigation";
+import {withNavigation} from "@react-navigation/compat";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
 import ScreenHeader from "../components/ScreenHeader";

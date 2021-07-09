@@ -7,7 +7,6 @@ import {ListItem} from 'react-native-elements'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {renderOrderState} from "../helpers/orderActions";
-import {NavigationEvents} from "react-navigation";
 import ScreenHeader from "../components/ScreenHeader";
 import OrderFilterForm from './OrderFilterForm'
 import LoadingScreen from "./LoadingScreen";
@@ -55,6 +54,12 @@ class InventoryOrderScreen extends React.Component {
     componentDidMount() {
         this.props.getOrdersByDateRange()
         this.getInventoryOrders()
+        this._getInventoryOrders = this.props.navigation.addListener('focus', () => {
+            this.getInventoryOrders()
+        })
+    }
+    componentWillUnmount() {
+        this._getInventoryOrders()
     }
 
     getInventoryOrders = () => {
@@ -201,11 +206,6 @@ class InventoryOrderScreen extends React.Component {
             return (
                 <ThemeContainer>
                     <View style={[styles.fullWidthScreen]}>
-                        <NavigationEvents
-                            onWillFocus={() => {
-                                this.getInventoryOrders()
-                            }}
-                        />
                         <ScreenHeader backNavigation={true}
                             parentFullScreen={true}
                             title={t('inventory.title')}

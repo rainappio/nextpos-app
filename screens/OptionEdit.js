@@ -11,7 +11,7 @@ class OptionEdit extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getProductOption(this.props.navigation.state.params.customId)
+    this.props.getProductOption(this.props.route.params.customId)
   }
 
   handleSubmit = values => {
@@ -28,7 +28,7 @@ class OptionEdit extends React.Component {
       },
       body: JSON.stringify(values)
     }, response => {
-      this.props.navigation.navigate(this.props.navigation.state.params.customRoute)
+      this.props.navigation.navigate(this.props.route.params.customRoute)
     }).then()
   }
 
@@ -42,12 +42,12 @@ class OptionEdit extends React.Component {
         'Content-Type': 'application/json'
       }
     }, response => {
-      this.props.navigation.navigate(this.props.navigation.state.params.customRoute)
+      this.props.navigation.navigate(this.props.route.params.customRoute)
     }).then()
   }
 
   render() {
-    const {navigation, productOption, loading, haveData} = this.props
+    const {navigation, route, productOption, loading, haveData} = this.props
     console.log('productOption', productOption)
 
     const mappedOption = {
@@ -72,6 +72,7 @@ class OptionEdit extends React.Component {
           onSubmit={this.handleSubmit}
           handleDeleteOption={this.handleDeleteOption}
           navigation={navigation}
+          route={route}
         />
       )
     } else {

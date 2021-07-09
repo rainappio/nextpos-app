@@ -48,7 +48,7 @@ class ReportsScreen extends React.Component {
                 uiComponent={
                   <MenuButton
                     route='SalesCharts'
-                    onPress={() => NavigationService?.navigateToRoute('SalesCharts')}
+                    onPress={() => NavigationService?.navigateToRoute('SalesCharts', {screen: 'SalesCharts'})}
                     title={t('salesReport')}
                     icon={
                       <FontAwesomeIcon
@@ -68,7 +68,7 @@ class ReportsScreen extends React.Component {
                 uiComponent={
                   <MenuButton
                     route='StaffTimeCard'
-                    onPress={() => NavigationService?.navigateToRoute('StaffTimeCard')}
+                    onPress={() => NavigationService?.navigateToRoute('StaffTimeCard', {screen: 'StaffTimeCard'})}
                     title={t('staffTimeCardReport')}
                     icon={
                       <Icon
@@ -90,7 +90,7 @@ class ReportsScreen extends React.Component {
                 uiComponent={
                   <MenuButton
                     route='CustomerStats'
-                    onPress={() => NavigationService?.navigateToRoute('CustomerStats')}
+                    onPress={() => NavigationService?.navigateToRoute('CustomerStats', {screen: 'CustomerStats'})}
                     title={t('customerStatsReport')}
                     icon={
                       <Icon

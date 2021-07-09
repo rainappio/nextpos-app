@@ -5,7 +5,6 @@ import LoadingScreen from "./LoadingScreen";
 import ProductRow from './ProductRow'
 import BackendErrorScreen from "./BackendErrorScreen";
 import {View} from "react-native";
-import {NavigationEvents} from "react-navigation";
 
 class ProductsOverview extends React.Component {
   static navigationOptions = {
@@ -15,12 +14,20 @@ class ProductsOverview extends React.Component {
   componentDidMount() {
     this.props.getProducts()
     this.props.getLables()
+    this._geInitialValue = this.props.navigation.addListener('focus', () => {
+      this.props.getProducts()
+      this.props.getLables()
+    })
+  }
+  componentWillUnmount() {
+    this._geInitialValue()
   }
 
   render() {
     const {
       products = [],
       navigation,
+      route,
       haveData,
       haveError,
       isLoading,
@@ -39,17 +46,11 @@ class ProductsOverview extends React.Component {
       }
     return (
       <View style={{flex: 1}}>
-        <NavigationEvents
-          onWillFocus={() => {
-            this.props.getProducts()
-            this.props.getLables()
-          }}
-        />
-
         <ProductRow
           products={products}
           labels={labels}
           navigation={navigation}
+          route={route}
         />
       </View>
     )

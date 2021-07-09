@@ -18,7 +18,7 @@ class AnnouncementsEdit extends React.Component {
   static contextType = LocaleContext
 
   handleUpdate = values => {
-    const announcementId = this.props.navigation.state.params.announcementId
+    const announcementId = this.props.route.params.announcementId
 
     dispatchFetchRequest(
       api.announcements.update(announcementId),
@@ -40,14 +40,14 @@ class AnnouncementsEdit extends React.Component {
 
   handleEditCancel = () => {
     this.props.clearAnnouncement(
-      this.props.navigation.state.params.announcementId
+      this.props.route.params.announcementId
     )
     this.props.getAnnouncements()
     this.props.navigation.navigate('Announcements')
   }
 
   handleDelete = id => {
-    const announcementId = this.props.navigation.state.params.announcementId
+    const announcementId = this.props.route.params.announcementId
     dispatchFetchRequest(api.announcements.delete(announcementId), {
       method: 'DELETE',
       withCredentials: true,
@@ -63,7 +63,7 @@ class AnnouncementsEdit extends React.Component {
   }
 
   render() {
-    const {navigation} = this.props
+    const {navigation, route} = this.props
     const {t} = this.context
 
     return (
@@ -76,11 +76,12 @@ class AnnouncementsEdit extends React.Component {
 
             <AnnouncementsForm
               isEdit={true}
-              initialValues={this.props.navigation.state.params.initialValues}
+              initialValues={this.props.route.params.initialValues}
               onSubmit={this.handleUpdate}
               handleEditCancel={this.handleEditCancel}
               handleDelete={this.handleDelete}
               navigation={navigation}
+              route={route}
             />
           </View>
         </DismissKeyboard>

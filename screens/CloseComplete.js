@@ -47,7 +47,7 @@ class CloseComplete extends React.Component {
 
           <View>
             <TouchableOpacity
-              onPress={() => handleSendEmail(this.props.navigation.state.params?.mostRecentShift?.id)}
+              onPress={() => handleSendEmail(this.props.route.params?.mostRecentShift?.id)}
             >
               <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('shift.sendEmail')}</Text>
             </TouchableOpacity>

@@ -61,7 +61,7 @@ class RenderCheckboxGroup extends React.Component {
                     this.props.navigation.navigate(customRoute, {
                       //productOptionId: ca.id,
                       customId: ca.id,
-                      customRoute: this.props.navigation.state.routeName
+                      customRoute: this.props.route.name
                     })
                   }}
                 />

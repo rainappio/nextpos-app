@@ -67,7 +67,7 @@ class SettingsScreen extends React.Component {
       <MenuButton
         route='StaffsOverview'
         onPress={() =>
-          NavigationService?.navigateToRoute('StaffsOverview')
+          NavigationService?.navigateToRoute('StaffsOverview', {screen: 'StaffsOverview'})
         }
         title={t('settings.staff')}
         icon={
@@ -107,7 +107,7 @@ class SettingsScreen extends React.Component {
 
       <MenuButton
         route='MemberScreen'
-        onPress={() => NavigationService?.navigateToRoute('MemberScreen')}
+        onPress={() => NavigationService?.navigateToRoute('MemberScreen', {screen: 'MemberScreen'})}
         title={t('settings.member')}
         icon={
           <FontAwesome5Icon
@@ -159,7 +159,7 @@ class SettingsScreen extends React.Component {
 
       <MenuButton
         route='EinvoiceStatusScreen'
-        onPress={() => NavigationService?.navigateToRoute('EinvoiceStatusScreen')}
+        onPress={() => NavigationService?.navigateToRoute('EinvoiceStatusScreen', {screen: 'EinvoiceStatusScreen'})}
         title={t('settings.eInvoice')}
         icon={
           <FontAwesome5Icon

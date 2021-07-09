@@ -177,7 +177,7 @@ class OrdersSummaryRow extends React.Component {
 
   handleCancel = orderId => {
     this.props.clearOrder(orderId)
-    this.props.navigation.navigate('TablesSrc')
+    this.props.navigation.navigate('TablesScr')
   }
 
   handleDeleteLineItem = (orderId, lineItemId) => {
@@ -223,7 +223,7 @@ class OrdersSummaryRow extends React.Component {
                 },
               },
                 response => {
-                  this.props.navigation.navigate('TablesSrc')
+                  this.props.navigation.navigate('TablesScr')
                 }).then()
             }
           },
@@ -245,7 +245,7 @@ class OrdersSummaryRow extends React.Component {
         body: JSON.stringify({lineItemIds: lineItemIds})
       },
         response => {
-          this.props.navigation.navigate('TablesSrc')
+          this.props.navigation.navigate('TablesScr')
         }).then()
     }
   }
@@ -281,7 +281,7 @@ class OrdersSummaryRow extends React.Component {
                 body: formData
               },
                 response => {
-                  this.props.navigation.navigate('TablesSrc')
+                  this.props.navigation.navigate('TablesScr')
                 }).then()
             }
           },
@@ -303,7 +303,7 @@ class OrdersSummaryRow extends React.Component {
         body: JSON.stringify({lineItemIds: lineItemIds})
       },
         response => {
-          this.props.navigation.navigate('TablesSrc')
+          this.props.navigation.navigate('TablesScr')
         }).then()
     }
   }
@@ -321,7 +321,7 @@ class OrdersSummaryRow extends React.Component {
     }, {
       defaultMessage: false
     }, response => {
-      this.props.navigation.navigate('TablesSrc')
+      this.props.navigation.navigate('TablesScr')
       this.props.getfetchOrderInflights()
       this.props.clearOrder(id)
       this.props.getOrdersByDateRange()
@@ -436,7 +436,7 @@ class OrdersSummaryRow extends React.Component {
     return (
       <View style={styles.fullWidthScreen}>
         <View style={{flex: 1}}>
-          <ScreenHeader backNavigation={(this.props?.navigation?.state?.params?.route == 'LoginSuccess' && order.orderType === 'TAKE_OUT') ? false : true}
+          <ScreenHeader backNavigation={(this.props?.route?.params?.route == 'LoginSuccess' && order.orderType === 'TAKE_OUT') ? false : true}
             parentFullScreen={true}
             backAction={() => this.handleCancel(order.orderId)}
             title={t('orderSummaryTitle')}
@@ -595,7 +595,7 @@ class OrdersSummaryRow extends React.Component {
                         onPress={() =>
                           this.props.navigation.navigate('OrderFormIII', {
                             prdId: data.item.productId,
-                            orderId: this.props.navigation.state.params.orderId,
+                            orderId: this.props.route.params.orderId,
                             lineItem: data.item
                           })
                         }>
@@ -842,7 +842,7 @@ class OrdersSummaryRow extends React.Component {
                   onPress={() =>
                     order.lineItems.length === 0
                       ? warningMessage(t('lineItemCountCheck'))
-                      : (!!this.props.navigation.state.params?.orderSetData && this.props.navigation.state.params?.orderSetData?.status !== 'MERGED')
+                      : (!!this.props.route.params?.orderSetData && this.props.route.params?.orderSetData?.status !== 'MERGED')
                         ? Alert.alert(
                           `${this.context.t('order.mergeOrderTitle')}`,
                           `${this.context.t('order.mergeOrderMsg')}`,
@@ -850,7 +850,7 @@ class OrdersSummaryRow extends React.Component {
                             {
                               text: `${this.context.t('action.yes')}`,
                               onPress: () => {
-                                this.handleMergeOrder(this.props.navigation.state.params?.orderSetData?.id, order.orderId)
+                                this.handleMergeOrder(this.props.route.params?.orderSetData?.id, order.orderId)
                               }
                             },
                             {
@@ -904,9 +904,9 @@ class OrdersSummaryRow extends React.Component {
             <DeleteBtn
               handleDeleteAction={() => handleDelete(order.orderId, () => {
                 if (order.orderType === 'TAKE_OUT') {
-                  NavigationService.navigate('LoginSuccess')
+                  this.props.navigation.navigate('Home', {screen: 'LoginSuccess'})
                 } else {
-                  NavigationService.navigate('TablesSrc')
+                  this.props.navigation.navigate('Tables', {screen: 'TablesScr'})
                 }
               })}
             />

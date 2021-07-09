@@ -23,9 +23,9 @@ class PrinterEdit extends React.Component {
 
   componentDidMount() {
     this.props.getPrinter(
-      this.props.navigation.state.params.customId === undefined
-        ? this.props.navigation.state.params.id
-        : this.props.navigation.state.params.customId
+      this.props.route.params.customId === undefined
+        ? this.props.route.params.id
+        : this.props.route.params.customId
     )
   }
 
@@ -68,7 +68,7 @@ class PrinterEdit extends React.Component {
   }
 
   render() {
-    const {navigation, printer, loading, haveData, haveError} = this.props
+    const {navigation, route, printer, loading, haveData, haveError} = this.props
     const {t} = this.context
 
     if (loading) {
@@ -89,6 +89,7 @@ class PrinterEdit extends React.Component {
 
           <PrinterForm
             navigation={navigation}
+            route={route}
             onSubmit={this.handleUpdate}
             handleDelete={this.handleDelete}
             isEdit={true}

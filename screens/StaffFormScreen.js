@@ -275,7 +275,7 @@ class StaffFormScreen extends React.Component {
                 <DeleteBtn
                   handleDeleteAction={this.handleDelete}
                   params={{
-                    name: this.props.navigation.state.params.staffname
+                    name: this.props.route.params.staffname
                   }}
                 />
               </View>

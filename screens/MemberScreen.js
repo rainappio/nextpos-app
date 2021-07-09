@@ -11,7 +11,6 @@ import styles from '../styles'
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
-import {NavigationEvents} from 'react-navigation'
 import {MainActionFlexButton, DeleteFlexButton} from "../components/ActionButtons";
 import DeleteBtn from '../components/DeleteBtn'
 import {ThemeContainer} from "../components/ThemeContainer";
@@ -56,6 +55,12 @@ class MemberScreen extends React.Component {
 
         this.props.getCurrentClient()
         this.getMembers()
+        this._refreshScreen = this.props.navigation.addListener('focus', () => {
+            this.refreshScreen()
+        })
+    }
+    componentWillUnmount() {
+        this._refreshScreen()
     }
 
 
@@ -245,11 +250,6 @@ class MemberScreen extends React.Component {
                 return (
                     <ThemeContainer>
                         <View style={[styles.fullWidthScreen]}>
-                            <NavigationEvents
-                                onWillFocus={() => {
-                                    this.refreshScreen()
-                                }}
-                            />
                             <ScreenHeader title={t('settings.member')}
                                 parentFullScreen={true}
 
@@ -501,11 +501,6 @@ class MemberScreen extends React.Component {
                 return (
                     <ThemeContainer>
                         <View style={[styles.fullWidthScreen]}>
-                            <NavigationEvents
-                                onWillFocus={() => {
-                                    this.refreshScreen()
-                                }}
-                            />
                             <ScreenHeader title={t('settings.member')}
                                 parentFullScreen={true}
                                 rightComponent={

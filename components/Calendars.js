@@ -9,7 +9,7 @@ import {LocaleContext} from '../locales/LocaleContext'
 import styles from '../styles'
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import _ from 'lodash';
-import {withNavigation} from 'react-navigation';
+import {withNavigation} from '@react-navigation/compat';
 import {StyledText} from './StyledText';
 import Modal from 'react-native-modal';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'

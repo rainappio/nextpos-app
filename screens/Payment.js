@@ -4,7 +4,6 @@ import PaymentFormScreenTablet from './PaymentFormScreenTablet'
 import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {handleDelete} from "../helpers/orderActions";
-import NavigationService from "../navigation/NavigationService";
 
 class Payment extends React.Component {
   static navigationOptions = {
@@ -21,7 +20,7 @@ class Payment extends React.Component {
 
 
   handlePayment = async values => {
-    const orderId = this.props.navigation.state.params.order.orderId
+    const orderId = this.props.route.params.order.orderId
 
     const waiveServiceCharge = async () => {
       const waiveServiceCharge = values.waiveServiceCharge === true
@@ -61,13 +60,13 @@ class Payment extends React.Component {
 
     const goToPaymentOrder = async () => {
       this.props.navigation.navigate(this.context?.appType === 'store' ? 'PaymentOrder' : 'RetailPaymentOrder', {
-        orderId: this.props.navigation.state.params.order.orderId,
+        orderId: this.props.route.params.order.orderId,
         navigation: this.props.navigation,
-        isSplitting: this.props.navigation.state.params?.isSplitting ?? false,
-        parentOrder: this.props.navigation.state.params?.parentOrder ?? null,
-        isSplitByHeadCount: this.props.navigation.state.params?.isSplitByHeadCount ?? false,
-        splitAmount: this.props.navigation.state.params?.splitAmount ?? null,
-        isLastOne: this.props.navigation.state.params?.isLastOne ?? false,
+        isSplitting: this.props.route.params?.isSplitting ?? false,
+        parentOrder: this.props.route.params?.parentOrder ?? null,
+        isSplitByHeadCount: this.props.route.params?.isSplitByHeadCount ?? false,
+        splitAmount: this.props.route.params?.splitAmount ?? null,
+        isLastOne: this.props.route.params?.isLastOne ?? false,
       })
     }
 
@@ -79,8 +78,8 @@ class Payment extends React.Component {
   }
 
   render() {
-    const {navigation} = this.props
-    const order = this.props.navigation.state.params.order
+    const {navigation, route} = this.props
+    const order = this.props.route.params.order
 
     const initialDiscount = {
       offerId: 'NO_DISCOUNT',
@@ -108,12 +107,13 @@ class Payment extends React.Component {
         }}
         order={order}
         navigation={navigation}
+        route={route}
         onSubmit={this.handlePayment}
-        isSplitting={this.props.navigation.state.params?.isSplitting ?? false}
-        parentOrder={this.props.navigation.state.params?.parentOrder ?? null}
-        isSplitByHeadCount={this.props.navigation.state.params?.isSplitByHeadCount ?? false}
-        splitAmount={this.props.navigation.state.params?.splitAmount ?? null}
-        isLastOne={this.props.navigation.state.params?.isLastOne ?? false}
+        isSplitting={this.props.route.params?.isSplitting ?? false}
+        parentOrder={this.props.route.params?.parentOrder ?? null}
+        isSplitByHeadCount={this.props.route.params?.isSplitByHeadCount ?? false}
+        splitAmount={this.props.route.params?.splitAmount ?? null}
+        isLastOne={this.props.route.params?.isLastOne ?? false}
       />
         : <PaymentFormScreen
           initialValues={{
@@ -122,12 +122,13 @@ class Payment extends React.Component {
           }}
           order={order}
           navigation={navigation}
+          route={route}
           onSubmit={this.handlePayment}
-          isSplitting={this.props.navigation.state.params?.isSplitting ?? false}
-          parentOrder={this.props.navigation.state.params?.parentOrder ?? null}
-          isSplitByHeadCount={this.props.navigation.state.params?.isSplitByHeadCount ?? false}
-          splitAmount={this.props.navigation.state.params?.splitAmount ?? null}
-          isLastOne={this.props.navigation.state.params?.isLastOne ?? false}
+          isSplitting={this.props.route.params?.isSplitting ?? false}
+          parentOrder={this.props.route.params?.parentOrder ?? null}
+          isSplitByHeadCount={this.props.route.params?.isSplitByHeadCount ?? false}
+          splitAmount={this.props.route.params?.splitAmount ?? null}
+          isLastOne={this.props.route.params?.isLastOne ?? false}
         />}
     </>
     )

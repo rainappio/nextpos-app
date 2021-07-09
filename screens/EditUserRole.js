@@ -24,17 +24,17 @@ class EditUserRole extends Component {
   }
 
   handleSubmit = (values) => {
-    var userroleId = this.props.navigation.state.params.userroleId;
+    var userroleId = this.props.route.params.userroleId;
     dispatchFetchRequest(
       api.clientUser.updateuserRole(userroleId), {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(values)
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
       },
+      body: JSON.stringify(values)
+    },
       response => {
         this.props.navigation.navigate('ManageUserRole')
         this.props.getUserRoles()
@@ -43,7 +43,7 @@ class EditUserRole extends Component {
   }
 
   handleDeleteUserRole = () => {
-    var userroleId = this.props.navigation.state.params.userroleId;
+    var userroleId = this.props.route.params.userroleId;
     dispatchFetchRequest(api.clientUser.deleteuserRole(userroleId), {
       method: 'DELETE',
       withCredentials: true,
@@ -63,13 +63,13 @@ class EditUserRole extends Component {
     return (
       <ThemeScrollView>
         <View style={styles.fullWidthScreen}>
-          <ScreenHeader title={t('editUserRoleTitle')} parentFullScreen={true}/>
+          <ScreenHeader title={t('editUserRoleTitle')} parentFullScreen={true} />
           <NewUserRoleForm
             permissions={Object.keys(this.props.permissions)}
             labels={this.props.permissions}
-            initialValues={this.props.navigation.state.params.initialValues}
+            initialValues={this.props.route.params.initialValues}
             handleEditCancel={this.handleEditCancel}
-            isEditForm={this.props.navigation.state.params.isEditForm}
+            isEditForm={this.props.route.params.isEditForm}
             onSubmit={this.handleSubmit}
             handleDeleteUserRole={this.handleDeleteUserRole}
           />
@@ -96,4 +96,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps)
-(EditUserRole)
+  (EditUserRole)

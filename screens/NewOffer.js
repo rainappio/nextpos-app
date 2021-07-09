@@ -39,7 +39,7 @@ class NewOffer extends React.Component {
   componentDidMount() {
     this.props.getLables();
     this.setState({
-      products: this.props.navigation.state.params !== undefined && this.props.navigation.state.params.updatedProducts
+      products: this.props.route.params !== undefined && this.props.route.params.updatedProducts
     })
   }
 
@@ -52,7 +52,7 @@ class NewOffer extends React.Component {
   handleSubmit = values => {
     values.productIds = [];
     values.productLabelIds = [];
-    const { products } = this.state;
+    const {products} = this.state;
 
     if (!values.dateBound) {
       values.startDate = null
@@ -87,15 +87,15 @@ class NewOffer extends React.Component {
   };
 
   render() {
-    const { t } = this.context;
-    const { products } = this.state;
-    const selectedProducts = this.props.navigation.state.params !== undefined && this.props.navigation.state.params.updatedProducts;
+    const {t} = this.context;
+    const {products} = this.state;
+    const selectedProducts = this.props.route.params !== undefined && this.props.route.params.updatedProducts;
 
     return (
       <ThemeKeyboardAwareScrollView>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader title={t("newOfferTitle")}
-                        parentFullScreen={true}
+            parentFullScreen={true}
           />
           <OfferForm
             initialValues={{

@@ -16,8 +16,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
 import {isGuiNumberValid} from 'taiwan-id-validator2'
 import {handleDelete, handleOrderAction, getTableDisplayName, handlePrintOrderDetails} from "../helpers/orderActions";
-import NavigationService from "../navigation/NavigationService";
-import {NavigationEvents} from 'react-navigation'
 import {ScanView} from '../components/scanView'
 import InputText from '../components/InputText'
 import {isRequired} from '../validators'
@@ -64,6 +62,12 @@ class PaymentFormScreenTablet extends React.Component {
         this.props.getfetchglobalOrderOffers()
         this.props.getOrder(this.props.order.orderId)
         this.setState({waiveServiceCharge: this.props.order?.serviceCharge === 0})
+        this._initScreen = this.props.navigation.addListener('focus', async () => {
+            await this.initScreen()
+        })
+    }
+    componentWillUnmount() {
+        this._initScreen()
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -138,7 +142,7 @@ class PaymentFormScreenTablet extends React.Component {
         }, {
             defaultMessage: false
         }, response => {
-            this.props.navigation.navigate('TablesSrc')
+            this.props.navigation.navigate('TablesScr')
         }).then()
     }
 
@@ -150,7 +154,7 @@ class PaymentFormScreenTablet extends React.Component {
                 })
             } else {
                 this.context?.saveSplitParentOrderId(null)
-                this.handleSplitByHeadComplete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess'))
+                this.handleSplitByHeadComplete(this.props.route.params?.parentOrder?.orderId, () => this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? ('Tables', {screen: 'TablesScr'}) : ('Home', {screen: 'LoginSuccess'})))
 
                 console.log("route: tb complete 1", this.props?.order?.orderType)
             }
@@ -181,14 +185,14 @@ class PaymentFormScreenTablet extends React.Component {
                     })
                 } else {
                     this.context?.saveSplitParentOrderId(null)
-                    this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess')
+                    this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesScr' : 'LoginSuccess')
 
                     console.log("route: tb complete 2", this.props?.order?.orderType)
                 }
 
             } else {
                 this.context?.saveSplitParentOrderId(null)
-                this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess')
+                this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesScr' : 'LoginSuccess')
 
                 console.log("route: tb complete 3", this.props?.order?.orderType)
             }
@@ -285,7 +289,7 @@ class PaymentFormScreenTablet extends React.Component {
             })
         }, response => {
             this.context?.saveSplitParentOrderId(null)
-            this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess')
+            this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesScr' : 'LoginSuccess')
 
             console.log("route: tb props", this.props?.order?.orderType)
         }).then()
@@ -470,11 +474,6 @@ class PaymentFormScreenTablet extends React.Component {
                         title={`${getTableDisplayName(order)} - ${t('payment.paymentTitle')}`}
                         backAction={() => {
                             !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()
-                        }}
-                    />
-                    <NavigationEvents
-                        onWillFocus={async () => {
-                            await this.initScreen()
                         }}
                     />
                     <Modal

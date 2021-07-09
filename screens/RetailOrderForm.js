@@ -28,7 +28,6 @@ import {printMessage} from "../helpers/printerActions";
 import DropDown from "../components/DropDown";
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
-import {NavigationEvents} from "react-navigation";
 import {SplitBillPopUp} from '../components/PopUp'
 import {OfferTooltip} from "../components/OfferTooltip";
 import {RealTimeOrderUpdate} from '../components/RealTimeOrderUpdate'
@@ -71,8 +70,14 @@ class RetailOrderForm extends React.Component {
     componentDidMount() {
         this.props.getLables()
         this.props.getProducts()
-        this.props.navigation.state.params.orderId !== undefined &&
-            this.props.getOrder(this.props.navigation.state.params.orderId)
+        this.props.route.params.orderId !== undefined &&
+            this.props.getOrder(this.props.route.params.orderId)
+        this._getOrder = this.props.navigation.addListener('focus', () => {
+            this.props.getOrder(this.props.route.params.orderId)
+        })
+    }
+    componentWillUnmount() {
+        this._getOrder()
     }
 
     PanelHeader = (labelName, labelId, isSelected = false) => {
@@ -94,7 +99,7 @@ class RetailOrderForm extends React.Component {
         }, response => {
             response.json().then(product => {
                 if (product.productOptions == null || product.productOptions.length === 0 && product.inventory == null) {
-                    const orderId = this.props.navigation.state.params.orderId
+                    const orderId = this.props.route.params.orderId
                     let lineItemRequest = {}
 
                     lineItemRequest['productId'] = productId
@@ -126,7 +131,7 @@ class RetailOrderForm extends React.Component {
                     } else {
                         this.props.navigation.navigate('RetailOrderFormIII', {
                             prdId: productId,
-                            orderId: this.props.navigation.state.params.orderId
+                            orderId: this.props.route.params.orderId
                         })
                     }
                 }
@@ -162,7 +167,7 @@ class RetailOrderForm extends React.Component {
         }, response => {
             response.json().then(product => {
                 if (product.productOptions == null || product.productOptions.length === 0 && product.inventory == null) {
-                    const orderId = this.props.navigation.state.params.orderId
+                    const orderId = this.props.route.params.orderId
                     let lineItemRequest = {}
 
                     lineItemRequest['productId'] = productId
@@ -185,7 +190,7 @@ class RetailOrderForm extends React.Component {
                     } else {
                         this.props.navigation.navigate('RetailOrderFormIII', {
                             prdId: productId,
-                            orderId: this.props.navigation.state.params.orderId
+                            orderId: this.props.route.params.orderId
                         })
                     }
                 }
@@ -294,7 +299,7 @@ class RetailOrderForm extends React.Component {
     }
     handleOnMessage = (data, id) => {
         if (data === `${id}.order.orderChanged`) {
-            this.props.getOrder(this.props.navigation.state.params.orderId)
+            this.props.getOrder(this.props.route.params.orderId)
         }
     }
 
@@ -343,15 +348,10 @@ class RetailOrderForm extends React.Component {
                 return (
                     <ThemeContainer>
                         <View style={{...styles.fullWidthScreen, marginBottom: 0}}>
-                            <NavigationEvents
-                                onWillFocus={() => {
-                                    this.props.getOrder(this.props.navigation.state.params.orderId)
-                                }}
-                            />
                             <RealTimeOrderUpdate
-                                topics={`/topic/order/${this.props.navigation.state.params.orderId}`}
+                                topics={`/topic/order/${this.props.route.params.orderId}`}
                                 handleOnMessage={this.handleOnMessage}
-                                id={this.props.navigation.state.params.orderId}
+                                id={this.props.route.params.orderId}
                             />
                             <ScreenHeader backNavigation={true}
                                 backAction={() => this.props.navigation.navigate('LoginSuccess')}
@@ -508,7 +508,7 @@ class RetailOrderForm extends React.Component {
                                                         fontSize: 16,
                                                         color: '#fff',
                                                     }}
-                                                    handleDeleteAction={() => handleDelete(order.orderId, () => NavigationService.navigate('LoginSuccess'))}
+                                                    handleDeleteAction={() => handleDelete(order.orderId, () => this.props.navigation.navigate('Home', {screen: 'LoginSuccess'}))}
                                                 />
 
                                             </View>
@@ -841,9 +841,9 @@ class RetailOrderForm extends React.Component {
                                 <TouchableOpacity
                                     onPress={() =>
                                         this.props.navigation.navigate('RetailOrdersSummary', {
-                                            orderId: this.props.navigation.state.params.orderId,
-                                            onSubmit: this.props.navigation.state.params.onSubmit,
-                                            handleDelete: this.props.navigation.state.params.handleDelete
+                                            orderId: this.props.route.params.orderId,
+                                            onSubmit: this.props.route.params.onSubmit,
+                                            handleDelete: this.props.route.params.handleDelete
                                         })
                                     }
                                 >
@@ -888,10 +888,10 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch,
     getLables: () => dispatch(getLables()),
     getProducts: () => dispatch(getProducts()),
-    getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId)),
+    getOrder: () => dispatch(getOrder(props.route.params.orderId)),
     getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
     getOrdersByDateRange: () => dispatch(getOrdersByDateRange()),
-    clearOrder: () => dispatch(clearOrder(props.navigation.state.params.orderId)),
+    clearOrder: () => dispatch(clearOrder(props.route.params.orderId)),
 })
 
 RetailOrderForm = reduxForm({

@@ -11,6 +11,7 @@ class CustomCheckBox extends React.Component {
       optionName,
       checkboxType,
       themeStyle,
+      customBackgroundThemeColor,
       ...rest
     } = this.props
 
@@ -21,7 +22,7 @@ class CustomCheckBox extends React.Component {
         }
         checkedIcon={'check-circle'}
         uncheckedIcon={'circle'}
-        checked={ value === customValue }
+        checked={value === customValue}
         onPress={() => {
           if (checkboxType === 'checkbox') {
             onChange(!value)
@@ -30,7 +31,7 @@ class CustomCheckBox extends React.Component {
             onChange(customValue)
           }
         }}
-        containerStyle={{backgroundColor: themeStyle.backgroundColor}}
+        containerStyle={{backgroundColor: customBackgroundThemeColor}}
       />
     )
   }

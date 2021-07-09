@@ -20,16 +20,17 @@ class Option extends React.Component {
       },
       body: JSON.stringify(values)
     }, response => {
-      this.props.navigation.navigate(this.props.navigation.state.params.customRoute)
+      this.props.navigation.navigate(this.props.route.params.customRoute)
     }).then()
   }
 
   render() {
-    const {navigation} = this.props
+    const {navigation, route} = this.props
     return (
       <OptionFormScreen
         onSubmit={this.handleSubmit}
         navigation={navigation}
+        route={route}
       />
     )
   }

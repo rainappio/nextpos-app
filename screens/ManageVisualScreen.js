@@ -15,7 +15,7 @@ import Modal from 'react-native-modal';
 import TableAddModal from './TableAddModal';
 import {withContext} from "../helpers/contextHelper";
 
-class ManageVisualSceen extends Component {
+class ManageVisualScreen extends Component {
   static navigationOptions = {
     header: null
   }
@@ -215,7 +215,7 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ManageVisualSceen)
+)(ManageVisualScreen)
 
 class DraggableBase extends Component {
   constructor(props) {

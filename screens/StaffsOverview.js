@@ -16,6 +16,7 @@ class StaffsOverview extends React.Component {
     const {
       clientusers = [],
       navigation,
+      route,
       haveData,
       haveError,
       isLoading,
@@ -26,6 +27,7 @@ class StaffsOverview extends React.Component {
       <StaffListScreen
         clientusers={clientusers}
         navigation={navigation}
+        route={route}
         haveData={haveData}
         haveError={haveError}
         isLoading={isLoading}

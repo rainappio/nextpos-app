@@ -35,7 +35,7 @@ class WorkingAreaAdd extends React.Component {
   }
 
   render() {
-    const {navigation} = this.props
+    const {navigation, route} = this.props
     const {t} = this.context
 
     return (
@@ -47,6 +47,7 @@ class WorkingAreaAdd extends React.Component {
           <WorkingAreaForm
             onSubmit={this.handleSubmit}
             navigation={navigation}
+            route={route}
           />
         </View>
       </ThemeContainer>

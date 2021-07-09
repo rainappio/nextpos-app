@@ -11,7 +11,6 @@ import {ThemeScrollView} from "../components/ThemeScrollView";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {api, dispatchFetchRequest} from '../constants/Backend'
-import {NavigationEvents} from 'react-navigation'
 import TimeZoneService from "../helpers/TimeZoneService";
 import moment from "moment-timezone";
 import {StyledText} from '../components/StyledText'
@@ -72,6 +71,13 @@ class CalendarScreen extends React.Component {
         this.getUsers()
         this.getEvents()
         this.getLabels()
+
+        this._refreshScreen = this.props.navigation.addListener('focus', () => {
+            this.refreshScreen()
+        })
+    }
+    componentWillUnmount() {
+        this._refreshScreen()
     }
 
     refreshScreen = async () => {
@@ -189,11 +195,6 @@ class CalendarScreen extends React.Component {
 
         return (
             <ThemeContainer>
-                <NavigationEvents
-                    onWillFocus={() => {
-                        this.refreshScreen()
-                    }}
-                />
 
                 <View style={[styles.fullWidthScreen, {marginBottom: 0}]}>
                     <ScreenHeader backNavigation={false}
@@ -283,7 +284,7 @@ class CalendarScreen extends React.Component {
                                                 </View>
                                                 {this.state?.labels?.map((workingArea) => {
                                                     return (
-                                                        <View style={{
+                                                        <View key={workingArea.id} style={{
                                                             flexDirection: 'row',
                                                             paddingVertical: 8,
                                                             alignItems: 'center'

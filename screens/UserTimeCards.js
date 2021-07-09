@@ -46,8 +46,8 @@ class UserTimeCards extends React.Component {
 
     this.state = {
       timecardId: null,
-      selectedYear: props.navigation.getParam('year'),
-      selectedMonth: props.navigation.getParam('month')
+      selectedYear: props.route.params?.year,
+      selectedMonth: props.route.params?.month,
     }
   }
 
@@ -56,7 +56,7 @@ class UserTimeCards extends React.Component {
   handleFilter = (values) => {
     const month = values.month;
     const year = values.year;
-    const username = this.props.navigation.state.params.name;
+    const username = this.props.route.params.name;
 
     if (!month || !year) {
       warningMessage('Please Choose Both Year and Month')
@@ -69,9 +69,10 @@ class UserTimeCards extends React.Component {
   }
 
   componentDidMount() {
-    const username = this.props.navigation.getParam('name')
-    const year = this.props.navigation.getParam('year')
-    const month = this.props.navigation.getParam('month')
+    const username = this.props.route.params?.name
+    const year = this.props.route.params?.year
+    const month = this.props.route.params?.month
+
 
     this.props.getUserTimeCards(username, year, month)
   }
@@ -135,7 +136,7 @@ class UserTimeCards extends React.Component {
           />
 
           <View>
-            <Text style={styles?.screenSubTitle(customMainThemeColor)}>{this.props.navigation.getParam('displayName')}</Text>
+            <Text style={styles?.screenSubTitle(customMainThemeColor)}>{this.props.route.params?.displayName}</Text>
           </View>
 
           <UserTimeCardFilterForm
@@ -145,11 +146,6 @@ class UserTimeCards extends React.Component {
               month: this.state.selectedMonth
             }}
           />
-
-          {/*<UserTimeCardsFilterForm
-							onSubmit={this.handleFilter}
-							displayName={this.props.navigation.state.params.displayName}
-            />*/}
 
           <View style={[styles.sectionBar]}>
             <View style={[styles.tableCellView, {flex: 3.2, alignItems: 'flex-start'}]}>

@@ -4,7 +4,7 @@ import styles from "../styles";
 import {Text, TouchableOpacity, View} from "react-native";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import {formatDate} from "../actions";
-import {withNavigation} from 'react-navigation'
+import {withNavigation} from '@react-navigation/compat'
 import {StyledText} from "../components/StyledText";
 import {getTableDisplayName} from "../helpers/orderActions";
 
@@ -37,7 +37,7 @@ class OrderTopInfo extends Component {
 
             <View style={[styles.tableCellView, {width: '20%'}]}>
               <TouchableOpacity onPress={() => {
-                const originScreen = this.props.navigation.state.routeName
+                const originScreen = this.props.route.name
                 const updateOrderRoute = (originScreen === 'OrdersSummary' || originScreen === 'OrderFormII') ? 'UpdateOrder' : 'UpdateOrderFromOrderDetail'
                 this.props.navigation.navigate(updateOrderRoute, {
                   order: order
@@ -78,12 +78,12 @@ class OrderTopInfo extends Component {
                 {order?.metadata?.hasOwnProperty('copyFromOrderId') && order?.metadata?.hasOwnProperty('copyFromSerialId') && (
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.navigate({
-                        routeName: 'OrderDetail',
+                      this.props.navigation.navigate('Orders', {
+                        screen: 'OrderDetail',
                         params: {
-                          orderId: order.metadata.copyFromOrderId
+                          orderId: order.metadata.copyFromOrderId,
+                          key: order.metadata.copyFromOrderId
                         },
-                        key: order.metadata.copyFromOrderId
                       })
                     }}>
                     <StyledText>({t('order.copiedFrom')}: {order.metadata.copyFromSerialId})</StyledText>
@@ -117,7 +117,7 @@ class OrderTopInfo extends Component {
             <View style={[styles.tableCellView, {width: '15%'}]}>
               <TouchableOpacity
                 onPress={() => {
-                  const originScreen = this.props.navigation.state.routeName
+                  const originScreen = this.props.route.name
                   const updateOrderRoute = (originScreen === 'OrdersSummary' || originScreen === 'OrderFormII') ? 'UpdateOrder' : 'UpdateOrderFromOrderDetail'
                   this.props.navigation.navigate(updateOrderRoute, {
                     order: order
@@ -156,12 +156,12 @@ class OrderTopInfo extends Component {
             {order?.metadata?.hasOwnProperty('copyFromOrderId') && order?.metadata?.hasOwnProperty('copyFromSerialId') && (
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate({
-                    routeName: 'OrderDetail',
+                  this.props.navigation.navigate('Orders', {
+                    screen: 'OrderDetail',
                     params: {
-                      orderId: order.metadata.copyFromOrderId
+                      orderId: order.metadata.copyFromOrderId,
+                      key: order.metadata.copyFromOrderId
                     },
-                    key: order.metadata.copyFromOrderId
                   })
                 }}>
                 <StyledText>({t('order.copiedFrom')}: {order.metadata.copyFromSerialId})</StyledText>

@@ -27,7 +27,7 @@ class ProductEdit extends Component {
     this.props.getProductOptions()
     this.props.getWorkingAreas('PRODUCT')
     this.props.getProduct()
-    this.getInventory(this.props.navigation.state.params.productId)
+    this.getInventory(this.props.route.params.productId)
   }
 
   handleEditCancel = () => {
@@ -45,7 +45,7 @@ class ProductEdit extends Component {
       })
     }
 
-    let prdId = this.props.navigation.state.params.productId
+    let prdId = this.props.route.params.productId
 
     dispatchFetchRequest(api.product.update(prdId), {
       method: 'POST',
@@ -61,7 +61,7 @@ class ProductEdit extends Component {
   }
 
   handleDelete = () => {
-    let productId = this.props.navigation.state.params.productId
+    let productId = this.props.route.params.productId
 
     dispatchFetchRequest(api.product.delete(productId), {
       method: 'DELETE',
@@ -123,7 +123,7 @@ class ProductEdit extends Component {
 
   addInventory = (values) => {
     const request = {quantity: {...values}}
-    let prdId = this.props.navigation.state.params.productId
+    let prdId = this.props.route.params.productId
     dispatchFetchRequest(
       api.inventory.addQuantity(prdId),
       {
@@ -146,7 +146,7 @@ class ProductEdit extends Component {
 
   addFirstInventory = (values) => {
     const request = {
-      productId: this.props.navigation.state.params.productId,
+      productId: this.props.route.params.productId,
       quantity: {...values}
     }
     dispatchFetchRequest(
@@ -170,7 +170,7 @@ class ProductEdit extends Component {
 
   handleInventoryUpdate = (values, oldSku) => {
     const request = {quantity: {...values}}
-    let prdId = this.props.navigation.state.params.productId
+    let prdId = this.props.route.params.productId
 
     dispatchFetchRequest(api.inventory.update(prdId, oldSku), {
       method: 'POST',
@@ -188,7 +188,7 @@ class ProductEdit extends Component {
   }
 
   handleInventoryDelete = (oldSku) => {
-    let prdId = this.props.navigation.state.params.productId
+    let prdId = this.props.route.params.productId
 
     dispatchFetchRequest(api.inventory.deleteQuantity(prdId, oldSku), {
       method: 'DELETE',
@@ -203,7 +203,7 @@ class ProductEdit extends Component {
   }
 
   handleDeleteAllInventory = () => {
-    let prdId = this.props.navigation.state.params.productId
+    let prdId = this.props.route.params.productId
 
     dispatchFetchRequest(api.inventory.delete(prdId), {
       method: 'DELETE',
@@ -222,6 +222,7 @@ class ProductEdit extends Component {
     const {
       labels,
       navigation,
+      route,
       product,
       products,
       haveData,
@@ -243,14 +244,15 @@ class ProductEdit extends Component {
           labels={labels}
           isEditForm={true}
           navigation={navigation}
+          route={route}
           initialValues={product}
           handleEditCancel={this.handleEditCancel}
           handleDeleteProduct={this.handleDelete}
           onSubmit={this.handleUpdate}
           workingareas={workingareas}
           prodctoptions={prodctoptions}
-          isPinned={this.props.navigation.state.params.isPinned}
-          productId={this.props.navigation.state.params.productId}
+          isPinned={this.props.route.params.isPinned}
+          productId={this.props.route.params.productId}
           handlepinToggle={this.handlepinToggle}
           inventoryData={this.state?.inventoryData}
           handleInventoryUpdate={this.handleInventoryUpdate}
@@ -281,21 +283,21 @@ const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getLables: () => dispatch(getLables()),
   load: () => {
-    dispatch(getProduct(props.navigation.state.params.productId))
+    dispatch(getProduct(props.route.params.productId))
   },
   clearProduct: () =>
-    dispatch(clearProduct(props.navigation.state.params.productId)),
+    dispatch(clearProduct(props.route.params.productId)),
   getProducts: () => dispatch(getProducts()),
   getWorkingAreas: () => dispatch(getWorkingAreas('PRODUCT')),
   getProductOptions: () => {
-    const labelId = props.navigation.state.params.labelId
+    const labelId = props.route.params.labelId
 
     if (labelId !== undefined && labelId != null && labelId !== 'ungrouped') {
-      dispatch(getProductOptions(props.navigation.state.params.labelId))
+      dispatch(getProductOptions(props.route.params.labelId))
     }
   },
   getProduct: () =>
-    dispatch(getProduct(props.navigation.state.params.productId))
+    dispatch(getProduct(props.route.params.productId))
 })
 
 export default connect(

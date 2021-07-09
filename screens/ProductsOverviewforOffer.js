@@ -19,6 +19,7 @@ class ProductsOverviewforOffer extends React.Component {
     const {
       products = [],
       navigation,
+      route,
       haveData,
       haveError,
       isLoading,
@@ -39,9 +40,10 @@ class ProductsOverviewforOffer extends React.Component {
       <ProductRowforOffer
         products={products}
         navigation={navigation}
+        route={route}
         labels={labels}
-        isEditForm={this.props.navigation.state.params !== undefined && this.props.navigation.state.params.isEditForm}
-        updatedProducts={this.props.navigation.state.params !== undefined && this.props.navigation.state.params.updatedselectedProducts}
+        isEditForm={this.props.route.params !== undefined && this.props.route.params.isEditForm}
+        updatedProducts={this.props.route.params !== undefined && this.props.route.params.updatedselectedProducts}
       />
     )
   }

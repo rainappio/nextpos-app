@@ -15,7 +15,6 @@ import {LocaleContext} from '../locales/LocaleContext'
 import SegmentedControl from "../components/SegmentedControl"
 import RenderStepper from '../components/RenderStepper'
 import ScreenHeader from "../components/ScreenHeader";
-import {NavigationEvents} from "react-navigation";
 import LoadingScreen from "./LoadingScreen";
 import {RenderDatePicker} from '../components/DateTimePicker'
 import TimeZoneService from "../helpers/TimeZoneService";
@@ -81,15 +80,22 @@ class ReservationFormScreen extends React.Component {
     this.props.getTableLayouts()
     this.props.getfetchOrderInflights()
     this.props.getAvailableTables()
-
+    this._resetForm = this.props.navigation.addListener('focus', () => {
+      if (!this.props.isEdit && !this.props.nextStep) {
+        this.handleResetForm()
+      }
+    })
+  }
+  componentWillUnmount() {
+    this._resetForm()
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  // componentDidUpdate(prevProps, prevState) {
 
-    if (!this.props.isEdit && (prevProps.initialValues !== this.props.initialValues)) {
-      this.loadInfo()
-    }
-  }
+  //   if (!this.props.isEdit && (prevProps.initialValues !== this.props.initialValues)) {
+  //     this.loadInfo()
+  //   }
+  // }
 
   loadInfo = () => {
     let data = this.props?.initialValues
@@ -319,9 +325,9 @@ class ReservationFormScreen extends React.Component {
     this.props.change(`minutes`, null)
     this.props.change(`people`, 0)
     this.props.change(`kid`, 0)
-    this.props.change(`name`, null)
-    this.props.change(`phoneNumber`, null)
-    this.props.change(`note`, null)
+    this.props.change(`name`, '')
+    this.props.change(`phoneNumber`, '')
+    this.props.change(`note`, '')
     this.props.change(`tableIds`, null)
     this.setState({selectedTableIds: [], selectedTableNames: [], reservationDate: moment(this.props?.initialValues.reservationStartDate ?? new Date()).format('YYYY-MM-DD'), selectedTimeBlock: 0, selectedHour: null, selectedMinutes: null, isGetTables: false})
     this.handleHourSelection(0)
@@ -408,13 +414,6 @@ class ReservationFormScreen extends React.Component {
         return (
           <ThemeScrollView>
             <View style={styles.fullWidthScreen}>
-              <NavigationEvents
-                onWillFocus={() => {
-                  if (!this.props.isEdit && !nextStep) {
-                    this.handleResetForm()
-                  }
-                }}
-              />
               <ScreenHeader
                 backNavigation={true}
                 backAction={() => {
@@ -776,13 +775,6 @@ class ReservationFormScreen extends React.Component {
         return (
           <ThemeContainer>
             <View style={styles.fullWidthScreen}>
-              <NavigationEvents
-                onWillFocus={() => {
-                  if (!this.props.isEdit && !nextStep) {
-                    this.handleResetForm()
-                  }
-                }}
-              />
               <ScreenHeader
                 backNavigation={true}
                 backAction={() => {
@@ -897,7 +889,7 @@ class ReservationFormScreen extends React.Component {
                                     let isAvailable = this.state.availableTables?.includes(table.tableId)
                                     let isSelected = this.state?.selectedTableIds.includes(table.tableId)
 
-                                    if (isAvailable || (!isAvailable && isSelected)) {
+                                    if (isAvailable) {
                                       return (
                                         <ListItem
                                           key={table?.tableId}
@@ -911,7 +903,7 @@ class ReservationFormScreen extends React.Component {
                                                   checked={this.state.selectedTableIds.includes(table.tableId)}
                                                   onPress={() => {
                                                     let tableList = this.state.availableTables
-                                                    if (isAvailable || (!isAvailable && isSelected)) {
+                                                    if (isAvailable) {
                                                       this.handleChooseTable(table.tableId, table.tableName)
                                                       if (isSelected) {
                                                         tableList.push(table.tableId)

@@ -6,7 +6,7 @@ import Modal from 'react-native-modal';
 import {isEmail, isRequired} from '../validators'
 import InputText from '../components/InputText'
 import styles from '../styles'
-import {withNavigation} from 'react-navigation'
+import {withNavigation} from '@react-navigation/compat'
 import {LocaleContext} from "../locales/LocaleContext";
 import {storage} from "../constants/Backend";
 import {StyledText} from "../components/StyledText";
@@ -82,7 +82,7 @@ class LoginScreen extends React.Component {
     })
 
 
-    const removeLoginAs = this.props.navigation.getParam('removeLoginAs');
+    const removeLoginAs = !!this.props.route && this.props.route.params?.removeLoginAs
 
     if (removeLoginAs) {
       AsyncStorage.removeItem('usedLoginAccounts')
@@ -114,6 +114,7 @@ class LoginScreen extends React.Component {
         <TouchableOpacity style={[styles.tableCellView]}
           onPress={() => {
             this.props?.handleLoginUsedAccount(item.clientUsername, item.clientPassword)
+            this.setState({modalVisible: false})
           }}>
           <View style={[styles.tableCellView]}>
             <Avatar

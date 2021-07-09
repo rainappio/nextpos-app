@@ -272,7 +272,7 @@ class OptionFormScreen extends React.Component {
             <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate(
-                  this.props.navigation.state.params.customRoute
+                  this.props.route.params.customRoute
                 )
               }
             >

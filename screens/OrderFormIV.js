@@ -9,7 +9,7 @@ import {isCountZero, isRequired} from '../validators'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
-import {withNavigation} from "react-navigation";
+import {withNavigation} from "@react-navigation/compat"
 import InputText from "../components/InputText";
 import RenderCheckBox from "../components/rn-elements/CheckBox";
 import {StyledText} from "../components/StyledText";

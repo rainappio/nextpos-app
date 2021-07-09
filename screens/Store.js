@@ -72,7 +72,7 @@ class Store extends React.Component {
   }
 
   render() {
-    const {client, navigation, loading, haveData, paymentMethods} = this.props
+    const {client, navigation, route, loading, haveData, paymentMethods} = this.props
 
 
     if (loading) {
@@ -85,6 +85,7 @@ class Store extends React.Component {
           initialValues={client}
           onSubmit={this.handleSubmit}
           navigation={navigation}
+          route={route}
           paymentMethods={paymentMethods}
         />
       )

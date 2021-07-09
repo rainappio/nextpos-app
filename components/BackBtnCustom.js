@@ -1,6 +1,6 @@
 import React from 'react'
 import {TouchableOpacity, View} from 'react-native'
-import {withNavigation} from 'react-navigation'
+import {withNavigation} from '@react-navigation/compat'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 class BackBtnCustom extends React.Component {

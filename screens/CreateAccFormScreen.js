@@ -5,7 +5,7 @@ import {PropTypes} from 'prop-types'
 import {isEmail, isRequired, isvalidPassword, isconfirmPassword} from '../validators'
 import InputText from '../components/InputText'
 import styles from '../styles'
-import {withNavigation} from 'react-navigation'
+import {withNavigation} from '@react-navigation/compat'
 import {LocaleContext} from '../locales/LocaleContext'
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";

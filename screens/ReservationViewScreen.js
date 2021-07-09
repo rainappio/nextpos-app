@@ -9,7 +9,6 @@ import {getInitialTablePosition, getTablePosition, getSetPosition} from "../help
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
-import {NavigationEvents} from "react-navigation";
 import LoadingScreen from "./LoadingScreen";
 import TimeZoneService from "../helpers/TimeZoneService";
 import styles from '../styles'
@@ -51,6 +50,12 @@ class ReservationViewForm extends React.Component {
     if (this.props.reservation?.tables) {
       this.handleSetTableIndex(this.props.reservation?.tables)
     }
+    this._getReservation = this.props.navigation.addListener('focus', () => {
+      this.props.getReservation()
+    })
+  }
+  componentWillUnmount() {
+    this._getReservation()
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.reservation?.tables !== this.props.reservation?.tables) {
@@ -198,11 +203,6 @@ class ReservationViewForm extends React.Component {
         return (
           <ThemeScrollView>
             <View style={styles.fullWidthScreen}>
-              <NavigationEvents
-                onWillFocus={() => {
-                  this.props.getReservation()
-                }}
-              />
               <ScreenHeader
                 backNavigation={true}
                 backAction={() => {
@@ -364,7 +364,7 @@ class ReservationViewForm extends React.Component {
 
                       <View style={[styles.bottom,
                       styles.horizontalMargin]}>
-                        {(reservation.status == 'BOOKED' || reservation.status == 'WAITING') &&
+                        {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
                           <TouchableOpacity onPress={() => {
                             navigation.navigate('ReservationEditScreen', {reservationId: reservation.id})
                           }}>
@@ -374,15 +374,17 @@ class ReservationViewForm extends React.Component {
                           </TouchableOpacity>
                         }
 
-                        <TouchableOpacity onPress={() => {
-                          this.handleSendNotification(reservation)
-                        }}>
-                          <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
-                            {t('reservation.sendNotification')}
-                          </Text>
-                        </TouchableOpacity>
+                        {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
+                          <TouchableOpacity onPress={() => {
+                            this.handleSendNotification(reservation)
+                          }}>
+                            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
+                              {t('reservation.sendNotification')}
+                            </Text>
+                          </TouchableOpacity>
+                        }
 
-                        {(reservation.status == 'BOOKED' || reservation.status == 'WAITING') &&
+                        {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
                           <TouchableOpacity onPress={() => {
                             this.handleDeleteReservation(reservation.id)
                           }}>
@@ -409,11 +411,6 @@ class ReservationViewForm extends React.Component {
         return (
           <ThemeContainer>
             <View style={styles.fullWidthScreen}>
-              <NavigationEvents
-                onWillFocus={() => {
-                  this.props.getReservation()
-                }}
-              />
               <ScreenHeader
                 backNavigation={true}
                 backAction={() => {
@@ -497,7 +494,7 @@ class ReservationViewForm extends React.Component {
                     </View>
 
                     <View style={[styles.bottom, styles.horizontalMargin]}>
-                      {(reservation.status == 'BOOKED' || reservation.status == 'WAITING') && <TouchableOpacity onPress={() => {
+                      {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') && <TouchableOpacity onPress={() => {
                         navigation.navigate('ReservationEditScreen', {reservationId: reservation.id})
                       }}>
                         <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
@@ -505,15 +502,15 @@ class ReservationViewForm extends React.Component {
                         </Text>
                       </TouchableOpacity>}
 
-                      <TouchableOpacity onPress={() => {
+                      {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') && <TouchableOpacity onPress={() => {
                         this.handleSendNotification(reservation)
                       }}>
                         <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                           {t('reservation.sendNotification')}
                         </Text>
-                      </TouchableOpacity>
+                      </TouchableOpacity>}
 
-                      {(reservation.status == 'BOOKED' || reservation.status == 'WAITING') &&
+                      {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
                         <TouchableOpacity onPress={() => {
                           this.handleDeleteReservation(reservation.id)
                         }}>
@@ -550,7 +547,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getTableLayouts: () => dispatch(getTableLayouts()),
-  getReservation: () => dispatch(getReservation(props.navigation?.state?.params?.reservationId)),
+  getReservation: () => dispatch(getReservation(props.route?.params?.reservationId)),
 })
 
 ReservationViewForm = reduxForm({

@@ -3,7 +3,6 @@ import {ScrollView, View, Alert} from 'react-native'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
-import {NavigationEvents} from "react-navigation";
 import {getReservation} from '../actions'
 import LoadingScreen from "./LoadingScreen";
 import ReservationFormScreen from './ReservationFormScreen'
@@ -29,7 +28,12 @@ class ReservationEditScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getReservation()
+    this._getReservation = this.props.navigation.addListener('focus', () => {
+      this.props.getReservation()
+    })
+  }
+  componentWillUnmount() {
+    this._getReservation()
   }
 
   handleUpdateReservation = () => {
@@ -102,16 +106,11 @@ class ReservationEditScreen extends React.Component {
 
 
   render() {
-    const {navigation, reservation, isLoading} = this.props
+    const {navigation, route, reservation, isLoading} = this.props
     const {t, isTablet, customMainThemeColor, customBackgroundColor} = this.context
 
     return (
       <ThemeContainer>
-        <NavigationEvents
-          onWillFocus={() => {
-            this.props.getReservation()
-          }}
-        />
         {isLoading ? <LoadingScreen /> :
           <ReservationFormScreen
             isEdit={true}
@@ -123,6 +122,7 @@ class ReservationEditScreen extends React.Component {
             nextStep={this.state.nextStep}
             initialValues={this.state.initialValues ?? reservation}
             navigation={navigation}
+            route={route}
           />
         }
       </ThemeContainer>
@@ -140,7 +140,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getReservation: () => dispatch(getReservation(props.navigation?.state?.params?.reservationId)),
+  getReservation: () => dispatch(getReservation(props.route?.params?.reservationId)),
 })
 
 

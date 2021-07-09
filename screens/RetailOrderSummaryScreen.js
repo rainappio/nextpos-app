@@ -374,7 +374,7 @@ class RetailOrderSummaryScreen extends React.Component {
                                                 onPress={() =>
                                                     this.props.navigation.navigate('RetailOrderFormIII', {
                                                         prdId: data.item.productId,
-                                                        orderId: this.props.navigation.state.params.orderId,
+                                                        orderId: this.props.route.params.orderId,
                                                         lineItem: data.item
                                                     })
                                                 }>
@@ -468,7 +468,7 @@ class RetailOrderSummaryScreen extends React.Component {
 
 
                     <DeleteBtn
-                        handleDeleteAction={() => handleDelete(order.orderId, () => NavigationService.navigate('LoginSuccess'))}
+                        handleDeleteAction={() => handleDelete(order.orderId, () => NavigationService.navigate('Home', {screen: 'LoginSuccess'}))}
                     />
                 </View>
             </View>
