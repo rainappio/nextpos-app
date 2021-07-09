@@ -200,9 +200,9 @@ class RowBase extends React.Component {
         styles.row,
         this._style,
       ]}>
-        <View key={data.id} style={[styles.markdownContainer(this.props?.locale), styles.shadowContainer(this.props?.locale.customBackgroundColor)]}>
+        <View key={data.id} style={[styles.markdownContainer(this.props?.locale), styles.shadowContainer(this.props?.locale.customBackgroundColor), {paddingHorizontal: 0}]}>
           <View
-            style={[styles.tableRowContainer]}
+            style={[styles.tableRowContainer, styles.withBottomBorder]}
           >
             <View style={[styles.tableCellView, {width: '10%'}]}>
               <IonIcon
@@ -231,7 +231,7 @@ class RowBase extends React.Component {
             </View>
           </View>
 
-          <View style={[styles.markdownContainer(this.props?.locale), styles.shadowContainer(this.props?.locale.customBackgroundColor)]}>
+          <View style={[styles.markdownContainer(this.props?.locale), {borderWidth: 0}]}>
             <Markdown>
               {data.markdownContent}
             </Markdown>

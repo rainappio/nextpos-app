@@ -1,5 +1,5 @@
 import React from 'react'
-import {ScrollView, View, Alert, TouchableOpacity, Text} from 'react-native'
+import {ScrollView, View, Alert, TouchableOpacity, Text, Share} from 'react-native'
 import {Accordion, List} from '@ant-design/react-native'
 import {Field, reduxForm} from 'redux-form'
 import {connect} from 'react-redux'
@@ -48,6 +48,43 @@ class ReservationSettingForm extends React.Component {
       this.setState({nonReservableTables: [...selectedTables, id]})
     }
   }
+  handleShareLink = async (link) => {
+    try {
+      const result = await Share.share({
+        title: `${this.context.t(`reservationSetting.webLink`)}`,
+        message: link,
+      });
+
+      if (result.action === Share.sharedAction) {
+        Alert.alert(
+          ``,
+          `${this.context.t(`reservationSetting.linkShareSuccess`)}`,
+          [
+            {text: `${this.context.t(`action.confirm`)}`, }
+          ]
+        )
+      } else if (result.action === Share.dismissedAction) {
+        Alert.alert(
+          ``,
+          `${this.context.t(`reservationSetting.linkShareFailed`)}`,
+          [
+            {text: `${this.context.t(`action.confirm`)}`, }
+          ]
+        )
+      }
+    } catch (error) {
+
+      Alert.alert(
+        ``,
+        `${this.context.t(`action.cancel`)}`,
+        [
+          {text: `${error.message}`, }
+        ]
+      )
+
+    }
+
+  }
 
 
   render() {
@@ -94,11 +131,13 @@ class ReservationSettingForm extends React.Component {
                     <View>
 
                       <StyledText style={{color: customMainThemeColor}}>
-                        {t('reservationSetting.webLink')}
+                        {initialValues.reservationLink}
                       </StyledText>
                     </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={[styles.tableCellView, {justifyContent: 'flex-end'}]} onPress={() => this.handleShareLink(initialValues.reservationLink)}>
                     <View style={{marginLeft: 8}}>
-                      <Icon name="link" size={28} color={customMainThemeColor} />
+                      <Icon name="share-outline" size={24} color={customMainThemeColor} />
 
                     </View>
                   </TouchableOpacity>

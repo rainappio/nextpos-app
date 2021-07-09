@@ -111,6 +111,8 @@ import ReservationConfirmScreen from '../screens/ReservationConfirmScreen'
 import ReservationViewScreen from '../screens/ReservationViewScreen'
 import ReservationSetting from '../screens/ReservationSetting'
 import {LocaleContext} from '../locales/LocaleContext'
+import ReservationUpcomingScreen from '../screens/ReservationUpcomingScreen'
+import ReservationUpcomingForm from '../screens/ReservationUpcomingForm'
 
 
 const Tab = createBottomTabNavigator();
@@ -354,7 +356,7 @@ function CustomDrawerContent(props) {
             focused={focused}
             onPress={() => {
               if (route.name == 'ReservationCalendar') {
-                props.navigation.navigate('ReservationCalendarScreen')
+                props.navigation.navigate('ReservationCalendar', {screen: 'ReservationCalendarScreen'})
               } else {
                 props.navigation.navigate(route.name)
               }
@@ -386,6 +388,12 @@ const ReservationDrawer = () => {
       } : {width: 64, backgroundColor: '#222'}}
       drawerType={dimensions.width >= 768 ? 'permanent' : 'back'}
     >
+      <Drawer.Screen name="ReservationUpcomingScreen" component={ReservationUpcomingScreen} options={{
+        drawerLabel: () => null,
+        drawerIcon: ({focused, color}) => (
+          <LabelIcon focused={focused} color={color} name='md-today' />
+        )
+      }} />
       <Drawer.Screen name="ReservationCalendar" component={ReservationStack} options={{
         drawerLabel: () => null,
         drawerIcon: ({focused, color}) => (

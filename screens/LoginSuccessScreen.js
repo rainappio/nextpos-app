@@ -446,7 +446,7 @@ class LoginSuccessScreen extends React.Component {
               || client?.localClientStatus?.noProduct
               || client?.localClientStatus?.noTable
               || client?.localClientStatus?.noWorkingArea) &&
-              <View style={[styles.sectionContainer, styles.withBottomBorder, {alignItems: 'center'}]}>
+              <View style={[styles.sectionContainer, {alignItems: 'center'}]}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <StyledText style={[styles?.announcementTitle(customMainThemeColor)]}>
                     {t('clientStatusTitle')}
@@ -538,9 +538,9 @@ class LoginSuccessScreen extends React.Component {
               getannouncements.results.map((getannoc, index) =>
                 <View key={getannoc.id}>
                   <View
-                    style={[styles.markdownContainer(this.context), styles.shadowContainer(customBackgroundColor), styles.sectionContainer,]}
+                    style={[styles.markdownContainer(this.context), styles.shadowContainer(customBackgroundColor), styles.sectionContainer, {paddingHorizontal: 0}]}
                   >
-                    <View style={[styles.tableCellView]}>
+                    <View style={[styles.tableCellView, styles.withBottomBorder, {paddingHorizontal: 8, paddingBottom: 4}]}>
                       <IonIcon
                         name={getannoc.titleIcon}
                         size={32}
@@ -551,16 +551,13 @@ class LoginSuccessScreen extends React.Component {
                       </StyledText>
                     </View>
 
-                    <View style={[styles.markdownContainer(this.context), styles.shadowContainer(customBackgroundColor),]}>
+                    <View style={[styles.markdownContainer(this.context), {borderWidth: 0}]}>
                       <Markdown style={themeStyle}>
                         {getannoc.markdownContent}
                       </Markdown>
                     </View>
-
-
                   </View>
-                  {(index !== getannouncements.results.length - 1) && <View style={{borderBottomWidth: 1, borderBottomColor: customMainThemeColor, marginTop: 8, marginBottom: 12}}>
-                  </View>}
+
                 </View>
               )
             }
