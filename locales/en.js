@@ -628,7 +628,7 @@ const en = {
     updateDate: 'Last updated',
     gesturePassword: 'Gesture Password',
     encodeToken: 'Encode Staff Login Code',
-    tokenShareSucess: 'Staff Login Code Share Sucess.',
+    tokenShareSuccess: 'Staff Login Code Share Success.',
     tokenShareFailed: 'Staff Login Code Share Failed.',
     loginWithAccount: 'Account',
     loginWithToken: 'Staff Login',
@@ -720,11 +720,22 @@ const en = {
     cancelActionContext: 'Cancel changes and return to reservation events list?',
     cancelEditActionContext: 'Discard changes and return to reservation info?',
     deleteActionContext: 'Confirm to delete this reservation?',
+    delayActionContext: 'Delay this reservation {{minutes}} mins?',
+    seatActionContext: 'Confirm this reservation as seated?',
+    selectTablesContext: 'Please select at least one table.',
+    addWaiting: 'Add Waiting',
+    summary: 'Summary',
+    actionTip: {
+      delay: 'Delay',
+      seat: 'Seat',
+      cancel: 'Cancel',
+      tableSelect: 'Table Select'
+    }
   },
   reservationSetting: {
     reservationSettingTitle: 'Reservation Settings',
     webLink: 'Reservation Web Link',
-    linkShareSuccess: 'Reservation Web Link Share Sucess.',
+    linkShareSuccess: 'Reservation Web Link Share Success.',
     linkShareFailed: 'Reservation Web Link Share Failed.',
     durationMinutes: 'Table Duration (Min)',
     nonReservableTables: 'Non Reservable Tables',

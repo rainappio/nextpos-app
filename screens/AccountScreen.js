@@ -96,7 +96,7 @@ class AccountScreen extends React.Component {
       if (result.action === Share.sharedAction) {
         Alert.alert(
           ``,
-          `${this.context.t(`account.tokenShareSucess`)}`,
+          `${this.context.t(`account.tokenShareSuccess`)}`,
           [
             {text: `${this.context.t(`action.confirm`)}`, }
           ]

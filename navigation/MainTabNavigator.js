@@ -333,8 +333,8 @@ const LabelIcon = (props) => {
 
   const {focused, color, name} = props
   return (
-    <View style={{paddingVertical: 16}}>
-      <Icon name={name} size={28} focused={focused} color={color} />
+    <View style={{paddingTop: 16, paddingBottom: 8, justifyContent: 'center'}}>
+      <Icon name={name} size={30} focused={focused} color={color} />
     </View>
   )
 }
@@ -343,16 +343,25 @@ function CustomDrawerContent(props) {
     <DrawerContentScrollView {...props}>
       {props.state.routes.map((route, i) => {
         const focused = i === props.state.index;
-        const {drawerIcon} = props.descriptors[route.key].options;
+        const {drawerIcon, drawerLabel} = props.descriptors[route.key].options;
 
         return (
           <DrawerItem
             key={route.key}
-            label={() => null}
+            label={({focused, color}) => {
+              return (
+                <View style={{width: 64, justifyContent: 'center', marginLeft: -2}}>
+                  {drawerIcon({focused, color})}
+                  <Text style={[{color: '#fff', fontSize: 8}]}>
+                    {drawerLabel}
+                  </Text>
+                </View>
+              )
+            }}
             activeTintColor={props.activeTintColor}
             inactiveTintColor={props.inactiveTintColor}
             activeBackgroundColor={props.activeBackgroundColor}
-            icon={drawerIcon}
+            // icon={drawerIcon}
             focused={focused}
             onPress={() => {
               if (route.name == 'ReservationCalendar') {
@@ -389,19 +398,19 @@ const ReservationDrawer = () => {
       drawerType={dimensions.width >= 768 ? 'permanent' : 'back'}
     >
       <Drawer.Screen name="ReservationUpcomingScreen" component={ReservationUpcomingScreen} options={{
-        drawerLabel: () => null,
+        drawerLabel: 'Upcome',
         drawerIcon: ({focused, color}) => (
           <LabelIcon focused={focused} color={color} name='md-today' />
         )
       }} />
       <Drawer.Screen name="ReservationCalendar" component={ReservationStack} options={{
-        drawerLabel: () => null,
+        drawerLabel: 'Calendar',
         drawerIcon: ({focused, color}) => (
           <LabelIcon focused={focused} color={color} name='md-calendar-sharp' />
         )
       }} />
       <Drawer.Screen name="ReservationSetting" component={ReservationSetting} options={{
-        drawerLabel: () => null,
+        drawerLabel: 'Settings',
         drawerIcon: ({focused, color}) => (
           <LabelIcon focused={focused} color={color} name='md-settings' />
         )

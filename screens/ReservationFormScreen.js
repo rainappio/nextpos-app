@@ -8,6 +8,7 @@ import {compose} from "redux";
 import {withContext} from "../helpers/contextHelper";
 import {isRequired, isNDigitsNumber} from '../validators'
 import InputText from '../components/InputText'
+import InputTextComponent from '../components/InputTextComponent'
 import {getTableLayouts, getTablesAvailable, getTableLayout, getfetchOrderInflights} from '../actions'
 import {getInitialTablePosition, getTablePosition, getSetPosition} from "../helpers/tableAction";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
@@ -60,8 +61,7 @@ class ReservationFormScreen extends React.Component {
       minutesArr: ['15', '30', '45', '00'],
       selectedHour: null,
       selectedMinutes: null,
-      timeViewSize: new Animated.Value(0),
-      isAnimating: false,
+      isTimeView: !!props?.isEdit ? true : false,
       isGetTables: !!props?.isEdit ?? false,
       people: [
         {label: context.t('reservation.adult'), value: 'people'},
@@ -90,12 +90,12 @@ class ReservationFormScreen extends React.Component {
     this._resetForm()
   }
 
-  // componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
 
-  //   if (!this.props.isEdit && (prevProps.initialValues !== this.props.initialValues)) {
-  //     this.loadInfo()
-  //   }
-  // }
+    if (!this.props.isEdit && (prevProps.initialValues !== this.props.initialValues)) {
+      this.loadInfo()
+    }
+  }
 
   loadInfo = () => {
     let data = this.props?.initialValues
@@ -127,8 +127,6 @@ class ReservationFormScreen extends React.Component {
         this.props.change(`minutes`, eventMins)
 
         this.handleHourSelection(selectedTimeBlock)
-        this.viewResize(1)
-        this.handleCheckAvailableTables(moment(data?.reservationStartDate).format('YYYY-MM-DD'), eventHour, eventMins)
       }
     }
   }
@@ -181,7 +179,7 @@ class ReservationFormScreen extends React.Component {
   }
   handleHourCheck = (value) => {
     if (!this.state.selectedHour) {
-      this.viewResize(1)
+      this.viewToggle(true)
     }
     if (!!this.state.selectedMinutes) {
       this.handleCheckAvailableTables(this.state.reservationDate, value, this.state.selectedMinutes)
@@ -193,17 +191,12 @@ class ReservationFormScreen extends React.Component {
     this.handleCheckAvailableTables(this.state.reservationDate, this.state.selectedHour, value)
   }
 
-  viewResize = (to) => {
-    this.setState({isAnimating: true})
-    Animated.timing(this.state.timeViewSize, {
-      toValue: to,
-      duration: 250,
-      useNativeDriver: false
-    }).start(() => this.setState({isAnimating: false}))
+  viewToggle = (toggle) => {
+    this.setState({isTimeView: toggle})
   }
 
 
-  handleCheckAvailableTables = (date, hour, mins) => {
+  handleCheckAvailableTables = async (date, hour, mins) => {
 
     let timezone = TimeZoneService.getTimeZone()
     let dateStr = `${date} ${hour}:${mins}`
@@ -214,7 +207,7 @@ class ReservationFormScreen extends React.Component {
 
     let reservationId = this.props?.initialValues?.id != undefined ? this.props?.initialValues?.id : null
 
-    dispatchFetchRequestWithOption(api.reservation.getAvailableTables(checkDate, reservationId), {
+    await dispatchFetchRequestWithOption(api.reservation.getAvailableTables(checkDate, reservationId), {
       method: 'GET',
       withCredentials: true,
       credentials: 'include',
@@ -223,7 +216,7 @@ class ReservationFormScreen extends React.Component {
       defaultMessage: false
     },
       response => {
-        response.json().then(data => {
+        response.json().then(async data => {
           this.setState({availableTables: data.results, isGetTables: true})
           this.handleCheckConflictTables(data.results)
 
@@ -331,7 +324,6 @@ class ReservationFormScreen extends React.Component {
     this.props.change(`tableIds`, null)
     this.setState({selectedTableIds: [], selectedTableNames: [], reservationDate: moment(this.props?.initialValues.reservationStartDate ?? new Date()).format('YYYY-MM-DD'), selectedTimeBlock: 0, selectedHour: null, selectedMinutes: null, isGetTables: false})
     this.handleHourSelection(0)
-    this.viewResize(0)
     this.props.handleNextStep(false)
   }
 
@@ -571,8 +563,8 @@ class ReservationFormScreen extends React.Component {
                             />))}
                         </View>
                       </View>
-                      {(!!this.state.isAnimating && this.state.timeViewSize._value !== 1) && <LoadingScreen />}
-                      {(!this.state.isAnimating && this.state.timeViewSize._value === 1) &&
+
+                      {(this.state.isTimeView) &&
                         <Animated.View style={[styles.withBottomBorder, {marginBottom: 4}]}>
                           <View style={[styles.sectionTitleContainer, {marginBottom: 4}]}>
                             <StyledText style={styles.sectionTitleText}>{t('reservation.minutes')}</StyledText>
@@ -623,7 +615,13 @@ class ReservationFormScreen extends React.Component {
                               <View style={[styles.flex(1), styles.fieldContainer]}>
                                 <Field
                                   name="name"
-                                  component={InputText}
+                                  component={InputTextComponent}
+                                  onSubmitEditing={() =>
+                                    this.secondInput.focus()
+                                  }
+                                  setFieldToBeFocused={input => {
+                                    this.firstInput = input
+                                  }}
                                   validate={isRequired}
                                   placeholder={t('reservation.name')}
                                 />
@@ -631,10 +629,12 @@ class ReservationFormScreen extends React.Component {
                               <View style={[styles.flex(1), styles.fieldContainer]}>
                                 <Field
                                   name="phoneNumber"
-                                  component={InputText}
-                                  onChange={val => {
-                                    if (val.length === 10)
-                                      Keyboard.dismiss()
+                                  component={InputTextComponent}
+                                  onSubmitEditing={() =>
+                                    this.thirdInput.focus()
+                                  }
+                                  setFieldToBeFocused={input => {
+                                    this.secondInput = input
                                   }}
                                   validate={isRequired}
                                   placeholder={t('reservation.phone')}
@@ -644,7 +644,10 @@ class ReservationFormScreen extends React.Component {
                               <View style={[styles.flex(1), styles.fieldContainer]}>
                                 <Field
                                   name="note"
-                                  component={InputText}
+                                  component={InputTextComponent}
+                                  setFieldToBeFocused={input => {
+                                    this.thirdInput = input
+                                  }}
                                   placeholder={t('reservation.otherNote')}
                                 />
                               </View>
@@ -841,8 +844,8 @@ class ReservationFormScreen extends React.Component {
                         />))}
                     </View>
                   </View>
-                  {(!!this.state.isAnimating && this.state.timeViewSize._value !== 1) && <LoadingScreen />}
-                  {(!this.state.isAnimating && this.state.timeViewSize._value === 1) &&
+
+                  {(this.state.isTimeView) &&
                     <Animated.View style={[styles.withBottomBorder, {marginBottom: 12}]}>
                       <View style={[styles.sectionTitleContainer]}>
                         <StyledText style={styles.sectionTitleText}>{t('reservation.minutes')}</StyledText>
@@ -886,7 +889,7 @@ class ReservationFormScreen extends React.Component {
                               >
                                 <List>
                                   {tablesMap?.[layout].map((table) => {
-                                    let isAvailable = this.state.availableTables?.includes(table.tableId)
+                                    let isAvailable = this.state.availableTables && this.state.availableTables?.includes(table.tableId)
                                     let isSelected = this.state?.selectedTableIds.includes(table.tableId)
 
                                     if (isAvailable) {
@@ -983,7 +986,13 @@ class ReservationFormScreen extends React.Component {
                           <View style={[styles.flex(1), styles.fieldContainer]}>
                             <Field
                               name="name"
-                              component={InputText}
+                              component={InputTextComponent}
+                              onSubmitEditing={() =>
+                                this.secondInput.focus()
+                              }
+                              setFieldToBeFocused={input => {
+                                this.firstInput = input
+                              }}
                               validate={isRequired}
                               placeholder={t('reservation.name')}
                             />
@@ -991,10 +1000,12 @@ class ReservationFormScreen extends React.Component {
                           <View style={[styles.flex(1), styles.fieldContainer]}>
                             <Field
                               name="phoneNumber"
-                              component={InputText}
-                              onChange={val => {
-                                if (val.length === 10)
-                                  Keyboard.dismiss()
+                              component={InputTextComponent}
+                              onSubmitEditing={() =>
+                                this.thirdInput.focus()
+                              }
+                              setFieldToBeFocused={input => {
+                                this.secondInput = input
                               }}
                               validate={isRequired}
                               placeholder={t('reservation.phone')}
@@ -1004,7 +1015,10 @@ class ReservationFormScreen extends React.Component {
                           <View style={[styles.flex(1), styles.fieldContainer]}>
                             <Field
                               name="note"
-                              component={InputText}
+                              component={InputTextComponent}
+                              setFieldToBeFocused={input => {
+                                this.thirdInput = input
+                              }}
                               placeholder={t('reservation.otherNote')}
                             />
                           </View>
