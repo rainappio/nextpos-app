@@ -30,13 +30,14 @@ class Category extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props
+    const {navigation, route} = this.props
 
     return (
       <CategoryCustomizeScreen
         isEditForm={false}
         onSubmit={this.handleSubmit}
         navigation={navigation}
+        route={route}
       />
     )
   }

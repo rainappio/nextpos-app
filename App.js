@@ -6,7 +6,6 @@ import {
   StyleSheet,
   View,
   AsyncStorage,
-  YellowBox,
   Dimensions,
   LogBox,
   Alert
@@ -30,7 +29,9 @@ import {Asset} from 'expo-asset'
 import * as Font from 'expo-font'
 import {Icon, Ionicons} from '@expo/vector-icons'
 import {canClockIn, doLoggedIn} from './actions'
-import AppNavigator from './navigation/AppNavigator'
+import {NavigationContainer} from '@react-navigation/native';
+import MainTabNavigator from './navigation/MainTabNavigator'
+// import AppNavigator from './navigation/AppNavigator'
 import styles from './styles'
 import * as Localization from 'expo-localization'
 import i18n from 'i18n-js'
@@ -58,7 +59,8 @@ export let currentLocale = ""
 LogBox.ignoreLogs([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
   'Warning: componentWillReceiveProps',
-  'Warning: componentWillMount'
+  'Warning: componentWillMount',
+  'Non-serializable values were found in the navigation state'
 ]);
 
 Sentry.init({
@@ -115,6 +117,8 @@ restoreAuth(store.dispatch)
 export default class App extends React.Component {
   constructor(props) {
     super(props)
+
+    this.navigatorRef = React.createRef()
 
     this.state = {
       isLoadingComplete: false,
@@ -185,6 +189,7 @@ export default class App extends React.Component {
     this.initSplitOrderId()
     this.initSplitParentOrderId()
 
+    NavigationService.setTopLevelNavigator(this.navigatorRef);
 
     checkExpoUpdate(this.state?.disableReload, this.setDisableReload)
   }
@@ -465,29 +470,31 @@ export default class App extends React.Component {
               customTabBarIconColor: this.state?.customTabBarIconColor
             }}>
               <LocaleContext.Provider value={this.state}>
-                <AppNavigator
-                  ref={navigatorRef => {
-                    NavigationService.setTopLevelNavigator(navigatorRef);
-                  }}
-                  screenProps={{
-                    t: this.t,
-                    locale: this.state.locale,
-                    localize: this.localize,
-                    changeLanguage: this.changeLanguage,
-                    themeStyle: this.state.themeStyle,
-                    reverseThemeStyle: this.state.reverseThemeStyle,
-                    appType: this.state?.appType,
-                    changeAppType: this.state?.changeAppType,
-                    getAppType: this.state?.getAppType,
-                    customMainThemeColor: this.state?.customMainThemeColor,
-                    changeCustomMainThemeColor: this.state?.changeCustomMainThemeColor,
-                    customSecondThemeColor: this.state?.customSecondThemeColor,
-                    customBackgroundColor: this.state?.customBackgroundColor,
-                    customBorderColor: this.state?.customBorderColor,
-                    customTabBarBackgroundColor: this.state?.customTabBarBackgroundColor,
-                    customTabBarIconColor: this.state?.customTabBarIconColor
-                  }}
-                />
+                <NavigationContainer
+                  ref={this.navigatorRef}
+
+                >
+                  <MainTabNavigator
+                    screenProps={{
+                      t: this.t,
+                      locale: this.state.locale,
+                      localize: this.localize,
+                      changeLanguage: this.changeLanguage,
+                      themeStyle: this.state.themeStyle,
+                      reverseThemeStyle: this.state.reverseThemeStyle,
+                      appType: this.state?.appType,
+                      changeAppType: this.state?.changeAppType,
+                      getAppType: this.state?.getAppType,
+                      customMainThemeColor: this.state?.customMainThemeColor,
+                      changeCustomMainThemeColor: this.state?.changeCustomMainThemeColor,
+                      customSecondThemeColor: this.state?.customSecondThemeColor,
+                      customBackgroundColor: this.state?.customBackgroundColor,
+                      customBorderColor: this.state?.customBorderColor,
+                      customTabBarBackgroundColor: this.state?.customTabBarBackgroundColor,
+                      customTabBarIconColor: this.state?.customTabBarIconColor
+                    }}
+                  />
+                </NavigationContainer>
               </LocaleContext.Provider>
             </ThemeContext.Provider>
             {/*https://www.npmjs.com/package/react-native-flash-message?activeTab=readme*/}

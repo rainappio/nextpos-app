@@ -41,6 +41,7 @@ class PrinternKDS extends React.Component {
       workingareas = [],
       loading,
       navigation,
+      route,
       haveError,
       haveData
     } = this.props
@@ -63,6 +64,7 @@ class PrinternKDS extends React.Component {
               rightComponent={
                 <PopUp
                   navigation={navigation}
+                  route={route}
                   toRoute1={'PrinterAdd'}
                   toRoute2={'WorkingAreaAdd'}
                   textForRoute1={t('newItem.printer')}

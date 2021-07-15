@@ -1,6 +1,6 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {Alert} from 'react-native'
-import {NavigationActions} from 'react-navigation';
+import {CommonActions} from '@react-navigation/native';
 import {LocaleContext} from '../locales/LocaleContext'
 import {withContext} from "../helpers/contextHelper";
 import i18n from 'i18n-js'
@@ -10,24 +10,27 @@ import {store} from '../App';
 let _navigator;
 
 function setTopLevelNavigator(navigatorRef) {
-  _navigator = navigatorRef;
+  _navigator = navigatorRef
 }
 
-function navigate(routeName, params) {
+function navigate(name, params) {
+  console.log("navigate=", name, params)
 
-  _navigator.dispatch(
-    NavigationActions.navigate({
-      routeName: routeName,
+
+  _navigator.current.dispatch(
+    CommonActions.navigate({
+      name: name,
       params: params,
     })
   );
 }
 
 
-function navigateToRoute(routeName, params, callback = null) {
+function navigateToRoute(name, params, callback = null) {
+
   const state = store.getState()
   const client = state?.client?.data
-  if (checkSubscriptionAccess(routeName, client?.clientSubscriptionAccess?.restrictedFeatures)) {
+  if (checkSubscriptionAccess(name, client?.clientSubscriptionAccess?.restrictedFeatures)) {
     Alert.alert(
       `${i18n.t('privilegedAccessTitle')}`,
       `${i18n.t('premiumFeatureMsg')}`,
@@ -35,12 +38,11 @@ function navigateToRoute(routeName, params, callback = null) {
         {
           text: `${i18n.t('action.yes')}`,
           onPress: () => {
-            _navigator.dispatch(
-              NavigationActions.navigate({
-                routeName: 'SubscriptionScreen',
-                params: {isRedirected: true}
-              })
-            );
+            _navigator.current.navigate({
+              name: 'Settings',
+              params: {screen: 'SubscriptionScreen', isRedirected: true}
+            })
+
           }
         },
         {
@@ -53,12 +55,11 @@ function navigateToRoute(routeName, params, callback = null) {
 
   } else {
     !!callback ? callback() :
-      _navigator.dispatch(
-        NavigationActions.navigate({
-          routeName: routeName,
-          params: params,
-        })
-      )
+      _navigator.current.navigate({
+        name: name,
+        params: params,
+      })
+
   }
 
 }

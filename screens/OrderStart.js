@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {clearProduct, getOrdersByDateRange, getTablesAvailable} from '../actions'
+import {clearProduct, getOrdersByDateRange, getTablesAvailable, getTableLayouts} from '../actions'
 import OrderForm from './OrderForm'
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -18,7 +18,13 @@ class OrderStart extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getTablesAvailable()
+    this._getTables = this.props.navigation.addListener('focus', () => {
+      this.props.getTablesAvailable()
+      this.props.getTableLayouts()
+    })
+  }
+  componentWillUnmount() {
+    this._getTables()
   }
 
   handleSubmit = values => {
@@ -47,14 +53,14 @@ class OrderStart extends React.Component {
         response.json().then(data => {
           this.props.navigation.navigate(this.context.appType === 'store' ? 'OrderFormII' : 'RetailOrderForm', {
             orderId: data.orderId,
-            route: this.props?.navigation?.state?.params?.route ?? null
+            route: this.props?.route?.params?.route ?? null
           })
         })
       }).then()
   }
 
   render() {
-    const {navigation, isLoading, haveData, availableTables, tableLayouts} = this.props
+    const {navigation, route, isLoading, haveData, availableTables, tableLayouts} = this.props
     const {appType} = this.context
     const initialValues = {
       male: 0,
@@ -73,7 +79,8 @@ class OrderStart extends React.Component {
       }
     })
 
-    if (isLoading) {
+
+    if (isLoading || !haveData) {
       return (
         <LoadingScreen />
       )
@@ -83,12 +90,14 @@ class OrderStart extends React.Component {
           <OrderForm
             onSubmit={this.handleSubmit}
             navigation={navigation}
+            route={route}
             tablesMap={tablesMap}
-            initialValues={{...initialValues, orderType: navigation?.state?.params?.orderType ?? null}}
+            initialValues={{...initialValues, orderType: route?.params?.orderType ?? null}}
           /> :
           <RetailStartOrderForm
             onSubmit={this.handleSubmit}
             navigation={navigation}
+            route={route}
             tablesMap={tablesMap}
             initialValues={{...initialValues, orderType: 'TAKE_OUT'}}
           />
@@ -100,13 +109,14 @@ class OrderStart extends React.Component {
 const mapStateToProps = state => ({
   tableLayouts: state.tablelayouts.data.tableLayouts,
   availableTables: state.tablesavailable.data.availableTables,
-  haveData: state.tablesavailable.haveData,
+  haveData: state.tablesavailable.haveData || state.tablelayouts.haveData,
   haveError: state.tablesavailable.haveError,
-  isLoading: state.tablesavailable.loading
+  isLoading: state.tablesavailable.loading || state.tablelayouts.loading
 })
 
 const mapDispatchToProps = dispatch => ({
   clearProduct: () => dispatch(clearProduct()),
+  getTableLayouts: () => dispatch(getTableLayouts()),
   getTablesAvailable: () => dispatch(getTablesAvailable()),
   getOrdersByDateRange: () => dispatch(getOrdersByDateRange())
 })

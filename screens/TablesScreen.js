@@ -9,7 +9,6 @@ import styles from '../styles'
 import {successMessage, api, dispatchFetchRequest, apiRoot} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {handleDelete, handleOrderSubmit, handleCreateOrderSet, handleDeleteOrderSet, handleOrderAction} from '../helpers/orderActions'
-import {NavigationEvents} from "react-navigation";
 import {handleOpenShift} from "../helpers/shiftActions";
 import {getCurrentClient} from "../actions/client";
 import LoadingScreen from "./LoadingScreen";
@@ -67,6 +66,12 @@ class TablesScreen extends React.Component {
 
   componentDidMount() {
     this.loadInfo()
+    this._loadInfo = this.props.navigation.addListener('focus', async () => {
+      await this.loadInfo()
+    })
+  }
+  componentWillUnmount() {
+    this._loadInfo()
   }
 
   loadInfo = () => {
@@ -144,6 +149,7 @@ class TablesScreen extends React.Component {
   render() {
     const {
       navigation,
+      route,
       haveData,
       client,
       isLoading,
@@ -165,8 +171,6 @@ class TablesScreen extends React.Component {
       tableTimeLimit = client.clientSettings?.TABLE_TIME_LIMIT?.value
       isTimeLimit = client.clientSettings?.TABLE_TIME_LIMIT?.enabled
     }
-
-
 
     if (isLoading) {
       return (
@@ -298,14 +302,7 @@ class TablesScreen extends React.Component {
       /*tablet render*/
       if (this?.state?.isTablet) {
         return (
-          <ThemeContainer
-
-          >
-            <NavigationEvents
-              onWillFocus={async () => {
-                await this.loadInfo()
-              }}
-            />
+          <ThemeContainer>
             <RealTimeOrderUpdate
               topics={`/topic/inflightOrders/${client?.id}`}
               handleOnMessage={this.handleOnMessage}
@@ -535,6 +532,7 @@ class TablesScreen extends React.Component {
                               <OrderItem
                                 order={item}
                                 navigation={navigation}
+                                route={route}
                                 handleOrderSubmit={handleOrderSubmit}
                                 handleDelete={handleDelete}
                                 tableTimeLimit={tableTimeLimit}
@@ -566,7 +564,7 @@ class TablesScreen extends React.Component {
                     {t('tableVisual.joinTable')}
                   </Text>
                 </TouchableOpacity>} */}
-                <TouchableOpacity onPress={() => NavigationService?.navigateToRoute('OrderDisplayScreen')} style={{flex: 1}}>
+                <TouchableOpacity onPress={() => NavigationService?.navigateToRoute('OrderDisplayScreen', {screen: 'OrderDisplayScreen'})} style={{flex: 1}}>
                   <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor), {flex: 1}]}>
                     {t('menu.orderDisplay')}
                   </Text>
@@ -602,11 +600,6 @@ class TablesScreen extends React.Component {
               />
             }
           >
-            <NavigationEvents
-              onWillFocus={() => {
-                this.loadInfo()
-              }}
-            />
             <RealTimeOrderUpdate
               topics={`/topic/inflightOrders/${client?.id}`}
               handleOnMessage={this.handleOnMessage}
@@ -654,6 +647,7 @@ class TablesScreen extends React.Component {
                         <OrderItem
                           order={item}
                           navigation={navigation}
+                          route={route}
                           handleOrderSubmit={handleOrderSubmit}
                           handleDelete={handleDelete}
                           tableTimeLimit={tableTimeLimit}
@@ -684,6 +678,7 @@ class TablesScreen extends React.Component {
                       <OrderItem
                         order={item}
                         navigation={navigation}
+                        route={route}
                         handleOrderSubmit={handleOrderSubmit}
                         handleDelete={handleDelete}
                         tableTimeLimit={tableTimeLimit}
@@ -702,7 +697,7 @@ class TablesScreen extends React.Component {
               </View>
 
               <View style={[styles.bottom, styles.horizontalMargin]}>
-                <TouchableOpacity onPress={() => NavigationService?.navigateToRoute('OrderDisplayScreen')}>
+                <TouchableOpacity onPress={() => NavigationService?.navigateToRoute('OrderDisplayScreen', {screen: 'OrderDisplayScreen'})}>
                   <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                     {t('menu.orderDisplay')}
                   </Text>

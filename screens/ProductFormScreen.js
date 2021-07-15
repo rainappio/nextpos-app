@@ -127,6 +127,7 @@ class ProductFormScreen extends React.Component {
       workingareas,
       prodctoptions,
       navigation,
+      route,
       isPinned,
       productId,
       handlepinToggle,
@@ -336,6 +337,7 @@ class ProductFormScreen extends React.Component {
                     component={RenderCheckboxGroup}
                     customarr={prodctoptions}
                     navigation={navigation}
+                    route={route}
                     customRoute={'OptionEdit'}
                   />
                 </View>

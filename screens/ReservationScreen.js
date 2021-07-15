@@ -2,7 +2,6 @@ import React from 'react'
 import {ScrollView, View, Alert} from 'react-native'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {clearReservation} from '../actions'
-import {NavigationEvents} from "react-navigation";
 import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
 import ReservationFormScreen from './ReservationFormScreen'
@@ -19,17 +18,24 @@ class ReservationScreen extends React.Component {
     super(props, context)
     this.state = {
       nextStep: false,
-      initialValues: this.props.navigation?.state?.params?.initialValues ?? null,
+      initialValues: this.props.route?.params?.initialValues ?? null,
     }
   }
 
   componentDidMount() {
     this.props.clearReservation()
     this.checkPropsChange()
+    this._resetForm = this.props.navigation.addListener('focus', () => {
+      this.props.clearReservation()
+      this.checkPropsChange()
+    })
+  }
+  componentWillUnmount() {
+    this._resetForm()
   }
 
   checkPropsChange = () => {
-    this.setState({initialValues: this.props.navigation?.state?.params?.initialValues ?? null, nextStep: false})
+    this.setState({initialValues: this.props.route?.params?.initialValues ?? null, nextStep: false})
   }
 
   handleCreateReservation = (isEdit) => {
@@ -97,16 +103,10 @@ class ReservationScreen extends React.Component {
 
 
   render() {
-    const {navigation} = this.props
+    const {navigation, route} = this.props
 
     return (
       <ThemeContainer>
-        <NavigationEvents
-          onWillFocus={() => {
-            this.props.clearReservation()
-            this.checkPropsChange()
-          }}
-        />
         <ReservationFormScreen
           isEdit={false}
           onSubmit={this.handleSubmit}
@@ -115,8 +115,9 @@ class ReservationScreen extends React.Component {
           handleSaveReservation={this.handleCreateReservation}
           handleCancel={this.handleCreateCancel}
           nextStep={this.state.nextStep}
-          initialValues={this.state.initialValues ?? this.props.navigation?.state?.params?.initialValues}
+          initialValues={this.state.initialValues ?? this.props.route?.params?.initialValues}
           navigation={navigation}
+          route={route}
         />
       </ThemeContainer>
     )

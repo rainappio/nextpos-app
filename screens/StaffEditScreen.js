@@ -17,7 +17,7 @@ class StaffEditScreen extends Component {
   }
 
   async componentDidMount() {
-    await this.getClientUsr(this.props.navigation.state.params.staffname)
+    await this.getClientUsr(this.props.route.params.staffname)
     this.props.getUserRoles()
     this.props.getWorkingAreas()
   }
@@ -32,7 +32,7 @@ class StaffEditScreen extends Component {
       values.roles = values.selectedRole
     }
 
-    const staffname = this.props.navigation.state.params.staffname
+    const staffname = this.props.route.params.staffname
 
     dispatchFetchRequest(
       api.clientUser.update(staffname),
@@ -76,6 +76,7 @@ class StaffEditScreen extends Component {
   render() {
     const {
       navigation,
+      route,
       haveData,
       haveError,
       userRoles,
@@ -102,6 +103,7 @@ class StaffEditScreen extends Component {
         <StaffFormScreen
           isEditForm={isEditForm}
           navigation={navigation}
+          route={route}
           initialValues={clientuser}
           workingareas={workingareas}
           handleEditCancel={this.handleEditCancel}
@@ -128,7 +130,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getClientUsr: () =>
-    dispatch(getClientUsr(props.navigation.state.params.staffname)),
+    dispatch(getClientUsr(props.route.params.staffname)),
   clearClient: () => dispatch(clearClientUser()),
   getClientUsrs: () => dispatch(getClientUsrs()),
   getUserRoles: () => dispatch(getUserRoles()),

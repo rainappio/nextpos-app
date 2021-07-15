@@ -9,7 +9,6 @@ import {StaffTimeCardFilterForm} from './StaffTimeCardFilterForm'
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import moment from "moment";
-import {NavigationEvents} from "react-navigation";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 
@@ -51,6 +50,14 @@ class StaffTimeCard extends React.Component {
 
   componentDidMount() {
     this.props.getTimeCards(this.state.selectedYear, this.state.selectedMonth)
+
+    this._getTimeCards = this.props.navigation.addListener('focus', () => {
+
+      this.props.getTimeCards(this.state.selectedYear, this.state.selectedMonth)
+    })
+  }
+  componentWillUnmount() {
+    this._getTimeCards()
   }
 
   handleFilter = (values) => {
@@ -113,14 +120,6 @@ class StaffTimeCard extends React.Component {
     } else if (haveData) {
       return (
         <ThemeScrollView>
-          <NavigationEvents
-            onWillFocus={() => {
-              console.log("loading staff time cards")
-              console.log(this.state)
-
-              this.props.getTimeCards(this.state.selectedYear, this.state.selectedMonth)
-            }}
-          />
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
               parentFullScreen={true}

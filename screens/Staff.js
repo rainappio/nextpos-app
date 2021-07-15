@@ -42,7 +42,7 @@ class Staff extends React.Component {
   }
 
   render() {
-    const {navigation, userRoles, isLoading, workingareas} = this.props
+    const {navigation, route, userRoles, isLoading, workingareas} = this.props
 
     if (isLoading) {
       return (
@@ -54,6 +54,7 @@ class Staff extends React.Component {
         isEditForm={false}
         onSubmit={this.handleSubmit}
         navigation={navigation}
+        route={route}
         onCancel={this.handleCancel}
         userRoles={userRoles}
         workingareas={workingareas}

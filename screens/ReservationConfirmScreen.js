@@ -31,7 +31,7 @@ class ReservationConfirmScreen extends React.Component {
             backNavigation={true}
             title={t('reservation.reservationTitle')}
             backAction={() => {
-              if (this.props.navigation?.state.params?.isEdit) {
+              if (this.props.route?.params?.isEdit) {
                 this.props.navigation.navigate('ReservationEditScreen')
               } else {
                 this.props.navigation.navigate('ReservationScreen')
@@ -44,7 +44,7 @@ class ReservationConfirmScreen extends React.Component {
                 <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.date')}</StyledText>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={[styles.reservationFormContainer]}>{this.props.navigation.state?.params?.reservationDate}</StyledText>
+                <StyledText style={[styles.reservationFormContainer]}>{this.props.route?.params?.reservationDate}</StyledText>
               </View>
             </View>
             <View style={[styles.tableRowContainerWithBorder]}>
@@ -52,7 +52,7 @@ class ReservationConfirmScreen extends React.Component {
                 <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.time')}</StyledText>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={[styles.reservationFormContainer]}>{this.props.navigation.state?.params?.initialValues?.hour}:{this.props.navigation?.state?.params?.initialValues?.minutes}</StyledText>
+                <StyledText style={[styles.reservationFormContainer]}>{this.props.route?.params?.initialValues?.hour}:{this.props.route?.params?.initialValues?.minutes}</StyledText>
               </View>
             </View>
 
@@ -61,7 +61,7 @@ class ReservationConfirmScreen extends React.Component {
                 <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.name')}</StyledText>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={[styles.reservationFormContainer]}>{this.props.navigation?.state.params?.initialValues?.name}</StyledText>
+                <StyledText style={[styles.reservationFormContainer]}>{this.props.route?.params?.initialValues?.name}</StyledText>
               </View>
             </View>
             <View style={styles.tableRowContainerWithBorder}>
@@ -69,7 +69,7 @@ class ReservationConfirmScreen extends React.Component {
                 <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.phone')}</StyledText>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={[styles.reservationFormContainer]}>{this.props.navigation?.state.params?.initialValues?.phoneNumber}</StyledText>
+                <StyledText style={[styles.reservationFormContainer]}>{this.props.route?.params?.initialValues?.phoneNumber}</StyledText>
               </View>
             </View>
             <View style={styles.tableRowContainerWithBorder}>
@@ -77,7 +77,7 @@ class ReservationConfirmScreen extends React.Component {
                 <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.peopleCount')}</StyledText>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={[styles.reservationFormContainer]}>{t('reservation.adult')}: {this.props.navigation?.state.params?.initialValues?.people ?? 0}, {t('reservation.kid')}: {this.props.navigation?.state.params?.initialValues?.kid ?? 0}</StyledText>
+                <StyledText style={[styles.reservationFormContainer]}>{t('reservation.adult')}: {this.props.route.params?.initialValues?.people ?? 0}, {t('reservation.kid')}: {this.props.route?.params?.initialValues?.kid ?? 0}</StyledText>
               </View>
             </View>
             <View style={styles.tableRowContainerWithBorder}>
@@ -85,7 +85,7 @@ class ReservationConfirmScreen extends React.Component {
                 <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.otherNote')}</StyledText>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
-                <StyledText style={[styles.reservationFormContainer]}>{this.props.navigation?.state.params?.initialValues?.note}</StyledText>
+                <StyledText style={[styles.reservationFormContainer]}>{this.props.route?.params?.initialValues?.note}</StyledText>
               </View>
             </View>
             <View style={styles.tableRowContainerWithBorder}>
@@ -93,7 +93,7 @@ class ReservationConfirmScreen extends React.Component {
                 <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.table')}</StyledText>
               </View>
               <View style={[styles.tableCellView, {flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', }]}>
-                {!!this.props.navigation?.state.params?.tableNames.length ? (this.props.navigation?.state.params?.tableNames).map((name, index) => (
+                {!!this.props.route.params?.tableNames.length ? (this.props.route.params?.tableNames).map((name, index) => (
                   <StyledText key={index} style={[styles.reservationFormContainer, {marginBottom: 4}]}>{name} </StyledText>
                 )
                 )
@@ -105,7 +105,7 @@ class ReservationConfirmScreen extends React.Component {
 
             <View style={[styles.bottom, styles.horizontalMargin]}>
               <TouchableOpacity onPress={() => {
-                this.props.navigation.state.params?.handleSaveReservation(this.props.navigation?.state.params?.isEdit)
+                this.props.route.params?.handleSaveReservation(this.props.route.params?.isEdit)
               }}>
                 <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                   {t('action.save')}
@@ -114,7 +114,7 @@ class ReservationConfirmScreen extends React.Component {
 
 
               <TouchableOpacity onPress={() => {
-                this.props.navigation.state.params?.handleCancel()
+                this.props.route.params?.handleCancel()
               }}>
                 <Text
                   style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}

@@ -5,7 +5,7 @@ import {isRequired} from '../validators'
 import InputText from '../components/InputText'
 import {DismissKeyboard} from '../components/DismissKeyboard'
 import styles from '../styles'
-import {withNavigation} from 'react-navigation'
+import {withNavigation} from '@react-navigation/compat'
 import {LocaleContext} from "../locales/LocaleContext";
 
 class PasswordResetForm extends React.Component {

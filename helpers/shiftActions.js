@@ -109,7 +109,7 @@ export const handleAbortCloseShift = () => {
   },
     response => {
       successMessage(i18n.t('shift.shiftAborted'))
-      NavigationService.navigate('ShiftClose')
+      NavigationService.navigate('Settings', {screen: 'ShiftClose'})
     }).then()
 }
 

@@ -39,13 +39,13 @@ class InventoryOrderFormScreen extends React.Component {
 
 
         this.state = {
-            data: props?.navigation?.state?.params?.data ?? null,
+            data: props?.route?.params?.data ?? null,
             initialValuesCount: props?.initialValues?.optionValues?.length ?? 0,
             isShowDatePicker: false,
             inventoryModalData: null,
             isShow: false,
-            isProcessed: props?.navigation?.state?.params?.data?.status == 'PROCESSED' ? true : false,
-            inventoryFormValues: props?.navigation?.state?.params?.data?.items ?? []
+            isProcessed: props?.route?.params?.data?.status == 'PROCESSED' ? true : false,
+            inventoryFormValues: props?.route?.params?.data?.items ?? []
         }
 
 
@@ -56,10 +56,10 @@ class InventoryOrderFormScreen extends React.Component {
     }
 
     componentDidMount() {
-        if (!!this.props?.navigation?.state?.params?.data) {
-            this.props?.change(`supplierId`, this.props?.navigation?.state?.params?.data?.supplierId)
-            this.props?.change(`supplierOrderId`, this.props?.navigation?.state?.params?.data?.supplierOrderId)
-            this.props?.change(`orderDate`, new Date(this.props?.navigation?.state?.params?.data?.orderDate))
+        if (!!this.props?.route?.params?.data) {
+            this.props?.change(`supplierId`, this.props?.route?.params?.data?.supplierId)
+            this.props?.change(`supplierOrderId`, this.props?.route?.params?.data?.supplierOrderId)
+            this.props?.change(`orderDate`, new Date(this.props?.route?.params?.data?.orderDate))
         }
         this.props.getProducts()
         this.props.getLables()
@@ -171,7 +171,7 @@ class InventoryOrderFormScreen extends React.Component {
     handleUpdate = (data) => {
         let request = {...data, items: this.state?.inventoryFormValues}
         dispatchFetchRequestWithOption(
-            api.inventoryOrders.getById(this.props?.navigation?.state?.params?.data?.id),
+            api.inventoryOrders.getById(this.props?.route?.params?.data?.id),
             {
                 method: 'POST',
                 withCredentials: true,

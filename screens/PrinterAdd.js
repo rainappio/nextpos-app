@@ -36,7 +36,7 @@ class PrinterAdd extends React.Component {
   }
 
   render() {
-    const {navigation} = this.props
+    const {navigation, route} = this.props
     const {t} = this.context
 
     return (
@@ -45,7 +45,7 @@ class PrinterAdd extends React.Component {
           <ScreenHeader title={t('printer.addPrinterTitle')}
             parentFullScreen={true} />
 
-          <PrinterForm navigation={navigation} onSubmit={this.handleSubmit} />
+          <PrinterForm navigation={navigation} route={route} onSubmit={this.handleSubmit} />
         </View>
       </ThemeContainer>
     )

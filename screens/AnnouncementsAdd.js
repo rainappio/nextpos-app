@@ -37,7 +37,7 @@ class AnnouncementsAdd extends React.Component {
   }
 
   render() {
-    const {navigation} = this.props
+    const {navigation, route} = this.props
     const {t} = this.context
 
     return (
@@ -50,6 +50,7 @@ class AnnouncementsAdd extends React.Component {
             <AnnouncementsForm
               onSubmit={this.handleSubmit}
               navigation={navigation}
+              route={route}
             />
           </View>
         </DismissKeyboard>

@@ -116,7 +116,7 @@ export const handleOrderSubmit = id => {
             })
           })
           successMessage(i18n.t('order.submitted'))
-          NavigationService.navigate('TablesSrc')
+          NavigationService.navigate('Tables', {screen: 'TablesScr'})
         }
       })
     }

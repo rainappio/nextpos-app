@@ -22,12 +22,12 @@ class OrderFormIII extends React.Component {
 
   componentDidMount() {
     this.props.getProduct()
-    this.props.getOrder(this.props.navigation.state.params.orderId)
+    this.props.getOrder(this.props.route.params.orderId)
     this.props.getGlobalProductOffers()
   }
 
   handleSubmit = values => {
-    const orderId = this.props.navigation.state.params.orderId
+    const orderId = this.props.route.params.orderId
 
     const updatedOptions = []
     values.productOptions != null && values.productOptions.map(option => {
@@ -44,7 +44,7 @@ class OrderFormIII extends React.Component {
     })
 
     const lineItemRequest = {
-      productId: this.props.navigation.state.params.prdId,
+      productId: this.props.route.params.prdId,
       quantity: values.quantity,
       sku: values.sku,
       overridePrice: values.overridePrice,
@@ -74,7 +74,7 @@ class OrderFormIII extends React.Component {
 
   handleUpdate = values => {
 
-    const orderId = this.props.navigation.state.params.orderId
+    const orderId = this.props.route.params.orderId
     const lineItemId = values.lineItemId
 
     const updatedOptions = []
@@ -117,7 +117,8 @@ class OrderFormIII extends React.Component {
     const {product, globalProductOffers, haveError, isLoading} = this.props
     const {customBackgroundColor} = this.context
 
-    const isEditLineItem = this.props.navigation.getParam('lineItem') != null
+
+    const isEditLineItem = this.props.route.params?.lineItem != null
     const lineItemDiscount = {
       offerId: 'NO_DISCOUNT',
       productDiscount: 'NO_DISCOUNT',
@@ -125,7 +126,7 @@ class OrderFormIII extends React.Component {
     }
 
     const initialValues = {
-      ...this.props.navigation.getParam('lineItem'),
+      ...this.props.route.params?.lineItem,
       lineItemDiscount: lineItemDiscount
     }
 
@@ -184,8 +185,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getProduct: () => dispatch(getProduct(props.navigation.state.params.prdId)),
-  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId)),
+  getProduct: () => dispatch(getProduct(props.route.params.prdId)),
+  getOrder: () => dispatch(getOrder(props.route.params.orderId)),
   getGlobalProductOffers: () => dispatch(getGlobalProductOffers())
 })
 

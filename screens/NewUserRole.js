@@ -31,7 +31,7 @@ class NewUserRole extends React.Component {
   }
 
   handleRoleSelection = (index) => {
-    this.setState({ selectedRole: index })
+    this.setState({selectedRole: index})
   }
 
   handleSubmit = values => {
@@ -58,17 +58,17 @@ class NewUserRole extends React.Component {
   }
 
   render() {
-    const { t } = this.context
+    const {t} = this.context
 
     return (
       <ThemeScrollView>
         <View style={styles.fullWidthScreen}>
-          <ScreenHeader title={t('newUserRoleTitle')} parentFullScreen={true}/>
+          <ScreenHeader title={t('newUserRoleTitle')} parentFullScreen={true} />
           <NewUserRoleForm
             onSubmit={this.handleSubmit}
-            permissions={this.props.navigation.state.params.permissions}
+            permissions={this.props.route.params.permissions}
             onCancel={this.handleCancel}
-            labels={this.props.navigation.state.params.labels}
+            labels={this.props.route.params.labels}
           />
         </View>
       </ThemeScrollView>

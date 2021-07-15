@@ -18,13 +18,11 @@ import {compose} from "redux";
 import OrderItemDetailEditModal from './OrderItemDetailEditModal';
 import OrderTopInfo from "./OrderTopInfo";
 import DeleteBtn from '../components/DeleteBtn'
-import NavigationService from "../navigation/NavigationService";
 import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer, revertSplitOrder, handleOrderAction, getTableDisplayName} from "../helpers/orderActions";
 import {SwipeRow} from 'react-native-swipe-list-view'
 import ScreenHeader from "../components/ScreenHeader";
 import Icon from 'react-native-vector-icons/FontAwesome'
 import {MainActionButton, MainActionFlexButton} from "../components/ActionButtons";
-import {NavigationEvents} from 'react-navigation'
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {SwipeListView} from 'react-native-swipe-list-view'
 import {CheckBox, Tooltip} from 'react-native-elements'
@@ -51,6 +49,12 @@ class SpiltBillScreen extends React.Component {
     componentDidMount() {
         console.log('SpiltBillScreen', this.props.order)
         this.refreshScreen()
+        this._refreshScreen = this.props.navigation.addListener('focus', () => {
+            this.refreshScreen()
+        })
+    }
+    componentWillUnmount() {
+        this._refreshScreen()
     }
 
     refreshScreen = () => {
@@ -74,7 +78,7 @@ class SpiltBillScreen extends React.Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                sourceOrderId: this.props.navigation.state.params?.order?.orderId,
+                sourceOrderId: this.props.route.params?.order?.orderId,
                 sourceLineItemId: item?.lineItemId
             })
         }, {
@@ -91,7 +95,7 @@ class SpiltBillScreen extends React.Component {
     }
 
     deleteItem = async (item) => {
-        let url = api.splitOrder.moveItem(this.props.navigation.state.params?.order?.orderId)
+        let url = api.splitOrder.moveItem(this.props.route.params?.order?.orderId)
         await dispatchFetchRequestWithOption(url, {
             method: 'POST',
             withCredentials: true,
@@ -176,7 +180,7 @@ class SpiltBillScreen extends React.Component {
                                             text: `${t('action.yes')}`,
                                             onPress: () => {
                                                 handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => {
-                                                    !!this.state?.splitOrderData ? this.revertSplitOrder(this.props.navigation.state.params?.order?.orderId, this.state.splitOrderId) : this.cleanSplitContext()
+                                                    !!this.state?.splitOrderData ? this.revertSplitOrder(this.props.route.params?.order?.orderId, this.state.splitOrderId) : this.cleanSplitContext()
                                                     this.props.navigation.goBack()
                                                 })
                                             }
@@ -190,11 +194,6 @@ class SpiltBillScreen extends React.Component {
                                 )
                             }}
                             title={t('splitBill.SpiltBillScreenTitle')} />
-                        <NavigationEvents
-                            onWillFocus={() => {
-                                this.refreshScreen()
-                            }}
-                        />
                         <View style={{flexDirection: 'row', flex: 1}}>
                             <View style={{
                                 flex: 1,
@@ -405,7 +404,7 @@ class SpiltBillScreen extends React.Component {
                                                         }}
                                                         handleDeleteAction={() => {
                                                             handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => {
-                                                                !!this.state?.splitOrderData && this.revertSplitOrder(this.props.navigation.state.params?.order?.orderId, this.state.splitOrderId)
+                                                                !!this.state?.splitOrderData && this.revertSplitOrder(this.props.route.params?.order?.orderId, this.state.splitOrderId)
                                                                 this.props.navigation.goBack()
                                                             })
 
@@ -462,7 +461,7 @@ class SpiltBillScreen extends React.Component {
                                                 text: `${t('action.yes')}`,
                                                 onPress: () => {
                                                     handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => {
-                                                        !!this.state?.splitOrderData ? this.revertSplitOrder(this.props.navigation.state.params?.order?.orderId, this.state.splitOrderId) : this.cleanSplitContext()
+                                                        !!this.state?.splitOrderData ? this.revertSplitOrder(this.props.route.params?.order?.orderId, this.state.splitOrderId) : this.cleanSplitContext()
                                                         this.props.navigation.goBack()
                                                     })
 
@@ -477,11 +476,6 @@ class SpiltBillScreen extends React.Component {
                                     )
                                 }} />
                         </View>
-                        <NavigationEvents
-                            onWillFocus={() => {
-                                this.refreshScreen()
-                            }}
-                        />
                         <View style={{flex: 1}}>
                             <View style={{flex: 9, paddingBottom: 8}}>
                                 <View style={{marginBottom: 5}}>
@@ -728,7 +722,7 @@ class SpiltBillScreen extends React.Component {
                                     }}
                                     handleDeleteAction={() => {
                                         handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => {
-                                            !!this.state?.splitOrderData && this.revertSplitOrder(this.props.navigation.state.params?.order?.orderId, this.state.splitOrderId)
+                                            !!this.state?.splitOrderData && this.revertSplitOrder(this.props.route.params?.order?.orderId, this.state.splitOrderId)
                                             this.props.navigation.goBack()
                                         })
 
@@ -778,10 +772,10 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch,
     getLables: () => dispatch(getLables()),
     getProducts: () => dispatch(getProducts()),
-    getOrder: (orderId) => dispatch(getOrder(orderId ?? props.navigation.state.params?.order?.orderId)),
+    getOrder: (orderId) => dispatch(getOrder(orderId ?? props.route.params?.order?.orderId)),
     getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
     getOrdersByDateRange: () => dispatch(getOrdersByDateRange()),
-    clearOrder: () => dispatch(clearOrder(props.navigation.state.params.orderId)),
+    clearOrder: () => dispatch(clearOrder(props.route.params.orderId)),
 })
 
 export default connect(

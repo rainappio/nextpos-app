@@ -11,7 +11,6 @@ import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import {BottomMainActionButton, MainActionButton} from "../components/ActionButtons"
-import {NavigationEvents} from 'react-navigation'
 import Icon from "react-native-vector-icons/Ionicons";
 import {Field, reduxForm} from 'redux-form'
 import InputText from '../components/InputText'
@@ -41,7 +40,7 @@ class SubscriptionScreen extends React.Component {
             currentPosition: this.props.clientStatus?.subscription?.status === 'SUBMITTED' ? 0 : 1,
             subscription: this.props.clientStatus?.subscription,
             plans: null,
-            modalVisible: this.props?.navigation?.state?.params?.isRedirected ?? false,
+            modalVisible: this.props?.route?.params?.isRedirected ?? false,
             agreeModalVisible: false,
             agreeModalId: null,
             changeStatusModalVisible: false,
@@ -49,6 +48,7 @@ class SubscriptionScreen extends React.Component {
             isAgreeTipVisible: false
         }
     }
+
 
     getCurrentSubscriptionStatus = () => {
         this.props.getCurrentClient()
@@ -160,12 +160,20 @@ class SubscriptionScreen extends React.Component {
                 }
             }
         })
+
+        this._refreshScreen = this.props.navigation.addListener('focus', () => {
+            this.refreshScreen()
+        })
+    }
+    componentWillUnmount() {
+        this._refreshScreen()
     }
 
     refreshScreen = () => {
         this.getCurrentSubscriptionStatus()
         this.getAllPlans(this.props?.client?.country)
     }
+
 
 
     render() {
@@ -180,11 +188,6 @@ class SubscriptionScreen extends React.Component {
         }
         return (
             <ThemeContainer>
-                <NavigationEvents
-                    onWillFocus={() => {
-                        this.refreshScreen()
-                    }}
-                />
                 <View style={[styles.fullWidthScreen]}>
 
                     <ScreenHeader title={t('settings.subscription')}

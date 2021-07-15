@@ -7,7 +7,6 @@ import PaymentOrderForm from './PaymentOrderForm'
 import {LocaleContext} from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
 import {handleDelete} from "../helpers/orderActions";
-import NavigationService from "../navigation/NavigationService";
 
 class PaymentOrder extends React.Component {
   static navigationOptions = {
@@ -63,20 +62,21 @@ class PaymentOrder extends React.Component {
     }, {
       defaultMessage: false
     }, response => {
-      this.props.navigation.navigate('TablesSrc')
+      this.props.navigation.navigate('TablesScr')
     }).then()
   }
 
 
   handleComplete = id => {
-    if (this.props.navigation.state.params?.isSplitByHeadCount) {
-      if (!this.props.navigation.state.params?.isLastOne) {
+    if (this.props.route.params?.isSplitByHeadCount) {
+      if (!this.props.route.params?.isLastOne) {
         this.props.navigation.navigate('SplitBillByHeadScreen', {
-          order: this.props.navigation.state.params?.parentOrder
+          order: this.props.route.params?.parentOrder
         })
       } else {
         this.context?.saveSplitParentOrderId(null)
-        this.handleSplitByHeadComplete(this.props.navigation.state.params?.parentOrder?.orderId, () => NavigationService.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess'))
+        this.handleSplitByHeadComplete(this.props.route.params?.parentOrder?.orderId, () => this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? ('Tables', {screen: 'TablesScr'}) : ('Home', {screen: 'LoginSuccess'})))
+
         console.log("route: complete 1")
 
       }
@@ -93,25 +93,25 @@ class PaymentOrder extends React.Component {
       }, {
         defaultMessage: false
       }, response => {
-        if (!!this.props.navigation.state.params?.isSplitting) {
-          if (this.props.navigation.state.params?.isSplitByHeadCount && !this.props.navigation.state.params?.isLastOne) {
+        if (!!this.props.route.params?.isSplitting) {
+          if (this.props.route.params?.isSplitByHeadCount && !this.props.route.params?.isLastOne) {
             this.props.navigation.navigate('SplitBillByHeadScreen', {
-              order: this.props.navigation.state.params?.parentOrder
+              order: this.props.route.params?.parentOrder
             })
           }
-          else if (this.props.navigation.state.params?.parentOrder?.lineItems.length !== 0) {
+          else if (this.props.route.params?.parentOrder?.lineItems.length !== 0) {
             this.props.navigation.navigate('SpiltBillScreen', {
-              order: this.props.navigation.state.params?.parentOrder
+              order: this.props.route.params?.parentOrder
             })
           } else {
             this.context?.saveSplitParentOrderId(null)
-            this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess')
+            this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? ('Tables', {screen: 'TablesScr'}) : 'Home', {screen: 'LoginSuccess'})
             console.log("route: complete 2")
           }
 
         } else {
           this.context?.saveSplitParentOrderId(null)
-          this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess')
+          this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? ('Tables', {screen: 'TablesScr'}) : 'Home', {screen: 'LoginSuccess'})
           console.log("route: complete 3", this.props?.order?.orderType)
         }
       }).then()
@@ -121,7 +121,7 @@ class PaymentOrder extends React.Component {
 
 
   checkAutoComplete = (values) => {
-    const totalAmount = !!this.props.navigation.state.params?.isSplitByHeadCount ? this.props.navigation.state.params?.splitAmount : this.props?.order?.orderTotal
+    const totalAmount = !!this.props.route.params?.isSplitByHeadCount ? this.props.route.params?.splitAmount : this.props?.order?.orderTotal
     if (values.paymentMethod === 'CASH' && values.cash < totalAmount) {
       Alert.alert(
         ``,
@@ -159,43 +159,24 @@ class PaymentOrder extends React.Component {
           this.props.navigation.navigate(this.context?.appType === 'store' ? 'CheckoutComplete' : 'RetailCheckoutComplete', {
             transactionResponse: data,
             onSubmit: this.handleComplete,
-            isSplitting: this.props.navigation.state.params?.isSplitting ?? false,
-            parentOrder: this.props.navigation.state.params?.parentOrder ?? null,
-            isSplitByHeadCount: this.props.navigation.state.params?.isSplitByHeadCount ?? false,
-            splitAmount: this.props.navigation.state.params?.splitAmount ?? null,
-            isLastOne: this.props.navigation.state.params?.isLastOne ?? false,
+            isSplitting: this.props.route.params?.isSplitting ?? false,
+            parentOrder: this.props.route.params?.parentOrder ?? null,
+            isSplitByHeadCount: this.props.route.params?.isSplitByHeadCount ?? false,
+            splitAmount: this.props.route.params?.splitAmount ?? null,
+            isLastOne: this.props.route.params?.isLastOne ?? false,
           })
         })
       }, response => {
         this.context?.saveSplitParentOrderId(null)
-        this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesSrc' : 'LoginSuccess')
+        this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? ('Tables', {screen: 'TablesScr'}) : 'Home', {screen: 'LoginSuccess'})
         console.log("route: props submit")
       }).then()
     }
-    // const transactionObj = {
-    //   orderId: this.props.navigation.state.params.orderId,
-    //   paymentMethod: values.paymentMethod,
-    //   billType: 'SINGLE',
-    //   taxIdNumber: values?.taxIdNumber ?? null,
-    //   paymentDetails: {},
-    //   printMark: true
-    // }
-    // if (!!values?.carrierId) {
-    //   transactionObj.carrierType = 'MOBILE'
-    //   transactionObj.carrierId = values?.carrierId
-    // }
-    // if (values.paymentMethod === 'CASH') {
-    //   transactionObj.paymentDetails['CASH'] = autoComplete ? cash : values.cash
-    // }
-    // if (values.paymentMethod === 'CARD') {
-    //   transactionObj.paymentDetails['CARD_TYPE'] = values.cardType
-    //   transactionObj.paymentDetails['LAST_FOUR_DIGITS'] = values.cardNumber
-    // }
 
     const transactionObj = {
-      orderId: this.props.navigation.state.params.orderId,
+      orderId: this.props.route.params.orderId,
       paymentMethod: values.paymentMethod,
-      billType: this.props.navigation.state.params?.isSplitByHeadCount ? 'SPLIT' : 'SINGLE',
+      billType: this.props.route.params?.isSplitByHeadCount ? 'SPLIT' : 'SINGLE',
       taxIdNumber: values?.taxIdNumber ?? null,
       paymentDetails: {},
       printMark: true
@@ -209,16 +190,16 @@ class PaymentOrder extends React.Component {
     }
     if (values.paymentMethod === 'CASH') {
       transactionObj.paymentDetails['CASH'] = autoComplete ? cash : values.cash
-      this.props.navigation.state.params?.isSplitByHeadCount && (transactionObj.settleAmount = this.props.navigation.state.params?.splitAmount)
+      this.props.route.params?.isSplitByHeadCount && (transactionObj.settleAmount = this.props.route.params?.splitAmount)
     }
     if (values.paymentMethod === 'CARD') {
       transactionObj.paymentDetails['CARD_TYPE'] = values.cardType
       transactionObj.paymentDetails['LAST_FOUR_DIGITS'] = values.cardNumber
-      this.props.navigation.state.params?.isSplitByHeadCount && (transactionObj.settleAmount = this.props.navigation.state.params?.splitAmount)
+      this.props.route.params?.isSplitByHeadCount && (transactionObj.settleAmount = this.props.route.params?.splitAmount)
     }
     if (values.paymentMethod === 'MOBILE') {
       transactionObj.paymentMethod = values.mobilePayType
-      this.props.navigation.state.params?.isSplitByHeadCount && (transactionObj.settleAmount = this.props.navigation.state.params?.splitAmount)
+      this.props.route.params?.isSplitByHeadCount && (transactionObj.settleAmount = this.props.route.params?.splitAmount)
     }
 
     if (!!values?.carrierId && !!values?.taxIdNumber) {
@@ -283,11 +264,11 @@ class PaymentOrder extends React.Component {
           selectedPaymentType={selectedPaymentType}
           paymentsTypes={paymentsTypes}
           handlePaymentTypeSelection={this.handlePaymentTypeSelection}
-          isSplitting={this.props.navigation.state.params?.isSplitting ?? false}
-          parentOrder={this.props.navigation.state.params?.parentOrder ?? null}
-          isSplitByHeadCount={this.props.navigation.state.params?.isSplitByHeadCount ?? false}
-          splitAmount={this.props.navigation.state.params?.splitAmount ?? null}
-          isLastOne={this.props.navigation.state.params?.isLastOne ?? false}
+          isSplitting={this.props.route.params?.isSplitting ?? false}
+          parentOrder={this.props.route.params?.parentOrder ?? null}
+          isSplitByHeadCount={this.props.route.params?.isSplitByHeadCount ?? false}
+          splitAmount={this.props.route.params?.splitAmount ?? null}
+          isLastOne={this.props.route.params?.isLastOne ?? false}
         />
       )
     }
@@ -303,7 +284,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
-  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId)),
+  getOrder: () => dispatch(getOrder(props.route.params.orderId)),
   getCurrentClient: () => dispatch(getCurrentClient()),
 })
 export default connect(

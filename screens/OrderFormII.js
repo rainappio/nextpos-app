@@ -18,7 +18,6 @@ import {compose} from "redux";
 import OrderItemDetailEditModal from './OrderItemDetailEditModal';
 import OrderTopInfo from "./OrderTopInfo";
 import DeleteBtn from '../components/DeleteBtn'
-import NavigationService from "../navigation/NavigationService";
 import {handleDelete, handleOrderSubmit, handleQuickCheckout, revertSplitOrder, handlePrintWorkingOrder, handlePrintOrderDetails, handleOrderAction, getTableDisplayName} from "../helpers/orderActions";
 import {SwipeRow} from 'react-native-swipe-list-view'
 import ScreenHeader from "../components/ScreenHeader";
@@ -28,7 +27,6 @@ import {printMessage} from "../helpers/printerActions";
 import DropDown from "../components/DropDown";
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
-import {NavigationEvents} from "react-navigation";
 import {SplitBillPopUp} from '../components/PopUp'
 import Colors from "../constants/Colors";
 import {OfferTooltip} from "../components/OfferTooltip";
@@ -72,8 +70,15 @@ class OrderFormII extends React.Component {
   componentDidMount() {
     this.props.getLables()
     this.props.getProducts()
-    this.props.navigation.state.params.orderId !== undefined &&
-      this.props.getOrder(this.props.navigation.state.params.orderId)
+    this.props.route.params.orderId !== undefined &&
+      this.props.getOrder(this.props.route.params.orderId)
+
+    this._getOrder = this.props.navigation.addListener('focus', () => {
+      this.props.route.params.orderId !== undefined && this.props.getOrder(this.props.route.params.orderId)
+    })
+  }
+  componentWillUnmount() {
+    this._getOrder()
   }
 
   PanelHeader = (labelName, labelId, isSelected = false) => {
@@ -99,7 +104,7 @@ class OrderFormII extends React.Component {
         if (product.productOptions == null || product.productOptions.length === 0 && product.inventory == null) {
 
 
-          const orderId = this.props.navigation.state.params.orderId
+          const orderId = this.props.route.params.orderId
           let lineItemRequest = {}
 
           lineItemRequest['productId'] = productId
@@ -131,7 +136,7 @@ class OrderFormII extends React.Component {
           } else {
             this.props.navigation.navigate('OrderFormIII', {
               prdId: productId,
-              orderId: this.props.navigation.state.params.orderId
+              orderId: this.props.route.params.orderId
             })
           }
         }
@@ -152,7 +157,7 @@ class OrderFormII extends React.Component {
     }, {
       defaultMessage: false
     }, response => {
-      this.props.navigation.navigate('TablesSrc')
+      this.props.navigation.navigate('TablesScr')
     }).then()
   }
 
@@ -167,7 +172,7 @@ class OrderFormII extends React.Component {
     }, response => {
       response.json().then(product => {
         if (product.productOptions == null || product.productOptions.length === 0 && product.inventory == null) {
-          const orderId = this.props.navigation.state.params.orderId
+          const orderId = this.props.route.params.orderId
           let lineItemRequest = {}
 
           lineItemRequest['productId'] = productId
@@ -190,7 +195,7 @@ class OrderFormII extends React.Component {
           } else {
             this.props.navigation.navigate('OrderFormIII', {
               prdId: productId,
-              orderId: this.props.navigation.state.params.orderId
+              orderId: this.props.route.params.orderId
             })
           }
         }
@@ -253,7 +258,7 @@ class OrderFormII extends React.Component {
                 },
               },
                 response => {
-                  this.props.navigation.navigate('TablesSrc')
+                  this.props.navigation.navigate('TablesScr')
                 }).then()
             }
           },
@@ -275,7 +280,7 @@ class OrderFormII extends React.Component {
         body: JSON.stringify({lineItemIds: lineItemIds})
       },
         response => {
-          this.props.navigation.navigate('TablesSrc')
+          this.props.navigation.navigate('TablesScr')
         }).then()
     }
   }
@@ -311,7 +316,7 @@ class OrderFormII extends React.Component {
                 body: formData
               },
                 response => {
-                  this.props.navigation.navigate('TablesSrc')
+                  this.props.navigation.navigate('TablesScr')
                 }).then()
             }
           },
@@ -333,7 +338,7 @@ class OrderFormII extends React.Component {
         body: JSON.stringify({lineItemIds: lineItemIds})
       },
         response => {
-          this.props.navigation.navigate('TablesSrc')
+          this.props.navigation.navigate('TablesScr')
         }).then()
     }
   }
@@ -476,7 +481,7 @@ class OrderFormII extends React.Component {
   handleOnMessage = (data, id) => {
     if (data === `${id}.order.orderChanged`) {
       console.log("refresh order")
-      this.props.getOrder(this.props.navigation.state.params.orderId)
+      this.props.getOrder(this.props.route.params.orderId)
     }
   }
 
@@ -540,18 +545,13 @@ class OrderFormII extends React.Component {
         return (
           <ThemeContainer>
             <View style={{...styles.fullWidthScreen, marginBottom: 0}}>
-              <NavigationEvents
-                onWillFocus={() => {
-                  this.props.getOrder(this.props.navigation.state.params.orderId)
-                }}
-              />
               <RealTimeOrderUpdate
-                topics={`/topic/order/${this.props.navigation.state.params.orderId}`}
+                topics={`/topic/order/${this.props.route.params.orderId}`}
                 handleOnMessage={this.handleOnMessage}
-                id={this.props.navigation.state.params.orderId}
+                id={this.props.route.params.orderId}
               />
               <ScreenHeader backNavigation={true}
-                backAction={() => this.props.navigation.navigate('TablesSrc')}
+                backAction={() => this.props.navigation.navigate('TablesScr')}
                 parentFullScreen={true}
                 title={t('orderForm.newOrderTitle')}
               />
@@ -567,6 +567,7 @@ class OrderFormII extends React.Component {
                 closeModal={() => {this.setState({modalVisible: false})}}
                 data={this.state.modalData}
                 navigation={this.props.navigation}
+                route={this.props.route}
                 prdId={this.state?.prdId}
                 isEditLineItem={this.state?.isEditLineItem ?? false} />
 
@@ -709,9 +710,9 @@ class OrderFormII extends React.Component {
                           }}
                           handleDeleteAction={() => handleDelete(order.orderId, () => {
                             if (order.orderType === 'TAKE_OUT') {
-                              NavigationService.navigate('LoginSuccess')
+                              this.props.navigation.navigate('Home', {screen: 'LoginSuccess'})
                             } else {
-                              NavigationService.navigate('TablesSrc')
+                              this.props.navigation.navigate('Tables', {screen: 'TablesScr'})
                             }
                           })}
                         />
@@ -789,9 +790,9 @@ class OrderFormII extends React.Component {
                           }}
                           handleDeleteAction={() => handleDelete(order.orderId, () => {
                             if (order.orderType === 'TAKE_OUT') {
-                              NavigationService.navigate('LoginSuccess')
+                              this.props.navigation.navigate('Home', {screen: 'LoginSuccess'})
                             } else {
-                              NavigationService.navigate('TablesSrc')
+                              this.props.navigation.navigate('Tables', {screen: 'TablesScr'})
                             }
                           })}
                         />
@@ -935,9 +936,9 @@ class OrderFormII extends React.Component {
                           }}
                           handleDeleteAction={() => handleDelete(order.orderId, () => {
                             if (order.orderType === 'TAKE_OUT') {
-                              NavigationService.navigate('LoginSuccess')
+                              this.props.navigation.navigate('Home', {screen: 'LoginSuccess'})
                             } else {
-                              NavigationService.navigate('TablesSrc')
+                              this.props.navigation.navigate('Tables', {screen: 'TablesScr'})
                             }
                           })}
                         />
@@ -1028,7 +1029,7 @@ class OrderFormII extends React.Component {
                             onPress={() =>
                               order.lineItems.length === 0
                                 ? warningMessage(t('orderForm.lineItemCountCheck'))
-                                : (!!this.props.navigation.state.params?.orderSetData && this.props.navigation.state.params?.orderSetData?.status !== 'MERGED')
+                                : (!!this.props.route.params?.orderSetData && this.props.route.params?.orderSetData?.status !== 'MERGED')
                                   ? Alert.alert(
                                     `${this.context.t('order.mergeOrderTitle')}`,
                                     `${this.context.t('order.mergeOrderMsg')}`,
@@ -1036,7 +1037,7 @@ class OrderFormII extends React.Component {
                                       {
                                         text: `${this.context.t('action.yes')}`,
                                         onPress: () => {
-                                          this.handleMergeOrder(this.props.navigation.state.params?.orderSetData?.id, order.orderId)
+                                          this.handleMergeOrder(this.props.route.params?.orderSetData?.id, order.orderId)
                                         }
                                       },
                                       {
@@ -1109,7 +1110,7 @@ class OrderFormII extends React.Component {
 
                         <View style={{flex: 1, marginLeft: 5}}>
                           <TouchableOpacity
-                            onPress={() => this.handleComplete(this.props.navigation.state.params?.orderSetData?.mainOrderId ?? order.orderId)}
+                            onPress={() => this.handleComplete(this.props.route.params?.orderSetData?.mainOrderId ?? order.orderId)}
                             style={styles?.flexButtonSecondAction(this.context)}
                           >
                             <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>{t('order.completeOrder')}</Text>
@@ -1437,10 +1438,10 @@ class OrderFormII extends React.Component {
                 <TouchableOpacity
                   onPress={() =>
                     this.props.navigation.navigate('OrdersSummary', {
-                      orderId: this.props.navigation.state.params.orderId,
-                      route: this.props?.navigation?.state?.params?.route ?? null,
-                      onSubmit: this.props.navigation.state.params.onSubmit,
-                      handleDelete: this.props.navigation.state.params.handleDelete
+                      orderId: this.props.route.params.orderId,
+                      route: this.props?.route?.params?.route ?? null,
+                      onSubmit: this.props.route.params.onSubmit,
+                      handleDelete: this.props.route.params.handleDelete
                     })
                   }
                 >
@@ -1486,10 +1487,10 @@ const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getLables: () => dispatch(getLables()),
   getProducts: () => dispatch(getProducts()),
-  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId)),
+  getOrder: () => dispatch(getOrder(props.route.params.orderId)),
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
   getOrdersByDateRange: () => dispatch(getOrdersByDateRange()),
-  clearOrder: () => dispatch(clearOrder(props.navigation.state.params.orderId)),
+  clearOrder: () => dispatch(clearOrder(props.route.params.orderId)),
   getPrinters: () => dispatch(getPrinters()),
 })
 

@@ -2,7 +2,6 @@ import React from 'react'
 import {reduxForm} from 'redux-form'
 import {connect} from 'react-redux'
 import {getOrder} from '../actions'
-import {NavigationEvents} from "react-navigation";
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
 import OrdersSummaryRow from "./OrdersSummaryRow";
@@ -18,11 +17,18 @@ class OrdersSummary extends React.Component {
 
   componentDidMount() {
     this.props.getOrder()
+    this._getOrder = this.props.navigation.addListener('focus', () => {
+      this.props.getOrder()
+    })
+  }
+  componentWillUnmount() {
+    this._getOrder()
   }
 
   render() {
     const {
       navigation,
+      route,
       haveData,
       haveError,
       isLoading,
@@ -37,19 +43,16 @@ class OrdersSummary extends React.Component {
     } else if (!!order?.orderId) {
       return (
         <ThemeScrollView>
-          <NavigationEvents
-            onWillFocus={() => {
-              this.props.getOrder()
-            }}
-          />
           {appType === 'store' ? <OrdersSummaryRow
             order={order}
             navigation={navigation}
+            route={route}
             initialValues={order}
           /> :
             <RetailOrderSummaryScreen
               order={order}
               navigation={navigation}
+              route={route}
               initialValues={order}
             />
           }
@@ -70,7 +73,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getOrder: () => dispatch(getOrder(props.navigation.state.params.orderId))
+  getOrder: () => dispatch(getOrder(props.route.params.orderId))
 })
 
 export default connect(

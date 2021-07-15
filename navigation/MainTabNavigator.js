@@ -1,10 +1,15 @@
 import React from 'react'
-import {Platform, Text, Dimensions, View} from 'react-native'
+import {AsyncStorage, Platform, Text, useWindowDimensions, View, TouchableOpacity} from 'react-native'
+import Animated from 'react-native-reanimated';
 import NavigationService from "../navigation/NavigationService";
-import {createStackNavigator} from 'react-navigation-stack'
-import {createBottomTabNavigator} from 'react-navigation-tabs'
-import {createDrawerNavigator} from 'react-navigation-drawer';
-import {createSwitchNavigator, StackActions} from 'react-navigation'
+import {StackActions, TabActions, CommonActions} from '@react-navigation/native';
+import {createBottomTabNavigator, BottomTabBar, useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
+import {
+  createDrawerNavigator, DrawerContentScrollView,
+  DrawerItemList, DrawerItem
+} from '@react-navigation/drawer';
+import {createCompatNavigatorFactory, createSwitchNavigator} from '@react-navigation/compat';
 import TabBarIcon from '../components/TabBarIcon'
 import Icon from 'react-native-vector-icons/Ionicons'
 import HomeScreen from '../screens/HomeScreen'
@@ -72,7 +77,7 @@ import CustomerStats from "../screens/CustomerStats";
 import ShiftHistory from "../screens/ShiftHistory";
 import ShiftDetails from "../screens/ShiftDetails";
 import {getToken} from "../constants/Backend";
-import ManageVisualSceen from '../screens/ManageVisualSceen'
+import ManageVisualScreen from '../screens/ManageVisualScreen'
 import UpdateOrder from "../screens/UpdateOrder";
 import EditUserRole from '../screens/EditUserRole'
 import NewUserRole from '../screens/NewUserRole'
@@ -84,7 +89,6 @@ import EinvoiceEditScreen from '../screens/EinvoiceEditScreen'
 import NewOffer from '../screens/NewOffer'
 import EditOffer from '../screens/EditOffer'
 import ProductsOverviewforOffer from '../screens/ProductsOverviewforOffer'
-import TabBarBottom from "react-navigation-tabs/src/views/BottomTabBar";
 import OrderDisplayScreen from "../screens/OrderDisplayScreen";
 import ResetClientPassword from "../screens/ResetClientPassword";
 import SpiltBillScreen from "../screens/SpiltBillScreen";
@@ -106,392 +110,407 @@ import ReservationFormScreen from '../screens/ReservationFormScreen'
 import ReservationConfirmScreen from '../screens/ReservationConfirmScreen'
 import ReservationViewScreen from '../screens/ReservationViewScreen'
 import ReservationSetting from '../screens/ReservationSetting'
-
-const Home = createStackNavigator({
-  LoginSuccess: LoginSuccessScreen,
-  ClientUsers: ClientUsers,
-  ClientUserLogin: ClientUserLogin,
-  ClockIn: ClockIn,
-  PasswordReset: PasswordReset,
-  RetailOrderStart: OrderStart,
-  RetailOrderForm: RetailOrderForm,
-  RetailOrderFormIII: OrderFormIII,
-  RetailPayment: Payment,
-  RetailCheckoutComplete: RetailCheckoutComplete,
-  RetailOrdersSummary: OrdersSummary,
-  RetailPaymentOrder: PaymentOrder,
-})
-Home.navigationOptions = ({screenProps: {t}}) => ({
-  title: t('menu.home'),
-
-  tabBarButtonComponent: (props) => (
-    <TabBarIcon focused={props?.focused} name={'md-home'} onPress={props?.onPress} />
-  ),
-})
-
-const Settings = createStackNavigator({
-  SettingScr: SettingsScreen,
-  Account: AccountScreen,
-  Store: Store,
-  ProductList: ProductListScreen,
-  ProductForm: ProductFormScreen,
-  Product: Product,
-  ProductEdit: ProductEditScreen,
-  ProductsOverview: ProductsOverview,
-  Staff: Staff,
-  StaffEdit: StaffEditScreen,
-  StaffsOverview: StaffsOverview,
-  OptionScreen: OptionFormScreen,
-  Option: Option,
-  OptionEdit: OptionEdit,
-  Category: Category,
-  CategoryCustomize: CategoryCustomize,
-  PrinternKDS: PrinternKDS,
-  PrinterAdd: PrinterAdd,
-  PrinterEdit: PrinterEdit,
-  WorkingAreaAdd: WorkingAreaAdd,
-  WorkingAreaEdit: WorkingAreaEdit,
-  ShiftClose: ShiftClose,
-  TableLayouts: TableLayouts,
-  TableLayoutAdd: TableLayoutAdd,
-  TableLayoutEdit: TableLayoutEdit,
-  TableAdd: TableAdd,
-  TableEdit: TableEdit,
-  Announcements: Announcements,
-  AnnouncementsAdd: AnnouncementsAdd,
-  AnnouncementsEdit: AnnouncementsEdit,
-  CloseComplete: CloseComplete,
-  AccountClose: AccountClose,
-  AccountCloseConfirm: AccountCloseConfirm,
-  ManageVisualSceen: ManageVisualSceen,
-  EditUserRole: EditUserRole,
-  NewUserRole: NewUserRole,
-  ManageUserRole: ManageUserRole,
-  ManageOffers: ManageOffers,
-  EinvoiceSettingScreen: EinvoiceSettingScreen,
-  EinvoiceStatusScreen: EinvoiceStatusScreen,
-  EinvoiceEditScreen: EinvoiceEditScreen,
-  NewOffer: NewOffer,
-  EditOffer: EditOffer,
-  ProductsOverviewforOffer: ProductsOverviewforOffer,
-  SubscriptionScreen: SubscriptionScreen,
-  MemberScreen: MemberScreen,
-  MemberFormScreen: MemberFormScreen
-})
-Settings.navigationOptions = ({screenProps: {t}}) => ({
-  title: t('menu.settings'),
-  tabBarButtonComponent: (props) => (
-    <TabBarIcon focused={props?.focused} name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'} onPress={props?.onPress} />
-  ),
-
-})
-
-const Tables = createStackNavigator({
-  TablesSrc: TablesScreen,
-  OrderDisplayScreen: OrderDisplayScreen,
-  OrderStart: OrderStart,
-  NewOrderForm: OrderForm,
-  OrderFormII: OrderFormII,
-  OrderFormIII: OrderFormIII,
-  OrderFormIV: OrderFormIV,
-  OrdersSummary: OrdersSummary,
-  UpdateOrder: UpdateOrder,
-  Payment: Payment,
-  PaymentOrder: PaymentOrder,
-  CheckoutComplete: CheckoutComplete,
-  SpiltBillScreen: SpiltBillScreen,
-  SplitBillByHeadScreen: SplitBillByHeadScreen,
-}, {
-  defaultNavigationOptions: {
-    gesturesEnabled: false,
-  },
-})
-Tables.navigationOptions = ({screenProps: {t, appType}}) => ({
-  title: t('menu.tables'),
-  tabBarButtonComponent: (props) => (appType === 'store' ?
-    <TabBarIcon focused={props?.focused} name="md-people" onPress={props?.onPress} />
-    : null
-  ),
-})
-
-const Orders = createStackNavigator({
-  OrdersScr: OrdersScreen,
-  OrderDetail: OrderDetail,
-  UpdateOrderFromOrderDetail: UpdateOrder,
-  NewOrderForm: OrderForm
-})
-Orders.navigationOptions = ({screenProps: {t}}) => ({
-  title: t('menu.orders'),
-  tabBarButtonComponent: (props) => (
-    <TabBarIcon focused={props?.focused} name="md-document" onPress={props?.onPress} />
-  ),
-
-})
+import {LocaleContext} from '../locales/LocaleContext'
+import ReservationUpcomingScreen from '../screens/ReservationUpcomingScreen'
+import ReservationUpcomingForm from '../screens/ReservationUpcomingForm'
 
 
-
-const Reports = createStackNavigator({
-  Reports: ReportsScreen,
-  SalesCharts: SalesCharts,
-  StaffTimeCard: StaffTimeCard,
-  UserTimeCards: UserTimeCards,
-  CustomerStats: CustomerStats,
-  ShiftHistory: ShiftHistory,
-  ShiftDetails: ShiftDetails
-})
-Reports.navigationOptions = ({screenProps: {t}}) => ({
-  title: t('menu.reporting'),
-  tabBarButtonComponent: (props) => (
-    <TabBarIcon focused={props?.focused} name="ios-stats-chart" onPress={props?.onPress} />
-  ),
-})
-
-const Inventory = createStackNavigator({
-  InventoryScreen: InventoryScreen,
-  InventoryOrderScreen: InventoryOrderScreen,
-  InventoryOrderFormScreen, InventoryOrderFormScreen
-
-})
-Inventory.navigationOptions = ({screenProps: {t, appType}}) => ({
-  title: t('inventory.title'),
-  tabBarButtonComponent: (props) => (appType === 'retail' ?
-    <TabBarIcon focused={props?.focused} name="inventory" onPress={props?.onPress} iconLib={'MaterialIcons'} />
-    : null
-  ),
-})
-
-const Rosters = createStackNavigator({
-  CalendarScreen: CalendarScreen,
-  RostersFormScreen: RostersFormScreen,
-
-})
-Rosters.navigationOptions = ({screenProps: {t}}) => ({
-  title: t('menu.reporting'),
-  tabBarButtonComponent: (props) => {
-    return (
-      <TabBarIcon focused={props?.focused} name="md-calendar" onPress={() => NavigationService?.navigateToRoute('CalendarScreen', null, props?.onPress)} />
-    )
-  },
-})
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
 
+const HomeStack = () => {
 
-
-
-
-const Reservations = createStackNavigator({
-  ReservationScreen: ReservationScreen,
-  ReservationCalendarScreen: ReservationCalendarScreen,
-  ReservationSetting: ReservationSetting,
-  ReservationEditScreen: ReservationEditScreen,
-  ReservationFormScreen: ReservationFormScreen,
-  ReservationConfirmScreen: ReservationConfirmScreen,
-})
-
-
-const testVisible = true
-
-Reservations.navigationOptions = ({screenProps: {t}}) => ({
-  title: t('menu.Reservation'),
-  tabBarButtonComponent: (props) => (
-    testVisible ?
-      <TabBarIcon focused={props?.focused} name="calendar-check" iconLib="MaterialCommunityIcons" onPress={() => NavigationService?.navigateToRoute('ReservationScreen', null, props?.onPress)} />
-      : null
-  ),
-})
-
-class Hidden extends React.Component {
-  render() {
-    return null;
-  }
+  return (
+    <Stack.Navigator
+      initialRouteName="LoginSuccess"
+      headerMode="screen"
+      screenOptions={{headerShown: false}}
+    >
+      <Stack.Screen name="LoginSuccess" component={LoginSuccessScreen} options={({route: {params}}) => ({
+        animationEnabled: params?.withAnimation ? false : true
+      })} />
+      <Stack.Screen name="ClockIn" component={ClockIn} />
+      <Stack.Screen name="PasswordReset" component={PasswordReset} />
+      <Stack.Screen name="RetailOrderStart" component={OrderStart} />
+      <Stack.Screen name="RetailOrderForm" component={RetailOrderForm} />
+      <Stack.Screen name="RetailOrderFormIII" component={OrderFormIII} />
+      <Stack.Screen name="RetailPayment" component={Payment} />
+      <Stack.Screen name="RetailCheckoutComplete" component={RetailCheckoutComplete} />
+      <Stack.Screen name="RetailOrdersSummary" component={OrdersSummary} />
+      <Stack.Screen name="RetailPaymentOrder" component={PaymentOrder} />
+    </Stack.Navigator>
+  );
 }
-class LabelIcon extends React.Component {
-  render() {
-    const {focused, tintColor} = this.props
-    return (
-      <View style={{padding: 24}}>
-        <Icon name={this.props.name} size={28} focused={focused} color={focused ? tintColor : '#f18d1a'} />
-      </View>
-    )
-  }
+
+const SettingsStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="SettingScr"
+      headerMode="screen"
+      screenOptions={{headerShown: false}}
+    >
+      <Stack.Screen name="SettingScr" component={SettingsScreen} options={({route: {params}}) => ({
+        animationEnabled: params?.withAnimation ? false : true
+      })} />
+      <Stack.Screen name="Account" component={AccountScreen} />
+      <Stack.Screen name="Store" component={Store} />
+      <Stack.Screen name="ProductList" component={ProductListScreen} />
+      <Stack.Screen name="ProductForm" component={ProductFormScreen} />
+      <Stack.Screen name="Product" component={Product} />
+      <Stack.Screen name="ProductEdit" component={ProductEditScreen} />
+      <Stack.Screen name="ProductsOverview" component={ProductsOverview} />
+      <Stack.Screen name="Staff" component={Staff} />
+      <Stack.Screen name="StaffsOverview" component={StaffsOverview} />
+      <Stack.Screen name="StaffEdit" component={StaffEditScreen} />
+      <Stack.Screen name="OptionScreen" component={OptionFormScreen} />
+      <Stack.Screen name="Option" component={Option} />
+      <Stack.Screen name="OptionEdit" component={OptionEdit} />
+      <Stack.Screen name="Category" component={Category} />
+      <Stack.Screen name="CategoryCustomize" component={CategoryCustomize} />
+      <Stack.Screen name="PrinternKDS" component={PrinternKDS} />
+      <Stack.Screen name="PrinterAdd" component={PrinterAdd} />
+      <Stack.Screen name="PrinterEdit" component={PrinterEdit} />
+      <Stack.Screen name="WorkingAreaAdd" component={WorkingAreaAdd} />
+      <Stack.Screen name="WorkingAreaEdit" component={WorkingAreaEdit} />
+      <Stack.Screen name="ShiftClose" component={ShiftClose} />
+      <Stack.Screen name="TableLayouts" component={TableLayouts} />
+      <Stack.Screen name="TableLayoutAdd" component={TableLayoutAdd} />
+      <Stack.Screen name="TableLayoutEdit" component={TableLayoutEdit} />
+      <Stack.Screen name="TableAdd" component={TableAdd} />
+      <Stack.Screen name="TableEdit" component={TableEdit} />
+      <Stack.Screen name="Announcements" component={Announcements} />
+      <Stack.Screen name="AnnouncementsAdd" component={AnnouncementsAdd} />
+      <Stack.Screen name="AnnouncementsEdit" component={AnnouncementsEdit} />
+      <Stack.Screen name="CloseComplete" component={CloseComplete} />
+      <Stack.Screen name="AccountClose" component={AccountClose} />
+      <Stack.Screen name="AccountCloseConfirm" component={AccountCloseConfirm} />
+      <Stack.Screen name="ManageVisualScreen" component={ManageVisualScreen} />
+      <Stack.Screen name="EditUserRole" component={EditUserRole} />
+      <Stack.Screen name="NewUserRole" component={NewUserRole} />
+      <Stack.Screen name="ManageUserRole" component={ManageUserRole} />
+      <Stack.Screen name="ManageOffers" component={ManageOffers} />
+      <Stack.Screen name="EinvoiceSettingScreen" component={EinvoiceSettingScreen} />
+      <Stack.Screen name="EinvoiceStatusScreen" component={EinvoiceStatusScreen} />
+      <Stack.Screen name="EinvoiceEditScreen" component={EinvoiceEditScreen} />
+      <Stack.Screen name="NewOffer" component={NewOffer} />
+      <Stack.Screen name="EditOffer" component={EditOffer} />
+      <Stack.Screen name="ProductsOverviewforOffer" component={ProductsOverviewforOffer} />
+      <Stack.Screen name="SubscriptionScreen" component={SubscriptionScreen} />
+      <Stack.Screen name="MemberScreen" component={MemberScreen} />
+      <Stack.Screen name="MemberFormScreen" component={MemberFormScreen} />
+    </Stack.Navigator>
+  );
 }
-const ReservationScreens = createDrawerNavigator({
 
-  ReservationCalendarScreen: {
-    screen: ReservationCalendarScreen,
-    navigationOptions: {
-      title: null,
-      drawerLabel: ({focused, tintColor}) => (
-        <LabelIcon focused={focused} tintColor={tintColor} name='md-calendar-sharp' />
-      ),
-    }
-  },
-  ReservationSetting: {
-    screen: ReservationSetting,
-    navigationOptions: {
-      title: null,
-      drawerLabel: ({focused, tintColor}) => (
-        <LabelIcon focused={focused} tintColor={tintColor} name='md-settings' />
-      ),
-    }
-  },
-  ReservationScreen: {
-    screen: ReservationScreen,
-    navigationOptions: {
-      title: null,
-      drawerLabel: <Hidden />,
-    }
-  },
-  ReservationViewScreen: {
-    screen: ReservationViewScreen,
-    navigationOptions: {
-      drawerLabel: <Hidden />
-    },
-  },
-  ReservationEditScreen: {
-    screen: ReservationEditScreen,
-    navigationOptions: {
-      drawerLabel: <Hidden />
-    },
-  },
-  ReservationFormScreen: {
-    screen: ReservationFormScreen,
-    navigationOptions: {
-      drawerLabel: <Hidden />
-    },
-  },
-  ReservationConfirmScreen: {
-    screen: ReservationConfirmScreen,
-    navigationOptions: {
-      drawerLabel: <Hidden />
-    },
-  },
-}, {
-  drawerBackgroundColor: '#222',
-  overlayColor: 1,
-  drawerType: 'slide',
-  drawerWidth: 80,
-  edgeWidth: 400,
+const TablesStack = () => {
 
-})
+  return (
+    <Stack.Navigator
+      initialRouteName="TablesScr"
+      headerMode="screen"
+      screenOptions={{headerShown: false}}
+    >
+      <Stack.Screen name="TablesScr" component={TablesScreen} options={({route: {params}}) => ({
+        animationEnabled: params?.withAnimation ? false : true
+      })} />
+      <Stack.Screen name="OrderDisplayScreen" component={OrderDisplayScreen} />
+      <Stack.Screen name="OrderStart" component={OrderStart} />
+      <Stack.Screen name="NewOrderForm" component={OrderForm} />
+      <Stack.Screen name="OrderFormII" component={OrderFormII} />
+      <Stack.Screen name="OrderFormIII" component={OrderFormIII} />
+      <Stack.Screen name="OrderFormIV" component={OrderFormIV} />
+      <Stack.Screen name="OrdersSummary" component={OrdersSummary} />
+      <Stack.Screen name="UpdateOrder" component={UpdateOrder} />
+      <Stack.Screen name="Payment" component={Payment} />
+      <Stack.Screen name="PaymentOrder" component={PaymentOrder} />
+      <Stack.Screen name="CheckoutComplete" component={CheckoutComplete} />
+      <Stack.Screen name="SpiltBillScreen" component={SpiltBillScreen} />
+      <Stack.Screen name="SplitBillByHeadScreen" component={SplitBillByHeadScreen} />
+    </Stack.Navigator>
+  );
+}
 
-ReservationScreens.navigationOptions = ({screenProps: {t}}) => ({
-  title: t('menu.Reservation'),
-  tabBarButtonComponent: (props) => (
-    testVisible ?
-      <TabBarIcon focused={props?.focused} name="calendar-check" iconLib="MaterialCommunityIcons" onPress={() => NavigationService?.navigateToRoute('ReservationScreen', null, props?.onPress)} />
-      : null
-  ),
-})
+const OrdersStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="OrdersScr"
+      headerMode="screen"
+      screenOptions={{headerShown: false}}
+    >
+      <Stack.Screen name="OrdersScr" component={OrdersScreen} options={({route: {params}}) => ({
+        animationEnabled: params?.withAnimation ? false : true
+      })} />
+      <Stack.Screen name="OrderDetail" component={OrderDetail} />
+      <Stack.Screen name="UpdateOrderFromOrderDetail" component={UpdateOrder} />
+      <Stack.Screen name="NewOrderForm" component={OrderForm} />
+    </Stack.Navigator>
+  );
+}
+const ReportsStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="Reports"
+      headerMode="screen"
+      screenOptions={{headerShown: false}}
+    >
+      <Stack.Screen name="Reports" component={ReportsScreen} options={({route: {params}}) => ({
+        animationEnabled: params?.withAnimation ? false : true
+      })} />
+      <Stack.Screen name="SalesCharts" component={SalesCharts} />
+      <Stack.Screen name="StaffTimeCard" component={StaffTimeCard} />
+      <Stack.Screen name="UserTimeCards" component={UserTimeCards} />
+      <Stack.Screen name="CustomerStats" component={CustomerStats} />
+      <Stack.Screen name="ShiftHistory" component={ShiftHistory} />
+      <Stack.Screen name="ShiftDetails" component={ShiftDetails} />
+    </Stack.Navigator>
+  );
+}
+const InventoryStack = () => {
 
-const tabBar = createBottomTabNavigator({
-  Home: {
-    screen: Home,
-    navigationOptions: ({navigation, screenProps: {t}}) => {
-      if (navigation.state.routes.length > 0) {
-        let tabBarVisible = true
-        navigation.state.routes.map(route => {
-          if (['RetailPayment', 'RetailPaymentOrder', 'RetailCheckoutComplete'].includes(route.routeName)) {
-            tabBarVisible = false
-          } else {
-            tabBarVisible = true
-          }
-        })
-        return {title: '', tabBarVisible}
-      }
-    }
-  },
-  Tables: {
-    screen: Tables,
-    navigationOptions: ({navigation, screenProps: {t}}) => {
-      if (navigation.state.routes.length > 0) {
-        let tabBarVisible = true
-        navigation.state.routes.map(route => {
-          if (['Payment', 'PaymentOrder', 'CheckoutComplete', 'SpiltBillScreen', 'SplitBillByHeadScreen'].includes(route.routeName)) {
-            tabBarVisible = false
-          } else {
-            tabBarVisible = true
-          }
-        })
-        return {title: '', tabBarVisible}
-      }
-    }
-  },
-  Orders: {
-    screen: Orders,
+  return (
+    <Stack.Navigator
+      initialRouteName="InventoryScreen"
+      headerMode="screen"
+      screenOptions={{headerShown: false}}
+    >
+      <Stack.Screen name="InventoryScreen" component={InventoryScreen} options={({route: {params}}) => ({
+        animationEnabled: params?.withAnimation ? false : true
+      })} />
+      <Stack.Screen name="InventoryOrderScreen" component={InventoryOrderScreen} />
+      <Stack.Screen name="InventoryOrderFormScreen" component={InventoryOrderFormScreen} />
+    </Stack.Navigator>
+  );
+}
+const RostersStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="CalendarScreen"
+      headerMode="screen"
+      screenOptions={{headerShown: false}}
+    >
+      <Stack.Screen name="CalendarScreen" component={CalendarScreen} options={({route: {params}}) => ({
+        animationEnabled: params?.withAnimation ? false : true
+      })} />
+      <Stack.Screen name="RostersFormScreen" component={RostersFormScreen} />
+    </Stack.Navigator>
+  );
+}
 
-  },
-  Reports: {
-    screen: Reports
-  },
-  Inventory: {
-    screen: Inventory
-  },
-  Reservations: {
-    screen: ReservationScreens,
-  },
-  Rosters: {
-    screen: Rosters
-  },
-  Settings: {
-    screen: Settings
-  }
-}, {
-  resetOnBlur: true,
-  defaultNavigationOptions: {
-    tabBarOnPress: async ({navigation, defaultHandler}) => {
+const ReservationStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="ReservationCalendarScreen"
+      headerMode="screen"
+      screenOptions={{headerShown: false}}
+    >
+      <Stack.Screen name="ReservationCalendarScreen" component={ReservationCalendarScreen} options={{
+        title: null,
+      }} />
+      <Stack.Screen name="ReservationSetting" component={ReservationSetting} options={{
+        title: null,
+      }} />
+      <Stack.Screen name="ReservationScreen" component={ReservationScreen} options={{
+        title: null,
+      }} />
+      <Stack.Screen name="ReservationViewScreen" component={ReservationViewScreen} options={{
+        title: null,
+      }} />
+      <Stack.Screen name="ReservationEditScreen" component={ReservationEditScreen} options={{
+        title: null,
+      }} />
+      <Stack.Screen name="ReservationFormScreen" component={ReservationFormScreen} options={{
+        title: null,
+      }} />
+      <Stack.Screen name="ReservationConfirmScreen" component={ReservationConfirmScreen} options={{
+        title: null,
+      }} />
+    </Stack.Navigator>
+  )
+}
+const LabelIcon = (props) => {
+
+  const {focused, color, name} = props
+  return (
+    <View style={{paddingVertical: 16}}>
+      <Icon name={name} size={28} focused={focused} color={color} />
+    </View>
+  )
+}
+function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props}>
+      {props.state.routes.map((route, i) => {
+        const focused = i === props.state.index;
+        const {drawerIcon} = props.descriptors[route.key].options;
+
+        return (
+          <DrawerItem
+            key={route.key}
+            label={() => null}
+            activeTintColor={props.activeTintColor}
+            inactiveTintColor={props.inactiveTintColor}
+            activeBackgroundColor={props.activeBackgroundColor}
+            icon={drawerIcon}
+            focused={focused}
+            onPress={() => {
+              if (route.name == 'ReservationCalendar') {
+                props.navigation.navigate('ReservationCalendar', {screen: 'ReservationCalendarScreen'})
+              } else {
+                props.navigation.navigate(route.name)
+              }
+            }}
+          />
+        );
+      })}
+
+    </DrawerContentScrollView>
+  );
+}
+const ReservationDrawer = () => {
+  const dimensions = useWindowDimensions();
+  const isTablet = dimensions.width >= 768;
+
+  return (
+    <Drawer.Navigator
+      initialRouteName="ReservationCalendarScreen"
+      drawerContentOptions={{
+        activeTintColor: '#488bd4',
+        inactiveTintColor: '#f18d1a',
+        activeBackgroundColor: '#222',
+      }}
+      drawerContent={props => <CustomDrawerContent {...props} />}
+      openByDefault={isTablet ? true : false}
+      edgeWidth={200}
+      drawerStyle={isTablet ? {
+        width: 64, backgroundColor: '#222'
+      } : {width: 64, backgroundColor: '#222'}}
+      drawerType={dimensions.width >= 768 ? 'permanent' : 'back'}
+    >
+      <Drawer.Screen name="ReservationUpcomingScreen" component={ReservationUpcomingScreen} options={{
+        drawerLabel: () => null,
+        drawerIcon: ({focused, color}) => (
+          <LabelIcon focused={focused} color={color} name='md-today' />
+        )
+      }} />
+      <Drawer.Screen name="ReservationCalendar" component={ReservationStack} options={{
+        drawerLabel: () => null,
+        drawerIcon: ({focused, color}) => (
+          <LabelIcon focused={focused} color={color} name='md-calendar-sharp' />
+        )
+      }} />
+      <Drawer.Screen name="ReservationSetting" component={ReservationSetting} options={{
+        drawerLabel: () => null,
+        drawerIcon: ({focused, color}) => (
+          <LabelIcon focused={focused} color={color} name='md-settings' />
+        )
+      }} />
+
+
+    </Drawer.Navigator >
+  )
+}
+
+
+const BottomTab = () => {
+  const screenProps = React.useContext(LocaleContext);
+  const dimensions = useWindowDimensions();
+  const isTablet = dimensions.width >= 768;
+
+  const tabBarListeners = ({navigation, route}) => ({
+    tabPress: async () => {
       const tokenObj = await getToken()
-
       if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {
-        navigation.dispatch(StackActions.popToTop())
+        if (!!route?.state?.routeNames) {
+          navigation.navigate(route.state.routeNames[0], {withAnimation: false})
+        } else {
+          navigation.navigate(route.name, {withAnimation: false})
+        }
       } else {
         navigation.navigate('Login')
       }
-
-      //navigation.dispatch(StackActions.popToTop())
-
-      /*navigation.dispatch(
-        StackActions.reset({
-          index: 0,
-          key: navigation.state.routes[0].key,
-          actions: [
-            NavigationActions.navigate({
-              routeName: navigation.state.routes[0].routeName
-            })
-          ]
-        })
-      )*/
-      defaultHandler()
     }
-  },
-  //https://stackoverflow.com/questions/42910540/react-navigation-how-to-change-tabbar-color-based-on-current-tab
-  tabBarComponent: props => {
+  })
 
-    return (
-      <TabBarBottom
-        {...props}
-        style={{color: props?.screenProps?.customSecondThemeColor, backgroundColor: props?.screenProps?.customTabBarBackgroundColor}}
+
+  return (
+    <Tab.Navigator lazy={true}
+      tabBarOptions={{
+        labelPosition: 'below-icon',
+        showLabel: false, showIcon: true,
+      }}
+      tabBar={props =>
+        <BottomTabBar
+          {...props}
+          tabStyle={{
+            height: 65,
+            flex: 1,
+            paddingTop: (isTablet ? 14 : 8),
+            textAlign: 'center',
+            justifyContent: 'center',
+            alignSelf: 'flex-start',
+            color: screenProps?.customSecondThemeColor, backgroundColor: screenProps?.customTabBarBackgroundColor,
+          }}
+          showLabel={false}
+          safeAreaInsets='bottom'
+        />
+      }
+    >
+      <Tab.Screen name="Home" component={HomeStack} options={{
+        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name={'md-home'} onPress={props?.onPress} />)
+      }}
+        listeners={tabBarListeners}
       />
-    )
-  },
-  tabBarOptions: {
-    showLabel: false
-  }
-})
+      {screenProps?.appType === 'store' && <Tab.Screen name="Tables" component={TablesStack} showLabel={false} options={{
+        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="md-people" onPress={props?.onPress} />)
+      }} listeners={tabBarListeners} />}
+      <Tab.Screen name="Orders" component={OrdersStack} showLabel={false} options={{
+        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="md-document" onPress={props?.onPress} />)
+      }} listeners={tabBarListeners} />
+      <Tab.Screen name="Reports" component={ReportsStack} showLabel={false} options={{
+        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name={'ios-stats-chart'} onPress={props?.onPress} />)
+      }} listeners={tabBarListeners} />
+      {screenProps?.appType === 'retail' && <Tab.Screen name="Inventory" component={InventoryStack} showLabel={false} options={{
+        tabBarIcon: (props) => (
+          <TabBarIcon focused={props?.focused} name="inventory" onPress={props?.onPress} iconLib={'MaterialIcons'} />)
+      }} listeners={tabBarListeners} />}
+      <Tab.Screen name="Reservations" component={ReservationDrawer} options={{
+        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="calendar-check" iconLib="MaterialCommunityIcons" onPress={props?.onPress} />)
+      }} listeners={tabBarListeners} />
+      <Tab.Screen name="Rosters" component={RostersStack} showLabel={false} options={{
+        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="md-calendar"
+          onPress={() => NavigationService?.navigateToRoute('Rosters', {screen: 'CalendarScreen'}, props?.onPress)
+          }
+        />)
+      }} listeners={tabBarListeners} />
+      <Tab.Screen name="Settings" component={SettingsStack} showLabel={false} options={{
+        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'} onPress={props?.onPress} />)
+      }} listeners={tabBarListeners} />
+    </Tab.Navigator >
+  );
+}
 
-export default createSwitchNavigator({
-  Home: HomeScreen,
-  ClientUsers: ClientUsers,
-  ClientUserLogin: ClientUserLogin,
-  Intro: IntroAppScreen,
-  CreateAcc: CreateAccScreen,
-  Login: Login,
-  LoginScreen: LoginScreen,
-  ResetClientPassword: ResetClientPassword,
-  ReservationScreens: {
-    screen: ReservationScreens
-  },
-  tabBar: {
-    screen: tabBar // Calling the tabNavigator, wich contains the other stackNavigators
-  },
-})
+
+function MainTabNavigator() {
+
+  return (
+    <Stack.Navigator headerMode="screen" initialRouteName="HomeScreen"
+      screenOptions={{headerShown: false}}>
+
+      <Stack.Screen name="HomeScreen" component={HomeScreen} options={{animationEnabled: false}} />
+      <Stack.Screen name="Intro" component={IntroAppScreen} options={{animationEnabled: false}} />
+      <Stack.Screen name="CreateAcc" component={CreateAccScreen} options={{animationEnabled: false}} />
+      <Stack.Screen name="Login" component={Login} options={{animationEnabled: false}} />
+      <Stack.Screen name="LoginScreen" component={LoginScreen} options={{animationEnabled: false}} />
+      <Stack.Screen name="ResetClientPassword" component={ResetClientPassword} options={{animationEnabled: false}} />
+
+      <Stack.Screen name="ClientUsers" component={ClientUsers} options={{animationEnabled: false}} />
+      <Stack.Screen name="ClientUserLogin" component={ClientUserLogin} options={{animationEnabled: false}} />
+      <Stack.Screen name="tabBar" component={BottomTab} options={{animationEnabled: false}} />
+
+    </Stack.Navigator>
+  )
+}
+
+export default MainTabNavigator

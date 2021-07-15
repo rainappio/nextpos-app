@@ -8,7 +8,7 @@ import {isEmail, isRequired, isvalidPassword} from "../validators";
 import {ThemeContainer} from "../components/ThemeContainer";
 import ScreenHeader from "../components/ScreenHeader";
 import {StyledText} from "../components/StyledText";
-import {withNavigation} from "react-navigation";
+import {withNavigation} from "@react-navigation/compat";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {CountdownCircleTimer} from 'react-native-countdown-circle-timer'
 

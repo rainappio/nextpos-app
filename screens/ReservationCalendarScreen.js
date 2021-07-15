@@ -11,7 +11,6 @@ import {ThemeScrollView} from "../components/ThemeScrollView";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {Calendar, LocaleConfig, Agenda, AgendaList} from 'react-native-calendars';
 import {api, dispatchFetchRequest} from '../constants/Backend'
-import {NavigationEvents} from 'react-navigation'
 import TimeZoneService from "../helpers/TimeZoneService";
 import moment from "moment-timezone";
 import {StyledText} from '../components/StyledText'
@@ -69,6 +68,12 @@ class ReservationCalendarScreen extends React.Component {
         this.props.getTableLayouts()
         this.getReservationEvents()
         this.getReservationEventsByDate()
+        this._refreshScreen = this.props.navigation.addListener('focus', () => {
+            this.refreshScreen()
+        })
+    }
+    componentWillUnmount() {
+        this._refreshScreen()
     }
 
     refreshScreen = async () => {
@@ -176,12 +181,6 @@ class ReservationCalendarScreen extends React.Component {
 
         return (
             <ThemeContainer>
-                <NavigationEvents
-                    onWillFocus={() => {
-                        this.refreshScreen()
-                    }}
-                />
-
                 <View style={[styles.fullWidthScreen, {marginBottom: 0}]}>
                     <ScreenHeader backNavigation={false}
                         parentFullScreen={true}

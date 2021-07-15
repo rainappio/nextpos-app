@@ -22,7 +22,7 @@ class WorkingAreaEdit extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getWorkingArea(this.props.navigation.state.params.id)
+    this.props.getWorkingArea(this.props.route.params.id)
   }
 
   handleUpdate = values => {
@@ -68,7 +68,7 @@ class WorkingAreaEdit extends React.Component {
   }
 
   render() {
-    const {navigation, workingarea, loading, haveError, haveData} = this.props
+    const {navigation, route, workingarea, loading, haveError, haveData} = this.props
     console.log('workingarea', JSON.stringify(workingarea))
     const {t} = this.context
 
@@ -94,9 +94,10 @@ class WorkingAreaEdit extends React.Component {
             onSubmit={this.handleUpdate}
             handleDelete={this.handleDelete}
             navigation={navigation}
+            route={route}
             initialValues={workingarea}
             isEdit={true}
-            dataArr={this.props.navigation.state.params.printers}
+            dataArr={this.props.route.params.printers}
             handleEditCancel={this.handleEditCancel}
           />
         </View>
@@ -115,7 +116,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getWorkingArea: () =>
-    dispatch(getWorkingArea(props.navigation.state.params.id)),
+    dispatch(getWorkingArea(props.route.params.id)),
   getPrinters: () => dispatch(getPrinters()),
   getWorkingAreas: () => dispatch(getWorkingAreas()),
   clearWorkingArea: () => dispatch(clearWorkingArea())

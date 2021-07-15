@@ -111,7 +111,7 @@ export class RadioReservationTimePick extends React.Component {
 
     const selectedColor = (customValueOrder == value) ? customBackgroundColor : customMainThemeColor
     const optionWidth = !isTablet ? (Dimensions.get('window').width) / 4 - 16
-      : (Dimensions.get('window').width) / (3 * 4) - 24
+      : (Dimensions.get('window').width) / (3 * 4) - 28
 
     return (
       <View style={[styles.jc_alignIem_center, (customValueOrder == value) && {backgroundColor: customMainThemeColor}, {borderWidth: 1, borderColor: customMainThemeColor, justifyContent: 'center', marginHorizontal: 8, marginVertical: 8, padding: 4, width: optionWidth}]}>

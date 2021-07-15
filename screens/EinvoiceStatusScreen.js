@@ -11,7 +11,6 @@ import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {BottomMainActionButton, MainActionButton} from "../components/ActionButtons"
-import {NavigationEvents} from 'react-navigation'
 import Icon from "react-native-vector-icons/Ionicons";
 import {Field, reduxForm} from 'redux-form'
 import InputText from '../components/InputText'
@@ -39,7 +38,12 @@ class EinvoiceStatusScreen extends React.Component {
 
         this.props.getCurrentClient()
         this.refreshScreen()
-
+        this._refreshScreen = this.props.navigation.addListener('focus', () => {
+            this.refreshScreen()
+        })
+    }
+    componentWillUnmount() {
+        this._refreshScreen()
     }
 
     refreshScreen = () => {
@@ -201,11 +205,6 @@ class EinvoiceStatusScreen extends React.Component {
         return (
             <ThemeScrollView>
                 <View style={[styles.fullWidthScreen]}>
-                    <NavigationEvents
-                        onWillFocus={() => {
-                            this.refreshScreen()
-                        }}
-                    />
                     <ScreenHeader title={t('eInvoice.eInvoiceStatusTitle')}
                         parentFullScreen={true}
 

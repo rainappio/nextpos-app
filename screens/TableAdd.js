@@ -20,7 +20,7 @@ class TableAdd extends React.Component {
   }
 
   handleSubmit = values => {
-    const layoutId = this.props.navigation.state.params.layoutId
+    const layoutId = this.props.route.params.layoutId
 
     dispatchFetchRequest(api.tablelayout.createTable(layoutId), {
       method: 'POST',
@@ -38,16 +38,16 @@ class TableAdd extends React.Component {
   }
 
   render() {
-    const {navigation} = this.props
+    const {navigation, route} = this.props
     const {t} = this.context
 
     return (
       <ThemeContainer>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader title={t('addTableTitle')}
-                        parentFullScreen={true}/>
+            parentFullScreen={true} />
 
-          <TableForm onSubmit={this.handleSubmit} navigation={navigation}/>
+          <TableForm onSubmit={this.handleSubmit} navigation={navigation} route={route} />
         </View>
       </ThemeContainer>
     )

@@ -46,14 +46,15 @@ class ClientUserLogin extends React.Component {
       )
       res.username = values.username
       await AsyncStorage.setItem('clientusrToken', JSON.stringify(res))
-      this.context?.getAppType(() => this.props.navigation.navigate('LoginSuccess'))
+      this.context?.getAppType(() => this.props.navigation.navigate('tabBar', {screen: 'LoginSuccess'}))
 
     }
   }
 
   render() {
-    const {navigation} = this.props
-    const {clientusersName, displayName, defaultUser} = this.props.navigation.state.params
+    const {navigation, route} = this.props
+    const {clientusersName, displayName, defaultUser} = this.props.route?.params
+
     return (
       <ClientUserLoginForm
         initialValues={{username: clientusersName}}
@@ -61,6 +62,7 @@ class ClientUserLogin extends React.Component {
         displayName={displayName}
         defaultUser={defaultUser}
         navigation={navigation}
+        route={route}
         onSubmit={this.clientLogin}
       />
     )

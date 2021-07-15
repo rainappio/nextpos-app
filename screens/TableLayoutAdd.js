@@ -38,18 +38,19 @@ class TableLayoutAdd extends React.Component {
   }
 
   render() {
-    const {navigation} = this.props
+    const {navigation, route} = this.props
     const {t} = this.context
 
     return (
       <ThemeContainer>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader title={t('addTableLayoutTitle')}
-                        parentFullScreen={true}/>
+            parentFullScreen={true} />
 
           <TableLayoutForm
             onSubmit={this.handleSubmit}
             navigation={navigation}
+            route={route}
           />
         </View>
       </ThemeContainer>

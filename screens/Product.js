@@ -28,14 +28,14 @@ class Product extends React.Component {
     }
 
     dispatchFetchRequest(api.product.new, {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(request)
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
       },
+      body: JSON.stringify(request)
+    },
       response => {
         this.props.navigation.navigate('ProductsOverview')
       }
@@ -43,7 +43,7 @@ class Product extends React.Component {
   }
 
   render() {
-    const {products, labels = [], navigation} = this.props
+    const {products, labels = [], navigation, route} = this.props
 
     return (
       <ProductFormScreen
@@ -51,6 +51,7 @@ class Product extends React.Component {
         labels={labels}
         onSubmit={this.handleSubmit}
         navigation={navigation}
+        route={route}
         isEditForm={false}
       />
     )

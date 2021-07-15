@@ -10,7 +10,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 import TimeZoneService from "../helpers/TimeZoneService";
 import moment from "moment-timezone";
 import {MainActionFlexButton, DeleteFlexButton} from "../components/ActionButtons";
-import {withNavigation} from 'react-navigation';
+import {withNavigation} from '@react-navigation/compat';
 
 /*
    Date   : 2020-12-03

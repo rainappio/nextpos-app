@@ -3,7 +3,7 @@ import {Text, TouchableOpacity, View} from "react-native"
 import styles from '../styles'
 import Icon from "react-native-vector-icons/Ionicons"
 import {LocaleContext} from "../locales/LocaleContext"
-import {withNavigation} from "react-navigation"
+import {withNavigation} from "@react-navigation/compat"
 
 class ScreenHeader extends Component {
   static contextType = LocaleContext

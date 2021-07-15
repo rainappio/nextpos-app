@@ -724,6 +724,8 @@ const en = {
   reservationSetting: {
     reservationSettingTitle: 'Reservation Settings',
     webLink: 'Reservation Web Link',
+    linkShareSuccess: 'Reservation Web Link Share Sucess.',
+    linkShareFailed: 'Reservation Web Link Share Failed.',
     durationMinutes: 'Table Duration (Min)',
     nonReservableTables: 'Non Reservable Tables',
   },

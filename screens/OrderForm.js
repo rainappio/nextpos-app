@@ -149,8 +149,8 @@ class OrderForm extends Component {
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
               backAction={() => {
-                if (this.props?.navigation?.state?.params?.route) {
-                  this.props.navigation.navigate(`${this.props?.navigation?.state.params.route}`)
+                if (this.props?.route?.params?.route) {
+                  this.props.navigation.navigate(`${this.props?.route?.params.route}`)
                 } else {
                   this.props.navigation.goBack()
                 }
@@ -315,8 +315,8 @@ class OrderForm extends Component {
                 <View style={{flex: 1, marginHorizontal: 5}}>
                   <TouchableOpacity
                     onPress={() => {
-                      if (this.props?.navigation?.state?.params?.route) {
-                        this.props.navigation.navigate(`${this.props?.navigation?.state.params.route}`)
+                      if (this.props?.route?.params?.route) {
+                        this.props.navigation.navigate(`${this.props?.route?.params.route}`)
                       } else {
                         this.props.navigation.goBack()
                       }
@@ -336,8 +336,8 @@ class OrderForm extends Component {
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
               backAction={() => {
-                if (this.props?.navigation?.state?.params?.route) {
-                  this.props.navigation.navigate(`${this.props?.navigation?.state.params.route}`)
+                if (this.props?.route?.params?.route) {
+                  this.props.navigation.navigate(`${this.props?.route?.params.route}`)
                 } else {
                   this.props.navigation.goBack()
                 }
@@ -379,9 +379,9 @@ class OrderForm extends Component {
                   )}
 
                   {noAvailableTables ||
-                    layoutList?.map((layout) => {
+                    layoutList?.map((layout, index) => {
                       return (
-                        <View>
+                        <View key={index}>
                           <View style={[complexTheme.shade, {flex: 1, marginTop: 12, height: 36, alignItems: 'center', justifyContent: 'center'}]}>
                             <StyledText style={{fontSize: 18, }}>{layout}</StyledText>
                           </View>
@@ -501,8 +501,8 @@ class OrderForm extends Component {
                 <View style={{flex: 1, marginHorizontal: 5}}>
                   <TouchableOpacity
                     onPress={() => {
-                      if (this.props?.navigation?.state?.params?.route) {
-                        this.props.navigation.navigate(`${this.props?.navigation?.state.params.route}`)
+                      if (this.props?.route?.params?.route) {
+                        this.props.navigation.navigate(`${this.props?.route?.params.route}`)
                       } else {
                         this.props.navigation.goBack()
                       }

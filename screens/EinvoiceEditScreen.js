@@ -30,14 +30,14 @@ class EinvoiceEditScreen extends React.Component {
 
 
         this.state = {
-            data: props.navigation?.state?.params?.data ?? null,
-            numberRanges: props.navigation?.state?.params?.data?.numberRanges ?? [{
+            data: props.route?.params?.data ?? null,
+            numberRanges: props.route?.params?.data?.numberRanges ?? [{
                 prefix: null,
                 rangeFrom: null,
                 rangeTo: null,
                 remainingInvoiceNumbers: null,
             }],
-            numberRangesLength: !!props.navigation?.state?.params?.data?.numberRanges ? props.navigation?.state?.params?.data?.numberRanges?.length : 0,
+            numberRangesLength: !!props.route?.params?.data?.numberRanges ? props.route?.params?.data?.numberRanges?.length : 0,
             selectedYear: [
                 {label: String(new Date().getFullYear() - 1911), value: String(new Date().getFullYear() - 1911)},
                 {label: String(new Date().getFullYear() - 1910), value: String(new Date().getFullYear() - 1910)},
@@ -79,7 +79,7 @@ class EinvoiceEditScreen extends React.Component {
                 })
             }, response => {
                 response.json().then(data => {
-                    this.props.navigation?.state?.params?.refreshScreen()
+                    this.props.route?.params?.refreshScreen()
                     this.props.navigation.goBack()
                 })
             }).then()
@@ -117,32 +117,7 @@ class EinvoiceEditScreen extends React.Component {
                 }).then()
             }
 
-            // numberRangeArr.forEach((item) => {
-            //     console.log('fetch', JSON.stringify({
-            //         "prefix": item?.prefix ?? '',
-            //         "rangeFrom": item?.rangeFrom ?? '',
-            //         "rangeTo": item?.rangeTo ?? '',
-            //     }), this.state.data?.ubn, this.state.data?.rangeIdentifier)
-            //     dispatchFetchRequest(api.eInvoice.add(this.state.data?.ubn, this.state.data?.rangeIdentifier), {
-            //         method: 'POST',
-            //         withCredentials: true,
-            //         credentials: 'include',
-            //         headers: {
-            //             'Content-Type': 'application/json'
-            //         },
-            //         body: JSON.stringify({
-            //             "prefix": item?.prefix ?? '',
-            //             "rangeFrom": item?.rangeFrom ?? '',
-            //             "rangeTo": item?.rangeTo ?? '',
-            //         })
-            //     }, response => {
-            //         response.json().then(data => {
-            //             console.log('handleSubmitBack', data)
-            //             this.props.navigation?.state?.params?.refreshScreen()
-            //         })
-            //     }).then()
-            // })
-            this.props.navigation?.state?.params?.refreshScreen()
+            this.props.route?.params?.refreshScreen()
             this.props.navigation.goBack()
 
         }
@@ -163,7 +138,7 @@ class EinvoiceEditScreen extends React.Component {
 
             }
         ).then()
-        await this.props.navigation?.state?.params?.refreshScreen()
+        await this.props.route?.params?.refreshScreen()
         await this.props.navigation.goBack()
     }
 

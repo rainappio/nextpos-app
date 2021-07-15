@@ -10,7 +10,6 @@ import OrderTopInfo from "./OrderTopInfo";
 import LoadingScreen from "./LoadingScreen";
 import {api, dispatchFetchRequestWithOption, successMessage, dispatchFetchRequest} from "../constants/Backend";
 import DeleteBtn from "../components/DeleteBtn";
-import {NavigationEvents} from "react-navigation";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import {withContext} from "../helpers/contextHelper";
@@ -44,8 +43,18 @@ class OrderDetail extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getOrder(this.props?.navigation?.state?.params?.orderId ?? this.props?.orderId)
+    this.props.getOrder(this.props?.route?.params?.orderId ?? this.props?.orderId)
     this.getOnePrinter()
+    this._getOrder = this.props.navigation.addListener('focus', () => {
+      this.props.getOrder()
+    })
+    this._closeModal = this.props.navigation.addListener('blur', () => {
+      !!this.props?.orderId && this.props?.closeModal()
+    })
+  }
+  componentWillUnmount() {
+    this._getOrder()
+    this._closeModal()
   }
 
   handleCopyOrder(order) {
@@ -59,9 +68,21 @@ class OrderDetail extends React.Component {
     }, response => {
       response.json().then(copiedOrder => {
         successMessage(this.context.t('order.copied'))
-        this.props.navigation.navigate('OrdersSummary', {
-          orderId: copiedOrder.orderId
-        })
+        if (this.context.isTablet) {
+          this.props.navigation.navigate('Tables', {
+            screen: 'OrderFormII',
+            params: {
+              orderId: copiedOrder.orderId
+            }
+          })
+        } else {
+          this.props.navigation.navigate('Tables', {
+            screen: 'OrdersSummary',
+            params: {
+              orderId: copiedOrder.orderId
+            }
+          })
+        }
 
       })
     }).then()
@@ -342,7 +363,7 @@ class OrderDetail extends React.Component {
           <View style={[styles.fullWidthScreen, (!!this.props?.orderId && {marginTop: 0})]}>
             <ScreenHeader parentFullScreen={true}
               backAction={() => {
-                if (this.props?.navigation?.state.params.route !== 'EinvoiceStatusScreen') {
+                if (this.props?.route?.params.route !== 'EinvoiceStatusScreen') {
                   !!this.props?.orderId ? this.props?.closeModal() : this.props.navigation.goBack()
                 } else {
                   this.props.navigation.navigate('EinvoiceStatusScreen')
@@ -350,14 +371,6 @@ class OrderDetail extends React.Component {
               }
               }
               title={t('order.orderDetailsTitle')} />
-            <NavigationEvents
-              onWillFocus={() => {
-                this.props.getOrder()
-              }}
-              onWillBlur={() => {
-                !!this.props?.orderId && this.props?.closeModal()
-              }}
-            />
             <ThemeScrollView>
               <OrderTopInfo order={order} />
 
@@ -739,7 +752,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getOrder: () => dispatch(getOrder(props?.navigation?.state?.params?.orderId ?? props?.orderId)),
+  getOrder: () => dispatch(getOrder(props?.route?.params?.orderId ?? props?.orderId)),
   orderId: props?.orderId,
   closeModal: props?.closeModal,
 })

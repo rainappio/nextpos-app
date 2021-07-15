@@ -36,7 +36,7 @@ class ShiftDetails extends React.Component {
 
   render() {
     const {t, themeStyle, customMainThemeColor} = this.context
-    const {shift} = this.props.navigation.state.params
+    const {shift} = this.props.route.params
 
     const closingShiftReport = {
       totalOrderCount: 0,
@@ -284,8 +284,11 @@ class ShiftDetails extends React.Component {
           <View style={[styles.sectionContainer, styles.verticalPadding, styles.horizontalMargin]}>
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('OrdersScr', {
-                  shiftId: shift.id
+                this.props.navigation.navigate('Orders', {
+                  screen: 'OrdersScr',
+                  params: {
+                    shiftId: shift.id
+                  }
                 })
               }}>
               <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('searchShiftOrders')}</Text>

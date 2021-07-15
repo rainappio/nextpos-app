@@ -449,6 +449,7 @@ class ProductRow extends React.Component {
     const {
       labels = [],
       navigation,
+      route,
       themeStyle
     } = this.props
     const {t, customMainThemeColor, customBackgroundColor} = this.context
@@ -527,9 +528,10 @@ class ProductRow extends React.Component {
                   <CustomPopUp
                     style={[{justifyContent: 'flex-end'}]}
                     navigation={navigation}
+                    route={route}
                     toRoute={['Category', 'Product', 'Option']}
                     textForRoute={[t('newItem.category'), t('newItem.product'), t('newItem.productOption')]}
-                    params={[{}, {}, {customRoute: this.props.navigation.state.routeName}]}
+                    params={[{}, {}, {customRoute: this.props.route.name}]}
                   />
                 </View>
               </View>

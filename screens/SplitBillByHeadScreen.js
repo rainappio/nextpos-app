@@ -18,13 +18,11 @@ import {compose} from "redux";
 import OrderItemDetailEditModal from './OrderItemDetailEditModal';
 import OrderTopInfo from "./OrderTopInfo";
 import DeleteBtn from '../components/DeleteBtn'
-import NavigationService from "../navigation/NavigationService";
 import {handleDelete, handleOrderSubmit, renderChildProducts, renderOptionsAndOffer, handleOrderAction, getTableDisplayName} from "../helpers/orderActions";
 import {SwipeRow} from 'react-native-swipe-list-view'
 import ScreenHeader from "../components/ScreenHeader";
 import Icon from 'react-native-vector-icons/FontAwesome'
 import {MainActionButton, MainActionFlexButton} from "../components/ActionButtons";
-import {NavigationEvents} from 'react-navigation'
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {SwipeListView} from 'react-native-swipe-list-view'
 import {CheckBox, Tooltip} from 'react-native-elements'
@@ -47,12 +45,19 @@ class SplitBillByHeadScreen extends React.Component {
 
 
     }
-
+    componentDidMount() {
+        this._refreshScreen = this.props.navigation.addListener('focus', () => {
+            this.refreshScreen()
+        })
+    }
+    componentWillUnmount() {
+        this._refreshScreen()
+    }
 
 
     refreshScreen = () => {
 
-        this.getSplitOrder(this.props.navigation.state.params?.order?.orderId)
+        this.getSplitOrder(this.props.route.params?.order?.orderId)
     }
 
 
@@ -63,7 +68,7 @@ class SplitBillByHeadScreen extends React.Component {
 
 
     getSplitOrder = (id) => {
-        if (!!this.props.navigation.state.params?.headCount) {
+        if (!!this.props.route.params?.headCount) {
             dispatchFetchRequestWithOption(
                 api.splitOrder.splitByHead(id),
                 {
@@ -72,7 +77,7 @@ class SplitBillByHeadScreen extends React.Component {
                     credentials: 'include',
                     headers: {'Content-Type': 'application/json', },
                     body: JSON.stringify({
-                        headCount: this.props.navigation.state.params?.headCount
+                        headCount: this.props.route.params?.headCount
                     })
                 }, {
                 defaultMessage: false
@@ -210,11 +215,6 @@ class SplitBillByHeadScreen extends React.Component {
                                 )
                             }}
                             title={t('splitBill.SpiltBillScreenTitle')} />
-                        <NavigationEvents
-                            onWillFocus={() => {
-                                this.refreshScreen()
-                            }}
-                        />
                         <View style={{flexDirection: 'row', flex: 1}}>
                             <View style={{
                                 flex: 1,
@@ -462,12 +462,6 @@ class SplitBillByHeadScreen extends React.Component {
                                 )
                             }}
                             title={t('splitBill.SpiltBillScreenTitle')} />
-                        <NavigationEvents
-                            onWillFocus={() => {
-                                this.refreshScreen()
-                            }}
-                        />
-
                         <View style={{flex: 1}}>
                             <View style={{flex: 9, paddingBottom: 8}}>
                                 <View style={{marginBottom: 5}}>
@@ -721,10 +715,10 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch,
     getLables: () => dispatch(getLables()),
     getProducts: () => dispatch(getProducts()),
-    getOrder: (orderId) => dispatch(getOrder(orderId ?? props.navigation.state.params?.order?.orderId)),
+    getOrder: (orderId) => dispatch(getOrder(orderId ?? props.route.params?.order?.orderId)),
     getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
     getOrdersByDateRange: () => dispatch(getOrdersByDateRange()),
-    clearOrder: () => dispatch(clearOrder(props.navigation.state.params.orderId)),
+    clearOrder: () => dispatch(clearOrder(props.route.params.orderId)),
 })
 
 export default connect(

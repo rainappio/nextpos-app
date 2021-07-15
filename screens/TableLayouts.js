@@ -8,7 +8,6 @@ import AddBtn from '../components/AddBtn'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
-import {NavigationEvents} from "react-navigation";
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import {ThemeScrollView} from "../components/ThemeScrollView";
@@ -57,6 +56,12 @@ class TableLayouts extends React.Component {
         }
       }
     })
+    this._getTableLayouts = this.props.navigation.addListener('focus', () => {
+      this.props.getTableLayouts()
+    })
+  }
+  componentWillUnmount() {
+    this._getTableLayouts()
   }
 
   PanelHeader = (layoutName, layoutId) => {
@@ -92,11 +97,6 @@ class TableLayouts extends React.Component {
     }
     return (
       <ThemeScrollView>
-        <NavigationEvents
-          onWillFocus={() => {
-            this.props.getTableLayouts()
-          }}
-        />
         <View>
           <View style={[styles.container]}>
             <ScreenHeader backNavigation={true}
@@ -116,7 +116,7 @@ class TableLayouts extends React.Component {
                     <View>
                       <MainActionButton title={t('tableLayouts.manageVisualLayoutTitle')} onPress={() => {
                         this.setState({isShowModal: false})
-                        this.props.navigation.navigate('ManageVisualSceen')
+                        this.props.navigation.navigate('ManageVisualScreen')
                       }} />
                     </View>
                   </OptionModal>

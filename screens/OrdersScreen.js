@@ -7,7 +7,6 @@ import {ListItem} from 'react-native-elements'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {renderOrderState} from "../helpers/orderActions";
-import {NavigationEvents} from "react-navigation";
 import ScreenHeader from "../components/ScreenHeader";
 import OrderFilterForm from './OrderFilterForm'
 import LoadingScreen from "./LoadingScreen";
@@ -50,6 +49,38 @@ class OrdersScreen extends React.Component {
 
   componentDidMount() {
     this.props.getOrdersByDateRange()
+    this._searchOrder = this.props.navigation.addListener('focus', () => {
+      if (this.state?.searchFilter?.searchTypeIndex === 0) {
+        let shiftId = this.props.route.params?.shiftId
+        if (this.props.route.params !== undefined && this.props.route.params.withAnimation == false) {
+          shiftId = null
+        }
+        const dateRangeToUse = shiftId != null ? 0 : this.state.searchFilter.dateRange
+
+        this.handleOrderSearch({
+          dateRange: dateRangeToUse,
+          shiftId: shiftId,
+          fromDate: this.state.searchFilter.fromDate,
+          toDate: this.state.searchFilter.toDate,
+          searchTypeIndex: this.state.searchFilter.searchTypeIndex,
+          tableName: this.state.searchFilter.tableName,
+        })
+      } else {
+        this.props.getOrdersByInvoiceNumber(this.state?.searchFilter?.invoiceNumber ?? '')
+      }
+      // To prevent FlatList scrolls to top automatically,
+      // we have to delay scroll to the original position
+      const offset = this.state.scrollPosition
+
+      if (this.ListView_Ref != null) {
+        setTimeout(() => {
+          this.ListView_Ref?.scrollToOffset({offset, animated: false})
+        }, 800)
+      }
+    })
+  }
+  componentWillUnmount() {
+    this._searchOrder()
   }
 
   upButtonHandler = () => {
@@ -179,38 +210,6 @@ class OrdersScreen extends React.Component {
       return (
         <ThemeContainer>
           <View style={[styles.fullWidthScreen]}>
-            <NavigationEvents
-              onWillFocus={() => {
-                if (this.state?.searchFilter?.searchTypeIndex === 0) {
-                  const shiftId = this.props.navigation.getParam('shiftId')
-                  const dateRangeToUse = shiftId != null ? 0 : this.state.searchFilter.dateRange
-
-                  this.handleOrderSearch({
-                    dateRange: dateRangeToUse,
-                    shiftId: shiftId,
-                    fromDate: this.state.searchFilter.fromDate,
-                    toDate: this.state.searchFilter.toDate,
-                    searchTypeIndex: this.state.searchFilter.searchTypeIndex,
-                    tableName: this.state.searchFilter.tableName,
-                  })
-
-                  // this.props.navigation.setParams({shiftId: undefined})
-                } else {
-                  this.props.getOrdersByInvoiceNumber(this.state?.searchFilter?.invoiceNumber ?? '')
-                }
-
-
-                // To prevent FlatList scrolls to top automatically,
-                // we have to delay scroll to the original position
-                const offset = this.state.scrollPosition
-
-                if (this.ListView_Ref != null) {
-                  setTimeout(() => {
-                    this.ListView_Ref?.scrollToOffset({offset, animated: false})
-                  }, 800)
-                }
-              }}
-            />
             <ScreenHeader backNavigation={false}
               parentFullScreen={true}
               title={t('order.ordersTitle')}

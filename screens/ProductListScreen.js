@@ -11,17 +11,18 @@ export const ProductListScreen = ({
   haveError,
   products,
   navigation,
+  route,
   getProduct,
   dispatch,
   labels
 }) => {
   if (isLoading) {
     return (
-      <LoadingScreen/>
+      <LoadingScreen />
     )
   } else if (haveError) {
     return (
-      <BackendErrorScreen/>
+      <BackendErrorScreen />
     )
   } else if (products !== undefined && products.length === 0) {
     return (
@@ -34,6 +35,7 @@ export const ProductListScreen = ({
     <ProductRow
       products={products}
       navigation={navigation}
+      route={route}
       getProduct={getProduct}
       labels={labels}
     />

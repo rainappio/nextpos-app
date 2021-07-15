@@ -11,6 +11,7 @@ export const StaffListScreen = ({
   haveError,
   clientusers,
   navigation,
+  route,
   currentUser
 }) => {
   if (isLoading) {
@@ -28,7 +29,7 @@ export const StaffListScreen = ({
       </View>
     )
   }
-  return <StaffRow clientusers={clientusers} navigation={navigation} isStaff={!(currentUser?.roles?.includes('ADMIN') || currentUser?.roles?.includes('MANAGER') || currentUser?.roles?.includes('OWNER'))} />
+  return <StaffRow clientusers={clientusers} navigation={navigation} route={route} isStaff={!(currentUser?.roles?.includes('ADMIN') || currentUser?.roles?.includes('MANAGER') || currentUser?.roles?.includes('OWNER'))} />
 }
 
 const mapDispatchToProps = dispatch => ({

@@ -21,12 +21,12 @@ class TableEdit extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getTableLayout(this.props.navigation.state.params.layoutId)
+    this.props.getTableLayout(this.props.route.params.layoutId)
   }
 
   handleSubmit = values => {
-    const tablelayoutId = this.props.navigation.state.params.layoutId
-    const tableId = this.props.navigation.state.params.tableId
+    const tablelayoutId = this.props.route.params.layoutId
+    const tableId = this.props.route.params.tableId
 
     dispatchFetchRequest(api.tablelayout.updateTable(tablelayoutId, tableId), {
       method: 'POST',
@@ -58,6 +58,7 @@ class TableEdit extends React.Component {
   render() {
     const {
       navigation,
+      route,
       tablelayout,
       haveData,
       haveError,
@@ -66,19 +67,19 @@ class TableEdit extends React.Component {
     const {t} = this.context
 
     const selectedTable = tablelayout !== undefined && tablelayout.tables !== undefined && tablelayout.tables.find(
-      table => table.tableId === this.props.navigation.state.params.tableId
+      table => table.tableId === this.props.route.params.tableId
     )
 
     if (isLoading) {
       return (
-        <LoadingScreen/>
+        <LoadingScreen />
       )
     } else if (haveData && selectedTable !== undefined) {
       return (
         <ThemeContainer>
           <View style={[styles.fullWidthScreen]}>
             <ScreenHeader title={t('editTableTitle')}
-                          parentFullScreen={true}/>
+              parentFullScreen={true} />
 
             <TableForm
               onSubmit={this.handleSubmit}
@@ -87,6 +88,7 @@ class TableEdit extends React.Component {
               isEdit={true}
               tableLayout={tablelayout}
               navigation={navigation}
+              route={route}
             />
           </View>
         </ThemeContainer>

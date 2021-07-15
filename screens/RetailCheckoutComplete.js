@@ -66,7 +66,7 @@ class RetailCheckoutComplete extends React.Component {
     }
 
     componentDidMount() {
-        this.getXML(this.props.navigation.state.params?.transactionResponse?.transactionId)
+        this.getXML(this.props.route.params?.transactionResponse?.transactionId)
         this.getOnePrinter()
         this.props.getWorkingAreas()
         this.context?.saveSplitOrderId(null)
@@ -152,7 +152,7 @@ class RetailCheckoutComplete extends React.Component {
 
         } = this.props
         const {t, customMainThemeColor} = this.context
-        const {transactionResponse} = this.props.navigation.state.params
+        const {transactionResponse} = this.props.route.params
         if (this.context.isTablet) {
             return (
                 <ThemeContainer>
@@ -272,7 +272,7 @@ class RetailCheckoutComplete extends React.Component {
                             <View style={{width: '100%', padding: '3%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
                                 <TouchableOpacity
                                     onPress={() =>
-                                        this.props.navigation.state.params.onSubmit(
+                                        this.props.route.params.onSubmit(
                                             transactionResponse.orderId
                                         )
                                     }
@@ -384,7 +384,7 @@ class RetailCheckoutComplete extends React.Component {
                             <View>
                                 <TouchableOpacity
                                     onPress={() =>
-                                        this.props.navigation.state.params.onSubmit(
+                                        this.props.route.params.onSubmit(
                                             transactionResponse.orderId
                                         )
                                     }

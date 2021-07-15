@@ -11,7 +11,6 @@ import styles from '../styles'
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
-import {NavigationEvents} from 'react-navigation'
 import {MainActionFlexButton, DeleteFlexButton} from "../components/ActionButtons";
 import DeleteBtn from '../components/DeleteBtn'
 import {ThemeContainer} from "../components/ThemeContainer";
@@ -40,7 +39,7 @@ class MemberFormScreen extends React.Component {
 
 
         this.state = {
-            data: props.navigation?.state?.params?.data ?? null,
+            data: props.route?.params?.data ?? null,
             showDatePicker: false,
             activeSections: [],
             modalVisible: false,
@@ -81,7 +80,7 @@ class MemberFormScreen extends React.Component {
             }, response => {
 
                 response.json().then(data => {
-                    this.props.navigation?.state?.params?.refreshScreen()
+                    this.props.route?.params?.refreshScreen()
                     this.props.navigation.goBack()
                 })
             }).then()
@@ -105,7 +104,7 @@ class MemberFormScreen extends React.Component {
                 defaultMessage: true
             }, response => {
                 response.json().then(data => {
-                    this.props.navigation?.state?.params?.refreshScreen()
+                    this.props.route?.params?.refreshScreen()
                     this.props.navigation.goBack()
                 })
 
@@ -127,7 +126,7 @@ class MemberFormScreen extends React.Component {
             defaultMessage: true
         }, response => {
 
-            this.props.navigation?.state?.params?.refreshScreen()
+            this.props.route?.params?.refreshScreen()
             this.props.navigation.goBack()
         }).then()
     }

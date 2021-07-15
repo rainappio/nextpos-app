@@ -23,7 +23,7 @@ class WorkingAreaForm extends React.Component {
   }
 
   render() {
-    const {handleSubmit, isEdit, handleEditCancel, navigation} = this.props
+    const {handleSubmit, isEdit, handleEditCancel, navigation, route} = this.props
     const {t, customMainThemeColor} = this.context
 
     return (
@@ -91,9 +91,10 @@ class WorkingAreaForm extends React.Component {
             customarr={
               isEdit
                 ? this.props.dataArr
-                : this.props.navigation.state.params.dataArr
+                : this.props.route.params.dataArr
             }
             navigation={navigation}
+            route={route}
             customRoute={'PrinterEdit'}
           />
         </View>

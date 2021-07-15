@@ -38,9 +38,9 @@ class RostersFormScreen extends React.Component {
         super(props, context)
 
         let entriesArr = []
-        if (!!props.navigation?.state?.params?.data?.rosterEntries) {
+        if (!!props.route?.params?.data?.rosterEntries) {
 
-            Object.values(props.navigation?.state?.params?.data?.rosterEntries)?.forEach((day) => {
+            Object.values(props.route?.params?.data?.rosterEntries)?.forEach((day) => {
                 day?.forEach((entry) => {
                     entriesArr.push(entry)
                 })
@@ -48,23 +48,23 @@ class RostersFormScreen extends React.Component {
         }
 
         this.state = {
-            data: props.navigation?.state?.params?.data ?? null,
-            uneditable: props.navigation?.state?.params?.data?.status === 'LOCKED',
-            showFromDate: !!props.navigation?.state?.params?.data?.rosterEntries
+            data: props.route?.params?.data ?? null,
+            uneditable: props.route?.params?.data?.status === 'LOCKED',
+            showFromDate: !!props.route?.params?.data?.rosterEntries
                 ? new Array(entriesArr?.length).fill(false)
                 : [false],
-            showToDate: !!props.navigation?.state?.params?.data?.rosterEntries
+            showToDate: !!props.route?.params?.data?.rosterEntries
                 ? new Array(entriesArr?.length).fill(false)
                 : [false],
             showEndDate: false,
-            rosterEntries: !!props.navigation?.state?.params?.data?.rosterEntries
+            rosterEntries: !!props.route?.params?.data?.rosterEntries
                 ? entriesArr
                 : [{
                     dayOfWeek: null,
                     startTime: null,
                     endTime: null,
                 }],
-            rosterEntriesLength: !!props.navigation?.state?.params?.data?.rosterEntries ? entriesArr?.length : 0,
+            rosterEntriesLength: !!props.route?.params?.data?.rosterEntries ? entriesArr?.length : 0,
             selectedYear: [
                 {label: String(new Date().getFullYear()), value: new Date().getFullYear()},
                 {label: String(new Date().getFullYear() + 1), value: new Date().getFullYear() + 1},
@@ -92,18 +92,18 @@ class RostersFormScreen extends React.Component {
                 {label: context.t('dayPicker.Friday'), value: 'FRIDAY'},
                 {label: context.t('dayPicker.Saturday'), value: 'SATURDAY'},
             ],
-            repeatType: props.navigation?.state?.params?.data?.eventRepeat === 'WEEKLY' ? 2
-                : props.navigation?.state?.params?.data?.eventRepeat === 'DAILY' ? 1 : 0,
-            eventColor: props.navigation?.state?.params?.data?.eventColor ?? '#fff',
+            repeatType: props.route?.params?.data?.eventRepeat === 'WEEKLY' ? 2
+                : props.route?.params?.data?.eventRepeat === 'DAILY' ? 1 : 0,
+            eventColor: props.route?.params?.data?.eventColor ?? '#fff',
             activeSections: [],
             labels: [],
             isManager: props?.currentUser?.roles?.includes('MANAGER') ?? false,
             hasWorkingAreaDistribute: false,
-            hasCrossDate: (new Date(props.navigation?.state?.params?.data?.startTime).getDate() < new Date(props.navigation?.state?.params?.data?.endTime).getDate()) ?? false,
+            hasCrossDate: (new Date(props.route?.params?.data?.startTime).getDate() < new Date(props.route?.params?.data?.endTime).getDate()) ?? false,
             showStartDatePicker: false,
-            formStartTime: props.navigation?.state?.params?.data?.startTime ?? null,
-            formEndTime: props.navigation?.state?.params?.data?.endTime ?? null,
-            formRepeatEndDate: props.navigation?.state?.params?.data?.repeatEndDate ?? null,
+            formStartTime: props.route?.params?.data?.startTime ?? null,
+            formEndTime: props.route?.params?.data?.endTime ?? null,
+            formRepeatEndDate: props.route?.params?.data?.repeatEndDate ?? null,
         }
 
         context.localize({
@@ -157,11 +157,11 @@ class RostersFormScreen extends React.Component {
     }
 
     componentDidMount() {
-        if (!!this.props.navigation?.state?.params?.data) {
-            this.props?.change(`startDate`, new Date(this.props.navigation?.state?.params?.data?.startTime))
-            this.props?.change(`startTime`, new Date(this.props.navigation?.state?.params?.data?.startTime))
-            this.props?.change(`endTime`, new Date(this.props.navigation?.state?.params?.data?.endTime))
-            this.props?.change(`repeatEndDate`, new Date(this.props.navigation?.state?.params?.data?.repeatEndDate ?? new Date()))
+        if (!!this.props.route?.params?.data) {
+            this.props?.change(`startDate`, new Date(this.props.route?.params?.data?.startTime))
+            this.props?.change(`startTime`, new Date(this.props.route?.params?.data?.startTime))
+            this.props?.change(`endTime`, new Date(this.props.route?.params?.data?.endTime))
+            this.props?.change(`repeatEndDate`, new Date(this.props.route?.params?.data?.repeatEndDate ?? new Date()))
         }
         if (!!this.state?.hasCrossDate) {
             console.log("orgin hasCrossDate=", this.state?.hasCrossDate)
@@ -180,17 +180,17 @@ class RostersFormScreen extends React.Component {
             },
         }, response => {
             response.json().then(data => {
-                console.log('getLabels', JSON.stringify(this.props.navigation?.state?.params?.data?.eventResources))
+                console.log('getLabels', JSON.stringify(this.props.route?.params?.data?.eventResources))
                 this.setState({
                     labels: (data?.workingAreas?.map((label) => {
                         return ({
                             labelName: label?.name,
-                            resources: this.props.navigation?.state?.params?.users?.map((user) => {
+                            resources: this.props.route?.params?.users?.map((user) => {
                                 if (user.workingAreaIds.includes(label?.id) || (!user.workingAreaIds.length && !user.defaultUser)) {
-                                    return {...user, isSelected: this.props.navigation?.state?.params?.data?.eventResources?.[`${label?.name}`]?.some((eventResource) => eventResource?.resourceId === user?.id)}
+                                    return {...user, isSelected: this.props.route?.params?.data?.eventResources?.[`${label?.name}`]?.some((eventResource) => eventResource?.resourceId === user?.id)}
                                 }
                             }).filter(user => user),
-                            labelIsSelected: this.props.navigation?.state?.params?.data?.eventResources?.[`${label?.name}`]?.some((eventResource) => eventResource?.resourceId === this.props?.currentUser?.id)
+                            labelIsSelected: this.props.route?.params?.data?.eventResources?.[`${label?.name}`]?.some((eventResource) => eventResource?.resourceId === this.props?.currentUser?.id)
                         })
                     }))
                 })
@@ -253,7 +253,7 @@ class RostersFormScreen extends React.Component {
             }, response => {
                 response.json().then(data => {
                     console.log('res', JSON.stringify(data))
-                    this.props.navigation?.state?.params?.refreshScreen()
+                    this.props.route?.params?.refreshScreen()
                     this.props.navigation.goBack()
                 })
             }).then()
@@ -298,7 +298,7 @@ class RostersFormScreen extends React.Component {
                                 }, response => {
                                     response.json().then(data => {
                                         console.log('res', JSON.stringify(data))
-                                        this.props.navigation?.state?.params?.refreshScreen()
+                                        this.props.route?.params?.refreshScreen()
                                         this.props.navigation.goBack()
                                     })
                                 }).then()
@@ -319,7 +319,7 @@ class RostersFormScreen extends React.Component {
                                 }, response => {
                                     response.json().then(data => {
                                         console.log('res', JSON.stringify(data))
-                                        this.props.navigation?.state?.params?.refreshScreen()
+                                        this.props.route?.params?.refreshScreen()
                                         this.props.navigation.goBack()
                                     })
                                 }).then()
@@ -341,7 +341,7 @@ class RostersFormScreen extends React.Component {
                 }, response => {
                     response.json().then(data => {
                         console.log('res', JSON.stringify(data))
-                        this.props.navigation?.state?.params?.refreshScreen()
+                        this.props.route?.params?.refreshScreen()
                         this.props.navigation.goBack()
                     })
                 }).then()
@@ -369,7 +369,7 @@ class RostersFormScreen extends React.Component {
             body: JSON.stringify(request)
         }, response => {
             response.json().then(data => {
-                this.props.navigation?.state?.params?.refreshScreen()
+                this.props.route?.params?.refreshScreen()
                 this.props.navigation.goBack()
             })
         }).then()
@@ -391,7 +391,7 @@ class RostersFormScreen extends React.Component {
                                     'Content-Type': 'application/json'
                                 },
                             }, response => {
-                                this.props.navigation?.state?.params?.refreshScreen()
+                                this.props.route?.params?.refreshScreen()
                                 this.props.navigation.goBack()
 
                             }).then()
@@ -408,7 +408,7 @@ class RostersFormScreen extends React.Component {
                                     'Content-Type': 'application/json'
                                 },
                             }, response => {
-                                this.props.navigation?.state?.params?.refreshScreen()
+                                this.props.route?.params?.refreshScreen()
                                 this.props.navigation.goBack()
 
                             }).then()
@@ -426,7 +426,7 @@ class RostersFormScreen extends React.Component {
                     'Content-Type': 'application/json'
                 },
             }, response => {
-                this.props.navigation?.state?.params?.refreshScreen()
+                this.props.route?.params?.refreshScreen()
                 this.props.navigation.goBack()
 
             }).then()
@@ -569,9 +569,9 @@ class RostersFormScreen extends React.Component {
                                                                 {label: t('rostersForm.nightShift'), value: 'nightShift'},
                                                                 {label: t('rostersForm.midnightShift'), value: 'midnightShift'},
                                                             ]}
-                                                            defaultValue={this.props.navigation?.state?.params?.data?.eventName ?? t('rostersForm.morningShift')}
+                                                            defaultValue={this.props.route?.params?.data?.eventName ?? t('rostersForm.morningShift')}
                                                         /> :
-                                                            <StyledText>{this.props.navigation?.state?.params?.data?.eventName ?? t('rostersForm.morningShift')}</StyledText>}
+                                                            <StyledText>{this.props.route?.params?.data?.eventName ?? t('rostersForm.morningShift')}</StyledText>}
                                                     </View>
                                                 </View>
                                                 <View style={[styles.fieldContainer]}>
@@ -922,9 +922,9 @@ class RostersFormScreen extends React.Component {
                                                             {label: t('rostersForm.nightShift'), value: 'nightShift'},
                                                             {label: t('rostersForm.midnightShift'), value: 'midnightShift'},
                                                         ]}
-                                                        defaultValue={this.props.navigation?.state?.params?.data?.eventName ?? t('rostersForm.morningShift')}
+                                                        defaultValue={this.props.route?.params?.data?.eventName ?? t('rostersForm.morningShift')}
                                                     /> :
-                                                        <StyledText>{this.props.navigation?.state?.params?.data?.eventName ?? t('rostersForm.morningShift')}</StyledText>}
+                                                        <StyledText>{this.props.route?.params?.data?.eventName ?? t('rostersForm.morningShift')}</StyledText>}
                                                 </View>
                                             </View>
                                             <View style={[styles.fieldContainer]}>

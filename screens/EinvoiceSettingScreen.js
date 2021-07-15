@@ -10,7 +10,6 @@ import styles from '../styles'
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import {api, dispatchFetchRequest} from '../constants/Backend'
-import {NavigationEvents} from 'react-navigation'
 
 class EinvoiceSettingScreen extends React.Component {
     static navigationOptions = {
@@ -29,6 +28,12 @@ class EinvoiceSettingScreen extends React.Component {
 
         this.props.getCurrentClient()
         !!this.props?.client?.attributes?.UBN && this.getEinvoice(this.props?.client?.attributes?.UBN)
+        this._refreshScreen = this.props.navigation.addListener('focus', () => {
+            this.refreshScreen()
+        })
+    }
+    componentWillUnmount() {
+        this._refreshScreen()
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -86,11 +91,6 @@ class EinvoiceSettingScreen extends React.Component {
         return (
             <ThemeScrollView>
                 <View style={[styles.fullWidthScreen]}>
-                    <NavigationEvents
-                        onWillFocus={() => {
-                            this.refreshScreen()
-                        }}
-                    />
                     <ScreenHeader title={t('eInvoice.eInvoiceTitle')}
                         parentFullScreen={true}
                         rightComponent={

@@ -8,7 +8,6 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import {doLogout, formatDateObj, getAnnouncements, getClientUsr, getCurrentClient, getShiftStatus, getPrinters} from '../actions'
 import styles from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
-import {NavigationEvents} from 'react-navigation'
 import {getToken, api, dispatchFetchRequestWithOption, successMessage, dispatchFetchRequest} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {Avatar} from 'react-native-elements'
@@ -54,12 +53,6 @@ class LoginSuccessScreen extends React.Component {
 
   }
 
-
-
-  /**
-   * Navigation lifecycle reference:
-   * https://reactnavigation.org/docs/en/navigation-lifecycle.html
-   */
   componentDidMount() {
     this.loadUserInfo()
     this.context.localize({
@@ -100,7 +93,12 @@ class LoginSuccessScreen extends React.Component {
         continueTakeOut: '繼續外帶',
       }
     })
-    // <NavigationEvent> component in the render function takes care of loading user info.
+    this._loadUserInfo = this.props.navigation.addListener('focus', () => {
+      this.loadUserInfo()
+    })
+  }
+  componentWillUnmount() {
+    this._loadUserInfo()
   }
 
   loadUserInfo = async () => {
@@ -206,9 +204,12 @@ class LoginSuccessScreen extends React.Component {
     },
       response => {
         response.json().then(data => {
-          this.props.navigation.navigate(this.context.appType === 'store' ? 'OrderFormII' : 'RetailOrderForm', {
-            orderId: data.orderId,
-            route: 'LoginSuccess'
+          this.props.navigation.navigate(this.context.appType === 'store' ? 'Tables' : 'Home', {
+            screen: this.context.appType === 'store' ? 'OrderFormII' : 'RetailOrderForm',
+            params: {
+              orderId: data.orderId,
+              route: 'LoginSuccess'
+            }
           })
         })
       }).then()
@@ -218,6 +219,7 @@ class LoginSuccessScreen extends React.Component {
     const {
       doLogout,
       navigation,
+      route,
       currentUser,
       isLoading,
       haveError,
@@ -239,14 +241,10 @@ class LoginSuccessScreen extends React.Component {
 
     return (
       <ThemeScrollView>
-        <NavigationEvents
-          onWillFocus={() => {
-            this.loadUserInfo()
-          }}
-        />
         <HiddenMenu
           ref={this.hiddenMenu}
           navigation={navigation}
+          route={route}
 
         />
 
@@ -347,13 +345,15 @@ class LoginSuccessScreen extends React.Component {
                   route={appType === 'store' ? 'OrderStart' : 'RetailOrderStart'}
                   onPress={() => {
                     console.log('order', JSON.stringify(order))
-                    this.props.navigation.navigate(appType === 'store' ? 'OrderStart' :
-                      (!!order && order?.orderType === 'TAKE_OUT' && ['OPEN', 'IN_PROCESS', 'DELIVERED', 'PAYMENT_IN_PROCESS'].includes(order?.state)) ? 'RetailOrderForm' : 'RetailOrderStart', {
-                      handleOrderSubmit: handleOrderSubmit,
-                      handleDelete: handleDelete,
-                      orderId: order?.orderId,
-                      orderType: 'IN_STORE',
-                      route: 'LoginSuccess'
+                    this.props.navigation.navigate(appType === 'store' ? 'Tables' : 'Home', {
+                      screen: appType === 'store' ? 'OrderStart' : (!!order && order?.orderType === 'TAKE_OUT' && ['OPEN', 'IN_PROCESS', 'DELIVERED', 'PAYMENT_IN_PROCESS'].includes(order?.state)) ? 'RetailOrderForm' : 'RetailOrderStart',
+                      params: {
+                        handleOrderSubmit: handleOrderSubmit,
+                        handleDelete: handleDelete,
+                        orderId: order?.orderId,
+                        orderType: 'IN_STORE',
+                        route: 'LoginSuccess'
+                      }
                     })
                   }}
                   title={(appType === 'retail' && !!order && order?.orderType === 'TAKE_OUT' && order?.state === 'OPEN') ? t('continueOrder') : t('quickOrder')}
@@ -385,7 +385,7 @@ class LoginSuccessScreen extends React.Component {
                 <MenuButton
                   route={'ShiftClose'}
                   onPress={() => {
-                    this.props.navigation.navigate('ShiftClose')
+                    this.props.navigation.navigate('Settings', {screen: 'ShiftClose'})
                   }}
                   title={t('openShift.title')}
                   icon={
@@ -404,6 +404,7 @@ class LoginSuccessScreen extends React.Component {
                   route='ClockIn'
                   onPress={() =>
                     NavigationService?.navigateToRoute('ClockIn', {
+                      screen: 'ClockIn',
                       authClientUserName: username
                     })}
                   title={t('menu.timecard')}
@@ -424,6 +425,7 @@ class LoginSuccessScreen extends React.Component {
                 route='ClockIn'
                 onPress={() =>
                   NavigationService?.navigateToRoute('ClockIn', {
+                    screen: 'ClockIn',
                     authClientUserName: username
                   })}
                 title={t('menu.timecard')}
@@ -444,7 +446,7 @@ class LoginSuccessScreen extends React.Component {
               || client?.localClientStatus?.noProduct
               || client?.localClientStatus?.noTable
               || client?.localClientStatus?.noWorkingArea) &&
-              <View style={[styles.sectionContainer, styles.withBottomBorder, {alignItems: 'center'}]}>
+              <View style={[styles.sectionContainer, {alignItems: 'center'}]}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <StyledText style={[styles?.announcementTitle(customMainThemeColor)]}>
                     {t('clientStatusTitle')}
@@ -452,7 +454,7 @@ class LoginSuccessScreen extends React.Component {
                 </View>
 
                 {client?.localClientStatus?.noTableLayout &&
-                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('TableLayoutAdd')}>
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('Settings', {screen: 'TableLayoutAdd'})}>
                     <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
                       {t('addTableLayout')}
                     </StyledText>
@@ -463,7 +465,7 @@ class LoginSuccessScreen extends React.Component {
                     />
                   </TouchableOpacity>}
                 {client?.localClientStatus?.noTable &&
-                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('TableLayouts')}>
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('Settings', {screen: 'TableLayouts'})}>
                     <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
                       {t('addTable')}
                     </StyledText>
@@ -474,7 +476,7 @@ class LoginSuccessScreen extends React.Component {
                     />
                   </TouchableOpacity>}
                 {client?.localClientStatus?.noCategory &&
-                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('Category')}>
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('Settings', {screen: 'Category'})}>
                     <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
                       {t('addCategory')}
                     </StyledText>
@@ -485,7 +487,7 @@ class LoginSuccessScreen extends React.Component {
                     />
                   </TouchableOpacity>}
                 {client?.localClientStatus?.noProduct &&
-                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('Product')}>
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('Settings', {screen: 'Product'})}>
                     <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
                       {t('addProduct')}
                     </StyledText>
@@ -496,7 +498,7 @@ class LoginSuccessScreen extends React.Component {
                     />
                   </TouchableOpacity>}
                 {client?.localClientStatus?.noElectronicInvoice &&
-                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('EinvoiceStatusScreen')}>
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('Settings', {screen: 'EinvoiceStatusScreen'})}>
                     <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
                       {t('addElectronicInvoice')}
                     </StyledText>
@@ -507,7 +509,7 @@ class LoginSuccessScreen extends React.Component {
                     />
                   </TouchableOpacity>}
                 {client?.localClientStatus?.noPrinter &&
-                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('PrinterAdd')}>
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('Settings', {screen: 'PrinterAdd'})}>
                     <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
                       {t('addPrinter')}
                     </StyledText>
@@ -518,7 +520,7 @@ class LoginSuccessScreen extends React.Component {
                     />
                   </TouchableOpacity>}
                 {client?.localClientStatus?.noWorkingArea &&
-                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('WorkingAreaAdd', {dataArr: printers})}>
+                  <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center', width: '100%', maxWidth: 640, justifyContent: 'space-between', marginBottom: 8}} onPress={() => this.props.navigation.navigate('Settings', {screen: 'WorkingAreaAdd', dataArr: printers})}>
                     <StyledText style={[{marginLeft: 10, marginRight: 10}]}>
                       {t('addWorkingArea')}
                     </StyledText>
@@ -536,9 +538,9 @@ class LoginSuccessScreen extends React.Component {
               getannouncements.results.map((getannoc, index) =>
                 <View key={getannoc.id}>
                   <View
-                    style={[styles.markdownContainer(this.context), styles.shadowContainer(customBackgroundColor), styles.sectionContainer,]}
+                    style={[styles.markdownContainer(this.context), styles.shadowContainer(customBackgroundColor), styles.sectionContainer, {paddingHorizontal: 0}]}
                   >
-                    <View style={[styles.tableCellView]}>
+                    <View style={[styles.tableCellView, styles.withBottomBorder, {paddingHorizontal: 8, paddingBottom: 4}]}>
                       <IonIcon
                         name={getannoc.titleIcon}
                         size={32}
@@ -549,16 +551,13 @@ class LoginSuccessScreen extends React.Component {
                       </StyledText>
                     </View>
 
-                    <View style={[styles.markdownContainer(this.context), styles.shadowContainer(customBackgroundColor),]}>
+                    <View style={[styles.markdownContainer(this.context), {borderWidth: 0}]}>
                       <Markdown style={themeStyle}>
                         {getannoc.markdownContent}
                       </Markdown>
                     </View>
-
-
                   </View>
-                  {(index !== getannouncements.results.length - 1) && <View style={{borderBottomWidth: 1, borderBottomColor: customMainThemeColor, marginTop: 8, marginBottom: 12}}>
-                  </View>}
+
                 </View>
               )
             }
@@ -670,7 +669,7 @@ export class HiddenMenu extends React.Component {
               ]}
               onPress={() => {
                 this.toggleMenu()
-                this.props.navigation.navigate('Account')
+                this.props.navigation.navigate('Settings', {screen: 'Account'})
               }}
             >
               <Text style={complexTheme[theme].overlay}>{t('settings.account')}</Text>
@@ -684,7 +683,7 @@ export class HiddenMenu extends React.Component {
               ]}
               onPress={() => {
                 this.toggleMenu()
-                this.props.navigation.navigate('ClientUsers')
+                this.props.navigation.navigate('ClientUsers', {screen: 'ClientUsers'})
               }}
             >
               <Text style={complexTheme[theme].overlay}>

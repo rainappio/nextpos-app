@@ -20,7 +20,6 @@ import {compose} from "redux";
 import {StyledText} from "../components/StyledText";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {CardFourNumberKeyboard} from '../components/MoneyKeyboard'
-import {NavigationEvents} from 'react-navigation'
 import * as Device from 'expo-device';
 
 
@@ -301,9 +300,9 @@ class ClockIn extends React.Component {
     }
 
     let timeCardStatus = timecard.timeCardStatus
-    let authClientUserName =
-      this.props.navigation.state.params !== undefined &&
-      this.props.navigation.state.params.authClientUserName
+    // let authClientUserName =
+    //   this.props.route.params !== undefined &&
+    //   this.props.route.params.authClientUserName
 
     let text = 'Waiting..';
     if (this.state.message) {

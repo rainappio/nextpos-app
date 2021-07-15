@@ -1,5 +1,4 @@
 import {Alert} from 'react-native'
-import NavigationService from "../navigation/NavigationService";
 import i18n from 'i18n-js'
 
 export const backAction = (navigation) => {

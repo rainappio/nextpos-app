@@ -50,7 +50,7 @@ class UpdateOrder extends React.Component {
 
   render() {
     const {navigation, isLoading, haveData, availableTables, tableLayouts} = this.props
-    const order = this.props.navigation.getParam('order')
+    const order = this.props.route.params?.order
 
     const initialValues = {
       orderId: order.orderId,
@@ -86,6 +86,7 @@ class UpdateOrder extends React.Component {
         <OrderForm
           onSubmit={this.handleSubmit}
           navigation={navigation}
+          route={route}
           tablesMap={tablesMap}
           initialValues={initialValues}
         />
