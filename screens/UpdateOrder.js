@@ -49,7 +49,7 @@ class UpdateOrder extends React.Component {
   }
 
   render() {
-    const {navigation, isLoading, haveData, availableTables, tableLayouts} = this.props
+    const {navigation, route, isLoading, haveData, availableTables, tableLayouts} = this.props
     const order = this.props.route.params?.order
 
     const initialValues = {

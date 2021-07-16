@@ -580,8 +580,17 @@ export const api = {
     cancel: (id) => {
       return `${apiRoot}/reservations/${id}`
     },
+    seat: (id) => {
+      return `${apiRoot}/reservations/${id}/seat`
+    },
+    delay: (id) => {
+      return `${apiRoot}/reservations/${id}/delay`
+    },
     getReservationByDate: (date, status) => {
       return `${apiRoot}/reservations?reservationDate=${date}&reservationStatus=${status}`
+    },
+    getReservationByTime: (startDate, endDate, status) => {
+      return `${apiRoot}/reservations/byDateRange?startDate=${startDate}&endDate=${endDate}&status=${status}`
     },
     getReservationByMonth: (year, month) => {
       return `${apiRoot}/reservations/byMonth?yearMonth=${year}-${month}`

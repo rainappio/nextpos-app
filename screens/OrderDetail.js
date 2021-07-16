@@ -157,7 +157,7 @@ class OrderDetail extends React.Component {
   }
 
   render() {
-    const {order, isLoading, haveData, complexTheme} = this.props
+    const {order, isLoading, haveData, complexTheme, route} = this.props
     const {t, customMainThemeColor} = this.context
 
     const cashPay = []
@@ -372,7 +372,7 @@ class OrderDetail extends React.Component {
               }
               title={t('order.orderDetailsTitle')} />
             <ThemeScrollView>
-              <OrderTopInfo order={order} />
+              <OrderTopInfo order={order} route={route} />
 
               <View style={[styles.tableRowContainerWithBorder]}>
                 <View style={[styles.tableCellView, {flex: 1}]}>

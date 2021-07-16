@@ -39,7 +39,7 @@ class OrderForm extends Component {
         2: {label: '4+', value: 'MORE_THAN_THREE'}
       },
       isTablet: context?.isTablet,
-      rightFormSize: new Animated.Value(0),
+      rightFormSize: new Animated.Value(1),
       isAnimating: false
     }
   }
@@ -104,7 +104,11 @@ class OrderForm extends Component {
       toValue: to,
       duration: 500,
       useNativeDriver: false
-    }).start(() => this.setState({isAnimating: false}))
+    }).start((done) => {
+      if (done.finished) {
+        this.setState({isAnimating: false})
+      }
+    })
   }
 
   handleAgeGroupSelection = (index) => {

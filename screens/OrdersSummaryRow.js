@@ -413,6 +413,7 @@ class OrdersSummaryRow extends React.Component {
       products = [],
       labels = [],
       navigation,
+      route,
       haveData,
       haveError,
       isLoading,
@@ -468,7 +469,7 @@ class OrdersSummaryRow extends React.Component {
             orderId={order?.orderId}
           />
 
-          <OrderTopInfo order={order} />
+          <OrderTopInfo order={order} route={route} />
 
           <View style={[styles.sectionBar]}>
             <View style={[styles.tableCellView, {flex: 6}]}>

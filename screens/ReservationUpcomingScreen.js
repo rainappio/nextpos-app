@@ -1,11 +1,13 @@
 import React from 'react'
 import {ScrollView, View, Alert} from 'react-native'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
-import {clearReservation} from '../actions'
 import {LocaleContext} from "../locales/LocaleContext";
+import {getTableLayouts, getTablesAvailable, getTableLayout, getfetchOrderInflights} from '../actions'
 import {ThemeContainer} from "../components/ThemeContainer";
 import ReservationUpcomingForm from './ReservationUpcomingForm'
 import {connect} from 'react-redux'
+import moment from 'moment-timezone'
+import LoadingScreen from "./LoadingScreen";
 
 
 class ReservationUpcomingScreen extends React.Component {
@@ -16,26 +18,32 @@ class ReservationUpcomingScreen extends React.Component {
   static contextType = LocaleContext
   constructor(props, context) {
     super(props, context)
+
+    this.state = {
+      loading: false,
+    }
   }
 
   componentDidMount() {
-
+    this.props.getTableLayouts()
+    this.props.getfetchOrderInflights()
+    this.props.getAvailableTables()
   }
-
-
 
 
   handleSubmit = (values) => {
 
+    this.setState({loading: true})
     let request = {
-      reservationDate: values?.checkDate,
+      reservationDate: moment(new Date()).format('YYYY-MM-DDTHH:mm:ss'),
       name: values.name,
       phoneNumber: values.phoneNumber,
-      tableIds: values.tableIds,
+      tableIds: [],
       people: values?.people ?? 0,
       kid: values?.kid ?? 0,
       note: values?.note ?? ''
     }
+    console.log("request=", request)
     dispatchFetchRequestWithOption(
       api.reservation.create,
       {
@@ -48,38 +56,54 @@ class ReservationUpcomingScreen extends React.Component {
         body: JSON.stringify(request)
       }, {defaultMessage: true},
       response => {
-        this.handleReset()
-        this.props.navigation.navigate('ReservationCalendarScreen')
+        this.setState({loading: false})
+
       }
     ).then()
   }
 
 
-
   render() {
-    const {navigation, route} = this.props
+    const {navigation, route, tablelayouts, availableTables, ordersInflight, isLoading, haveData} = this.props
 
-    return (
-      <ThemeContainer>
+    if (isLoading || this.state.loading || !haveData) {
+      return (
+        <LoadingScreen />
+      )
+    } else {
+      return (
         <ReservationUpcomingForm
-          isEdit={false}
           onSubmit={this.handleSubmit}
           navigation={navigation}
           route={route}
+          tablelayouts={tablelayouts}
+          availableTables={availableTables}
+          ordersInflight={ordersInflight}
+          initialValues={{people: 0, kid: 0}}
         />
-      </ThemeContainer>
-    )
+      )
+    }
   }
 }
 
 
+
 const mapStateToProps = state => ({
+  tablelayouts: state.tablelayouts.data.tableLayouts,
+  haveData: state.tablelayouts.haveData,
+  haveError: state.ordersinflight.haveError || state.tablelayouts.haveError,
+  isLoading: state.ordersinflight.loading || state.tablelayouts.loading,
+  availableTables: state.tablesavailable.data.availableTables,
+  ordersInflight: state.ordersinflight.data.orders,
+  orderSets: state.ordersinflight.data?.setData,
 })
 
-const mapDispatchToProps = (dispatch, props) => ({
+const mapDispatchToProps = dispatch => ({
   dispatch,
-  clearReservation: () => dispatch(clearReservation()),
-
+  getTableLayouts: () => dispatch(getTableLayouts()),
+  getAvailableTables: () => dispatch(getTablesAvailable()),
+  getTableLayout: (id) => dispatch(getTableLayout(id)),
+  getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
 })
 
 

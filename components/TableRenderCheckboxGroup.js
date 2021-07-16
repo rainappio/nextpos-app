@@ -1,5 +1,7 @@
 import React from 'react'
 import {View} from 'react-native'
+import {Radio} from '@ant-design/react-native'
+
 import {Checkbox} from '@ant-design/react-native'
 import styles from '../styles'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
@@ -36,27 +38,39 @@ class TableRenderCheckboxGroup extends React.Component {
 
                 return (
                     <View key={ca.tableId}>
-                        <View style={[styles.tableRowContainerWithBorder, {paddingHorizontal: 0}]}>
-                            <View style={[styles.tableCellView, {flex: 1}]}>
-                                <StyledText>{ca.tableName}</StyledText>
-                            </View>
-                            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-                                <View>
-                                    <CheckBox
-                                        onChange={e => onChange(e.target.checked)}
-                                        checkedIcon={'check-circle'}
-                                        uncheckedIcon={'circle'}
-                                        checked={value.length !== 0 && value.includes(ca.tableId)}
-                                        containerStyle={{margin: 0, padding: 0, minWidth: 0}}
-                                        onPress={() => {
-                                            onChange(!(value.length !== 0 && value.includes(ca.tableId)))
-                                        }}
-                                    >
-                                    </CheckBox>
+                        <Radio
+                            onChange={() =>
+                                onChange(!(value.length !== 0 && value.includes(ca.tableId)))
+                            }
+                            onPress={() => {
+                                onChange(!(value.length !== 0 && value.includes(ca.tableId)))
+                            }}
+                            checked={value.length !== 0 && value.includes(ca.tableId)}
+                            style={{position: 'absolute', right: 0, opacity: 0}}
+                        >
+                            <View style={[styles.tableRowContainerWithBorder, {paddingHorizontal: 0}]}>
+                                <View style={[styles.tableCellView, {flex: 1}]}>
+                                    <StyledText>{ca.tableName}</StyledText>
+                                </View>
+                                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                                    <View>
+                                        <CheckBox
+                                            onChange={e => onChange(e.target.checked)}
+                                            checkedIcon={'check-circle'}
+                                            uncheckedIcon={'circle'}
+                                            checked={value.length !== 0 && value.includes(ca.tableId)}
+                                            containerStyle={{margin: 0, padding: 0, minWidth: 0}}
+                                            onPress={() => {
+                                                onChange(!(value.length !== 0 && value.includes(ca.tableId)))
+                                            }}
+                                        >
+                                        </CheckBox>
+                                    </View>
+
                                 </View>
 
                             </View>
-                        </View>
+                        </Radio>
                     </View>
                 )
             })

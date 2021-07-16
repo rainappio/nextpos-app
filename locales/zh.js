@@ -628,7 +628,7 @@ const zh = {
     updateDate: '最後更新',
     gesturePassword: '圖形密碼',
     encodeToken: '產生員工登入碼',
-    tokenShareSucess: '員工登入碼分享成功',
+    tokenShareSuccess: '員工登入碼分享成功',
     tokenShareFailed: '員工登入碼分享失敗',
     loginWithAccount: '帳號登入',
     loginWithToken: '員工登入',
@@ -722,6 +722,22 @@ const zh = {
     cancelActionContext: '是否取消訂位，並返回訂位管理列表？',
     cancelEditActionContext: '是否放棄已編輯的欄位，並返回訂位資訊頁？',
     deleteActionContext: '是否要刪除此筆訂位資料？',
+    delayActionContext: '是否將此訂位延遲 {{minutes}} 分鐘？',
+    seatActionContext: '是否確認此訂位的客人已入座？',
+    selectTablesContext: '請選擇至少一個桌位。',
+    addWaiting: '新增候補',
+    summary: '訂位列表',
+    actionTip: {
+      delay: '延遲',
+      seat: '入座',
+      cancel: '取消',
+      tableSelect: '選擇桌位'
+    },
+    drawer: {
+      upcoming: '候位',
+      calendar: '管理訂位',
+      settings: '設定'
+    }
   },
   reservationSetting: {
     reservationSettingTitle: '訂位設定',
