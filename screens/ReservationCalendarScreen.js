@@ -76,7 +76,7 @@ class ReservationCalendarScreen extends React.Component {
         this._refreshScreen()
     }
 
-    refreshScreen = async () => {
+    refreshScreen = () => {
 
         this.props.getTableLayouts()
         this.getReservationEvents(new Date(this.state?.selectedDate ?? new Date()).getFullYear(), moment(new Date(this.state?.selectedDate ?? new Date())).format('MM'))

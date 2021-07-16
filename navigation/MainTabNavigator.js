@@ -2,7 +2,7 @@ import React from 'react'
 import {AsyncStorage, Platform, Text, useWindowDimensions, View, TouchableOpacity} from 'react-native'
 import Animated from 'react-native-reanimated';
 import NavigationService from "../navigation/NavigationService";
-import {StackActions, TabActions, CommonActions} from '@react-navigation/native';
+import {StackActions, TabActions, CommonActions, getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {createBottomTabNavigator, BottomTabBar, useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
@@ -333,8 +333,8 @@ const LabelIcon = (props) => {
 
   const {focused, color, name} = props
   return (
-    <View style={{paddingVertical: 16}}>
-      <Icon name={name} size={28} focused={focused} color={color} />
+    <View style={{paddingTop: 16, paddingBottom: 8, justifyContent: 'center'}}>
+      <Icon name={name} size={30} focused={focused} color={color} />
     </View>
   )
 }
@@ -343,16 +343,24 @@ function CustomDrawerContent(props) {
     <DrawerContentScrollView {...props}>
       {props.state.routes.map((route, i) => {
         const focused = i === props.state.index;
-        const {drawerIcon} = props.descriptors[route.key].options;
+        const {drawerIcon, drawerLabel} = props.descriptors[route.key].options;
 
         return (
           <DrawerItem
             key={route.key}
-            label={() => null}
+            label={({focused, color}) => {
+              return (
+                <View style={{width: 64, justifyContent: 'center', marginLeft: -2}}>
+                  {drawerIcon({focused, color})}
+                  <Text style={[{maxWidth: 44, color: '#fff', fontSize: 8, textAlign: 'center', marginLeft: -6}]}>
+                    {drawerLabel}
+                  </Text>
+                </View>
+              )
+            }}
             activeTintColor={props.activeTintColor}
             inactiveTintColor={props.inactiveTintColor}
             activeBackgroundColor={props.activeBackgroundColor}
-            icon={drawerIcon}
             focused={focused}
             onPress={() => {
               if (route.name == 'ReservationCalendar') {
@@ -369,6 +377,7 @@ function CustomDrawerContent(props) {
   );
 }
 const ReservationDrawer = () => {
+  const screenProps = React.useContext(LocaleContext);
   const dimensions = useWindowDimensions();
   const isTablet = dimensions.width >= 768;
 
@@ -389,19 +398,19 @@ const ReservationDrawer = () => {
       drawerType={dimensions.width >= 768 ? 'permanent' : 'back'}
     >
       <Drawer.Screen name="ReservationUpcomingScreen" component={ReservationUpcomingScreen} options={{
-        drawerLabel: () => null,
+        drawerLabel: screenProps.t('reservation.drawer.upcoming'),
         drawerIcon: ({focused, color}) => (
           <LabelIcon focused={focused} color={color} name='md-today' />
         )
       }} />
       <Drawer.Screen name="ReservationCalendar" component={ReservationStack} options={{
-        drawerLabel: () => null,
+        drawerLabel: screenProps.t('reservation.drawer.calendar'),
         drawerIcon: ({focused, color}) => (
           <LabelIcon focused={focused} color={color} name='md-calendar-sharp' />
         )
       }} />
       <Drawer.Screen name="ReservationSetting" component={ReservationSetting} options={{
-        drawerLabel: () => null,
+        drawerLabel: screenProps.t('reservation.drawer.settings'),
         drawerIcon: ({focused, color}) => (
           <LabelIcon focused={focused} color={color} name='md-settings' />
         )
@@ -417,6 +426,8 @@ const BottomTab = () => {
   const screenProps = React.useContext(LocaleContext);
   const dimensions = useWindowDimensions();
   const isTablet = dimensions.width >= 768;
+
+  const customHiddenRoutes = ['Payment', 'PaymentOrder', 'CheckoutComplete', 'SpiltBillScreen', 'SplitBillByHeadScreen', 'RetailPayment', 'RetailPaymentOrder', 'RetailCheckoutComplete']
 
   const tabBarListeners = ({navigation, route}) => ({
     tabPress: async () => {
@@ -457,14 +468,18 @@ const BottomTab = () => {
         />
       }
     >
-      <Tab.Screen name="Home" component={HomeStack} options={{
-        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name={'md-home'} onPress={props?.onPress} />)
-      }}
+      <Tab.Screen name="Home" component={HomeStack}
+        options={({route}) => ({
+          tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name={'md-home'} onPress={props?.onPress} />),
+          tabBarVisible: !customHiddenRoutes.includes(getFocusedRouteNameFromRoute(route))
+        })}
         listeners={tabBarListeners}
       />
-      {screenProps?.appType === 'store' && <Tab.Screen name="Tables" component={TablesStack} showLabel={false} options={{
-        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="md-people" onPress={props?.onPress} />)
-      }} listeners={tabBarListeners} />}
+      {screenProps?.appType === 'store' && <Tab.Screen name="Tables" component={TablesStack} showLabel={false} options={({route}) => ({
+        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="md-people" onPress={props?.onPress} />),
+        tabBarVisible: !customHiddenRoutes.includes(getFocusedRouteNameFromRoute(route))
+      })}
+        listeners={tabBarListeners} />}
       <Tab.Screen name="Orders" component={OrdersStack} showLabel={false} options={{
         tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="md-document" onPress={props?.onPress} />)
       }} listeners={tabBarListeners} />

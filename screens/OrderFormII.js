@@ -496,6 +496,7 @@ class OrderFormII extends React.Component {
       themeStyle,
       orderIsLoading,
       productsData,
+      route,
       printers = [],
     } = this.props
 
@@ -555,7 +556,7 @@ class OrderFormII extends React.Component {
                 parentFullScreen={true}
                 title={t('orderForm.newOrderTitle')}
               />
-              <OrderTopInfo order={order} />
+              <OrderTopInfo order={order} route={route} />
               <OrderItemDetailEditModal
                 modalVisible={this.state.modalVisible}
                 submitOrder={(orderId) => {

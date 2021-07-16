@@ -24,7 +24,6 @@ class ReservationScreen extends React.Component {
 
   componentDidMount() {
     this.props.clearReservation()
-    this.checkPropsChange()
     this._resetForm = this.props.navigation.addListener('focus', () => {
       this.props.clearReservation()
       this.checkPropsChange()
@@ -106,20 +105,18 @@ class ReservationScreen extends React.Component {
     const {navigation, route} = this.props
 
     return (
-      <ThemeContainer>
-        <ReservationFormScreen
-          isEdit={false}
-          onSubmit={this.handleSubmit}
-          handleReset={this.handleReset}
-          handleNextStep={this.handleNextStep}
-          handleSaveReservation={this.handleCreateReservation}
-          handleCancel={this.handleCreateCancel}
-          nextStep={this.state.nextStep}
-          initialValues={this.state.initialValues ?? this.props.route?.params?.initialValues}
-          navigation={navigation}
-          route={route}
-        />
-      </ThemeContainer>
+      <ReservationFormScreen
+        isEdit={false}
+        onSubmit={this.handleSubmit}
+        handleReset={this.handleReset}
+        handleNextStep={this.handleNextStep}
+        handleSaveReservation={this.handleCreateReservation}
+        handleCancel={this.handleCreateCancel}
+        nextStep={this.state.nextStep}
+        initialValues={this.state.initialValues ?? this.props.route?.params?.initialValues}
+        navigation={navigation}
+        route={route}
+      />
     )
   }
 }
