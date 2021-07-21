@@ -75,7 +75,8 @@ class SubscriptionScreen extends React.Component {
             withCredentials: true,
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-api-key': 'Sjl5KBZFV1qurEHjVlKZKG5z6aeYR8yd'
             },
         }, response => {
             response.json().then(data => {

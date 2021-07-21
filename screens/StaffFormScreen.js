@@ -133,7 +133,7 @@ class StaffFormScreen extends React.Component {
       workingareas = [],
       currentUser
     } = this.props
-    const {t, customMainThemeColor} = this.context
+    const {t, isTablet, customMainThemeColor} = this.context
 
     const roleIdArr = [];
     userRoles !== undefined && userRoles.map(usrRole => roleIdArr.push({label: usrRole.roleName, value: usrRole.id}))
@@ -141,14 +141,10 @@ class StaffFormScreen extends React.Component {
 
     return (
       <ThemeScrollView>
-        <View style={styles.fullWidthScreen}>
+        <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
           <View>
             <ScreenHeader title={t('staffTitle')}
               parentFullScreen={true} />
-
-
-
-
 
             <View style={styles.tableRowContainerWithBorder}>
               <View style={[styles.tableCellView, styles.flex(1)]}>

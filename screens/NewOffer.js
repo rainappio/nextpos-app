@@ -87,13 +87,13 @@ class NewOffer extends React.Component {
   };
 
   render() {
-    const {t} = this.context;
+    const {t, isTablet} = this.context;
     const {products} = this.state;
     const selectedProducts = this.props.route.params !== undefined && this.props.route.params.updatedProducts;
 
     return (
       <ThemeKeyboardAwareScrollView>
-        <View style={styles.fullWidthScreen}>
+        <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
           <ScreenHeader title={t("newOfferTitle")}
             parentFullScreen={true}
           />

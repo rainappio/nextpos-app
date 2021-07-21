@@ -251,7 +251,9 @@ class ReservationSettingForm extends React.Component {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity onPress={() =>
+              this.props.navigation.navigate('ReservationUpcomingScreen')
+            }>
               <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
                 {t('action.cancel')}
               </Text>

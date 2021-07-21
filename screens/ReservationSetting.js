@@ -1,5 +1,4 @@
 import React from 'react'
-
 import {LocaleContext} from "../locales/LocaleContext";
 import {getTableLayouts, getTablesAvailable, getCurrentClient, getReservationSettings} from '../actions'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
@@ -7,7 +6,7 @@ import {ThemeContainer} from "../components/ThemeContainer";
 import {connect} from 'react-redux'
 import LoadingScreen from "./LoadingScreen";
 import ReservationSettingForm from './ReservationSettingForm'
-
+import {FocusAwareStatusBar} from '../components/FocusAwareStatusBar'
 
 class ReservationSetting extends React.Component {
   static navigationOptions = {
@@ -69,6 +68,7 @@ class ReservationSetting extends React.Component {
     } else if (haveData) {
       return (
         <ThemeContainer>
+          <FocusAwareStatusBar barStyle="light-content" backgroundColor="#222" />
           <ReservationSettingForm
             initialValues={reservationSettings}
             onSubmit={this.handleSubmit}

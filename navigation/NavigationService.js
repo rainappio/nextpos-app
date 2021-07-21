@@ -65,6 +65,7 @@ function navigateToRoute(name, params, callback = null) {
 }
 
 function checkSubscriptionAccess(route, restrictedFeatures) {
+
   let flag = false
   restrictedFeatures?.forEach((item) => {
     if (item === 'timeCard') {
@@ -98,7 +99,7 @@ function checkSubscriptionAccess(route, restrictedFeatures) {
       }
     }
     else if (item === 'calendar') {
-      if (route === 'CalendarScreen') {
+      if (route === 'CalendarScreen' || route === 'Rosters') {
         flag = true
       }
     }
@@ -108,7 +109,7 @@ function checkSubscriptionAccess(route, restrictedFeatures) {
       }
     }
     else if (item === 'roster') {
-      if (route === 'RostersScreen') {
+      if (route === 'RostersScreen' || route === 'Rosters') {
         flag = true
       }
     }

@@ -54,12 +54,12 @@ class CategoryCustomizeScreen extends React.Component {
       handleSubmit,
     } = this.props
 
-    const {t, customMainThemeColor} = this.context
+    const {t, isTablet, customMainThemeColor} = this.context
 
     return (
       // scroll bar in the center issue: https://github.com/facebook/react-native/issues/26610
       <ThemeScrollView>
-        <View style={[styles.fullWidthScreen]}>
+        <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
           <ScreenHeader parentFullScreen={true}
             title={t('categoryTitle')}
             backAction={() => backAction(this.props.navigation)}
@@ -90,6 +90,7 @@ class CategoryCustomizeScreen extends React.Component {
                   component={RenderCheckboxGroup}
                   customarr={prodctoptions}
                   navigation={this.props.navigation}
+                  route={this.props.route}
                   customRoute={'OptionEdit'}
                 />
               </View>

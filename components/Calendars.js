@@ -13,6 +13,7 @@ import {withNavigation} from '@react-navigation/compat';
 import {StyledText} from './StyledText';
 import Modal from 'react-native-modal';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
+import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import {FontAwesome} from '@expo/vector-icons';
 import {Ionicons} from '@expo/vector-icons';
 
@@ -905,17 +906,28 @@ class ReservationEventBase extends Component {
                                                                                     })
 
                                                                                 }}
-                                                                                key={event.id} style={{position: 'absolute', borderWidth: 1, borderColor: customBackgroundColor, backgroundColor: statusColor, height: 64, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (4 * ((layoutIndex + 1) * (tableIndex + 1)) - (tableIndex * 4) + 4), overflow: 'hidden', borderRadius: 15, paddingHorizontal: 5, justifyContent: 'center', zIndex: 9}}
+                                                                                key={event.id} style={{
+                                                                                    position: 'absolute', borderWidth: 1,
+                                                                                    flex: 1, borderColor: customBackgroundColor, backgroundColor: statusColor, height: 72, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (4 * ((layoutIndex + 1) * (tableIndex + 1)) - (tableIndex * 4) + 0), overflow: 'hidden', borderRadius: 12, paddingHorizontal: 4, justifyContent: 'center', zIndex: 9
+                                                                                }}
 
                                                                             >
-                                                                                <StyledText style={{color: customBackgroundColor}}>{event?.name}
-                                                                                </StyledText>
-                                                                                <StyledText style={{color: customBackgroundColor}}>{moment(event?.reservationStartDate).tz(timezone).format("HH:mm")}
-                                                                                </StyledText>
-                                                                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                                                                    <Ionicons name={'ios-people'} color={customBackgroundColor} size={16} />
-                                                                                    <StyledText style={{color: customBackgroundColor, marginLeft: 4}}>
-                                                                                        {event.people + event.kid}</StyledText>
+
+                                                                                <View style={{flex: 1, justifyContent: 'center'}}>
+                                                                                    <StyledText style={{color: customBackgroundColor}}>{event?.name}
+                                                                                    </StyledText>
+                                                                                </View>
+                                                                                <View style={{flex: 1, justifyContent: 'center'}}>
+                                                                                    <StyledText style={{color: customBackgroundColor}}>{moment(event?.reservationStartDate).tz(timezone).format("HH:mm")}
+                                                                                    </StyledText>
+                                                                                </View>
+                                                                                <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                                                                                    <View style={{flex: 2, flexDirection: 'row', }}>
+                                                                                        <Ionicons name={'ios-people'} color={customBackgroundColor} size={16} />
+                                                                                        <StyledText style={{color: customBackgroundColor, marginLeft: 4}}>
+                                                                                            {event.people + event.kid}</StyledText></View>
+                                                                                    <View style={{flex: 1, justifyContent: 'flex-end'}}>
+                                                                                        <MCIcon name={event?.sourceOfOrigin == 'APP' ? 'tablet-cellphone' : 'web'} color={customBackgroundColor} size={16} /></View>
                                                                                 </View>
                                                                             </TouchableOpacity>
 
@@ -956,17 +968,23 @@ class ReservationEventBase extends Component {
                                                     })
 
                                                 }}
-                                                key={eventIndex} style={{position: 'absolute', borderWidth: 1, borderColor: statusColor, backgroundColor: customBackgroundColor, height: 64, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (64 * (eventIndex) + ((eventIndex + 1) * 2)), overflow: 'hidden', borderRadius: 15, paddingHorizontal: 5, justifyContent: 'center', zIndex: 9}}
+                                                key={eventIndex} style={{position: 'absolute', borderWidth: 1, borderColor: statusColor, backgroundColor: customBackgroundColor, height: 72, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (72 * (eventIndex) + ((eventIndex + 1) * 2)), overflow: 'hidden', borderRadius: 12, paddingHorizontal: 4, justifyContent: 'center', zIndex: 9}}
 
                                             >
-                                                <StyledText style={{color: statusColor}}>{event?.name}
-                                                </StyledText>
-                                                <StyledText style={{color: statusColor}}>{moment(event?.reservationStartDate).tz(timezone).format("HH:mm")}
-                                                </StyledText>
-                                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                                <View style={{flex: 1, flexDirection: 'row'}}>
+                                                    <StyledText style={{color: statusColor}}>{event?.name}
+                                                    </StyledText>
+                                                </View>
+                                                <View style={{flex: 1, justifyContent: 'center'}}>
+                                                    <StyledText style={{color: statusColor}}>{moment(event?.reservationStartDate).tz(timezone).format("HH:mm")}
+                                                    </StyledText>
+                                                </View>
+                                                <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
                                                     <Ionicons name={'ios-people'} color={statusColor} size={16} />
                                                     <StyledText style={{color: statusColor, marginLeft: 4}}>
                                                         {event.people + event.kid}</StyledText>
+                                                    <View style={{flex: 1, justifyContent: 'flex-end'}}>
+                                                        <MCIcon name={event?.sourceOfOrigin == 'APP' ? 'tablet-cellphone' : 'web'} color={statusColor} size={16} /></View>
                                                 </View>
                                             </TouchableOpacity>
                                         )
@@ -1113,6 +1131,13 @@ class ReservationDayEventBase extends Component {
                                             <StyledText style={[{paddingLeft: 8}]}>
                                                 {event?.name}
                                             </StyledText>
+                                            <StyledText style={[{paddingLeft: 8}]}>
+                                                <MCIcon
+                                                    name={event?.sourceOfOrigin == 'APP' ? 'tablet-cellphone' : 'web'}
+                                                    size={16}
+                                                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                                                />
+                                            </StyledText>
                                         </View>
                                         <View style={[styles.flex(1.7), {justifyContent: 'center'}]}>
                                             <StyledText>
@@ -1147,7 +1172,6 @@ class ReservationDayEventBase extends Component {
                                                 {event?.status?.slice(0, 1)}
                                             </StyledText>
                                         </View>
-
                                     </View>
                                 </TouchableOpacity>
 

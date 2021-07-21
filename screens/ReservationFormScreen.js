@@ -681,7 +681,7 @@ class ReservationFormScreen extends React.Component {
 
                   {nextStep &&
                     <>
-                      <View style={[styles.tableRowContainerWithBorder, {marginTop: 72}]}>
+                      <View style={[styles.tableRowContainerWithBorder, {marginTop: 0}]}>
                         <View style={[styles.tableCellView, styles.flex(1)]}>
                           <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.date')}</StyledText>
                         </View>

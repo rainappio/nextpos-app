@@ -24,6 +24,7 @@ import {ThemeContainer} from "../components/ThemeContainer";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import moment from 'moment-timezone'
 import Icon from 'react-native-vector-icons/Ionicons'
+import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {timezone} from 'expo-localization';
 
@@ -40,7 +41,7 @@ class ReservationUpcomingForm extends React.Component {
     this.state = {
       isTablet: context?.isTablet,
       isLoading: false,
-      selectedTimeBlock: 0,
+      selectedTimeBlock: null,
       timeBlocks: {
         0: {value: 'MORNING', label: context.t('reservation.timeBlock.morning')},
         1: {value: 'NOON', label: context.t('reservation.timeBlock.noon')},
@@ -88,8 +89,13 @@ class ReservationUpcomingForm extends React.Component {
   handleGetReservationDate = (event, selectedDate) => {
 
     this.props.change(`reservationStartDate`, new Date(selectedDate))
-    this.setState({reservationDate: moment(selectedDate).format('YYYY-MM-DD')})
-    this.handleTimeFormat(this.state.selectedTimeBlock, moment(selectedDate).format('YYYY-MM-DD'))
+
+    let currentHour = moment(selectedDate).hour()
+    let timeBlockIndex = currentHour <= 10 ? 0 : currentHour > 10 && currentHour < 17 ? 1 : 2
+    console.log(currentHour, timeBlockIndex)
+
+    this.setState({reservationDate: moment(selectedDate).format('YYYY-MM-DD'), selectedTimeBlock: timeBlockIndex})
+    this.handleTimeFormat(timeBlockIndex, moment(selectedDate).format('YYYY-MM-DD'))
   }
   showDatePicker = () => {
     this.setState({
@@ -112,7 +118,7 @@ class ReservationUpcomingForm extends React.Component {
 
     let startDate = moment(`${currentDate} ${startHour}:00`).format('YYYY-MM-DDTHH:mm:ss')
     let endDate = moment(`${currentDate} ${endHour}:00`).format('YYYY-MM-DDTHH:mm:ss')
-    this.setState({startDate: startDate, endDate})
+    this.setState({startDate: startDate, endDate: endDate})
 
     this.getReservationEventsByTime(startDate, endDate, 'BOOKED, CONFIRMED, SEATED')
     this.getReservationEventsByTime(startDate, endDate, 'WAITING')
@@ -694,9 +700,17 @@ class ReservationUpcomingForm extends React.Component {
 
                             <View style={[styles.flex(2), {alignItems: 'flex-start', paddingLeft: 8}]}>
                               <View>
-                                <StyledText style={[styles.textBold]}>
-                                  {event?.name}
-                                </StyledText>
+                                <View style={{flexDirection: 'row'}}>
+                                  <View>
+                                    <StyledText style={[styles.textBold]}>
+                                      {event?.name}
+                                    </StyledText>
+                                  </View>
+                                  <View style={{marginLeft: 2}}>
+                                    <MCIcon color={customMainThemeColor} size={16} name={event?.sourceOfOrigin == 'APP' ? 'tablet-cellphone' : 'web'} />
+                                  </View>
+                                </View>
+
                                 <StyledText>
                                   {event?.phoneNumber}
                                 </StyledText>
@@ -790,9 +804,16 @@ class ReservationUpcomingForm extends React.Component {
 
                             <View style={[styles.flex(2), {alignItems: 'flex-start', paddingLeft: 8}]}>
                               <View>
-                                <StyledText style={[styles.textBold]}>
-                                  {event?.name}
-                                </StyledText>
+                                <View style={{flexDirection: 'row'}}>
+                                  <View>
+                                    <StyledText style={[styles.textBold]}>
+                                      {event?.name}
+                                    </StyledText>
+                                  </View>
+                                  <View style={{marginLeft: 2}}>
+                                    <MCIcon color={customMainThemeColor} size={16} name={event?.sourceOfOrigin == 'APP' ? 'tablet-cellphone' : 'web'} />
+                                  </View>
+                                </View>
                                 <StyledText>
                                   {event?.phoneNumber}
                                 </StyledText>
@@ -1203,12 +1224,19 @@ class ReservationUpcomingForm extends React.Component {
                     {(this.state.isBookedMode && this.state.dayBookedEvents.length > 0) && this.state.dayBookedEvents.map((event) => {
 
                       return (
-                        <View key={event?.id} style={[styles.dynamicVerticalPadding(8), styles.withBottomBorder, {flexDirection: 'row', flex: 1, justifyContent: 'space-evenly', alignItems: 'center', maxHeight: 96}]}>
+                        <View key={event?.id} style={[styles.dynamicVerticalPadding(8), styles.withBottomBorder, {flexDirection: 'row', flex: 1, justifyContent: 'space-evenly', alignItems: 'center', maxHeight: 108}]}>
                           <View style={[styles.flex(2), {alignItems: 'flex-start', paddingLeft: 8}]}>
                             <View>
-                              <StyledText style={[styles.textBold]}>
-                                {event?.name}
-                              </StyledText>
+                              <View style={{flexDirection: 'row'}}>
+                                <View>
+                                  <StyledText style={[styles.textBold]}>
+                                    {event?.name}
+                                  </StyledText>
+                                </View>
+                                <View style={{marginLeft: 2}}>
+                                  <MCIcon color={customMainThemeColor} size={16} name={event?.sourceOfOrigin == 'APP' ? 'tablet-cellphone' : 'web'} />
+                                </View>
+                              </View>
                               <StyledText>
                                 {event?.phoneNumber}
                               </StyledText>
@@ -1265,17 +1293,17 @@ class ReservationUpcomingForm extends React.Component {
                               <>
                                 <TouchableOpacity onPress={() => {
                                   this.handleSeat(event.id)
-                                }} style={[styles.flexButton(customMainThemeColor), {marginBottom: 8, paddingVertical: 8}]}>
+                                }} style={[styles.flexButton(customMainThemeColor), {marginBottom: 8, paddingVertical: 2}]}>
                                   <StyledText style={[styles.flexButtonText]}>{t('reservation.actionTip.seat')}</StyledText>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                   onPress={() => {
                                     this.handleToggleDelayModal(true, event.id)
                                   }}
-                                  style={[styles.flexButton(customMainThemeColor), {marginBottom: 8, paddingVertical: 8}]}>
+                                  style={[styles.flexButton(customMainThemeColor), {marginBottom: 8, paddingVertical: 2}]}>
                                   <StyledText style={[styles.flexButtonText]}>{t('reservation.actionTip.delay')}</StyledText>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.handleCancel(event.id)} style={[styles.flexButton(customMainThemeColor), {marginBottom: 0, paddingVertical: 8}]}>
+                                <TouchableOpacity onPress={() => this.handleCancel(event.id)} style={[styles.flexButton(customMainThemeColor), {marginBottom: 0, paddingVertical: 2}]}>
                                   <StyledText style={[styles.flexButtonText]}>{t('reservation.actionTip.cancel')}</StyledText>
                                 </TouchableOpacity>
                               </>}
@@ -1288,9 +1316,16 @@ class ReservationUpcomingForm extends React.Component {
                       return (
                         <View key={event?.id} style={[styles.withBottomBorder, {flexDirection: 'row', flex: 1, justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8, maxHeight: 96}]}>
                           <View style={[styles.flex(2), {alignItems: 'flex-start', paddingLeft: 8}]}>
-                            <StyledText style={[styles.textBold]}>
-                              {event?.name}
-                            </StyledText>
+                            <View style={{flexDirection: 'row'}}>
+                              <View>
+                                <StyledText style={[styles.textBold]}>
+                                  {event?.name}
+                                </StyledText>
+                              </View>
+                              <View style={{marginLeft: 2}}>
+                                <MCIcon color={customMainThemeColor} size={16} name={event?.sourceOfOrigin == 'APP' ? 'tablet-cellphone' : 'web'} />
+                              </View>
+                            </View>
                             <StyledText>
                               {event?.phoneNumber}
                             </StyledText>

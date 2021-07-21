@@ -145,7 +145,7 @@ class EditOffer extends Component {
   };
 
   render() {
-    const {t} = this.context;
+    const {t, isTablet} = this.context;
     const {orderOffer, isLoading, haveData} = this.props;
 
     const selectedProducts =
@@ -171,7 +171,7 @@ class EditOffer extends Component {
     } else if (haveData) {
       return (
         <ThemeKeyboardAwareScrollView>
-          <View style={styles.fullWidthScreen}>
+          <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
             <ScreenHeader
               title={t("editOfferTitle")}
               parentFullScreen={true}

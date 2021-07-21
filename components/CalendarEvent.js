@@ -7,6 +7,7 @@ import styles from '../styles'
 import {Button} from 'react-native-elements';
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
+import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import TimeZoneService from "../helpers/TimeZoneService";
 import moment from "moment-timezone";
 import {MainActionFlexButton, DeleteFlexButton} from "../components/ActionButtons";
@@ -145,8 +146,8 @@ const CalendarEventBase = (props) => {
                 </View>
                 <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 4}}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                        {/* <View styles={[styles.flex(2)]}></View> */}
-                        <View style={{flexDirection: 'row', flex: 1.2, justifyContent: 'flex-start'}}>
+
+                        <View style={{flexDirection: 'row', flex: 1.5, justifyContent: 'flex-start'}}>
                             <StyledText style={{...props?.theme?.text, marginTop: 10, paddingHorizontal: 4}}>
                                 <FontAwesome5Icon
                                     name={'user-check'}
@@ -169,6 +170,14 @@ const CalendarEventBase = (props) => {
                             <StyledText style={{...props?.theme?.text, marginTop: 12, fontSize: 16}}>
                                 {event?.phoneNumber}</StyledText>
                         </View>
+                        <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
+                            <StyledText style={{...props?.theme?.text, marginTop: 8, paddingHorizontal: 4}}>
+                                <MCIcon
+                                    name={event?.sourceOfOrigin == 'APP' ? 'tablet-cellphone' : 'web'}
+                                    size={20}
+                                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                                /></StyledText>
+                        </View>
                     </View>
 
 
@@ -183,7 +192,7 @@ const CalendarEventBase = (props) => {
                             <StyledText style={{...props?.theme?.text, fontSize: 16, marginTop: 12}}>{t('reservation.adult')} {event?.people}, {t('reservation.kid')} {event?.kid}</StyledText>
                         </View>
 
-                        <View style={[styles.flexButton(customMainThemeColor), {flexDirection: 'row', flex: 0.8}, (event?.status == 'WAITING') && {backgroundColor: customBackgroundColor}, (event?.status == 'CANCELLED') && {backgroundColor: '#f75336', borderColor: '#f75336'}]}>
+                        <View style={[styles.flexButton(customMainThemeColor), {flexDirection: 'row', flex: 0.8, marginVertical: 4}, (event?.status == 'WAITING') && {backgroundColor: customBackgroundColor}, (event?.status == 'CANCELLED') && {backgroundColor: '#f75336', borderColor: '#f75336'}]}>
                             <StyledText style={[(event?.status !== 'WAITING') && {color: customBackgroundColor}]}>
                                 {event?.status}
                             </StyledText>

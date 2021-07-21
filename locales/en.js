@@ -705,6 +705,7 @@ const en = {
     cancelReservation: 'Cancel Reservation',
     noTable: 'None (Waiting)',
     status: 'Status',
+    sourceOfOrigin: 'Source Of Origin',
     booked: 'Booked',
     waiting: 'Waiting',
     cancelled: 'Cancelled',

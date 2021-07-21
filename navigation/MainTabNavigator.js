@@ -393,7 +393,7 @@ const ReservationDrawer = () => {
       openByDefault={isTablet ? true : false}
       edgeWidth={200}
       drawerStyle={isTablet ? {
-        width: 64, backgroundColor: '#222'
+        width: 64, backgroundColor: '#222', borderRightWidth: 0
       } : {width: 64, backgroundColor: '#222'}}
       drawerType={dimensions.width >= 768 ? 'permanent' : 'back'}
     >
@@ -432,8 +432,11 @@ const BottomTab = () => {
   const tabBarListeners = ({navigation, route}) => ({
     tabPress: async () => {
       const tokenObj = await getToken()
+      console.log(route?.state?.routeNames, route.name)
       if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {
-        if (!!route?.state?.routeNames) {
+        if (route.name === 'Rosters') {
+          NavigationService?.navigateToRoute('Roster', {screen: 'CalendarScreen'}, null)
+        } else if (!!route?.state?.routeNames) {
           navigation.navigate(route.state.routeNames[0], {withAnimation: false})
         } else {
           navigation.navigate(route.name, {withAnimation: false})

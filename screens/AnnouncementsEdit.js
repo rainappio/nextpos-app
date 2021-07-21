@@ -64,12 +64,12 @@ class AnnouncementsEdit extends React.Component {
 
   render() {
     const {navigation, route} = this.props
-    const {t} = this.context
+    const {t, isTablet} = this.context
 
     return (
       <ThemeScrollView>
         <DismissKeyboard>
-          <View style={styles.container}>
+          <View style={[styles.container, isTablet && styles.horizontalPaddingScreen]}>
             <ScreenHeader title={t('editAnnouncementTitle')}
               backAction={() => backAction(this.props.navigation)}
             />

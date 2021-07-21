@@ -1,7 +1,7 @@
 import React from 'react'
 import {FlatList, Modal, Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
-import {formatCurrency, formatDateObj, getRangedSalesReport, getSalesDistributionReport, getSalesRankingReport} from '../actions'
+import {formatCurrency, formatDateObj, getRangedSalesReport, getSalesRankingReport} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import BackendErrorScreen from './BackendErrorScreen'
@@ -90,7 +90,6 @@ class SalesCharts extends React.Component {
 
   componentDidMount() {
     this.props.getRangedSalesReport()
-    this.props.getSalesDistributionReport()
   }
 
   generateRangedSalesChart = (rangedSalesReport) => {
@@ -156,11 +155,9 @@ class SalesCharts extends React.Component {
     const {
       getrangedSalesReport,
       salesRankingReport,
-      salesdistributionReport,
       isLoading,
       haveData,
       haveError,
-      haveSDData
     } = this.props
     const {t, isTablet, customMainThemeColor} = this.context
     const containSalesData = haveData && getrangedSalesReport?.salesByRange !== undefined
@@ -671,18 +668,15 @@ class SalesCharts extends React.Component {
 const mapStateToProps = state => ({
   getrangedSalesReport: state.getrangedsalesreport.data,
   salesRankingReport: state.salesrankingreport.data,
-  salesdistributionReport: state.salesdistributionreport.data,
   haveData: state.getrangedsalesreport.haveData,
   haveError: state.getrangedsalesreport.haveError,
   isLoading: state.getrangedsalesreport.loading,
-  haveSDData: state.salesdistributionreport.haveData
 })
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
   getRangedSalesReport: (rangeType, fromDate, toDate) => dispatch(getRangedSalesReport(rangeType, fromDate, toDate)),
   getSalesRankingReport: (rangeType, fromDate, toDate, labelId) => dispatch(getSalesRankingReport(rangeType, fromDate, toDate, labelId)),
-  getSalesDistributionReport: () => dispatch(getSalesDistributionReport())
 })
 
 export default connect(

@@ -6,6 +6,7 @@ import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
 import ReservationFormScreen from './ReservationFormScreen'
 import {connect} from 'react-redux'
+import {FocusAwareStatusBar} from '../components/FocusAwareStatusBar'
 
 
 class ReservationScreen extends React.Component {
@@ -105,18 +106,21 @@ class ReservationScreen extends React.Component {
     const {navigation, route} = this.props
 
     return (
-      <ReservationFormScreen
-        isEdit={false}
-        onSubmit={this.handleSubmit}
-        handleReset={this.handleReset}
-        handleNextStep={this.handleNextStep}
-        handleSaveReservation={this.handleCreateReservation}
-        handleCancel={this.handleCreateCancel}
-        nextStep={this.state.nextStep}
-        initialValues={this.state.initialValues ?? this.props.route?.params?.initialValues}
-        navigation={navigation}
-        route={route}
-      />
+      <>
+        <FocusAwareStatusBar barStyle="light-content" backgroundColor="#222" />
+        <ReservationFormScreen
+          isEdit={false}
+          onSubmit={this.handleSubmit}
+          handleReset={this.handleReset}
+          handleNextStep={this.handleNextStep}
+          handleSaveReservation={this.handleCreateReservation}
+          handleCancel={this.handleCreateCancel}
+          nextStep={this.state.nextStep}
+          initialValues={this.state.initialValues ?? this.props.route?.params?.initialValues}
+          navigation={navigation}
+          route={route}
+        />
+      </>
     )
   }
 }

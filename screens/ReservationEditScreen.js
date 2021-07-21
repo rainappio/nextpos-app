@@ -9,8 +9,7 @@ import ReservationFormScreen from './ReservationFormScreen'
 import {connect} from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../styles'
-
-
+import {FocusAwareStatusBar} from '../components/FocusAwareStatusBar'
 
 
 class ReservationEditScreen extends React.Component {
@@ -111,6 +110,7 @@ class ReservationEditScreen extends React.Component {
 
     return (
       <ThemeContainer>
+        <FocusAwareStatusBar barStyle="light-content" backgroundColor="#222" />
         {isLoading ? <LoadingScreen /> :
           <ReservationFormScreen
             isEdit={true}
