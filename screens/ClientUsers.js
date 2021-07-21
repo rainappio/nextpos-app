@@ -24,8 +24,6 @@ class ClientUsers extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getClientUsrs()
-    this.props.getCurrentClient()
     this.context.localize({
       en: {
         clientUsersTitle: 'Client Users'
@@ -34,7 +32,16 @@ class ClientUsers extends React.Component {
         clientUsersTitle: '選擇使用者'
       }
     })
+    this._getCurrentAccount = this.props.navigation.addListener('focus', () => {
+      this.props.getClientUsrs()
+      this.props.getCurrentClient()
+
+    })
   }
+  componentWillUnmount() {
+    this._getCurrentAccount()
+  }
+
 
   async handleDefaultUserLogout(navigation) {
     try {
@@ -50,6 +57,7 @@ class ClientUsers extends React.Component {
   render() {
     const {clientusers, navigation} = this.props
     const {t, customMainThemeColor, customBackgroundColor, customSecondThemeColor} = this.context
+
     return (
 
       <ThemeScrollView>

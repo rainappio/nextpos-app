@@ -38,12 +38,12 @@ class AnnouncementsAdd extends React.Component {
 
   render() {
     const {navigation, route} = this.props
-    const {t} = this.context
+    const {t, isTablet} = this.context
 
     return (
       <ThemeContainer>
         <DismissKeyboard>
-          <View style={{...styles.fullWidthScreen, marginLeft: 15, marginRight: 15, }}>
+          <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen, {marginLeft: 15, marginRight: 15, }]}>
             <ScreenHeader title={t('newAnnouncementTitle')}
               backAction={() => backAction(this.props.navigation)} />
 

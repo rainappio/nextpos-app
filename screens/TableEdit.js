@@ -64,7 +64,7 @@ class TableEdit extends React.Component {
       haveError,
       isLoading
     } = this.props
-    const {t} = this.context
+    const {t, isTablet} = this.context
 
     const selectedTable = tablelayout !== undefined && tablelayout.tables !== undefined && tablelayout.tables.find(
       table => table.tableId === this.props.route.params.tableId
@@ -77,7 +77,7 @@ class TableEdit extends React.Component {
     } else if (haveData && selectedTable !== undefined) {
       return (
         <ThemeContainer>
-          <View style={[styles.fullWidthScreen]}>
+          <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
             <ScreenHeader title={t('editTableTitle')}
               parentFullScreen={true} />
 

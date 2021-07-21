@@ -83,13 +83,13 @@ class OptionFormScreen extends React.Component {
   }
 
   render() {
-    const {t, customMainThemeColor} = this.context
+    const {t, isTablet, customMainThemeColor} = this.context
     const {handleSubmit, handleDeleteOption, initialValues} = this.props
     console.log('optionValues', initialValues?.optionValues)
 
 
     const renderOptionValPopup = (name, index, fields) => (
-      <Animatable.View ref={(ref) => {
+      <Animatable.View key={index} ref={(ref) => {
         this.[`renderOptionValRef_${index}`] = ref
       }}>
         <View
@@ -192,7 +192,7 @@ class OptionFormScreen extends React.Component {
 
     return (
       <ThemeKeyboardAwareScrollView getRef={(ref) => this.scrollViewRef = ref}>
-        <View style={[styles.fullWidthScreen]}>
+        <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
           <ScreenHeader parentFullScreen={true}
             backAction={() => backAction(this.props.navigation)}
             title={t('productOptionTitle')} />
@@ -242,7 +242,7 @@ class OptionFormScreen extends React.Component {
               <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end', flexWrap: 'wrap'}]}>
                 {initialValues?.usedByProducts?.map((item, index, array) => {
                   return (
-                    <StyledText style={styles.fieldTitle}>{item?.name}{(index < array?.length - 1) && ', '}</StyledText>
+                    <StyledText key={index} style={styles.fieldTitle}>{item?.name}{(index < array?.length - 1) && ', '}</StyledText>
                   )
                 })}
               </View>

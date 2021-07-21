@@ -314,7 +314,6 @@ class RetailOrderForm extends React.Component {
             themeStyle,
             orderIsLoading,
             productsData,
-            route
         } = this.props
 
         const {reverseThemeStyle, t, splitParentOrderId, customMainThemeColor} = this.context
@@ -359,7 +358,7 @@ class RetailOrderForm extends React.Component {
                                 parentFullScreen={true}
                                 title={t('orderForm.newOrderTitle')}
                             />
-                            <OrderTopInfo order={order} route={route} />
+                            <OrderTopInfo order={order} route={this.props.route} />
                             <OrderItemDetailEditModal
                                 modalVisible={this.state.modalVisible}
                                 submitOrder={(orderId) => {
@@ -371,6 +370,7 @@ class RetailOrderForm extends React.Component {
                                 closeModal={() => {this.setState({modalVisible: false})}}
                                 data={this.state.modalData}
                                 navigation={this.props.navigation}
+                                route={this.props.route}
                                 prdId={this.state?.prdId}
                                 isEditLineItem={this.state?.isEditLineItem ?? false} />
 

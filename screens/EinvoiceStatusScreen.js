@@ -132,7 +132,7 @@ class EinvoiceStatusScreen extends React.Component {
 
     render() {
         const {navigation, isLoading, client, handleSubmit} = this.props
-        const {t, customMainThemeColor} = this.context
+        const {t, isTablet, customMainThemeColor} = this.context
 
         const {cancellableEinvoice} = this.state
 
@@ -204,7 +204,7 @@ class EinvoiceStatusScreen extends React.Component {
         }
         return (
             <ThemeScrollView>
-                <View style={[styles.fullWidthScreen]}>
+                <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
                     <ScreenHeader title={t('eInvoice.eInvoiceStatusTitle')}
                         parentFullScreen={true}
 

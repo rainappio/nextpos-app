@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {Keyboard, Text, TouchableOpacity, View, FlatList, Dimensions, Alert, Animated, RefreshControl} from 'react-native'
+import {Keyboard, Text, TouchableOpacity, View, FlatList, Dimensions, Alert, Animated} from 'react-native'
 import {connect} from 'react-redux'
 import {compose} from "redux";
 import {withContext} from "../helpers/contextHelper";
@@ -17,8 +17,9 @@ import {ThemeContainer} from "../components/ThemeContainer";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import moment from 'moment-timezone'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
-
+import {FocusAwareStatusBar} from '../components/FocusAwareStatusBar'
 
 class ReservationViewForm extends React.Component {
   static navigationOptions = {
@@ -164,6 +165,7 @@ class ReservationViewForm extends React.Component {
     const {
       navigation,
       isLoading,
+      haveData,
       tablelayouts,
       reservation,
     } = this.props
@@ -171,7 +173,7 @@ class ReservationViewForm extends React.Component {
     const {t, customMainThemeColor, customBackgroundColor} = this.context
 
 
-    if (isLoading) {
+    if (isLoading || !haveData) {
       return (
         <LoadingScreen />
       )
@@ -201,215 +203,232 @@ class ReservationViewForm extends React.Component {
 
       if (!!this?.state?.isTablet) {
         return (
-          <ThemeScrollView>
-            <View style={styles.fullWidthScreen}>
-              <ScreenHeader
-                backNavigation={true}
-                backAction={() => {
-                  navigation.navigate('ReservationCalendarScreen')
-                }}
-                title={t('reservation.reservationViewTitle')}
-                parentFullScreen={true} />
-              <View style={[styles.fieldContainer, styles.flex(1), {flexDirection: 'row-reverse'}]}>
+          <ThemeContainer>
+            <FocusAwareStatusBar barStyle="light-content" backgroundColor="#222" />
+            <ThemeScrollView>
+              <View style={styles.fullWidthScreen}>
+                <ScreenHeader
+                  backNavigation={true}
+                  backAction={() => {
+                    navigation.navigate('ReservationCalendarScreen')
+                  }}
+                  title={t('reservation.reservationViewTitle')}
+                  parentFullScreen={true} />
+                <View style={[styles.fieldContainer, styles.flex(1), {flexDirection: 'row-reverse'}]}>
 
-                <View style={[styles.flex(2), {marginHorizontal: 20}]}>
-                  <View style={[{flexDirection: 'row', width: '100%', minHeight: 80}]}>
-                    {tablelayouts?.map((tblLayout, index) => {
-                      return (<TouchableOpacity
-                        key={index}
-                        style={{
-                          borderColor: customMainThemeColor,
-                          borderWidth: 2,
-                          borderBottomWidth: 0,
-                          borderLeftWidth: index === 0 ? 2 : 0,
-                          padding: 4,
-                          width: 120,
-                          backgroundColor: this.state?.tableIndex === index ? customMainThemeColor : null,
-                        }}
-                        onPress={() => {this.setState({tableIndex: index})}}>
-                        <StyledText style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
-                          {tblLayout.layoutName}
-                        </StyledText>
-                        {floorCapacity[tblLayout.id] !== undefined && (
-                          <>
-                            <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
-                              {t('tableVisual.tableCapacity')} {tblLayout.totalTables}
-                            </Text>
-                            <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
-                              {t('tableVisual.availableTables')} {floorCapacity[tblLayout.id].tableCount}
-                            </Text>
-                          </>
-                        )}
+                  <View style={[styles.flex(2), {marginHorizontal: 20}]}>
+                    <View style={[{flexDirection: 'row', width: '100%', minHeight: 80}]}>
+                      {tablelayouts?.map((tblLayout, index) => {
+                        return (<TouchableOpacity
+                          key={index}
+                          style={{
+                            borderColor: customMainThemeColor,
+                            borderWidth: 2,
+                            borderBottomWidth: 0,
+                            borderLeftWidth: index === 0 ? 2 : 0,
+                            padding: 4,
+                            width: 120,
+                            backgroundColor: this.state?.tableIndex === index ? customMainThemeColor : null,
+                          }}
+                          onPress={() => {this.setState({tableIndex: index})}}>
+                          <StyledText style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                            {tblLayout.layoutName}
+                          </StyledText>
+                          {floorCapacity[tblLayout.id] !== undefined && (
+                            <>
+                              <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                                {t('tableVisual.tableCapacity')} {tblLayout.totalTables}
+                              </Text>
+                              <Text style={[this.state?.tableIndex === index ? styles?.sectionBarText(customBackgroundColor) : (styles?.sectionBarText(customMainThemeColor)), {flex: 4, textAlign: 'center', marginRight: 4}]}>
+                                {t('tableVisual.availableTables')} {floorCapacity[tblLayout.id].tableCount}
+                              </Text>
+                            </>
+                          )}
 
-                      </TouchableOpacity>)
-                    })}
+                        </TouchableOpacity>)
+                      })}
 
-                  </View>
-                  {this.state.tableIndex >= 0 &&
-                    <View style={[styles?.ballContainer(customMainThemeColor), {flex: 6}]}>
-                      <View onLayout={(event) => {
-                        let {x, y, width, height} = event.nativeEvent.layout;
-                        this.setState({
-                          tableWidth: width,
-                          tableHeight: height,
-                        })
-                      }}
-                        pointerEvents={'none'}
-                        style={[{width: '100%', height: '100%', alignSelf: 'center', flexWrap: 'wrap'}, {opacity: 0.7, backgroundColor: '#BFBFBF'}]}>
-
-                        {(this.state?.tableWidth && !isLoading) || <View style={{flex: 1, width: '100%'}}><LoadingScreen /></View>}
-
-                        {
-                          tablelayouts[this.state.tableIndex]?.tables?.map((table, index) => {
-                            let positionArr = tablelayouts[this.state.tableIndex]?.tables?.map((table, index) => {
-                              if (table.position != null) {
-                                return {...getTablePosition(table, this.state?.tableWidth ?? this.state?.windowWidth, this.state?.tableHeight ?? this.state?.windowHeight), tableId: table?.tableId, tableData: table}
-                              } else {
-                                return {...getInitialTablePosition(index, this.state?.tableHeight ?? this.state?.windowHeight), tableId: table?.tableId, tableData: table}
-                              }
-                            })
-                            return (
-                              (this.state?.tableWidth && !isLoading && reservation) && <TableMap
-                                borderColor={'#BFBFBF'}
-                                t={t}
-                                table={table}
-                                key={table.tableId}
-                                layoutId={tablelayouts[this.state.tableIndex]?.id}
-                                index={index}
-                                reservation={reservation}
-                                tableWidth={this.state?.tableWidth ?? this.state?.windowWidth}
-                                tableHeight={this.state?.tableHeight ?? this.state?.windowHeight}
-                                positionArr={positionArr}
-                              />
-                            )
+                    </View>
+                    {this.state.tableIndex >= 0 &&
+                      <View style={[styles?.ballContainer(customMainThemeColor), {flex: 6}]}>
+                        <View onLayout={(event) => {
+                          let {x, y, width, height} = event.nativeEvent.layout;
+                          this.setState({
+                            tableWidth: width,
+                            tableHeight: height,
                           })
-                        }
-                      </View>
-                    </View>}
-                </View>
+                        }}
+                          pointerEvents={'none'}
+                          style={[{width: '100%', height: '100%', alignSelf: 'center', flexWrap: 'wrap'}, {opacity: 0.7, backgroundColor: '#BFBFBF'}]}>
 
-                <View style={[styles.flex(1), {marginLeft: 20, justifyContent: 'flex-start', }]}>
-                  {!!reservation &&
-                    <>
-                      <View style={[styles.tableRowContainerWithBorder, {marginTop: 72}]}>
-                        <View style={[styles.tableCellView, styles.flex(1)]}>
-                          <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.date')}</StyledText>
-                        </View>
-                        <View style={[styles.tableCellView, styles.justifyRight]}>
-                          <StyledText style={[styles.reservationFormContainer]}>{moment(reservation?.reservationStartDate).format('YYYY-MM-DD')}</StyledText>
-                        </View>
-                      </View>
-                      <View style={[styles.tableRowContainerWithBorder]}>
-                        <View style={[styles.tableCellView, styles.flex(1)]}>
-                          <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.time')}</StyledText>
-                        </View>
-                        <View style={[styles.tableCellView, styles.justifyRight]}>
-                          <StyledText style={[styles.reservationFormContainer]}>{moment(reservation?.reservationStartDate).format('HH:mm')}</StyledText>
-                        </View>
-                      </View>
+                          {(this.state?.tableWidth && !isLoading) || <View style={{flex: 1, width: '100%'}}><LoadingScreen /></View>}
 
-                      <View style={styles.tableRowContainerWithBorder}>
-                        <View style={[styles.tableCellView, styles.flex(1)]}>
-                          <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.name')}</StyledText>
-                        </View>
-                        <View style={[styles.tableCellView, styles.justifyRight]}>
-                          <StyledText style={[styles.reservationFormContainer]}>{reservation?.name}</StyledText>
-                        </View>
-                      </View>
-                      <View style={styles.tableRowContainerWithBorder}>
-                        <View style={[styles.tableCellView, styles.flex(1)]}>
-                          <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.phone')}</StyledText>
-                        </View>
-                        <View style={[styles.tableCellView, styles.justifyRight]}>
-                          <StyledText style={[styles.reservationFormContainer]}>{reservation.phoneNumber}</StyledText>
-                        </View>
-                      </View>
-                      <View style={styles.tableRowContainerWithBorder}>
-                        <View style={[styles.tableCellView, styles.flex(1)]}>
-                          <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.peopleCount')}</StyledText>
-                        </View>
-                        <View style={[styles.tableCellView, styles.justifyRight]}>
-                          <StyledText style={[styles.reservationFormContainer]}>{t('reservation.adult')}: {reservation.people ?? 0}, {t('reservation.kid')}: {reservation.kid ?? 0}</StyledText>
-                        </View>
-                      </View>
-                      <View style={styles.tableRowContainerWithBorder}>
-                        <View style={[styles.tableCellView, styles.flex(1)]}>
-                          <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.otherNote')}</StyledText>
-                        </View>
-                        <View style={[styles.tableCellView, styles.justifyRight]}>
-                          <StyledText style={[styles.reservationFormContainer]}>{reservation?.note}</StyledText>
-                        </View>
-                      </View>
-                      <View style={styles.tableRowContainerWithBorder}>
-                        <View style={[styles.tableCellView, styles.flex(1)]}>
-                          <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.table')}</StyledText>
-                        </View>
-                        <View style={[styles.tableCellView, {flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', }]}>
-                          {!!reservation.tables ? reservation.tables.map((table, index) => (
-                            <StyledText key={index} style={[styles.reservationFormContainer, {marginBottom: 4}]}>{table.tableName} </StyledText>
-                          ))
-                            :
-                            <StyledText style={[styles.reservationFormContainer]}>{t('reservation.noTable')}</StyledText>
+                          {
+                            tablelayouts[this.state.tableIndex]?.tables?.map((table, index) => {
+                              let positionArr = tablelayouts[this.state.tableIndex]?.tables?.map((table, index) => {
+                                if (table.position != null) {
+                                  return {...getTablePosition(table, this.state?.tableWidth ?? this.state?.windowWidth, this.state?.tableHeight ?? this.state?.windowHeight), tableId: table?.tableId, tableData: table}
+                                } else {
+                                  return {...getInitialTablePosition(index, this.state?.tableHeight ?? this.state?.windowHeight), tableId: table?.tableId, tableData: table}
+                                }
+                              })
+                              return (
+                                (this.state?.tableWidth && !isLoading && reservation) && <TableMap
+                                  borderColor={'#BFBFBF'}
+                                  t={t}
+                                  table={table}
+                                  key={table.tableId}
+                                  layoutId={tablelayouts[this.state.tableIndex]?.id}
+                                  index={index}
+                                  reservation={reservation}
+                                  tableWidth={this.state?.tableWidth ?? this.state?.windowWidth}
+                                  tableHeight={this.state?.tableHeight ?? this.state?.windowHeight}
+                                  positionArr={positionArr}
+                                />
+                              )
+                            })
                           }
                         </View>
-                      </View>
-                      <View style={styles.tableRowContainerWithBorder}>
-                        <View style={[styles.tableCellView, styles.flex(1)]}>
-                          <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.status')}</StyledText>
+                      </View>}
+                  </View>
+
+                  <View style={[styles.flex(1), {marginLeft: 20, justifyContent: 'flex-start', }]}>
+                    {!!reservation &&
+                      <>
+                        <View style={[styles.tableRowContainerWithBorder, {marginTop: 0}]}>
+                          <View style={[styles.tableCellView, styles.flex(1)]}>
+                            <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.date')}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, styles.justifyRight]}>
+                            <StyledText style={[styles.reservationFormContainer]}>{moment(reservation?.reservationStartDate).format('YYYY-MM-DD')}</StyledText>
+                          </View>
                         </View>
-                        <View style={[styles.tableCellView, styles.justifyRight]}>
-                          <StyledText style={[styles.reservationFormContainer]}>{t(`reservation.statusTip.${reservation?.status}`)}</StyledText>
+                        <View style={[styles.tableRowContainerWithBorder]}>
+                          <View style={[styles.tableCellView, styles.flex(1)]}>
+                            <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.time')}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, styles.justifyRight]}>
+                            <StyledText style={[styles.reservationFormContainer]}>{moment(reservation?.reservationStartDate).format('HH:mm')}</StyledText>
+                          </View>
                         </View>
-                      </View>
 
-                      <View style={[styles.bottom,
-                      styles.horizontalMargin]}>
-                        {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
-                          <TouchableOpacity onPress={() => {
-                            navigation.navigate('ReservationEditScreen', {reservationId: reservation.id})
-                          }}>
-                            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                              {t('action.edit')}
-                            </Text>
-                          </TouchableOpacity>
-                        }
+                        <View style={styles.tableRowContainerWithBorder}>
+                          <View style={[styles.tableCellView, styles.flex(1)]}>
+                            <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.name')}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, styles.justifyRight]}>
+                            <StyledText style={[styles.reservationFormContainer]}>{reservation?.name}</StyledText>
+                          </View>
+                        </View>
+                        <View style={styles.tableRowContainerWithBorder}>
+                          <View style={[styles.tableCellView, styles.flex(1)]}>
+                            <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.phone')}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, styles.justifyRight]}>
+                            <StyledText style={[styles.reservationFormContainer]}>{reservation.phoneNumber}</StyledText>
+                          </View>
+                        </View>
+                        <View style={styles.tableRowContainerWithBorder}>
+                          <View style={[styles.tableCellView, styles.flex(1)]}>
+                            <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.peopleCount')}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, styles.justifyRight]}>
+                            <StyledText style={[styles.reservationFormContainer]}>{t('reservation.adult')}: {reservation.people ?? 0}, {t('reservation.kid')}: {reservation.kid ?? 0}</StyledText>
+                          </View>
+                        </View>
+                        <View style={styles.tableRowContainerWithBorder}>
+                          <View style={[styles.tableCellView, styles.flex(1)]}>
+                            <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.otherNote')}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, styles.justifyRight]}>
+                            <StyledText style={[styles.reservationFormContainer]}>{reservation?.note}</StyledText>
+                          </View>
+                        </View>
+                        <View style={styles.tableRowContainerWithBorder}>
+                          <View style={[styles.tableCellView, styles.flex(1)]}>
+                            <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.table')}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, {flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', }]}>
+                            {!!reservation.tables ? reservation.tables.map((table, index) => (
+                              <StyledText key={index} style={[styles.reservationFormContainer, {marginBottom: 4}]}>{table.tableName} </StyledText>
+                            ))
+                              :
+                              <StyledText style={[styles.reservationFormContainer]}>{t('reservation.noTable')}</StyledText>
+                            }
+                          </View>
+                        </View>
+                        <View style={styles.tableRowContainerWithBorder}>
+                          <View style={[styles.tableCellView, styles.flex(1)]}>
+                            <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.status')}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, styles.justifyRight]}>
+                            <StyledText style={[styles.reservationFormContainer]}>{t(`reservation.statusTip.${reservation?.status}`)}</StyledText>
+                          </View>
+                        </View>
+                        <View style={styles.tableRowContainerWithBorder}>
+                          <View style={[styles.tableCellView, styles.flex(1)]}>
+                            <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.sourceOfOrigin')}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, styles.justifyRight]}>
+                            <StyledText style={[styles.reservationFormContainer]}>
+                              <MCIcon
+                                name={reservation?.sourceOfOrigin == 'APP' ? 'tablet-cellphone' : 'web'}
+                                size={24}
+                                style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                              />
+                            </StyledText>
+                          </View>
+                        </View>
 
-                        {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
-                          <TouchableOpacity onPress={() => {
-                            this.handleSendNotification(reservation)
-                          }}>
-                            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
-                              {t('reservation.sendNotification')}
-                            </Text>
-                          </TouchableOpacity>
-                        }
+                        <View style={[styles.bottom,
+                        styles.horizontalMargin]}>
+                          {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
+                            <TouchableOpacity onPress={() => {
+                              navigation.navigate('ReservationEditScreen', {reservationId: reservation.id})
+                            }}>
+                              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                                {t('action.edit')}
+                              </Text>
+                            </TouchableOpacity>
+                          }
 
-                        {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
-                          <TouchableOpacity onPress={() => {
-                            this.handleDeleteReservation(reservation.id)
-                          }}>
-                            <Text
-                              style={[styles?.bottomActionButton(customMainThemeColor), styles.deleteButton]}
-                            >
-                              {t('reservation.cancelReservation')}
-                            </Text>
-                          </TouchableOpacity>
-                        }
+                          {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
+                            <TouchableOpacity onPress={() => {
+                              this.handleSendNotification(reservation)
+                            }}>
+                              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
+                                {t('reservation.sendNotification')}
+                              </Text>
+                            </TouchableOpacity>
+                          }
 
-                      </View>
-                    </>
-                  }
+                          {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
+                            <TouchableOpacity onPress={() => {
+                              this.handleDeleteReservation(reservation.id)
+                            }}>
+                              <Text
+                                style={[styles?.bottomActionButton(customMainThemeColor), styles.deleteButton]}
+                              >
+                                {t('reservation.cancelReservation')}
+                              </Text>
+                            </TouchableOpacity>
+                          }
+                        </View>
+                      </>
+                    }
+
+                  </View>
+
 
                 </View>
-
-
               </View>
-            </View>
-          </ThemeScrollView >
+            </ThemeScrollView >
+          </ThemeContainer>
         )
       } else {
         return (
           <ThemeContainer>
+            <FocusAwareStatusBar barStyle="light-content" backgroundColor="#222" />
             <View style={styles.fullWidthScreen}>
               <ScreenHeader
                 backNavigation={true}
@@ -492,6 +511,21 @@ class ReservationViewForm extends React.Component {
                         <StyledText style={[styles.reservationFormContainer]}>{t(`reservation.statusTip.${reservation?.status}`)}</StyledText>
                       </View>
                     </View>
+                    <View style={styles.tableRowContainerWithBorder}>
+                      <View style={[styles.tableCellView, styles.flex(1)]}>
+                        <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.sourceOfOrigin')}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView, styles.justifyRight]}>
+                        <StyledText style={[styles.reservationFormContainer]}>
+                          <MCIcon
+                            name={reservation?.sourceOfOrigin == 'APP' ? 'tablet-cellphone' : 'web'}
+                            size={24}
+                            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                          />
+                        </StyledText>
+                      </View>
+                    </View>
+
 
                     <View style={[styles.bottom, styles.horizontalMargin]}>
                       {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') && <TouchableOpacity onPress={() => {

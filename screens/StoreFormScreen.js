@@ -214,7 +214,7 @@ class StoreFormScreen extends Component {
     return (
       <ThemeKeyboardAwareScrollView>
         <ScrollView scrollIndicatorInsets={{right: 1}}>
-          <View style={styles.container}>
+          <View style={[styles.container, isTablet && styles.horizontalPaddingScreen]}>
             <View>
               <ScreenHeader title={t('settings.stores')} />
 

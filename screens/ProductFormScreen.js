@@ -114,7 +114,7 @@ class ProductFormScreen extends React.Component {
   }
 
   render() {
-    const {t, customMainThemeColor, customBackgroundColor} = this.context
+    const {t, isTablet, customMainThemeColor, customBackgroundColor} = this.context
 
     const {
       initialValues,
@@ -147,7 +147,7 @@ class ProductFormScreen extends React.Component {
 
     return (
       <ThemeKeyboardAwareScrollView>
-        <View style={[styles.fullWidthScreen]}>
+        <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
           <ScreenHeader parentFullScreen={true}
             title={isEditForm ? t('product.editProduct') : t('product.newProduct')}
             backAction={() => backAction(this.props.navigation)}

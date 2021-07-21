@@ -36,11 +36,11 @@ class WorkingAreaAdd extends React.Component {
 
   render() {
     const {navigation, route} = this.props
-    const {t} = this.context
+    const {t, isTablet} = this.context
 
     return (
       <ThemeContainer>
-        <View style={styles.fullWidthScreen}>
+        <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
           <ScreenHeader title={t('workingAreaScreen.addWorkingAreaTitle')}
             parentFullScreen={true} />
 

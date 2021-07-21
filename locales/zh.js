@@ -707,6 +707,7 @@ const zh = {
     cancelReservation: '取消訂位',
     noTable: '未選(候補)',
     status: '訂單狀態',
+    sourceOfOrigin: '訂位來源',
     booked: '訂位',
     waiting: '候補',
     cancelled: '取消',

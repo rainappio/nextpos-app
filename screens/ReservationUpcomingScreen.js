@@ -8,6 +8,7 @@ import ReservationUpcomingForm from './ReservationUpcomingForm'
 import {connect} from 'react-redux'
 import moment from 'moment-timezone'
 import LoadingScreen from "./LoadingScreen";
+import {FocusAwareStatusBar} from '../components/FocusAwareStatusBar'
 
 
 class ReservationUpcomingScreen extends React.Component {
@@ -63,8 +64,10 @@ class ReservationUpcomingScreen extends React.Component {
   }
 
 
+
   render() {
     const {navigation, route, tablelayouts, availableTables, ordersInflight, isLoading, haveData} = this.props
+
 
     if (isLoading || this.state.loading || !haveData) {
       return (
@@ -72,15 +75,18 @@ class ReservationUpcomingScreen extends React.Component {
       )
     } else {
       return (
-        <ReservationUpcomingForm
-          onSubmit={this.handleSubmit}
-          navigation={navigation}
-          route={route}
-          tablelayouts={tablelayouts}
-          availableTables={availableTables}
-          ordersInflight={ordersInflight}
-          initialValues={{people: 0, kid: 0}}
-        />
+        <>
+          <FocusAwareStatusBar barStyle="light-content" backgroundColor="#222" />
+          <ReservationUpcomingForm
+            onSubmit={this.handleSubmit}
+            navigation={navigation}
+            route={route}
+            tablelayouts={tablelayouts}
+            availableTables={availableTables}
+            ordersInflight={ordersInflight}
+            initialValues={{people: 0, kid: 0}}
+          />
+        </>
       )
     }
   }

@@ -69,7 +69,7 @@ class PrinterEdit extends React.Component {
 
   render() {
     const {navigation, route, printer, loading, haveData, haveError} = this.props
-    const {t} = this.context
+    const {t, isTablet} = this.context
 
     if (loading) {
       return (
@@ -83,7 +83,7 @@ class PrinterEdit extends React.Component {
 
     return (
       <ThemeContainer>
-        <View style={styles.fullWidthScreen}>
+        <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
           <ScreenHeader title={t('printer.editPrinterTitle')}
             parentFullScreen={true} />
 

@@ -65,7 +65,7 @@ class TableLayoutEdit extends React.Component {
       haveError,
       isLoading
     } = this.props
-    const {t} = this.context
+    const {t, isTablet} = this.context
 
     if (isLoading) {
       return (
@@ -74,7 +74,7 @@ class TableLayoutEdit extends React.Component {
     }
     return (
       <ThemeScrollView>
-        <View style={[styles.fullWidthScreen]}>
+        <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
           <ScreenHeader title={t('editTableLayoutTitle')}
             parentFullScreen={true}
             rightComponent={

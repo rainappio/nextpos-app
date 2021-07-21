@@ -189,14 +189,14 @@ class EinvoiceEditScreen extends React.Component {
     }
 
     render() {
-        const {t, customMainThemeColor} = this.context
+        const {t, isTablet, customMainThemeColor} = this.context
         const {handleSubmit} = this.props
 
 
         return (
 
             <ThemeContainer>
-                <View style={styles.container}>
+                <View style={[styles.container, isTablet && styles.horizontalPaddingScreen]}>
                     <View style={{flex: 7}}>
                         <ScreenHeader title={t('eInvoice.eInvoiceTitle')} />
                         {!this.state.data && <View style={{height: 100}}><View style={[{

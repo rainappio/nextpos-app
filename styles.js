@@ -477,6 +477,9 @@ export default StyleSheet.create({
   verticalPadding: {
     paddingVertical: 20
   },
+  horizontalPaddingScreen: {
+    paddingHorizontal: '15%'
+  },
   dynamicHorizontalPadding: val => {
     return {paddingHorizontal: val}
   },

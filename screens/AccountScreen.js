@@ -213,7 +213,7 @@ class AccountScreen extends React.Component {
             <View style={[styles.tableCellView, {flex: 1}]}>
               <StyledText style={styles.fieldTitle}>{t('account.encodeToken')}</StyledText>
             </View>
-            <View style={[styles.tableCellView, {flex: 4, justifyContent: 'flex-end'}]}>
+            <View style={[styles.tableCellView, {flex: 4, justifyContent: 'flex-end', minHeight: 24}]}>
               {this.state?.encodeToken && <TouchableOpacity
                 onPress={() => this.handleShareToken(this.state?.encodeToken)}
                 style={{paddingHorizontal: 8}}
@@ -221,8 +221,6 @@ class AccountScreen extends React.Component {
                 <Text style={{color: customMainThemeColor}}>{this.state?.encodeToken}</Text>
               </TouchableOpacity>
               }
-
-
             </View>
             <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
               <TouchableOpacity
@@ -236,7 +234,7 @@ class AccountScreen extends React.Component {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => this.handleEncodeToken()}
-                style={{paddingVertical: 0}}
+                style={{paddingVertical: 0, justifyContent: 'flex-end'}}
               >
                 <Text style={{flex: 1}}>
                   <Icon name={this.state?.encodeToken ? "md-create" : 'add'} size={24} color={customMainThemeColor} />
