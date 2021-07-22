@@ -60,7 +60,9 @@ LogBox.ignoreLogs([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
   'Warning: componentWillReceiveProps',
   'Warning: componentWillMount',
-  'Non-serializable values were found in the navigation state'
+  'Non-serializable values were found in the navigation state',
+  '%s: Calling %s on the ref of an Animated component is no longer necessary. You can now directly use the ref instead. This method will be removed in a future release., ReactNativeFiberHostComponent, getNode()',
+
 ]);
 
 Sentry.init({
@@ -69,7 +71,7 @@ Sentry.init({
   debug: true
 });
 
-Sentry.setRelease(Constants.manifest.revisionId);
+Sentry.Native.setRelease(Constants.manifest.revisionId);
 
 export const store = createStore(
   rootReducer,
