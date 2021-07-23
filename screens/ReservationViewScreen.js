@@ -214,6 +214,7 @@ class ReservationViewForm extends React.Component {
                   }}
                   title={t('reservation.reservationViewTitle')}
                   parentFullScreen={true} />
+
                 <View style={[styles.fieldContainer, styles.flex(1), {flexDirection: 'row-reverse'}]}>
 
                   <View style={[styles.flex(2), {marginHorizontal: 20}]}>
@@ -435,6 +436,15 @@ class ReservationViewForm extends React.Component {
                 backAction={() => {
                   navigation.navigate('ReservationCalendarScreen')
                 }}
+                rightComponent={
+                  <TouchableOpacity
+                    onPress={() => this.props.navigation.toggleDrawer()}
+                  >
+                    <View>
+                      <Ionicons name="md-menu" size={32} style={styles?.buttonIconStyle(customMainThemeColor)} />
+                    </View>
+                  </TouchableOpacity>
+                }
                 title={t('reservation.reservationViewTitle')}
                 parentFullScreen={true} />
 

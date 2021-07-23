@@ -256,7 +256,7 @@ class OptionFormScreen extends React.Component {
               <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end', flexWrap: 'wrap'}]}>
                 {initialValues?.usedByProductLabels?.map((item, index, array) => {
                   return (
-                    <StyledText style={styles.fieldTitle}>{item?.name}{(index < array?.length - 1) && ', '}</StyledText>
+                    <StyledText key={index} style={styles.fieldTitle}>{item?.name}{(index < array?.length - 1) && ', '}</StyledText>
                   )
                 })}
               </View>

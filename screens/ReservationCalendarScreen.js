@@ -1,7 +1,5 @@
 import React from 'react'
 import {View, Text, ScrollView, TouchableOpacity, Alert} from 'react-native'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
@@ -23,7 +21,6 @@ import SegmentedControlTab from "react-native-segmented-control-tab";
 import {CheckBox} from 'react-native-elements'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {CalendarEvent} from "../components/CalendarEvent";
-import {Ionicons} from '@expo/vector-icons';
 import {compose} from "redux";
 import {connect} from 'react-redux'
 import {MaterialCommunityIcons} from '@expo/vector-icons';
@@ -187,6 +184,7 @@ class ReservationCalendarScreen extends React.Component {
                     <ScreenHeader backNavigation={false}
                         parentFullScreen={true}
                         title={t('reservation.reservationCalendarTitle')}
+                        leftMenuIcon={!isTablet}
                         rightComponent={
                             <View style={{flexDirection: 'row'}}>
                                 <View style={{marginRight: 8}}>

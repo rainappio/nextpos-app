@@ -27,6 +27,7 @@ import {Pages} from 'react-native-pages'
 import {CheckBox} from 'react-native-elements'
 import {checkExpoUpdate} from "../helpers/updateAppHelper";
 import {ThemePicker} from "../components/ThemePicker";
+import Constants from 'expo-constants';
 
 
 class LoginSuccessScreen extends React.Component {
@@ -137,7 +138,7 @@ class LoginSuccessScreen extends React.Component {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'Sjl5KBZFV1qurEHjVlKZKG5z6aeYR8yd'
+        'x-api-key': Constants.manifest.extra.xApikey
       },
     }, {
       defaultMessage: false
