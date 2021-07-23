@@ -5,6 +5,7 @@ npm-debug.*
 *.jks
 *.p12
 *.key
+*.env
 *.mobileprovision
 
 .idea/

@@ -15,6 +15,7 @@ class ScreenHeader extends Component {
       backAction,
       rightComponent,
       parentFullScreen,
+      leftMenuIcon,
       style
     } = this.props
 
@@ -25,7 +26,7 @@ class ScreenHeader extends Component {
 
     return (
       <View style={[styles.screenTopContainer, (parentFullScreen && {marginHorizontal: 15}), style, {borderWidth: 0}]}>
-        <View style={{width: '20%', alignItems: 'flex-start', borderWidth: 0}}>
+        <View style={leftMenuIcon && {flexDirection: 'row'}, {width: '20%', alignItems: 'flex-start', borderWidth: 0}}>
           {displayBackButton && (
             <TouchableOpacity
               hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
@@ -33,6 +34,15 @@ class ScreenHeader extends Component {
             >
               <View>
                 <Icon name="chevron-back" size={32} style={styles?.buttonIconStyle(customMainThemeColor)} />
+              </View>
+            </TouchableOpacity>
+          )}
+          {leftMenuIcon && (
+            <TouchableOpacity
+              onPress={() => this.props.navigation.toggleDrawer()}
+            >
+              <View>
+                <Icon name="md-menu" size={32} style={styles?.buttonIconStyle(customMainThemeColor)} />
               </View>
             </TouchableOpacity>
           )}

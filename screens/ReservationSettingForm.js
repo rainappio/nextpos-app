@@ -115,7 +115,17 @@ class ReservationSettingForm extends React.Component {
       <ThemeContainer>
         <View style={[styles.container]}>
           <ScreenHeader title={t('reservationSetting.reservationSettingTitle')}
+            backNavigation={false}
             parentFullScreen={true}
+            rightComponent={(!isTablet &&
+              <TouchableOpacity
+                onPress={() => this.props.navigation.toggleDrawer()}
+              >
+                <View>
+                  <Icon name="md-menu" size={32} style={styles?.buttonIconStyle(customMainThemeColor)} />
+                </View>
+              </TouchableOpacity>
+            )}
           />
           <View style={[styles.flex(4)]}>
             <ThemeKeyboardAwareScrollView>
@@ -124,7 +134,7 @@ class ReservationSettingForm extends React.Component {
                 <View style={[styles.tableCellView, {flex: 2}]}>
                   <StyledText style={styles.fieldTitle}>{t('reservationSetting.webLink')}</StyledText>
                 </View>
-                <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
 
                   <TouchableOpacity style={[styles.tableCellView, {justifyContent: 'flex-end'}]}
                     onPress={() => this.handleReservationLink(initialValues.reservationLink)}>

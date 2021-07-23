@@ -123,9 +123,9 @@ class SettingsScreen extends React.Component {
         onPress={() => this.props.navigation.navigate('ManageOffers')}
         title={t('settings.manageOffers')}
         icon={
-          <FontAwesomeIcon
-            name="sun-o"
-            size={40}
+          <MCIcon
+            name="offer"
+            size={48}
             style={[styles?.buttonIconStyle(customMainThemeColor)]}
           />
         }

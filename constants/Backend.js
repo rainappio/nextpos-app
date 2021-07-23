@@ -4,6 +4,8 @@ import * as Sentry from 'sentry-expo';
 import NavigationService from "../navigation/NavigationService";
 import i18n from 'i18n-js'
 import {order} from '../assets/images';
+import Constants from 'expo-constants';
+
 
 export const storage = {
   clientAccessToken: 'token',
@@ -16,7 +18,8 @@ export const storage = {
 //export const apiRoot = 'http://10.0.4.9:8080'
 //export const apiRoot = 'http://192.168.1.102:8080'
 //export const apiRoot = 'http://192.168.2.244:8080'
-export const apiRoot = 'https://api.rain-app.io'
+// export const apiRoot = 'https://api.rain-app.io'
+export const apiRoot = Constants.manifest.extra.host
 
 
 export const api = {

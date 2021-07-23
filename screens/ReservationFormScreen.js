@@ -792,6 +792,15 @@ class ReservationFormScreen extends React.Component {
                     navigation.navigate('ReservationViewScreen')
                   }
                 }}
+                rightComponent={
+                  <TouchableOpacity
+                    onPress={() => this.props.navigation.toggleDrawer()}
+                  >
+                    <View>
+                      <Ionicons name="md-menu" size={32} style={styles?.buttonIconStyle(customMainThemeColor)} />
+                    </View>
+                  </TouchableOpacity>
+                }
                 title={t('reservation.reservationTitle')}
                 parentFullScreen={true} />
 

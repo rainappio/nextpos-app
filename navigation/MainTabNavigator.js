@@ -5,10 +5,7 @@ import NavigationService from "../navigation/NavigationService";
 import {StackActions, TabActions, CommonActions, getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {createBottomTabNavigator, BottomTabBar, useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
-import {
-  createDrawerNavigator, DrawerContentScrollView,
-  DrawerItemList, DrawerItem
-} from '@react-navigation/drawer';
+import {createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem} from '@react-navigation/drawer';
 import {createCompatNavigatorFactory, createSwitchNavigator} from '@react-navigation/compat';
 import TabBarIcon from '../components/TabBarIcon'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -432,9 +429,8 @@ const BottomTab = () => {
   const tabBarListeners = ({navigation, route}) => ({
     tabPress: async () => {
       const tokenObj = await getToken()
-      console.log(route?.state?.routeNames, route.name)
       if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {
-        if (route.name === 'Rosters') {
+        if (route.name === 'CalendarScreen') {
           NavigationService?.navigateToRoute('Roster', {screen: 'CalendarScreen'}, null)
         } else if (!!route?.state?.routeNames) {
           navigation.navigate(route.state.routeNames[0], {withAnimation: false})
@@ -494,10 +490,11 @@ const BottomTab = () => {
           <TabBarIcon focused={props?.focused} name="inventory" onPress={props?.onPress} iconLib={'MaterialIcons'} />)
       }} listeners={tabBarListeners} />}
       <Tab.Screen name="Reservations" component={ReservationDrawer} options={{
-        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="calendar-check" iconLib="MaterialCommunityIcons" onPress={props?.onPress} />)
+        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="clipboard-pencil" iconLib="Foundation" onPress={props?.onPress} />)
       }} listeners={tabBarListeners} />
       <Tab.Screen name="Rosters" component={RostersStack} showLabel={false} options={{
-        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="md-calendar"
+        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="calendar-account"
+          iconLib="MaterialCommunityIcons"
           onPress={() => NavigationService?.navigateToRoute('Rosters', {screen: 'CalendarScreen'}, props?.onPress)
           }
         />)

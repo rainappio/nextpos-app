@@ -3,8 +3,8 @@ import Icon from 'react-native-vector-icons/Ionicons'
 //import FontAwesomeIcon from 'react-native-vector-icons/FontAwesomeIcon'
 import Colors from '../constants/Colors'
 import {withContext} from "../helpers/contextHelper";
-import {MaterialIcons} from '@expo/vector-icons';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
+import {MaterialIcons, MaterialCommunityIcons, Foundation, AntDesign} from '@expo/vector-icons';
+
 
 class TabBarIcon extends React.Component {
   render() {
@@ -32,6 +32,20 @@ class TabBarIcon extends React.Component {
     if (iconLib === 'MaterialCommunityIcons') {
       return (
         <MaterialCommunityIcons
+          {...elementProps}
+        />
+      )
+    }
+    if (iconLib === 'Foundation') {
+      return (
+        <Foundation
+          {...elementProps}
+        />
+      )
+    }
+    if (iconLib === 'AntDesign') {
+      return (
+        <AntDesign
           {...elementProps}
         />
       )

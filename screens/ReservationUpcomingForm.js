@@ -134,8 +134,7 @@ class ReservationUpcomingForm extends React.Component {
         'Content-Type': 'application/json'
       },
     }, response => {
-      response.json().then(async (data) => {
-        // console.log(data.results)
+      response.json().then((data) => {
         if (status == 'BOOKED, CONFIRMED, SEATED') {
           this.setState({dayBookedEvents: data?.results, bookedCount: data?.results.length, isLoading: false})
         } else {
@@ -424,7 +423,7 @@ class ReservationUpcomingForm extends React.Component {
                       activeSections={this.state?.activeTableLayout}
                       expandMultiple
                     >
-                      {layoutList.map((layout, layoutIndex) => {
+                      {layoutList && layoutList.map((layout, layoutIndex) => {
                         return (
                           <Accordion.Panel
                             key={layoutIndex}
@@ -901,7 +900,13 @@ class ReservationUpcomingForm extends React.Component {
                       <Icon name="add" size={32} color={customMainThemeColor} />
                     </View>
                   </TouchableOpacity>
-
+                  <TouchableOpacity
+                    onPress={() => this.props.navigation.toggleDrawer()}
+                  >
+                    <View>
+                      <Icon name="md-menu" size={32} style={styles?.buttonIconStyle(customMainThemeColor)} />
+                    </View>
+                  </TouchableOpacity>
                 </View>
               }
             />
@@ -932,7 +937,7 @@ class ReservationUpcomingForm extends React.Component {
                       activeSections={this.state?.activeTableLayout}
                       expandMultiple
                     >
-                      {layoutList.map((layout, layoutIndex) => {
+                      {layoutList && layoutList.map((layout, layoutIndex) => {
                         return (
                           <Accordion.Panel
                             key={layoutIndex}
