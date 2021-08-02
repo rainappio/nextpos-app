@@ -92,7 +92,8 @@ class ReservationSettingForm extends React.Component {
       handleSubmit,
       initialValues,
       availableTables,
-      tablelayouts
+      tablelayouts,
+      statusHeight
     } = this.props
     const {t, isTablet, customMainThemeColor, customBackgroundColor} = this.context
 
@@ -113,7 +114,7 @@ class ReservationSettingForm extends React.Component {
 
     return (
       <ThemeContainer>
-        <View style={[styles.container]}>
+        <View style={[styles.container, {marginTop: 53 - statusHeight}]}>
           <ScreenHeader title={t('reservationSetting.reservationSettingTitle')}
             backNavigation={false}
             parentFullScreen={true}

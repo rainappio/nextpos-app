@@ -561,7 +561,8 @@ const zh = {
   },
   membership: {
     searchNullMsg: '查無此人，是否註冊會員?',
-    creatSuccessMsg: '註冊成功',
+    createSuccessMsg: '已新增會員',
+    createFailedMsg: '請確認必填欄位',
     bindSuccessMsg: '綁定成功',
     name: '姓名',
     phoneNumber: '聯絡電話',

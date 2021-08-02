@@ -27,6 +27,7 @@ import {formatDate} from '../actions'
 import Modal from 'react-native-modal';
 import OrderDetail from './OrderDetail';
 
+
 class InventoryOrderScreen extends React.Component {
     static navigationOptions = {
         header: null
@@ -238,7 +239,7 @@ class InventoryOrderScreen extends React.Component {
     }
 
     render() {
-        const {navigation, offers, isLoading, handleSubmit} = this.props
+        const {navigation, route, offers, isLoading, handleSubmit} = this.props
         const {t, isTablet, themeStyle, customMainThemeColor, customBackgroundColor} = this.context
 
         if (isLoading || this.state.isLoading) {
@@ -261,7 +262,7 @@ class InventoryOrderScreen extends React.Component {
                                 useNativeDriver
                                 hideModalContentWhileAnimating
                             >
-                                <OrderDetail orderId={this.state?.modalOrderId} closeModal={() => this.setState({modalVisible: false})} />
+                                <OrderDetail navigation={navigation} route={route} orderId={this.state?.modalOrderId} closeModal={() => this.setState({modalVisible: false})} />
                             </Modal>
                             <View style={{flexDirection: 'row', flex: 1}}>
                                 <View style={{flex: 1, borderRightWidth: 1, borderColor: customMainThemeColor, paddingRight: 3}}>

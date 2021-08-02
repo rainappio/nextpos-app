@@ -23,6 +23,7 @@ import ViewPager from '@react-native-community/viewpager';
 import {InProcessOrderCard} from "../components/InProcessOrderCard";
 import {RealTimeOrderUpdate} from '../components/RealTimeOrderUpdate'
 
+
 class OrderDisplayScreen extends React.Component {
   static navigationOptions = {
     header: null
@@ -65,6 +66,12 @@ class OrderDisplayScreen extends React.Component {
       }
     })
     this.getLabels()
+  }
+
+  componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return;
+    };
   }
 
   getLabels = () => {
@@ -208,10 +215,8 @@ class OrderDisplayScreen extends React.Component {
     const {client, locale} = this.props
     const {t, customMainThemeColor} = this.context
 
-
     const renderWorkingAreas = Object.keys(this.state.orders)?.filter((workingArea) => this.state?.selectedLabels.has(workingArea))
     const isOrderMode = (client?.attributes?.ORDER_DISPLAY_MODE === 'ORDER')
-
 
     return (
       <ThemeContainer>
@@ -276,9 +281,9 @@ class OrderDisplayScreen extends React.Component {
                             </View>
                             <StyledText>{t('allSelected')}</StyledText>
                           </View>
-                          {this.state?.labels?.map((workingArea) => {
+                          {this.state?.labels?.map((workingArea, index) => {
                             return (
-                              <View style={{
+                              <View key={index} style={{
                                 flexDirection: 'row',
                                 paddingVertical: 8,
                                 alignItems: 'center'
@@ -374,7 +379,7 @@ class OrderDisplayScreen extends React.Component {
               </View>
             </>
 
-            : <>
+            : !!this.state.receiving && <>
               <View style={styles.sectionTitleContainer}>
                 <StyledText style={styles.sectionTitleText}>{t('totalOrders')}: {Object.keys(this.state.orders).reduce((accumulator, currentValue, currentIndex, array) => {return (accumulator + (this.state?.selectedLabels.has(currentValue) ? this.state.orders[`${currentValue}`]?.length : 0))}, 0)}</StyledText>
               </View>
@@ -383,6 +388,7 @@ class OrderDisplayScreen extends React.Component {
                   let isSelected = index === this.state?.selectedLabelIndex
                   return (
                     <TouchableOpacity
+                      key={index}
                       onPress={() => {
                         this.setState({selectedLabelIndex: index})
                         this.viewPagerRef.setPage(index)
@@ -406,17 +412,14 @@ class OrderDisplayScreen extends React.Component {
                   initialPage={0}
                   onPageSelected={(e) => this.setState({selectedLabelIndex: e?.nativeEvent?.position})}
                 >
-                  {renderWorkingAreas.map((workingArea) => {
+                  {renderWorkingAreas.map((workingArea, index) => {
                     return (
-                      <View style={{flex: 1}}>
-
+                      <View key={index} style={{flex: 1}}>
                         <DraggableFlatList
                           activationDistance={5}
                           data={this.state.orders[`${workingArea}`]}
                           dragItemOverflow
                           renderItem={({item, index, drag, isActive}) => {
-
-
                             return (
                               <TouchableOpacity style={[styles.sectionContainerWithBorder, {flexDirection: 'row', marginBottom: 5, paddingHorizontal: 10, alignItems: 'center'}]}
                                 onLongPress={drag}

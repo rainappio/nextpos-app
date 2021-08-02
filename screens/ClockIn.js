@@ -5,7 +5,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext"
-import {dateToLocaleString, formatDate, normalizeTimeString} from "../actions"
+import {formatDate, normalizeTimeString} from "../actions"
 import ScreenHeader from "../components/ScreenHeader";
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
@@ -109,7 +109,7 @@ class ClockIn extends React.Component {
    */
   _getLocationAsync = async () => {
 
-    let {status} = await Location.requestPermissionsAsync()
+    let {status} = await Location.requestForegroundPermissionsAsync()
 
     if (status !== 'granted') {
       this.setState({
@@ -287,7 +287,6 @@ class ClockIn extends React.Component {
     const locationBasedService = client.clientSettings.LOCATION_BASED_SERVICE != null ? client.clientSettings.LOCATION_BASED_SERVICE.enabled : false
 
     const timeCardDevice = client.attributes?.TIME_CARD_DEVICE ?? null
-
 
     /**
      * This check exists to circumvent the issue that the first render() call hasn't set the this.state.timecard object yet.

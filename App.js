@@ -24,6 +24,7 @@ import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import rootReducer from './reducers'
+import {getSettingTimezone} from './actions'
 import AppLoading from 'expo-app-loading'
 import {Asset} from 'expo-asset'
 import * as Font from 'expo-font'
@@ -61,7 +62,6 @@ LogBox.ignoreLogs([
   'Warning: componentWillReceiveProps',
   'Warning: componentWillMount',
   'Non-serializable values were found in the navigation state',
-  '%s: Calling %s on the ref of an Animated component is no longer necessary. You can now directly use the ref instead. This method will be removed in a future release., ReactNativeFiberHostComponent, getNode()',
 
 ]);
 
@@ -194,6 +194,7 @@ export default class App extends React.Component {
     NavigationService.setTopLevelNavigator(this.navigatorRef);
 
     checkExpoUpdate(this.state?.disableReload, this.setDisableReload)
+    getSettingTimezone()
   }
 
 

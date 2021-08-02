@@ -238,7 +238,7 @@ class MemberScreen extends React.Component {
     }
 
     render() {
-        const {navigation, offers, isLoading, handleSubmit} = this.props
+        const {navigation, route, offers, isLoading, handleSubmit} = this.props
         const {t, isTablet, themeStyle, customMainThemeColor, customBackgroundColor} = this.context
 
         if (isLoading || this.state.isLoading) {
@@ -261,7 +261,7 @@ class MemberScreen extends React.Component {
                                 useNativeDriver
                                 hideModalContentWhileAnimating
                             >
-                                <OrderDetail orderId={this.state?.modalOrderId} closeModal={() => this.setState({modalVisible: false})} />
+                                <OrderDetail navigation={navigation} route={route} orderId={this.state?.modalOrderId} closeModal={() => this.setState({modalVisible: false})} />
                             </Modal>
                             <View style={{flexDirection: 'row', flex: 1}}>
                                 <View style={{flex: 1, borderRightWidth: 1, borderColor: customMainThemeColor, paddingRight: 3}}>
@@ -420,6 +420,7 @@ class MemberScreen extends React.Component {
                                                         {this.state?.itemData?.recentOrders?.map((order) => {
                                                             return (
                                                                 <TouchableOpacity
+                                                                    key={order?.orderId}
                                                                     onPress={() => this.setState({modalVisible: true, modalOrderId: order?.orderId})}
                                                                     style={[styles.tableRowContainer, {borderColor: customMainThemeColor, borderWidth: 1, borderRadius: 10, margin: 5}]}>
 
@@ -445,9 +446,9 @@ class MemberScreen extends React.Component {
                                                 >
                                                     <View>
                                                         <View style={styles.sectionContainer}>
-                                                            {this.state?.itemData?.topRankings?.map((item) => {
+                                                            {this.state?.itemData?.topRankings?.map((item, index) => {
                                                                 return (
-                                                                    <View style={[styles.tableRowContainer]}>
+                                                                    <View key={index} style={[styles.tableRowContainer]}>
 
                                                                         <View style={[styles.tableCellView, {flex: 1}]}>
                                                                             <StyledText>{item.productName}</StyledText>

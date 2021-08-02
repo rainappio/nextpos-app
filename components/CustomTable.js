@@ -35,7 +35,7 @@ const CustomTableBase = (props) => {
             <View style={[styles.sectionBar, {borderColor: customMainThemeColor}]}>
                 {props?.tableTopBar.map((title, index) => {
                     return (
-                        <View style={[styles.tableCellView, {flex: props?.occupy?.[index] ?? 1}, (index > 0 && {justifyContent: 'flex-end'})]}>
+                        <View key={index} style={[styles.tableCellView, {flex: props?.occupy?.[index] ?? 1}, (index > 0 && {justifyContent: 'flex-end'})]}>
                             <Text style={[styles?.sectionBarTextSmall(customMainThemeColor)]}>{props?.tableTopBar?.[index] ?? 'ERR'}</Text>
                         </View>
                     )

@@ -72,6 +72,9 @@ class TablesScreen extends React.Component {
   }
   componentWillUnmount() {
     this._loadInfo()
+    this.setState = (state, callback) => {
+      return;
+    };
   }
 
   loadInfo = () => {

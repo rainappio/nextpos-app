@@ -6,7 +6,7 @@ import {ThemeContainer} from "../components/ThemeContainer";
 import {connect} from 'react-redux'
 import LoadingScreen from "./LoadingScreen";
 import ReservationSettingForm from './ReservationSettingForm'
-import {FocusAwareStatusBar} from '../components/FocusAwareStatusBar'
+import {FocusAwareStatusBar, statusHeight} from '../components/FocusAwareStatusBar'
 
 class ReservationSetting extends React.Component {
   static navigationOptions = {
@@ -70,6 +70,7 @@ class ReservationSetting extends React.Component {
         <ThemeContainer>
           <FocusAwareStatusBar barStyle="light-content" backgroundColor="#222" />
           <ReservationSettingForm
+            statusHeight={statusHeight}
             initialValues={reservationSettings}
             onSubmit={this.handleSubmit}
             navigation={navigation}

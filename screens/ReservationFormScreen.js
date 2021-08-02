@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Field, reduxForm} from 'redux-form'
+import {Field, reduxForm, formValueSelector} from 'redux-form'
 import {Keyboard, Text, TouchableOpacity, View, FlatList, Dimensions, Alert, Animated, RefreshControl} from 'react-native'
 import {Accordion, List} from '@ant-design/react-native'
 import {ListItem, CheckBox} from "react-native-elements";
@@ -71,11 +71,15 @@ class ReservationFormScreen extends React.Component {
       selectedTableIds: [],
       selectedTableNames: [],
       activeTableLayout: [],
+      searching: false,
+      searchResults: null,
+      membershipModalVisible: false,
+      isMembership: false,
+      isSearched: false,
     }
   }
 
   componentDidMount() {
-
     this.loadInfo()
     this.props.getTableLayouts()
     this.props.getfetchOrderInflights()
@@ -86,12 +90,12 @@ class ReservationFormScreen extends React.Component {
       }
     })
   }
+
   componentWillUnmount() {
     this._resetForm()
   }
 
   componentDidUpdate(prevProps, prevState) {
-
     if (!this.props.isEdit && (prevProps.initialValues !== this.props.initialValues)) {
       this.loadInfo()
     }
@@ -144,13 +148,12 @@ class ReservationFormScreen extends React.Component {
       this.props.change(`reservationStartDate`, new Date(selectedDate))
       this.setState({reservationDate: moment(selectedDate).format('YYYY-MM-DD')})
       this.handleCheckAvailableTables(moment(selectedDate).format('YYYY-MM-DD'), this.state.selectedHour, this.state.selectedMinutes)
-    } else {
 
+    } else {
       this.setState({
         reservationDate: moment(selectedDate).format('YYYY-MM-DD')
       })
     }
-
   }
   showDatePicker = () => {
     this.setState({
@@ -222,7 +225,6 @@ class ReservationFormScreen extends React.Component {
 
         })
       }).then()
-
   }
   handleCheckConflictTables = (availableTables) => {
 
@@ -241,9 +243,7 @@ class ReservationFormScreen extends React.Component {
     })
     this.props.change(`tableIds`, tableIds)
     this.setState({selectedTableIds: tableIds, selectedTableNames: tableNames})
-
   }
-
   handleGetTableName = (id) => {
     let layoutId = id.slice(0, 36)
     let target = null
@@ -255,7 +255,6 @@ class ReservationFormScreen extends React.Component {
     })
     return target.tableName
   }
-
   handlesetTableIndex = (ids) => {
     if (ids && ids.length > 0 && this.state.isTablet) {
 
@@ -301,6 +300,91 @@ class ReservationFormScreen extends React.Component {
     this.setState({activeTableLayout: arr})
   }
 
+
+  handleSearchMember = (phone) => {
+    if (phone !== '') {
+      this.setState({searching: true, isSearched: false})
+
+      dispatchFetchRequest(api.membership.getByPhone(phone), {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {}
+      }, response => {
+        response.json().then(data => {
+          if (data?.results?.length > 0) {
+            this.setState({searchResults: data.results[0], searching: false, isMembership: true, membershipModalVisible: true, isSearched: true})
+          } else {
+            this.setState({searchResults: data.results, searching: false, isMembership: false, membershipModalVisible: false, isSearched: true})
+            this.nameInput.focus()
+          }
+        })
+      }).then()
+    } else {
+      this.setState({isSearched: false, isMembership: false, searchResults: []})
+    }
+  }
+
+  handleCreateMember = () => {
+    if (this.props?.name && this.props?.phoneNumber) {
+      let request = {
+        name: this.props?.name,
+        phoneNumber: this.props?.phoneNumber,
+        tags: this.props?.note ? [this.props?.note] : null
+      }
+      dispatchFetchRequestWithOption(api.membership.creat, {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(request)
+      }, {
+        defaultMessage: false
+      }, response => {
+        response.json().then(data => {
+          this.setState({isMembership: true, })
+          Alert.alert(
+            ``,
+            `${data?.phoneNumber} ${this.context.t(`membership.createSuccessMsg`)}`,
+            [
+              {
+                text: `${this.context.t('action.yes')}`,
+                onPress: () => {
+                }
+              }
+            ]
+          )
+        })
+      }).then()
+    } else {
+      Alert.alert(
+        ``,
+        `${this.context.t(`membership.createFailedMsg`)}`,
+        [
+          {
+            text: `${this.context.t('action.yes')}`,
+            onPress: () => {
+            }
+          }
+        ]
+      )
+    }
+  }
+
+  handleFillName = (flag) => {
+    this.setState({membershipModalVisible: false})
+
+    if (!!flag) {
+      this.props.change(`name`, this.state.searchResults.name)
+      this.noteInput.focus()
+    } else {
+      this.nameInput.focus()
+    }
+  }
+
+
   handleCheckForm = (value) => {
     this.props.navigation.navigate('ReservationConfirmScreen', {
       handleCancel: this.props.handleCancel,
@@ -344,6 +428,7 @@ class ReservationFormScreen extends React.Component {
       handleSubmit,
       handleCancel,
       handleSaveReservation,
+      statusHeight
     } = this.props
 
     const {t, customMainThemeColor, customBackgroundColor} = this.context
@@ -405,7 +490,7 @@ class ReservationFormScreen extends React.Component {
       if (!!this?.state?.isTablet) {
         return (
           <ThemeScrollView>
-            <View style={styles.fullWidthScreen}>
+            <View style={[styles.fullWidthScreen, {marginTop: 53 - statusHeight}]}>
               <ScreenHeader
                 backNavigation={true}
                 backAction={() => {
@@ -614,40 +699,86 @@ class ReservationFormScreen extends React.Component {
                               </View>
                               <View style={[styles.flex(1), styles.fieldContainer]}>
                                 <Field
-                                  name="name"
-                                  component={InputTextComponent}
-                                  onSubmitEditing={() =>
-                                    this.secondInput.focus()
-                                  }
-                                  setFieldToBeFocused={input => {
-                                    this.firstInput = input
-                                  }}
-                                  validate={isRequired}
-                                  placeholder={t('reservation.name')}
-                                />
-                              </View>
-                              <View style={[styles.flex(1), styles.fieldContainer]}>
-                                <Field
                                   name="phoneNumber"
                                   component={InputTextComponent}
-                                  onSubmitEditing={() =>
-                                    this.thirdInput.focus()
+                                  onSubmitEditing={(value) =>
+                                    this.handleSearchMember(value.nativeEvent.text)
                                   }
                                   setFieldToBeFocused={input => {
-                                    this.secondInput = input
+                                    this.phoneNumberInput = input
                                   }}
                                   validate={isRequired}
                                   placeholder={t('reservation.phone')}
                                   keyboardType={'numeric'}
                                 />
+                                {this.state.searching ? <View style={{width: 24}}><LoadingScreen /></View> : this.state.isSearched ? <View>
+                                  {this.state.isMembership ? <Ionicons name="checkmark-circle" size={24} color={customMainThemeColor} /> :
+                                    <TouchableOpacity onPress={() =>
+                                      Alert.alert(
+                                        ``,
+                                        `${this.context.t(`membership.searchNullMsg`)}`,
+                                        [
+                                          {
+                                            text: `${this.context.t('action.yes')}`,
+                                            onPress: () => {
+                                              this.handleCreateMember()
+                                            }
+                                          },
+                                          {
+                                            text: `${this.context.t('action.no')}`,
+                                            onPress: () => {},
+                                            style: 'cancel'
+                                          }
+                                        ]
+                                      )}>
+                                      <Ionicons name="add" size={24} color={customMainThemeColor} />
+                                    </TouchableOpacity>
+                                  }
+                                </View> : null}
+                              </View>
+                              <View style={[styles.flex(1), styles.fieldContainer]}>
+                                <Field
+                                  name="name"
+                                  component={InputTextComponent}
+                                  onSubmitEditing={() =>
+                                    this.noteInput.focus()
+                                  }
+                                  setFieldToBeFocused={input => {
+                                    this.nameInput = input
+                                  }}
+                                  validate={isRequired}
+                                  placeholder={t('reservation.name')}
+                                />
+                                {this.state.membershipModalVisible &&
+                                  <View style={[{
+                                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                                    position: 'absolute', width: '100%', top: -4, right: 0, backgroundColor: '#eee', borderRadius: 8, paddingHorizontal: 12
+                                  }]}>
+                                    {this.state.searching ? <LoadingScreen /> :
+                                      <>
+                                        <View>
+                                          <StyledText style={[styles.textMedium]}>{this.state.searchResults.name}</StyledText>
+                                        </View>
+                                        <View style={[styles.fieldContainer]}>
+                                          <TouchableOpacity style={[styles.dynamicHorizontalPadding(4)]} onPress={() => this.handleFillName(true)}>
+                                            <Ionicons name="checkmark" size={24} color={customMainThemeColor} />
+                                          </TouchableOpacity>
+                                          <TouchableOpacity onPress={() => this.handleFillName(false)}>
+                                            <Ionicons name="close" size={24} color={customMainThemeColor} />
+                                          </TouchableOpacity>
+                                        </View>
+
+                                      </>}
+                                  </View>}
                               </View>
                               <View style={[styles.flex(1), styles.fieldContainer]}>
                                 <Field
                                   name="note"
                                   component={InputTextComponent}
                                   setFieldToBeFocused={input => {
-                                    this.thirdInput = input
+                                    this.noteInput = input
                                   }}
+
                                   placeholder={t('reservation.otherNote')}
                                 />
                               </View>
@@ -777,7 +908,7 @@ class ReservationFormScreen extends React.Component {
       } else {
         return (
           <ThemeContainer>
-            <View style={styles.fullWidthScreen}>
+            <View style={[styles.fullWidthScreen, {marginTop: 53 - statusHeight}]}>
               <ScreenHeader
                 backNavigation={true}
                 backAction={() => {
@@ -994,40 +1125,86 @@ class ReservationFormScreen extends React.Component {
                           </View>
                           <View style={[styles.flex(1), styles.fieldContainer]}>
                             <Field
-                              name="name"
-                              component={InputTextComponent}
-                              onSubmitEditing={() =>
-                                this.secondInput.focus()
-                              }
-                              setFieldToBeFocused={input => {
-                                this.firstInput = input
-                              }}
-                              validate={isRequired}
-                              placeholder={t('reservation.name')}
-                            />
-                          </View>
-                          <View style={[styles.flex(1), styles.fieldContainer]}>
-                            <Field
                               name="phoneNumber"
                               component={InputTextComponent}
-                              onSubmitEditing={() =>
-                                this.thirdInput.focus()
+                              onSubmitEditing={(value) =>
+                                this.handleSearchMember(value.nativeEvent.text)
                               }
                               setFieldToBeFocused={input => {
-                                this.secondInput = input
+                                this.phoneNumberInput = input
                               }}
                               validate={isRequired}
                               placeholder={t('reservation.phone')}
                               keyboardType={'numeric'}
                             />
+                            {this.state.searching ? <View style={{width: 24}}><LoadingScreen /></View> : this.state.isSearched ? <View>
+                              {this.state.isMembership ? <Ionicons name="checkmark-circle" size={24} color={customMainThemeColor} /> :
+                                <TouchableOpacity onPress={() =>
+                                  Alert.alert(
+                                    ``,
+                                    `${this.context.t(`membership.searchNullMsg`)}`,
+                                    [
+                                      {
+                                        text: `${this.context.t('action.yes')}`,
+                                        onPress: () => {
+                                          this.handleCreateMember()
+                                        }
+                                      },
+                                      {
+                                        text: `${this.context.t('action.no')}`,
+                                        onPress: () => {},
+                                        style: 'cancel'
+                                      }
+                                    ]
+                                  )}>
+                                  <Ionicons name="add" size={24} color={customMainThemeColor} />
+                                </TouchableOpacity>
+                              }
+                            </View> : null}
+                          </View>
+                          <View style={[styles.flex(1), styles.fieldContainer]}>
+                            <Field
+                              name="name"
+                              component={InputTextComponent}
+                              onSubmitEditing={() =>
+                                this.noteInput.focus()
+                              }
+                              setFieldToBeFocused={input => {
+                                this.nameInput = input
+                              }}
+                              validate={isRequired}
+                              placeholder={t('reservation.name')}
+                            />
+                            {this.state.membershipModalVisible &&
+                              <View style={[{
+                                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                                position: 'absolute', width: '100%', top: -4, right: 0, backgroundColor: '#eee', borderRadius: 8, paddingHorizontal: 12
+                              }]}>
+                                {this.state.searching ? <LoadingScreen /> :
+                                  <>
+                                    <View>
+                                      <StyledText style={[styles.textMedium]}>{this.state.searchResults.name}</StyledText>
+                                    </View>
+                                    <View style={[styles.fieldContainer]}>
+                                      <TouchableOpacity style={[styles.dynamicHorizontalPadding(4)]} onPress={() => this.handleFillName(true)}>
+                                        <Ionicons name="checkmark" size={24} color={customMainThemeColor} />
+                                      </TouchableOpacity>
+                                      <TouchableOpacity onPress={() => this.handleFillName(false)}>
+                                        <Ionicons name="close" size={24} color={customMainThemeColor} />
+                                      </TouchableOpacity>
+                                    </View>
+
+                                  </>}
+                              </View>}
                           </View>
                           <View style={[styles.flex(1), styles.fieldContainer]}>
                             <Field
                               name="note"
                               component={InputTextComponent}
                               setFieldToBeFocused={input => {
-                                this.thirdInput = input
+                                this.noteInput = input
                               }}
+
                               placeholder={t('reservation.otherNote')}
                             />
                           </View>
@@ -1070,16 +1247,26 @@ class ReservationFormScreen extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  tablelayouts: state.tablelayouts.data.tableLayouts,
-  tablelayout: state.tablelayout.data,
-  haveData: state.tablelayouts.haveData,
-  haveError: state.ordersinflight.haveError || state.tablelayouts.haveError,
-  isLoading: state.ordersinflight.loading || state.tablelayouts.loading,
-  availableTables: state.tablesavailable.data.availableTables,
-  ordersInflight: state.ordersinflight.data.orders,
-  orderSets: state.ordersinflight.data?.setData,
-})
+const selector = formValueSelector('reservationForm')
+
+const mapStateToProps = state => {
+  const phoneNumber = selector(state, 'phoneNumber')
+  const name = selector(state, 'name')
+  const note = selector(state, 'note')
+  return {
+    phoneNumber,
+    name,
+    note,
+    tablelayouts: state.tablelayouts.data.tableLayouts,
+    tablelayout: state.tablelayout.data,
+    haveData: state.tablelayouts.haveData,
+    haveError: state.ordersinflight.haveError || state.tablelayouts.haveError,
+    isLoading: state.ordersinflight.loading || state.tablelayouts.loading,
+    availableTables: state.tablesavailable.data.availableTables,
+    ordersInflight: state.ordersinflight.data.orders,
+    orderSets: state.ordersinflight.data?.setData,
+  }
+}
 
 const mapDispatchToProps = dispatch => ({
   dispatch,

@@ -6,7 +6,7 @@ import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
 import ReservationFormScreen from './ReservationFormScreen'
 import {connect} from 'react-redux'
-import {FocusAwareStatusBar} from '../components/FocusAwareStatusBar'
+import {FocusAwareStatusBar, statusHeight} from '../components/FocusAwareStatusBar'
 
 
 class ReservationScreen extends React.Component {
@@ -32,6 +32,9 @@ class ReservationScreen extends React.Component {
   }
   componentWillUnmount() {
     this._resetForm()
+    this.setState = (state, callback) => {
+      return;
+    };
   }
 
   checkPropsChange = () => {
@@ -110,6 +113,7 @@ class ReservationScreen extends React.Component {
         <FocusAwareStatusBar barStyle="light-content" backgroundColor="#222" />
         <ReservationFormScreen
           isEdit={false}
+          statusHeight={statusHeight}
           onSubmit={this.handleSubmit}
           handleReset={this.handleReset}
           handleNextStep={this.handleNextStep}

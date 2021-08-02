@@ -8,7 +8,7 @@ import ReservationUpcomingForm from './ReservationUpcomingForm'
 import {connect} from 'react-redux'
 import moment from 'moment-timezone'
 import LoadingScreen from "./LoadingScreen";
-import {FocusAwareStatusBar} from '../components/FocusAwareStatusBar'
+import {FocusAwareStatusBar, statusHeight} from '../components/FocusAwareStatusBar'
 
 
 class ReservationUpcomingScreen extends React.Component {
@@ -78,6 +78,7 @@ class ReservationUpcomingScreen extends React.Component {
         <>
           <FocusAwareStatusBar barStyle="light-content" backgroundColor="#222" />
           <ReservationUpcomingForm
+            statusHeight={statusHeight}
             onSubmit={this.handleSubmit}
             navigation={navigation}
             route={route}

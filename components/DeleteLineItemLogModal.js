@@ -12,19 +12,16 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import TimePeriodPicker from "../components/TimePeriodPicker";
 import moment from "moment";
 import Modal from 'react-native-modal';
-import {formatCurrency, formatDate, customFormatLocaleDate} from "../actions";
+import {formatCurrency, normalizeTimeString} from "../actions";
 
 
 export const DeleteLineItemLogModal = (props) => {
     const localeContext = useContext(LocaleContext);
     const {customMainThemeColor} = localeContext
 
-
     useEffect(() => {
 
     }, [])
-
-
 
 
     return (
@@ -78,7 +75,7 @@ export const DeleteLineItemLogModal = (props) => {
                             </View>
 
                             <View style={[{flex: 2}, styles.tableCellView, {justifyContent: 'flex-end'}]}>
-                                <StyledText style={[styles.tableCellView]}>{customFormatLocaleDate(item?.deletedDate)}</StyledText>
+                                <StyledText style={[styles.tableCellView]}>{normalizeTimeString(item?.deletedDate, 'YYYY-MM-DD HH:mm')}</StyledText>
                             </View>
 
                             <View style={[{flex: 1}, styles.tableCellView, {justifyContent: 'flex-end'}]}>

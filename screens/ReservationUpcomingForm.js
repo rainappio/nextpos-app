@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Field, reduxForm} from 'redux-form'
+import {Field, reduxForm, formValueSelector} from 'redux-form'
 import {Keyboard, Text, TouchableOpacity, View, FlatList, Dimensions, Alert, Animated, ScrollView, Modal} from 'react-native'
 import FullModal from 'react-native-modal';
 import {Accordion, List} from '@ant-design/react-native'
@@ -68,6 +68,11 @@ class ReservationUpcomingForm extends React.Component {
       selectedTableIds: [],
       selectedEventValues: null,
       mobileFormVisible: false,
+      searching: false,
+      searchResults: null,
+      membershipModalVisible: false,
+      isMembership: false,
+      isSearched: false,
     }
   }
 
@@ -79,6 +84,9 @@ class ReservationUpcomingForm extends React.Component {
   }
   componentWillUnmount() {
     this._refreshScreen()
+    this.setState = (state, callback) => {
+      return;
+    };
   }
 
   refreshScreen = () => {
@@ -92,7 +100,6 @@ class ReservationUpcomingForm extends React.Component {
 
     let currentHour = moment(selectedDate).hour()
     let timeBlockIndex = currentHour <= 10 ? 0 : currentHour > 10 && currentHour < 17 ? 1 : 2
-    console.log(currentHour, timeBlockIndex)
 
     this.setState({reservationDate: moment(selectedDate).format('YYYY-MM-DD'), selectedTimeBlock: timeBlockIndex})
     this.handleTimeFormat(timeBlockIndex, moment(selectedDate).format('YYYY-MM-DD'))
@@ -280,8 +287,92 @@ class ReservationUpcomingForm extends React.Component {
 
         })
       }).then()
-
   }
+
+  handleSearchMember = (phone) => {
+    if (phone !== '') {
+      this.setState({searching: true, isSearched: false})
+      dispatchFetchRequest(api.membership.getByPhone(phone), {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {}
+      }, response => {
+        response.json().then(data => {
+          if (data?.results?.length > 0) {
+            this.setState({searchResults: data.results[0], searching: false, isMembership: true, membershipModalVisible: true, isSearched: true})
+          } else {
+            this.setState({searchResults: data.results, searching: false, isMembership: false, membershipModalVisible: false, isSearched: true})
+            this.nameInput.focus()
+          }
+        })
+      }).then()
+    } else {
+      this.setState({isSearched: false, isMembership: false, searchResults: []})
+    }
+  }
+
+  handleCreateMember = () => {
+    if (this.props?.name && this.props?.phoneNumber) {
+      let request = {
+        name: this.props?.name,
+        phoneNumber: this.props?.phoneNumber,
+        tags: this.props?.note ? [this.props?.note] : null
+      }
+      dispatchFetchRequestWithOption(api.membership.creat, {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(request)
+      }, {
+        defaultMessage: false
+      }, response => {
+        response.json().then(data => {
+
+          this.setState({isMembership: true})
+          Alert.alert(
+            ``,
+            `${data?.phoneNumber} ${this.context.t(`membership.createSuccessMsg`)}`,
+            [
+              {
+                text: `${this.context.t('action.yes')}`,
+                onPress: () => {
+                }
+              }
+            ]
+          )
+        })
+      }).then()
+    } else {
+      Alert.alert(
+        ``,
+        `${this.context.t(`membership.createFailedMsg`)}`,
+        [
+          {
+            text: `${this.context.t('action.yes')}`,
+            onPress: () => {
+            }
+          }
+        ]
+      )
+    }
+  }
+
+  handleFillName = (flag) => {
+    this.setState({membershipModalVisible: false})
+
+    if (!!flag) {
+      this.props.change(`name`, this.state.searchResults.name)
+      this.noteInput.focus()
+    } else {
+      this.nameInput.focus()
+    }
+  }
+
+
   handleUpdateReservation = (values) => {
     let request = {
       reservationDate: moment(values.reservationStartDate).format('YYYY-MM-DDTHH:mm:ss'),
@@ -358,6 +449,7 @@ class ReservationUpcomingForm extends React.Component {
       ordersInflight,
       availableTables,
       handleSubmit,
+      statusHeight
     } = this.props
 
     const {t, customMainThemeColor, customBackgroundColor} = this.context
@@ -389,7 +481,7 @@ class ReservationUpcomingForm extends React.Component {
     if (!!this?.state?.isTablet) {
       return (
         <ThemeScrollView>
-          <View style={styles.fullWidthScreen}>
+          <View style={[styles.fullWidthScreen, {marginTop: 53 - statusHeight}]}>
             <ScreenHeader
               backNavigation={false}
               title={t('reservation.reservationTitle')}
@@ -619,39 +711,84 @@ class ReservationUpcomingForm extends React.Component {
                         </View>
                         <View style={[styles.flex(1), styles.fieldContainer]}>
                           <Field
-                            name="name"
-                            component={InputTextComponent}
-                            onSubmitEditing={() =>
-                              this.secondInput.focus()
-                            }
-                            setFieldToBeFocused={input => {
-                              this.firstInput = input
-                            }}
-                            validate={isRequired}
-                            placeholder={t('reservation.name')}
-                          />
-                        </View>
-                        <View style={[styles.flex(1), styles.fieldContainer]}>
-                          <Field
                             name="phoneNumber"
                             component={InputTextComponent}
-                            onSubmitEditing={() =>
-                              this.thirdInput.focus()
+                            onSubmitEditing={(value) =>
+                              this.handleSearchMember(value.nativeEvent.text)
                             }
                             setFieldToBeFocused={input => {
-                              this.secondInput = input
+                              this.phoneNumberInput = input
                             }}
                             validate={isRequired}
                             placeholder={t('reservation.phone')}
                             keyboardType={'numeric'}
                           />
+                          {this.state.searching ? <View style={{width: 24}}><LoadingScreen /></View> : this.state.isSearched ? <View>
+                            {this.state.isMembership ? <Icon name="checkmark-circle" size={24} color={customMainThemeColor} /> :
+                              <TouchableOpacity onPress={() =>
+                                Alert.alert(
+                                  ``,
+                                  `${this.context.t(`membership.searchNullMsg`)}`,
+                                  [
+                                    {
+                                      text: `${this.context.t('action.yes')}`,
+                                      onPress: () => {
+                                        this.handleCreateMember()
+                                      }
+                                    },
+                                    {
+                                      text: `${this.context.t('action.no')}`,
+                                      onPress: () => {},
+                                      style: 'cancel'
+                                    }
+                                  ]
+                                )}>
+                                <Icon name="add" size={24} color={customMainThemeColor} />
+                              </TouchableOpacity>
+                            }
+                          </View> : null}
+                        </View>
+                        <View style={[styles.flex(1), styles.fieldContainer]}>
+                          <Field
+                            name="name"
+                            component={InputTextComponent}
+                            onSubmitEditing={() =>
+                              this.noteInput.focus()
+                            }
+                            setFieldToBeFocused={input => {
+                              this.nameInput = input
+                            }}
+                            validate={isRequired}
+                            placeholder={t('reservation.name')}
+                          />
+                          {this.state.membershipModalVisible &&
+                            <View style={[{
+                              flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                              position: 'absolute', width: '100%', top: -4, right: 0, backgroundColor: '#eee', borderRadius: 8, paddingHorizontal: 12
+                            }]}>
+                              {this.state.searching ? <LoadingScreen /> :
+                                <>
+                                  <View>
+                                    <StyledText style={[styles.textMedium]}>{this.state.searchResults.name}</StyledText>
+                                  </View>
+                                  <View style={[styles.fieldContainer]}>
+                                    <TouchableOpacity style={[styles.dynamicHorizontalPadding(4)]} onPress={() => this.handleFillName(true)}>
+                                      <Icon name="checkmark" size={24} color={customMainThemeColor} />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.handleFillName(false)}>
+                                      <Icon name="close" size={24} color={customMainThemeColor} />
+                                    </TouchableOpacity>
+                                  </View>
+
+                                </>}
+                            </View>}
                         </View>
                         <View style={[styles.flex(1), styles.fieldContainer]}>
                           <Field
                             name="note"
                             component={InputTextComponent}
                             setFieldToBeFocused={input => {
-                              this.thirdInput = input
+                              this.noteInput = input
                             }}
 
                             placeholder={t('reservation.otherNote')}
@@ -1119,39 +1256,84 @@ class ReservationUpcomingForm extends React.Component {
                       </View>
                       <View style={[styles.flex(1), styles.fieldContainer]}>
                         <Field
-                          name="name"
-                          component={InputTextComponent}
-                          onSubmitEditing={() =>
-                            this.secondInput.focus()
-                          }
-                          setFieldToBeFocused={input => {
-                            this.firstInput = input
-                          }}
-                          validate={isRequired}
-                          placeholder={t('reservation.name')}
-                        />
-                      </View>
-                      <View style={[styles.flex(1), styles.fieldContainer]}>
-                        <Field
                           name="phoneNumber"
                           component={InputTextComponent}
-                          onSubmitEditing={() =>
-                            this.thirdInput.focus()
+                          onSubmitEditing={(value) =>
+                            this.handleSearchMember(value.nativeEvent.text)
                           }
                           setFieldToBeFocused={input => {
-                            this.secondInput = input
+                            this.phoneNumberInput = input
                           }}
                           validate={isRequired}
                           placeholder={t('reservation.phone')}
                           keyboardType={'numeric'}
                         />
+                        {this.state.searching ? <View style={{width: 24}}><LoadingScreen /></View> : this.state.isSearched ? <View>
+                          {this.state.isMembership ? <Icon name="checkmark-circle" size={24} color={customMainThemeColor} /> :
+                            <TouchableOpacity onPress={() =>
+                              Alert.alert(
+                                ``,
+                                `${this.context.t(`membership.searchNullMsg`)}`,
+                                [
+                                  {
+                                    text: `${this.context.t('action.yes')}`,
+                                    onPress: () => {
+                                      this.handleCreateMember()
+                                    }
+                                  },
+                                  {
+                                    text: `${this.context.t('action.no')}`,
+                                    onPress: () => {},
+                                    style: 'cancel'
+                                  }
+                                ]
+                              )}>
+                              <Icon name="add" size={24} color={customMainThemeColor} />
+                            </TouchableOpacity>
+                          }
+                        </View> : null}
+                      </View>
+                      <View style={[styles.flex(1), styles.fieldContainer]}>
+                        <Field
+                          name="name"
+                          component={InputTextComponent}
+                          onSubmitEditing={() =>
+                            this.noteInput.focus()
+                          }
+                          setFieldToBeFocused={input => {
+                            this.nameInput = input
+                          }}
+                          validate={isRequired}
+                          placeholder={t('reservation.name')}
+                        />
+                        {this.state.membershipModalVisible &&
+                          <View style={[{
+                            flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                            position: 'absolute', width: '100%', top: -4, right: 0, backgroundColor: '#eee', borderRadius: 8, paddingHorizontal: 12
+                          }]}>
+                            {this.state.searching ? <LoadingScreen /> :
+                              <>
+                                <View>
+                                  <StyledText style={[styles.textMedium]}>{this.state.searchResults.name}</StyledText>
+                                </View>
+                                <View style={[styles.fieldContainer]}>
+                                  <TouchableOpacity style={[styles.dynamicHorizontalPadding(4)]} onPress={() => this.handleFillName(true)}>
+                                    <Icon name="checkmark" size={24} color={customMainThemeColor} />
+                                  </TouchableOpacity>
+                                  <TouchableOpacity onPress={() => this.handleFillName(false)}>
+                                    <Icon name="close" size={24} color={customMainThemeColor} />
+                                  </TouchableOpacity>
+                                </View>
+
+                              </>}
+                          </View>}
                       </View>
                       <View style={[styles.flex(1), styles.fieldContainer]}>
                         <Field
                           name="note"
                           component={InputTextComponent}
                           setFieldToBeFocused={input => {
-                            this.thirdInput = input
+                            this.noteInput = input
                           }}
 
                           placeholder={t('reservation.otherNote')}
@@ -1394,24 +1576,28 @@ class ReservationUpcomingForm extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-
-})
-
-const mapDispatchToProps = dispatch => ({
-  dispatch,
-
-})
 
 ReservationUpcomingForm = reduxForm({
   form: 'reservationUpcomingForm'
 })(ReservationUpcomingForm)
 
+const selector = formValueSelector('reservationUpcomingForm')
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withContext
-)
-export default enhance(ReservationUpcomingForm)
+
+ReservationUpcomingForm = connect(
+  state => {
+    const phoneNumber = selector(state, 'phoneNumber')
+    const name = selector(state, 'name')
+    const note = selector(state, 'note')
+    return {
+      phoneNumber,
+      name,
+      note,
+    }
+  }
+)(ReservationUpcomingForm)
+
+
+export default (ReservationUpcomingForm)
 
 

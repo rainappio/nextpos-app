@@ -26,7 +26,7 @@ import {connect} from 'react-redux'
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {getTableLayouts, getTableLayout} from '../actions'
 import LoadingScreen from "./LoadingScreen";
-import {FocusAwareStatusBar} from '../components/FocusAwareStatusBar'
+import {FocusAwareStatusBar, statusHeight} from '../components/FocusAwareStatusBar'
 
 class ReservationCalendarScreen extends React.Component {
     static navigationOptions = {
@@ -180,7 +180,7 @@ class ReservationCalendarScreen extends React.Component {
         return (
             <ThemeContainer>
                 <FocusAwareStatusBar barStyle="light-content" backgroundColor="#222" />
-                <View style={[styles.fullWidthScreen, {marginBottom: 0}]}>
+                <View style={[styles.fullWidthScreen, {marginBottom: 0, marginTop: 53 - statusHeight}]}>
                     <ScreenHeader backNavigation={false}
                         parentFullScreen={true}
                         title={t('reservation.reservationCalendarTitle')}

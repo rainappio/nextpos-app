@@ -19,7 +19,7 @@ import moment from 'moment-timezone'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
-import {FocusAwareStatusBar} from '../components/FocusAwareStatusBar'
+import {FocusAwareStatusBar, statusHeight} from '../components/FocusAwareStatusBar'
 
 class ReservationViewForm extends React.Component {
   static navigationOptions = {
@@ -206,7 +206,7 @@ class ReservationViewForm extends React.Component {
           <ThemeContainer>
             <FocusAwareStatusBar barStyle="light-content" backgroundColor="#222" />
             <ThemeScrollView>
-              <View style={styles.fullWidthScreen}>
+              <View style={[styles.fullWidthScreen, {marginTop: 53 - statusHeight}]}>
                 <ScreenHeader
                   backNavigation={true}
                   backAction={() => {
@@ -430,7 +430,7 @@ class ReservationViewForm extends React.Component {
         return (
           <ThemeContainer>
             <FocusAwareStatusBar barStyle="light-content" backgroundColor="#222" />
-            <View style={styles.fullWidthScreen}>
+            <View style={[styles.fullWidthScreen, {marginTop: 53 - statusHeight}]}>
               <ScreenHeader
                 backNavigation={true}
                 backAction={() => {

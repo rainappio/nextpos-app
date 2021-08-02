@@ -111,6 +111,12 @@ class RetailOrderSummaryScreen extends React.Component {
         console.debug(`order summary order id: ${this.props.order.orderId}`)
     }
 
+    componentWillUnmount() {
+        this.setState = (state, callback) => {
+            return;
+        };
+    }
+
     toggleOrderLineItem = (lineItemId) => {
         const lineItem = this.state.orderLineItems.hasOwnProperty(lineItemId) ? this.state.orderLineItems[lineItemId] : {
             checked: false,
