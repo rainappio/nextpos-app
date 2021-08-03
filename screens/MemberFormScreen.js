@@ -150,7 +150,7 @@ class MemberFormScreen extends React.Component {
                             useNativeDriver
                             hideModalContentWhileAnimating
                         >
-                            <OrderDetail orderId={this.state?.modalOrderId} closeModal={() => this.setState({modalVisible: false})} />
+                            <OrderDetail navigation={this.props.navigation} route={this.props.route} orderId={this.state?.modalOrderId} closeModal={() => this.setState({modalVisible: false})} />
                         </Modal>
                         <ThemeKeyboardAwareScrollView style={{flex: 1}}>
 
@@ -253,6 +253,7 @@ class MemberFormScreen extends React.Component {
                                                     {this.state?.data?.recentOrders?.map((order) => {
                                                         return (
                                                             <TouchableOpacity
+                                                                key={order?.orderId}
                                                                 onPress={() => this.setState({modalVisible: true, modalOrderId: order?.orderId})}
                                                                 style={[styles.tableRowContainer, {borderColor: customMainThemeColor, borderWidth: 1, borderRadius: 10, margin: 5}]}>
 
@@ -279,7 +280,7 @@ class MemberFormScreen extends React.Component {
                                                     <View style={styles.sectionContainer}>
                                                         {this.state?.data?.topRankings?.map((item) => {
                                                             return (
-                                                                <View style={[styles.tableRowContainer]}>
+                                                                <View key={item.id} style={[styles.tableRowContainer]}>
 
                                                                     <View style={[styles.tableCellView, {flex: 1}]}>
                                                                         <StyledText>{item.productName}</StyledText>

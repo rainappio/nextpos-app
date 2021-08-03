@@ -79,6 +79,9 @@ class OrderFormII extends React.Component {
   }
   componentWillUnmount() {
     this._getOrder()
+    this.setState = (state, callback) => {
+      return;
+    }
   }
 
   PanelHeader = (labelName, labelId, isSelected = false) => {

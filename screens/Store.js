@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {api, dispatchFetchRequest} from '../constants/Backend'
-import {getCurrentClient, getPaymentMethods} from '../actions'
+import {getCurrentClient, getPaymentMethods, getSettingTimezone} from '../actions'
 import StoreFormScreen from './StoreFormScreen'
 import LoadingScreen from "./LoadingScreen";
 
@@ -65,6 +65,7 @@ class Store extends React.Component {
       body: JSON.stringify(values)
     },
       response => {
+        getSettingTimezone()
         this.props.navigation.navigate('SettingScr')
       }).then()
 

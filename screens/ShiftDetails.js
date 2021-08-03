@@ -3,13 +3,14 @@ import {Text, TouchableOpacity, View, ScrollView} from 'react-native'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
-import {formatCurrency, formatDate, customFormatLocaleDate} from "../actions";
+import {formatCurrency, formatDate} from "../actions";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
 import Modal from 'react-native-modal';
 import {Ionicons} from '@expo/vector-icons';
 import {handleSendEmail, handlePrintReport} from "../helpers/shiftActions";
 import {DeleteLineItemLogModal} from "../components/DeleteLineItemLogModal";
+
 
 class ShiftDetails extends React.Component {
   static navigationOptions = {

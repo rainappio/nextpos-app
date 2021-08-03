@@ -1,23 +1,37 @@
-import TimeZoneService from "../helpers/TimeZoneService";
 import {Platform} from 'react-native';
 import moment from "moment-timezone";
+import {api, dispatchFetchRequest} from "../constants/Backend";
 
-const timezone = TimeZoneService.getTimeZone()
 
-export const customFormatLocaleDate = (date, format = null) => {
-  return moment(date ?? new Date()).tz(timezone).format(format ?? "YYYY-MM-DD HH:mm")
+let selectedTimeZone = 'Asia/Taipei'
+
+export const getSettingTimezone = () => {
+  dispatchFetchRequest(
+    api.client.get,
+    {
+      method: 'GET',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {}
+    },
+    response => {
+      response.json().then(data => {
+        selectedTimeZone = data.timezone
+      })
+    }
+  ).then()
 }
+
 
 /**
  * Format date string.
  */
-export const formatDateObj = dateStr => {
-  if (dateStr != null) {
+export const formatDateObj = (dateStr) => {
+
+  if (dateStr != null && selectedTimeZone !== null) {
     const dateObj = new Date(dateStr)
-    return dateObj.toLocaleString('en-TW', {
-      dateStyle: 'long',
-      //timeZone: timezone //comment because Android error
-    })
+
+    return moment(dateObj).tz(selectedTimeZone).format("YYYY/MM/DD, hh:mm:ss A")
   }
 
   return null
@@ -39,46 +53,35 @@ export const formatDateFromMillis = dateMillis => {
  */
 export const formatDate = (date) => {
 
-  if (date === undefined || date === null) {
+  if ((date === undefined || date === null) && selectedTimeZone !== null) {
     return undefined
   }
 
   const dateObj = useDateObj(date)
+  return moment(dateObj).tz(selectedTimeZone).format("YYYY/MM/DD, HH:mm:ss")
 
-  return dateObj.toLocaleString('en-TW', {
-    dateStyle: 'long',
-    //timeZone: timezone,
-    hour12: false
-  })
 }
 
-export const formatDateOnly = date => {
+export const formatDateOnly = (date) => {
 
-  if (date === undefined || date === null) {
+  if ((date === undefined || date === null) && selectedTimeZone !== null) {
     return undefined
   }
 
   const dateObj = useDateObj(date)
-  return dateObj.toLocaleDateString('en-TW', {
-    dateStyle: 'long',
-    //timeZone: timezone
-  })
+  return moment(dateObj).tz(selectedTimeZone).format("YYYY/MM/DD")
+
 }
 
-export const formatTime = date => {
+export const formatTime = (date) => {
 
-  if (date === undefined || date === null) {
+  if ((date === undefined || date === null) && selectedTimeZone !== null) {
     return undefined
   }
 
   const dateObj = useDateObj(date)
+  return moment(dateObj).tz(selectedTimeZone).format('HH:mm:ss')
 
-  return moment(dateObj).format('HH:mm:ss')
-  // return dateObj.toLocaleTimeString('en-TW', {
-  //   dateStyle: 'long',
-  //   //timeZone: timezone
-  //   hour12: false
-  // })
 }
 
 export const getTimeDifference = date => {
@@ -87,12 +90,6 @@ export const getTimeDifference = date => {
   return Date.now() - dateObj
 }
 
-export const dateToLocaleString = dateObj => {
-  return dateObj.toLocaleString('en-TW', {
-    dateStyle: 'long',
-    //timeZone: timezone
-  })
-}
 
 export const formatCurrency = number => {
   if (number != null) {
@@ -122,9 +119,9 @@ export const normalizeTimeString = (time, formatString = null) => {
   if (!!time) {
 
 
-    return moment(time).tz(timezone).format(formatString ?? 'YYYY-MM-DD HH:mm:ss')
+    return moment(time).tz(selectedTimeZone).format(formatString ?? 'YYYY-MM-DD HH:mm:ss')
   } else {
-    return moment().tz(timezone).format(formatString ?? 'YYYY-MM-DD HH:mm:ss')
+    return moment().tz(selectedTimeZone).format(formatString ?? 'YYYY-MM-DD HH:mm:ss')
   }
 }
 

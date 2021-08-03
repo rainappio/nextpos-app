@@ -1,7 +1,7 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
 import {Text, TouchableOpacity, View, ScrollView} from 'react-native'
-import {formatCurrency, formatDate, dateToLocaleString, customFormatLocaleDate} from '../actions'
+import {formatCurrency, formatDate} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ConfirmActionButton from '../components/ConfirmActionButton'
@@ -13,6 +13,7 @@ import {StyledText} from "../components/StyledText";
 import Modal from 'react-native-modal';
 import {Ionicons} from '@expo/vector-icons';
 import {DeleteLineItemLogModal} from "../components/DeleteLineItemLogModal";
+
 
 class AccountCloseConfirmForm extends React.Component {
   static navigationOptions = {

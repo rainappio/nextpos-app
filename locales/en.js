@@ -561,7 +561,8 @@ const en = {
   },
   membership: {
     searchNullMsg: 'Can\'t find membership. Sign up?',
-    creatSuccessMsg: 'New membership created.',
+    createSuccessMsg: 'New membership created.',
+    createFailedMsg: 'Please check all required fields.',
     bindSuccessMsg: 'Membership is added to the order.',
     name: 'Name',
     phoneNumber: 'Phone Number',

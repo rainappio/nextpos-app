@@ -14,11 +14,6 @@ export const storage = {
   clientPassword: 'clientPassword'
 }
 
-//export const apiRoot = 'http://104.199.147.121'
-//export const apiRoot = 'http://10.0.4.9:8080'
-//export const apiRoot = 'http://192.168.1.102:8080'
-//export const apiRoot = 'http://192.168.2.244:8080'
-// export const apiRoot = 'https://api.rain-app.io'
 export const apiRoot = Constants.manifest.extra.host
 
 

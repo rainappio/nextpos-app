@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {FlatList, Text, TouchableOpacity, View} from 'react-native'
-import {formatDate, getUserTimeCards, normalizeTimeString} from '../actions'
+import {getUserTimeCards, normalizeTimeString} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {warningMessage} from '../constants/Backend'
