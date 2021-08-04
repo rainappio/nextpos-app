@@ -76,6 +76,7 @@ class ReservationFormScreen extends React.Component {
       membershipModalVisible: false,
       isMembership: false,
       isSearched: false,
+      isNameEditable: props?.initialValues?.membershipId ? false : true,
     }
   }
 
@@ -110,6 +111,7 @@ class ReservationFormScreen extends React.Component {
 
       if (!!data.id) {
         this.props.change(`id`, data.id)
+        this.props.change(`membershipId`, data?.membershipId ?? null)
 
         let idArray = [], nameArr = [], selectedTimeBlock = 0
         !!data?.tables && data?.tables.forEach((table) => {
@@ -201,30 +203,32 @@ class ReservationFormScreen extends React.Component {
 
   handleCheckAvailableTables = async (date, hour, mins) => {
 
-    let timezone = TimeZoneService.getTimeZone()
-    let dateStr = `${date} ${hour}:${mins}`
-    let checkDate = moment(dateStr).tz(timezone).format('YYYY-MM-DDTHH:mm:ss')
+    if (!!date && !!hour && !!mins) {
+      let timezone = TimeZoneService.getTimeZone()
+      let dateStr = `${date} ${hour}:${mins}`
+      let checkDate = moment(dateStr).tz(timezone).format('YYYY-MM-DDTHH:mm:ss')
 
-    console.log("check date", dateStr)
-    this.props.change(`checkDate`, checkDate)
+      console.log("check date", dateStr)
+      this.props.change(`checkDate`, checkDate)
 
-    let reservationId = this.props?.initialValues?.id != undefined ? this.props?.initialValues?.id : null
+      let reservationId = this.props?.initialValues?.id != undefined ? this.props?.initialValues?.id : null
 
-    await dispatchFetchRequestWithOption(api.reservation.getAvailableTables(checkDate, reservationId), {
-      method: 'GET',
-      withCredentials: true,
-      credentials: 'include',
-      headers: {},
-    }, {
-      defaultMessage: false
-    },
-      response => {
-        response.json().then(async data => {
-          this.setState({availableTables: data.results, isGetTables: true})
-          this.handleCheckConflictTables(data.results)
+      await dispatchFetchRequestWithOption(api.reservation.getAvailableTables(checkDate, reservationId), {
+        method: 'GET',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {},
+      }, {
+        defaultMessage: false
+      },
+        response => {
+          response.json().then(async data => {
+            this.setState({availableTables: data.results, isGetTables: true})
+            this.handleCheckConflictTables(data.results)
 
-        })
-      }).then()
+          })
+        }).then()
+    }
   }
   handleCheckConflictTables = (availableTables) => {
 
@@ -313,6 +317,7 @@ class ReservationFormScreen extends React.Component {
       }, response => {
         response.json().then(data => {
           if (data?.results?.length > 0) {
+            this.props.change(`membershipId`, data.results[0]?.id)
             this.setState({searchResults: data.results[0], searching: false, isMembership: true, membershipModalVisible: true, isSearched: true})
           } else {
             this.setState({searchResults: data.results, searching: false, isMembership: false, membershipModalVisible: false, isSearched: true})
@@ -344,6 +349,7 @@ class ReservationFormScreen extends React.Component {
         defaultMessage: false
       }, response => {
         response.json().then(data => {
+          this.props.change(`membershipId`, data?.id)
           this.setState({isMembership: true, })
           Alert.alert(
             ``,
@@ -372,16 +378,22 @@ class ReservationFormScreen extends React.Component {
       )
     }
   }
-
   handleFillName = (flag) => {
-    this.setState({membershipModalVisible: false})
 
     if (!!flag) {
       this.props.change(`name`, this.state.searchResults.name)
+      this.setState({isNameEditable: false, membershipModalVisible: false})
       this.noteInput.focus()
     } else {
+      this.setState({isNameEditable: true, membershipModalVisible: false})
       this.nameInput.focus()
     }
+  }
+  handleUnbindMember = () => {
+    this.props.change(`membershipId`, null)
+    this.props.change(`phoneNumber`, '')
+    this.props.change(`name`, '')
+    this.setState({isSearched: false, isMembership: false, searchResults: [], isNameEditable: true, })
   }
 
 
@@ -707,6 +719,8 @@ class ReservationFormScreen extends React.Component {
                                   setFieldToBeFocused={input => {
                                     this.phoneNumberInput = input
                                   }}
+                                  extraStyle={this.props?.membershipId && {backgroundColor: '#e7e7e7'}}
+                                  editable={!this.props?.membershipId}
                                   validate={isRequired}
                                   placeholder={t('reservation.phone')}
                                   keyboardType={'numeric'}
@@ -735,6 +749,28 @@ class ReservationFormScreen extends React.Component {
                                     </TouchableOpacity>
                                   }
                                 </View> : null}
+                                {(isEdit && !!this.props?.membershipId) &&
+                                  <TouchableOpacity onPress={() =>
+                                    Alert.alert(
+                                      ``,
+                                      `${this.context.t(`reservation.unbindMemberContext`)}`,
+                                      [
+                                        {
+                                          text: `${this.context.t('action.yes')}`,
+                                          onPress: () => {
+                                            this.handleUnbindMember()
+                                          }
+                                        },
+                                        {
+                                          text: `${this.context.t('action.no')}`,
+                                          onPress: () => {},
+                                          style: 'cancel'
+                                        }
+                                      ]
+                                    )}>
+                                    <Ionicons name="close-circle" size={24} color={customMainThemeColor} />
+                                  </TouchableOpacity>
+                                }
                               </View>
                               <View style={[styles.flex(1), styles.fieldContainer]}>
                                 <Field
@@ -746,6 +782,8 @@ class ReservationFormScreen extends React.Component {
                                   setFieldToBeFocused={input => {
                                     this.nameInput = input
                                   }}
+                                  extraStyle={(!this.state.isNameEditable) && {backgroundColor: '#e7e7e7'}}
+                                  editable={this.state.isNameEditable}
                                   validate={isRequired}
                                   placeholder={t('reservation.name')}
                                 />
@@ -1133,6 +1171,8 @@ class ReservationFormScreen extends React.Component {
                               setFieldToBeFocused={input => {
                                 this.phoneNumberInput = input
                               }}
+                              extraStyle={this.props?.membershipId && {backgroundColor: '#e7e7e7'}}
+                              editable={!this.props?.membershipId}
                               validate={isRequired}
                               placeholder={t('reservation.phone')}
                               keyboardType={'numeric'}
@@ -1161,6 +1201,28 @@ class ReservationFormScreen extends React.Component {
                                 </TouchableOpacity>
                               }
                             </View> : null}
+                            {(isEdit && !!this.props?.membershipId) &&
+                              <TouchableOpacity onPress={() =>
+                                Alert.alert(
+                                  ``,
+                                  `${this.context.t(`reservation.unbindMemberContext`)}`,
+                                  [
+                                    {
+                                      text: `${this.context.t('action.yes')}`,
+                                      onPress: () => {
+                                        this.handleUnbindMember()
+                                      }
+                                    },
+                                    {
+                                      text: `${this.context.t('action.no')}`,
+                                      onPress: () => {},
+                                      style: 'cancel'
+                                    }
+                                  ]
+                                )}>
+                                <Ionicons name="close-circle" size={24} color={customMainThemeColor} />
+                              </TouchableOpacity>
+                            }
                           </View>
                           <View style={[styles.flex(1), styles.fieldContainer]}>
                             <Field
@@ -1172,6 +1234,8 @@ class ReservationFormScreen extends React.Component {
                               setFieldToBeFocused={input => {
                                 this.nameInput = input
                               }}
+                              extraStyle={(!this.state.isNameEditable) && {backgroundColor: '#e7e7e7'}}
+                              editable={this.state.isNameEditable}
                               validate={isRequired}
                               placeholder={t('reservation.name')}
                             />
@@ -1253,10 +1317,12 @@ const mapStateToProps = state => {
   const phoneNumber = selector(state, 'phoneNumber')
   const name = selector(state, 'name')
   const note = selector(state, 'note')
+  const membershipId = selector(state, 'membershipId')
   return {
     phoneNumber,
     name,
     note,
+    membershipId,
     tablelayouts: state.tablelayouts.data.tableLayouts,
     tablelayout: state.tablelayout.data,
     haveData: state.tablelayouts.haveData,

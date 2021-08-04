@@ -15,7 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {ScanView} from '../components/scanView'
 import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
 import Modal from 'react-native-modal';
-import {isRequired} from '../validators'
+import {isRequired, isCarrierType} from '../validators'
 import {RadioLineItemObjPick} from '../components/RadioItemObjPick'
 
 class PaymentOrderForm extends React.Component {
@@ -544,6 +544,10 @@ class PaymentOrderForm extends React.Component {
                   component={InputText}
                   placeholder={t('payment.carrierId')}
                   extraStyle={{textAlign: 'left'}}
+                  validate={[isCarrierType]}
+                  format={(value, name) => {
+                    return value != null ? String(value).toUpperCase() : ''
+                  }}
                 />
               </View>
               <View style={{flex: 1}}>

@@ -56,6 +56,13 @@ export const isTwoBigWords = val => {
   else
     return undefined
 }
+export const isCarrierType = val => {
+  if (!val || !/^\/[0-9A-Z.+-]{7}$/.test(val)) {
+    return i18n.t('errors.requireCarrierType', {locale: currentLocale})
+  }
+  else
+    return undefined
+}
 
 export const isNDigitsNumber = (n) => (value) => {
   if (!value || value?.length !== n || isNaN(value)) {

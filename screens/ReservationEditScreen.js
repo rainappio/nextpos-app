@@ -45,7 +45,8 @@ class ReservationEditScreen extends React.Component {
       tableIds: values.tableIds,
       people: values?.people ?? 0,
       kid: values?.kid ?? 0,
-      note: values?.note ?? ''
+      note: values?.note ?? '',
+      membershipId: values?.membershipId
     }
     console.log("check update=", request)
 

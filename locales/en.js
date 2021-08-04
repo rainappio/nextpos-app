@@ -124,7 +124,12 @@ const en = {
     kid: 'Kid',
     visitFrequency: 'Visit Frequency',
     peopleCount: 'People Count',
-    openOrder: 'Save Order'
+    openOrder: 'Save Order',
+    membership: {
+      title: 'Membership',
+      name: 'Name',
+      phone: 'phone'
+    },
   },
   orderForm: {
     newOrderTitle: 'New Order',
@@ -423,6 +428,7 @@ const en = {
     requireFourDigits: 'Please enter 4 digits number',
     requireEightDigits: 'Please enter 8 digits number',
     requireTwoUppercaseLetters: 'Please enter 2 uppercase letter',
+    requireCarrierType: 'Please enter correct carrier type',
     requireNDigitsNumber: `Please enter {{n}} digits number`,
     expiredToken: 'Toke is either invalid or expired',
   },
@@ -722,6 +728,8 @@ const en = {
     cancelActionContext: 'Cancel changes and return to reservation events list?',
     cancelEditActionContext: 'Discard changes and return to reservation info?',
     deleteActionContext: 'Confirm to delete this reservation?',
+    unbindMemberContext: 'Unbind membership and change membership info?',
+    unbindSuccessContext: 'Reservation was unbound membership.',
     delayActionContext: 'Delay this reservation by {{minutes}} mins?',
     seatActionContext: 'Confirm this reservation as seated?',
     selectTablesContext: 'Please select at least one table.',

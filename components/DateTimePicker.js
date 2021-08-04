@@ -47,8 +47,8 @@ class RenderDateTimePicker extends Component {
 			themeStyle,
 			...rest
 		} = this.props
-		const {t, locale, customMainThemeColor, customBorderColor} = this.context
-		const colorScheme = Appearance.getColorScheme();
+		const {t, locale, customMainThemeColor, customBorderColor, colorScheme} = this.context
+
 
 		const timezone = TimeZoneService.getTimeZone()
 		const i18nMoment = moment(value).tz(timezone);
@@ -77,7 +77,7 @@ class RenderDateTimePicker extends Component {
 							flexDirection: 'row',
 						}}
 					>
-						<View style={{borderRadius: 10, paddingHorizontal: 10, backgroundColor: '#989898'}}>
+						<View style={{backgroundColor: (colorScheme == 'dark' ? '#222' : '#fff'), borderRadius: 10, paddingHorizontal: 10, }}>
 
 							<RNDateTimePicker
 								testID="dateTimePicker"
@@ -208,7 +208,7 @@ class RenderTimePickerBase extends Component {
 			mode,
 			...rest
 		} = this.props
-		const {t, locale, customMainThemeColor, customBorderColor} = this.context
+		const {t, locale, customMainThemeColor, customBorderColor, colorScheme} = this.context
 		const timezone = TimeZoneService.getTimeZone()
 		const i18nMoment = moment(!!value ? value : new Date()).tz(timezone);
 
@@ -240,7 +240,7 @@ class RenderTimePickerBase extends Component {
 						>
 
 
-							<View style={{backgroundColor: 'white', borderRadius: 10, paddingHorizontal: 10}}>
+							<View style={{backgroundColor: (colorScheme == 'dark' ? '#222' : '#fff'), borderRadius: 10, paddingHorizontal: 10}}>
 								<RNDateTimePicker
 									style={{minWidth: 320}}
 									testID="dateTimePicker"
@@ -360,7 +360,7 @@ class RenderDatePickerBase extends Component {
 			mode,
 			...rest
 		} = this.props
-		const {t, locale, customMainThemeColor, customBorderColor} = this.context
+		const {t, locale, customMainThemeColor, customBorderColor, colorScheme} = this.context
 		const timezone = TimeZoneService.getTimeZone()
 		const i18nMoment = moment(!!value ? value : new Date()).tz(timezone);
 
@@ -390,7 +390,7 @@ class RenderDatePickerBase extends Component {
 						}}
 					>
 
-						<View style={{backgroundColor: 'white', borderRadius: 10, paddingHorizontal: 10}}>
+						<View style={{backgroundColor: (colorScheme == 'dark' ? '#222' : '#fff'), borderRadius: 10, paddingHorizontal: 10}}>
 
 							<RNDateTimePicker
 								style={{minWidth: 320}}
