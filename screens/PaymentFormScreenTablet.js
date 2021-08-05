@@ -18,7 +18,7 @@ import {isGuiNumberValid} from 'taiwan-id-validator2'
 import {handleDelete, handleOrderAction, getTableDisplayName, handlePrintOrderDetails} from "../helpers/orderActions";
 import {ScanView} from '../components/scanView'
 import InputText from '../components/InputText'
-import {isRequired} from '../validators'
+import {isRequired, isCarrierType} from '../validators'
 import Modal from 'react-native-modal';
 import {OfferTooltip} from "../components/OfferTooltip";
 
@@ -854,7 +854,10 @@ class PaymentFormScreenTablet extends React.Component {
                                                     <Field
                                                         name={`carrierId`}
                                                         component={InputText}
-                                                        validate={this.state.modalVisible ? undefined : [isRequired]}
+                                                        validate={this.state.modalVisible ? undefined : [isRequired, isCarrierType]}
+                                                        format={(value, name) => {
+                                                            return value != null ? String(value).toUpperCase() : ''
+                                                        }}
                                                     />
                                                     <TouchableOpacity style={{minWidth: 64, alignItems: 'center', }}
                                                         onPress={() => {

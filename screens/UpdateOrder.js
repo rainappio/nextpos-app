@@ -55,6 +55,7 @@ class UpdateOrder extends React.Component {
     const initialValues = {
       orderId: order.orderId,
       orderType: order.orderType,
+      membership: order.membership,
       tableIds: Array.isArray(order?.tables) ? order?.tables?.map((table) => table?.tableId) : null,
       ageGroup: order.demographicData != null ? order.demographicData.ageGroup : null,
       visitFrequency: order.demographicData != null ? order.demographicData.visitFrequency : null,

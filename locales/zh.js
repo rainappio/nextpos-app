@@ -124,7 +124,12 @@ const zh = {
     kid: '兒童',
     visitFrequency: '造訪次數',
     peopleCount: '來客數',
-    openOrder: '儲存訂單'
+    openOrder: '儲存訂單',
+    membership: {
+      title: '會員資料',
+      name: '名稱',
+      phone: '電話'
+    },
   },
   orderForm: {
     newOrderTitle: '新訂單',
@@ -423,6 +428,7 @@ const zh = {
     requireFourDigits: '請輸入四位數字',
     requireEightDigits: '請輸入八位數字',
     requireTwoUppercaseLetters: '請輸入兩個大寫英文',
+    requireCarrierType: '請輸入正確載具格式',
     requireNDigitsNumber: '請輸入{{n}}位數字',
     expiredToken: 'Token無效或已失效',
   },
@@ -724,6 +730,8 @@ const zh = {
     cancelActionContext: '是否取消訂位，並返回訂位管理列表？',
     cancelEditActionContext: '是否放棄已編輯的欄位，並返回訂位資訊頁？',
     deleteActionContext: '是否要刪除此筆訂位資料？',
+    unbindMemberContext: '解除會員綁定並變更資料?',
+    unbindSuccessContext: '訂位已解除會員綁定。',
     delayActionContext: '是否將此訂位延遲 {{minutes}} 分鐘？',
     seatActionContext: '是否確認此訂位的客人已入座？',
     selectTablesContext: '請選擇至少一個桌位。',

@@ -225,6 +225,36 @@ class OrderForm extends Component {
                   </View>
                 </View> */}
 
+                {this.props?.initialValues?.membership && <View style={[styles.dynamicHorizontalPadding(16), styles.withBottomBorder, {paddingBottom: 12}]}>
+                  <View style={styles.sectionTitleContainer}>
+                    <StyledText style={styles.sectionTitleText}>{t('newOrder.membership.title')}</StyledText>
+                  </View>
+                  <View style={[styles.fieldContainer, {justifyContent: 'space-between'}]}>
+                    <View style={[styles.flexButtonSecondAction(this.context)]}>
+                      <StyledText style={[{color: customMainThemeColor, }]}>
+                        {t('newOrder.membership.name')}
+                      </StyledText>
+                    </View>
+                    <View style={[styles.flex(2), {alignItems: 'flex-end'}]}>
+                      <StyledText>
+                        {this.props?.initialValues?.membership.name}
+                      </StyledText>
+                    </View>
+                  </View>
+                  <View style={[styles.fieldContainer, {justifyContent: 'space-between'}]}>
+                    <View style={[styles.flexButtonSecondAction(this.context)]}>
+                      <StyledText style={[{color: customMainThemeColor, }]}>
+                        {t('newOrder.membership.phone')}
+                      </StyledText>
+                    </View>
+                    <View style={[styles.flex(2), {alignItems: 'flex-end'}]}>
+                      <StyledText>
+                        {this.props?.initialValues?.membership.phoneNumber}
+                      </StyledText>
+                    </View>
+                  </View>
+                </View>}
+
                 <View style={styles.sectionContent}>
                   <View style={styles.sectionTitleContainer}>
                     <StyledText style={styles.sectionTitleText}>{t('newOrder.peopleCount')}</StyledText>
@@ -369,6 +399,37 @@ class OrderForm extends Component {
                 </View>
               </View>
             </View>
+
+
+            {this.props?.initialValues?.membership && <View style={[styles.dynamicHorizontalPadding(16), styles.withBottomBorder, {paddingBottom: 12}]}>
+              <View style={styles.sectionTitleContainer}>
+                <StyledText style={styles.sectionTitleText}>{t('newOrder.membership.title')}</StyledText>
+              </View>
+              <View style={[styles.fieldContainer, {justifyContent: 'space-between'}]}>
+                <View style={[styles.flexButtonSecondAction(this.context)]}>
+                  <StyledText style={[{color: customMainThemeColor, paddingVertical: 2}]}>
+                    {t('newOrder.membership.name')}
+                  </StyledText>
+                </View>
+                <View style={[styles.flex(2), {alignItems: 'flex-end'}]}>
+                  <StyledText>
+                    {this.props?.initialValues?.membership.name}
+                  </StyledText>
+                </View>
+              </View>
+              <View style={[styles.fieldContainer, {justifyContent: 'space-between'}]}>
+                <View style={[styles.flexButtonSecondAction(this.context)]}>
+                  <StyledText style={[{color: customMainThemeColor, paddingVertical: 2}]}>
+                    {t('newOrder.membership.phone')}
+                  </StyledText>
+                </View>
+                <View style={[styles.flex(2), {alignItems: 'flex-end'}]}>
+                  <StyledText>
+                    {this.props?.initialValues?.membership.phoneNumber}
+                  </StyledText>
+                </View>
+              </View>
+            </View>}
 
             {this.state.selectedOrderType === 0 && Object.keys(tablesMap).length > 0 && (
               <View style={styles.sectionContent}>

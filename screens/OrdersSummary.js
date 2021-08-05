@@ -36,7 +36,11 @@ class OrdersSummary extends React.Component {
     } = this.props
     const {appType} = this.context
 
-    if (haveError) {
+    if (isLoading) {
+      return (
+        <LoadingScreen />
+      )
+    } else if (haveError) {
       return (
         <BackendErrorScreen />
       )

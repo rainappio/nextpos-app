@@ -8,7 +8,8 @@ import {
   AsyncStorage,
   Dimensions,
   LogBox,
-  Alert
+  Alert,
+  Appearance,
 } from 'react-native';
 if (Platform.OS === "android") {
   // See https://github.com/expo/expo/issues/6536 for this issue.
@@ -179,12 +180,15 @@ export default class App extends React.Component {
       const reverseThemeStyle = theme === 'light' ? {...themes.light, borderColor: 'black'} : themes.light
       const isTablet = await Device.getDeviceTypeAsync();// 1=PHONE 2=TABLET
       this.changeScreenOrientation(isTablet);
+      const colorScheme = Appearance.getColorScheme();
+
       this.setState({
         theme: theme,
         themeStyle: themeStyle,
         reverseThemeStyle: reverseThemeStyle,
         complexTheme: complexTheme[theme],
-        isTablet: (isTablet !== 1)
+        isTablet: (isTablet !== 1),
+        colorScheme: colorScheme
       })
     })
     this.checkCustomTheme()
@@ -455,6 +459,7 @@ export default class App extends React.Component {
               complexTheme: this.state.complexTheme,
               toggleTheme: this.state.toggleTheme,
               isTablet: this.state.isTablet,
+              colorScheme: this.state.colorScheme,
               splitOrderId: this.state?.splitOrderId,
               saveSplitOrderId: this.state.saveSplitOrderId,
               splitParentOrderId: this.state.splitParentOrderId,
