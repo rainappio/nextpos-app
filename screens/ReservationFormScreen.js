@@ -713,7 +713,7 @@ class ReservationFormScreen extends React.Component {
                                 <Field
                                   name="phoneNumber"
                                   component={InputTextComponent}
-                                  onSubmitEditing={(value) =>
+                                  onEndEditing={(value) =>
                                     this.handleSearchMember(value.nativeEvent.text)
                                   }
                                   setFieldToBeFocused={input => {
@@ -776,7 +776,7 @@ class ReservationFormScreen extends React.Component {
                                 <Field
                                   name="name"
                                   component={InputTextComponent}
-                                  onSubmitEditing={() =>
+                                  onEndEditing={() =>
                                     this.noteInput.focus()
                                   }
                                   setFieldToBeFocused={input => {
@@ -1165,7 +1165,7 @@ class ReservationFormScreen extends React.Component {
                             <Field
                               name="phoneNumber"
                               component={InputTextComponent}
-                              onSubmitEditing={(value) =>
+                              onEndEditing={(value) =>
                                 this.handleSearchMember(value.nativeEvent.text)
                               }
                               setFieldToBeFocused={input => {
@@ -1228,7 +1228,7 @@ class ReservationFormScreen extends React.Component {
                             <Field
                               name="name"
                               component={InputTextComponent}
-                              onSubmitEditing={() =>
+                              onEndEditing={() =>
                                 this.noteInput.focus()
                               }
                               setFieldToBeFocused={input => {

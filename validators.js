@@ -57,7 +57,7 @@ export const isTwoBigWords = val => {
     return undefined
 }
 export const isCarrierType = val => {
-  if (!val || !/^\/[0-9A-Z.+-]{7}$/.test(val)) {
+  if (val !== undefined && !/^\/[0-9A-Z.+-]{7}$/.test(val)) {
     return i18n.t('errors.requireCarrierType', {locale: currentLocale})
   }
   else
