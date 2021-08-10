@@ -14,6 +14,7 @@ class InputTextComponent extends React.Component {
                 onBlur,
                 onChange,
                 onSubmitEditing,
+                onEndEditing,
                 onFocus,
                 value,
                 secureTextEntry,
@@ -36,6 +37,7 @@ class InputTextComponent extends React.Component {
                     onBlur={onBlur}
                     onChangeText={onChange}
                     onSubmitEditing={onSubmitEditing}
+                    onEndEditing={onEndEditing}
                     onFocus={onFocus}
                     secureTextEntry={secureTextEntry}
                     keyboardType={keyboardType}
