@@ -744,7 +744,8 @@ const en = {
     drawer: {
       upcoming: 'Upcoming',
       calendar: 'Calendar',
-      settings: 'Settings'
+      settings: 'Settings',
+      exit: 'Exit'
     }
   },
   reservationSetting: {

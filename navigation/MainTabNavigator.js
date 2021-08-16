@@ -137,6 +137,7 @@ const HomeStack = () => {
       <Stack.Screen name="RetailCheckoutComplete" component={RetailCheckoutComplete} />
       <Stack.Screen name="RetailOrdersSummary" component={OrdersSummary} />
       <Stack.Screen name="RetailPaymentOrder" component={PaymentOrder} />
+      <Stack.Screen name="Reservations" component={ReservationDrawer} options={{animationEnabled: false}} />
     </Stack.Navigator>
   );
 }
@@ -362,6 +363,8 @@ function CustomDrawerContent(props) {
             onPress={() => {
               if (route.name == 'ReservationCalendar') {
                 props.navigation.navigate('ReservationCalendar', {screen: 'ReservationCalendarScreen'})
+              } else if (route.name == 'ReservationExit') {
+                props.navigation.navigate('Home', {screen: 'LoginSuccess'})
               } else {
                 props.navigation.navigate(route.name)
               }
@@ -412,6 +415,12 @@ const ReservationDrawer = () => {
           <LabelIcon focused={focused} color={color} name='md-settings' />
         )
       }} />
+      <Drawer.Screen name="ReservationExit" component={HomeStack} options={{
+        drawerLabel: screenProps.t('reservation.drawer.exit'),
+        drawerIcon: ({focused, color}) => (
+          <LabelIcon focused={focused} color={color} name='md-exit-outline' />
+        )
+      }} />
 
 
     </Drawer.Navigator >
@@ -424,7 +433,9 @@ const BottomTab = () => {
   const dimensions = useWindowDimensions();
   const isTablet = dimensions.width >= 768;
 
-  const customHiddenRoutes = ['Payment', 'PaymentOrder', 'CheckoutComplete', 'SpiltBillScreen', 'SplitBillByHeadScreen', 'RetailPayment', 'RetailPaymentOrder', 'RetailCheckoutComplete']
+  const customHiddenRoutes = [
+    'Payment', 'PaymentOrder', 'CheckoutComplete', 'SpiltBillScreen', 'SplitBillByHeadScreen', 'RetailPayment', 'RetailPaymentOrder', 'RetailCheckoutComplete', 'Reservations'
+  ]
 
   const tabBarListeners = ({navigation, route}) => ({
     tabPress: async () => {
@@ -489,9 +500,6 @@ const BottomTab = () => {
         tabBarIcon: (props) => (
           <TabBarIcon focused={props?.focused} name="inventory" onPress={props?.onPress} iconLib={'MaterialIcons'} />)
       }} listeners={tabBarListeners} />}
-      <Tab.Screen name="Reservations" component={ReservationDrawer} options={{
-        tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="clipboard-pencil" iconLib="Foundation" onPress={props?.onPress} />)
-      }} listeners={tabBarListeners} />
       <Tab.Screen name="Rosters" component={RostersStack} showLabel={false} options={{
         tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="calendar-account"
           iconLib="MaterialCommunityIcons"

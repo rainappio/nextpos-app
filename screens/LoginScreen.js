@@ -111,7 +111,7 @@ class LoginScreen extends React.Component {
   Item = (item, rowMap) => {
     return (
       <View key={rowMap} style={[styles.tableRowContainerWithBorder, {paddingHorizontal: 20, backgroundColor: this?.context?.customBackgroundColor}]}>
-        <TouchableOpacity style={[styles.tableCellView]}
+        <TouchableOpacity style={[styles.tableCellView, styles.flex(1)]}
           onPress={() => {
             this.props?.handleLoginUsedAccount(item.clientUsername, item.clientPassword)
             this.setState({modalVisible: false})
