@@ -5,6 +5,7 @@ import {Field, reduxForm} from 'redux-form'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
+import {Foundation} from '@expo/vector-icons';
 import {doLogout, formatDateObj, getAnnouncements, getClientUsr, getCurrentClient, getShiftStatus, getPrinters} from '../actions'
 import styles from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
@@ -419,25 +420,62 @@ class LoginSuccessScreen extends React.Component {
                   } />
               </View>
             }
+            {(isTablet || (!isTablet && shiftStatus !== 'ACTIVE')) &&
+              <View style={[styles.menuContainer, {flex: 1}]}>
+                <MenuButton
+                  route='Reservations'
+                  onPress={() =>
+                    NavigationService?.navigateToRoute('Reservations', {
+                      screen: 'Reservations',
+                    })}
+                  title={t('menu.reservations')}
+                  icon={
+                    <Foundation
+                      name="clipboard-pencil"
+                      size={40}
+                      style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                    />
+                  } />
+              </View>
+            }
           </View>
           {!isTablet && shiftStatus === 'ACTIVE' &&
-            <View style={[styles.menuContainer, {flex: 1}]}>
-              <MenuFlatButton
-                style={{maxHeight: 80}}
-                route='ClockIn'
-                onPress={() =>
-                  NavigationService?.navigateToRoute('ClockIn', {
-                    screen: 'ClockIn',
-                    authClientUserName: username
-                  })}
-                title={t('menu.timecard')}
-                icon={
-                  <FontAwesomeIcon
-                    name="clock-o"
-                    size={32}
-                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
-                  />
-                } />
+            <View style={{flexDirection: 'row'}}>
+              <View style={[styles.menuContainer, {flex: 1}]}>
+                <MenuButton
+                  style={{maxHeight: 80}}
+                  route='ClockIn'
+                  onPress={() =>
+                    NavigationService?.navigateToRoute('ClockIn', {
+                      screen: 'ClockIn',
+                      authClientUserName: username
+                    })}
+                  title={t('menu.timecard')}
+                  icon={
+                    <FontAwesomeIcon
+                      name="clock-o"
+                      size={32}
+                      style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                    />
+                  } />
+              </View>
+              <View style={[styles.menuContainer, {flex: 1}]}>
+                <MenuButton
+                  style={{maxHeight: 80}}
+                  route='Reservations'
+                  onPress={() =>
+                    NavigationService?.navigateToRoute('Reservations', {
+                      screen: 'Reservations',
+                    })}
+                  title={t('menu.reservations')}
+                  icon={
+                    <Foundation
+                      name="clipboard-pencil"
+                      size={40}
+                      style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                    />
+                  } />
+              </View>
             </View>
           }
           <View style={[styles.flex(2), {margin: 10}]}>

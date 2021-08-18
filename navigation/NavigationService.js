@@ -73,6 +73,11 @@ function checkSubscriptionAccess(route, restrictedFeatures) {
         flag = true
       }
     }
+    else if (item === 'reservation') {
+      if (route === 'Reservations') {
+        flag = true
+      }
+    }
     else if (item === 'orderDisplay') {
       if (route === 'OrderDisplayScreen') {
         flag = true

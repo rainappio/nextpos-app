@@ -50,6 +50,7 @@ import {activateKeepAwake, useKeepAwake} from "expo-keep-awake";
 import TimeZoneService from "./helpers/TimeZoneService";
 import {complexTheme, ThemeContext, themes} from "./themes/ThemeContext";
 import {getTheme, storeTheme} from "./helpers/contextHelper";
+import {enableScreens} from 'react-native-screens'
 
 import * as Device from 'expo-device';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -194,6 +195,7 @@ export default class App extends React.Component {
     this.checkCustomTheme()
     this.initSplitOrderId()
     this.initSplitParentOrderId()
+    enableScreens(false);
 
     NavigationService.setTopLevelNavigator(this.navigatorRef);
 

@@ -746,7 +746,8 @@ const zh = {
     drawer: {
       upcoming: '候位',
       calendar: '管理訂位',
-      settings: '設定'
+      settings: '設定',
+      exit: '離開'
     }
   },
   reservationSetting: {
