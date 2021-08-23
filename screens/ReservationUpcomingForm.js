@@ -484,7 +484,7 @@ class ReservationUpcomingForm extends React.Component {
           <View style={[styles.fullWidthScreen, {marginTop: 53 - statusHeight}]}>
             <ScreenHeader
               backNavigation={false}
-              title={t('reservation.reservationTitle')}
+              title={t('reservation.reservationUpcomingTitle')}
               parentFullScreen={true} />
 
 
@@ -1021,11 +1021,12 @@ class ReservationUpcomingForm extends React.Component {
     } else {
       return (
         <ThemeContainer>
-          <View style={styles.fullWidthScreen}>
+          <View style={[styles.fullWidthScreen, {marginTop: 53 - statusHeight}]}>
             <ScreenHeader
               backNavigation={false}
-              title={t('reservation.reservationTitle')}
+              title={t('reservation.reservationUpcomingTitle')}
               parentFullScreen={true}
+              leftMenuIcon={true}
               rightComponent={
                 <View style={{flexDirection: 'row'}}>
                   <TouchableOpacity
@@ -1037,16 +1038,10 @@ class ReservationUpcomingForm extends React.Component {
                       <Icon name="add" size={32} color={customMainThemeColor} />
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => this.props.navigation.toggleDrawer()}
-                  >
-                    <View>
-                      <Icon name="md-menu" size={32} style={styles?.buttonIconStyle(customMainThemeColor)} />
-                    </View>
-                  </TouchableOpacity>
                 </View>
               }
             />
+
             <FullModal
               isVisible={this.state?.showTableModal}
               useNativeDriver

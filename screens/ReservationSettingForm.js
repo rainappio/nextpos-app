@@ -114,21 +114,13 @@ class ReservationSettingForm extends React.Component {
 
     return (
       <ThemeContainer>
-        <View style={[styles.container, {marginTop: 53 - statusHeight}]}>
+        <View style={[styles.container, {marginTop: 53 - statusHeight}, isTablet && styles.horizontalPaddingScreen]}>
           <ScreenHeader title={t('reservationSetting.reservationSettingTitle')}
             backNavigation={false}
             parentFullScreen={true}
-            rightComponent={(!isTablet &&
-              <TouchableOpacity
-                onPress={() => this.props.navigation.toggleDrawer()}
-              >
-                <View>
-                  <Icon name="md-menu" size={32} style={styles?.buttonIconStyle(customMainThemeColor)} />
-                </View>
-              </TouchableOpacity>
-            )}
+            leftMenuIcon={!isTablet}
           />
-          <View style={[styles.flex(4)]}>
+          <View style={[styles.flex(4), {marginTop: 20}]}>
             <ThemeKeyboardAwareScrollView>
 
               <View style={styles.fieldContainer}>
@@ -155,10 +147,10 @@ class ReservationSettingForm extends React.Component {
                 </View>
               </View>
               <View style={styles.fieldContainer}>
-                <View style={[styles.tableCellView, {flex: 2}]}>
+                <View style={[styles.tableCellView, {flex: 1}]}>
                   <StyledText style={styles.fieldTitle}>{t('reservationSetting.durationMinutes')}</StyledText>
                 </View>
-                <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
                   <Field
                     name="durationMinutes"
                     component={InputText}

@@ -26,7 +26,7 @@ class ScreenHeader extends Component {
 
     return (
       <View style={[styles.screenTopContainer, (parentFullScreen && {marginHorizontal: 15}), style, {borderWidth: 0}]}>
-        <View style={leftMenuIcon && {flexDirection: 'row'}, {width: '20%', alignItems: 'flex-start', borderWidth: 0}}>
+        <View style={[{width: '20%', alignItems: 'flex-start', borderWidth: 0}, leftMenuIcon && {flexDirection: 'row'}]}>
           {displayBackButton && (
             <TouchableOpacity
               hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}

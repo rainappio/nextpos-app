@@ -28,11 +28,11 @@ class CloseComplete extends React.Component {
   }
 
   render() {
-    const {t, customMainThemeColor} = this.context
+    const {t, customMainThemeColor, isTablet} = this.context
 
     return (
       <ThemeContainer>
-        <View style={styles.container}>
+        <View style={[styles.container, isTablet && styles.horizontalPaddingScreen]}>
           <ScreenHeader backNavigation={false}
             title={t('closeCompletedTitle')} />
 

@@ -29,7 +29,7 @@ class AccountCloseConfirmForm extends React.Component {
   }
 
   render() {
-    const {t, themeStyle, customMainThemeColor} = this.context
+    const {t, themeStyle, customMainThemeColor, isTablet} = this.context
     const {handleSubmit, mostrecentShift, handleAbortCloseShift} = this.props
 
     const closingShiftReport = {
@@ -74,7 +74,7 @@ class AccountCloseConfirmForm extends React.Component {
 
     return (
       <ThemeKeyboardAwareScrollView>
-        <View style={[styles.container]}>
+        <View style={[styles.container, isTablet && styles.horizontalPaddingScreen]}>
           <ScreenHeader title={t('shift.confirmCloseTitle')} />
 
           <DeleteLineItemLogModal isShow={this.state?.isShow} closeModal={() => this.setState({isShow: false})} data={mostrecentShift} />
