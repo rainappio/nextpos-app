@@ -30,6 +30,7 @@ import en from 'javascript-time-ago/locale/en';
 import moment from 'moment-timezone'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
+import NotificationTask, {schedulePushNotification} from '../components/NotificationTask'
 
 
 class ReservationFormScreen extends React.Component {
@@ -916,13 +917,13 @@ class ReservationFormScreen extends React.Component {
                       </View>
 
                       <View style={[styles.bottom, styles.horizontalMargin]}>
-                        <TouchableOpacity onPress={() => {
-                          handleSaveReservation()
-                        }}>
-                          <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                            {t('action.save')}
-                          </Text>
-                        </TouchableOpacity>
+                        <NotificationTask
+                          buttonText={t('action.save')}
+                          isStyledText={false}
+                          buttonStyles={[]}
+                          textStyles={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}
+                          onPress={() => handleSaveReservation(schedulePushNotification, t, 'CREATE')}
+                        />
 
                         <TouchableOpacity onPress={() => {
                           handleCancel(isEdit)

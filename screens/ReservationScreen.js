@@ -41,7 +41,7 @@ class ReservationScreen extends React.Component {
     this.setState({initialValues: this.props.route?.params?.initialValues ?? null, nextStep: false})
   }
 
-  handleCreateReservation = (isEdit) => {
+  handleCreateReservation = (notificationPush, t, flag) => {
 
     let values = this.state.initialValues
     let request = {
@@ -69,7 +69,9 @@ class ReservationScreen extends React.Component {
         this.handleReset()
         this.props.navigation.navigate('ReservationCalendarScreen')
       }
-    ).then()
+    ).then(() => {
+      notificationPush(request, t, flag)
+    })
   }
 
   handleReset = () => {

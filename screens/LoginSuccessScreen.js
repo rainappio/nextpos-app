@@ -29,6 +29,7 @@ import {CheckBox} from 'react-native-elements'
 import {checkExpoUpdate} from "../helpers/updateAppHelper";
 import {ThemePicker} from "../components/ThemePicker";
 import Constants from 'expo-constants';
+import {registerForPushNotificationsAsync} from '../components/NotificationTask'
 
 
 class LoginSuccessScreen extends React.Component {
@@ -110,6 +111,7 @@ class LoginSuccessScreen extends React.Component {
     this.props.getCurrentUser(token.username)
     this.props.getAnnouncements()
     this.props.getShiftStatus()
+    registerForPushNotificationsAsync()
     console.log('token', JSON.stringify(token))
 
     this.setState({
