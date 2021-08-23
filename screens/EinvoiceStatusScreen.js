@@ -209,7 +209,7 @@ class EinvoiceStatusScreen extends React.Component {
                         parentFullScreen={true}
 
                     />
-                    <View style={[styles.container, {justifyContent: 'space-around'}]}>
+                    <View style={[styles.container, {justifyContent: 'space-around', marginBottom: 0}]}>
                         <View style={{marginBottom: 16}}>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 8}}>
                                 <View style={{flexDirection: 'row'}}>
@@ -330,15 +330,15 @@ class EinvoiceStatusScreen extends React.Component {
                                 </ThemeScrollView>
                             </View>
                         </Modal>
-                        <View style={{flex: 1, justifyContent: 'flex-end'}}>
+                        <View style={[styles.bottom]}>
 
-                            <View style={{flex: 1}}>
-                                <BottomMainActionButton title={t('eInvoice.viewCancellableInvoice')} onPress={() => this.setState({modalVisible: true})} />
-                            </View>
-                            <View style={{flex: 1}}>
-                                <BottomMainActionButton title={t('eInvoice.viewAllInvoice')} onPress={() => {
-                                    this.props.navigation.navigate('EinvoiceSettingScreen')
-                                }} />
+                            <View style={{flex: 1, justifyContent: 'space-evenly'}}>
+                                <MainActionButton
+                                    title={t('eInvoice.viewCancellableInvoice')} onPress={() => this.setState({modalVisible: true})} />
+                                <MainActionButton
+                                    title={t('eInvoice.viewAllInvoice')} onPress={() => {
+                                        this.props.navigation.navigate('EinvoiceSettingScreen')
+                                    }} />
                             </View>
                         </View>
                     </View>

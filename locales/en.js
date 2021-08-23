@@ -690,7 +690,8 @@ const en = {
   reservation: {
     reservationTitle: 'Reservation',
     reservationViewTitle: 'Reservation Info',
-    reservationCalendarTitle: 'Reservation Events',
+    reservationCalendarTitle: 'Calendar',
+    reservationUpcomingTitle: 'Upcoming',
     date: 'Reservation Date',
     time: 'Reservation Time',
     timeBlock: {
@@ -725,6 +726,8 @@ const en = {
     },
     sendNotification: 'Send SMS',
     sendActionContext: 'Send confirm notification to phone: {{phoneNumber}} ?',
+    createNotificationContext: 'Created new reservation.',
+    cancelNotificationContext: 'Reservation was cancelled.',
     cancelActionContext: 'Cancel changes and return to reservation events list?',
     cancelEditActionContext: 'Discard changes and return to reservation info?',
     deleteActionContext: 'Confirm to delete this reservation?',

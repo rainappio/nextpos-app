@@ -66,7 +66,7 @@ class ShiftClose extends React.Component {
 
   render() {
     const {loading, shift, haveData, mostRecentShift} = this.props
-    const {t, customMainThemeColor} = this.context
+    const {t, customMainThemeColor, isTablet} = this.context
 
     if (loading) {
       return (
@@ -86,7 +86,7 @@ class ShiftClose extends React.Component {
     else {
       return (
         <ThemeContainer>
-          <View style={[styles.fullWidthScreen]}>
+          <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
             <ScreenHeader parentFullScreen={true}
               title={t('shift.shiftTitle')} />
 

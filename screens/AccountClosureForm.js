@@ -22,7 +22,7 @@ class AccountClosureForm extends React.Component {
   }
 
   render() {
-    const {t, customMainThemeColor} = this.context
+    const {t, customMainThemeColor, isTablet} = this.context
     const {mostrecentShift, handleSubmit} = this.props
 
     let allPaymentMethod = []
@@ -36,7 +36,7 @@ class AccountClosureForm extends React.Component {
 
     return (
       <ThemeKeyboardAwareScrollView>
-        <View style={[styles.container]}>
+        <View style={[styles.container, isTablet && styles.horizontalPaddingScreen]}>
           <ScreenHeader title={t('shift.accountCloseTitle')} />
 
           <View>

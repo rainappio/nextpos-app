@@ -436,15 +436,7 @@ class ReservationViewForm extends React.Component {
                 backAction={() => {
                   navigation.navigate('ReservationCalendarScreen')
                 }}
-                rightComponent={
-                  <TouchableOpacity
-                    onPress={() => this.props.navigation.toggleDrawer()}
-                  >
-                    <View>
-                      <Ionicons name="md-menu" size={32} style={styles?.buttonIconStyle(customMainThemeColor)} />
-                    </View>
-                  </TouchableOpacity>
-                }
+                leftMenuIcon={true}
                 title={t('reservation.reservationViewTitle')}
                 parentFullScreen={true} />
 

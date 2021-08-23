@@ -692,7 +692,8 @@ const zh = {
   reservation: {
     reservationTitle: '訂位',
     reservationViewTitle: '訂位資訊',
-    reservationCalendarTitle: '訂位管理',
+    reservationCalendarTitle: '管理訂位',
+    reservationUpcomingTitle: '候位',
     date: '預約日期',
     time: '預約時間',
     timeBlock: {
@@ -727,6 +728,8 @@ const zh = {
     },
     sendNotification: '寄送簡訊',
     sendActionContext: '是否發送訂位簡訊至客人的手機: {{phoneNumber}} ?',
+    createNotificationContext: '已新增訂位',
+    cancelNotificationContext: '訂位已取消',
     cancelActionContext: '是否取消訂位，並返回訂位管理列表？',
     cancelEditActionContext: '是否放棄已編輯的欄位，並返回訂位資訊頁？',
     deleteActionContext: '是否要刪除此筆訂位資料？',
@@ -751,7 +754,7 @@ const zh = {
     }
   },
   reservationSetting: {
-    reservationSettingTitle: '訂位設定',
+    reservationSettingTitle: '設定',
     webLink: '線上訂位連結',
     linkShareSuccess: '線上連結分享成功',
     linkShareFailed: '線上連結分享失敗',
