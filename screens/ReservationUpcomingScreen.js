@@ -9,6 +9,7 @@ import {connect} from 'react-redux'
 import moment from 'moment-timezone'
 import LoadingScreen from "./LoadingScreen";
 import {FocusAwareStatusBar, statusHeight} from '../components/FocusAwareStatusBar'
+import {schedulePushNotification} from '../components/NotificationTask'
 
 
 class ReservationUpcomingScreen extends React.Component {
@@ -60,7 +61,9 @@ class ReservationUpcomingScreen extends React.Component {
         this.setState({loading: false})
 
       }
-    ).then()
+    ).then(() => {
+      schedulePushNotification(request, this.context.t, 'CREATE')
+    })
   }
 
 

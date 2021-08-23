@@ -7,7 +7,7 @@ import {StyledText} from "../components/StyledText";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import ScreenHeader from "../components/ScreenHeader";
 import {connect} from 'react-redux'
-
+import NotificationTask, {schedulePushNotification} from '../components/NotificationTask'
 
 class ReservationConfirmScreen extends React.Component {
   static navigationOptions = {
@@ -104,13 +104,13 @@ class ReservationConfirmScreen extends React.Component {
             </View>
 
             <View style={[styles.bottom, styles.horizontalMargin]}>
-              <TouchableOpacity onPress={() => {
-                this.props.route.params?.handleSaveReservation(this.props.route.params?.isEdit)
-              }}>
-                <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                  {t('action.save')}
-                </Text>
-              </TouchableOpacity>
+              <NotificationTask
+                buttonText={t('action.save')}
+                isStyledText={false}
+                buttonStyles={[]}
+                textStyles={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}
+                onPress={() => this.props.route.params?.handleSaveReservation(schedulePushNotification, t, 'CREATE')}
+              />
 
 
               <TouchableOpacity onPress={() => {

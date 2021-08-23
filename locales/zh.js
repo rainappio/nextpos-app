@@ -727,6 +727,8 @@ const zh = {
     },
     sendNotification: '寄送簡訊',
     sendActionContext: '是否發送訂位簡訊至客人的手機: {{phoneNumber}} ?',
+    createNotificationContext: '已新增訂位',
+    cancelNotificationContext: '訂位已取消',
     cancelActionContext: '是否取消訂位，並返回訂位管理列表？',
     cancelEditActionContext: '是否放棄已編輯的欄位，並返回訂位資訊頁？',
     deleteActionContext: '是否要刪除此筆訂位資料？',

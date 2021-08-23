@@ -4,7 +4,7 @@ import {Keyboard, Text, TouchableOpacity, View, FlatList, Dimensions, Alert, Ani
 import {connect} from 'react-redux'
 import {compose} from "redux";
 import {withContext} from "../helpers/contextHelper";
-import {getTableLayouts, getReservation} from '../actions'
+import {getTableLayouts, getReservation, normalizeTimeString} from '../actions'
 import {getInitialTablePosition, getTablePosition, getSetPosition} from "../helpers/tableAction";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -20,6 +20,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {FocusAwareStatusBar, statusHeight} from '../components/FocusAwareStatusBar'
+import NotificationTask, {schedulePushNotification} from '../components/NotificationTask'
 
 class ReservationViewForm extends React.Component {
   static navigationOptions = {
@@ -98,7 +99,7 @@ class ReservationViewForm extends React.Component {
     )
   }
 
-  handleDeleteReservation = (id) => {
+  handleDeleteReservation = (reservation, notificationPush, t, flag) => {
     Alert.alert(
       ``,
       `${this.context.t('reservation.deleteActionContext')}`,
@@ -107,7 +108,7 @@ class ReservationViewForm extends React.Component {
           text: `${this.context.t('action.yes')}`,
           onPress: () => {
             dispatchFetchRequestWithOption(
-              api.reservation.update(id),
+              api.reservation.update(reservation.id),
               {
                 method: 'DELETE',
                 withCredentials: true,
@@ -118,7 +119,9 @@ class ReservationViewForm extends React.Component {
                 this.props.navigation.navigate('ReservationCalendarScreen')
 
               }
-            ).then()
+            ).then(() => {
+              notificationPush(reservation, t, flag)
+            })
           }
         },
         {
@@ -301,7 +304,7 @@ class ReservationViewForm extends React.Component {
                             <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.date')}</StyledText>
                           </View>
                           <View style={[styles.tableCellView, styles.justifyRight]}>
-                            <StyledText style={[styles.reservationFormContainer]}>{moment(reservation?.reservationStartDate).format('YYYY-MM-DD')}</StyledText>
+                            <StyledText style={[styles.reservationFormContainer]}>{normalizeTimeString(reservation?.reservationStartDate, 'YYYY-MM-DD')}</StyledText>
                           </View>
                         </View>
                         <View style={[styles.tableRowContainerWithBorder]}>
@@ -309,7 +312,7 @@ class ReservationViewForm extends React.Component {
                             <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.time')}</StyledText>
                           </View>
                           <View style={[styles.tableCellView, styles.justifyRight]}>
-                            <StyledText style={[styles.reservationFormContainer]}>{moment(reservation?.reservationStartDate).format('HH:mm')}</StyledText>
+                            <StyledText style={[styles.reservationFormContainer]}>{normalizeTimeString(reservation?.reservationStartDate, 'HH:mm')}</StyledText>
                           </View>
                         </View>
 
@@ -404,15 +407,14 @@ class ReservationViewForm extends React.Component {
                           }
 
                           {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
-                            <TouchableOpacity onPress={() => {
-                              this.handleDeleteReservation(reservation.id)
-                            }}>
-                              <Text
-                                style={[styles?.bottomActionButton(customMainThemeColor), styles.deleteButton]}
-                              >
-                                {t('reservation.cancelReservation')}
-                              </Text>
-                            </TouchableOpacity>
+
+                            <NotificationTask
+                              buttonText={t('reservation.actionTip.cancel')}
+                              buttonStyles={[]}
+                              isStyledText={false}
+                              textStyles={[styles?.bottomActionButton(customMainThemeColor), styles.deleteButton]}
+                              onPress={() => this.handleDeleteReservation(reservation, schedulePushNotification, t, 'DELETE')}
+                            />
                           }
                         </View>
                       </>
@@ -448,6 +450,7 @@ class ReservationViewForm extends React.Component {
                 title={t('reservation.reservationViewTitle')}
                 parentFullScreen={true} />
 
+
               <ThemeKeyboardAwareScrollView>
                 {!!reservation &&
                   <>
@@ -456,7 +459,7 @@ class ReservationViewForm extends React.Component {
                         <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.date')}</StyledText>
                       </View>
                       <View style={[styles.tableCellView, styles.justifyRight]}>
-                        <StyledText style={[styles.reservationFormContainer]}>{moment(reservation?.reservationStartDate).format('YYYY-MM-DD')}</StyledText>
+                        <StyledText style={[styles.reservationFormContainer]}>{normalizeTimeString(reservation?.reservationStartDate, 'YYYY-MM-DD')}</StyledText>
                       </View>
                     </View>
                     <View style={[styles.tableRowContainerWithBorder]}>
@@ -464,7 +467,7 @@ class ReservationViewForm extends React.Component {
                         <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.time')}</StyledText>
                       </View>
                       <View style={[styles.tableCellView, styles.justifyRight]}>
-                        <StyledText style={[styles.reservationFormContainer]}>{moment(reservation?.reservationStartDate).format('HH:mm')}</StyledText>
+                        <StyledText style={[styles.reservationFormContainer]}>{normalizeTimeString(reservation?.reservationStartDate, 'HH:mm')}</StyledText>
                       </View>
                     </View>
 
@@ -555,15 +558,13 @@ class ReservationViewForm extends React.Component {
                       </TouchableOpacity>}
 
                       {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
-                        <TouchableOpacity onPress={() => {
-                          this.handleDeleteReservation(reservation.id)
-                        }}>
-                          <Text
-                            style={[styles?.bottomActionButton(customMainThemeColor), styles.deleteButton]}
-                          >
-                            {t('reservation.cancelReservation')}
-                          </Text>
-                        </TouchableOpacity>
+                        <NotificationTask
+                          buttonText={t('reservation.actionTip.cancel')}
+                          buttonStyles={[]}
+                          isStyledText={false}
+                          textStyles={[styles?.bottomActionButton(customMainThemeColor), styles.deleteButton]}
+                          onPress={() => this.handleDeleteReservation(reservation, schedulePushNotification, t, 'DELETE')}
+                        />
                       }
 
                     </View>

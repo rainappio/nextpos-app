@@ -35,7 +35,7 @@ class ReservationEditScreen extends React.Component {
     this._getReservation()
   }
 
-  handleUpdateReservation = () => {
+  handleUpdateReservation = (notificationPush, t, flag) => {
 
     let values = this.state.initialValues
     let request = {
@@ -65,9 +65,9 @@ class ReservationEditScreen extends React.Component {
         this.handleReset()
         this.props.navigation.navigate('ReservationCalendarScreen')
       }
-    ).then(
-
-    )
+    ).then(() => {
+      notificationPush(request, t, flag)
+    })
   }
 
   handleReset = () => {

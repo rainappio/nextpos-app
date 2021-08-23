@@ -6,6 +6,7 @@ import {Accordion, List} from '@ant-design/react-native'
 import {ListItem, CheckBox, Button, Tooltip} from "react-native-elements";
 import {connect} from 'react-redux'
 import {compose} from "redux";
+import {normalizeTimeString} from '../actions'
 import {withContext} from "../helpers/contextHelper";
 import {isRequired, isNDigitsNumber} from '../validators'
 import InputText from '../components/InputText'
@@ -26,7 +27,8 @@ import moment from 'moment-timezone'
 import Icon from 'react-native-vector-icons/Ionicons'
 import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
-import {timezone} from 'expo-localization';
+import NotificationTask, {schedulePushNotification} from '../components/NotificationTask'
+
 
 
 class ReservationUpcomingForm extends React.Component {
@@ -227,7 +229,7 @@ class ReservationUpcomingForm extends React.Component {
     )
   }
 
-  handleCancel = (id) => {
+  handleCancel = (reservation, notificationPush, t, flag) => {
     Alert.alert(
       ``,
       `${this.context.t('reservation.deleteActionContext')}`,
@@ -236,7 +238,7 @@ class ReservationUpcomingForm extends React.Component {
           text: `${this.context.t('action.yes')}`,
           onPress: () => {
             dispatchFetchRequestWithOption(
-              api.reservation.update(id),
+              api.reservation.update(reservation.id),
               {
                 method: 'DELETE',
                 withCredentials: true,
@@ -246,11 +248,12 @@ class ReservationUpcomingForm extends React.Component {
               response => {
 
               }
-            ).then(
+            ).then(() => {
+              notificationPush(reservation, t, flag)
               setTimeout(() => {
                 this.refreshScreen()
               }, 300)
-            )
+            })
           }
         },
         {
@@ -270,7 +273,7 @@ class ReservationUpcomingForm extends React.Component {
   }
   handleCheckAvailableTables = (id, time) => {
 
-    let checkDate = moment(time).format('YYYY-MM-DDTHH:mm:ss')
+    let checkDate = normalizeTimeString(time, 'YYYY-MM-DDTHH:mm:ss')
 
     console.log("check date", checkDate)
     dispatchFetchRequestWithOption(api.reservation.getAvailableTables(checkDate, id), {
@@ -375,7 +378,7 @@ class ReservationUpcomingForm extends React.Component {
 
   handleUpdateReservation = (values) => {
     let request = {
-      reservationDate: moment(values.reservationStartDate).format('YYYY-MM-DDTHH:mm:ss'),
+      reservationDate: normalizeTimeString(values.reservationStartDate, 'YYYY-MM-DDTHH:mm:ss'),
       name: values.name,
       phoneNumber: values.phoneNumber,
       tableIds: this.state.selectedTableIds,
@@ -797,13 +800,13 @@ class ReservationUpcomingForm extends React.Component {
                       </View>
 
                       <View>
-                        <TouchableOpacity onPress={(values) => {
-                          handleSubmit(values)
-                        }}>
-                          <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                            {t('action.save')}
-                          </Text>
-                        </TouchableOpacity>
+                        <NotificationTask
+                          buttonText={t('action.save')}
+                          isStyledText={false}
+                          buttonStyles={[]}
+                          textStyles={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}
+                          onPress={(values) => handleSubmit(values)}
+                        />
                       </View>
 
                     </View>
@@ -856,7 +859,7 @@ class ReservationUpcomingForm extends React.Component {
 
                             <View style={[styles.flex(1), {justifyContent: 'center'}]}>
                               <StyledText>
-                                {moment(event?.reservationStartDate).tz(timezone).format('HH:mm')}
+                                {normalizeTimeString(event?.reservationStartDate, 'HH:mm')}
                               </StyledText>
                             </View>
                             <View style={[styles.flex(0.5), {justifyContent: 'center'}]}>
@@ -924,9 +927,13 @@ class ReservationUpcomingForm extends React.Component {
                                     style={[styles.flexButton(customMainThemeColor), {margin: 4, paddingVertical: 2}]}>
                                     <StyledText style={[styles.flexButtonText]}>{t('reservation.actionTip.delay')}</StyledText>
                                   </TouchableOpacity>
-                                  <TouchableOpacity onPress={() => this.handleCancel(event.id)} style={[styles.flexButton(customMainThemeColor), {margin: 4, paddingVertical: 2}]}>
-                                    <StyledText style={[styles.flexButtonText]}>{t('reservation.actionTip.cancel')}</StyledText>
-                                  </TouchableOpacity>
+                                  <NotificationTask
+                                    buttonText={t('reservation.actionTip.cancel')}
+                                    isStyledText={true}
+                                    buttonStyles={[styles.flexButton(customMainThemeColor), {margin: 4, paddingVertical: 2}]}
+                                    textStyles={[styles.flexButtonText]}
+                                    onPress={() => this.handleCancel(event, schedulePushNotification, t, 'DELETE')}
+                                  />
                                 </View>
                               }
                             </View>
@@ -973,7 +980,7 @@ class ReservationUpcomingForm extends React.Component {
                             </View>
                             <View style={[styles.flex(1), {justifyContent: 'center'}]}>
                               <StyledText>
-                                {moment(event?.reservationStartDate).tz(timezone).format('HH:mm')}
+                                {normalizeTimeString(event?.reservationStartDate, 'HH:mm')}
                               </StyledText>
                             </View>
                             <View style={[styles.flex(0.5), {justifyContent: 'center', flexDirection: 'row'}]}>
@@ -1342,13 +1349,13 @@ class ReservationUpcomingForm extends React.Component {
                     </View>
 
                     <View>
-                      <TouchableOpacity onPress={(values) => {
-                        handleSubmit(values)
-                      }}>
-                        <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                          {t('action.save')}
-                        </Text>
-                      </TouchableOpacity>
+                      <NotificationTask
+                        buttonText={t('action.save')}
+                        isStyledText={false}
+                        buttonStyles={[]}
+                        textStyles={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}
+                        onPress={(values) => handleSubmit(values)}
+                      />
                     </View>
 
                   </View>
@@ -1432,7 +1439,7 @@ class ReservationUpcomingForm extends React.Component {
 
                           <View style={[styles.flex(0.9), {justifyContent: 'center'}]}>
                             <StyledText>
-                              {moment(event?.reservationStartDate).tz(timezone).format('HH:mm')}
+                              {normalizeTimeString(event?.reservationStartDate, 'HH:mm')}
                             </StyledText>
                           </View>
                           <View style={[styles.flex(0.6), {justifyContent: 'center'}]}>
@@ -1490,9 +1497,13 @@ class ReservationUpcomingForm extends React.Component {
                                   style={[styles.flexButton(customMainThemeColor), {marginBottom: 8, paddingVertical: 2}]}>
                                   <StyledText style={[styles.flexButtonText]}>{t('reservation.actionTip.delay')}</StyledText>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.handleCancel(event.id)} style={[styles.flexButton(customMainThemeColor), {marginBottom: 0, paddingVertical: 2}]}>
-                                  <StyledText style={[styles.flexButtonText]}>{t('reservation.actionTip.cancel')}</StyledText>
-                                </TouchableOpacity>
+                                <NotificationTask
+                                  buttonText={t('reservation.actionTip.cancel')}
+                                  isStyledText={true}
+                                  buttonStyles={[styles.flexButton(customMainThemeColor), {paddingVertical: 2}]}
+                                  textStyles={[styles.flexButtonText]}
+                                  onPress={() => this.handleCancel(event, schedulePushNotification, t, 'DELETE')}
+                                />
                               </>}
                           </View>
                         </View>
@@ -1535,7 +1546,7 @@ class ReservationUpcomingForm extends React.Component {
                           </View>
                           <View style={[styles.flex(1.2), {justifyContent: 'flex-end'}]}>
                             <StyledText>
-                              {moment(event?.reservationStartDate).tz(timezone).format('HH:mm')}
+                              {normalizeTimeString(event?.reservationStartDate, 'HH:mm')}
                             </StyledText>
                           </View>
                           <View style={[styles.flex(0.8), {textAlign: 'center', flexDirection: 'row'}]}>

@@ -608,6 +608,10 @@ export const api = {
     },
     settings: `${apiRoot}/reservationSettings/me`
   },
+  notification: {
+    update: `${apiRoot}/pushNotifications/me`,
+    get: `${apiRoot}/pushNotifications/me`,
+  },
   membership: {
     get: (id) => {
       return `${apiRoot}/memberships/${id}`
