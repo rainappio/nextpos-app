@@ -842,17 +842,18 @@ class ReservationEventBase extends Component {
 
                                 </View>
                             </TouchableOpacity>
-                            <View style={{flex: 2, alignItems: 'center', borderRightWidth: 1, paddingVertical: 10, borderColor: '#e7e7e7'}}>
-                                <StyledText>00-08</StyledText>
-                            </View>
-                            <View style={{flex: 2, alignItems: 'center', borderRightWidth: 1, paddingVertical: 10, borderColor: '#e7e7e7'}}>
-                                <StyledText>08-16</StyledText>
-                            </View>
 
-                            <View style={{flex: 2, alignItems: 'center', paddingVertical: 10, borderColor: '#e7e7e7'}}>
-                                <StyledText>16-24</StyledText>
+                            <View style={[styles.flex(8), {flexDirection: 'row'}]}>
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24].map((num, index) => {
+                                    return (
+                                        <View key={index} style={{flex: 1, alignItems: 'center', borderRightWidth: 1, paddingVertical: 10, borderColor: '#e7e7e7'}}>
+                                            <StyledText>{num}</StyledText>
+                                        </View>
+                                    )
+                                })}
                             </View>
                         </View>
+
                         <View style={{flex: 1, marginTop: 8}}>
                             {this.state.isBookedMode ?
                                 <>
@@ -877,13 +878,12 @@ class ReservationEventBase extends Component {
 
 
                                                             <View style={{flex: 7}}>
-
                                                                 {!!dayEvents && dayEvents.map((event) => {
                                                                     let startAt = new Date(moment(event?.reservationStartDate).tz(timezone)).getTime()
                                                                     let endAt = new Date(moment(event?.reservationEndDate).tz(timezone)).getTime()
                                                                     let startDuration = (startAt - todayStart) / 86400000
                                                                     let endDuration = (todayEnd - endAt) / 86400000
-                                                                    let widthDuration = (endAt - startAt) / 86400000
+                                                                    let widthDuration = ((endAt - startAt) / 86400000) > 0.065 ? ((endAt - startAt) / 86400000) : 0.065
 
                                                                     let statusColor = event.status === 'BOOKED' ? '#006B35' : event.status === 'CONFIRMED' ? '#F18D1A' : '#F75336'
 
@@ -908,7 +908,7 @@ class ReservationEventBase extends Component {
                                                                                 }}
                                                                                 key={event.id} style={{
                                                                                     position: 'absolute', borderWidth: 1,
-                                                                                    flex: 1, borderColor: customBackgroundColor, backgroundColor: statusColor, height: 72, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (4 * ((layoutIndex + 1) * (tableIndex + 1)) - (tableIndex * 4) + 0), overflow: 'hidden', borderRadius: 12, paddingHorizontal: 4, justifyContent: 'center', zIndex: 9
+                                                                                    flex: 1, borderColor: customBackgroundColor, backgroundColor: statusColor, height: 72, left: `${100 * startDuration + 2}%`, width: `${100 * widthDuration}%`, top: (4 * ((layoutIndex + 1) * (tableIndex + 1)) - (tableIndex * 4) - ((layoutIndex * tableIndex) * 2)), overflow: 'hidden', borderRadius: 12, paddingHorizontal: 4, justifyContent: 'center', zIndex: 9
                                                                                 }}
 
                                                                             >
@@ -948,52 +948,57 @@ class ReservationEventBase extends Component {
                                 </>
                                 :
                                 <>
-                                    {!!dayEvents && dayEvents.map((event, eventIndex) => {
-                                        let startAt = new Date(moment(event?.reservationStartDate).tz(timezone)).getTime()
-                                        let endAt = new Date(moment(event?.reservationEndDate).tz(timezone)).getTime()
-                                        let startDuration = (startAt - todayStart) / 86400000
-                                        let endDuration = (todayEnd - endAt) / 86400000
-                                        let widthDuration = (endAt - startAt) / 86400000
+                                    <View style={[{flex: 1, flexDirection: 'row'}]}>
+                                        <View style={[{flex: 1, padding: 12}]}></View>
+                                        <View style={[{flex: 8}]}>
 
-                                        let eventHour = moment(event.reservationStartDate).tz(timezone).format('HH')
-                                        let eventMins = moment(event.reservationStartDate).tz(timezone).format('mm')
 
-                                        let statusColor = event.status === 'WAITING' ? '#006B35' : '#f75336'
+                                            {!!dayEvents && dayEvents.map((event, eventIndex) => {
+                                                let startAt = new Date(moment(event?.reservationStartDate).tz(timezone)).getTime()
+                                                let endAt = new Date(moment(event?.reservationEndDate).tz(timezone)).getTime()
+                                                let startDuration = (startAt - todayStart) / 86400000
+                                                let endDuration = (todayEnd - endAt) / 86400000
+                                                let widthDuration = ((endAt - startAt) / 86400000) > 0.07 ? ((endAt - startAt) / 86400000) : 0.07
 
-                                        return (
-                                            <TouchableOpacity
-                                                onPress={() => {
-                                                    this.props.navigation.navigate('ReservationViewScreen', {
-                                                        reservationId: event.id
-                                                    })
+                                                let eventHour = moment(event.reservationStartDate).tz(timezone).format('HH')
+                                                let eventMins = moment(event.reservationStartDate).tz(timezone).format('mm')
 
-                                                }}
-                                                key={eventIndex} style={{position: 'absolute', borderWidth: 1, borderColor: statusColor, backgroundColor: customBackgroundColor, height: 72, left: `${100 * startDuration}%`, width: `${100 * widthDuration}%`, top: (72 * (eventIndex) + ((eventIndex + 1) * 2)), overflow: 'hidden', borderRadius: 12, paddingHorizontal: 4, justifyContent: 'center', zIndex: 9}}
+                                                let statusColor = event.status === 'WAITING' ? '#006B35' : '#f75336'
 
-                                            >
-                                                <View style={{flex: 1, flexDirection: 'row'}}>
-                                                    <StyledText style={{color: statusColor}}>{event?.name}
-                                                    </StyledText>
-                                                </View>
-                                                <View style={{flex: 1, justifyContent: 'center'}}>
-                                                    <StyledText style={{color: statusColor}}>{moment(event?.reservationStartDate).tz(timezone).format("HH:mm")}
-                                                    </StyledText>
-                                                </View>
-                                                <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                                    <Ionicons name={'ios-people'} color={statusColor} size={16} />
-                                                    <StyledText style={{color: statusColor, marginLeft: 4}}>
-                                                        {event.people + event.kid}</StyledText>
-                                                    <View style={{flex: 1, justifyContent: 'flex-end'}}>
-                                                        <MCIcon name={event?.sourceOfOrigin == 'APP' ? 'tablet-cellphone' : 'web'} color={statusColor} size={16} /></View>
-                                                </View>
-                                            </TouchableOpacity>
-                                        )
-                                    })}
+                                                return (
+                                                    <TouchableOpacity
+                                                        onPress={() => {
+                                                            this.props.navigation.navigate('ReservationViewScreen', {
+                                                                reservationId: event.id
+                                                            })
+
+                                                        }}
+                                                        key={eventIndex} style={{position: 'absolute', borderWidth: 1, borderColor: statusColor, backgroundColor: customBackgroundColor, height: 72, left: `${100 * startDuration + 2}%`, width: `${100 * widthDuration}%`, top: (72 * (eventIndex) + ((eventIndex + 1) * 2)), overflow: 'hidden', borderRadius: 12, paddingHorizontal: 4, justifyContent: 'center', zIndex: 9}}
+
+                                                    >
+                                                        <View style={{flex: 1, flexDirection: 'row'}}>
+                                                            <StyledText style={{color: statusColor}}>{event?.name}
+                                                            </StyledText>
+                                                        </View>
+                                                        <View style={{flex: 1, justifyContent: 'center'}}>
+                                                            <StyledText style={{color: statusColor}}>{moment(event?.reservationStartDate).tz(timezone).format("HH:mm")}
+                                                            </StyledText>
+                                                        </View>
+                                                        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                                                            <Ionicons name={'ios-people'} color={statusColor} size={16} />
+                                                            <StyledText style={{color: statusColor, marginLeft: 4}}>
+                                                                {event.people + event.kid}</StyledText>
+                                                            <View style={{flex: 1, justifyContent: 'flex-end'}}>
+                                                                <MCIcon name={event?.sourceOfOrigin == 'APP' ? 'tablet-cellphone' : 'web'} color={statusColor} size={16} /></View>
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                )
+                                            })}
+                                        </View>
+                                    </View>
                                 </>
                             }
                         </View>
-
-
 
                     </View>
                 </ScrollView>

@@ -285,7 +285,7 @@ class OrderForm extends Component {
                     </View>
                     {noAvailableTables && (
                       <View style={styles.sectionContent}>
-                        <StyledText>{t('noAvailableTables')}</StyledText>
+                        <StyledText>{t('newOrder.noAvailableTables')}</StyledText>
                       </View>
                     )}
 

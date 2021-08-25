@@ -1,6 +1,6 @@
 import React from 'react'
 import {LocaleContext} from "../locales/LocaleContext";
-import {getTableLayouts, getTablesAvailable, getCurrentClient, getReservationSettings} from '../actions'
+import {getTableLayouts, getTablesAvailable, getCurrentClient, getReservationSettings, getShiftStatus} from '../actions'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {ThemeContainer} from "../components/ThemeContainer";
 import {connect} from 'react-redux'
@@ -22,6 +22,7 @@ class ReservationSetting extends React.Component {
     this.props.getTableLayouts()
     this.props.getAvailableTables()
     this.props.getReservationSettings()
+    this.props.getShiftStatus()
     this._getReservationSettings = this.props.navigation.addListener('focus', () => {
       this.props.getReservationSettings()
 
@@ -57,6 +58,7 @@ class ReservationSetting extends React.Component {
       tablelayouts,
       availableTables,
       reservationSettings,
+      shiftStatus
     } = this.props
     const {t, isTablet, themeStyle, customMainThemeColor, customBackgroundColor} = this.context
 
@@ -77,6 +79,7 @@ class ReservationSetting extends React.Component {
             route={route}
             tablelayouts={tablelayouts}
             availableTables={availableTables}
+            shiftStatus={shiftStatus}
           />
         </ThemeContainer>
       )
@@ -92,12 +95,14 @@ const mapStateToProps = state => ({
   reservationSettings: state.reservationSettings.data,
   tablelayouts: state.tablelayouts.data.tableLayouts,
   availableTables: state.tablesavailable.data.availableTables,
+  shiftStatus: state.shift.data.shiftStatus,
 })
 
 const mapDispatchToProps = dispatch => ({
   getAvailableTables: () => dispatch(getTablesAvailable()),
   getReservationSettings: () => dispatch(getReservationSettings()),
   getTableLayouts: () => dispatch(getTableLayouts()),
+  getShiftStatus: () => dispatch(getShiftStatus()),
 })
 
 export default connect(

@@ -104,7 +104,7 @@ class AccountCloseConfirmForm extends React.Component {
 
         {!!allPaymentMethod && (allPaymentMethod).map(([key, value]) => {
           return (
-            <View style={styles.tableRowContainerWithBorder}>
+            <View key={key} style={styles.tableRowContainerWithBorder}>
               <View style={{flex: 3}}>
                 <StyledText style={[styles.fieldTitle]}>
                   {t(`settings.paymentMethods.${key}`)}

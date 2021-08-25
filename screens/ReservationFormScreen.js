@@ -9,7 +9,7 @@ import {withContext} from "../helpers/contextHelper";
 import {isRequired, isNDigitsNumber} from '../validators'
 import InputText from '../components/InputText'
 import InputTextComponent from '../components/InputTextComponent'
-import {getTableLayouts, getTablesAvailable, getTableLayout, getfetchOrderInflights} from '../actions'
+import {getTableLayouts, getTablesAvailable, getTableLayout, getfetchOrderInflights, getShiftStatus} from '../actions'
 import {getInitialTablePosition, getTablePosition, getSetPosition} from "../helpers/tableAction";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -86,6 +86,7 @@ class ReservationFormScreen extends React.Component {
     this.props.getTableLayouts()
     this.props.getfetchOrderInflights()
     this.props.getAvailableTables()
+    this.props.getShiftStatus()
     this._resetForm = this.props.navigation.addListener('focus', () => {
       if (!this.props.isEdit && !this.props.nextStep) {
         this.handleResetForm()
@@ -441,7 +442,8 @@ class ReservationFormScreen extends React.Component {
       handleSubmit,
       handleCancel,
       handleSaveReservation,
-      statusHeight
+      statusHeight,
+      shiftStatus
     } = this.props
 
     const {t, customMainThemeColor, customBackgroundColor} = this.context
@@ -480,23 +482,43 @@ class ReservationFormScreen extends React.Component {
       const floorCapacity = {}
       const tablesMap = {}
 
-      availableTables && tablelayouts && tablelayouts.forEach((layout, idx) => {
+      if (shiftStatus === 'ACTIVE') {
 
-        let seatCount = 0
-        let tableCount = 0
-        const availableTablesOfLayout = availableTables[layout.id]
+        availableTables && tablelayouts && tablelayouts.forEach((layout, idx) => {
 
-        if (availableTablesOfLayout !== undefined) {
-          tablesMap[layout.layoutName] = tablelayouts?.[idx]?.tables
-        }
-        availableTablesOfLayout !== undefined && availableTablesOfLayout.forEach((table, idx2) => {
-          seatCount += table.capacity
-          tableCount += 1
+          let seatCount = 0
+          let tableCount = 0
+          const availableTablesOfLayout = availableTables[layout.id]
+
+          if (availableTablesOfLayout !== undefined) {
+            tablesMap[layout.layoutName] = tablelayouts?.[idx]?.tables
+          }
+          availableTablesOfLayout !== undefined && availableTablesOfLayout.forEach((table, idx2) => {
+            seatCount += table.capacity
+            tableCount += 1
+          })
+          floorCapacity[layout.id] = {}
+          floorCapacity[layout.id].seatCount = seatCount
+          floorCapacity[layout.id].tableCount = tableCount
         })
-        floorCapacity[layout.id] = {}
-        floorCapacity[layout.id].seatCount = seatCount
-        floorCapacity[layout.id].tableCount = tableCount
-      })
+      } else {
+        tablelayouts && tablelayouts.forEach((layout, idx) => {
+
+          let seatCount = 0
+          let tableCount = 0
+
+          const availableTablesOfLayout = tablelayouts?.[idx]?.tables
+          tablesMap[layout.layoutName] = tablelayouts?.[idx]?.tables
+
+          availableTablesOfLayout !== undefined && availableTablesOfLayout.forEach((table, idx2) => {
+            seatCount += table.capacity
+            tableCount += 1
+          })
+          floorCapacity[layout.id] = {}
+          floorCapacity[layout.id].seatCount = seatCount
+          floorCapacity[layout.id].tableCount = tableCount
+        })
+      }
 
       const layoutList = Object.keys(tablesMap)
       const noAvailableTables = Object.keys(tablesMap).length === 0
@@ -1041,6 +1063,13 @@ class ReservationFormScreen extends React.Component {
                   <View style={[styles.bottom, styles.horizontalMargin]}>
                     {this.state.isGetTables &&
                       <>
+                        {noAvailableTables && (
+                          <View style={[styles.sectionContent]}>
+                            <View style={[styles.jc_alignIem_center]}>
+                              <StyledText>({t('empty')})</StyledText>
+                            </View>
+                          </View>
+                        )}
                         <Accordion
                           onChange={(activeSections) => this.setState({activeTableLayout: activeSections})}
                           activeSections={this.state?.activeTableLayout}
@@ -1110,7 +1139,7 @@ class ReservationFormScreen extends React.Component {
                                       )
                                     }
                                   })}
-                                  {noAvailableTables && (
+                                  {tablesMap?.[layout].length == 0 && (
                                     <ListItem
                                       title={
                                         <View style={[styles.tableRowContainer]}>
@@ -1325,6 +1354,7 @@ const mapStateToProps = state => {
     availableTables: state.tablesavailable.data.availableTables,
     ordersInflight: state.ordersinflight.data.orders,
     orderSets: state.ordersinflight.data?.setData,
+    shiftStatus: state.shift.data.shiftStatus,
   }
 }
 
@@ -1334,6 +1364,7 @@ const mapDispatchToProps = dispatch => ({
   getAvailableTables: () => dispatch(getTablesAvailable()),
   getTableLayout: (id) => dispatch(getTableLayout(id)),
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
+  getShiftStatus: () => dispatch(getShiftStatus()),
 })
 
 ReservationFormScreen = reduxForm({

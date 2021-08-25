@@ -150,7 +150,7 @@ class RetailStartOrderForm extends Component {
                     <View style={styles.fullWidthScreen}>
                         <ScreenHeader backNavigation={true}
                             parentFullScreen={true}
-                            title={t('newOrderTitle')}
+                            title={t('newOrder.newOrderTitle')}
                         />
                         <View style={{flexDirection: 'row', flex: 1}}>
                             <Animated.View style={{flex: 1}}>
@@ -199,7 +199,7 @@ class RetailStartOrderForm extends Component {
 
                                 <View style={styles.sectionContent}>
                                     <View style={styles.sectionTitleContainer}>
-                                        <StyledText style={styles.sectionTitleText}>{t('peopleCount')}</StyledText>
+                                        <StyledText style={styles.sectionTitleText}>{t('newOrder.peopleCount')}</StyledText>
                                     </View>
                                     <View>
                                         {people.map((people, ix) => (
@@ -223,11 +223,11 @@ class RetailStartOrderForm extends Component {
                                 <ThemeScrollView>
                                     <View style={{paddingHorizontal: 16}}>
                                         <View style={styles.sectionTitleContainer}>
-                                            <StyledText style={styles.sectionTitleText}>{t('table')}</StyledText>
+                                            <StyledText style={styles.sectionTitleText}>{t('newOrder.table')}</StyledText>
                                         </View>
                                         {noAvailableTables && (
                                             <View style={styles.sectionContent}>
-                                                <StyledText>{t('noAvailableTables')}</StyledText>
+                                                <StyledText>{t('newOrder.noAvailableTables')}</StyledText>
                                             </View>
                                         )}
 
@@ -273,7 +273,7 @@ class RetailStartOrderForm extends Component {
                                             } else {
                                                 Alert.alert(
                                                     '',
-                                                    `${t('noAvailableTables')}`,
+                                                    `${t('newOrder.noAvailableTables')}`,
                                                     [
                                                         {
                                                             text: `${t('action.ok')}`,
@@ -283,7 +283,7 @@ class RetailStartOrderForm extends Component {
                                         }}
                                     >
                                         <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                                            {t('openOrder')}
+                                            {t('newOrder.openOrder')}
                                         </Text>
                                     </TouchableOpacity>
                                 </ View>
@@ -308,7 +308,7 @@ class RetailStartOrderForm extends Component {
                     <View style={styles.fullWidthScreen}>
                         <ScreenHeader backNavigation={true}
                             parentFullScreen={true}
-                            title={t('newOrderTitle')}
+                            title={t('newOrder.newOrderTitle')}
                         />
 
 
@@ -317,11 +317,11 @@ class RetailStartOrderForm extends Component {
                             <View style={styles.sectionContent}>
                                 <View style={{paddingHorizontal: 16}}>
                                     <View style={styles.sectionTitleContainer}>
-                                        <StyledText style={styles.sectionTitleText}>{t('table')}</StyledText>
+                                        <StyledText style={styles.sectionTitleText}>{t('newOrder.table')}</StyledText>
                                     </View>
                                     {noAvailableTables && (
                                         <View style={styles.sectionContent}>
-                                            <StyledText>{t('noAvailableTables')}</StyledText>
+                                            <StyledText>{t('newOrder.noAvailableTables')}</StyledText>
                                         </View>
                                     )}
 
@@ -349,7 +349,7 @@ class RetailStartOrderForm extends Component {
 
                         {noAvailableTables && (
                             <View style={styles.sectionContent}>
-                                <StyledText>{t('noAvailableTables')}</StyledText>
+                                <StyledText>{t('newOrder.noAvailableTables')}</StyledText>
                             </View>
                         )}
 
@@ -396,7 +396,7 @@ class RetailStartOrderForm extends Component {
 
                         <View style={styles.sectionContent}>
                             <View style={styles.sectionTitleContainer}>
-                                <StyledText style={styles.sectionTitleText}>{t('peopleCount')}</StyledText>
+                                <StyledText style={styles.sectionTitleText}>{t('newOrder.peopleCount')}</StyledText>
                             </View>
                             <View>
                                 {people.map((people, ix) => (
@@ -430,7 +430,7 @@ class RetailStartOrderForm extends Component {
                                             } else {
                                                 Alert.alert(
                                                     '',
-                                                    `${t('noAvailableTables')}`,
+                                                    `${t('newOrder.noAvailableTables')}`,
                                                     [
                                                         {
                                                             text: `${t('action.ok')}`,
@@ -440,7 +440,7 @@ class RetailStartOrderForm extends Component {
                                         }}
                                     >
                                         <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                                            {t('openOrder')}
+                                            {t('newOrder.openOrder')}
                                         </Text>
                                     </TouchableOpacity>
                                 </ View>

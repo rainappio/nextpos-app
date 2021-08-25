@@ -452,7 +452,8 @@ class ReservationUpcomingForm extends React.Component {
       ordersInflight,
       availableTables,
       handleSubmit,
-      statusHeight
+      statusHeight,
+      shiftStatus
     } = this.props
 
     const {t, customMainThemeColor, customBackgroundColor} = this.context
@@ -462,20 +463,20 @@ class ReservationUpcomingForm extends React.Component {
 
     const tablesMap = {}
 
-    availableTables && tablelayouts && tablelayouts.forEach((layout, idx) => {
+    if (shiftStatus === 'ACTIVE') {
+      availableTables && tablelayouts && tablelayouts.forEach((layout, idx) => {
+        const availableTablesOfLayout = availableTables[layout.id]
 
-      let seatCount = 0
-      let tableCount = 0
-      const availableTablesOfLayout = availableTables[layout.id]
-
-      if (availableTablesOfLayout !== undefined) {
-        tablesMap[layout.layoutName] = tablelayouts?.[idx]?.tables
-      }
-      availableTablesOfLayout !== undefined && availableTablesOfLayout.forEach((table, idx2) => {
-        seatCount += table.capacity
-        tableCount += 1
+        if (availableTablesOfLayout !== undefined) {
+          tablesMap[layout.layoutName] = tablelayouts?.[idx]?.tables
+        }
       })
-    })
+    } else {
+      tablelayouts && tablelayouts.forEach((layout, idx) => {
+
+        tablesMap[layout.layoutName] = tablelayouts?.[idx]?.tables
+      })
+    }
 
     const layoutList = Object.keys(tablesMap)
     const noAvailableTables = Object.keys(tablesMap).length === 0
@@ -513,6 +514,13 @@ class ReservationUpcomingForm extends React.Component {
                 </View>
                 <ScrollView style={{maxHeight: 480}}>
                   <View>
+                    {noAvailableTables && (
+                      <View style={[styles.sectionContent]}>
+                        <View style={[styles.jc_alignIem_center]}>
+                          <StyledText>({t('empty')})</StyledText>
+                        </View>
+                      </View>
+                    )}
                     <Accordion
                       onChange={(activeSections) => this.setState({activeTableLayout: activeSections})}
                       activeSections={this.state?.activeTableLayout}
@@ -581,11 +589,11 @@ class ReservationUpcomingForm extends React.Component {
                                   />
                                 )
                               })}
-                              {noAvailableTables && (
+                              {tablesMap?.[layout].length == 0 && (
                                 <ListItem
                                   title={
                                     <View style={[styles.tableRowContainer]}>
-                                      <View style={[styles.tableCellView]}>
+                                      <View style={[styles.tableCellView, styles.withBottomBorder]}>
                                         <StyledText>({t('empty')})</StyledText>
                                       </View>
                                     </View>
@@ -1071,6 +1079,13 @@ class ReservationUpcomingForm extends React.Component {
                 </View>
                 <ScrollView style={{maxHeight: 400}}>
                   <View>
+                    {noAvailableTables && (
+                      <View style={[styles.sectionContent]}>
+                        <View style={[styles.jc_alignIem_center]}>
+                          <StyledText>({t('empty')})</StyledText>
+                        </View>
+                      </View>
+                    )}
                     <Accordion
                       onChange={(activeSections) => this.setState({activeTableLayout: activeSections})}
                       activeSections={this.state?.activeTableLayout}
@@ -1140,7 +1155,7 @@ class ReservationUpcomingForm extends React.Component {
                                   )
                                 }
                               })}
-                              {noAvailableTables && (
+                              {tablesMap?.[layout].length == 0 && (
                                 <ListItem
                                   title={
                                     <View style={[styles.tableRowContainer]}>
