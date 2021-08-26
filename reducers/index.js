@@ -4,6 +4,7 @@ import {reducer as authReducer} from './auth'
 import {reducer as clientReducer} from './client'
 import {reducer as labelsReducer} from './labels'
 import {reducer as productsReducer} from './products'
+import {reducer as productsDetailReducer} from './productsDetail'
 import {reducer as labelReducer} from './label'
 import {reducer as productReducer} from './product'
 import {reducer as clientusersReducer} from './clientusers'
@@ -47,6 +48,7 @@ const rootReducer = combineReducers({
   client: clientReducer,
   labels: labelsReducer,
   products: productsReducer,
+  productsDetail: productsDetailReducer,
   label: labelReducer,
   product: productReducer,
   clientusers: clientusersReducer,

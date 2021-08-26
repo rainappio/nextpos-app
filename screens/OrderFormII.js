@@ -3,7 +3,7 @@ import {reduxForm, Field} from 'redux-form'
 import {Alert, ScrollView, Text, TouchableOpacity, View, StyleSheet, Dimensions, PixelRatio, Platform} from 'react-native'
 import {connect} from 'react-redux'
 import {Accordion, List} from '@ant-design/react-native'
-import {getLables, getProducts, clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange, getTimeDifference, getPrinters} from '../actions'
+import {getLables, getProducts, getProductsDetail, clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange, getTimeDifference, getPrinters} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -69,7 +69,7 @@ class OrderFormII extends React.Component {
 
   componentDidMount() {
     this.props.getLables()
-    this.props.getProducts()
+    this.props.getProductsDetail()
     this.props.route.params.orderId !== undefined &&
       this.props.getOrder(this.props.route.params.orderId)
 
@@ -421,7 +421,7 @@ class OrderFormII extends React.Component {
               }
             }, response => {
               this.props.navigation.navigate('OrderFormII')
-              this.props.getProducts()
+              this.props.getProductsDetail()
             }).then()
           }
         },
@@ -491,7 +491,7 @@ class OrderFormII extends React.Component {
 
   render() {
     const {
-      products = [],
+      productsDetail = [],
       labels = [],
       haveError,
       isLoading,
@@ -504,7 +504,7 @@ class OrderFormII extends React.Component {
     } = this.props
 
     const {reverseThemeStyle, t, splitParentOrderId, customMainThemeColor, customBackgroundColor} = this.context
-    const map = new Map(Object.entries(products))
+    const map = new Map(Object.entries(productsDetail))
 
     let totalQuantity = 0
 
@@ -537,7 +537,7 @@ class OrderFormII extends React.Component {
       return (
         <BackendErrorScreen />
       )
-    } else if (products !== undefined && products.length === 0) {
+    } else if (productsDetail !== undefined && productsDetail.length === 0) {
       return (
         <View style={[styles.container]}>
           <Text>no products ...</Text>
@@ -634,6 +634,13 @@ class OrderFormII extends React.Component {
                                 </View>
                                 <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.description}</StyledText>
                                 <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>${prd.price}</StyledText>
+                                {!!prd.hasOptions &&
+                                  <View style={[{position: 'absolute', right: 12, bottom: 20}]}>
+                                    <StyledText>
+                                      <Icon name='more' size={20} color={customMainThemeColor} />
+                                    </StyledText>
+                                  </View>
+                                }
                               </View>
                             </TouchableOpacity>
                           )
@@ -655,6 +662,13 @@ class OrderFormII extends React.Component {
                               </View>
                               <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.description}</StyledText>
                               <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>${prd.price}</StyledText>
+                              {!!prd.hasOptions &&
+                                <View style={[{position: 'absolute', right: 12, bottom: 20}]}>
+                                  <StyledText>
+                                    <Icon name='more' size={20} color={customMainThemeColor} />
+                                  </StyledText>
+                                </View>
+                              }
                             </View>
                           </TouchableOpacity>
                         ))}</View> : this.state?.selectedLabel === 'ungrouped' ? <StyledText style={{alignSelf: 'center'}}>{t('orderForm.nothing')}</StyledText> : null}
@@ -664,7 +678,7 @@ class OrderFormII extends React.Component {
                           return (
                             <>
                               {(map.get(lbl.label) !== undefined && map.get(lbl.label)?.length > 0) ?
-                                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get(lbl.label).map(prd => {
+                                <View key={lbl.label} style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get(lbl.label).map(prd => {
                                   return (
                                     <TouchableOpacity style={[{width: '22%', marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, {backgroundColor: '#d6d6d6'}, (prd?.outOfStock && {backgroundColor: 'gray'})]}
                                       onPress={() => prd?.outOfStock ? this.handleItemOutOfStock(prd.id, prd?.outOfStock) : this.addItemToOrder(prd.id)}
@@ -682,6 +696,13 @@ class OrderFormII extends React.Component {
                                         </View>
                                         <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>{prd.description}</StyledText>
                                         <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (prd?.outOfStock && {backgroundColor: 'rgba(128, 128, 128, 0)'})]}>${prd.price}</StyledText>
+                                        {!!prd.hasOptions &&
+                                          <View style={[{position: 'absolute', right: 12, bottom: 20}]}>
+                                            <StyledText>
+                                              <Icon name='more' size={20} color={customMainThemeColor} />
+                                            </StyledText>
+                                          </View>
+                                        }
                                       </View>
                                     </TouchableOpacity>
                                   )
@@ -1292,6 +1313,11 @@ class OrderFormII extends React.Component {
                                 <View style={[styles.tableCellView, styles.flex(1)]}>
                                   <StyledText>{prd.name}</StyledText>
                                   {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
+                                  {!!prd.hasOptions &&
+                                    <StyledText style={{paddingLeft: 8}}>
+                                      <Icon name='more' size={20} color={customMainThemeColor} />
+                                    </StyledText>
+                                  }
                                 </View>
                                 <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
                                   <StyledText>${prd.price}</StyledText>
@@ -1339,6 +1365,11 @@ class OrderFormII extends React.Component {
                                       <View style={[styles.tableCellView, styles.flex(1)]}>
                                         <StyledText>{prd.name}</StyledText>
                                         {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
+                                        {!!prd.hasOptions &&
+                                          <StyledText style={{paddingLeft: 8}}>
+                                            <Icon name='more' size={20} color={customMainThemeColor} />
+                                          </StyledText>
+                                        }
                                       </View>
                                       <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
                                         <StyledText>${prd.price}</StyledText>
@@ -1387,6 +1418,11 @@ class OrderFormII extends React.Component {
                                 <View style={[styles.tableCellView, styles.flex(1)]}>
                                   <StyledText>{prd.name}</StyledText>
                                   {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
+                                  {!!prd.hasOptions &&
+                                    <StyledText style={{paddingLeft: 8}}>
+                                      <Icon name='more' size={20} color={customMainThemeColor} />
+                                    </StyledText>
+                                  }
                                 </View>
                                 <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
                                   <StyledText>${prd.price}</StyledText>
@@ -1477,20 +1513,20 @@ class OrderFormII extends React.Component {
 const mapStateToProps = state => ({
   labels: state.labels.data.labels,
   subproducts: state.label.data.subLabels,
-  products: state.products.data.results,
-  haveData: state.products.haveData,
-  haveError: state.products.haveError,
-  isLoading: state.products.loading,
+  productsDetail: state.productsDetail.data.results,
+  haveData: state.productsDetail.haveData,
+  haveError: state.productsDetail.haveError,
+  isLoading: state.productsDetail.loading,
   order: state.order.data,
   orderIsLoading: state.order.loading,
-  productsData: state.products,
+  productsData: state.productsDetail,
   printers: state.printers.data.printers,
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getLables: () => dispatch(getLables()),
-  getProducts: () => dispatch(getProducts()),
+  getProductsDetail: () => dispatch(getProductsDetail()),
   getOrder: () => dispatch(getOrder(props.route.params.orderId)),
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
   getOrdersByDateRange: () => dispatch(getOrdersByDateRange()),

@@ -105,13 +105,14 @@ class PaymentOrder extends React.Component {
             })
           } else {
             this.context?.saveSplitParentOrderId(null)
-            this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? ('Tables', {screen: 'TablesScr'}) : 'Home', {screen: 'LoginSuccess'})
+            this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesScr' : 'LoginSuccess')
             console.log("route: complete 2")
           }
 
         } else {
+          console.log("test navigation")
           this.context?.saveSplitParentOrderId(null)
-          this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? ('Tables', {screen: 'TablesScr'}) : 'Home', {screen: 'LoginSuccess'})
+          this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesScr' : 'LoginSuccess')
           console.log("route: complete 3", this.props?.order?.orderType)
         }
       }).then()
@@ -168,7 +169,7 @@ class PaymentOrder extends React.Component {
         })
       }, response => {
         this.context?.saveSplitParentOrderId(null)
-        this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? ('Tables', {screen: 'TablesScr'}) : 'Home', {screen: 'LoginSuccess'})
+        this.props.navigation.navigate(this.context?.appType === 'store' && (this.props?.order?.orderType !== 'TAKE_OUT') ? 'TablesScr' : 'LoginSuccess')
         console.log("route: props submit")
       }).then()
     }

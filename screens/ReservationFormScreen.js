@@ -6,7 +6,7 @@ import {ListItem, CheckBox} from "react-native-elements";
 import {connect} from 'react-redux'
 import {compose} from "redux";
 import {withContext} from "../helpers/contextHelper";
-import {isRequired, isNDigitsNumber} from '../validators'
+import {isRequired, isCountZero} from '../validators'
 import InputText from '../components/InputText'
 import InputTextComponent from '../components/InputTextComponent'
 import {getTableLayouts, getTablesAvailable, getTableLayout, getfetchOrderInflights, getShiftStatus} from '../actions'
@@ -64,10 +64,6 @@ class ReservationFormScreen extends React.Component {
       selectedMinutes: null,
       isTimeView: !!props?.isEdit ? true : false,
       isGetTables: !!props?.isEdit ?? false,
-      people: [
-        {label: context.t('reservation.adult'), value: 'people'},
-        {label: context.t('reservation.kid'), value: 'kid'}
-      ],
       availableTables: null,
       selectedTableIds: [],
       selectedTableNames: [],
@@ -714,18 +710,21 @@ class ReservationFormScreen extends React.Component {
                                 <StyledText style={styles.sectionTitleText}>{t('reservation.peopleCount')}</StyledText>
                               </View>
                               <View>
-                                {this.state.people.map((people, ix) => (
-                                  <View
-                                    style={[styles.tableRowContainerWithBorder]}
-                                    key={ix}
-                                  >
-                                    <Field
-                                      name={people.value}
-                                      component={RenderStepper}
-                                      optionName={people.label}
-                                    />
-                                  </View>
-                                ))}
+                                <View style={[styles.tableRowContainerWithBorder]}>
+                                  <Field
+                                    name={`people`}
+                                    component={RenderStepper}
+                                    optionName={t('reservation.adult')}
+                                    validate={[isRequired, isCountZero]}
+                                  />
+                                </View>
+                                <View style={[styles.tableRowContainerWithBorder]}>
+                                  <Field
+                                    name={`kid`}
+                                    component={RenderStepper}
+                                    optionName={t('reservation.kid')}
+                                  />
+                                </View>
                               </View>
                             </View>
 
@@ -1165,18 +1164,21 @@ class ReservationFormScreen extends React.Component {
                             <StyledText style={styles.sectionTitleText}>{t('reservation.peopleCount')}</StyledText>
                           </View>
                           <View>
-                            {this.state.people.map((people, index) => (
-                              <View
-                                style={[styles.tableRowContainerWithBorder]}
-                                key={index}
-                              >
-                                <Field
-                                  name={people.value}
-                                  component={RenderStepper}
-                                  optionName={people.label}
-                                />
-                              </View>
-                            ))}
+                            <View style={[styles.tableRowContainerWithBorder]}>
+                              <Field
+                                name={`people`}
+                                component={RenderStepper}
+                                optionName={t('reservation.adult')}
+                                validate={[isRequired, isCountZero]}
+                              />
+                            </View>
+                            <View style={[styles.tableRowContainerWithBorder]}>
+                              <Field
+                                name={`kid`}
+                                component={RenderStepper}
+                                optionName={t('reservation.kid')}
+                              />
+                            </View>
                           </View>
                         </View>
 

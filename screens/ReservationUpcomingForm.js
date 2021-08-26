@@ -8,7 +8,7 @@ import {connect} from 'react-redux'
 import {compose} from "redux";
 import {normalizeTimeString} from '../actions'
 import {withContext} from "../helpers/contextHelper";
-import {isRequired, isNDigitsNumber} from '../validators'
+import {isRequired, isCountZero} from '../validators'
 import InputText from '../components/InputText'
 import InputTextComponent from '../components/InputTextComponent'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
@@ -53,10 +53,6 @@ class ReservationUpcomingForm extends React.Component {
       reservationDate: moment(new Date()).format('YYYY-MM-DD'),
       startDate: moment(new Date()).startOf('day').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss'),
       endDate: moment(new Date()).startOf('day').add(11, 'hour').format('YYYY-MM-DDTHH:mm:ss'),
-      people: [
-        {label: context.t('reservation.adult'), value: 'people'},
-        {label: context.t('reservation.kid'), value: 'kid'}
-      ],
       dayBookedEvents: [],
       dayWaitingEvents: [],
       bookedCount: 0,
@@ -701,18 +697,21 @@ class ReservationUpcomingForm extends React.Component {
                           <StyledText style={styles.sectionTitleText}>{t('reservation.peopleCount')}</StyledText>
                         </View>
                         <View>
-                          {this.state.people.map((people, ix) => (
-                            <View
-                              style={[styles.tableRowContainerWithBorder]}
-                              key={ix}
-                            >
-                              <Field
-                                name={people.value}
-                                component={RenderStepper}
-                                optionName={people.label}
-                              />
-                            </View>
-                          ))}
+                          <View style={[styles.tableRowContainerWithBorder]}>
+                            <Field
+                              name={`people`}
+                              component={RenderStepper}
+                              optionName={t('reservation.adult')}
+                              validate={[isRequired, isCountZero]}
+                            />
+                          </View>
+                          <View style={[styles.tableRowContainerWithBorder]}>
+                            <Field
+                              name={`kid`}
+                              component={RenderStepper}
+                              optionName={t('reservation.kid')}
+                            />
+                          </View>
                         </View>
                       </View>
 
@@ -921,7 +920,7 @@ class ReservationUpcomingForm extends React.Component {
                               </View>
                             </View>
                             <View style={[styles.flex(3), {justifyContent: 'flex-end'}]}>
-                              {event?.status !== 'SEATED' &&
+                              {(event?.status !== 'SEATED' && shiftStatus === 'ACTIVE') &&
                                 <View style={[styles.tableRowContainer]}>
                                   <TouchableOpacity onPress={() => {
                                     this.handleSeat(event.id)
@@ -1252,18 +1251,21 @@ class ReservationUpcomingForm extends React.Component {
                         <StyledText style={styles.sectionTitleText}>{t('reservation.peopleCount')}</StyledText>
                       </View>
                       <View>
-                        {this.state.people.map((people, ix) => (
-                          <View
-                            style={[styles.tableRowContainerWithBorder]}
-                            key={ix}
-                          >
-                            <Field
-                              name={people.value}
-                              component={RenderStepper}
-                              optionName={people.label}
-                            />
-                          </View>
-                        ))}
+                        <View style={[styles.tableRowContainerWithBorder]}>
+                          <Field
+                            name={`people`}
+                            component={RenderStepper}
+                            optionName={t('reservation.adult')}
+                            validate={[isRequired, isCountZero]}
+                          />
+                        </View>
+                        <View style={[styles.tableRowContainerWithBorder]}>
+                          <Field
+                            name={`kid`}
+                            component={RenderStepper}
+                            optionName={t('reservation.kid')}
+                          />
+                        </View>
                       </View>
                     </View>
 
@@ -1493,7 +1495,7 @@ class ReservationUpcomingForm extends React.Component {
 
                           </View>
                           <View style={[styles.flex(2), {justifyContent: 'center', flexDirection: 'column', marginRight: 4}]}>
-                            {event?.status !== 'SEATED' &&
+                            {(event?.status !== 'SEATED' && shiftStatus === 'ACTIVE') &&
                               <>
                                 <TouchableOpacity onPress={() => {
                                   this.handleSeat(event.id)

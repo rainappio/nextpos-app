@@ -127,7 +127,8 @@ export async function registerForPushNotificationsAsync() {
     }).then()
 
   } else {
-    alert('Must use physical device for Push Notifications');
+    // alert('Must use physical device for Push Notifications');
+    return;
   }
 
   if (Platform.OS === 'android') {
