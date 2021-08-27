@@ -125,6 +125,7 @@ export const api = {
       return `${apiRoot}/products/${id}/?version=DESIGN`
     },
     getAllGrouped: `${apiRoot}/searches/products/grouped?state=DESIGN`,
+    getAllDetail: `${apiRoot}/searches/products/`,
     search: (keyword) => {
       return `${apiRoot}/products?keyword=${keyword}`
     },

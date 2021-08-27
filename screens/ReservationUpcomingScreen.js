@@ -2,7 +2,7 @@ import React from 'react'
 import {ScrollView, View, Alert} from 'react-native'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext";
-import {getTableLayouts, getTablesAvailable, getTableLayout, getfetchOrderInflights} from '../actions'
+import {getTableLayouts, getTablesAvailable, getTableLayout, getfetchOrderInflights, getShiftStatus} from '../actions'
 import {ThemeContainer} from "../components/ThemeContainer";
 import ReservationUpcomingForm from './ReservationUpcomingForm'
 import {connect} from 'react-redux'
@@ -30,6 +30,7 @@ class ReservationUpcomingScreen extends React.Component {
     this.props.getTableLayouts()
     this.props.getfetchOrderInflights()
     this.props.getAvailableTables()
+    this.props.getShiftStatus()
   }
 
 
@@ -69,7 +70,7 @@ class ReservationUpcomingScreen extends React.Component {
 
 
   render() {
-    const {navigation, route, tablelayouts, availableTables, ordersInflight, isLoading, haveData} = this.props
+    const {navigation, route, tablelayouts, availableTables, ordersInflight, isLoading, haveData, shiftStatus} = this.props
 
 
     if (isLoading || this.state.loading || !haveData) {
@@ -87,6 +88,7 @@ class ReservationUpcomingScreen extends React.Component {
             route={route}
             tablelayouts={tablelayouts}
             availableTables={availableTables}
+            shiftStatus={shiftStatus}
             ordersInflight={ordersInflight}
             initialValues={{people: 0, kid: 0}}
           />
@@ -106,6 +108,7 @@ const mapStateToProps = state => ({
   availableTables: state.tablesavailable.data.availableTables,
   ordersInflight: state.ordersinflight.data.orders,
   orderSets: state.ordersinflight.data?.setData,
+  shiftStatus: state.shift.data.shiftStatus,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -114,8 +117,9 @@ const mapDispatchToProps = dispatch => ({
   getAvailableTables: () => dispatch(getTablesAvailable()),
   getTableLayout: (id) => dispatch(getTableLayout(id)),
   getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
-})
+  getShiftStatus: () => dispatch(getShiftStatus()),
 
+})
 
 export default connect(
   mapStateToProps,

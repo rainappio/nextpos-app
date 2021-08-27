@@ -93,20 +93,29 @@ class ReservationSettingForm extends React.Component {
       initialValues,
       availableTables,
       tablelayouts,
-      statusHeight
+      statusHeight,
+      shiftStatus
     } = this.props
     const {t, isTablet, customMainThemeColor, customBackgroundColor} = this.context
 
     const tablesMap = {}
     let defaultLayouts = []
 
-    availableTables && tablelayouts && tablelayouts.forEach((layout, idx) => {
-      const availableTablesOfLayout = availableTables[layout.id]
-      if (availableTablesOfLayout !== undefined) {
+    if (shiftStatus === 'ACTIVE') {
+      availableTables && tablelayouts && tablelayouts.forEach((layout, idx) => {
+        const availableTablesOfLayout = availableTables[layout.id]
+
+        if (availableTablesOfLayout !== undefined) {
+          tablesMap[layout.layoutName] = tablelayouts?.[idx]?.tables
+          defaultLayouts.push(idx)
+        }
+      })
+    } else {
+      tablelayouts && tablelayouts.forEach((layout, idx) => {
         tablesMap[layout.layoutName] = tablelayouts?.[idx]?.tables
         defaultLayouts.push(idx)
-      }
-    })
+      })
+    }
 
     const layoutList = Object.keys(tablesMap)
     const noAvailableTables = Object.keys(tablesMap).length === 0
@@ -160,13 +169,20 @@ class ReservationSettingForm extends React.Component {
                 </View>
               </View>
 
-              <View style={styles.fieldContainer}>
+              <View style={[styles.fieldContainer, {marginTop: 12}]}>
                 <View style={[styles.tableCellView, {flex: 2}]}>
                   <StyledText style={styles.fieldTitle}>{t('reservationSetting.nonReservableTables')}</StyledText>
                 </View>
 
               </View>
               <View>
+                {noAvailableTables && (
+                  <View style={[styles.sectionContent]}>
+                    <View style={[styles.jc_alignIem_center]}>
+                      <StyledText>({t('empty')})</StyledText>
+                    </View>
+                  </View>
+                )}
                 <Accordion
                   onChange={(activeSections) => {
                     this.setState({activeTableLayout: activeSections})
@@ -223,7 +239,7 @@ class ReservationSettingForm extends React.Component {
 
 
                           })}
-                          {noAvailableTables && (
+                          {tablesMap?.[layout].length == 0 && (
                             <ListItem
                               title={
                                 <View style={[styles.tableRowContainer]}>

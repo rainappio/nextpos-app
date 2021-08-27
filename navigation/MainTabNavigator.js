@@ -1,6 +1,7 @@
 import React from 'react'
 import {AsyncStorage, Platform, Text, useWindowDimensions, View, TouchableOpacity} from 'react-native'
 import Animated from 'react-native-reanimated';
+import {handleRefreshToken} from "../helpers/loginActions";
 import NavigationService from "../navigation/NavigationService";
 import {StackActions, TabActions, CommonActions, getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {createBottomTabNavigator, BottomTabBar, useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
@@ -109,13 +110,11 @@ import ReservationViewScreen from '../screens/ReservationViewScreen'
 import ReservationSetting from '../screens/ReservationSetting'
 import {LocaleContext} from '../locales/LocaleContext'
 import ReservationUpcomingScreen from '../screens/ReservationUpcomingScreen'
-import ReservationUpcomingForm from '../screens/ReservationUpcomingForm'
 
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
-
 
 const HomeStack = () => {
 
@@ -449,7 +448,7 @@ const BottomTab = () => {
           navigation.navigate(route.name, {withAnimation: false})
         }
       } else {
-        navigation.navigate('Login')
+        handleRefreshToken()
       }
     }
   })

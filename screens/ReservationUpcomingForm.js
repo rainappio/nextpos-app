@@ -8,7 +8,7 @@ import {connect} from 'react-redux'
 import {compose} from "redux";
 import {normalizeTimeString} from '../actions'
 import {withContext} from "../helpers/contextHelper";
-import {isRequired, isNDigitsNumber} from '../validators'
+import {isRequired, isCountZero} from '../validators'
 import InputText from '../components/InputText'
 import InputTextComponent from '../components/InputTextComponent'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
@@ -53,10 +53,6 @@ class ReservationUpcomingForm extends React.Component {
       reservationDate: moment(new Date()).format('YYYY-MM-DD'),
       startDate: moment(new Date()).startOf('day').add(7, 'hour').format('YYYY-MM-DDTHH:mm:ss'),
       endDate: moment(new Date()).startOf('day').add(11, 'hour').format('YYYY-MM-DDTHH:mm:ss'),
-      people: [
-        {label: context.t('reservation.adult'), value: 'people'},
-        {label: context.t('reservation.kid'), value: 'kid'}
-      ],
       dayBookedEvents: [],
       dayWaitingEvents: [],
       bookedCount: 0,
@@ -452,7 +448,8 @@ class ReservationUpcomingForm extends React.Component {
       ordersInflight,
       availableTables,
       handleSubmit,
-      statusHeight
+      statusHeight,
+      shiftStatus
     } = this.props
 
     const {t, customMainThemeColor, customBackgroundColor} = this.context
@@ -462,20 +459,20 @@ class ReservationUpcomingForm extends React.Component {
 
     const tablesMap = {}
 
-    availableTables && tablelayouts && tablelayouts.forEach((layout, idx) => {
+    if (shiftStatus === 'ACTIVE') {
+      availableTables && tablelayouts && tablelayouts.forEach((layout, idx) => {
+        const availableTablesOfLayout = availableTables[layout.id]
 
-      let seatCount = 0
-      let tableCount = 0
-      const availableTablesOfLayout = availableTables[layout.id]
-
-      if (availableTablesOfLayout !== undefined) {
-        tablesMap[layout.layoutName] = tablelayouts?.[idx]?.tables
-      }
-      availableTablesOfLayout !== undefined && availableTablesOfLayout.forEach((table, idx2) => {
-        seatCount += table.capacity
-        tableCount += 1
+        if (availableTablesOfLayout !== undefined) {
+          tablesMap[layout.layoutName] = tablelayouts?.[idx]?.tables
+        }
       })
-    })
+    } else {
+      tablelayouts && tablelayouts.forEach((layout, idx) => {
+
+        tablesMap[layout.layoutName] = tablelayouts?.[idx]?.tables
+      })
+    }
 
     const layoutList = Object.keys(tablesMap)
     const noAvailableTables = Object.keys(tablesMap).length === 0
@@ -513,6 +510,13 @@ class ReservationUpcomingForm extends React.Component {
                 </View>
                 <ScrollView style={{maxHeight: 480}}>
                   <View>
+                    {noAvailableTables && (
+                      <View style={[styles.sectionContent]}>
+                        <View style={[styles.jc_alignIem_center]}>
+                          <StyledText>({t('empty')})</StyledText>
+                        </View>
+                      </View>
+                    )}
                     <Accordion
                       onChange={(activeSections) => this.setState({activeTableLayout: activeSections})}
                       activeSections={this.state?.activeTableLayout}
@@ -581,11 +585,11 @@ class ReservationUpcomingForm extends React.Component {
                                   />
                                 )
                               })}
-                              {noAvailableTables && (
+                              {tablesMap?.[layout].length == 0 && (
                                 <ListItem
                                   title={
                                     <View style={[styles.tableRowContainer]}>
-                                      <View style={[styles.tableCellView]}>
+                                      <View style={[styles.tableCellView, styles.withBottomBorder]}>
                                         <StyledText>({t('empty')})</StyledText>
                                       </View>
                                     </View>
@@ -693,18 +697,21 @@ class ReservationUpcomingForm extends React.Component {
                           <StyledText style={styles.sectionTitleText}>{t('reservation.peopleCount')}</StyledText>
                         </View>
                         <View>
-                          {this.state.people.map((people, ix) => (
-                            <View
-                              style={[styles.tableRowContainerWithBorder]}
-                              key={ix}
-                            >
-                              <Field
-                                name={people.value}
-                                component={RenderStepper}
-                                optionName={people.label}
-                              />
-                            </View>
-                          ))}
+                          <View style={[styles.tableRowContainerWithBorder]}>
+                            <Field
+                              name={`people`}
+                              component={RenderStepper}
+                              optionName={t('reservation.adult')}
+                              validate={[isRequired, isCountZero]}
+                            />
+                          </View>
+                          <View style={[styles.tableRowContainerWithBorder]}>
+                            <Field
+                              name={`kid`}
+                              component={RenderStepper}
+                              optionName={t('reservation.kid')}
+                            />
+                          </View>
                         </View>
                       </View>
 
@@ -913,7 +920,7 @@ class ReservationUpcomingForm extends React.Component {
                               </View>
                             </View>
                             <View style={[styles.flex(3), {justifyContent: 'flex-end'}]}>
-                              {event?.status !== 'SEATED' &&
+                              {(event?.status !== 'SEATED' && shiftStatus === 'ACTIVE') &&
                                 <View style={[styles.tableRowContainer]}>
                                   <TouchableOpacity onPress={() => {
                                     this.handleSeat(event.id)
@@ -1071,6 +1078,13 @@ class ReservationUpcomingForm extends React.Component {
                 </View>
                 <ScrollView style={{maxHeight: 400}}>
                   <View>
+                    {noAvailableTables && (
+                      <View style={[styles.sectionContent]}>
+                        <View style={[styles.jc_alignIem_center]}>
+                          <StyledText>({t('empty')})</StyledText>
+                        </View>
+                      </View>
+                    )}
                     <Accordion
                       onChange={(activeSections) => this.setState({activeTableLayout: activeSections})}
                       activeSections={this.state?.activeTableLayout}
@@ -1140,7 +1154,7 @@ class ReservationUpcomingForm extends React.Component {
                                   )
                                 }
                               })}
-                              {noAvailableTables && (
+                              {tablesMap?.[layout].length == 0 && (
                                 <ListItem
                                   title={
                                     <View style={[styles.tableRowContainer]}>
@@ -1237,18 +1251,21 @@ class ReservationUpcomingForm extends React.Component {
                         <StyledText style={styles.sectionTitleText}>{t('reservation.peopleCount')}</StyledText>
                       </View>
                       <View>
-                        {this.state.people.map((people, ix) => (
-                          <View
-                            style={[styles.tableRowContainerWithBorder]}
-                            key={ix}
-                          >
-                            <Field
-                              name={people.value}
-                              component={RenderStepper}
-                              optionName={people.label}
-                            />
-                          </View>
-                        ))}
+                        <View style={[styles.tableRowContainerWithBorder]}>
+                          <Field
+                            name={`people`}
+                            component={RenderStepper}
+                            optionName={t('reservation.adult')}
+                            validate={[isRequired, isCountZero]}
+                          />
+                        </View>
+                        <View style={[styles.tableRowContainerWithBorder]}>
+                          <Field
+                            name={`kid`}
+                            component={RenderStepper}
+                            optionName={t('reservation.kid')}
+                          />
+                        </View>
                       </View>
                     </View>
 
@@ -1478,7 +1495,7 @@ class ReservationUpcomingForm extends React.Component {
 
                           </View>
                           <View style={[styles.flex(2), {justifyContent: 'center', flexDirection: 'column', marginRight: 4}]}>
-                            {event?.status !== 'SEATED' &&
+                            {(event?.status !== 'SEATED' && shiftStatus === 'ACTIVE') &&
                               <>
                                 <TouchableOpacity onPress={() => {
                                   this.handleSeat(event.id)

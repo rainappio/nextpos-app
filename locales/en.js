@@ -752,7 +752,7 @@ const en = {
     }
   },
   reservationSetting: {
-    reservationSettingTitle: 'Reservation Settings',
+    reservationSettingTitle: 'Settings',
     webLink: 'Reservation Web Link',
     linkShareSuccess: 'Reservation Web Link Share Success.',
     linkShareFailed: 'Reservation Web Link Share Failed.',

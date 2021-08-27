@@ -26,23 +26,29 @@ export const handleRefreshToken = async () => {
   if (!response.ok) {
     warningMessage('Refresh token request failed.')
   } else {
+    await AsyncStorage.removeItem('token')
+    await AsyncStorage.removeItem('clientusrToken')
+
+    await AsyncStorage.setItem(storage.clientUsername, clientUsername)
+    await AsyncStorage.setItem(storage.clientPassword, clientPassword)
+
     let res = await response.json()
-    // const loggedIn = new Date()
-    // res.loggedIn = loggedIn
-    // res.tokenExp = new Date().setSeconds(
-    //   loggedIn.getSeconds() + parseInt(res.expires_in)
-    // )
-    //
-    // res.cli_userName = values.username
-    // res.cli_masterPwd = values.masterPassword
-    //
-    // // this is used for LoginSuccessScreen.
-    // res.username = res.cli_userName
-    //
-    // await AsyncStorage.setItem('token', JSON.stringify(res))
-    // this.props.dispatch(doLoggedIn(res.access_token))
-    // this.props.navigation.navigate('LoginSuccess')
+    const loggedIn = new Date()
+    res.loggedIn = loggedIn
+    res.tokenExp = new Date().setSeconds(
+      loggedIn.getSeconds() + parseInt(res.expires_in)
+    )
+
+    res.cli_userName = clientUsername
+    res.cli_masterPwd = clientPassword
+
+    // this is used for LoginSuccessScreen.
+    res.username = res.cli_userName
+
+    await AsyncStorage.setItem('token', JSON.stringify(res))
+    doLoggedIn(res.access_token)
   }
+
 
   return response
 }
