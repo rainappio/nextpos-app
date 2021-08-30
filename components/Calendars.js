@@ -884,6 +884,8 @@ class ReservationEventBase extends Component {
                                                                     let startDuration = (startAt - todayStart) / 86400000
                                                                     let endDuration = (todayEnd - endAt) / 86400000
                                                                     let widthDuration = ((endAt - startAt) / 86400000) > 0.065 ? ((endAt - startAt) / 86400000) : 0.065
+                                                                    let startHour = ((moment(event?.reservationStartDate).tz(timezone).format('H'))) / 24
+                                                                    let startMin = ((moment(event?.reservationStartDate).tz(timezone).format('m'))) / 60 / 30
 
                                                                     let statusColor = event.status === 'BOOKED' ? '#006B35' : event.status === 'CONFIRMED' ? '#F18D1A' : '#F75336'
 
@@ -894,8 +896,6 @@ class ReservationEventBase extends Component {
                                                                             isLineTable = true
                                                                         }
                                                                     })
-                                                                    let eventHour = moment(event.reservationStartDate).tz(timezone).format('HH')
-                                                                    let eventMins = moment(event.reservationStartDate).tz(timezone).format('mm')
 
                                                                     if (isLineTable) {
                                                                         return (
@@ -908,7 +908,7 @@ class ReservationEventBase extends Component {
                                                                                 }}
                                                                                 key={event.id} style={{
                                                                                     position: 'absolute', borderWidth: 1,
-                                                                                    flex: 1, borderColor: customBackgroundColor, backgroundColor: statusColor, height: 72, left: `${100 * startDuration + 2}%`, width: `${100 * widthDuration}%`, top: (4 * ((layoutIndex + 1) * (tableIndex + 1)) - (tableIndex * 4) - ((layoutIndex * tableIndex) * 2)), overflow: 'hidden', borderRadius: 12, paddingHorizontal: 4, justifyContent: 'center', zIndex: 9
+                                                                                    flex: 1, borderColor: customBackgroundColor, backgroundColor: statusColor, height: 72, left: `${100 * (startHour + startMin) - 7}%`, width: `${100 * widthDuration}%`, top: (4 * ((layoutIndex + 1) * (tableIndex + 1)) - (tableIndex * 4) - ((layoutIndex * tableIndex) * 2)), overflow: 'hidden', borderRadius: 12, paddingHorizontal: 4, justifyContent: 'center', zIndex: 9
                                                                                 }}
 
                                                                             >

@@ -211,7 +211,7 @@ class TablesScreen extends React.Component {
               <StyledText style={styles.messageBlock}>{t('tableVisual.shiftClosing')}</StyledText>
             </View>
             <View style={[styles.bottom, styles.horizontalMargin]}>
-              <TouchableOpacity onPress={() => navigation.navigate('ShiftClose')}>
+              <TouchableOpacity onPress={() => navigation.navigate('Settings', {screen: 'ShiftClose'})}>
                 <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                   {t('shift.closeShift')}
                 </Text>
