@@ -48,14 +48,14 @@ const CustomTableBase = (props) => {
             <ScrollView style={{flex: 1}} nestedScrollEnabled>
                 {props?.tableData?.map((data, index) => {
                     return (
-                        <TouchableOpacity style={{flexDirection: 'row', padding: 8, }}
+                        <TouchableOpacity key={index} style={{flexDirection: 'row', padding: 8, }}
                             onPress={() => {
                                 props?.itemOnPress && props?.itemOnPress(data, index)
                             }}
                         >
                             {props?.tableContent?.map((content, contentIndex) => {
                                 return (
-                                    <View style={[styles.tableCellView, {flex: props?.occupy?.[contentIndex] ?? 1}, (contentIndex > 0 && {justifyContent: 'flex-end'})]}>
+                                    <View key={contentIndex} style={[styles.tableCellView, {flex: props?.occupy?.[contentIndex] ?? 1}, (contentIndex > 0 && {justifyContent: 'flex-end'})]}>
                                         <Text style={[styles?.sectionBarTextSmall(customMainThemeColor)]}>{props?.tableData?.[index]?.[`${content}`] ?? 'ERR'}</Text>
                                     </View>
                                 )

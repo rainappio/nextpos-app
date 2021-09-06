@@ -457,6 +457,7 @@ const en = {
       noPrinter: 'Checkout printer is not setup.',
       outOfStock: 'The selected product is out of stock.',
       inactiveOffer: 'The resolved offer is not active',
+      operationNotAllowed: 'The operation not allowed.'
     }
   },
   eInvoice: {

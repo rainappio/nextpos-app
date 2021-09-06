@@ -58,6 +58,7 @@ class StoreFormScreen extends Component {
         timezone: 'Timezone',
         featureToggle: 'Features',
         locationBasedService: 'Location Based Time Card',
+        reservationNotification: 'Reservation Notification',
         applyOffer: 'Apply Offer',
         uiPreferences: 'UI Preferences',
         paymentMethods: 'Payment Methods',
@@ -101,6 +102,7 @@ class StoreFormScreen extends Component {
         timezone: '時區',
         featureToggle: '進階功能',
         locationBasedService: '位置打卡功能',
+        reservationNotification: '訂位推播通知',
         applyOffer: '套用促銷',
         uiPreferences: '介面喜好',
         paymentMethods: '付款方式',
@@ -491,8 +493,6 @@ class StoreFormScreen extends Component {
                   />
                 </View>
               </View>
-
-
               <View style={[styles.fieldContainer, {marginTop: 8}]}>
                 <View style={{flex: 2}}>
                   <StyledText style={styles.fieldTitle}>{t('timeCardDeviceSetting.title')}</StyledText>
@@ -523,6 +523,19 @@ class StoreFormScreen extends Component {
                       <Icon name="md-trash-sharp" size={24} color={customMainThemeColor} />
                     </StyledText>
                   </TouchableOpacity>}
+                </View>
+              </View>
+
+
+              <View style={styles.fieldContainer}>
+                <View style={{flex: 1}}>
+                  <StyledText style={styles.fieldTitle}>{t('reservationNotification')}</StyledText>
+                </View>
+                <View style={[styles.alignRight]}>
+                  <Field
+                    name="clientSettings.PUSH_NOTIFICATION.enabled"
+                    component={RNSwitch}
+                  />
                 </View>
               </View>
 

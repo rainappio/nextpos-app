@@ -13,6 +13,8 @@ export const ThemeKeyboardAwareScrollView = (props) => {
       innerRef={ref => {
         !!props?.getRef && props?.getRef(ref)
       }}
+      extraHeight={props?.extraHeight ?? 0}
+      enableResetScrollToCoords={props?.enableResetScrollToCoords ?? true}
     >
       {props?.children}
     </KeyboardAwareScrollView>

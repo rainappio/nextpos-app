@@ -9,8 +9,10 @@ export const handleRefreshToken = async () => {
   const clientPassword = await AsyncStorage.getItem(storage.clientPassword)
 
   const formData = new FormData()
-  formData.append('grant_type', 'refresh_token')
-  formData.append('refresh_token', accessToken.refresh_token)
+  formData.append('grant_type', 'password')
+  formData.append('password', clientPassword)
+  formData.append('username', clientUsername)
+
   const auth = 'Basic ' + btoa(clientUsername + ':' + clientPassword)
 
   let response = await fetch(api.getAuthToken, {

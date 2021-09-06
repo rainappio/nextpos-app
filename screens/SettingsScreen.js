@@ -24,7 +24,7 @@ class SettingsScreen extends React.Component {
   render() {
     const {t, changeLanguage, changeAppType, appType, customMainThemeColor} = this.context
 
-    let menuButtonsArr = [
+    let optionNormal = [
       <MenuButton
         route='Account'
         onPress={() => this.props.navigation.navigate('Account')}
@@ -182,8 +182,114 @@ class SettingsScreen extends React.Component {
           />
         }
       />,
-
     ]
+    let optionReservation = [
+      <MenuButton
+        route='Account'
+        onPress={() => this.props.navigation.navigate('Account')}
+        title={t('settings.account')}
+        icon={
+          <MaterialIcon
+            name="account-box"
+            size={40}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+          />
+        } />,
+
+      <MenuButton
+        route='Store'
+        onPress={() => this.props.navigation.navigate('Store')}
+        title={t('settings.stores')}
+        icon={
+          <Icon
+            name="md-home"
+            size={40}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+          />
+        } />,
+
+      <MenuButton
+        route='StaffsOverview'
+        onPress={() =>
+          NavigationService?.navigateToRoute('StaffsOverview', {screen: 'StaffsOverview'})
+        }
+        title={t('settings.staff')}
+        icon={
+          <Icon
+            name="ios-people"
+            size={40}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='Announcements'
+        onPress={() => this.props.navigation.navigate('Announcements')}
+        title={t('settings.announcements')}
+        icon={
+          <FontAwesomeIcon
+            name="commenting"
+            size={40}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='MemberScreen'
+        onPress={() => NavigationService?.navigateToRoute('MemberScreen', {screen: 'MemberScreen'})}
+        title={t('settings.member')}
+        icon={
+          <FontAwesome5Icon
+            name="user-cog"
+            size={40}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='TableLayouts'
+        onPress={() => this.props.navigation.navigate('TableLayouts')}
+        title={t('settings.tableLayouts')}
+        icon={
+          <MaterialIcon
+            name="event-seat"
+            size={40}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='PrinternKDS'
+        onPress={() => this.props.navigation.navigate('PrinternKDS')}
+        title={t('settings.workingArea')}
+        icon={
+          <Icon
+            name="md-print"
+            size={40}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+          />
+        }
+      />,
+
+      <MenuButton
+        route='SubscriptionScreen'
+        onPress={() => this.props.navigation.navigate('SubscriptionScreen')}
+        title={t('settings.subscription')}
+        icon={
+          <MCIcon
+            name="professional-hexagon"
+            size={40}
+            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+          />
+        }
+      />,
+    ]
+
+    let menuButtonsArr = (appType === 'reservation') ? optionReservation : optionNormal
 
 
 
@@ -195,7 +301,7 @@ class SettingsScreen extends React.Component {
             title={t('menu.settings')} />
 
 
-          <Pages indicatorColor={customMainThemeColor}>
+          {(appType !== 'reservation') ? <Pages indicatorColor={customMainThemeColor}>
             <View style={{flex: 1, paddingBottom: 16}}>
               <View style={[styles.menuContainer]}>
                 {menuButtonsArr?.[0] ?? <View style={{flex: 1}}></View>}
@@ -247,6 +353,35 @@ class SettingsScreen extends React.Component {
 
             </View>
           </Pages>
+            :
+            <View style={{flex: 1, paddingBottom: 16}}>
+              <View style={[styles.menuContainer]}>
+                {menuButtonsArr?.[0] ?? <View style={{flex: 1}}></View>}
+                <View style={styles.dynamicHorizontalPadding(6)} />
+                {menuButtonsArr?.[1] ?? <View style={{flex: 1}}></View>}
+              </View>
+
+              <View style={[styles.menuContainer]}>
+                {menuButtonsArr?.[2] ?? <View style={{flex: 1}}></View>}
+                <View style={styles.dynamicHorizontalPadding(6)} />
+                {menuButtonsArr?.[3] ?? <View style={{flex: 1}}></View>}
+              </View>
+
+              <View style={[styles.menuContainer]}>
+                {menuButtonsArr?.[4] ?? <View style={{flex: 1}}></View>}
+                <View style={styles.dynamicHorizontalPadding(6)} />
+                {menuButtonsArr?.[5] ?? <View style={{flex: 1}}></View>}
+              </View>
+              <View style={[styles.menuContainer]}>
+                {menuButtonsArr?.[6] ?? <View style={{flex: 1}}></View>}
+                <View style={styles.dynamicHorizontalPadding(6)} />
+                {menuButtonsArr?.[7] ?? <View style={{flex: 1}}></View>}
+              </View>
+            </View>
+
+
+
+          }
         </View>
       </ThemeContainer>
     )

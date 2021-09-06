@@ -1,7 +1,7 @@
 import React from 'react'
 import {ScrollView, View, Alert} from 'react-native'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
-import {clearReservation} from '../actions'
+import {getCurrentClient, clearReservation} from '../actions'
 import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
 import ReservationFormScreen from './ReservationFormScreen'
@@ -13,6 +13,7 @@ class ReservationScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  _isMounted = false
 
   static contextType = LocaleContext
   constructor(props, context) {
@@ -24,17 +25,24 @@ class ReservationScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.props.clearReservation()
-    this._resetForm = this.props.navigation.addListener('focus', () => {
+    this._isMounted = true;
+
+    if (this._isMounted) {
       this.props.clearReservation()
-      this.checkPropsChange()
-    })
+      this._resetForm = this.props.navigation.addListener('focus', () => {
+        this.props.clearReservation()
+        this.checkPropsChange()
+      })
+
+    }
   }
   componentWillUnmount() {
+    this._isMounted = false;
+
     this._resetForm()
     this.setState = (state, callback) => {
-      return;
-    };
+      return
+    }
   }
 
   checkPropsChange = () => {
@@ -70,7 +78,9 @@ class ReservationScreen extends React.Component {
         this.props.navigation.navigate('ReservationCalendarScreen')
       }
     ).then(() => {
-      notificationPush(request, t, flag)
+      if (this.props.client?.clientSettings?.PUSH_NOTIFICATION && !!this.props.client?.clientSettings?.PUSH_NOTIFICATION?.value) {
+        notificationPush(request, t, flag)
+      }
     })
   }
 
@@ -109,7 +119,7 @@ class ReservationScreen extends React.Component {
 
 
   render() {
-    const {navigation, route} = this.props
+    const {navigation, route, client} = this.props
 
     return (
       <>
@@ -126,6 +136,7 @@ class ReservationScreen extends React.Component {
           initialValues={this.state.initialValues ?? this.props.route?.params?.initialValues}
           navigation={navigation}
           route={route}
+          client={client}
         />
       </>
     )
@@ -134,10 +145,12 @@ class ReservationScreen extends React.Component {
 
 
 const mapStateToProps = state => ({
+  client: state.client.data,
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
+  getCurrentClient: () => dispatch(getCurrentClient()),
   clearReservation: () => dispatch(clearReservation()),
 
 })

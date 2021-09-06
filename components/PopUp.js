@@ -244,10 +244,9 @@ export const CustomPopUp = withContext(CustomPopUpBase)
 class SplitBillPopUpBase extends Component {
   static contextType = LocaleContext
 
+  _isMounted = false
   constructor(props, context) {
     super(props, context)
-
-
 
     this.state = {
       quantity: 1,
@@ -260,7 +259,17 @@ class SplitBillPopUpBase extends Component {
     }
   }
   componentDidMount() {
-    this.getSplitBillByHeadCount(this.props?.orderId)
+    this._isMounted = true
+    if (this._isMounted) {
+      this.getSplitBillByHeadCount(this.props?.orderId)
+    }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
+    this.setState = (state, callback) => {
+      return
+    }
   }
   toggleModal = visible => {
     this.props?.toggleModal(visible)

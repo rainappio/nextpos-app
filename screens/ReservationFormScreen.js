@@ -39,6 +39,8 @@ class ReservationFormScreen extends React.Component {
   }
   static contextType = LocaleContext
 
+  _isMounted = false
+
   constructor(props, context) {
     super(props, context)
 
@@ -78,20 +80,29 @@ class ReservationFormScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.loadInfo()
-    this.props.getTableLayouts()
-    this.props.getfetchOrderInflights()
-    this.props.getAvailableTables()
-    this.props.getShiftStatus()
-    this._resetForm = this.props.navigation.addListener('focus', () => {
-      if (!this.props.isEdit && !this.props.nextStep) {
-        this.handleResetForm()
-      }
-    })
+    this._isMounted = true;
+
+    if (this._isMounted) {
+      this.loadInfo()
+      this.props.getTableLayouts()
+      this.props.getfetchOrderInflights()
+      this.props.getAvailableTables()
+      this.props.getShiftStatus()
+      this._resetForm = this.props.navigation.addListener('focus', () => {
+        if (!this.props.isEdit && !this.props.nextStep) {
+          this.handleResetForm()
+        }
+      })
+    }
   }
 
   componentWillUnmount() {
+    this._isMounted = false;
+
     this._resetForm()
+    this.setState = (state, callback) => {
+      return
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -147,7 +158,9 @@ class ReservationFormScreen extends React.Component {
     if (!!this.state.selectedHour && !!this.state.selectedMinutes) {
       this.props.change(`reservationStartDate`, new Date(selectedDate))
       this.setState({reservationDate: moment(selectedDate).format('YYYY-MM-DD')})
-      this.handleCheckAvailableTables(moment(selectedDate).format('YYYY-MM-DD'), this.state.selectedHour, this.state.selectedMinutes)
+      if (this._isMounted) {
+        this.handleCheckAvailableTables(moment(selectedDate).format('YYYY-MM-DD'), this.state.selectedHour, this.state.selectedMinutes)
+      }
 
     } else {
       this.setState({
@@ -381,6 +394,7 @@ class ReservationFormScreen extends React.Component {
     if (!!flag) {
       this.props.change(`name`, this.state.searchResults.name)
       this.setState({isNameEditable: false, membershipModalVisible: false})
+      this.scroll?.scrollToEnd({animated: true})
       this.noteInput.focus()
     } else {
       this.setState({isNameEditable: true, membershipModalVisible: false})
@@ -439,7 +453,8 @@ class ReservationFormScreen extends React.Component {
       handleCancel,
       handleSaveReservation,
       statusHeight,
-      shiftStatus
+      shiftStatus,
+      client
     } = this.props
 
     const {t, customMainThemeColor, customBackgroundColor} = this.context
@@ -631,7 +646,10 @@ class ReservationFormScreen extends React.Component {
 
                 <View style={[styles.flex(1), {marginLeft: 20, justifyContent: 'flex-start', maxHeight: '100%'}]}>
                   {!nextStep &&
-                    <ThemeKeyboardAwareScrollView>
+                    <ThemeKeyboardAwareScrollView
+                      getRef={ref => {this.scroll = ref}}
+                      extraHeight={-72} enableResetScrollToCoords={false}
+                    >
 
                       <View style={styles.tableRowContainer}>
                         <View style={[styles.tableCellView, styles.flex(1)]}>
@@ -799,8 +817,10 @@ class ReservationFormScreen extends React.Component {
                                 <Field
                                   name="name"
                                   component={InputTextComponent}
-                                  onEndEditing={() =>
+                                  onEndEditing={() => {
+                                    this.scroll?.scrollToEnd({animated: true})
                                     this.noteInput.focus()
+                                  }
                                   }
                                   setFieldToBeFocused={input => {
                                     this.nameInput = input
@@ -839,7 +859,9 @@ class ReservationFormScreen extends React.Component {
                                   setFieldToBeFocused={input => {
                                     this.noteInput = input
                                   }}
-
+                                  onEndEditing={() =>
+                                    this.scroll?.scrollTo({x: 0, y: 0, animated: true})
+                                  }
                                   placeholder={t('reservation.otherNote')}
                                 />
                               </View>
@@ -988,7 +1010,10 @@ class ReservationFormScreen extends React.Component {
                 title={t('reservation.reservationTitle')}
                 parentFullScreen={true} />
 
-              <ThemeKeyboardAwareScrollView>
+              <ThemeKeyboardAwareScrollView
+                getRef={ref => {this.scroll = ref}}
+                extraHeight={-72} enableResetScrollToCoords={false}
+              >
                 <>
                   <View style={styles.tableRowContainer}>
                     <View style={[styles.tableCellView, styles.flex(1)]}>
@@ -1293,7 +1318,9 @@ class ReservationFormScreen extends React.Component {
                               setFieldToBeFocused={input => {
                                 this.noteInput = input
                               }}
-
+                              onEndEditing={() =>
+                                this.scroll?.scrollTo({x: 0, y: 480, animated: true})
+                              }
                               placeholder={t('reservation.otherNote')}
                             />
                           </View>

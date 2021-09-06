@@ -2,7 +2,7 @@ import React from 'react'
 import {ScrollView, View, Alert} from 'react-native'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext";
-import {getTableLayouts, getTablesAvailable, getTableLayout, getfetchOrderInflights, getShiftStatus} from '../actions'
+import {getCurrentClient, getTableLayouts, getTablesAvailable, getTableLayout, getfetchOrderInflights, getShiftStatus} from '../actions'
 import {ThemeContainer} from "../components/ThemeContainer";
 import ReservationUpcomingForm from './ReservationUpcomingForm'
 import {connect} from 'react-redux'
@@ -16,6 +16,7 @@ class ReservationUpcomingScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  _isMounted = false
 
   static contextType = LocaleContext
   constructor(props, context) {
@@ -27,10 +28,17 @@ class ReservationUpcomingScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getTableLayouts()
-    this.props.getfetchOrderInflights()
-    this.props.getAvailableTables()
-    this.props.getShiftStatus()
+    this._isMounted = true;
+
+    if (this._isMounted) {
+      this.props.getTableLayouts()
+      this.props.getfetchOrderInflights()
+      this.props.getAvailableTables()
+      this.props.getShiftStatus()
+    }
+  }
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
 
@@ -63,14 +71,16 @@ class ReservationUpcomingScreen extends React.Component {
 
       }
     ).then(() => {
-      schedulePushNotification(request, this.context.t, 'CREATE')
+      if (this.props.client?.clientSettings?.PUSH_NOTIFICATION && !!this.props.client?.clientSettings?.PUSH_NOTIFICATION?.value) {
+        schedulePushNotification(request, this.context.t, 'CREATE')
+      }
     })
   }
 
 
 
   render() {
-    const {navigation, route, tablelayouts, availableTables, ordersInflight, isLoading, haveData, shiftStatus} = this.props
+    const {client, navigation, route, tablelayouts, availableTables, ordersInflight, isLoading, haveData, shiftStatus} = this.props
 
 
     if (isLoading || this.state.loading || !haveData) {
@@ -86,6 +96,7 @@ class ReservationUpcomingScreen extends React.Component {
             onSubmit={this.handleSubmit}
             navigation={navigation}
             route={route}
+            client={client}
             tablelayouts={tablelayouts}
             availableTables={availableTables}
             shiftStatus={shiftStatus}
@@ -101,6 +112,7 @@ class ReservationUpcomingScreen extends React.Component {
 
 
 const mapStateToProps = state => ({
+  client: state.client.data,
   tablelayouts: state.tablelayouts.data.tableLayouts,
   haveData: state.tablelayouts.haveData,
   haveError: state.ordersinflight.haveError || state.tablelayouts.haveError,
@@ -113,6 +125,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
+  getCurrentClient: () => dispatch(getCurrentClient()),
   getTableLayouts: () => dispatch(getTableLayouts()),
   getAvailableTables: () => dispatch(getTablesAvailable()),
   getTableLayout: (id) => dispatch(getTableLayout(id)),

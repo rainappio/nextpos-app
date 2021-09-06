@@ -457,6 +457,7 @@ const zh = {
       noPrinter: '結帳出單機尚未設定',
       outOfStock: '選擇的產品已無庫存',
       inactiveOffer: '目前選用的促銷未啟用',
+      operationNotAllowed: '該項目不可選取'
     }
   },
   eInvoice: {

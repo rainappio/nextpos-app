@@ -489,9 +489,9 @@ const BottomTab = () => {
         tabBarVisible: !customHiddenRoutes.includes(getFocusedRouteNameFromRoute(route))
       })}
         listeners={tabBarListeners} />}
-      <Tab.Screen name="Orders" component={OrdersStack} showLabel={false} options={{
+      {screenProps?.appType !== 'reservation' && <Tab.Screen name="Orders" component={OrdersStack} showLabel={false} options={{
         tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name="md-document" onPress={props?.onPress} />)
-      }} listeners={tabBarListeners} />
+      }} listeners={tabBarListeners} />}
       <Tab.Screen name="Reports" component={ReportsStack} showLabel={false} options={{
         tabBarIcon: (props) => (<TabBarIcon focused={props?.focused} name={'ios-stats-chart'} onPress={props?.onPress} />)
       }} listeners={tabBarListeners} />
