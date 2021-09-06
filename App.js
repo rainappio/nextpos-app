@@ -353,7 +353,7 @@ export default class App extends React.Component {
       response => {
         response.json().then(data => {
 
-          this.setState({appType: data?.clientType === 'RETAIL' ? 'retail' : 'store'})
+          this.setState({appType: data?.clientType === 'RETAIL' ? 'retail' : data?.clientType === 'RESERVATION' ? 'reservation' : 'store'})
           !!successCallback && successCallback()
         })
       },
