@@ -225,7 +225,7 @@ class SpiltBillScreen extends React.Component {
                                         {order?.lineItems?.length > 0 ?
                                             order?.lineItems?.map((item, index) => {
                                                 return (
-                                                    <TouchableOpacity style={[{backgroundColor: '#d6d6d6'}, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}
+                                                    <TouchableOpacity key={index} style={[{backgroundColor: '#d6d6d6'}, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}
                                                         activeOpacity={0.8}
                                                         onPress={() => {this.addItem(item)}}>
                                                         <View style={{aspectRatio: 3, alignItems: 'center', flexDirection: 'row'}}>
@@ -320,7 +320,7 @@ class SpiltBillScreen extends React.Component {
 
 
 
-                                                                <TouchableOpacity style={[{backgroundColor: '#d6d6d6', color: '#000'}, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}
+                                                                <TouchableOpacity key={index} style={[{backgroundColor: '#d6d6d6', color: '#000'}, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}
                                                                     activeOpacity={0.8}
                                                                     onPress={() => {this.deleteItem(item)}}>
                                                                     <View style={{aspectRatio: 6, alignItems: 'center', flexDirection: 'row'}}>
@@ -533,7 +533,7 @@ class SpiltBillScreen extends React.Component {
                                         {order?.lineItems?.length > 0 ?
                                             order?.lineItems?.map((item, index) => {
                                                 return (
-                                                    <TouchableOpacity style={[styles.rowFront, themeStyle, {backgroundColor: customBackgroundColor}]} onPress={() => {this.addItem(item)}}>
+                                                    <TouchableOpacity key={index} style={[styles.rowFront, themeStyle, {backgroundColor: customBackgroundColor}]} onPress={() => {this.addItem(item)}}>
                                                         <View style={{marginBottom: 0}}>
                                                             <View style={[styles.tableRowContainer, {paddingBottom: 0}]}>
                                                                 <View style={[styles.tableCellView, {flex: 8}]}>
@@ -643,7 +643,7 @@ class SpiltBillScreen extends React.Component {
                                         {this.state.splitOrderData?.lineItems?.length > 0 ?
                                             this.state.splitOrderData?.lineItems?.map((item, index) => {
                                                 return (
-                                                    <TouchableOpacity style={[styles.rowFront, themeStyle, {backgroundColor: customBackgroundColor}]} onPress={() => {this.deleteItem(item)}}>
+                                                    <TouchableOpacity key={index} style={[styles.rowFront, themeStyle, {backgroundColor: customBackgroundColor}]} onPress={() => {this.deleteItem(item)}}>
                                                         <View style={{marginBottom: 0}}>
                                                             <View style={[styles.tableRowContainer, {paddingBottom: 0}]}>
                                                                 <View style={[styles.tableCellView, {flex: 8}]}>

@@ -37,7 +37,7 @@ class OrderFormII extends React.Component {
     header: null
   }
   static contextType = LocaleContext
-
+  _isMounted = false
   constructor(props, context) {
     super(props, context)
     this.myRef = React.createRef();
@@ -68,19 +68,25 @@ class OrderFormII extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getLables()
-    this.props.getProductsDetail()
-    this.props.route.params.orderId !== undefined &&
-      this.props.getOrder(this.props.route.params.orderId)
+    this._isMounted = true
 
-    this._getOrder = this.props.navigation.addListener('focus', () => {
-      this.props.route.params.orderId !== undefined && this.props.getOrder(this.props.route.params.orderId)
-    })
+    if (this._isMounted) {
+      this.props.getLables()
+      this.props.getProductsDetail()
+      this.props.route.params.orderId !== undefined &&
+        this.props.getOrder(this.props.route.params.orderId)
+
+      this._getOrder = this.props.navigation.addListener('focus', () => {
+        this.props.route.params.orderId !== undefined && this.props.getOrder(this.props.route.params.orderId)
+      })
+
+    }
   }
   componentWillUnmount() {
+    this._isMounted = false
     this._getOrder()
     this.setState = (state, callback) => {
-      return;
+      return
     }
   }
 
@@ -650,6 +656,7 @@ class OrderFormII extends React.Component {
                         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get('ungrouped').map(prd => (
 
                           <TouchableOpacity style={[{width: '22%', marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, {backgroundColor: '#d6d6d6'}, (prd?.outOfStock && {backgroundColor: 'gray'})]}
+                            key={prd?.id}
                             onPress={() => prd?.outOfStock ? this.handleItemOutOfStock(prd.id, prd?.outOfStock) : this.addItemToOrder(prd.id)}
                             onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}>
                             <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>

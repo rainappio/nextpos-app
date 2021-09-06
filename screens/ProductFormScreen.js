@@ -134,15 +134,6 @@ class ProductFormScreen extends React.Component {
       inventoryData
     } = this.props
 
-    const inventoryInitial = {
-      unitOfMeasure: 'EACH',
-      baseUnitQuantity: 1,
-      minimumStockLevel: 0
-    }
-    if (!this.state.inventoryModalData) {
-      this.setState({inventoryModalData: inventoryInitial})
-    }
-
     console.log('inventoryModalData', JSON.stringify(inventoryData))
 
     return (
@@ -292,7 +283,15 @@ class ProductFormScreen extends React.Component {
             <View>
               <View style={styles.sectionContainer}>
                 <View style={[styles.tableRowContainer, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
-                  <TouchableOpacity onPress={() => {this.setState({inventoryModalData: null, isShow: true})}}>
+                  <TouchableOpacity onPress={() => {
+                    this.setState({
+                      inventoryModalData: {
+                        unitOfMeasure: 'EACH',
+                        baseUnitQuantity: 1,
+                        minimumStockLevel: 0
+                      }, isShow: true
+                    })
+                  }}>
                     <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
                       {t('inventory.addInventory')}
                     </Text>

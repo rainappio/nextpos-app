@@ -344,7 +344,7 @@ class LoginSuccessScreen extends React.Component {
           </View>
 
           <View style={{flexDirection: 'row'}}>
-            {shiftStatus === 'ACTIVE' && (
+            {(shiftStatus === 'ACTIVE' && appType !== 'reservation') && (
               <View style={[styles.menuContainer, {flex: 1}]}>
                 <MenuButton
                   route={appType === 'store' ? 'OrderStart' : 'RetailOrderStart'}
@@ -371,7 +371,7 @@ class LoginSuccessScreen extends React.Component {
                   } />
               </View>
             )}
-            {shiftStatus === 'ACTIVE' && (
+            {(shiftStatus === 'ACTIVE' && appType !== 'reservation') && (
               <View style={[styles.menuContainer, {flex: 1}]}>
                 <MenuButton
                   onPress={() => this.handleQuickTakeOut()}
@@ -385,7 +385,7 @@ class LoginSuccessScreen extends React.Component {
                   } />
               </View>
             )}
-            {(shiftStatus !== 'ACTIVE') && (
+            {(shiftStatus !== 'ACTIVE' && appType !== 'reservation') && (
               <View style={[styles.menuContainer, {flex: 1}]}>
                 <MenuButton
                   route={'ShiftClose'}
@@ -487,7 +487,7 @@ class LoginSuccessScreen extends React.Component {
               || client?.localClientStatus?.noPrinter
               || client?.localClientStatus?.noProduct
               || client?.localClientStatus?.noTable
-              || client?.localClientStatus?.noWorkingArea) &&
+              || client?.localClientStatus?.noWorkingArea) && (appType !== 'reservation') &&
               <View style={[styles.sectionContainer, {alignItems: 'center'}]}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <StyledText style={[styles?.announcementTitle(customMainThemeColor)]}>

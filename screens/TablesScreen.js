@@ -38,6 +38,7 @@ class TablesScreen extends React.Component {
     header: null
   }
   static contextType = LocaleContext
+  _isMounted = false;
 
   constructor(props, context) {
     super(props, context)
@@ -65,16 +66,21 @@ class TablesScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.loadInfo()
-    this._loadInfo = this.props.navigation.addListener('focus', async () => {
-      await this.loadInfo()
-    })
+    this._isMounted = true;
+
+    if (this._isMounted) {
+      this.loadInfo()
+      this._loadInfo = this.props.navigation.addListener('focus', async () => {
+        await this.loadInfo()
+      })
+    }
   }
   componentWillUnmount() {
+    this._isMounted = false
     this._loadInfo()
     this.setState = (state, callback) => {
-      return;
-    };
+      return
+    }
   }
 
   loadInfo = () => {
@@ -922,7 +928,8 @@ class DraggableBase extends Component {
     if (isSelected && count < 20) {
       Animated.timing(this.state.opacity, {
         toValue: this.state.opacity?._value === 0.5 ? 1 : 0.5,
-        duration: 500
+        duration: 500,
+        useNativeDriver: false,
       }).start(() => {
         this.handleFlashBorder(count + 1)
       })

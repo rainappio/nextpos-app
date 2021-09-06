@@ -15,14 +15,22 @@ class OrdersSummary extends React.Component {
   }
   static contextType = LocaleContext
 
+  _isMounted = false
   componentDidMount() {
-    this.props.getOrder()
-    this._getOrder = this.props.navigation.addListener('focus', () => {
+    this._isMounted = true
+    if (this._isMounted) {
       this.props.getOrder()
-    })
+      this._getOrder = this.props.navigation.addListener('focus', () => {
+        this.props.getOrder()
+      })
+    }
   }
   componentWillUnmount() {
+    this._isMounted = false
     this._getOrder()
+    this.setState = (state, callback) => {
+      return
+    }
   }
 
   render() {

@@ -37,6 +37,8 @@ class ReservationUpcomingForm extends React.Component {
   }
   static contextType = LocaleContext
 
+  _isMounted = false
+
   constructor(props, context) {
     super(props, context)
 
@@ -75,16 +77,22 @@ class ReservationUpcomingForm extends React.Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
 
-    this._refreshScreen = this.props.navigation.addListener('focus', () => {
-      this.getReservationEventsByTime(this.state.startDate, this.state.endDate, this.state.modeStatus)
-    })
+    if (this._isMounted) {
+      this._refreshScreen = this.props.navigation.addListener('focus', () => {
+        this.getReservationEventsByTime(this.state.startDate, this.state.endDate, this.state.modeStatus)
+      })
+    }
+
   }
   componentWillUnmount() {
+    this._isMounted = false;
+
     this._refreshScreen()
     this.setState = (state, callback) => {
-      return;
-    };
+      return
+    }
   }
 
   refreshScreen = () => {
@@ -125,8 +133,10 @@ class ReservationUpcomingForm extends React.Component {
     let endDate = moment(`${currentDate} ${endHour}:00`).format('YYYY-MM-DDTHH:mm:ss')
     this.setState({startDate: startDate, endDate: endDate})
 
-    this.getReservationEventsByTime(startDate, endDate, 'BOOKED, CONFIRMED, SEATED')
-    this.getReservationEventsByTime(startDate, endDate, 'WAITING')
+    if (this._isMounted) {
+      this.getReservationEventsByTime(startDate, endDate, 'BOOKED, CONFIRMED, SEATED')
+      this.getReservationEventsByTime(startDate, endDate, 'WAITING')
+    }
   }
 
   getReservationEventsByTime = async (startDate, endDate, status) => {
@@ -245,7 +255,9 @@ class ReservationUpcomingForm extends React.Component {
 
               }
             ).then(() => {
-              notificationPush(reservation, t, flag)
+              if (this.props.client?.clientSettings?.PUSH_NOTIFICATION && !!this.props.client?.clientSettings?.PUSH_NOTIFICATION?.value) {
+                notificationPush(reservation, t, flag)
+              }
               setTimeout(() => {
                 this.refreshScreen()
               }, 300)
@@ -304,6 +316,8 @@ class ReservationUpcomingForm extends React.Component {
             this.setState({searchResults: data.results, searching: false, isMembership: false, membershipModalVisible: false, isSearched: true})
             this.nameInput.focus()
           }
+
+
         })
       }).then()
     } else {
@@ -365,6 +379,7 @@ class ReservationUpcomingForm extends React.Component {
 
     if (!!flag) {
       this.props.change(`name`, this.state.searchResults.name)
+      this.scroll?.scrollToEnd({animated: true})
       this.noteInput.focus()
     } else {
       this.nameInput.focus()
@@ -449,10 +464,11 @@ class ReservationUpcomingForm extends React.Component {
       availableTables,
       handleSubmit,
       statusHeight,
-      shiftStatus
+      shiftStatus,
+      client
     } = this.props
 
-    const {t, customMainThemeColor, customBackgroundColor} = this.context
+    const {t, customMainThemeColor, customBackgroundColor, appType} = this.context
     const timeBlocks = Object.keys(this.state.timeBlocks).map(key => this.state.timeBlocks[key].label)
     const timezone = TimeZoneService.getTimeZone()
 
@@ -480,7 +496,7 @@ class ReservationUpcomingForm extends React.Component {
 
     if (!!this?.state?.isTablet) {
       return (
-        <ThemeScrollView>
+        <ThemeScrollView keyboardShouldPersistTaps={'always'}>
           <View style={[styles.fullWidthScreen, {marginTop: 53 - statusHeight}]}>
             <ScreenHeader
               backNavigation={false}
@@ -687,7 +703,8 @@ class ReservationUpcomingForm extends React.Component {
               <View style={[styles.flex(9), styles.withBorder(this.context), {flexDirection: 'row'}]}>
 
                 <View style={[styles.flex(1), {justifyContent: 'flex-start', borderRightWidth: 1, borderColor: customMainThemeColor}]}>
-                  <ThemeKeyboardAwareScrollView>
+                  <ThemeKeyboardAwareScrollView getRef={ref => {this.scroll = ref}} extraHeight={-72} enableResetScrollToCoords={false}
+                  >
                     <View style={[styles.horizontalMargin]}>
                       <View style={[{marginBottom: 8}]}>
                         <View style={[styles.sectionTitleContainer, {marginVertical: 0}]}>
@@ -800,7 +817,9 @@ class ReservationUpcomingForm extends React.Component {
                             setFieldToBeFocused={input => {
                               this.noteInput = input
                             }}
-
+                            onEndEditing={() =>
+                              this.scroll?.scrollTo({x: 0, y: 0, animated: true})
+                            }
                             placeholder={t('reservation.otherNote')}
                           />
                         </View>
@@ -920,13 +939,31 @@ class ReservationUpcomingForm extends React.Component {
                               </View>
                             </View>
                             <View style={[styles.flex(3), {justifyContent: 'flex-end'}]}>
-                              {(event?.status !== 'SEATED' && shiftStatus === 'ACTIVE') &&
+                              {(event?.status !== 'SEATED' && shiftStatus === 'ACTIVE' && appType !== 'reservation') &&
                                 <View style={[styles.tableRowContainer]}>
                                   <TouchableOpacity onPress={() => {
                                     this.handleSeat(event.id)
                                   }} style={[styles.flexButton(customMainThemeColor), {margin: 4, paddingVertical: 2}]}>
                                     <StyledText style={[styles.flexButtonText]}>{t('reservation.actionTip.seat')}</StyledText>
                                   </TouchableOpacity>
+                                  <TouchableOpacity
+                                    onPress={() => {
+                                      this.handleToggleDelayModal(true, event.id)
+                                    }}
+                                    style={[styles.flexButton(customMainThemeColor), {margin: 4, paddingVertical: 2}]}>
+                                    <StyledText style={[styles.flexButtonText]}>{t('reservation.actionTip.delay')}</StyledText>
+                                  </TouchableOpacity>
+                                  <NotificationTask
+                                    buttonText={t('reservation.actionTip.cancel')}
+                                    isStyledText={true}
+                                    buttonStyles={[styles.flexButton(customMainThemeColor), {margin: 4, paddingVertical: 2}]}
+                                    textStyles={[styles.flexButtonText]}
+                                    onPress={() => this.handleCancel(event, schedulePushNotification, t, 'DELETE')}
+                                  />
+                                </View>
+                              }
+                              {(appType === 'reservation') &&
+                                <View style={[styles.tableRowContainer]}>
                                   <TouchableOpacity
                                     onPress={() => {
                                       this.handleToggleDelayModal(true, event.id)
@@ -1244,7 +1281,10 @@ class ReservationUpcomingForm extends React.Component {
                   </TouchableOpacity>
                 </View>
 
-                <ThemeKeyboardAwareScrollView>
+                <ThemeKeyboardAwareScrollView
+                  getRef={ref => {this.scroll = ref}}
+                  extraHeight={-120} enableResetScrollToCoords={false}
+                >
                   <View style={[styles.horizontalMargin]}>
                     <View style={[{marginBottom: 8}]}>
                       <View style={[styles.sectionTitleContainer, {marginVertical: 0}]}>
@@ -1354,7 +1394,9 @@ class ReservationUpcomingForm extends React.Component {
                           setFieldToBeFocused={input => {
                             this.noteInput = input
                           }}
-
+                          onEndEditing={() =>
+                            this.scroll?.scrollTo({x: 0, y: 0, animated: true})
+                          }
                           placeholder={t('reservation.otherNote')}
                         />
                       </View>
@@ -1495,7 +1537,7 @@ class ReservationUpcomingForm extends React.Component {
 
                           </View>
                           <View style={[styles.flex(2), {justifyContent: 'center', flexDirection: 'column', marginRight: 4}]}>
-                            {(event?.status !== 'SEATED' && shiftStatus === 'ACTIVE') &&
+                            {(event?.status !== 'SEATED' && shiftStatus === 'ACTIVE' && appType !== 'reservation') &&
                               <>
                                 <TouchableOpacity onPress={() => {
                                   this.handleSeat(event.id)
@@ -1517,6 +1559,24 @@ class ReservationUpcomingForm extends React.Component {
                                   onPress={() => this.handleCancel(event, schedulePushNotification, t, 'DELETE')}
                                 />
                               </>}
+                            {(appType === 'reservation') &&
+                              <>
+                                <TouchableOpacity
+                                  onPress={() => {
+                                    this.handleToggleDelayModal(true, event.id)
+                                  }}
+                                  style={[styles.flexButton(customMainThemeColor), {margin: 4, paddingVertical: 2}]}>
+                                  <StyledText style={[styles.flexButtonText]}>{t('reservation.actionTip.delay')}</StyledText>
+                                </TouchableOpacity>
+                                <NotificationTask
+                                  buttonText={t('reservation.actionTip.cancel')}
+                                  isStyledText={true}
+                                  buttonStyles={[styles.flexButton(customMainThemeColor), {margin: 4, paddingVertical: 2}]}
+                                  textStyles={[styles.flexButtonText]}
+                                  onPress={() => this.handleCancel(event, schedulePushNotification, t, 'DELETE')}
+                                />
+                              </>
+                            }
                           </View>
                         </View>
                       )

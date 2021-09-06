@@ -3,7 +3,7 @@ import {ScrollView, View, Alert} from 'react-native'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
-import {getReservation} from '../actions'
+import {getCurrentClient, getReservation} from '../actions'
 import LoadingScreen from "./LoadingScreen";
 import ReservationFormScreen from './ReservationFormScreen'
 import {connect} from 'react-redux'
@@ -16,6 +16,7 @@ class ReservationEditScreen extends React.Component {
   static navigationOptions = {
     header: null
   }
+  _isMounted = false
 
   static contextType = LocaleContext
   constructor(props, context) {
@@ -27,12 +28,21 @@ class ReservationEditScreen extends React.Component {
   }
 
   componentDidMount() {
-    this._getReservation = this.props.navigation.addListener('focus', () => {
-      this.props.getReservation()
-    })
+    this._isMounted = true;
+
+    if (this._isMounted) {
+      this._getReservation = this.props.navigation.addListener('focus', () => {
+        this.props.getReservation()
+      })
+    }
   }
   componentWillUnmount() {
+    this._isMounted = false;
+
     this._getReservation()
+    this.setState = (state, callback) => {
+      return
+    }
   }
 
   handleUpdateReservation = (notificationPush, t, flag) => {
@@ -66,7 +76,9 @@ class ReservationEditScreen extends React.Component {
         this.props.navigation.navigate('ReservationCalendarScreen')
       }
     ).then(() => {
-      notificationPush(request, t, flag)
+      if (this.props.client?.clientSettings?.PUSH_NOTIFICATION && !!this.props.client?.clientSettings?.PUSH_NOTIFICATION?.value) {
+        notificationPush(request, t, flag)
+      }
     })
   }
 
@@ -106,7 +118,7 @@ class ReservationEditScreen extends React.Component {
 
 
   render() {
-    const {navigation, route, reservation, isLoading} = this.props
+    const {client, navigation, route, reservation, isLoading} = this.props
     const {t, isTablet, customMainThemeColor, customBackgroundColor} = this.context
 
     return (
@@ -125,6 +137,7 @@ class ReservationEditScreen extends React.Component {
             initialValues={this.state.initialValues ?? reservation}
             navigation={navigation}
             route={route}
+            client={client}
           />
         }
       </ThemeContainer>
@@ -134,6 +147,7 @@ class ReservationEditScreen extends React.Component {
 
 
 const mapStateToProps = state => ({
+  client: state.client.data,
   haveData: state.reservation.haveData,
   haveError: state.reservation.haveError,
   isLoading: state.reservation.loading,
@@ -142,6 +156,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
+  getCurrentClient: () => dispatch(getCurrentClient()),
   getReservation: () => dispatch(getReservation(props.route?.params?.reservationId)),
 })
 

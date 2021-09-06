@@ -370,6 +370,7 @@ export const EditPasswordPopUp = enhance(EditPasswordPopUpBase)
 class EditGesturePasswordPopUpBase extends Component {
   static contextType = LocaleContext
 
+  _isMounted = false
   constructor(props, context) {
     super(props, context)
 
@@ -430,13 +431,19 @@ class EditGesturePasswordPopUpBase extends Component {
 
 
   async componentDidMount() {
-    await this.checkGesturePassword()
+    this._isMounted = true
+    if (this._isMounted) {
+      await this.checkGesturePassword()
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps?.updateGestureFlag !== this.props?.updateGestureFlag) {
       this.setState({hasGesturePassword: false})
     }
+  }
+  componentWillUnmount() {
+    this._isMounted = false
   }
 
   checkGesturePassword = async (result = null) => {

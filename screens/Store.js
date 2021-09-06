@@ -47,6 +47,13 @@ class Store extends React.Component {
       values.clientSettings.LOCATION_BASED_SERVICE.value = values.clientSettings.LOCATION_BASED_SERVICE.enabled
     }
 
+    if (!values.clientSettings.PUSH_NOTIFICATION) {
+      values.clientSettings.PUSH_NOTIFICATION = {enable: false}
+    }
+    if (values.clientSettings.PUSH_NOTIFICATION !== undefined) {
+      values.clientSettings.PUSH_NOTIFICATION.value = values.clientSettings.PUSH_NOTIFICATION.enabled
+    }
+
     if (values.clientSettings.APPLY_CUSTOM_OFFER !== undefined) {
       values.clientSettings.APPLY_CUSTOM_OFFER.value = values.clientSettings.APPLY_CUSTOM_OFFER.enabled
     }

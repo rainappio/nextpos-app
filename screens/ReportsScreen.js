@@ -29,7 +29,7 @@ class ReportsScreen extends React.Component {
 
   render() {
     const {themeStyle} = this.props
-    const {t, customMainThemeColor} = this.context
+    const {t, customMainThemeColor, appType} = this.context
 
 
     return (
@@ -41,103 +41,147 @@ class ReportsScreen extends React.Component {
           />
 
           <View style={[styles.flex(1)]}>
-            <View style={[styles.menuContainer]}>
+            {appType !== 'reservation' ?
+              <>
+                <View style={[styles.menuContainer]}>
 
-              <PermissionCheckTouchable
-                requiredPermission='OWNER'
-                uiComponent={
-                  <MenuButton
-                    route='SalesCharts'
-                    onPress={() => NavigationService?.navigateToRoute('SalesCharts', {screen: 'SalesCharts'})}
-                    title={t('salesReport')}
-                    icon={
-                      <FontAwesomeIcon
-                        name="bar-chart"
-                        size={40}
-                        style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                  <PermissionCheckTouchable
+                    requiredPermission='OWNER'
+                    uiComponent={
+                      <MenuButton
+                        route='SalesCharts'
+                        onPress={() => NavigationService?.navigateToRoute('SalesCharts', {screen: 'SalesCharts'})}
+                        title={t('salesReport')}
+                        icon={
+                          <FontAwesomeIcon
+                            name="bar-chart"
+                            size={40}
+                            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                          />
+                        }
                       />
                     }
                   />
-                }
-              />
 
 
-              <View style={styles.dynamicHorizontalPadding(6)} />
-              <PermissionCheckTouchable
-                requiredPermission='OWNER'
-                uiComponent={
-                  <MenuButton
-                    route='StaffTimeCard'
-                    onPress={() => NavigationService?.navigateToRoute('StaffTimeCard', {screen: 'StaffTimeCard'})}
-                    title={t('staffTimeCardReport')}
-                    icon={
-                      <Icon
-                        name="md-time"
-                        size={40}
-                        style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                  <View style={styles.dynamicHorizontalPadding(6)} />
+                  <PermissionCheckTouchable
+                    requiredPermission='OWNER'
+                    uiComponent={
+                      <MenuButton
+                        route='StaffTimeCard'
+                        onPress={() => NavigationService?.navigateToRoute('StaffTimeCard', {screen: 'StaffTimeCard'})}
+                        title={t('staffTimeCardReport')}
+                        icon={
+                          <Icon
+                            name="md-time"
+                            size={40}
+                            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                          />
+                        }
                       />
                     }
                   />
-                }
-              />
 
 
-            </View>
-
-            <View style={[styles.menuContainer]}>
-              <PermissionCheckTouchable
-                requiredPermission='OWNER'
-                uiComponent={
-                  <MenuButton
-                    route='CustomerStats'
-                    onPress={() => NavigationService?.navigateToRoute('CustomerStats', {screen: 'CustomerStats'})}
-                    title={t('customerStatsReport')}
-                    icon={
-                      <Icon
-                        name="md-trending-up"
-                        size={40}
-                        style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                </View>
+                <View style={[styles.menuContainer]}>
+                  <PermissionCheckTouchable
+                    requiredPermission='OWNER'
+                    uiComponent={
+                      <MenuButton
+                        route='CustomerStats'
+                        onPress={() => NavigationService?.navigateToRoute('CustomerStats', {screen: 'CustomerStats'})}
+                        title={t('customerStatsReport')}
+                        icon={
+                          <Icon
+                            name="md-trending-up"
+                            size={40}
+                            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                          />
+                        }
                       />
                     }
                   />
-                }
-              />
 
 
-              <View style={styles.dynamicHorizontalPadding(6)} />
+                  <View style={styles.dynamicHorizontalPadding(6)} />
 
-              <PermissionCheckTouchable
-                requiredPermission='OWNER'
-                uiComponent={
-                  <MenuButton
-                    route='ShiftHistory'
-                    onPress={() => this.props.navigation.navigate('ShiftHistory')}
-                    title={t('shiftHistory')}
-                    icon={
-                      <Icon
-                        name="md-today"
-                        size={40}
-                        style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                  <PermissionCheckTouchable
+                    requiredPermission='OWNER'
+                    uiComponent={
+                      <MenuButton
+                        route='ShiftHistory'
+                        onPress={() => this.props.navigation.navigate('ShiftHistory')}
+                        title={t('shiftHistory')}
+                        icon={
+                          <Icon
+                            name="md-today"
+                            size={40}
+                            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                          />
+                        }
                       />
                     }
                   />
-                }
-              />
 
-            </View>
-            <View style={[styles.menuContainer]}>
-              <View style={{flex: 1}}></View>
-              <View style={styles.dynamicHorizontalPadding(6)} />
-              <View style={{flex: 1}}></View>
-            </View>
-            <View style={[styles.menuContainer]}>
-              <View style={{flex: 1}}></View>
-              <View style={styles.dynamicHorizontalPadding(6)} />
-              <View style={{flex: 1}}></View>
-            </View>
+                </View>
+                <View style={[styles.menuContainer]}>
+                  <View style={{flex: 1}}></View>
+                  <View style={styles.dynamicHorizontalPadding(6)} />
+                  <View style={{flex: 1}}></View>
+                </View>
+                <View style={[styles.menuContainer]}>
+                  <View style={{flex: 1}}></View>
+                  <View style={styles.dynamicHorizontalPadding(6)} />
+                  <View style={{flex: 1}}></View>
+                </View>
+              </>
+              :
+              <>
+                <View style={[styles.menuContainer]}>
+                  <PermissionCheckTouchable
+                    requiredPermission='OWNER'
+                    uiComponent={
+                      <MenuButton
+                        route='StaffTimeCard'
+                        onPress={() => NavigationService?.navigateToRoute('StaffTimeCard', {screen: 'StaffTimeCard'})}
+                        title={t('staffTimeCardReport')}
+                        icon={
+                          <Icon
+                            name="md-time"
+                            size={40}
+                            style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                          />
+                        }
+                      />
+                    }
+                  />
+                  <View style={styles.dynamicHorizontalPadding(6)} />
+                  <View style={{flex: 1}}></View>
+                </View>
+                <View style={[styles.menuContainer]}>
+                  <View style={{flex: 1}}></View>
+                  <View style={styles.dynamicHorizontalPadding(6)} />
+                  <View style={{flex: 1}}></View>
+                </View>
+                <View style={[styles.menuContainer]}>
+                  <View style={{flex: 1}}></View>
+                  <View style={styles.dynamicHorizontalPadding(6)} />
+                  <View style={{flex: 1}}></View>
+                </View>
+                <View style={[styles.menuContainer]}>
+                  <View style={{flex: 1}}></View>
+                  <View style={styles.dynamicHorizontalPadding(6)} />
+                  <View style={{flex: 1}}></View>
+                </View>
+              </>
+
+            }
+
           </View>
         </View>
-      </ThemeContainer>
+      </ThemeContainer >
     )
   }
 }

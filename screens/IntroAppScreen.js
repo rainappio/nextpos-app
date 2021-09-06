@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import styles from '../styles'
 import {doLogout} from '../actions'
 import {getToken} from "../constants/Backend";
+import {handleRefreshToken} from "../helpers/loginActions";
 import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
@@ -35,8 +36,8 @@ class IntroAppScreen extends React.Component {
     if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {
       this.props.navigation.navigate('ClientUsers')
     } else {
-      this.props.dispatch(doLogout())
-      this.props.navigation.navigate('Login')
+      handleRefreshToken()
+      this.props.navigation.navigate('ClientUsers')
     }
   }
 

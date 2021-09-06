@@ -283,7 +283,7 @@ class DraggableBase extends Component {
       },
       onPanResponderMove: Animated.event([
         null, {dx: this.state.pan.x, dy: this.state.pan.y}
-      ]),
+      ], {useNativeDriver: false}),
       onPanResponderRelease: (e, gesture) => {
         this.state.pan.flattenOffset();
         console.log(`on release: ${JSON.stringify(this.state.pan)}`)

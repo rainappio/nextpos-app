@@ -244,7 +244,7 @@ class SplitBillByHeadScreen extends React.Component {
                                         {order?.lineItems?.length > 0 ?
                                             order?.lineItems?.map((item, index) => {
                                                 return (
-                                                    <TouchableOpacity style={[{backgroundColor: '#d6d6d6'}, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}
+                                                    <TouchableOpacity key={index} style={[{backgroundColor: '#d6d6d6'}, {marginBottom: 16, borderRadius: 10}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}
                                                         activeOpacity={0.8}
                                                         onPress={() => {}}>
                                                         <View style={{aspectRatio: 3, alignItems: 'center', flexDirection: 'row'}}>
@@ -336,7 +336,7 @@ class SplitBillByHeadScreen extends React.Component {
 
 
 
-                                                                <TouchableOpacity style={[{backgroundColor: '#d6d6d6', color: '#000'}, {marginBottom: 16, borderRadius: 10}, (!!item?.paid && {backgroundColor: 'gray'})]}
+                                                                <TouchableOpacity key={index} style={[{backgroundColor: '#d6d6d6', color: '#000'}, {marginBottom: 16, borderRadius: 10}, (!!item?.paid && {backgroundColor: 'gray'})]}
                                                                     activeOpacity={0.8}
                                                                     disabled={item?.paid}
                                                                     onPress={() => {}}>
@@ -520,7 +520,7 @@ class SplitBillByHeadScreen extends React.Component {
                                         {order?.lineItems?.length > 0 ?
                                             order?.lineItems?.map((item, index) => {
                                                 return (
-                                                    <TouchableOpacity style={[styles.rowFront, themeStyle, {backgroundColor: customBackgroundColor}]} onPress={() => {}}>
+                                                    <TouchableOpacity key={index} style={[styles.rowFront, themeStyle, {backgroundColor: customBackgroundColor}]} onPress={() => {}}>
                                                         <View style={{marginBottom: 0}}>
                                                             <View style={[styles.tableRowContainer, {paddingBottom: 0}]}>
                                                                 <View style={[styles.tableCellView, {flex: 8}]}>
@@ -596,7 +596,7 @@ class SplitBillByHeadScreen extends React.Component {
                                         {this.state.splitOrderData?.splitAmounts?.length > 0 ?
                                             this.state.splitOrderData?.splitAmounts?.map((item, index) => {
                                                 return (
-                                                    <TouchableOpacity style={[{backgroundColor: '#d6d6d6', color: '#000'}, {marginBottom: 8, borderRadius: 10}, (!!item?.paid && {backgroundColor: 'gray'})]}
+                                                    <TouchableOpacity key={index} style={[{backgroundColor: '#d6d6d6', color: '#000'}, {marginBottom: 8, borderRadius: 10}, (!!item?.paid && {backgroundColor: 'gray'})]}
                                                         disabled={item?.paid}
                                                         activeOpacity={0.8}
                                                         onPress={() => {}}>

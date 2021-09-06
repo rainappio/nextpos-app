@@ -25,6 +25,7 @@ import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import rootReducer from './reducers'
+import {handleRefreshToken} from "./helpers/loginActions";
 import {getSettingTimezone} from './actions'
 import AppLoading from 'expo-app-loading'
 import {Asset} from 'expo-asset'
@@ -176,6 +177,8 @@ export default class App extends React.Component {
   }
 
   async componentDidMount() {
+    handleRefreshToken()
+
     getTheme().then(async (theme) => {
       const themeStyle = theme === 'light' ? themes.light : themes.dark
       const reverseThemeStyle = theme === 'light' ? {...themes.light, borderColor: 'black'} : themes.light

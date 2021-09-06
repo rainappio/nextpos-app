@@ -100,14 +100,16 @@ class PaymentFormScreenTablet extends React.Component {
         if (count < 2) {
             Animated.timing(this.state.discountOpacity, {
                 toValue: this.state.discountOpacity?._value < 1 ? 1 : 0,
-                duration: 500
+                duration: 500,
+                useNativeDriver: false,
             }).start(() => {
                 this.handleFlashDiscount(count + 1)
             })
         } else {
             Animated.timing(this.state.discountOpacity, {
                 toValue: 0,
-                duration: 100
+                duration: 100,
+                useNativeDriver: false,
             })
         }
     }
@@ -116,14 +118,16 @@ class PaymentFormScreenTablet extends React.Component {
         if (count < 2) {
             Animated.timing(this.state.serviceChargeOpacity, {
                 toValue: this.state.serviceChargeOpacity?._value < 1 ? 1 : 0,
-                duration: 500
+                duration: 500,
+                useNativeDriver: false,
             }).start(() => {
                 this.handleFlashServiceCharge(count + 1)
             })
         } else {
             Animated.timing(this.state.serviceChargeOpacity, {
                 toValue: 0,
-                duration: 100
+                duration: 100,
+                useNativeDriver: false,
             })
         }
     }

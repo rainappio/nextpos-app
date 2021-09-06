@@ -4,7 +4,7 @@ import {Keyboard, Text, TouchableOpacity, View, FlatList, Dimensions, Alert, Ani
 import {connect} from 'react-redux'
 import {compose} from "redux";
 import {withContext} from "../helpers/contextHelper";
-import {getTableLayouts, getReservation, normalizeTimeString} from '../actions'
+import {getCurrentClient, getTableLayouts, getReservation, normalizeTimeString} from '../actions'
 import {getInitialTablePosition, getTablePosition, getSetPosition} from "../helpers/tableAction";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -120,7 +120,9 @@ class ReservationViewForm extends React.Component {
 
               }
             ).then(() => {
-              notificationPush(reservation, t, flag)
+              if (this.props.client?.clientSettings?.PUSH_NOTIFICATION && !!this.props.client?.clientSettings?.PUSH_NOTIFICATION?.value) {
+                notificationPush(reservation, t, flag)
+              }
             })
           }
         },
@@ -171,6 +173,7 @@ class ReservationViewForm extends React.Component {
       haveData,
       tablelayouts,
       reservation,
+      client
     } = this.props
 
     const {t, customMainThemeColor, customBackgroundColor} = this.context
@@ -574,6 +577,7 @@ class ReservationViewForm extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  client: state.client.data,
   tablelayouts: state.tablelayouts.data.tableLayouts,
   haveData: state.reservation.haveData || state.tablelayouts.haveData,
   haveError: state.reservation.haveError || state.tablelayouts.haveError,
@@ -583,6 +587,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
+  getCurrentClient: () => dispatch(getCurrentClient()),
   getTableLayouts: () => dispatch(getTableLayouts()),
   getReservation: () => dispatch(getReservation(props.route?.params?.reservationId)),
 })
