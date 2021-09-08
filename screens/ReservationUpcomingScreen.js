@@ -71,7 +71,7 @@ class ReservationUpcomingScreen extends React.Component {
 
       }
     ).then(() => {
-      if (this.props.client?.clientSettings?.PUSH_NOTIFICATION && !!this.props.client?.clientSettings?.PUSH_NOTIFICATION?.value) {
+      if (this.props.client?.clientSettings?.PUSH_NOTIFICATION !== undefined && this.props.client?.clientSettings?.PUSH_NOTIFICATION?.value) {
         schedulePushNotification(request, this.context.t, 'CREATE')
       }
     })

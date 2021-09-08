@@ -14,7 +14,7 @@
           "icon": "./assets/images/logo.png",
           "color": "#ffffff",
           "sounds": ["./assets/sounds/juntos-607.mp3"],
-          "mode": "development"
+          "mode": "production"
         }
       ]
     ],
