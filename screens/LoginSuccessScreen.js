@@ -51,7 +51,8 @@ class LoginSuccessScreen extends React.Component {
       globalAnnouncements: null,
       modalVisible: false,
       checkedObj: null,
-      isLoadingUserInfo: false
+      isLoadingUserInfo: false,
+      notificationRegister: false
     }
 
   }
@@ -111,7 +112,7 @@ class LoginSuccessScreen extends React.Component {
     this.props.getCurrentUser(token.username)
     this.props.getAnnouncements()
     this.props.getShiftStatus()
-    registerForPushNotificationsAsync()
+
     console.log('token', JSON.stringify(token))
 
     this.setState({
@@ -132,6 +133,11 @@ class LoginSuccessScreen extends React.Component {
         isLoadingUserInfo: false
       })
     }
+    if (!this.state.notificationRegister) {
+      registerForPushNotificationsAsync()
+      this.setState({notificationRegister: true})
+    }
+
   }
 
   getGlobalAnnouncements = () => {
