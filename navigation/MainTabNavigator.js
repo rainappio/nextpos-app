@@ -442,6 +442,9 @@ const BottomTab = () => {
       if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {
         if (route.name === 'CalendarScreen') {
           NavigationService?.navigateToRoute('Roster', {screen: 'CalendarScreen'}, null)
+
+        } else if (route.name === 'Orders') {
+          navigation.navigate((!!route?.state?.routeNames ? route.state.routeNames[0] : 'Orders'), {shiftId: null, withAnimation: false})
         } else if (!!route?.state?.routeNames) {
           navigation.navigate(route.state.routeNames[0], {withAnimation: false})
         } else {
