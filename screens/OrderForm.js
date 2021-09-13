@@ -366,7 +366,7 @@ class OrderForm extends Component {
       )
     } else {
       return (
-        <ThemeScrollView>
+        <ThemeContainer>
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
               backAction={() => {
@@ -379,100 +379,100 @@ class OrderForm extends Component {
               parentFullScreen={true}
               title={t('newOrder.newOrderTitle')}
             />
-
-            <View style={[styles.sectionContent, styles.horizontalMargin]}>
-              <View style={styles.sectionTitleContainer}>
-                <StyledText style={styles.sectionTitleText}>{t('newOrder.orderType')}</StyledText>
-              </View>
-              <View style={[styles.fieldContainer]}>
-                <View style={{flex: 1}}>
-                  <Field
-                    name="orderType"
-                    component={SegmentedControl}
-                    selectedIndex={this.state.selectedOrderType}
-                    onChange={this.handleOrderTypeSelection}
-                    values={orderTypes}
-                    normalize={value => {
-                      return this.state.orderTypes[value].value
-                    }}
-                  />
+            <ThemeScrollView style={{height: '100%'}}>
+              <View style={[styles.sectionContent, styles.horizontalMargin]}>
+                <View style={styles.sectionTitleContainer}>
+                  <StyledText style={styles.sectionTitleText}>{t('newOrder.orderType')}</StyledText>
                 </View>
-              </View>
-            </View>
-
-
-            {this.props?.initialValues?.membership && <View style={[styles.dynamicHorizontalPadding(16), styles.withBottomBorder, {paddingBottom: 12}]}>
-              <View style={styles.sectionTitleContainer}>
-                <StyledText style={styles.sectionTitleText}>{t('newOrder.membership.title')}</StyledText>
-              </View>
-              <View style={[styles.fieldContainer, {justifyContent: 'space-between'}]}>
-                <View style={[styles.flexButtonSecondAction(this.context)]}>
-                  <StyledText style={[{color: customMainThemeColor, paddingVertical: 2}]}>
-                    {t('newOrder.membership.name')}
-                  </StyledText>
-                </View>
-                <View style={[styles.flex(2), {alignItems: 'flex-end'}]}>
-                  <StyledText>
-                    {this.props?.initialValues?.membership.name}
-                  </StyledText>
-                </View>
-              </View>
-              <View style={[styles.fieldContainer, {justifyContent: 'space-between'}]}>
-                <View style={[styles.flexButtonSecondAction(this.context)]}>
-                  <StyledText style={[{color: customMainThemeColor, paddingVertical: 2}]}>
-                    {t('newOrder.membership.phone')}
-                  </StyledText>
-                </View>
-                <View style={[styles.flex(2), {alignItems: 'flex-end'}]}>
-                  <StyledText>
-                    {this.props?.initialValues?.membership.phoneNumber}
-                  </StyledText>
-                </View>
-              </View>
-            </View>}
-
-            {this.state.selectedOrderType === 0 && Object.keys(tablesMap).length > 0 && (
-              <View style={styles.sectionContent}>
-                <View style={{paddingHorizontal: 16}}>
-                  <View style={styles.sectionTitleContainer}>
-                    <StyledText style={styles.sectionTitleText}>{t('newOrder.table')}</StyledText>
+                <View style={[styles.fieldContainer]}>
+                  <View style={{flex: 1}}>
+                    <Field
+                      name="orderType"
+                      component={SegmentedControl}
+                      selectedIndex={this.state.selectedOrderType}
+                      onChange={this.handleOrderTypeSelection}
+                      values={orderTypes}
+                      normalize={value => {
+                        return this.state.orderTypes[value].value
+                      }}
+                    />
                   </View>
-                  {noAvailableTables && (
-                    <View style={styles.sectionContent}>
-                      <StyledText>{t('newOrder.noAvailableTables')}</StyledText>
-                    </View>
-                  )}
-
-                  {noAvailableTables ||
-                    layoutList?.map((layout, index) => {
-                      return (
-                        <View key={index}>
-                          <View style={[complexTheme.shade, {flex: 1, marginTop: 12, height: 36, alignItems: 'center', justifyContent: 'center'}]}>
-                            <StyledText style={{fontSize: 18, }}>{layout}</StyledText>
-                          </View>
-                          <Field
-                            name={`tableIds`}
-                            component={TableRenderCheckboxGroup}
-                            customarr={tablesMap?.[layout]}
-                          />
-                        </View>
-                      )
-                    })
-                  }
-
-
                 </View>
               </View>
-            )}
-
-            {noAvailableTables && (
-              <View style={styles.sectionContent}>
-                <StyledText>{t('newOrder.noAvailableTables')}</StyledText>
-              </View>
-            )}
 
 
-            {/* <View style={[styles.sectionContent, styles.horizontalMargin]}>
+              {this.props?.initialValues?.membership && <View style={[styles.dynamicHorizontalPadding(16), styles.withBottomBorder, {paddingBottom: 12}]}>
+                <View style={styles.sectionTitleContainer}>
+                  <StyledText style={styles.sectionTitleText}>{t('newOrder.membership.title')}</StyledText>
+                </View>
+                <View style={[styles.fieldContainer, {justifyContent: 'space-between'}]}>
+                  <View style={[styles.flexButtonSecondAction(this.context)]}>
+                    <StyledText style={[{color: customMainThemeColor, paddingVertical: 2}]}>
+                      {t('newOrder.membership.name')}
+                    </StyledText>
+                  </View>
+                  <View style={[styles.flex(2), {alignItems: 'flex-end'}]}>
+                    <StyledText>
+                      {this.props?.initialValues?.membership.name}
+                    </StyledText>
+                  </View>
+                </View>
+                <View style={[styles.fieldContainer, {justifyContent: 'space-between'}]}>
+                  <View style={[styles.flexButtonSecondAction(this.context)]}>
+                    <StyledText style={[{color: customMainThemeColor, paddingVertical: 2}]}>
+                      {t('newOrder.membership.phone')}
+                    </StyledText>
+                  </View>
+                  <View style={[styles.flex(2), {alignItems: 'flex-end'}]}>
+                    <StyledText>
+                      {this.props?.initialValues?.membership.phoneNumber}
+                    </StyledText>
+                  </View>
+                </View>
+              </View>}
+
+              {this.state.selectedOrderType === 0 && Object.keys(tablesMap).length > 0 && (
+                <View style={styles.sectionContent}>
+                  <View style={{paddingHorizontal: 16}}>
+                    <View style={styles.sectionTitleContainer}>
+                      <StyledText style={styles.sectionTitleText}>{t('newOrder.table')}</StyledText>
+                    </View>
+                    {noAvailableTables && (
+                      <View style={styles.sectionContent}>
+                        <StyledText>{t('newOrder.noAvailableTables')}</StyledText>
+                      </View>
+                    )}
+
+                    {noAvailableTables ||
+                      layoutList?.map((layout, index) => {
+                        return (
+                          <View key={index}>
+                            <View style={[complexTheme.shade, {flex: 1, marginTop: 12, height: 36, alignItems: 'center', justifyContent: 'center'}]}>
+                              <StyledText style={{fontSize: 18, }}>{layout}</StyledText>
+                            </View>
+                            <Field
+                              name={`tableIds`}
+                              component={TableRenderCheckboxGroup}
+                              customarr={tablesMap?.[layout]}
+                            />
+                          </View>
+                        )
+                      })
+                    }
+
+
+                  </View>
+                </View>
+              )}
+
+              {noAvailableTables && (
+                <View style={styles.sectionContent}>
+                  <StyledText>{t('newOrder.noAvailableTables')}</StyledText>
+                </View>
+              )}
+
+
+              {/* <View style={[styles.sectionContent, styles.horizontalMargin]}>
               <View style={styles.sectionTitleContainer}>
                 <StyledText style={styles.sectionTitleText}>{t('newOrder.ageGroup')}</StyledText>
               </View>
@@ -492,7 +492,7 @@ class OrderForm extends Component {
               </View>
             </View> */}
 
-            {/* <View style={[styles.sectionContent, styles.horizontalMargin]}>
+              {/* <View style={[styles.sectionContent, styles.horizontalMargin]}>
               <View style={styles.sectionTitleContainer}>
                 <StyledText style={styles.sectionTitleText}>{t('newOrder.visitFrequency')}</StyledText>
               </View>
@@ -512,35 +512,34 @@ class OrderForm extends Component {
               </View>
             </View> */}
 
-            <View style={styles.sectionContent}>
-              <View style={styles.sectionTitleContainer}>
-                <StyledText style={styles.sectionTitleText}>{t('newOrder.peopleCount')}</StyledText>
+              <View style={styles.sectionContent}>
+                <View style={styles.sectionTitleContainer}>
+                  <StyledText style={styles.sectionTitleText}>{t('newOrder.peopleCount')}</StyledText>
+                </View>
+                <View>
+                  {people.map((people, ix) => (
+                    <View
+                      style={[styles.tableRowContainerWithBorder]}
+                      key={ix}
+                    >
+                      <Field
+                        name={people.value}
+                        component={RenderStepper}
+                        optionName={people.label}
+                      />
+                    </View>
+                  ))}
+                </View>
               </View>
-              <View>
-                {people.map((people, ix) => (
-                  <View
-                    style={[styles.tableRowContainerWithBorder]}
-                    key={ix}
-                  >
-                    <Field
-                      name={people.value}
-                      component={RenderStepper}
-                      optionName={people.label}
-                    />
-                  </View>
-                ))}
-              </View>
-            </View>
 
-            {this.state.selectedOrderType != null && (
-              <View
-                style={[
-                  styles.bottom,
-                  styles.flexRow,
-                  styles.horizontalMargin
-                ]}
-              >
-                <View style={{flex: 1, marginHorizontal: 5}}>
+            </ThemeScrollView>
+
+          </View>
+          {this.state.selectedOrderType != null && (
+            <View style={[{position: 'relative', bottom: 0, maxHeight: 100}]}>
+              <View style={[styles.tableRowContainerWithBorder, {borderBottomWidth: 0}]}>
+                <View style={[{flex: 1, marginHorizontal: 5}]}>
+
                   <TouchableOpacity
                     onPress={() => {
                       if (!noAvailableTables) {
@@ -563,7 +562,7 @@ class OrderForm extends Component {
                   </TouchableOpacity>
                 </ View>
 
-                <View style={{flex: 1, marginHorizontal: 5}}>
+                <View style={[{flex: 1, marginHorizontal: 5}]}>
                   <TouchableOpacity
                     onPress={() => {
                       if (this.props?.route?.params?.route) {
@@ -577,9 +576,9 @@ class OrderForm extends Component {
                   </TouchableOpacity>
                 </View>
               </View>
-            )}
-          </View>
-        </ThemeScrollView>
+            </View>
+          )}
+        </ThemeContainer>
       )
     }
 

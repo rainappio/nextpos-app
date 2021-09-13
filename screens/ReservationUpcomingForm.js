@@ -18,6 +18,7 @@ import RenderStepper from '../components/RenderStepper'
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import {RenderDatePicker} from '../components/DateTimePicker'
+import {RadioReservationTimePick} from '../components/RadioItemObjPick'
 import TimeZoneService from "../helpers/TimeZoneService";
 import styles from '../styles'
 import {StyledText} from "../components/StyledText";
@@ -73,6 +74,10 @@ class ReservationUpcomingForm extends React.Component {
       membershipModalVisible: false,
       isMembership: false,
       isSearched: false,
+      hoursArr: null,
+      minutesArr: ['15', '30', '45', '00'],
+      selectedHour: null,
+      selectedMinutes: null
     }
   }
 
@@ -274,9 +279,22 @@ class ReservationUpcomingForm extends React.Component {
   }
 
   handleToggleTableList = (flag, event) => {
+    console.log(this.state.selectedHour, this.state.selectedMinutes)
     this.setState({showTableModal: flag, selectedEventValues: event})
     if (event !== null) {
-      this.handleCheckAvailableTables(event.id, event.reservationStartDate)
+      let startHour = moment(event.reservationStartDate).hour()
+      let endHour = startHour + 4 > 24 ? 24 : startHour + 4
+      let customHours = []
+      for (let i = startHour; i <= endHour; i++) {
+        customHours.push(i.toString())
+      }
+      this.setState({hoursArr: customHours})
+      // this.handleCheckAvailableTables(event.id, event.reservationStartDate)
+    } else {
+      this.props.change(`hour`, null)
+      this.props.change(`minutes`, null)
+      this.handleHourCheck(null)
+      this.handleMinuteCheck(null)
     }
   }
   handleCheckAvailableTables = (id, time) => {
@@ -388,8 +406,11 @@ class ReservationUpcomingForm extends React.Component {
 
 
   handleUpdateReservation = (values) => {
+    let eventDate = normalizeTimeString(values.reservationStartDate, 'YYYY-MM-DD')
+    let dateStr = `${eventDate} ${this.state.selectedHour}:${this.state.selectedMinutes}`
+
     let request = {
-      reservationDate: normalizeTimeString(values.reservationStartDate, 'YYYY-MM-DDTHH:mm:ss'),
+      reservationDate: normalizeTimeString(dateStr, 'YYYY-MM-DDTHH:mm:ss'),
       name: values.name,
       phoneNumber: values.phoneNumber,
       tableIds: this.state.selectedTableIds,
@@ -413,7 +434,7 @@ class ReservationUpcomingForm extends React.Component {
         }, {defaultMessage: true},
         response => {
           this.handleToggleTableList(false, null)
-          this.setState({selectedTableIds: []})
+          this.setState({selectedTableIds: [], selectedHour: null, selectedMinutes: null})
         }
       ).then(
         setTimeout(() => {
@@ -432,6 +453,22 @@ class ReservationUpcomingForm extends React.Component {
         ]
       )
     }
+  }
+
+  handleHourCheck = (value) => {
+    if ((value !== null) && !!this.state.selectedMinutes) {
+      let dateStr = `${this.state.reservationDate} ${value}:${this.state.selectedMinutes}`
+      this.handleCheckAvailableTables((this.state.selectedEventValues?.id ?? null), dateStr)
+    }
+    this.setState({selectedHour: value})
+  }
+  handleMinuteCheck = (value) => {
+    if ((value !== null) && !!this.state.selectedHour) {
+      let dateStr = `${this.state.reservationDate} ${this.state.selectedHour}:${value}`
+      this.handleCheckAvailableTables((this.state.selectedEventValues?.id ?? null), dateStr)
+    }
+    this.setState({selectedMinutes: value})
+
   }
 
   handleChooseTable = (id, name) => {
@@ -526,6 +563,47 @@ class ReservationUpcomingForm extends React.Component {
                 </View>
                 <ScrollView style={{maxHeight: 480}}>
                   <View>
+                    <View>
+                      <View style={[styles.withBottomBorder]}>
+                        <View style={[styles.sectionTitleContainer, {marginBottom: 4}]}>
+                          <StyledText style={[styles.sectionTitleText]}>{t('reservation.hours')}</StyledText>
+                        </View>
+                        <View style={[styles.flex(2), styles.fieldContainer, {flexWrap: 'wrap'}]}>
+                          {!!this.state.hoursArr && this.state.hoursArr?.map((item, index) => (
+                            <Field
+                              key={index}
+                              name="hour"
+                              component={RadioReservationTimePick}
+                              customValueOrder={item}
+                              optionName={`${item}00`}
+                              onChange={(value) => this.handleHourCheck(value)}
+                              onCheck={(currentVal, fieldVal) => {
+                                return fieldVal !== undefined && currentVal === fieldVal
+                              }}
+                            />))}
+                        </View>
+                      </View>
+                      <View style={[styles.withBottomBorder, {marginBottom: 4}]}>
+                        <View style={[styles.sectionTitleContainer, {marginBottom: 4}]}>
+                          <StyledText style={styles.sectionTitleText}>{t('reservation.minutes')}</StyledText>
+                        </View>
+                        <View style={[styles.flex(2), styles.fieldContainer]}>
+                          {!!this.state.minutesArr && this.state.minutesArr?.map((item, index) => (
+                            <Field
+                              key={index}
+                              name="minutes"
+                              component={RadioReservationTimePick}
+                              customValueOrder={item}
+                              optionName={`${item}`}
+                              onChange={(value) => this.handleMinuteCheck(value)}
+                              onCheck={(currentVal, fieldVal) => {
+                                return fieldVal !== undefined && currentVal === fieldVal
+                              }}
+                            />
+                          ))}
+                        </View>
+                      </View>
+                    </View>
                     {noAvailableTables && (
                       <View style={[styles.sectionContent]}>
                         <View style={[styles.jc_alignIem_center]}>
@@ -533,94 +611,96 @@ class ReservationUpcomingForm extends React.Component {
                         </View>
                       </View>
                     )}
-                    <Accordion
-                      onChange={(activeSections) => this.setState({activeTableLayout: activeSections})}
-                      activeSections={this.state?.activeTableLayout}
-                      expandMultiple
-                    >
-                      {layoutList && layoutList.map((layout, layoutIndex) => {
-                        return (
-                          <Accordion.Panel
-                            key={layoutIndex}
-                            header={
-                              <View style={[styles.listPanel]}>
-                                <View style={[styles.tableCellView, styles.flex(1)]}>
-                                  <StyledText style={[{color: customMainThemeColor, fontWeight: 'bold'}, styles.listPanelText]}>{layout}
-                                  </StyledText>
+                    {(!!this.state.selectedHour && !!this.state.selectedMinutes) &&
+                      <Accordion
+                        onChange={(activeSections) => this.setState({activeTableLayout: activeSections})}
+                        activeSections={this.state?.activeTableLayout}
+                        expandMultiple
+                      >
+                        {layoutList && layoutList.map((layout, layoutIndex) => {
+                          return (
+                            <Accordion.Panel
+                              key={layoutIndex}
+                              header={
+                                <View style={[styles.listPanel]}>
+                                  <View style={[styles.tableCellView, styles.flex(1)]}>
+                                    <StyledText style={[{color: customMainThemeColor, fontWeight: 'bold'}, styles.listPanelText]}>{layout}
+                                    </StyledText>
+                                  </View>
                                 </View>
-                              </View>
-                            }
-                          >
-                            <List>
-                              {tablesMap?.[layout].map((table) => {
-                                let isAvailable = this.state.availableTables?.includes(table.tableId)
-                                let isSelected = this.state?.selectedTableIds.includes(table.tableId)
+                              }
+                            >
+                              <List>
+                                {tablesMap?.[layout].map((table) => {
+                                  let isAvailable = this.state.availableTables?.includes(table.tableId)
+                                  let isSelected = this.state?.selectedTableIds.includes(table.tableId)
 
-                                return (
+                                  return (
+                                    <ListItem
+                                      key={table?.tableId}
+                                      title={
+                                        <View style={[styles.tableRowContainer]}>
+                                          <View style={[styles.tableCellView]}>
+                                            <CheckBox
+                                              containerStyle={{margin: 0, padding: 0}}
+                                              disabled={!isAvailable}
+                                              checkedIcon={'check-circle'}
+                                              uncheckedIcon={'circle'}
+                                              checked={this.state.selectedTableIds.includes(table.tableId)}
+                                              onPress={() => {
+                                                let tableList = this.state.availableTables
+                                                if (isAvailable) {
+                                                  this.handleChooseTable(table.tableId, table.tableName)
+                                                  if (isSelected) {
+                                                    tableList.push(table.tableId)
+                                                    this.setState({availableTables: tableList})
+                                                  }
+                                                }
+                                              }}
+                                            >
+                                            </CheckBox>
+                                          </View>
+                                          <View style={[styles.tableCellView]}>
+                                            <StyledText>{table?.tableName}</StyledText>
+                                          </View>
+                                        </View>
+                                      }
+                                      onPress={() => {
+                                        let tableList = this.state.availableTables
+                                        if (isAvailable || (!isAvailable && isSelected)) {
+                                          this.handleChooseTable(table.tableId, table.tableName)
+                                          if (isSelected) {
+                                            tableList.push(table.tableId)
+                                            this.setState({availableTables: tableList})
+                                          }
+                                        }
+                                      }}
+                                      bottomDivider
+                                      containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: !isAvailable ? '#ccc' : customBackgroundColor},]}
+                                    />
+                                  )
+                                })}
+                                {tablesMap?.[layout].length == 0 && (
                                   <ListItem
-                                    key={table?.tableId}
                                     title={
                                       <View style={[styles.tableRowContainer]}>
-                                        <View style={[styles.tableCellView]}>
-                                          <CheckBox
-                                            containerStyle={{margin: 0, padding: 0}}
-                                            disabled={!isAvailable}
-                                            checkedIcon={'check-circle'}
-                                            uncheckedIcon={'circle'}
-                                            checked={this.state.selectedTableIds.includes(table.tableId)}
-                                            onPress={() => {
-                                              let tableList = this.state.availableTables
-                                              if (isAvailable) {
-                                                this.handleChooseTable(table.tableId, table.tableName)
-                                                if (isSelected) {
-                                                  tableList.push(table.tableId)
-                                                  this.setState({availableTables: tableList})
-                                                }
-                                              }
-                                            }}
-                                          >
-                                          </CheckBox>
-                                        </View>
-                                        <View style={[styles.tableCellView]}>
-                                          <StyledText>{table?.tableName}</StyledText>
+                                        <View style={[styles.tableCellView, styles.withBottomBorder]}>
+                                          <StyledText>({t('empty')})</StyledText>
                                         </View>
                                       </View>
                                     }
                                     onPress={() => {
-                                      let tableList = this.state.availableTables
-                                      if (isAvailable || (!isAvailable && isSelected)) {
-                                        this.handleChooseTable(table.tableId, table.tableName)
-                                        if (isSelected) {
-                                          tableList.push(table.tableId)
-                                          this.setState({availableTables: tableList})
-                                        }
-                                      }
                                     }}
                                     bottomDivider
-                                    containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: !isAvailable ? '#ccc' : customBackgroundColor},]}
+                                    containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
                                   />
-                                )
-                              })}
-                              {tablesMap?.[layout].length == 0 && (
-                                <ListItem
-                                  title={
-                                    <View style={[styles.tableRowContainer]}>
-                                      <View style={[styles.tableCellView, styles.withBottomBorder]}>
-                                        <StyledText>({t('empty')})</StyledText>
-                                      </View>
-                                    </View>
-                                  }
-                                  onPress={() => {
-                                  }}
-                                  bottomDivider
-                                  containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
-                                />
-                              )}
-                            </List>
-                          </Accordion.Panel>
-                        )
-                      })}
-                    </Accordion>
+                                )}
+                              </List>
+                            </Accordion.Panel>
+                          )
+                        })}
+                      </Accordion>
+                    }
 
                   </View>
                 </ScrollView>
@@ -1104,7 +1184,7 @@ class ReservationUpcomingForm extends React.Component {
                 margin: 0, justifyContent: 'center', flex: 1
               }}
             >
-              <View style={[styles.customBorderAndBackgroundColor(this.context), {alignSelf: 'center', minHeight: 540, height: '80%', width: '90%', borderRadius: 16, paddingBottom: 8}]}>
+              <View style={[styles.customBorderAndBackgroundColor(this.context), {alignSelf: 'center', minHeight: 540, height: '80%', width: '100%', borderRadius: 16, paddingBottom: 8}]}>
                 <View style={[styles.tableRowContainer, styles.dynamicVerticalPadding(24), {justifyContent: 'center'}]}>
                   <StyledText style={[styles?.announcementTitle(customMainThemeColor)]}>{t('reservation.actionTip.tableSelect')}</StyledText>
                   <TouchableOpacity style={{position: 'absolute', right: 10, top: 8, zIndex: 100}}
@@ -1113,7 +1193,48 @@ class ReservationUpcomingForm extends React.Component {
                     <Icon name="close" size={32} color={customMainThemeColor} />
                   </TouchableOpacity>
                 </View>
-                <ScrollView style={{maxHeight: 400}}>
+                <ScrollView style={{maxHeight: 480}}>
+                  <View>
+                    <View style={[styles.withBottomBorder]}>
+                      <View style={[styles.sectionTitleContainer, {marginBottom: 4}]}>
+                        <StyledText style={[styles.sectionTitleText]}>{t('reservation.hours')}</StyledText>
+                      </View>
+                      <View style={[styles.flex(2), styles.fieldContainer, {flexWrap: 'wrap'}]}>
+                        {!!this.state.hoursArr && this.state.hoursArr?.map((item, index) => (
+                          <Field
+                            key={index}
+                            name="hour"
+                            component={RadioReservationTimePick}
+                            customValueOrder={item}
+                            optionName={`${item}00`}
+                            onChange={(value) => this.handleHourCheck(value)}
+                            onCheck={(currentVal, fieldVal) => {
+                              return fieldVal !== undefined && currentVal === fieldVal
+                            }}
+                          />))}
+                      </View>
+                    </View>
+                    <View style={[styles.withBottomBorder, {marginBottom: 4}]}>
+                      <View style={[styles.sectionTitleContainer, {marginBottom: 4}]}>
+                        <StyledText style={styles.sectionTitleText}>{t('reservation.minutes')}</StyledText>
+                      </View>
+                      <View style={[styles.flex(2), styles.fieldContainer]}>
+                        {!!this.state.minutesArr && this.state.minutesArr?.map((item, index) => (
+                          <Field
+                            key={index}
+                            name="minutes"
+                            component={RadioReservationTimePick}
+                            customValueOrder={item}
+                            optionName={`${item}`}
+                            onChange={(value) => this.handleMinuteCheck(value)}
+                            onCheck={(currentVal, fieldVal) => {
+                              return fieldVal !== undefined && currentVal === fieldVal
+                            }}
+                          />
+                        ))}
+                      </View>
+                    </View>
+                  </View>
                   <View>
                     {noAvailableTables && (
                       <View style={[styles.sectionContent]}>
@@ -1122,95 +1243,96 @@ class ReservationUpcomingForm extends React.Component {
                         </View>
                       </View>
                     )}
-                    <Accordion
-                      onChange={(activeSections) => this.setState({activeTableLayout: activeSections})}
-                      activeSections={this.state?.activeTableLayout}
-                      expandMultiple
-                    >
-                      {layoutList && layoutList.map((layout, layoutIndex) => {
-                        return (
-                          <Accordion.Panel
-                            key={layoutIndex}
-                            header={
-                              <View style={[styles.listPanel]}>
-                                <View style={[styles.tableCellView, styles.flex(1)]}>
-                                  <StyledText style={[{color: customMainThemeColor, fontWeight: 'bold'}, styles.listPanelText]}>{layout}
-                                  </StyledText>
+                    {(!!this.state.selectedHour && !!this.state.selectedMinutes) &&
+                      <Accordion
+                        onChange={(activeSections) => this.setState({activeTableLayout: activeSections})}
+                        activeSections={this.state?.activeTableLayout}
+                        expandMultiple
+                      >
+                        {layoutList && layoutList.map((layout, layoutIndex) => {
+                          return (
+                            <Accordion.Panel
+                              key={layoutIndex}
+                              header={
+                                <View style={[styles.listPanel]}>
+                                  <View style={[styles.tableCellView, styles.flex(1)]}>
+                                    <StyledText style={[{color: customMainThemeColor, fontWeight: 'bold'}, styles.listPanelText]}>{layout}
+                                    </StyledText>
+                                  </View>
                                 </View>
-                              </View>
-                            }
-                          >
-                            <List>
-                              {tablesMap?.[layout].map((table) => {
-                                let isAvailable = this.state.availableTables?.includes(table.tableId)
-                                let isSelected = this.state?.selectedTableIds.includes(table.tableId)
+                              }
+                            >
+                              <List>
+                                {tablesMap?.[layout].map((table) => {
+                                  let isAvailable = this.state.availableTables?.includes(table.tableId)
+                                  let isSelected = this.state?.selectedTableIds.includes(table.tableId)
 
-                                if (isAvailable) {
-                                  return (
-                                    <ListItem
-                                      key={table?.tableId}
-                                      title={
-                                        <View style={[styles.tableRowContainer]}>
-                                          <View style={[styles.tableCellView]}>
-                                            <CheckBox
-                                              containerStyle={{margin: 0, padding: 0}}
-                                              checkedIcon={'check-circle'}
-                                              uncheckedIcon={'circle'}
-                                              checked={this.state.selectedTableIds.includes(table.tableId)}
-                                              onPress={() => {
-                                                let tableList = this.state.availableTables
-                                                if (isAvailable) {
-                                                  this.handleChooseTable(table.tableId, table.tableName)
-                                                  if (isSelected) {
-                                                    tableList.push(table.tableId)
-                                                    this.setState({availableTables: tableList})
+                                  if (isAvailable) {
+                                    return (
+                                      <ListItem
+                                        key={table?.tableId}
+                                        title={
+                                          <View style={[styles.tableRowContainer]}>
+                                            <View style={[styles.tableCellView]}>
+                                              <CheckBox
+                                                containerStyle={{margin: 0, padding: 0}}
+                                                checkedIcon={'check-circle'}
+                                                uncheckedIcon={'circle'}
+                                                checked={this.state.selectedTableIds.includes(table.tableId)}
+                                                onPress={() => {
+                                                  let tableList = this.state.availableTables
+                                                  if (isAvailable) {
+                                                    this.handleChooseTable(table.tableId, table.tableName)
+                                                    if (isSelected) {
+                                                      tableList.push(table.tableId)
+                                                      this.setState({availableTables: tableList})
+                                                    }
                                                   }
-                                                }
-                                              }}
-                                            >
-                                            </CheckBox>
+                                                }}
+                                              >
+                                              </CheckBox>
+                                            </View>
+                                            <View style={[styles.tableCellView]}>
+                                              <StyledText>{table?.tableName}</StyledText>
+                                            </View>
                                           </View>
-                                          <View style={[styles.tableCellView]}>
-                                            <StyledText>{table?.tableName}</StyledText>
-                                          </View>
-                                        </View>
-                                      }
-                                      onPress={() => {
-                                        let tableList = this.state.availableTables
-                                        if (isAvailable || (!isAvailable && isSelected)) {
-                                          this.handleChooseTable(table.tableId, table.tableName)
-                                          if (isSelected) {
-                                            tableList.push(table.tableId)
-                                            this.setState({availableTables: tableList})
-                                          }
                                         }
-                                      }}
-                                      bottomDivider
-                                      containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: customBackgroundColor},]}
-                                    />
-                                  )
-                                }
-                              })}
-                              {tablesMap?.[layout].length == 0 && (
-                                <ListItem
-                                  title={
-                                    <View style={[styles.tableRowContainer]}>
-                                      <View style={[styles.tableCellView]}>
-                                        <StyledText>({t('empty')})</StyledText>
-                                      </View>
-                                    </View>
+                                        onPress={() => {
+                                          let tableList = this.state.availableTables
+                                          if (isAvailable || (!isAvailable && isSelected)) {
+                                            this.handleChooseTable(table.tableId, table.tableName)
+                                            if (isSelected) {
+                                              tableList.push(table.tableId)
+                                              this.setState({availableTables: tableList})
+                                            }
+                                          }
+                                        }}
+                                        bottomDivider
+                                        containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: customBackgroundColor},]}
+                                      />
+                                    )
                                   }
-                                  onPress={() => {
-                                  }}
-                                  bottomDivider
-                                  containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
-                                />
-                              )}
-                            </List>
-                          </Accordion.Panel>
-                        )
-                      })}
-                    </Accordion>
+                                })}
+                                {tablesMap?.[layout].length == 0 && (
+                                  <ListItem
+                                    title={
+                                      <View style={[styles.tableRowContainer]}>
+                                        <View style={[styles.tableCellView]}>
+                                          <StyledText>({t('empty')})</StyledText>
+                                        </View>
+                                      </View>
+                                    }
+                                    onPress={() => {
+                                    }}
+                                    bottomDivider
+                                    containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
+                                  />
+                                )}
+                              </List>
+                            </Accordion.Panel>
+                          )
+                        })}
+                      </Accordion>}
 
                   </View>
                 </ScrollView>
