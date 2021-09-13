@@ -52,9 +52,7 @@ class OrdersScreen extends React.Component {
     this._searchOrder = this.props.navigation.addListener('focus', () => {
       if (this.state?.searchFilter?.searchTypeIndex === 0) {
         let shiftId = this.props.route.params?.shiftId
-        if (this.props.route.params !== undefined && this.props.route.params.withAnimation == false) {
-          shiftId = null
-        }
+
         const dateRangeToUse = shiftId != null ? 0 : this.state.searchFilter.dateRange
 
         this.handleOrderSearch({
@@ -78,6 +76,18 @@ class OrdersScreen extends React.Component {
         }, 800)
       }
     })
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps?.route.params?.shiftId !== this.props?.route.params?.shiftId) {
+      this.handleOrderSearch({
+        dateRange: 1,
+        shiftId: null,
+        fromDate: this.state.searchFilter.fromDate,
+        toDate: this.state.searchFilter.toDate,
+        searchTypeIndex: this.state.searchFilter.searchTypeIndex,
+        tableName: this.state.searchFilter.tableName,
+      })
+    }
   }
   componentWillUnmount() {
     this._searchOrder()
