@@ -232,7 +232,8 @@ const zh = {
     splitByHeadCount: '以人頭拆帳',
     payLeftAmount: '一次付清',
     completeOrder: '結束訂單',
-    splitInvoiceDetail: '發票(狀態)'
+    splitInvoiceDetail: '發票(狀態)',
+    unableEditPayingOrder: '結帳中的訂單不可編輯品項.'
   },
   orderState: {
     OPEN: '已開單',

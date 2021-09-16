@@ -628,8 +628,25 @@ class OrderFormII extends React.Component {
 
                             <TouchableOpacity style={[{width: '22%', marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, {backgroundColor: '#d6d6d6'}, (prd?.outOfStock && {backgroundColor: 'gray'})]}
                               key={prd.id}
-                              onPress={() => prd?.outOfStock ? this.handleItemOutOfStock(prd.id, prd?.outOfStock) : this.addItemToOrder(prd.id)}
-                              onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}>
+                              onPress={() => {
+                                if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
+                                  warningMessage(t('order.unableEditPayingOrder'))
+                                } else {
+                                  if (prd?.outOfStock) {
+                                    this.handleItemOutOfStock(prd.id, prd?.outOfStock)
+                                  } else {
+                                    this.addItemToOrder(prd.id)
+                                  }
+                                }
+                              }
+                              }
+                              onLongPress={() => {
+                                if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
+                                  warningMessage(t('order.unableEditPayingOrder'))
+                                } else {
+                                  this.handleItemOutOfStock(prd.id, prd?.outOfStock)
+                                }
+                              }}>
                               <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
                                 {prd?.outOfStock && <View style={{position: 'absolute', alignSelf: 'center'}} >
                                   <Icon name='cancel' color='white' style={[{fontSize: this.normalize(32), padding: 0, margin: 0}]} />
@@ -657,8 +674,26 @@ class OrderFormII extends React.Component {
 
                           <TouchableOpacity style={[{width: '22%', marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, {backgroundColor: '#d6d6d6'}, (prd?.outOfStock && {backgroundColor: 'gray'})]}
                             key={prd?.id}
-                            onPress={() => prd?.outOfStock ? this.handleItemOutOfStock(prd.id, prd?.outOfStock) : this.addItemToOrder(prd.id)}
-                            onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}>
+                            onPress={() => {
+                              if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
+                                warningMessage(t('order.unableEditPayingOrder'))
+                              } else {
+                                if (prd?.outOfStock) {
+                                  this.handleItemOutOfStock(prd.id, prd?.outOfStock)
+                                } else {
+                                  this.addItemToOrder(prd.id)
+                                }
+                              }
+                            }
+                            }
+                            onLongPress={() => {
+                              if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
+                                warningMessage(t('order.unableEditPayingOrder'))
+                              } else {
+                                this.handleItemOutOfStock(prd.id, prd?.outOfStock)
+                              }
+                            }}
+                          >
                             <View style={{aspectRatio: 1, alignItems: 'center', justifyContent: 'space-around'}}>
                               {prd?.outOfStock && <View style={{position: 'absolute', alignSelf: 'center'}} >
                                 <Icon name='cancel' color='white' style={[{fontSize: this.normalize(32), padding: 0, margin: 0}]} />
@@ -688,8 +723,25 @@ class OrderFormII extends React.Component {
                                 <View key={lbl.label} style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get(lbl.label).map(prd => {
                                   return (
                                     <TouchableOpacity style={[{width: '22%', marginLeft: '2%', marginBottom: '2%', borderRadius: 10}, {backgroundColor: '#d6d6d6'}, (prd?.outOfStock && {backgroundColor: 'gray'})]}
-                                      onPress={() => prd?.outOfStock ? this.handleItemOutOfStock(prd.id, prd?.outOfStock) : this.addItemToOrder(prd.id)}
-                                      onLongPress={() => this.handleItemOutOfStock(prd.id, prd?.outOfStock)}
+                                      onPress={() => {
+                                        if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
+                                          warningMessage(t('order.unableEditPayingOrder'))
+                                        } else {
+                                          if (prd?.outOfStock) {
+                                            this.handleItemOutOfStock(prd.id, prd?.outOfStock)
+                                          } else {
+                                            this.addItemToOrder(prd.id)
+                                          }
+                                        }
+                                      }
+                                      }
+                                      onLongPress={() => {
+                                        if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
+                                          warningMessage(t('order.unableEditPayingOrder'))
+                                        } else {
+                                          this.handleItemOutOfStock(prd.id, prd?.outOfStock)
+                                        }
+                                      }}
                                       key={prd.id}
                                     >
 
@@ -1174,10 +1226,14 @@ class OrderFormII extends React.Component {
                                     <TouchableOpacity
                                       onPress={() => {
                                         this[`ref_${index}`]?.closeRow()
-                                        if (item.price === 0) {
-                                          this.handleFreeLineitem(order.orderId, item.lineItemId, false)
+                                        if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
+                                          warningMessage(t('order.unableEditPayingOrder'))
                                         } else {
-                                          this.handleFreeLineitem(order.orderId, item.lineItemId, true)
+                                          if (item.price === 0) {
+                                            this.handleFreeLineitem(order.orderId, item.lineItemId, false)
+                                          } else {
+                                            this.handleFreeLineitem(order.orderId, item.lineItemId, true)
+                                          }
                                         }
                                       }}
                                       style={{flex: 1, backgroundColor: customMainThemeColor, borderRadius: 10, paddingLeft: 5, alignItems: 'flex-start', justifyContent: 'center'}}>
@@ -1188,10 +1244,14 @@ class OrderFormII extends React.Component {
                                     <DeleteBtn
                                       handleDeleteAction={() => {
                                         this[`ref_${index}`]?.closeRow()
-                                        this.handleDeleteLineItem(
-                                          order.orderId,
-                                          item.lineItemId
-                                        );
+                                        if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
+                                          warningMessage(t('order.unableEditPayingOrder'))
+                                        } else {
+                                          this.handleDeleteLineItem(
+                                            order.orderId,
+                                            item.lineItemId
+                                          )
+                                        }
                                       }}
                                       islineItemDelete={true}
                                       containerStyle={{flex: 1, width: '100%', justifyContent: 'center', alignItems: 'flex-end'}}
@@ -1331,7 +1391,13 @@ class OrderFormII extends React.Component {
                                 </View>
                               </View>
                             }
-                            onPress={() => this.addItemToOrder(prd.id)}
+                            onPress={() => {
+                              if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
+                                warningMessage(t('order.unableEditPayingOrder'))
+                              } else {
+                                this.addItemToOrder(prd.id)
+                              }
+                            }}
                             bottomDivider
                             containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                           />
@@ -1383,7 +1449,13 @@ class OrderFormII extends React.Component {
                                       </View>
                                     </View>
                                   }
-                                  onPress={() => this.addItemToOrder(prd.id)}
+                                  onPress={() => {
+                                    if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
+                                      warningMessage(t('order.unableEditPayingOrder'))
+                                    } else {
+                                      this.addItemToOrder(prd.id)
+                                    }
+                                  }}
                                   bottomDivider
                                   containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                                 />
@@ -1436,7 +1508,13 @@ class OrderFormII extends React.Component {
                                 </View>
                               </View>
                             }
-                            onPress={() => this.addItemToOrder(prd.id)}
+                            onPress={() => {
+                              if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
+                                warningMessage(t('order.unableEditPayingOrder'))
+                              } else {
+                                this.addItemToOrder(prd.id)
+                              }
+                            }}
                             bottomDivider
                             containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
                           />

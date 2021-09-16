@@ -232,7 +232,8 @@ const en = {
     splitByHeadCount: 'By Head Count',
     payLeftAmount: 'Pay All',
     completeOrder: 'Complete',
-    splitInvoiceDetail: 'Invoice(Status)'
+    splitInvoiceDetail: 'Invoice(Status)',
+    unableEditPayingOrder: 'Paying order unable to edit items.'
   },
   orderState: {
     OPEN: 'Open',

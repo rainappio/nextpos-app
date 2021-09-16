@@ -578,10 +578,14 @@ class OrdersSummaryRow extends React.Component {
                     <View style={styles?.editIcon(customMainThemeColor)}>
                       <TouchableOpacity
                         onPress={() => {
-                          if (data.item.price === 0) {
-                            this.handleFreeLineitem(order.orderId, data.item.lineItemId, false)
+                          if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
+                            warningMessage(t('order.unableEditPayingOrder'))
                           } else {
-                            this.handleFreeLineitem(order.orderId, data.item.lineItemId, true)
+                            if (data.item.price === 0) {
+                              this.handleFreeLineitem(order.orderId, data.item.lineItemId, false)
+                            } else {
+                              this.handleFreeLineitem(order.orderId, data.item.lineItemId, true)
+                            }
                           }
                         }
                         }>
@@ -610,12 +614,16 @@ class OrdersSummaryRow extends React.Component {
                     </View>
                     <View style={styles.delIcon}>
                       <DeleteBtn
-                        handleDeleteAction={(orderId, lineItemId) =>
-                          this.handleDeleteLineItem(
-                            order.orderId,
-                            data.item.lineItemId
-                          )
-                        }
+                        handleDeleteAction={(orderId, lineItemId) => {
+                          if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
+                            warningMessage(`Paying order unable to edit items.`)
+                          } else {
+                            this.handleDeleteLineItem(
+                              order.orderId,
+                              data.item.lineItemId
+                            )
+                          }
+                        }}
                         islineItemDelete={true}
                       />
                     </View>

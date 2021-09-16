@@ -39,9 +39,11 @@ class OrderTopInfo extends Component {
               <TouchableOpacity onPress={() => {
                 const originScreen = this.props.route.name
                 const updateOrderRoute = (originScreen === 'OrdersSummary' || originScreen === 'OrderFormII') ? 'UpdateOrder' : 'UpdateOrderFromOrderDetail'
-                this.props.navigation.navigate(updateOrderRoute, {
-                  order: order
-                })
+                if (originScreen !== 'OrderDetail') {
+                  this.props.navigation.navigate(updateOrderRoute, {
+                    order: order
+                  })
+                }
               }}>
                 <View>
                   <FontAwesomeIcon
@@ -119,9 +121,11 @@ class OrderTopInfo extends Component {
                 onPress={() => {
                   const originScreen = this.props.route.name
                   const updateOrderRoute = (originScreen === 'OrdersSummary' || originScreen === 'OrderFormII') ? 'UpdateOrder' : 'UpdateOrderFromOrderDetail'
-                  this.props.navigation.navigate(updateOrderRoute, {
-                    order: order
-                  })
+                  if (originScreen !== 'OrderDetail') {
+                    this.props.navigation.navigate(updateOrderRoute, {
+                      order: order
+                    })
+                  }
                 }}
               >
                 <View>

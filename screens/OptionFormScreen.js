@@ -67,8 +67,8 @@ class OptionFormScreen extends React.Component {
 
   exchangeAnimate = (from, to, callback) => {
     Promise.all([
-      this.[`renderOptionValRef_${from}`]?.pulse(500).then(endState => endState),
-      this.[`renderOptionValRef_${to}`]?.pulse(500).then(endState => endState),]
+      this[`renderOptionValRef_${from}`]?.pulse(500).then(endState => endState),
+      this[`renderOptionValRef_${to}`]?.pulse(500).then(endState => endState),]
     ).finally(() => {
 
     })
@@ -76,8 +76,8 @@ class OptionFormScreen extends React.Component {
   }
 
   deleteAnimate = (index, callback) => {
-    this.[`renderOptionValRef_${index}`]?.fadeOutRight(250).then(() => {
-      this.[`renderOptionValRef_${index}`]?.animate({0: {opacity: 1}, 1: {opacity: 1}}, 1)
+    this[`renderOptionValRef_${index}`]?.fadeOutRight(250).then(() => {
+      this[`renderOptionValRef_${index}`]?.animate({0: {opacity: 1}, 1: {opacity: 1}}, 1)
       callback()
     })
   }
@@ -90,7 +90,7 @@ class OptionFormScreen extends React.Component {
 
     const renderOptionValPopup = (name, index, fields) => (
       <Animatable.View key={index} ref={(ref) => {
-        this.[`renderOptionValRef_${index}`] = ref
+        this[`renderOptionValRef_${index}`] = ref
       }}>
         <View
           style={[styles.tableRowContainerWithBorder]}

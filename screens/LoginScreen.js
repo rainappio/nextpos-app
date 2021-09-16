@@ -89,7 +89,14 @@ class LoginScreen extends React.Component {
     }
     if (!removeLoginAs) {
       AsyncStorage.getItem('usedLoginAccounts').then(value => {
-        this.setState({usedLoginUsers: JSON.parse(value)})
+        let list = JSON.parse(value).sort((a, b) => {
+          let prevUser = a.clientUsername.toLowerCase()
+          let currUser = b.clientUsername.toLowerCase()
+          if (prevUser > currUser) return 1
+          if (prevUser < currUser) return -1
+          else return 0
+        })
+        this.setState({usedLoginUsers: list})
       })
     }
   }
