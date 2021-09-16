@@ -12,6 +12,8 @@ import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScro
 import {StyledText} from "../components/StyledText";
 import {handleOrderAction, getTableDisplayName, handlePrintOrderDetails} from "../helpers/orderActions";
 import {OfferTooltip} from "../components/OfferTooltip";
+import {ThemeContainer} from "../components/ThemeContainer";
+
 
 class PaymentFormScreen extends React.Component {
   static navigationOptions = {
@@ -51,7 +53,7 @@ class PaymentFormScreen extends React.Component {
 
 
     return (
-      <ThemeKeyboardAwareScrollView>
+      <ThemeContainer>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={true}
             parentFullScreen={true}
@@ -61,84 +63,84 @@ class PaymentFormScreen extends React.Component {
             }}
 
           />
+          <ThemeKeyboardAwareScrollView>
+            <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <StyledText>{t('order.tableName')}</StyledText>
+              </View>
 
-          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
-            <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText>{t('order.tableName')}</StyledText>
-            </View>
-
-            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <StyledText style={styles.tableCellText}>
-                {getTableDisplayName(order)}
-              </StyledText>
-            </View>
-          </View>
-
-          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
-            <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText>{t('order.subtotal')}</StyledText>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <StyledText style={styles.tableCellText}>
+                  {getTableDisplayName(order)}
+                </StyledText>
+              </View>
             </View>
 
-            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <StyledText style={styles.tableCellText}>
-                {formatCurrency(order?.total?.amountWithTax)}
-              </StyledText>
-            </View>
-          </View>
+            <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <StyledText>{t('order.subtotal')}</StyledText>
+              </View>
 
-          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
-            <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText>{t('order.discount')}</StyledText>
-            </View>
-
-            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <OfferTooltip
-                style={styles.tableCellText}
-                offer={order?.appliedOfferInfo}
-                discount={order?.discount}
-                t={t}
-              />
-            </View>
-          </View>
-
-          {(appType === 'store') && <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
-            <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText>{t('order.serviceCharge')}</StyledText>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <StyledText style={styles.tableCellText}>
+                  {formatCurrency(order?.total?.amountWithTax)}
+                </StyledText>
+              </View>
             </View>
 
-            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <StyledText style={styles.tableCellText}>
-                {formatCurrency(order.serviceCharge)}
-              </StyledText>
-            </View>
-          </View>}
+            <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <StyledText>{t('order.discount')}</StyledText>
+              </View>
 
-          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
-            <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText>{t('order.total')}</StyledText>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <OfferTooltip
+                  style={styles.tableCellText}
+                  offer={order?.appliedOfferInfo}
+                  discount={order?.discount}
+                  t={t}
+                />
+              </View>
             </View>
 
-            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <StyledText style={styles.tableCellText}>
-                {formatCurrency(order.orderTotal)}
-              </StyledText>
-            </View>
-          </View>
+            {(appType === 'store') && <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <StyledText>{t('order.serviceCharge')}</StyledText>
+              </View>
 
-          {(appType === 'store') && order?.serviceChargeEnabled && <View style={[styles.sectionContainer]}>
-            <View style={[styles.sectionTitleContainer]}>
-              <StyledText style={styles.sectionTitleText}>{t('orderOptions')}</StyledText>
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <StyledText style={styles.tableCellText}>
+                  {formatCurrency(order.serviceCharge)}
+                </StyledText>
+              </View>
+            </View>}
+
+            <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <StyledText>{t('order.total')}</StyledText>
+              </View>
+
+              <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
+                <StyledText style={styles.tableCellText}>
+                  {formatCurrency(order.orderTotal)}
+                </StyledText>
+              </View>
             </View>
-            <View>
-              <Field
-                name="waiveServiceCharge"
-                component={CustomCheckBox}
-                customValue={true}
-                checkboxType='checkbox'
-                optionName={t('waiveServiceCharge')}
-              />
-            </View>
-            {/*<View>
+
+            {(appType === 'store') && order?.serviceChargeEnabled && <View style={[styles.sectionContainer]}>
+              <View style={[styles.sectionTitleContainer]}>
+                <StyledText style={styles.sectionTitleText}>{t('orderOptions')}</StyledText>
+              </View>
+              <View>
+                <Field
+                  name="waiveServiceCharge"
+                  component={CustomCheckBox}
+                  customValue={true}
+                  checkboxType='checkbox'
+                  optionName={t('waiveServiceCharge')}
+                />
+              </View>
+              {/*<View>
                 <Field
                   name="orderOption"
                   component={CustomCheckBox}
@@ -146,63 +148,75 @@ class PaymentFormScreen extends React.Component {
                   optionName={t('resetAllOffers')}
                 />
               </View>*/}
-          </View>}
+            </View>}
 
-          <View style={[styles.sectionContainer]}>
-            <View style={[styles.sectionTitleContainer]}>
-              <StyledText style={styles.sectionTitleText}>{t('order.discount')}</StyledText>
+            <View style={[styles.sectionContainer]}>
+              <View style={[styles.sectionTitleContainer]}>
+                <StyledText style={styles.sectionTitleText}>{t('order.discount')}</StyledText>
+              </View>
+
+              {globalorderoffers != null && globalorderoffers.map((offer, ix) => (
+                <View
+                  style={[]}
+                  key={ix}
+                >
+                  <Field
+                    name="discount"
+                    component={RenderCheckBox}
+                    customValue={{
+                      offerId: offer.offerId,
+                      orderDiscount: offer.offerId,
+                      discount: offer.discountValue
+                    }}
+                    optionName={offer.offerName}
+                    defaultValueDisplay={(customValue, value) => String(customValue.orderDiscount === value.orderDiscount ? value.discount : 0)}
+                  />
+                </View>
+              ))}
+            </View>
+          </ThemeKeyboardAwareScrollView>
+
+          <View style={[{position: 'relative', bottom: 0, }]}>
+            <View style={[styles.tableRowContainerWithBorder, {paddingBottom: 0, borderBottomWidth: 0}]}>
+              <View style={[{flex: 1, marginHorizontal: 5}]}>
+                <TouchableOpacity onPress={() => handleSubmit()}>
+                  <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                    {t('payOrder')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
 
-            {globalorderoffers != null && globalorderoffers.map((offer, ix) => (
-              <View
-                style={[]}
-                key={ix}
-              >
-                <Field
-                  name="discount"
-                  component={RenderCheckBox}
-                  customValue={{
-                    offerId: offer.offerId,
-                    orderDiscount: offer.offerId,
-                    discount: offer.discountValue
-                  }}
-                  optionName={offer.offerName}
-                  defaultValueDisplay={(customValue, value) => String(customValue.orderDiscount === value.orderDiscount ? value.discount : 0)}
-                />
+            <View style={[styles.tableRowContainerWithBorder, {paddingVertical: 0, borderBottomWidth: 0}]}>
+              <View style={[{flex: 1, marginHorizontal: 5}]}>
+                <TouchableOpacity
+                  onPress={() => handlePrintOrderDetails(order.orderId)}>
+                  <Text
+                    style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+                  >
+                    {t('printOrderDetails')}
+                  </Text>
+                </TouchableOpacity>
               </View>
-            ))}
-          </View>
+            </View>
 
-          <View style={[styles.bottom, styles.horizontalMargin]}>
-            <TouchableOpacity onPress={() => handleSubmit()}>
-              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                {t('payOrder')}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => handlePrintOrderDetails(order.orderId)}>
-              <Text
-                style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
-              >
-                {t('printOrderDetails')}
-              </Text>
-            </TouchableOpacity>
-
-            <View>
-              <TouchableOpacity
-                onPress={() => !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()}
-              >
-                <Text
-                  style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+            <View style={[styles.tableRowContainerWithBorder, {paddingVertical: 4, borderBottomWidth: 0}]}>
+              <View style={[{flex: 1, marginHorizontal: 5}]}>
+                <TouchableOpacity
+                  onPress={() => !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()}
                 >
-                  {t('action.cancel')}
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}
+                  >
+                    {t('action.cancel')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
             </View>
           </View>
         </View>
-      </ThemeKeyboardAwareScrollView>
+      </ThemeContainer >
     )
   }
 }
