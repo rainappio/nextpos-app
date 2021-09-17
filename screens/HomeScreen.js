@@ -27,7 +27,7 @@ export default class HomeScreen extends React.Component {
   }
 
   render() {
-    let {t, customMainThemeColor} = this.context
+    let {t, customMainThemeColor, isTablet} = this.context
 
     return (
       <ThemeContainer>
@@ -51,7 +51,7 @@ export default class HomeScreen extends React.Component {
             <StyledText style={styles?.welcomeText(this.context)}>Securely</StyledText>
           </View>
 
-          <View style={styles.bottom}>
+          <View style={[styles.bottom, isTablet && styles.horizontalPaddingScreen]}>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Intro')}
             >

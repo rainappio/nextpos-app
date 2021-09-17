@@ -40,10 +40,12 @@
       "bundleIdentifier": "io.rain.app",
       "infoPlist": {
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Geofencing for staff clock in",
+        "NSLocationAlwaysUsageDescription": "Geofencing for staff clock in",
         "NSLocationWhenInUseUsageDescription": "Geofencing for staff clock in",
         "UIBackgroundModes": [
           "location",
-          "fetch"
+          "fetch",
+          "remote-notification"
         ],
         "userInterfaceStyle": "automatic"
       }
@@ -62,7 +64,11 @@
     "android": {
       "package": "io.rainapp",
       "versionCode": 8,
-      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"],
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION"
+      ],
       "userInterfaceStyle": "automatic"
     }
   }

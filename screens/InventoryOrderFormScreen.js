@@ -65,22 +65,6 @@ class InventoryOrderFormScreen extends React.Component {
         this.props.getLables()
 
     }
-    exchangeAnimate = (from, to, callback) => {
-        Promise.all([
-            this.[`renderOptionValRef_${from}`]?.pulse(500).then(endState => endState),
-            this.[`renderOptionValRef_${to}`]?.pulse(500).then(endState => endState),]
-        ).finally(() => {
-
-        })
-        callback()
-    }
-
-    deleteAnimate = (index, callback) => {
-        this.[`renderOptionValRef_${index}`]?.fadeOutRight(250).then(() => {
-            this.[`renderOptionValRef_${index}`]?.animate({0: {opacity: 1}, 1: {opacity: 1}}, 1)
-            callback()
-        })
-    }
 
     handleSubmit = (data) => {
         let request = {...data, items: this.state?.inventoryFormValues}
