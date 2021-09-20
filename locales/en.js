@@ -108,9 +108,17 @@ const en = {
     productLabel: 'Product Label',
     description: 'Description',
     childProducts: 'Child Products',
+    childLabels: 'Child Labels',
     options: 'Options',
     workingArea: 'Working Area',
     inventoryEdit: 'Product Inventory',
+    productType: {
+      title: 'Product Type',
+      normal: 'Normal',
+      fixedSet: 'Fixed Set',
+      comboSet: 'Combo Set'
+    },
+    multiple: 'Multiple',
   },
   newOrder: {
     newOrderTitle: 'New Order',

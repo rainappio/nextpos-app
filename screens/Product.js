@@ -26,6 +26,15 @@ class Product extends React.Component {
         return p.id
       })
     }
+    if (request.productComboLabels != null) {
+      request.productComboLabels = request.productComboLabels.map((item) => {
+        let label = {
+          productLabelId: item.id,
+          multipleSelection: item.multipleSelection ?? false,
+        }
+        return label
+      })
+    }
 
     dispatchFetchRequest(api.product.new, {
       method: 'POST',

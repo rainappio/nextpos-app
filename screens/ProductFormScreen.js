@@ -11,9 +11,12 @@ import DeleteBtn from '../components/DeleteBtn'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import RadioItemObjPick from "../components/RadioItemObjPick";
+import SegmentedControl from "../components/SegmentedControl";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {StyledText} from "../components/StyledText";
 import ItemList from "../components/ItemList";
+import ItemListDrag from "../components/ItemListDrag";
+import LabelSelector from "./LabelSelector";
 import ProductSelector from "./ProductSelector";
 import {backAction} from '../helpers/backActions'
 import {CustomTable} from '../components/CustomTable'
@@ -33,49 +36,15 @@ class ProductFormScreen extends React.Component {
     this.state = {
       inventoryModalData: null,
       isShow: false,
+      selectedProductType: this.props.initialValues?.productType === 'PRODUCT_SET' ? 1 : this.props.initialValues?.productType === 'PRODUCT_COMBO' ? 2 : 0,
+      productTypes: {
+        0: {label: context.t('product.productType.normal'), value: 'PRODUCT'},
+        1: {label: context.t('product.productType.fixedSet'), value: 'PRODUCT_SET'},
+        2: {label: context.t('product.productType.comboSet'), value: 'PRODUCT_COMBO'}
+      },
     }
   }
 
-  componentDidMount() {
-    this.context.localize({
-      en: {
-        product: {
-          ungrouped: 'Ungrouped',
-          pinned: 'Pinned',
-          newProduct: 'New Product',
-          editProduct: 'Edit Product',
-          productName: 'Product Name',
-          internalProductName: 'Internal Product Name',
-          price: 'Price',
-          costPrice: 'Cost Price',
-          productLabel: 'Product Label',
-          description: 'Description',
-          childProducts: 'Child Products',
-          options: 'Options',
-          workingArea: 'Working Area',
-          inventoryEdit: 'Product Inventory',
-        }
-      },
-      zh: {
-        product: {
-          ungrouped: '未分類',
-          pinned: '置頂產品',
-          newProduct: '新增產品',
-          editProduct: '修改產品',
-          productName: '產品名稱',
-          internalProductName: '內部產品名稱',
-          price: '價格',
-          costPrice: '成本價',
-          productLabel: '產品分類',
-          description: '產品敘述',
-          childProducts: '子產品',
-          options: '產品選項',
-          workingArea: '工作區',
-          inventoryEdit: '產品庫存管理',
-        }
-      }
-    })
-  }
 
   handleItemPress = (data) => {
     this.setState({inventoryModalData: data, isShow: true})
@@ -113,6 +82,11 @@ class ProductFormScreen extends React.Component {
     this.setState({inventoryModalData: values, isShow: false})
   }
 
+  handleProductTypeSelection = (index) => {
+    const selectedIndex = this.state.selectedProductType === index ? null : index
+    this.setState({selectedProductType: selectedIndex})
+  }
+
   render() {
     const {t, isTablet, customMainThemeColor, customBackgroundColor} = this.context
 
@@ -133,6 +107,8 @@ class ProductFormScreen extends React.Component {
       handlepinToggle,
       inventoryData
     } = this.props
+
+    const productTypes = Object.keys(this.state.productTypes).map(key => this.state.productTypes[key].label)
 
     console.log('inventoryModalData', JSON.stringify(inventoryData))
 
@@ -257,27 +233,76 @@ class ProductFormScreen extends React.Component {
             </View>
           </View>
 
-          {(!isEditForm || initialValues.productType === 'PRODUCT_SET') && (
-            <View style={styles.sectionContainer}>
-              <View style={styles.sectionTitleContainer}>
-                <StyledText style={styles.sectionTitleText}>{t('product.childProducts')}</StyledText>
+          {!isEditForm && (
+            <View style={styles.tableRowContainerWithBorder}>
+              <View style={[styles.tableCellView, {flex: 1}]}>
+                <StyledText style={styles.fieldTitle}>{t('product.productType.title')}</StyledText>
               </View>
+              <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+                <View style={{flex: 1}}>
+                  <Field
+                    name="productType"
+                    component={SegmentedControl}
+                    selectedIndex={this.state.selectedProductType}
+                    values={productTypes}
+                    onChange={this.handleProductTypeSelection}
+                    normalize={value => {
+                      return this.state.productTypes[value].value
+                    }}
+                  />
+                </View>
+              </View>
+            </View>)}
 
-              <View>
-                <Field
-                  name="childProducts"
-                  component={ItemList}
-                  listSelector={(onChange) =>
-                    <ProductSelector
-                      products={products}
-                      labels={labels}
-                      handleOnSelect={onChange}
+          {this.state.selectedProductType === 1 &&
+            <>
+              {(!isEditForm || initialValues.productType === 'PRODUCT_SET') && (
+                <View style={styles.sectionContainer}>
+                  <View style={styles.sectionTitleContainer}>
+                    <StyledText style={styles.sectionTitleText}>{t('product.childProducts')}</StyledText>
+                  </View>
+
+                  <View>
+                    <Field
+                      name="childProducts"
+                      component={ItemList}
+                      listSelector={(onChange) =>
+                        <ProductSelector
+                          products={products}
+                          labels={labels}
+                          handleOnSelect={onChange}
+                        />
+                      }
                     />
-                  }
-                />
-              </View>
-            </View>
-          )}
+                  </View>
+                </View>
+              )}
+            </>
+          }
+          {this.state.selectedProductType === 2 &&
+            <>
+              {(!isEditForm || initialValues.productType === 'PRODUCT_COMBO') && (
+                <View style={styles.sectionContainer}>
+                  <View style={styles.sectionTitleContainer}>
+                    <StyledText style={styles.sectionTitleText}>{t('product.childLabels')}</StyledText>
+                  </View>
+
+                  <View>
+                    <Field
+                      name="productComboLabels"
+                      component={ItemListDrag}
+                      listSelector={(onChange) =>
+                        <LabelSelector
+                          labels={labels}
+                          handleOnSelect={onChange}
+                        />
+                      }
+                    />
+                  </View>
+                </View>
+              )}
+            </>
+          }
 
           {isEditForm && (
             <View>

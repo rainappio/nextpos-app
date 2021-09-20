@@ -44,6 +44,15 @@ class ProductEdit extends Component {
         return p.id
       })
     }
+    if (request.productComboLabels != null) {
+      request.productComboLabels = request.productComboLabels.map((item) => {
+        let label = {
+          productLabelId: item.id,
+          multipleSelection: item.multipleSelection ?? false,
+        }
+        return label
+      })
+    }
 
     let prdId = this.props.route.params.productId
 

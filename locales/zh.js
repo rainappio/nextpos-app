@@ -108,9 +108,17 @@ const zh = {
     productLabel: '產品分類',
     description: '產品敘述',
     childProducts: '子產品',
+    childLabels: '子分類',
     options: '產品選項',
     workingArea: '工作區',
     inventoryEdit: '產品庫存管理',
+    productType: {
+      title: '產品類型',
+      normal: '一般產品',
+      fixedSet: '固定組合',
+      comboSet: '彈性組合'
+    },
+    multiple: '可複選',
   },
   newOrder: {
     newOrderTitle: '新訂單',
