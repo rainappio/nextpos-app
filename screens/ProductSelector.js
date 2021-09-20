@@ -67,7 +67,7 @@ class ProductSelector extends React.Component {
             <StyledText style={[styles.listPanelText]}>{item.label}</StyledText>
           </View>
           <View style={[styles.flex(1), styles.alignRight]}>
-            <AntDesignIcon name={this.state.selectedToggleItems.get(item.id) ? 'up' : 'down'} size={22} color="#ccc"/>
+            <AntDesignIcon name={this.state.selectedToggleItems.get(item.id) ? 'up' : 'down'} size={22} color="#ccc" />
           </View>
         </View>
       </TouchableOpacity>
@@ -107,21 +107,21 @@ class ProductSelector extends React.Component {
           <View>
             {products != null && products.map(data => {
               return (
-                <View style={[styles.productPanel]}
-                      key={data.id}>
+                <View style={[styles.productPanel, styles.withBottomBorder]}
+                  key={data.id}>
                   {
                     this.checkProductExists(data.id) ? (
                       <StyledText style={{marginRight: 50}}>{data.name} ({this.context.t('alreadySelected')})</StyledText>
                     ) : (
-                      <TouchableOpacity
-                        style={styles.flex(1)}
-                        onPress={() => {
-                          this.addProduct({id: data.id, name: data.name});
-                        }}
-                      >
-                        <StyledText>{data.name}</StyledText>
-                      </TouchableOpacity>
-                    )
+                        <TouchableOpacity
+                          style={styles.flex(1)}
+                          onPress={() => {
+                            this.addProduct({id: data.id, name: data.name});
+                          }}
+                        >
+                          <StyledText>{data.name}</StyledText>
+                        </TouchableOpacity>
+                      )
                   }
                 </View>
               )
@@ -144,8 +144,8 @@ class ProductSelector extends React.Component {
     return (
       <ThemeContainer>
         <ScreenHeader backNavigation={false}
-                      parentFullScreen={true}
-                      title={t('selectProductTitle')}
+          parentFullScreen={true}
+          title={t('selectProductTitle')}
         />
         <FlatList
           data={enhancedLabels}
