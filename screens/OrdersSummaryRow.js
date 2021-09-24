@@ -552,8 +552,9 @@ class OrdersSummaryRow extends React.Component {
                         <StyledText>${data.item.price}</StyledText>
                       </View>
 
-                      <View style={[styles.tableCellView, {flex: 3}]}>
-                        <StyledText>${data.item.lineItemSubTotal}</StyledText>
+                      <View style={[styles.tableCellView, {flex: 3}, data.item?.comboTotal > 0 && {flexDirection: 'column'}]}>
+                        <StyledText>${data.item.lineItemSubTotal} </StyledText>
+                        {data.item?.comboTotal > 0 && <View style={[styles.flex(1)]}><StyledText>{`($${data.item?.comboTotal})`}</StyledText></View>}
                       </View>
                       <View style={[styles.tableCellView, styles.justifyRight, {flex: 2}]}>
                         {this.renderStateToolTip(data.item.state, t)}
