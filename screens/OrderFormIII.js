@@ -48,7 +48,13 @@ class OrderFormIII extends React.Component {
     !!values?.childLineItems && values.childLineItems.map(product => {
       product.map((item) => {
         if (item !== undefined) {
-          updatechildLineItems.push(item)
+          let newOptions = []
+          item.productOptions.map((option) => {
+            if (Array.isArray(option)) {
+              newOptions.push(...option)
+            }
+          })
+          updatechildLineItems.push({...item, productOptions: newOptions})
         }
       })
     })

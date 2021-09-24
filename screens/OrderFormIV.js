@@ -303,7 +303,7 @@ class OrderFormIV extends React.Component {
                                         </View>
 
                                         <Field
-                                          name={`childLineItems[${labelIndex}][${prdIndex}].productOptions`}
+                                          name={`childLineItems[${labelIndex}][${prdIndex}].productOptions[${optionIndex}]`}
                                           component={CheckBoxGroupObjPick}
                                           customarr={this.state.comboLabels[labelIndex].products[prdIndex].productOptions[optionIndex]}
                                           limitOne={option.multipleChoice === true ? false : true}
