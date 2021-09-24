@@ -110,7 +110,7 @@ class OrderFormII extends React.Component {
       response.json().then(product => {
         console.log("visible option check")
         console.log("inventory check:", product.inventory)
-        if (product.productOptions == null || product.productOptions.length === 0 && product.inventory == null) {
+        if (product.productOptions == null || product.productOptions.length === 0 && product.inventory == null && product.productComboLabels == null) {
 
 
           const orderId = this.props.route.params.orderId
@@ -180,7 +180,7 @@ class OrderFormII extends React.Component {
       }
     }, response => {
       response.json().then(product => {
-        if (product.productOptions == null || product.productOptions.length === 0 && product.inventory == null) {
+        if (product.productOptions == null || product.productOptions.length === 0 && product.inventory == null && product.productComboLabels == null) {
           const orderId = this.props.route.params.orderId
           let lineItemRequest = {}
 
@@ -578,6 +578,8 @@ class OrderFormII extends React.Component {
                 data={this.state.modalData}
                 navigation={this.props.navigation}
                 route={this.props.route}
+                productsDetail={productsDetail}
+                labels={labels}
                 prdId={this.state?.prdId}
                 isEditLineItem={this.state?.isEditLineItem ?? false} />
 
@@ -664,6 +666,13 @@ class OrderFormII extends React.Component {
                                     </StyledText>
                                   </View>
                                 }
+                                {!!prd.comboProduct &&
+                                  <View style={[{position: 'absolute', right: 12, bottom: 20}]}>
+                                    <StyledText>
+                                      <Icon name='basket-unfill' size={20} color={customMainThemeColor} />
+                                    </StyledText>
+                                  </View>
+                                }
                               </View>
                             </TouchableOpacity>
                           )
@@ -708,6 +717,13 @@ class OrderFormII extends React.Component {
                                 <View style={[{position: 'absolute', right: 12, bottom: 20}]}>
                                   <StyledText>
                                     <Icon name='more' size={20} color={customMainThemeColor} />
+                                  </StyledText>
+                                </View>
+                              }
+                              {!!prd.comboProduct &&
+                                <View style={[{position: 'absolute', right: 12, bottom: 20}]}>
+                                  <StyledText>
+                                    <Icon name='basket-unfill' size={20} color={customMainThemeColor} />
                                   </StyledText>
                                 </View>
                               }
@@ -759,6 +775,13 @@ class OrderFormII extends React.Component {
                                           <View style={[{position: 'absolute', right: 12, bottom: 20}]}>
                                             <StyledText>
                                               <Icon name='more' size={20} color={customMainThemeColor} />
+                                            </StyledText>
+                                          </View>
+                                        }
+                                        {!!prd.comboProduct &&
+                                          <View style={[{position: 'absolute', right: 12, bottom: 20}]}>
+                                            <StyledText>
+                                              <Icon name='basket-unfill' size={20} color={customMainThemeColor} />
                                             </StyledText>
                                           </View>
                                         }
@@ -1217,7 +1240,7 @@ class OrderFormII extends React.Component {
                                 leftOpenValue={50}
                                 rightOpenValue={-50}
                                 disableLeftSwipe={!!item?.associatedLineItemId}
-                                disableRightSwipe={!!item?.associatedLineItemId}
+                                disableRightSwipe={!!item?.associatedLineItemId || item?.comboTotal > 0}
                                 ref={(e) => this[`ref_${index}`] = e}
                                 key={index}
                               >
@@ -1260,7 +1283,7 @@ class OrderFormII extends React.Component {
                                 </View>
 
                                 <TouchableOpacity
-                                  disabled={!!item?.associatedLineItemId}
+                                  disabled={!!item?.associatedLineItemId || item?.comboTotal > 0}
                                   style={[{backgroundColor: '#d6d6d6'}, {marginBottom: '3%', borderRadius: 8, }, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}
                                   activeOpacity={0.8}
                                   onPress={() => {
@@ -1268,7 +1291,9 @@ class OrderFormII extends React.Component {
                                   }}>
                                   <View style={{aspectRatio: 2, alignItems: 'flex-start', flexDirection: 'row'}}>
                                     <View style={{flex: 2.5, flexDirection: 'column', paddingLeft: '3%', paddingTop: '3%'}}>
-                                      <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.productName} ${item.price}</StyledText>
+                                      <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>
+                                        {!!item?.associatedLineItemId && <Icon name='subdirectory-arrow-right' size={20} color={customMainThemeColor} />}
+                                        {item.productName} ${item.price}</StyledText>
                                       {!!item?.childProducts?.length > 0 && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}> - {item.childProducts.map((childProduct) => childProduct?.productName).join(',')}</StyledText>}
                                       {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.options}</StyledText>}
                                       {!!item?.sku && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.sku}</StyledText>}
@@ -1385,6 +1410,11 @@ class OrderFormII extends React.Component {
                                       <Icon name='more' size={20} color={customMainThemeColor} />
                                     </StyledText>
                                   }
+                                  {!!prd.comboProduct &&
+                                    <StyledText style={{paddingLeft: 8}}>
+                                      <Icon name='basket-unfill' size={20} color={customMainThemeColor} />
+                                    </StyledText>
+                                  }
                                 </View>
                                 <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
                                   <StyledText>${prd.price}</StyledText>
@@ -1441,6 +1471,11 @@ class OrderFormII extends React.Component {
                                         {!!prd.hasOptions &&
                                           <StyledText style={{paddingLeft: 8}}>
                                             <Icon name='more' size={20} color={customMainThemeColor} />
+                                          </StyledText>
+                                        }
+                                        {!!prd.comboProduct &&
+                                          <StyledText style={{paddingLeft: 8}}>
+                                            <Icon name='basket-unfill' size={20} color={customMainThemeColor} />
                                           </StyledText>
                                         }
                                       </View>
@@ -1500,6 +1535,11 @@ class OrderFormII extends React.Component {
                                   {!!prd.hasOptions &&
                                     <StyledText style={{paddingLeft: 8}}>
                                       <Icon name='more' size={20} color={customMainThemeColor} />
+                                    </StyledText>
+                                  }
+                                  {!!prd.comboProduct &&
+                                    <StyledText style={{paddingLeft: 8}}>
+                                      <Icon name='basket-unfill' size={20} color={customMainThemeColor} />
                                     </StyledText>
                                   }
                                 </View>

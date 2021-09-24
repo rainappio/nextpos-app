@@ -206,6 +206,9 @@ export const api = {
     updateLineItemPrice: (orderId, lineItemId) => {
       return `${apiRoot}/orders/${orderId}/lineitems/${lineItemId}/price`
     },
+    newComboLineItem: (orderId) => {
+      return `${apiRoot}/orders/${orderId}/comboLineitems`
+    },
     process: orderId => {
       return `${apiRoot}/orders/${orderId}/process`
     },

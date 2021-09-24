@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import {clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange} from '../actions'
 import AddBtn from '../components/AddBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import DeleteBtn from '../components/DeleteBtn'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, warningMessage, successMessage, apiRoot} from '../constants/Backend'
 import styles from '../styles'
@@ -512,7 +513,7 @@ class OrdersSummaryRow extends React.Component {
             <SwipeListView
               data={
                 order.lineItems?.map((item) => {
-                  return {...item, disableRightSwipe: !!item?.associatedLineItemId, disableLeftSwipe: !!item?.associatedLineItemId}
+                  return {...item, disableRightSwipe: !!item?.associatedLineItemId || item?.comboTotal > 0, disableLeftSwipe: !!item?.associatedLineItemId}
                 }).sort((a, b) => {
                   let sort = ["OPEN", "IN_PROCESS", "ALREADY_IN_PROCESS", "PREPARED", "DELIVERED", "SETTLED"];
                   return sort.indexOf(a.state) - sort.indexOf(b.state);
@@ -537,6 +538,7 @@ class OrdersSummaryRow extends React.Component {
                         )}
                         <View style={{flex: 5}}>
                           <StyledText style={{textAlign: 'left'}}>
+                            {!!data.item?.associatedLineItemId && <MCIcon name='subdirectory-arrow-right' size={20} color={customMainThemeColor} />}
                             {data.item.productName}
                           </StyledText>
                         </View>
@@ -595,8 +597,9 @@ class OrdersSummaryRow extends React.Component {
                     <View style={{width: '40%'}}>
 
                     </View>
-                    <View style={styles?.editIcon(customMainThemeColor)}>
+                    <View style={[styles?.editIcon(customMainThemeColor), data.item?.comboTotal > 0 && {backgroundColor: '#ddd'}]}>
                       <TouchableOpacity
+                        disabled={data.item?.comboTotal > 0}
                         onPress={() =>
                           this.props.navigation.navigate('OrderFormIII', {
                             prdId: data.item.productId,

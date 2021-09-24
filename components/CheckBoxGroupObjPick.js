@@ -13,6 +13,7 @@ class CheckBoxGroupObjPick extends React.Component {
       customValue,
       optionName,
       customarr,
+      limitOne,
       meta: {error, touched, valid},
       themeStyle,
       ...rest
@@ -27,10 +28,19 @@ class CheckBoxGroupObjPick extends React.Component {
 
         const onChange = (checked) => {
           const arr = [...this.props.input.value]
-          if (checked) {
-            arr.push(ca)
+          if (limitOne) {
+            arr.length = 0
+            if (checked) {
+              arr.push(ca)
+            } else {
+              arr.pop()
+            }
           } else {
-            arr.splice(arr.map((item) => item.optionValue).indexOf(ca.optionValue), 1)
+            if (checked) {
+              arr.push(ca)
+            } else {
+              arr.splice(arr.map((item) => item.optionValue).indexOf(ca.optionValue), 1)
+            }
           }
           return this.props.input.onChange(arr)
         }
