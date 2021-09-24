@@ -549,7 +549,7 @@ class RetailOrderForm extends React.Component {
                                                                 leftOpenValue={50}
                                                                 rightOpenValue={-50}
                                                                 disableLeftSwipe={!!item?.associatedLineItemId}
-                                                                disableRightSwipe={!!item?.associatedLineItemId}
+                                                                disableRightSwipe={!!item?.associatedLineItemId || item?.comboTotal > 0}
                                                                 ref={(e) => this[`ref_${index}`] = e}
                                                             >
                                                                 <View style={{flex: 1, marginBottom: '3%', borderRadius: 10, width: '100%', flexDirection: 'row'}}>
@@ -583,7 +583,7 @@ class RetailOrderForm extends React.Component {
                                                                 </View>
 
                                                                 <TouchableOpacity
-                                                                    disabled={!!item?.associatedLineItemId}
+                                                                    disabled={!!item?.associatedLineItemId || item?.comboTotal > 0}
                                                                     style={[{backgroundColor: '#d6d6d6'}, {marginBottom: '3%', borderRadius: 8, }, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}
                                                                     activeOpacity={0.8}
                                                                     onPress={() => {

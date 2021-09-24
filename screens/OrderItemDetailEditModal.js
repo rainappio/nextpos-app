@@ -3,6 +3,7 @@ import {Field, reduxForm, formValueSelector} from 'redux-form'
 import {connect} from 'react-redux'
 import {Alert, StyleSheet, Text, TouchableHighlight, View, TouchableOpacity, KeyboardAvoidingView, FlatList, Dimensions} from "react-native";
 import {Accordion, List} from '@ant-design/react-native'
+import {Ionicons} from '@expo/vector-icons'
 import RenderStepper from '../components/RenderStepper'
 import {isCountZero, isRequired} from '../validators'
 import styles from '../styles'
@@ -17,7 +18,6 @@ import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScro
 import {getGlobalProductOffers, getOrder, getProduct} from '../actions';
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
-
 import CheckBoxGroupObjPick from '../components/CheckBoxGroupObjPick'
 import RadioItemObjPick, {RadioLineItemObjPick} from '../components/RadioItemObjPick'
 import InputText from "../components/InputText";
@@ -71,6 +71,8 @@ const OrderItemDetailEditModal = (props) => {
                         goBack={props.closeModal}
                         isEditLineItem={props?.isEditLineItem ?? false}
                         modalData={props?.data}
+                        productsDetail={props?.productsDetail}
+                        labels={props?.labels}
                     />
                 </KeyboardAvoidingView>
 
@@ -96,7 +98,6 @@ class ConnectedOrderItemOptionsBase extends React.Component {
     }
 
     componentDidMount() {
-
         this.props.getProduct()
         this.props.getOrder(this.props.route.params.orderId)
         this.props.getGlobalProductOffers()
@@ -105,7 +106,6 @@ class ConnectedOrderItemOptionsBase extends React.Component {
     handleSubmit = values => {
         const orderId = this.props.route.params.orderId
 
-        console.log("check values.productOptions=", values.productOptions)
         const updatedOptions = []
         !!values?.productOptions && values.productOptions.map(option => {
             if (!option.optionName) {
@@ -118,36 +118,75 @@ class ConnectedOrderItemOptionsBase extends React.Component {
                 updatedOptions.push(option)
             }
         })
+        const updatechildLineItems = []
+        !!values?.childLineItems && values.childLineItems.map(product => {
+            product.map((item) => {
+                if (item !== undefined) {
+                    updatechildLineItems.push(item)
+                }
+            })
+        })
 
-
-        const lineItemRequest = {
-            productId: this.props.prdId,
-            quantity: values.quantity,
-            sku: values.sku,
-            overridePrice: values.overridePrice,
-            productOptions: updatedOptions,
-            productDiscount: values.lineItemDiscount.productDiscount,
-            discountValue: values.lineItemDiscount.discount
-        }
-        console.log("submit lineItemRequest= ", lineItemRequest)
-
-        dispatchFetchRequest(
-            api.order.newLineItem(orderId),
-            {
-                method: 'POST',
-                withCredentials: true,
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(lineItemRequest)
-            },
-            response => {
-                successMessage(this.context.t('orderForm.addItemSuccess', {quantity: values.quantity, product: this.props?.product.name}))
-                this.props.getOrder(orderId)
-                this.props.goBack()
+        if (!values?.childLineItems) {
+            const lineItemRequest = {
+                productId: this.props.prdId,
+                quantity: values.quantity,
+                sku: values.sku,
+                overridePrice: values.overridePrice,
+                productOptions: updatedOptions,
+                productDiscount: values.lineItemDiscount.productDiscount,
+                discountValue: values.lineItemDiscount.discount,
             }
-        ).then()
+            console.log("submit lineItemRequest= ", lineItemRequest)
+
+            dispatchFetchRequest(
+                api.order.newLineItem(orderId),
+                {
+                    method: 'POST',
+                    withCredentials: true,
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(lineItemRequest)
+                },
+                response => {
+                    successMessage(this.context.t('orderForm.addItemSuccess', {quantity: values.quantity, product: this.props?.product.name}))
+                    this.props.getOrder(orderId)
+                    this.props.goBack()
+                }
+            ).then()
+
+        } else {
+            const lineItemRequest = {
+                productId: this.props.prdId,
+                quantity: values.quantity,
+                sku: values.sku,
+                overridePrice: values.overridePrice,
+                productOptions: updatedOptions,
+                productDiscount: values.lineItemDiscount.productDiscount,
+                discountValue: values.lineItemDiscount.discount,
+                childLineItems: updatechildLineItems
+            }
+            console.log("submit lineItemRequest= ", lineItemRequest)
+            dispatchFetchRequest(
+                api.order.newComboLineItem(orderId),
+                {
+                    method: 'POST',
+                    withCredentials: true,
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(lineItemRequest)
+                },
+                response => {
+                    successMessage(this.context.t('orderForm.addItemSuccess', {quantity: values.quantity, product: this.props?.product.name}))
+                    this.props.getOrder(orderId)
+                    this.props.goBack()
+                }
+            ).then()
+        }
     }
 
     handleUpdate = values => {
@@ -157,7 +196,6 @@ class ConnectedOrderItemOptionsBase extends React.Component {
 
         const updatedOptions = []
 
-        console.log("check values.productOptions=", values.productOptions)
         !!values?.productOptions && values.productOptions.map(option => {
             if (!option.optionName) {
                 option.optionName = this.context.t('freeTextProductOption')
@@ -176,7 +214,7 @@ class ConnectedOrderItemOptionsBase extends React.Component {
             productOptions: updatedOptions,
             overridePrice: values.overridePrice,
             productDiscount: values.lineItemDiscount.productDiscount,
-            discountValue: values.lineItemDiscount.discount
+            discountValue: values.lineItemDiscount.discount,
         }
 
         console.log("update lineItemRequest= ", lineItemRequest)
@@ -198,7 +236,7 @@ class ConnectedOrderItemOptionsBase extends React.Component {
     }
 
     render() {
-        const {product, globalProductOffers, haveError, isLoading} = this.props
+        const {product, productsDetail, globalProductOffers, haveError, isLoading, labels = []} = this.props
 
 
         const isEditLineItem = !!this.props?.isEditLineItem
@@ -242,6 +280,8 @@ class ConnectedOrderItemOptionsBase extends React.Component {
                     <OrderItemOptions
                         onSubmit={this.handleUpdate}
                         product={product}
+                        productsDetail={productsDetail}
+                        labels={labels}
                         initialValues={initialValues}
                         globalProductOffers={globalProductOffers}
                         goBack={this.props.goBack}
@@ -250,6 +290,8 @@ class ConnectedOrderItemOptionsBase extends React.Component {
                         <OrderItemOptions
                             onSubmit={this.handleSubmit}
                             product={product}
+                            productsDetail={productsDetail}
+                            labels={labels}
                             initialValues={{lineItemDiscount: lineItemDiscount, quantity: 1, sku: null}}
                             globalProductOffers={globalProductOffers}
                             goBack={this.props.goBack}
@@ -272,7 +314,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch,
     getProduct: () => dispatch(getProduct(props.prdId)),
     getOrder: () => dispatch(getOrder(props.route.params.orderId)),
-    getGlobalProductOffers: () => dispatch(getGlobalProductOffers())
+    getGlobalProductOffers: () => dispatch(getGlobalProductOffers()),
 })
 
 const ConnectedOrderItemOptions = connect(
@@ -295,23 +337,29 @@ class OrderItemOptions extends React.Component {
                 quantity: 'Quantity',
                 freeTextProductOption: 'Note',
                 overridePrice: 'Custom Price',
-                lineItemDiscount: 'Line Item Discount'
+                lineItemDiscount: 'Line Item Discount',
+                singleChoice: 'Single',
+                multipleChoice: 'Multiple',
             },
             zh: {
                 productOptions: '選擇產品註記',
                 quantity: '數量',
                 freeTextProductOption: '註記',
                 overridePrice: '自訂價格',
-                lineItemDiscount: '品項折扣'
+                lineItemDiscount: '品項折扣',
+                singleChoice: '單選',
+                multipleChoice: '複選',
             }
         })
         this.state = {
             optionActiveSections: [],
+            comboActiveSections: [],
             generalActiveSections: [],
             highlightSkuIndex: null,
             selectedSkuQuantity: 1,
             selectedSku: '',
             inventoryId: null,
+            comboLabels: [],
         }
     }
 
@@ -332,11 +380,98 @@ class OrderItemOptions extends React.Component {
             })?.filter((item) => {return item !== undefined})
             this.setState({optionActiveSections: activeSectionsArr})
         }
+
+        if (!!this.props?.product?.productComboLabels) {
+
+            let comboLabelList = this.props.product.productComboLabels
+            comboLabelList.map((prdComboLabel, labelIndex) => {
+                const productsList = new Map(Object.entries(this.props?.productsDetail))
+                this.props?.labels.find((label) => {
+                    if (label.id == prdComboLabel.id) {
+                        let prds = productsList.get(label.label)
+                        prdComboLabel.products = prds
+                        prdComboLabel.products.map((product) => product.isSelected = false)
+                    }
+                })
+            })
+            let activeSectionsArr = this.props?.product?.productComboLabels?.map((label, labelIndex) => {
+                return labelIndex
+            })?.filter((item) => {return item !== undefined})
+            this.setState({comboActiveSections: activeSectionsArr, comboLabels: comboLabelList})
+
+        }
         if (this.props?.initialValues.sku) {
             this.setState({selectedSku: this.props?.initialValues.sku})
         }
         if (this.props?.initialValues.quantity) {
             this.setState({selectedSkuQuantity: this.props?.initialValues.quantity})
+        }
+    }
+
+
+    getComboProduct = (comboPrd, prdIndex, labelIndex) => {
+
+        if (this.props?.childLineItems !== undefined && this.props?.childLineItems[labelIndex] !== undefined && this.props?.childLineItems[labelIndex][prdIndex] !== undefined) {
+
+            let newChild = this.props?.childLineItems[labelIndex].splice(prdIndex, 1, undefined)
+            this.props.change(`childLineItems[${labelIndex}]`, newChild)
+            this.state.comboLabels[labelIndex].products[prdIndex].isSelected = false
+            this.setState({comboLabels: this.state.comboLabels})
+            this.props.change(`childLineItems`, this.props?.childLineItems) // renew immediately
+
+        } else {
+
+            this.state.comboLabels[labelIndex].products[prdIndex].isLoading = true
+            this.setState({comboLabels: this.state.comboLabels})
+            dispatchFetchRequest(api.product.getById(comboPrd.id), {
+                method: 'GET',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }, response => {
+                response.json().then(product => {
+                    if (comboPrd.hasOptions) {
+                        let optionsInfo = []
+                        let optionsArr = []
+                        product.productOptions.map((prdOption, optionIndex) => {
+
+                            optionsInfo.push({
+                                optionName: prdOption.optionName,
+                                multipleChoice: prdOption.multipleChoice,
+                                required: prdOption.required,
+                            })
+                            optionsArr[optionIndex] = []
+                            prdOption.optionValues.map((optVal, x) => {
+                                optionsArr[optionIndex].push({
+                                    optionName: prdOption.optionName,
+                                    optionValue: optVal.value,
+                                    optionPrice: optVal.price,
+                                    id: prdOption.versionId + x
+                                })
+                            })
+                        })
+
+                        this.state.comboLabels[labelIndex].products[prdIndex].optionsInfo = optionsInfo
+                        this.state.comboLabels[labelIndex].products[prdIndex].productOptions = optionsArr
+                        this.state.comboLabels[labelIndex].products[prdIndex].isLoading = false
+                        this.state.comboLabels[labelIndex].products[prdIndex].isSelected = true
+                        this.setState({comboLabels: this.state.comboLabels})
+
+                    } else {
+                        this.state.comboLabels[labelIndex].products[prdIndex].productOptions = null
+                        this.state.comboLabels[labelIndex].products[prdIndex].optionsInfo = [{optionName: null, multipleChoice: false, required: false}]
+                        this.state.comboLabels[labelIndex].products[prdIndex].isLoading = false
+                        this.state.comboLabels[labelIndex].products[prdIndex].isSelected = true
+                        this.setState({comboLabels: this.state.comboLabels})
+                    }
+
+                    this.props.change(`childLineItems[${labelIndex}][${prdIndex}].productId`, product.id)
+                    this.props.change(`childLineItems[${labelIndex}][${prdIndex}].quantity`, 1)
+                })
+            }
+            ).then()
         }
     }
 
@@ -379,13 +514,16 @@ class OrderItemOptions extends React.Component {
     }
 
     render() {
-        const {product, globalProductOffers} = this.props
+        const {product, productsDetail, globalProductOffers, labels = []} = this.props
         const {t, themeStyle, customMainThemeColor, customBackgroundColor} = this.context
 
+        const hasProductComboLabels = product.productComboLabels != null && product.productComboLabels.length > 0
         const hasProductOptions = product.productOptions != null && product.productOptions.length > 0
         const lastOptionIndex = product.productOptions != null ? product.productOptions.length : 0
         const hasInventory = product.inventory != null
         const inventoryData = product.inventory ? Object.values(product.inventory.inventoryQuantities) : null
+
+
 
         return (
             <View style={[themeStyle, {height: '100%', borderRadius: 10, backgroundColor: customBackgroundColor}]}>
@@ -398,6 +536,103 @@ class OrderItemOptions extends React.Component {
                 <View style={{flex: 9}}>
                     <ThemeScrollView >
                         <View >
+
+
+                            {hasProductComboLabels && (
+                                <View style={[styles.sectionTitleContainer]}>
+                                    <StyledText style={styles.sectionTitleText}>
+                                        {t('product.childLabels')}
+                                    </StyledText>
+                                </View>
+                            )}
+                            {hasProductComboLabels && product.productComboLabels !== undefined &&
+                                <Accordion
+                                    onChange={(activeSections) => this.setState({comboActiveSections: activeSections})}
+                                    expandMultiple={true}
+                                    activeSections={this.state.comboActiveSections}
+                                >
+                                    {this.state.comboLabels !== null && this.state.comboLabels.map((prdComboLabel, labelIndex) => {
+                                        let isMultipleLabel = prdComboLabel.multipleSelection
+
+                                        return (
+                                            <Accordion.Panel
+                                                key={labelIndex}
+                                                header={<View style={styles.listPanel}>
+                                                    <StyledText style={styles.listPanelText}>{prdComboLabel.name}</StyledText>
+                                                    <StyledText style={[{fontSize: 12, color: customMainThemeColor, padding: 4}]}>{isMultipleLabel ? t('multipleChoice') : t('singleChoice')}</StyledText>
+                                                </View>}
+                                            >
+                                                <View
+                                                    key={prdComboLabel.id}
+                                                    style={styles.sectionContainer}
+                                                >
+                                                    <View>
+                                                        {prdComboLabel.products.map((product, prdIndex) => {
+                                                            return (
+                                                                <View key={prdIndex}>
+                                                                    <TouchableOpacity style={[styles.listPanel, styles.dynamicHorizontalPadding(16)]} onPress={() => {
+
+                                                                        if (this.state.comboLabels[labelIndex].products[prdIndex]) {
+                                                                            if (!isMultipleLabel) {
+                                                                                this.state.comboLabels[labelIndex].products.map((product) => product.isSelected = false)
+                                                                                this.setState({comboLabels: this.state.comboLabels})
+                                                                                this.props.change(`childLineItems[${labelIndex}]`, undefined)
+                                                                            }
+                                                                            this.getComboProduct(product, prdIndex, labelIndex)
+                                                                        }
+                                                                    }
+                                                                    }>
+                                                                        <View style={[styles.tableRowContainer, styles.flex(1), {justifyContent: 'space-between'}]}>
+                                                                            <View style={[styles.tableCellView]}>
+                                                                                <StyledText style={[styles.listPanelText]}>
+                                                                                    {product.name}
+                                                                                </StyledText>
+
+                                                                            </View>
+                                                                            {(this.state.comboLabels[labelIndex].products[prdIndex].isSelected) && <View style={[styles.tableCellView]}>
+                                                                                <StyledText>
+                                                                                    <Ionicons name="checkbox" size={28} color={customMainThemeColor} />
+                                                                                </StyledText>
+                                                                            </View>}
+
+                                                                        </View>
+                                                                    </TouchableOpacity>
+                                                                    {this.state.comboLabels[labelIndex].products[prdIndex].isLoading && <LoadingScreen />}
+                                                                    {
+                                                                        (!!this.state.comboLabels[labelIndex].products[prdIndex].productOptions) && (this.state.comboLabels[labelIndex].products[prdIndex].isSelected) &&
+                                                                        <View style={[{paddingLeft: 20}]}>
+                                                                            {product.optionsInfo.map((option, optionIndex) => {
+                                                                                return (
+                                                                                    <View key={optionIndex}>
+                                                                                        <View style={[styles.jc_alignIem_center, styles.sectionTitleText]}>
+                                                                                            <StyledText style={[{paddingTop: 8, color: customMainThemeColor}]}>{option.optionName}</StyledText>
+                                                                                        </View>
+
+                                                                                        <Field
+                                                                                            name={`childLineItems[${labelIndex}][${prdIndex}].productOptions`}
+                                                                                            component={CheckBoxGroupObjPick}
+                                                                                            customarr={this.state.comboLabels[labelIndex].products[prdIndex].productOptions[optionIndex]}
+                                                                                            limitOne={option.multipleChoice === true ? false : true}
+                                                                                            validate={option.required ? isRequired : null}
+                                                                                        />
+                                                                                    </View>
+                                                                                )
+                                                                            })}
+
+                                                                        </View>}
+                                                                </View>
+                                                            )
+
+                                                        })
+
+                                                        }
+                                                    </View>
+
+                                                </View>
+                                            </Accordion.Panel>
+                                        )
+                                    })}</Accordion>
+                            }
 
 
                             {hasInventory && (
@@ -460,44 +695,15 @@ class OrderItemOptions extends React.Component {
                                                     key={prdOption.versionId}
                                                     style={styles.sectionContainer}
                                                 >
-
-
-                                                    {prdOption.multipleChoice === false ? (
-                                                        <View>
-                                                            {prdOption.optionValues.map((optVal, ix) => {
-                                                                let optionObj = {}
-                                                                optionObj['optionName'] = prdOption.optionName
-                                                                optionObj['optionValue'] = optVal.value
-                                                                optionObj['optionPrice'] = optVal.price
-                                                                optionObj['id'] = prdOption.id
-
-                                                                return (
-                                                                    <View key={prdOption.id + ix}>
-                                                                        <Field
-                                                                            name={`productOptions[${optionIndex}]`}
-                                                                            component={RadioLineItemObjPick}
-                                                                            customValueOrder={optionObj}
-                                                                            optionName={optVal.value}
-                                                                            onCheck={(currentVal, fieldVal) => {
-                                                                                return fieldVal !== undefined && currentVal.optionValue === fieldVal.optionValue
-                                                                            }}
-                                                                            validate={requiredOption ? isRequired : null}
-                                                                            style={{flex: 1}}
-                                                                        />
-                                                                    </View>
-                                                                )
-                                                            })}
-                                                        </View>
-                                                    ) : (
-                                                            <View>
-                                                                <Field
-                                                                    name={`productOptions[${optionIndex}]`}
-                                                                    component={CheckBoxGroupObjPick}
-                                                                    customarr={arrForTrueState}
-                                                                    validate={requiredOption ? isRequired : null}
-                                                                />
-                                                            </View>
-                                                        )}
+                                                    <View>
+                                                        <Field
+                                                            name={`productOptions[${optionIndex}]`}
+                                                            component={CheckBoxGroupObjPick}
+                                                            customarr={arrForTrueState}
+                                                            limitOne={prdOption.multipleChoice === false ? true : false}
+                                                            validate={requiredOption ? isRequired : null}
+                                                        />
+                                                    </View>
                                                 </View>
                                             </Accordion.Panel>
                                         )
@@ -585,7 +791,6 @@ class OrderItemOptions extends React.Component {
                     <View style={{flex: 1, marginHorizontal: 5}}>
                         <TouchableOpacity
                             onPress={(value) => {
-                                console.log("goBack", value)
                                 this.props.goBack()
                             }}
                         >
@@ -618,8 +823,10 @@ const selector = formValueSelector('OrderItemOptions')
 OrderItemOptions = connect(
     state => {
         const quantity = selector(state, 'quantity')
+        const childLineItems = selector(state, 'childLineItems')
         return {
             quantity,
+            childLineItems,
         }
     }
 )(OrderItemOptions)
