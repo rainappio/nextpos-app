@@ -49,7 +49,7 @@ class OrderFormIII extends React.Component {
       product.map((item) => {
         if (item !== undefined) {
           let newOptions = []
-          item.productOptions.map((option) => {
+          !!item.productOptions && item.productOptions.map((option) => {
             if (Array.isArray(option)) {
               newOptions.push(...option)
             }
