@@ -361,41 +361,15 @@ class OrderFormIV extends React.Component {
                     </StyledText>
                   </View>
 
-                  {prdOption.multipleChoice === false ? (
-                    <View>
-                      {prdOption.optionValues.map((optVal, ix) => {
-                        let optionObj = {}
-                        optionObj['optionName'] = prdOption.optionName
-                        optionObj['optionValue'] = optVal.value
-                        optionObj['optionPrice'] = optVal.price
-                        optionObj['id'] = prdOption.id
-
-                        return (
-                          <View key={prdOption.id + ix}>
-                            <Field
-                              name={`productOptions[${optionIndex}]`}
-                              component={RadioLineItemObjPick}
-                              customValueOrder={optionObj}
-                              optionName={optVal.value}
-                              onCheck={(currentVal, fieldVal) => {
-                                return fieldVal !== undefined && currentVal.optionValue === fieldVal.optionValue
-                              }}
-                              validate={requiredOption ? isRequired : null}
-                            />
-                          </View>
-                        )
-                      })}
-                    </View>
-                  ) : (
-                      <View>
-                        <Field
-                          name={`productOptions[${optionIndex}]`}
-                          component={CheckBoxGroupObjPick}
-                          customarr={ArrForTrueState}
-                          validate={requiredOption ? isRequired : null}
-                        />
-                      </View>
-                    )}
+                  <View>
+                    <Field
+                      name={`productOptions[${optionIndex}]`}
+                      component={CheckBoxGroupObjPick}
+                      customarr={ArrForTrueState}
+                      limitOne={prdOption.multipleChoice === false ? true : false}
+                      validate={requiredOption ? isRequired : null}
+                    />
+                  </View>
                 </View>
               )
             })}
