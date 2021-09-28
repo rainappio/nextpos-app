@@ -54,7 +54,7 @@ class OrderFormIII extends React.Component {
               newOptions.push(...option)
             }
           })
-          updatechildLineItems.push({...item, productOptions: newOptions})
+          updatechildLineItems.push({...item, productOptions: newOptions, quantity: values.quantity})
         }
       })
     })
