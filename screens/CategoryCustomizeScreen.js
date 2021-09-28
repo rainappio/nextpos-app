@@ -5,6 +5,7 @@ import InputText from '../components/InputText'
 import AddBtn from '../components/AddBtn'
 import RNSwitch from '../components/RNSwitch'
 import RenderCheckboxGroup from '../components/CheckBoxGroup'
+import CheckBoxGroupObjPick from '../components/CheckBoxGroupObjPick'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
@@ -42,7 +43,11 @@ class CategoryCustomizeScreen extends React.Component {
       }
     })
 
+    let WorkingId = this.props?.initialValues?.workingAreaId
+    let initialWorkingId = !!WorkingId ? [{optionValue: WorkingId, id: WorkingId}] : null
+    this.props.change(`workingAreaId`, initialWorkingId)
     this.props.change(`appliesToProducts`, true)
+
   }
 
   render() {
@@ -55,6 +60,15 @@ class CategoryCustomizeScreen extends React.Component {
     } = this.props
 
     const {t, isTablet, customMainThemeColor} = this.context
+
+    let workingArr = []
+    workingareas !== undefined && workingareas.map((workarea) => {
+      workingArr.push({
+        name: workarea.name,
+        optionValue: workarea.id,
+        id: workarea.id
+      })
+    })
 
     return (
       // scroll bar in the center issue: https://github.com/facebook/react-native/issues/26610
@@ -100,20 +114,18 @@ class CategoryCustomizeScreen extends React.Component {
                   <StyledText style={styles.sectionTitleText}>{t('workingArea')}</StyledText>
                 </View>
 
-                {workingareas !== undefined &&
-                  workingareas.map(workarea => (
-                    <View key={workarea.id}>
-                      <Field
-                        name='workingAreaId'
-                        component={RadioItemObjPick}
-                        customValueOrder={workarea.id}
-                        optionName={workarea.name}
-                        onCheck={(currentVal, fieldVal) => {
-                          return fieldVal !== undefined && currentVal === fieldVal
-                        }}
-                      />
-                    </View>
-                  ))}
+                {!!workingArr && workingArr.length > 0 &&
+                  <View>
+                    <Field
+                      name={`workingAreaId`}
+                      component={CheckBoxGroupObjPick}
+                      customarr={workingArr}
+                      limitOne={true}
+                      validate={null}
+                    />
+                  </View>
+
+                }
               </View>
 
 

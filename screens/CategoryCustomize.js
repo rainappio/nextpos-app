@@ -28,6 +28,9 @@ class CategoryCustomize extends React.Component {
   handleSubmit = values => {
     const labelId = this.props.route.params.labelId
 
+    let updateWorkingAreaId = (!!values?.workingAreaId && !!values?.workingAreaId[0]) ? values?.workingAreaId[0].id : null
+    let request = {...values, workingAreaId: updateWorkingAreaId}
+
     dispatchFetchRequest(api.productLabel.getById(labelId), {
       method: 'POST',
       withCredentials: true,
@@ -35,7 +38,7 @@ class CategoryCustomize extends React.Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(values)
+      body: JSON.stringify(request)
     }, response => {
       this.props.clearLabel()
       this.props.getLables()
