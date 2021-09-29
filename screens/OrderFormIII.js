@@ -59,7 +59,7 @@ class OrderFormIII extends React.Component {
       })
     })
 
-    if (!values?.childLineItems) {
+    if (this.props.product?.productType !== 'PRODUCT_COMBO') {
       const lineItemRequest = {
         productId: this.props.route.params.prdId,
         quantity: values.quantity,
@@ -101,23 +101,26 @@ class OrderFormIII extends React.Component {
         childLineItems: updatechildLineItems
       }
       console.log("submit lineItemRequest= ", lineItemRequest)
-      dispatchFetchRequest(
-        api.order.newComboLineItem(orderId),
-        {
-          method: 'POST',
-          withCredentials: true,
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
+      let checkAllRequired = values.checkChildProduct.every(value => value === true)
+      if (checkAllRequired) {
+        dispatchFetchRequest(
+          api.order.newComboLineItem(orderId),
+          {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(lineItemRequest)
           },
-          body: JSON.stringify(lineItemRequest)
-        },
-        response => {
-          successMessage(this.context.t('orderForm.addItemSuccess', {quantity: values.quantity, product: this.props?.product.name}))
-          this.props.getOrder(orderId)
-          this.props.navigation.goBack()
-        }
-      ).then()
+          response => {
+            successMessage(this.context.t('orderForm.addItemSuccess', {quantity: values.quantity, product: this.props?.product.name}))
+            this.props.getOrder(orderId)
+            this.props.navigation.goBack()
+          }
+        ).then()
+      }
     }
   }
 

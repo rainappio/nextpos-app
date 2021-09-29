@@ -31,6 +31,7 @@ class Product extends React.Component {
         let label = {
           productLabelId: item.id,
           multipleSelection: item.multipleSelection ?? false,
+          required: item.required ?? false,
         }
         return label
       })

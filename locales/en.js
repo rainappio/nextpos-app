@@ -119,6 +119,7 @@ const en = {
       comboSet: 'Combo Set'
     },
     multiple: 'Multiple',
+    required: 'Required',
   },
   newOrder: {
     newOrderTitle: 'New Order',

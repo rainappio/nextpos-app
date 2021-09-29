@@ -119,6 +119,7 @@ const zh = {
       comboSet: '彈性組合'
     },
     multiple: '可複選',
+    required: '必選',
   },
   newOrder: {
     newOrderTitle: '新訂單',
