@@ -267,7 +267,7 @@ class OrderFormIV extends React.Component {
                     header={<View style={styles.listPanel}>
                       <StyledText style={styles.listPanelText}>{prdComboLabel.name}</StyledText>
                       <StyledText style={[{fontSize: 12, color: customMainThemeColor, padding: 4}]}>{isMultipleLabel ? t('multipleChoice') : t('singleChoice')}</StyledText>
-                      <StyledText style={[styles.rootError, {padding: 4}]}>{(isChildPrdRequired && childPrdCheck) && t('requiredChoice')}
+                      <StyledText style={[styles.rootError, {padding: 4, marginVertical: 0}]}>{(isChildPrdRequired && childPrdCheck) && t('requiredChoice')}
                       </StyledText>
                     </View>}
                   >
