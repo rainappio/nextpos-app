@@ -734,7 +734,7 @@ class OrderFormII extends React.Component {
                       {labels.map(lbl => {
                         if (this.state?.selectedLabel === lbl.label) {
                           return (
-                            <>
+                            <View key={lbl.id}>
                               {(map.get(lbl.label) !== undefined && map.get(lbl.label)?.length > 0) ?
                                 <View key={lbl.label} style={{flexDirection: 'row', flexWrap: 'wrap'}}>{map.get(lbl.label).map(prd => {
                                   return (
@@ -789,7 +789,7 @@ class OrderFormII extends React.Component {
                                     </TouchableOpacity>
                                   )
                                 })}</View> : <StyledText style={{alignSelf: 'center'}}>{t('orderForm.nothing')}</StyledText>}
-                            </>
+                            </View>
 
                           )
                         }

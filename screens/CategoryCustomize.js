@@ -91,9 +91,7 @@ class CategoryCustomize extends React.Component {
       )
     } else if (label !== undefined && Object.entries(label).length === 0) {
       return (
-        <View style={[styles.container]}>
-          <Text>fetching label ...</Text>
-        </View>
+        <LoadingScreen />
       )
     }
     return (

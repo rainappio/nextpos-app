@@ -19,7 +19,8 @@ class ItemListDrag extends React.Component {
     this.state = {
       visible: false,
       isDragged: true,
-      selectionValues: []
+      selectionMultiple: [],
+      selectionRequired: [],
     }
   }
 
@@ -40,12 +41,23 @@ class ItemListDrag extends React.Component {
     this.checkLableSort(updatedItems)
     this.props.input.onChange(updatedItems)
   }
+  setItemRequired = (value, id) => {
+    const updatedItems = this.props.input?.value
+    let index = updatedItems.findIndex((item) => (item.id) == id)
+    let target = {...updatedItems[index], required: value}
+    updatedItems[index] = target
+
+    this.checkLableSort(updatedItems)
+    this.props.input.onChange(updatedItems)
+  }
 
   checkLableSort = (data) => {
-    const selectionValues = data.map((item) => {return item.multipleSelection ?? false})
+    const selectionMultiple = data.map((item) => {return item.multipleSelection ?? false})
+    const selectionRequired = data.map((item) => {return item.required ?? false})
 
     this.setState({
-      selectionValues: selectionValues
+      selectionMultiple: selectionMultiple,
+      selectionRequired: selectionRequired
     })
     this.props.input.onChange(data)
   }
@@ -58,8 +70,7 @@ class ItemListDrag extends React.Component {
       listSelector,
       ...rest
     } = this.props
-    const {t, customMainThemeColor} = this.context
-
+    const {t, customMainThemeColor, isTablet} = this.context
 
     return (
       <View style={styles.flex(1)}>
@@ -82,23 +93,23 @@ class ItemListDrag extends React.Component {
             renderItem={({item, index, drag, isActive}) => (
               <View style={[styles.tableRowContainerWithBorder]} key={item.id}>
                 <TouchableOpacity
-                  style={[styles.jc_alignIem_center, {width: 60, marginRight: 4}]}
+                  style={[styles.jc_alignIem_center, {width: 50, marginRight: 4}]}
                   onLongPress={drag}
                 >
-                  <Animated.Text style={[styles.primaryText, {paddingVertical: 12}]}>
+                  <Text style={[styles.primaryText, {paddingVertical: 12}]}>
                     <MaterialIcon
                       name="drag-handle"
                       size={22}
                       style={[styles.iconStyle(this.context?.customMainThemeColor)]}
                     />
-                  </Animated.Text>
+                  </Text>
                 </TouchableOpacity>
                 <View style={[styles.flex(5), styles.tableRowContainer]}>
 
                   <View style={[styles.flex(2)]}>
-                    <StyledText>{item.name ?? item.label}</StyledText>
+                    <StyledText style={[styles.textMedium, styles.jc_alignIem_center]}>{item.name ?? item.label}</StyledText>
                   </View>
-                  <View style={[styles.tableCellView, styles.justifyRight, {justifyContent: 'flex-end'}]}>
+                  <View style={[styles.tableCellView, styles.justifyRight, {justifyContent: 'flex-end'}, !isTablet && {flexDirection: 'column-reverse'}]}>
                     <View>
                       <StyledText>{t('product.multiple')}</StyledText>
                     </View>
@@ -107,13 +118,27 @@ class ItemListDrag extends React.Component {
                         onValueChange={(value) => {
                           this.setItemMultiple(value, (item.id))
                         }}
-                        value={item?.multipleSelection ?? this.state?.selectionValues[index]}
+                        value={item?.multipleSelection ?? this.state?.selectionMultiple[index]}
+                      />
+                    </View>
+
+                  </View>
+                  <View style={[styles.tableCellView, styles.justifyRight, {justifyContent: 'flex-end'}, !isTablet && {flexDirection: 'column-reverse'}]}>
+                    <View>
+                      <StyledText>{t('product.required')}</StyledText>
+                    </View>
+                    <View style={[styles.dynamicHorizontalPadding(8)]}>
+                      <Switch
+                        onValueChange={(value) => {
+                          this.setItemRequired(value, (item.id))
+                        }}
+                        value={item?.required ?? this.state?.selectionRequired[index]}
                       />
                     </View>
                   </View>
 
                 </View>
-                <View style={[styles.tableCellView, {justifyContent: 'flex-end', width: 60}]}>
+                <View style={[styles.tableCellView, {justifyContent: 'flex-end', width: 50}]}>
                   <TouchableOpacity
                     onPress={() => this.removeItem(item.id)}
                     hitSlop={styles.hitSlop}

@@ -38,6 +38,7 @@ class OrderFormIV extends React.Component {
         lineItemDiscount: 'Line Item Discount',
         singleChoice: 'Single',
         multipleChoice: 'Multiple',
+        requiredChoice: 'Required',
       },
       zh: {
         productOptions: '選擇產品註記',
@@ -47,6 +48,7 @@ class OrderFormIV extends React.Component {
         lineItemDiscount: '品項折扣',
         singleChoice: '單選',
         multipleChoice: '複選',
+        requiredChoice: '必選',
       }
     })
     this.state = {
@@ -71,8 +73,16 @@ class OrderFormIV extends React.Component {
     if (!!this.props?.product?.productComboLabels) {
 
       let comboLabelList = this.props.product.productComboLabels
+      let requiredArr = []
+
       comboLabelList.map((prdComboLabel, labelIndex) => {
         const productsList = new Map(Object.entries(this.props?.productsDetail))
+
+        if (prdComboLabel.required == true) {
+          requiredArr.push(false)
+        } else {
+          requiredArr.push(true)
+        }
         this.props?.labels.find((label) => {
           if (label.id == prdComboLabel.id) {
             let prds = productsList.get(label.label)
@@ -85,6 +95,7 @@ class OrderFormIV extends React.Component {
         return labelIndex
       })?.filter((item) => {return item !== undefined})
       this.setState({comboActiveSections: activeSectionsArr, comboLabels: comboLabelList})
+      this.props.change(`checkChildProduct`, requiredArr)
 
     }
   }
@@ -247,6 +258,8 @@ class OrderFormIV extends React.Component {
             >
               {this.state.comboLabels !== null && this.state.comboLabels.map((prdComboLabel, labelIndex) => {
                 let isMultipleLabel = prdComboLabel.multipleSelection
+                let isChildPrdRequired = prdComboLabel.required
+                let childPrdCheck = (this.props?.childLineItems !== undefined && this.props?.childLineItems[labelIndex] !== undefined) ? this.props?.childLineItems[labelIndex].every((value) => value === undefined) : true
 
                 return (
                   <Accordion.Panel
@@ -254,6 +267,8 @@ class OrderFormIV extends React.Component {
                     header={<View style={styles.listPanel}>
                       <StyledText style={styles.listPanelText}>{prdComboLabel.name}</StyledText>
                       <StyledText style={[{fontSize: 12, color: customMainThemeColor, padding: 4}]}>{isMultipleLabel ? t('multipleChoice') : t('singleChoice')}</StyledText>
+                      <StyledText style={[styles.rootError, {padding: 4, marginVertical: 0}]}>{(isChildPrdRequired && childPrdCheck) && t('requiredChoice')}
+                      </StyledText>
                     </View>}
                   >
                     <View
@@ -271,6 +286,10 @@ class OrderFormIV extends React.Component {
                                     this.state.comboLabels[labelIndex].products.map((product) => product.isSelected = false)
                                     this.setState({comboLabels: this.state.comboLabels})
                                     this.props.change(`childLineItems[${labelIndex}]`, undefined)
+                                  }
+                                  if (isChildPrdRequired) {
+                                    let checkValidate = isChildPrdRequired && childPrdCheck
+                                    this.props.change(`checkChildProduct[${labelIndex}]`, checkValidate)
                                   }
                                   this.getComboProduct(product, prdIndex, labelIndex)
                                 }

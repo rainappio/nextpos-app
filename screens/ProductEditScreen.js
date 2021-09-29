@@ -21,12 +21,11 @@ class ProductEdit extends Component {
   }
 
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.getLables()
-    this.props.load()
     this.props.getProductOptions()
-    this.props.getWorkingAreas('PRODUCT')
-    this.props.getProduct()
+    await this.props.getWorkingAreas('PRODUCT')
+    await this.props.getProduct()
     this.getInventory(this.props.route.params.productId)
   }
 
@@ -49,6 +48,7 @@ class ProductEdit extends Component {
         let label = {
           productLabelId: item.id,
           multipleSelection: item.multipleSelection ?? false,
+          required: item.required ?? false,
         }
         return label
       })
@@ -291,9 +291,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getLables: () => dispatch(getLables()),
-  load: () => {
-    dispatch(getProduct(props.route.params.productId))
-  },
   clearProduct: () =>
     dispatch(clearProduct(props.route.params.productId)),
   getProducts: () => dispatch(getProducts()),
