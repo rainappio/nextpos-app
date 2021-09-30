@@ -104,12 +104,12 @@ class ItemListDrag extends React.Component {
                     />
                   </Text>
                 </TouchableOpacity>
-                <View style={[styles.flex(5), styles.tableRowContainer]}>
+                <View style={[styles.flex(5), styles.tableRowContainer, styles.jc_alignIem_center]}>
 
                   <View style={[styles.flex(2)]}>
-                    <StyledText style={[styles.textMedium, styles.jc_alignIem_center]}>{item.name ?? item.label}</StyledText>
+                    <StyledText style={[styles.textMedium]}>{item.name ?? item.label}</StyledText>
                   </View>
-                  <View style={[styles.tableCellView, styles.justifyRight, {justifyContent: 'flex-end'}, !isTablet && {flexDirection: 'column-reverse'}]}>
+                  <View style={[styles.tableCellView, styles.justifyRight, !isTablet && {flexDirection: 'column-reverse', justifyContent: 'flex-start', alignItems: 'center'}]}>
                     <View>
                       <StyledText>{t('product.multiple')}</StyledText>
                     </View>
@@ -123,7 +123,7 @@ class ItemListDrag extends React.Component {
                     </View>
 
                   </View>
-                  <View style={[styles.tableCellView, styles.justifyRight, {justifyContent: 'flex-end'}, !isTablet && {flexDirection: 'column-reverse'}]}>
+                  <View style={[styles.tableCellView, styles.justifyRight, !isTablet && {flexDirection: 'column-reverse', justifyContent: 'flex-start', alignItems: 'center'}]}>
                     <View>
                       <StyledText>{t('product.required')}</StyledText>
                     </View>
@@ -141,7 +141,7 @@ class ItemListDrag extends React.Component {
                 <View style={[styles.tableCellView, {justifyContent: 'flex-end', width: 50}]}>
                   <TouchableOpacity
                     onPress={() => this.removeItem(item.id)}
-                    hitSlop={styles.hitSlop}
+                    hitSlop={isTablet ? styles.hitSlop : {top: 20, bottom: 20, left: 20, right: 20}}
                   >
                     <AntDesignIcon
                       name={"closecircle"}
