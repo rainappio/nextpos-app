@@ -5,6 +5,7 @@ import {LocaleContext} from '../locales/LocaleContext'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from 'react-native-elements';
 import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
+import {ThemeScrollView} from "../components/ThemeScrollView";
 
 
 /*
@@ -258,43 +259,46 @@ export const DiscountKeyboard = (props) => {
         return (
             <View style={{
                 backgroundColor: customBackgroundColor,
-                margin: '5%',
-                borderRadius: 10,
                 flex: 1,
-
-                paddingVertical: '10%',
                 alignItems: 'center'
             }}>
                 {props?.title && <Text style={{fontSize: 28, fontWeight: 'bold'}}>{props?.title}</Text>}
-                {props?.globalorderoffers?.map((item, index) => (
-
-                    <Button
-                        key={index}
-                        title={item?.offerName}
-                        raised
-                        containerStyle={{
-                            marginVertical: '5%',
-                            padding: 0,
-                            justifyContent: 'center',
-                            height: '10%',
-                            flexDirection: 'row'
-                        }}
-                        buttonStyle={{
+                <ThemeScrollView style={{flex: 1}}>
+                    {props?.globalorderoffers?.map((item, index) => (
+                        <View style={{
+                            backgroundColor: customBackgroundColor,
                             flex: 1,
-                            width: '100%',
-                            margin: 0,
-                            borderRadius: 10,
-                            backgroundColor: customMainThemeColor,
-                        }}
-                        onPress={() => {
-                            handleLabelPress(item?.offerId, item)
-                        }}
+                            alignItems: 'center'
+                        }}>
+                            <Button
+                                key={index}
+                                title={item?.offerName}
+                                raised
+                                containerStyle={{
+                                    marginVertical: '5%',
+                                    padding: 0,
+                                    justifyContent: 'center',
+                                    height: '10%',
+                                    flexDirection: 'row'
+                                }}
+                                buttonStyle={{
+                                    flex: 1,
+                                    width: '100%',
+                                    margin: 0,
+                                    borderRadius: 10,
+                                    backgroundColor: customMainThemeColor,
+                                    paddingVertical: '10%'
+                                }}
+                                onPress={() => {
+                                    handleLabelPress(item?.offerId, item)
+                                }}
 
-                    />
-                )
-                )}
+                            />
+                        </View>
+                    )
+                    )}
 
-
+                </ThemeScrollView>
             </View>
         );
     }
