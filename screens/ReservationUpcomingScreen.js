@@ -44,7 +44,6 @@ class ReservationUpcomingScreen extends React.Component {
 
   handleSubmit = (values) => {
 
-    this.setState({loading: true})
     let request = {
       reservationDate: moment(new Date()).format('YYYY-MM-DDTHH:mm:ss'),
       name: values.name,
@@ -55,26 +54,83 @@ class ReservationUpcomingScreen extends React.Component {
       note: values?.note ?? ''
     }
     console.log("request=", request)
-    dispatchFetchRequestWithOption(
-      api.reservation.create,
-      {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(request)
-      }, {defaultMessage: true},
-      response => {
-        this.setState({loading: false})
 
-      }
-    ).then(() => {
-      if (this.props.client?.clientSettings?.PUSH_NOTIFICATION !== undefined && this.props.client?.clientSettings?.PUSH_NOTIFICATION?.value) {
-        schedulePushNotification(request, this.context.t, 'CREATE')
-      }
-    })
+    Alert.alert(
+      ``,
+      `${this.context.t('reservation.sendActionContext', {phoneNumber: values.phoneNumber})}`,
+      [
+        {
+          text: `${this.context.t('action.yes')}`,
+          onPress: () => {
+            this.setState({loading: true})
+
+            dispatchFetchRequestWithOption(
+              api.reservation.create,
+              {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(request)
+              }, {defaultMessage: true},
+              response => {
+                response.json().then((data) => {
+                  dispatchFetchRequestWithOption(
+                    api.reservation.sendNotification(data.id),
+                    {
+                      method: 'POST',
+                      withCredentials: true,
+                      credentials: 'include',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                    }, {defaultMessage: false},
+                    response => {
+                    }
+                  ).then()
+                  this.setState({loading: false})
+                })
+              }
+            ).then(() => {
+              if (this.props.client?.clientSettings?.PUSH_NOTIFICATION !== undefined && this.props.client?.clientSettings?.PUSH_NOTIFICATION?.value) {
+                schedulePushNotification(request, this.context.t, 'CREATE')
+              }
+            })
+          }
+        },
+        {
+          text: `${this.context.t('action.no')}`,
+          onPress: () => {
+            this.setState({loading: true})
+
+            dispatchFetchRequestWithOption(
+              api.reservation.create,
+              {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(request)
+              }, {defaultMessage: true},
+              response => {
+                response.json().then((data) => {
+                  this.setState({loading: false})
+                })
+              }
+            ).then(() => {
+              if (this.props.client?.clientSettings?.PUSH_NOTIFICATION !== undefined && this.props.client?.clientSettings?.PUSH_NOTIFICATION?.value) {
+                schedulePushNotification(request, this.context.t, 'CREATE')
+              }
+            })
+          },
+          style: 'cancel'
+        }
+      ]
+    )
   }
 
 

@@ -178,7 +178,6 @@ class ReservationViewForm extends React.Component {
 
     const {t, customMainThemeColor, customBackgroundColor} = this.context
 
-
     if (isLoading || !haveData) {
       return (
         <LoadingScreen />
@@ -386,6 +385,16 @@ class ReservationViewForm extends React.Component {
                             </StyledText>
                           </View>
                         </View>
+                        <View style={styles.tableRowContainerWithBorder}>
+                          <View style={[styles.tableCellView, styles.flex(1)]}>
+                            <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.messageSentDate')}</StyledText>
+                          </View>
+                          <View style={[styles.tableCellView, styles.justifyRight]}>
+                            <StyledText style={[styles.reservationFormContainer]}>
+                              {!!reservation?.messageSentDate ? normalizeTimeString(reservation?.messageSentDate, 'YYYY-MM-DD') : t('reservation.messageNotSent')}
+                            </StyledText>
+                          </View>
+                        </View>
 
                         <View style={[styles.bottom,
                         styles.horizontalMargin]}>
@@ -449,7 +458,7 @@ class ReservationViewForm extends React.Component {
               <ThemeKeyboardAwareScrollView>
                 {!!reservation &&
                   <>
-                    <View style={[styles.tableRowContainerWithBorder, {marginTop: 72}]}>
+                    <View style={[styles.tableRowContainerWithBorder, {marginTop: 0}]}>
                       <View style={[styles.tableCellView, styles.flex(1)]}>
                         <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.date')}</StyledText>
                       </View>
@@ -530,6 +539,16 @@ class ReservationViewForm extends React.Component {
                             size={24}
                             style={[styles?.buttonIconStyle(customMainThemeColor)]}
                           />
+                        </StyledText>
+                      </View>
+                    </View>
+                    <View style={styles.tableRowContainerWithBorder}>
+                      <View style={[styles.tableCellView, styles.flex(1)]}>
+                        <StyledText style={[styles.reservationFormTitle(customMainThemeColor)]}>{t('reservation.messageSentDate')}</StyledText>
+                      </View>
+                      <View style={[styles.tableCellView, styles.justifyRight]}>
+                        <StyledText style={[styles.reservationFormContainer]}>
+                          {!!reservation?.messageSentDate ? normalizeTimeString(reservation?.messageSentDate, 'YYYY-MM-DD') : t('reservation.messageNotSent')}
                         </StyledText>
                       </View>
                     </View>

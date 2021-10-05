@@ -735,6 +735,8 @@ const en = {
       CANCELLED: 'Cancelled',
       SEATED: 'Seated'
     },
+    messageSentDate: 'SMS Sent Date',
+    messageNotSent: 'Not Sent',
     sendNotification: 'Send SMS',
     sendActionContext: 'Send confirm notification to phone: {{phoneNumber}} ?',
     createNotificationContext: 'Created new reservation.',
