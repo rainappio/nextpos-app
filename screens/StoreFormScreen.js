@@ -374,7 +374,7 @@ class StoreFormScreen extends Component {
                     component={InputText}
                     placeholder={t('timeLimit')}
                     keyboardType="numeric"
-                    validate={isPositiveInteger}
+                    validate={this.props.initialValues?.clientSettings?.TABLE_TIME_LIMIT ? isPositiveInteger : null}
                     format={(value, name) => {
                       return value !== undefined && value !== null ? String(value) : '120'
                     }}

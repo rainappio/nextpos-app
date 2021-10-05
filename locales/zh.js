@@ -737,6 +737,8 @@ const zh = {
       CANCELLED: '已取消',
       SEATED: '已入座'
     },
+    messageSentDate: '簡訊寄送日期',
+    messageNotSent: '未寄送',
     sendNotification: '寄送簡訊',
     sendActionContext: '是否發送訂位簡訊至客人的手機: {{phoneNumber}} ?',
     createNotificationContext: '已新增訂位',

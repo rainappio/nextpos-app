@@ -62,26 +62,88 @@ class ReservationScreen extends React.Component {
       note: values?.note ?? '',
       membershipId: values?.membershipId
     }
-    dispatchFetchRequestWithOption(
-      api.reservation.create,
-      {
-        method: 'POST',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
+
+    Alert.alert(
+      ``,
+      `${this.context.t('reservation.sendActionContext', {phoneNumber: values.phoneNumber})}`,
+      [
+        {
+          text: `${this.context.t('action.yes')}`,
+          onPress: () => {
+            dispatchFetchRequestWithOption(
+              api.reservation.create,
+              {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(request)
+              }, {defaultMessage: true},
+              response => {
+                response.json().then((data) => {
+                  dispatchFetchRequestWithOption(
+                    api.reservation.sendNotification(data.id),
+                    {
+                      method: 'POST',
+                      withCredentials: true,
+                      credentials: 'include',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                    }, {defaultMessage: false},
+                    response => {
+                    }
+                  ).then()
+
+                  this.handleReset()
+                  setTimeout(() => {
+                    this.props.navigation.navigate('ReservationViewScreen', {
+                      reservationId: data.id,
+                    })
+                  }, 800)
+                })
+              }
+            ).then(() => {
+              if (this.props.client?.clientSettings?.PUSH_NOTIFICATION !== undefined && this.props.client?.clientSettings?.PUSH_NOTIFICATION?.value) {
+                notificationPush(request, t, flag)
+              }
+            })
+          }
         },
-        body: JSON.stringify(request)
-      }, {defaultMessage: true},
-      response => {
-        this.handleReset()
-        this.props.navigation.navigate('ReservationCalendarScreen')
-      }
-    ).then(() => {
-      if (this.props.client?.clientSettings?.PUSH_NOTIFICATION !== undefined && this.props.client?.clientSettings?.PUSH_NOTIFICATION?.value) {
-        notificationPush(request, t, flag)
-      }
-    })
+        {
+          text: `${this.context.t('action.no')}`,
+          onPress: () => {
+            dispatchFetchRequestWithOption(
+              api.reservation.create,
+              {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(request)
+              }, {defaultMessage: true},
+              response => {
+                response.json().then((data) => {
+                  this.handleReset()
+                  this.props.navigation.navigate('ReservationViewScreen', {
+                    reservationId: data.id,
+                  })
+                })
+              }
+            ).then(() => {
+              if (this.props.client?.clientSettings?.PUSH_NOTIFICATION !== undefined && this.props.client?.clientSettings?.PUSH_NOTIFICATION?.value) {
+                notificationPush(request, t, flag)
+              }
+            })
+          },
+          style: 'cancel'
+        }
+      ]
+    )
   }
 
   handleReset = () => {

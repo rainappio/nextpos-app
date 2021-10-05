@@ -142,7 +142,7 @@ class ReservationCalendarScreen extends React.Component {
 
     handleMonthChange = async (year = new Date().getFullYear(), month = moment(new Date()).format('MM'), callback) => {
 
-        month = moment(new Date(`${year}-${month <= 10 ? '0' : ''}${month}-01`)).format('MM')
+        month = moment(new Date(`${year}-${month < 10 ? '0' : ''}${month}-01`)).format('MM')
 
         this.setState({monthLoading: true})
         await dispatchFetchRequest(api.reservation.getReservationByMonth(year, month), {
