@@ -5,6 +5,8 @@ import NavigationService from "../navigation/NavigationService";
 import i18n from 'i18n-js'
 import {order} from '../assets/images';
 import Constants from 'expo-constants';
+import {handleRefreshToken} from "../helpers/loginActions";
+
 
 
 export const storage = {
@@ -703,7 +705,11 @@ export const dispatchFetchRequestWithOption = async (
 
     if (token != null) {
       console.trace(`Use client user token: ${useClientUserToken}`)
-      const tokenObj = JSON.parse(token)
+      let tokenObj = JSON.parse(token)
+      if (tokenObj.tokenExp < Date.now()) {
+        newToken = await handleRefreshToken()
+        tokenObj = newToken
+      }
       payload.headers.Authorization = payload?.headers?.Authorization ?? `Bearer ${tokenObj.access_token}`
 
       const suppressError = options?.ignoreErrorMessage

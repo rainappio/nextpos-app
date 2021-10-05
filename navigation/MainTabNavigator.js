@@ -456,7 +456,7 @@ const BottomTab = () => {
           navigation.navigate(route.name, {withAnimation: false})
         }
       } else {
-        handleRefreshToken()
+        await handleRefreshToken()
       }
     }
   })

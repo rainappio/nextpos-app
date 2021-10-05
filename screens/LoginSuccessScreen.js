@@ -1,5 +1,6 @@
 import React from 'react'
 import {Image, Text, TouchableOpacity, View, Alert, Dimensions} from 'react-native'
+import {Placeholder, PlaceholderMedia, PlaceholderLine, Fade, ShineOverlay} from "rn-placeholder";
 import {connect} from 'react-redux'
 import {Field, reduxForm} from 'redux-form'
 import IonIcon from 'react-native-vector-icons/Ionicons'
@@ -236,6 +237,7 @@ class LoginSuccessScreen extends React.Component {
       haveError,
       getannouncements,
       shiftStatus,
+      shiftStatusLoading,
       themeStyle,
       client,
       printers = [],
@@ -258,6 +260,7 @@ class LoginSuccessScreen extends React.Component {
           route={route}
 
         />
+
 
 
         <View style={[styles.fullWidthScreen]}>
@@ -348,7 +351,49 @@ class LoginSuccessScreen extends React.Component {
               {t('loggedIn')} {formatDateObj(loggedIn)}
             </StyledText>
           </View>
+          {(isLoading || shiftStatusLoading) &&
+            <View style={{flex: 1, marginVertical: 28, marginHorizon: 12}}>
+              <View style={{flexDirection: 'row'}}>
+                <View style={[styles.flex(1), styles.placeHolderContainer(customBackgroundColor)]}>
+                  <Placeholder Animation={ShineOverlay}>
+                    <View style={{backgroundColor: '#eee', flex: 1, width: '100%', height: 120}}></View>
+                  </Placeholder>
+                </View>
+                <View style={[styles.flex(1), styles.placeHolderContainer(customBackgroundColor)]}>
+                  <Placeholder Animation={ShineOverlay}>
+                    <View style={{backgroundColor: '#eee', flex: 1, width: '100%', height: 120}}></View>
+                  </Placeholder>
+                </View>
+                <View style={[styles.flex(1), styles.placeHolderContainer(customBackgroundColor)]}>
+                  <Placeholder Animation={ShineOverlay}>
+                    <View style={{backgroundColor: '#eee', flex: 1, width: '100%', height: 120}}></View>
+                  </Placeholder>
+                </View>
+              </View>
+              <View style={[styles.placeHolderContainer(customBackgroundColor)]}>
+                <Placeholder Animation={ShineOverlay}>
+                  <PlaceholderLine width={80} />
+                  <PlaceholderLine />
+                  <PlaceholderLine width={30} />
+                </Placeholder>
+              </View>
+              <View style={[styles.placeHolderContainer(customBackgroundColor)]}>
+                <Placeholder Animation={ShineOverlay}>
+                  <PlaceholderLine width={80} />
+                  <PlaceholderLine />
+                  <PlaceholderLine width={30} />
+                </Placeholder>
+              </View>
+              <View style={[styles.placeHolderContainer(customBackgroundColor)]}>
+                <Placeholder Animation={ShineOverlay}>
+                  <PlaceholderLine width={80} />
+                  <PlaceholderLine />
+                  <PlaceholderLine width={30} />
+                </Placeholder>
+              </View>
 
+            </View>
+          }
           <View style={{flexDirection: 'row'}}>
             {(shiftStatus === 'ACTIVE' && appType !== 'reservation') && (
               <View style={[styles.menuContainer, {flex: 1}]}>
@@ -624,6 +669,7 @@ const mapStateToProps = state => ({
   isLoading: state.clientuser.loading,
   getannouncements: state.announcements.data,
   shiftStatus: state.shift.data.shiftStatus,
+  shiftStatusLoading: state.shift.data.loading,
   client: state.client.data,
   printers: state.printers.data.printers,
   order: state.order.data,
