@@ -775,4 +775,11 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  placeHolderContainer: (customBackgroundColor) => ({
+    backgroundColor: customBackgroundColor,
+    padding: 8,
+    marginHorizon: 8,
+    marginVertical: 12,
+    borderRadius: 8
+  })
 })

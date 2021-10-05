@@ -4,7 +4,6 @@ import {AsyncStorage} from "react-native";
 import {doLoggedIn} from "../actions";
 
 export const handleRefreshToken = async () => {
-  const accessToken = await getToken()
   const clientUsername = await AsyncStorage.getItem(storage.clientUsername)
   const clientPassword = await AsyncStorage.getItem(storage.clientPassword)
 
@@ -51,6 +50,7 @@ export const handleRefreshToken = async () => {
     doLoggedIn(res.access_token)
   }
 
+  const accessToken = await getToken()
 
-  return response
+  return accessToken
 }

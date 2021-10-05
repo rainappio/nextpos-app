@@ -36,8 +36,8 @@ class IntroAppScreen extends React.Component {
     if (tokenObj !== null && tokenObj.tokenExp > Date.now()) {
       this.props.navigation.navigate('ClientUsers')
     } else {
-      handleRefreshToken()
-      this.props.navigation.navigate('ClientUsers')
+      const newToken = await handleRefreshToken()
+      this.props.navigation.navigate(!!newToken ? 'ClientUsers' : 'Login')
     }
   }
 
