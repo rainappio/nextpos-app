@@ -146,7 +146,7 @@ class EditOffer extends Component {
 
   render() {
     const {t, isTablet} = this.context;
-    const {orderOffer, isLoading, haveData} = this.props;
+    const {orderOffer, isLoading, haveData, navigation, route} = this.props;
 
     const selectedProducts =
       this.props.route.params !== undefined &&
@@ -183,7 +183,8 @@ class EditOffer extends Component {
               isEditForm={true}
               onSubmit={this.handleSubmit}
               handleDeleteOffer={this.handleDeleteOffer}
-              navigation={this.props.navigation}
+              navigation={navigation}
+              route={route}
               handleActivate={this.handleActivate}
               handleDeactivate={this.handleDeactivate}
               selectedProducts={selectedProducts}

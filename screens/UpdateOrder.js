@@ -1,10 +1,13 @@
 import React from 'react'
+import {Alert} from 'react-native'
 import {connect} from 'react-redux'
 import {clearProduct, getTablesAvailable} from '../actions'
 import OrderForm from './OrderForm'
-import {api, dispatchFetchRequest} from '../constants/Backend'
+import {successMessage, warningMessage, api, dispatchFetchRequest} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
+import {printMessage} from "../helpers/printerActions";
+
 
 class UpdateOrder extends React.Component {
   static navigationOptions = {
@@ -43,9 +46,42 @@ class UpdateOrder extends React.Component {
     },
       response => {
         response.json().then(data => {
-          this.props.navigation.pop(1)
+          this.handlePrintTableInfo(data?.updateTable)
         })
       }).then()
+  }
+
+  handlePrintTableInfo = (updateTable) => {
+    if (updateTable !== null) {
+      Alert.alert(
+        ``,
+        `${this.context.t('tableVisual.printChangeTable')}`,
+        [
+          {
+            text: `${this.context.t('action.yes')}`,
+            onPress: () => {
+              updateTable?.ipAddresses?.map((ipAddresses) => {
+                printMessage(updateTable.instruction, ipAddresses, () => {
+                  successMessage(this.context.t('printerSuccess'))
+                }, () => {
+                  warningMessage(this.context.t('printerWarning'))
+                })
+              })
+              this.props.navigation.pop(1)
+            }
+          },
+          {
+            text: `${this.context.t('action.no')}`,
+            onPress: () => {
+              this.props.navigation.pop(1)
+            },
+            style: 'cancel'
+          }
+        ]
+      )
+    } else {
+      this.props.navigation.pop(1)
+    }
   }
 
   render() {

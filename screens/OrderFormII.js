@@ -1283,7 +1283,7 @@ class OrderFormII extends React.Component {
                                 </View>
 
                                 <TouchableOpacity
-                                  disabled={!!item?.associatedLineItemId || item?.comboTotal > 0}
+                                  disabled={!!item?.associatedLineItemId || item?.comboTotal > 0 || item?.state !== 'OPEN'}
                                   style={[{backgroundColor: '#d6d6d6'}, {marginBottom: '3%', borderRadius: 8, }, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}
                                   activeOpacity={0.8}
                                   onPress={() => {

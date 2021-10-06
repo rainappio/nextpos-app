@@ -802,6 +802,7 @@ const en = {
     isPayingMsg: 'Proceed to enter payment screen.',
     isMergingTitle: 'Merge Order',
     isMergingMsg: 'Proceed with merging orders to the destination table?',
+    printChangeTable: 'Print change table detail?'
   },
 }
 

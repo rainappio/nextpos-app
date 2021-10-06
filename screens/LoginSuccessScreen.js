@@ -351,7 +351,7 @@ class LoginSuccessScreen extends React.Component {
               {t('loggedIn')} {formatDateObj(loggedIn)}
             </StyledText>
           </View>
-          {(isLoading || shiftStatusLoading) &&
+          {(shiftStatusLoading) &&
             <View style={{flex: 1, marginVertical: 28, marginHorizon: 12}}>
               <View style={{flexDirection: 'row'}}>
                 <View style={[styles.flex(1), styles.placeHolderContainer(customBackgroundColor)]}>
