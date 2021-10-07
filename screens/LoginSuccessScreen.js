@@ -351,7 +351,7 @@ class LoginSuccessScreen extends React.Component {
               {t('loggedIn')} {formatDateObj(loggedIn)}
             </StyledText>
           </View>
-          {(shiftStatusLoading) &&
+          {(isLoading || shiftStatusLoading) &&
             <View style={{flex: 1, marginVertical: 28, marginHorizon: 12}}>
               <View style={{flexDirection: 'row'}}>
                 <View style={[styles.flex(1), styles.placeHolderContainer(customBackgroundColor)]}>
@@ -395,7 +395,7 @@ class LoginSuccessScreen extends React.Component {
             </View>
           }
           <View style={{flexDirection: 'row'}}>
-            {(shiftStatus === 'ACTIVE' && appType !== 'reservation') && (
+            {(!isLoading && shiftStatus === 'ACTIVE' && appType !== 'reservation') && (
               <View style={[styles.menuContainer, {flex: 1}]}>
                 <MenuButton
                   route={appType === 'store' ? 'OrderStart' : 'RetailOrderStart'}
@@ -422,7 +422,7 @@ class LoginSuccessScreen extends React.Component {
                   } />
               </View>
             )}
-            {(shiftStatus === 'ACTIVE' && appType !== 'reservation') && (
+            {(!isLoading && shiftStatus === 'ACTIVE' && appType !== 'reservation') && (
               <View style={[styles.menuContainer, {flex: 1}]}>
                 <MenuButton
                   onPress={() => this.handleQuickTakeOut()}
@@ -436,7 +436,7 @@ class LoginSuccessScreen extends React.Component {
                   } />
               </View>
             )}
-            {(shiftStatus !== 'ACTIVE' && appType !== 'reservation') && (
+            {(!isLoading && shiftStatus !== 'ACTIVE' && appType !== 'reservation') && (
               <View style={[styles.menuContainer, {flex: 1}]}>
                 <MenuButton
                   route={'ShiftClose'}
