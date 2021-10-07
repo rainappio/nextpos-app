@@ -206,6 +206,8 @@ class EditPasswordPopUpBase extends Component {
       await AsyncStorage.setItem(storage.clientUsername, this.props.name)
       await AsyncStorage.setItem(storage.clientPassword, password)
 
+      const usedLoginList = await AsyncStorage.getItem('usedLoginAccounts').then(req => JSON.parse(req) ?? [])
+
       const loggedIn = new Date()
       res.loggedIn = loggedIn
       res.tokenExp = new Date().setSeconds(
@@ -218,6 +220,12 @@ class EditPasswordPopUpBase extends Component {
       // this is used for LoginSuccessScreen.
       res.username = res.cli_userName
 
+      await AsyncStorage.removeItem('usedLoginAccounts')
+      let updateIndex = usedLoginList?.findIndex((value) => value.clientUsername === this.props.name)
+      let updateUser = {clientUsername: this.props.name, clientPassword: password}
+      usedLoginList.splice(updateIndex, 1, updateUser)
+
+      await AsyncStorage.setItem('usedLoginAccounts', JSON.stringify(usedLoginList))
       await AsyncStorage.setItem('token', JSON.stringify(res))
       doLoggedIn(res.access_token)
     }
@@ -472,7 +480,7 @@ class EditGesturePasswordPopUpBase extends Component {
 
     try {
       await AsyncStorage.setItem(`gesturePassword_${this.props?.client?.id}`, result);
-      await AsyncStorage.setItem(`gesturePassword_${result}`, this.state?.oldPassword);
+      await AsyncStorage.setItem(`gesturePassword_${this.props?.client?.id}_${result}`, this.state?.oldPassword);
       successMessage(this.context.t('editPasswordPopUp.passwordUpdated'))
       this.setState({hasGesturePassword: true, showEnterNewPassword: false, wrongPassword: false})
       this.toggleModal(false)

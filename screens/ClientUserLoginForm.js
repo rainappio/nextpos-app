@@ -53,7 +53,7 @@ class ClientUserLoginForm extends React.Component {
         // We have data!!
         this.setState({showGesture: true})
         if (!!result) {
-          const gesturePassword = await AsyncStorage.getItem(`gesturePassword_${result}`);
+          const gesturePassword = await AsyncStorage.getItem(`gesturePassword_${this.props?.client?.id}_${result}`);
           if (result === value && gesturePassword !== null) {
             this.setState({showGesture: true})
             this.props.onSubmit({username: this.props?.clientusersName, password: String(gesturePassword)})
