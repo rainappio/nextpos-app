@@ -1,5 +1,6 @@
 import React from "react";
-import {Field, reduxForm} from "redux-form";
+import {Field, reduxForm, formValueSelector} from "redux-form";
+import {connect} from 'react-redux';
 import {Platform, Text, TouchableOpacity, View} from "react-native";
 import {isRequired} from "../validators";
 import InputText from "../components/InputText";
@@ -13,6 +14,7 @@ import AntDesignIcon from "react-native-vector-icons/AntDesign";
 import RenderPureCheckBox from "../components/rn-elements/PureCheckBox";
 import {api, dispatchFetchRequest} from "../constants/Backend";
 import {StyledText} from "../components/StyledText";
+import {parse} from "expo-linking";
 
 class OfferForm extends React.Component {
   static navigationOptions = {
@@ -385,14 +387,34 @@ class OfferForm extends React.Component {
               <StyledText style={styles.fieldTitle}>{t("discountValue")}</StyledText>
             </View>
             <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
-              <Field
-                name="discountValue"
-                component={InputText}
-                placeholder={t("discountValue")}
-                secureTextEntry={false}
-                keyboardType='numeric'
-                validate={isRequired}
-              />
+              {this.props?.discountType && this.props?.discountType === 'AMOUNT_OFF' ?
+                <Field
+                  name="discountValue"
+                  component={InputText}
+                  placeholder={t("discountValue")}
+                  secureTextEntry={false}
+                  keyboardType='numeric'
+                  validate={isRequired}
+                /> :
+                <>
+                  <Field
+                    name="discountValue"
+                    component={InputText}
+                    placeholder={t("discountValue")}
+                    secureTextEntry={false}
+                    keyboardType='numeric'
+                    validate={isRequired}
+                    format={(value, name) => {
+                      return (value !== undefined && value !== null) ? parseInt(value * 100) : null
+                    }}
+                    normalize={(newValue, prevValue) => {
+                      if (isNaN(newValue)) {newValue = prevValue}
+                      return (newValue / 100)
+                    }}
+                  />
+                  <StyledText style={{paddingLeft: 4}}>{'%'}</StyledText>
+                </>
+              }
             </View>
           </View>
         </View>
@@ -447,5 +469,15 @@ class OfferForm extends React.Component {
 OfferForm = reduxForm({
   form: "newOffOfferFormerForm"
 })(OfferForm);
+
+const selector = formValueSelector('newOffOfferFormerForm')
+
+OfferForm = connect(state => {
+  const discountType = selector(state, 'discountType')
+  return {
+    discountType
+  }
+}
+)(OfferForm)
 
 export default OfferForm;

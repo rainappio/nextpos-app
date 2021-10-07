@@ -803,6 +803,7 @@ const zh = {
     isPayingMsg: '是否進入結帳流程？',
     isMergingTitle: '兩桌訂單將合併',
     isMergingMsg: '是否將訂單合併到拖曳的目標桌？',
+    printChangeTable: '是否列印換桌明細?'
   }
 }
 

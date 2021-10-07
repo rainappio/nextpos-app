@@ -6,7 +6,7 @@ import OrderStart from './OrderStart'
 import OrderItem from './OrderItem'
 import {getfetchOrderInflights, getMostRecentShiftStatus, getShiftStatus, getTableLayouts, getTablesAvailable, getTableLayout} from '../actions'
 import styles from '../styles'
-import {successMessage, api, dispatchFetchRequest, apiRoot} from '../constants/Backend'
+import {successMessage, warningMessage, api, dispatchFetchRequest, apiRoot} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import {handleDelete, handleOrderSubmit, handleCreateOrderSet, handleDeleteOrderSet, handleOrderAction} from '../helpers/orderActions'
 import {handleOpenShift} from "../helpers/shiftActions";
@@ -31,6 +31,7 @@ import {getInitialTablePosition, getTablePosition, getSetPosition} from "../help
 import NavigationService from "../navigation/NavigationService";
 import {MaterialIcons} from '@expo/vector-icons';
 import {RealTimeOrderUpdate} from '../components/RealTimeOrderUpdate'
+import {printMessage} from "../helpers/printerActions";
 
 
 class TablesScreen extends React.Component {
@@ -855,9 +856,43 @@ class DraggableBase extends Component {
     },
       response => {
         response.json().then(data => {
-          this.props?.onRefresh()
+          this.handlePrintTableInfo(data?.updateTable)
         })
       }).then()
+  }
+  handlePrintTableInfo = (updateTable) => {
+    const t = this.props.t
+    if (updateTable !== null) {
+      Alert.alert(
+        ``,
+        `${t('tableVisual.printChangeTable')}`,
+        [
+          {
+            text: `${t('action.yes')}`,
+            onPress: () => {
+              updateTable?.ipAddresses?.map((ipAddresses) => {
+                printMessage(updateTable.instruction, ipAddresses, () => {
+                  successMessage(t('printerSuccess'))
+                }, () => {
+                  warningMessage(t('printerWarning'))
+                }
+                )
+              })
+              this.props?.onRefresh()
+            }
+          },
+          {
+            text: `${t('action.no')}`,
+            onPress: () => {
+              this.props?.onRefresh()
+            },
+            style: 'cancel'
+          }
+        ]
+      )
+    } else {
+      this.props?.onRefresh()
+    }
   }
 
   handleMergeOrder = (table, values, toTable) => {

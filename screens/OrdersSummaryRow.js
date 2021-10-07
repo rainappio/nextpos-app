@@ -598,9 +598,9 @@ class OrdersSummaryRow extends React.Component {
                     <View style={{width: '40%'}}>
 
                     </View>
-                    <View style={[styles?.editIcon(customMainThemeColor), data.item?.comboTotal > 0 && {backgroundColor: '#ddd'}]}>
+                    <View style={[styles?.editIcon(customMainThemeColor), (data.item?.comboTotal > 0 || data.item?.state !== 'OPEN') && {backgroundColor: '#ddd'}]}>
                       <TouchableOpacity
-                        disabled={data.item?.comboTotal > 0}
+                        disabled={data.item?.comboTotal > 0 || data.item?.state !== 'OPEN'}
                         onPress={() =>
                           this.props.navigation.navigate('OrderFormIII', {
                             prdId: data.item.productId,
