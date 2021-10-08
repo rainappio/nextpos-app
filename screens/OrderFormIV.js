@@ -260,6 +260,10 @@ class OrderFormIV extends React.Component {
                 let isMultipleLabel = prdComboLabel.multipleSelection
                 let isChildPrdRequired = prdComboLabel.required
                 let childPrdCheck = (this.props?.childLineItems !== undefined && this.props?.childLineItems[labelIndex] !== undefined) ? this.props?.childLineItems[labelIndex].every((value) => value === undefined) : true
+                if (isChildPrdRequired) {
+                  let checkValidate = isChildPrdRequired && childPrdCheck
+                  this.props.change(`checkChildProduct[${labelIndex}]`, !checkValidate)
+                }
 
                 return (
                   <Accordion.Panel
@@ -287,10 +291,7 @@ class OrderFormIV extends React.Component {
                                     this.setState({comboLabels: this.state.comboLabels})
                                     this.props.change(`childLineItems[${labelIndex}]`, undefined)
                                   }
-                                  if (isChildPrdRequired) {
-                                    let checkValidate = isChildPrdRequired && childPrdCheck
-                                    this.props.change(`checkChildProduct[${labelIndex}]`, checkValidate)
-                                  }
+
                                   this.getComboProduct(product, prdIndex, labelIndex)
                                 }
                               }
