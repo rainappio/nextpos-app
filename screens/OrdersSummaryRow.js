@@ -23,6 +23,7 @@ import {SplitBillPopUp} from '../components/PopUp'
 import Colors from "../constants/Colors";
 import {OfferTooltip} from "../components/OfferTooltip";
 import {RealTimeOrderUpdate} from '../components/RealTimeOrderUpdate'
+import OrderItemMoveTableModal from './OrderItemMoveTableModal';
 
 
 class OrdersSummaryRow extends React.Component {
@@ -106,7 +107,10 @@ class OrdersSummaryRow extends React.Component {
 
     this.state = {
       orderLineItems: {},
-      splitBillModalVisible: false
+      splitBillModalVisible: false,
+      moveItemMode: false,
+      moveItems: [],
+      tableModalVisible: false
     }
 
     console.debug(`order summary order id: ${this.props.order.orderId}`)
@@ -402,6 +406,13 @@ class OrdersSummaryRow extends React.Component {
     }).then()
   }
 
+  handleToggleTableModal = (flag) => {
+    this.setState({tableModalVisible: flag})
+  }
+  resetTableModal = () => {
+    this.setState({moveItemMode: false, moveItems: [], tableModalVisible: false})
+  }
+
   handleOnMessage = (data, id) => {
     if (data === `${id}.order.orderChanged`) {
       console.log("refresh order")
@@ -459,6 +470,14 @@ class OrdersSummaryRow extends React.Component {
             handleOnMessage={this.handleOnMessage}
             id={order?.orderId}
           />
+          <OrderItemMoveTableModal
+            tableModalVisible={this.state.tableModalVisible}
+            toggleModal={this.handleToggleTableModal}
+            reset={this.resetTableModal}
+            data={this.state.moveItems}
+            navigation={this.props.navigation}
+            route={this.props.route}
+          />
           <SplitBillPopUp
             navigation={this.props.navigation}
             toRoute={['SpiltBillScreen', 'SplitBillByHeadScreen']}
@@ -507,13 +526,30 @@ class OrdersSummaryRow extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
+          <View style={{flex: 1, marginHorizontal: 8, marginTop: 4}}>
+            {(['OPEN', 'IN_PROCESS', 'ALREADY_IN_PROCESS', 'PREPARED', 'DELIVERED'].includes(order.state) && order?.lineItems.length > 0) && <View style={[{marginBottom: 0, paddingVertical: 8}]}>
+              <TouchableOpacity style={[styles.flexButton(customMainThemeColor), (!!this.state.moveItemMode && {backgroundColor: customBackgroundColor})]}
+                onPress={() => {
+                  this.setState({moveItemMode: !this.state.moveItemMode})
+                }}
+              >
+                <View style={{flexDirection: 'row', padding: 2}}>
+                  <StyledText style={[styles.dynamicHorizontalPadding(4)]}>
+                    <MCIcon name='redo' size={18} color={!!this.state.moveItemMode ? customMainThemeColor : customBackgroundColor} />
+                  </StyledText>
+                  <Text style={[{color: customBackgroundColor}, (!!this.state.moveItemMode && {color: customMainThemeColor})]}>
+                    {!!this.state.moveItemMode ? t('orderForm.selectItems') : t('orderForm.moveItems')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>}
+          </View>
 
           <View>
-
             <SwipeListView
               data={
                 order.lineItems?.map((item) => {
-                  return {...item, disableRightSwipe: !!item?.associatedLineItemId || item?.comboTotal > 0, disableLeftSwipe: !!item?.associatedLineItemId}
+                  return {...item, disableRightSwipe: (!!item?.associatedLineItemId || item?.comboTotal > 0 || this.state.moveItemMode), disableLeftSwipe: !!item?.associatedLineItemId}
                 }).sort((a, b) => {
                   let sort = ["OPEN", "IN_PROCESS", "ALREADY_IN_PROCESS", "PREPARED", "DELIVERED", "SETTLED"];
                   return sort.indexOf(a.state) - sort.indexOf(b.state);
@@ -525,7 +561,7 @@ class OrdersSummaryRow extends React.Component {
                   <View key={rowMap} style={{marginBottom: 15}}>
                     <View style={styles.tableRowContainer}>
                       <View style={[styles.tableCellView, {flex: 6}]}>
-                        {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(data.item.state) && (
+                        {(['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(data.item.state) && !this.state.moveItemMode) && (
                           <CheckBox
                             checkedIcon='dot-circle-o'
                             uncheckedIcon='circle-o'
@@ -535,6 +571,23 @@ class OrdersSummaryRow extends React.Component {
                             checked={this.state.orderLineItems[data.item.lineItemId] !== undefined && this.state.orderLineItems[data.item.lineItemId].checked}
                             onIconPress={() => this.toggleOrderLineItem(data.item.lineItemId)}
                           />
+                        )}
+                        {(this.state.moveItemMode && !data.item?.associatedLineItemId) && (
+                          <TouchableOpacity
+                            onPress={() => {
+                              let moveList = this.state?.moveItems
+                              if (moveList.includes(data.item?.lineItemId)) {
+                                moveList.splice(moveList.indexOf(data.item?.lineItemId), 1)
+                              } else {
+                                moveList.push(data.item?.lineItemId)
+                              }
+                              this.setState({
+                                moveItems: moveList
+                              });
+                            }}
+                            style={[{marginHorizontal: 8, borderWidth: 2, borderColor: customMainThemeColor, backgroundColor: customBackgroundColor, borderRadius: 50, width: 16, height: 16}, (!!this.state?.moveItems.includes(data.item?.lineItemId) && {backgroundColor: customMainThemeColor})]}
+                          >
+                          </TouchableOpacity>
                         )}
                         <View style={{flex: 5}}>
                           <StyledText style={{textAlign: 'left'}}>
@@ -688,6 +741,17 @@ class OrdersSummaryRow extends React.Component {
         </View>
 
         <View style={[styles.bottom, styles.horizontalMargin]}>
+          {(!!this.state.moveItemMode && (this.state?.moveItems && this.state?.moveItems.length !== 0)) &&
+            <TouchableOpacity
+              onPress={() => {
+                this.handleToggleTableModal(true);
+              }}
+
+            >
+              <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>{t('orderForm.moveToTable')}</Text>
+            </TouchableOpacity>
+          }
+
           {['OPEN', 'IN_PROCESS', 'DELIVERED'].includes(order.state) && (order.orderType !== 'TAKE_OUT') && (
             <TouchableOpacity
               onPress={() =>

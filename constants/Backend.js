@@ -211,6 +211,9 @@ export const api = {
     newComboLineItem: (orderId) => {
       return `${apiRoot}/orders/${orderId}/comboLineitems`
     },
+    moveLineItems: sourceOrderId => {
+      return `${apiRoot}/orders/${sourceOrderId}/lineitems/move`
+    },
     process: orderId => {
       return `${apiRoot}/orders/${orderId}/process`
     },

@@ -57,6 +57,7 @@ const zh = {
       JKO: '街口支付',
       UBER_EATS: 'Uber Eats',
       FOOD_PANDA: '熊貓外送',
+      GOV_VOUCHER: '政府消費券'
     }
   },
   newItem: {
@@ -155,6 +156,11 @@ const zh = {
     deleteOrder: '刪除',
     selectItemToDeliver: '請選擇品項送餐',
     deliverOrder: '送餐完畢',
+    moveItems: '移動品項',
+    selectItems: '選取品項',
+    moveToTable: '移至別桌',
+    selectTargetTable: '選取移至哪桌',
+    moveSelectedLineItems: '確認將選擇的品項移動至 {{tableName}}？',
     payOrder: '付款',
     stateTip: {
       open: {
@@ -239,6 +245,7 @@ const zh = {
     splitBillPopUpTitle: '拆帳方式',
     splitByItem: '以品項拆帳',
     splitByHeadCount: '以人頭拆帳',
+    splitByCustomAmount: '自訂款項拆帳',
     payLeftAmount: '一次付清',
     completeOrder: '結束訂單',
     splitInvoiceDetail: '發票(狀態)',
@@ -275,6 +282,7 @@ const zh = {
     updateOrderLineItemPrice: '品項招待',
     quickCheckout: '快速結帳',
     moveOrder: '併桌',
+    moveLineItems: '移動品項',
   },
   invoiceStatus: {
     invoiceStatus: '發票狀態',
@@ -467,7 +475,8 @@ const zh = {
       noPrinter: '結帳出單機尚未設定',
       outOfStock: '選擇的產品已無庫存',
       inactiveOffer: '目前選用的促銷未啟用',
-      operationNotAllowed: '該項目不可選取'
+      operationNotAllowed: '該項目不可選取',
+      moveNotAllowed: '品項不可移至結帳中的桌位'
     }
   },
   eInvoice: {

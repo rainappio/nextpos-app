@@ -35,6 +35,7 @@ class OrderFormIII extends React.Component {
     values.productOptions != null && values.productOptions.map(option => {
       if (!option.optionName) {
         option.optionName = this.context.t('freeTextProductOption')
+        option.optionValueId = "noteId"
       }
       if (Array.isArray(option)) {
 
@@ -133,6 +134,7 @@ class OrderFormIII extends React.Component {
     values.productOptions != null && values.productOptions.map(option => {
       if (!option.optionName) {
         option.optionName = this.context.t('freeTextProductOption')
+        option.optionValueId = "noteId"
       }
       if (Array.isArray(option)) {
 

@@ -15,6 +15,7 @@ class TableRenderCheckboxGroup extends React.Component {
             input: {onBlur, onChange, onFocus, value},
             customValue,
             optionName,
+            limitOne,
             customarr,
             themeStyle,
             meta: {error, toched, valid},
@@ -28,10 +29,21 @@ class TableRenderCheckboxGroup extends React.Component {
                 const onChange = checked => {
                     const arr = [...this.props.input.value]
 
-                    if (checked) {
-                        arr.push(ca.tableId)
+                    if (limitOne) {
+                        // arr= [ca.tableId,ca.tableName]
+                        arr.length = 0
+                        if (checked) {
+                            arr.push(ca.tableId, {tableId: ca.tableId, tableName: ca.tableName})
+                            // arr.push(ca.tableName)
+                        } else {
+                            arr.pop()
+                        }
                     } else {
-                        arr.splice(arr.indexOf(ca.tableId), 1)
+                        if (checked) {
+                            arr.push(ca.tableId)
+                        } else {
+                            arr.splice(arr.indexOf(ca.tableId), 1)
+                        }
                     }
                     return this.props.input.onChange(arr)
                 }

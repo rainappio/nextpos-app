@@ -70,6 +70,29 @@ class OrderFormIV extends React.Component {
     if (this.props?.initialValues.quantity) {
       this.setState({selectedSkuQuantity: this.props?.initialValues.quantity})
     }
+    if (this.props?.initialValues?.noteOption) {
+      let lastOptionIndex = this.props?.product.productOptions != null ? this.props?.product.productOptions.length : 0
+      this.props.change(`productOptions[${lastOptionIndex}].optionValue`, this.props?.initialValues?.noteOption)
+    }
+    if (!!this.props?.product?.productOptions) {
+
+      let arrForInitState = []
+      this.props?.product?.productOptions?.map((prdOption, optionIndex) => {
+        prdOption.optionValues.map((optVal, x) => {
+          if (this.props.initialValues?.optionValueIds?.includes(String(optVal.optionValueId))) {
+            arrForInitState.push({
+              optionName: prdOption.optionName,
+              optionValue: optVal.value,
+              optionPrice: optVal.price,
+              optionValueId: optVal.optionValueId,
+              id: prdOption.versionId + x
+            })
+          }
+        })
+        this.props.change(`productOptions[${optionIndex}]`, arrForInitState)
+        arrForInitState = []  // clear for next option
+      })
+    }
     if (!!this.props?.product?.productComboLabels) {
 
       let comboLabelList = this.props.product.productComboLabels
@@ -366,6 +389,7 @@ class OrderFormIV extends React.Component {
                   optionName: prdOption.optionName,
                   optionValue: optVal.value,
                   optionPrice: optVal.price,
+                  optionValueId: optVal.optionValueId,
                   id: prdOption.versionId + x
                 })
               })

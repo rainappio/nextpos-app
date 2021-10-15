@@ -110,6 +110,7 @@ class ConnectedOrderItemOptionsBase extends React.Component {
         !!values?.productOptions && values.productOptions.map(option => {
             if (!option.optionName) {
                 option.optionName = this.context.t('freeTextProductOption')
+                option.optionValueId = "noteId"
             }
             if (Array.isArray(option)) {
 
@@ -208,6 +209,7 @@ class ConnectedOrderItemOptionsBase extends React.Component {
         !!values?.productOptions && values.productOptions.map(option => {
             if (!option.optionName) {
                 option.optionName = this.context.t('freeTextProductOption')
+                option.optionValueId = "noteId"
             }
             if (Array.isArray(option)) {
 
@@ -385,11 +387,32 @@ class OrderItemOptions extends React.Component {
 
     componentDidMount() {
         if (!!this.props?.product?.productOptions) {
+
+            let arrForInitState = []
+            let selectedOptions = []
+            this.props?.product?.productOptions?.map((prdOption, optionIndex) => {
+                prdOption.optionValues.map((optVal, x) => {
+                    if (this.props.initialValues?.optionValueIds?.includes(String(optVal.optionValueId))) {
+                        arrForInitState.push({
+                            optionName: prdOption.optionName,
+                            optionValue: optVal.value,
+                            optionPrice: optVal.price,
+                            optionValueId: optVal.optionValueId,
+                            id: prdOption.versionId + x
+                        })
+                        selectedOptions.push(optionIndex)
+                    }
+                })
+                this.props.change(`productOptions[${optionIndex}]`, arrForInitState)
+                arrForInitState = []  // clear for next option
+            })
             let activeSectionsArr = this.props?.product?.productOptions?.map((prdOption, optionIndex) => {
                 if (prdOption?.required)
                     return optionIndex
             })?.filter((item) => {return item !== undefined})
-            this.setState({optionActiveSections: activeSectionsArr})
+            let combineArr = [...new Set(selectedOptions.concat(activeSectionsArr))]
+            this.setState({optionActiveSections: combineArr})
+
         }
 
         if (!!this.props?.product?.productComboLabels) {
@@ -424,6 +447,17 @@ class OrderItemOptions extends React.Component {
         if (this.props?.initialValues.quantity) {
             this.setState({selectedSkuQuantity: this.props?.initialValues.quantity})
         }
+        if (this.props?.initialValues?.appliedOfferInfo) {
+            let active = [...this.state.generalActiveSections, 1]
+            this.setState({generalActiveSections: active})
+        }
+        if (this.props?.initialValues?.noteOption) {
+            let lastOptionIndex = this.props?.product.productOptions != null ? this.props?.product.productOptions.length : 0
+            this.props.change(`productOptions[${lastOptionIndex}].optionValue`, this.props?.initialValues?.noteOption)
+            let active = [...this.state.generalActiveSections, 0]
+            this.setState({generalActiveSections: active})
+        }
+
     }
 
 
@@ -466,6 +500,7 @@ class OrderItemOptions extends React.Component {
                                     optionName: prdOption.optionName,
                                     optionValue: optVal.value,
                                     optionPrice: optVal.price,
+                                    optionValueId: optVal.optionValueId,
                                     id: prdOption.versionId + x
                                 })
                             })
@@ -709,6 +744,7 @@ class OrderItemOptions extends React.Component {
                                                 optionName: prdOption.optionName,
                                                 optionValue: optVal.value,
                                                 optionPrice: optVal.price,
+                                                optionValueId: optVal.optionValueId,
                                                 id: prdOption.versionId + x
                                             })
                                         })
