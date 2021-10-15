@@ -57,6 +57,7 @@ const en = {
       JKO: 'JKO Pay',
       UBER_EATS: 'Uber Eats',
       FOOD_PANDA: 'Foodpanda',
+      GOV_VOUCHER: 'Gov. Voucher'
     }
   },
   newItem: {
@@ -155,6 +156,11 @@ const en = {
     deleteOrder: 'Delete',
     selectItemToDeliver: 'Please select a line item to deliver',
     deliverOrder: 'Deliver',
+    moveItems: 'Move Items',
+    selectItems: 'Select Items',
+    moveToTable: 'Move To Table',
+    selectTargetTable: 'Select target table',
+    moveSelectedLineItems: 'Confirm to move selected line items to {{tableName}}？',
     payOrder: 'Payment',
     stateTip: {
       open: {
@@ -239,6 +245,7 @@ const en = {
     splitBillPopUpTitle: 'Split Bill',
     splitByItem: 'By Item',
     splitByHeadCount: 'By Head Count',
+    splitByCustomAmount: 'By Custom Amount',
     payLeftAmount: 'Pay All',
     completeOrder: 'Complete',
     splitInvoiceDetail: 'Invoice(Status)',
@@ -275,6 +282,7 @@ const en = {
     updateOrderLineItemPrice: 'Free Order Item',
     quickCheckout: 'Quick Checkout',
     moveOrder: 'Move Order',
+    moveLineItems: 'Move Line Items',
   },
   invoiceStatus: {
     invoiceStatus: 'Invoice status',
@@ -467,7 +475,8 @@ const en = {
       noPrinter: 'Checkout printer is not setup.',
       outOfStock: 'The selected product is out of stock.',
       inactiveOffer: 'The resolved offer is not active',
-      operationNotAllowed: 'The operation not allowed.'
+      operationNotAllowed: 'The operation not allowed.',
+      moveNotAllowed: 'Moving line items are not allowed on settling or settled orders.'
     }
   },
   eInvoice: {

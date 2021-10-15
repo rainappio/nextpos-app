@@ -16,6 +16,7 @@ import {ListItem} from "react-native-elements";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import OrderItemDetailEditModal from './OrderItemDetailEditModal';
+import OrderItemMoveTableModal from './OrderItemMoveTableModal';
 import OrderTopInfo from "./OrderTopInfo";
 import DeleteBtn from '../components/DeleteBtn'
 import {handleDelete, handleOrderSubmit, handleQuickCheckout, revertSplitOrder, handlePrintWorkingOrder, handlePrintOrderDetails, handleOrderAction, getTableDisplayName} from "../helpers/orderActions";
@@ -61,6 +62,9 @@ class OrderFormII extends React.Component {
       ],
       otherAction: null,
       splitBillModalVisible: false,
+      moveItemMode: false,
+      moveItems: [],
+      tableModalVisible: false
     }
     this.onChange = activeSections => {
       this.setState({activeSections: activeSections})
@@ -73,8 +77,6 @@ class OrderFormII extends React.Component {
     if (this._isMounted) {
       this.props.getLables()
       this.props.getProductsDetail()
-      this.props.route.params.orderId !== undefined &&
-        this.props.getOrder(this.props.route.params.orderId)
 
       this._getOrder = this.props.navigation.addListener('focus', () => {
         this.props.route.params.orderId !== undefined && this.props.getOrder(this.props.route.params.orderId)
@@ -473,6 +475,13 @@ class OrderFormII extends React.Component {
     ).then()
   }
 
+  handleToggleTableModal = (flag) => {
+    this.setState({tableModalVisible: flag})
+  }
+  resetTableModal = () => {
+    this.setState({moveItemMode: false, moveItems: [], tableModalVisible: false})
+  }
+
   normalize = (size) => {
     const {
       width: SCREEN_WIDTH,
@@ -582,7 +591,14 @@ class OrderFormII extends React.Component {
                 labels={labels}
                 prdId={this.state?.prdId}
                 isEditLineItem={this.state?.isEditLineItem ?? false} />
-
+              <OrderItemMoveTableModal
+                tableModalVisible={this.state.tableModalVisible}
+                toggleModal={this.handleToggleTableModal}
+                reset={this.resetTableModal}
+                data={this.state.moveItems}
+                navigation={this.props.navigation}
+                route={this.props.route}
+              />
               <SplitBillPopUp
                 navigation={this.props.navigation}
                 toRoute={['SpiltBillScreen', 'SplitBillByHeadScreen']}
@@ -1226,12 +1242,42 @@ class OrderFormII extends React.Component {
                       </View>
                     </>
                     }
+                    {(!!this.state.moveItemMode && (this.state?.moveItems && this.state?.moveItems.length !== 0)) && <>
+                      <View style={{flex: 0.5, marginLeft: 5}}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.handleToggleTableModal(true);
+                          }}
+                          style={styles?.flexButton(customMainThemeColor)}
+                        >
+                          <Text style={styles.flexButtonText}>{t('orderForm.moveToTable')}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </>}
+
                   </View>
                 </View>
 
                 <View style={[styles.orderItemRightList, {borderColor: customMainThemeColor, borderTopWidth: 1, paddingTop: 5}]}>
                   {orderIsLoading ? <View style={{flex: 5, borderBottomWidth: 1, borderColor: customMainThemeColor, paddingLeft: 10}}><LoadingScreen /></View>
                     : <View style={{flex: 5, borderBottomWidth: 1, borderColor: customMainThemeColor, paddingLeft: 10}}>
+                      {(['OPEN', 'IN_PROCESS', 'ALREADY_IN_PROCESS', 'PREPARED', 'DELIVERED'].includes(order.state) && order?.lineItems?.length > 0) && <View style={[styles.flex(1), {marginBottom: 8, maxHeight: 28}]}>
+                        <TouchableOpacity style={[styles.flexButton(customMainThemeColor), (!!this.state.moveItemMode && {backgroundColor: customBackgroundColor})]}
+                          onPress={() => {
+
+                            this.setState({moveItemMode: !this.state.moveItemMode, moveItems: []})
+                          }}
+                        >
+                          <View style={{flexDirection: 'row', padding: 4}}>
+                            <StyledText style={[styles.dynamicHorizontalPadding(4)]}>
+                              <Icon name='redo' size={18} color={!!this.state.moveItemMode ? customMainThemeColor : customBackgroundColor} />
+                            </StyledText>
+                            <Text style={[{color: customBackgroundColor}, (!!this.state.moveItemMode && {color: customMainThemeColor})]}>
+                              {!!this.state.moveItemMode ? t('orderForm.selectItems') : t('orderForm.moveItems')}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      </View>}
                       <ScrollView style={{flex: 1}}>
                         {order?.lineItems?.length > 0 ?
                           order?.lineItems?.map((item, index) => {
@@ -1282,48 +1328,67 @@ class OrderFormII extends React.Component {
                                   </View>
                                 </View>
 
+
                                 <TouchableOpacity
-                                  disabled={!!item?.associatedLineItemId || item?.comboTotal > 0 || item?.state !== 'OPEN'}
-                                  style={[{backgroundColor: '#d6d6d6'}, {marginBottom: '3%', borderRadius: 8, }, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}
+                                  disabled={!!item?.associatedLineItemId || item?.comboTotal > 0 || item?.state !== 'OPEN' || !!this.state.moveItemMode}
+                                  style={[{backgroundColor: '#d6d6d6'}, {marginBottom: '3%', borderRadius: 8, width: '100%'}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}
                                   activeOpacity={0.8}
                                   onPress={() => {
                                     this.editItem(item.productId, item)
                                   }}>
                                   <View style={{aspectRatio: 2, alignItems: 'flex-start', flexDirection: 'row'}}>
                                     <View style={{flex: 2.5, flexDirection: 'column', paddingLeft: '3%', paddingTop: '3%'}}>
-                                      <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>
+                                      <StyledText style={[{...{backgroundColor: '#d6d6d6', color: '#000'}, fontSize: 16, fontWeight: 'bold'}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}>
                                         {!!item?.associatedLineItemId && <Icon name='subdirectory-arrow-right' size={20} color={customMainThemeColor} />}
                                         {item.productName} ${item.price}</StyledText>
-                                      {!!item?.childProducts?.length > 0 && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}> - {item.childProducts.map((childProduct) => childProduct?.productName).join(',')}</StyledText>}
-                                      {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.options}</StyledText>}
-                                      {!!item?.sku && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{item.sku}</StyledText>}
-                                      {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
+                                      {!!item?.childProducts?.length > 0 && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}> - {item.childProducts.map((childProduct) => childProduct?.productName).join(',')}</StyledText>}
+                                      {!!item?.options && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}>{item.options}</StyledText>}
+                                      {!!item?.sku && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}>{item.sku}</StyledText>}
+                                      {!!item?.appliedOfferInfo && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}>{` ${item?.appliedOfferInfo?.offerName}(${item?.appliedOfferInfo?.overrideDiscount})`}</StyledText>}
                                     </View>
                                     <View style={{position: 'absolute', bottom: '3%', left: '3%', flexDirection: 'row'}}>
                                       <View style={{marginRight: 5}}>
-                                        {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: `${Colors.orderBgWhite}`, color: `${Colors.orderOpen}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.open.display')}</StyledText>}
+                                        {item?.state === 'OPEN' && <StyledText style={[{backgroundColor: `${Colors.orderBgWhite}`, color: `${Colors.orderOpen}`, paddingHorizontal: 2, fontWeight: "bold"}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.open.display')}</StyledText>}
                                         {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && (
-                                          <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderInProcess}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.inProcess.display')}</StyledText>
+                                          <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderInProcess}`, paddingHorizontal: 2, fontWeight: "bold"}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.inProcess.display')}</StyledText>
                                         )}
-                                        {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderPrepare}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.prepared.display')}</StyledText>}
+                                        {item?.state === 'PREPARED' && <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderPrepare}`, paddingHorizontal: 2, fontWeight: "bold"}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.prepared.display')}</StyledText>}
                                         {item?.state === 'DELIVERED' && (
-                                          <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderDeliver}`, paddingHorizontal: 2, fontWeight: "bold"}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.delivered.display')}</StyledText>
+                                          <StyledText style={[{backgroundColor: `${Colors.orderBgGray}`, color: `${Colors.orderDeliver}`, paddingHorizontal: 2, fontWeight: "bold"}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.delivered.display')}</StyledText>
                                         )}
-                                        {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.settled.display')}</StyledText>}
+                                        {item?.state === 'SETTLED' && <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}>{t('orderForm.stateTip.settled.display')}</StyledText>}
                                       </View>
-                                      <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>
+                                      <StyledText style={[{backgroundColor: '#d6d6d6', color: '#808080'}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}>
                                         {timeAgo.format(Date.now() - getTimeDifference(item?.createdDate), {flavour: 'narrow'})}
                                       </StyledText>
                                     </View>
                                     <View style={{flexDirection: 'column', flex: 1, padding: '3%', justifyContent: 'space-between', height: '100%', alignItems: 'flex-end', borderLeftWidth: 1}} >
 
                                       <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
-                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>{`${item.quantity}`}</StyledText>
-                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, (!!this.state?.choosenItem?.[item.lineItemId] && {backgroundColor: customMainThemeColor})]}>${item.lineItemSubTotal}</StyledText>
+                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}>{`${item.quantity}`}</StyledText>
+                                        <StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}, ((!!this.state?.choosenItem?.[item.lineItemId] || !!this.state?.moveItems.includes(item.lineItemId)) && {backgroundColor: customMainThemeColor})]}>${item.lineItemSubTotal}</StyledText>
 
                                       </View>
                                       {item?.comboTotal > 0 && <View style={[styles.flex(1)]}><StyledText style={[{backgroundColor: '#d6d6d6', color: '#000'}]}>{`($${item?.comboTotal})`}</StyledText></View>}
-                                      {['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && <TouchableOpacity
+                                      {(this.state.moveItemMode && !item?.associatedLineItemId) &&
+                                        <TouchableOpacity
+                                          onPress={() => {
+                                            let moveList = this.state?.moveItems
+                                            if (moveList.includes(item.lineItemId)) {
+                                              moveList.splice(moveList.indexOf(item.lineItemId), 1)
+                                            } else {
+                                              moveList.push(item.lineItemId)
+                                            }
+                                            this.setState({
+                                              moveItems: moveList
+                                            });
+                                          }}
+                                          style={[{width: '100%'}]}
+                                        >
+                                          <StyledText style={[{borderWidth: 1, borderColor: customMainThemeColor, backgroundColor: customBackgroundColor, padding: 4, shadowColor: '#000', shadowOffset: {width: 1, height: 1}, shadowOpacity: 1, width: '100%', textAlign: 'center'}]}>{t('orderForm.choose')}</StyledText>
+                                        </TouchableOpacity>
+                                      }
+                                      {(['IN_PROCESS', 'ALREADY_IN_PROCESS'].includes(item?.state) && !this.state.moveItemMode) && <TouchableOpacity
                                         onPress={() => {
                                           this.setState({
                                             choosenItem: {...this.state?.choosenItem, [item.lineItemId]: !this.state?.choosenItem?.[item.lineItemId] ?? false}
