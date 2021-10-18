@@ -601,10 +601,10 @@ class OrderFormII extends React.Component {
               />
               <SplitBillPopUp
                 navigation={this.props.navigation}
-                toRoute={['SpiltBillScreen', 'SplitBillByHeadScreen']}
-                textForRoute={[t('order.splitByItem'), t('order.splitByHeadCount')]}
+                toRoute={['SpiltBillScreen', 'SplitBillByHeadScreen', 'SplitBillByAmountScreen']}
+                textForRoute={[t('order.splitByItem'), t('order.splitByHeadCount'), t('order.splitByCustomAmount')]}
                 title={t('order.splitBillPopUpTitle')}
-                params={[{order: order}, {order: order}]}
+                params={[{order: order}, {order: order}, {order: order}]}
                 isVisible={this.state?.splitBillModalVisible}
                 toggleModal={(visible) => this.setState({splitBillModalVisible: visible})}
                 orderId={order?.orderId}

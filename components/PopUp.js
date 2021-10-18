@@ -250,7 +250,8 @@ class SplitBillPopUpBase extends Component {
 
     this.state = {
       quantity: 1,
-      showHeadCount: false
+      showHeadCount: false,
+      showAmountCount: false
     }
   }
   componentDidUpdate(prevProps, prevState) {
@@ -296,7 +297,7 @@ class SplitBillPopUpBase extends Component {
             this.setState({showHeadCount: true})
             this.props?.change('quantity', data?.headCount)
           } else {
-            this.setState({showHeadCount: false})
+            this.setState({showHeadCount: false, showAmountCount: false})
             this.props?.reset()
           }
 
@@ -364,7 +365,16 @@ class SplitBillPopUpBase extends Component {
                       validate={[isRequired, isCountZero]}
                     />
                   </View>}
-                  {this.state?.showHeadCount || toRoute?.map((item, index, array) => {
+                  {/* // for future multiple(>3) amount split */}
+                  {/* {this.state?.showAmountCount && <View >
+                    <Field
+                      name="quantity"
+                      component={RenderStepper}
+                      optionName={t('splitBillPopUp.quantity')}
+                      validate={[isRequired, isCountZero]}
+                    />
+                  </View>} */}
+                  {this.state?.showHeadCount || this.state?.showAmountCount || toRoute?.map((item, index, array) => {
                     return (
                       <View
                         style={{width: '100%', paddingHorizontal: 5}} key={index}
@@ -373,6 +383,13 @@ class SplitBillPopUpBase extends Component {
                           onPress={() => {
                             if (item === 'SplitBillByHeadScreen' && !this.state?.showHeadCount) {
                               this.setState({showHeadCount: true})
+                            } else if (item === 'SplitBillByAmountScreen' && !this.state?.showAmountCount) {
+                              this.setState({showAmountCount: true})
+                              handleOrderAction(orderId, 'ENTER_PAYMENT', () => navigation.navigate(toRoute[2], {
+                                ...params?.[2],
+                                amountCount: 2
+                              }))
+                              this.toggleModal(false)
                             } else {
                               let par = params?.[index] ?? {}
                               handleOrderAction(orderId, 'ENTER_PAYMENT', () => navigation.navigate(item, {
@@ -420,6 +437,35 @@ class SplitBillPopUpBase extends Component {
                       </Text>
                     </TouchableOpacity>
                   </View>}
+
+                  {/* // for future multiple(>3) amount split */}
+                  {/* {this.state?.showAmountCount && <View
+                    style={{width: '100%', paddingHorizontal: 5, paddingTop: 10}}
+                  >
+                    <TouchableOpacity
+                      onPress={handleSubmit(data => {
+                        handleOrderAction(orderId, 'ENTER_PAYMENT', () => navigation.navigate(toRoute[2], {
+                          ...params?.[2],
+                          amountCount: data?.quantity
+                        }))
+                        this.toggleModal(false)
+                      })}
+                    >
+                      <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                        {t('splitBillPopUp.ok')}
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.toggleModal(false)
+                      }}
+                    >
+                      <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
+                        {t('action.cancel')}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>} */}
 
                 </View>
               </View>

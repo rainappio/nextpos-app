@@ -732,6 +732,10 @@ export const MobilePayKeyboard = (props) => {
     const {t, customMainThemeColor, customBackgroundColor} = localeContext
 
     const mobilePayList = props?.client.paymentMethods.filter((item) => item.paymentKey !== 'CARD' && item.paymentKey !== 'CASH')
+    mobilePayList.sort((a, b) => {
+        let sort = ["LINE_PAY", "JKO", "UBER_EATS", "FOOD_PANDA", "GOV_VOUCHER"];
+        return sort.indexOf(a.paymentKey) - sort.indexOf(b.paymentKey);
+    })
 
     const labelNameOutput = (result) => {
         !!props?.getResult ? props?.getResult(result) : console.warn("need getResult()")
