@@ -91,6 +91,7 @@ import OrderDisplayScreen from "../screens/OrderDisplayScreen";
 import ResetClientPassword from "../screens/ResetClientPassword";
 import SpiltBillScreen from "../screens/SpiltBillScreen";
 import SplitBillByHeadScreen from "../screens/SplitBillByHeadScreen";
+import SplitBillByAmountScreen from "../screens/SplitBillByAmountScreen"
 import SubscriptionScreen from '../screens/SubscriptionScreen'
 import RostersFormScreen from '../screens/RostersFormScreen'
 import CalendarScreen from '../screens/CalendarScreen'
@@ -225,6 +226,7 @@ const TablesStack = () => {
       <Stack.Screen name="CheckoutComplete" component={CheckoutComplete} />
       <Stack.Screen name="SpiltBillScreen" component={SpiltBillScreen} />
       <Stack.Screen name="SplitBillByHeadScreen" component={SplitBillByHeadScreen} />
+      <Stack.Screen name="SplitBillByAmountScreen" component={SplitBillByAmountScreen} />
     </Stack.Navigator>
   );
 }

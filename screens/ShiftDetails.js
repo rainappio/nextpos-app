@@ -60,7 +60,7 @@ class ShiftDetails extends React.Component {
 
     if (shift.close.closingBalances != null) {
       allPaymentMethod = Object.entries(shift.close.closingBalances).sort((a, b) => {
-        let sort = ["CASH", "CARD", "LINE_PAY", "JKO", "UBER_EATS", "FOOD_PANDA"];
+        let sort = ["CASH", "CARD", "LINE_PAY", "JKO", "UBER_EATS", "FOOD_PANDA", "GOV_VOUCHER"];
         return sort.indexOf(a[0]) - sort.indexOf(b[0]);
       })
     }

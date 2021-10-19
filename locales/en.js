@@ -160,7 +160,7 @@ const en = {
     selectItems: 'Select Items',
     moveToTable: 'Move To Table',
     selectTargetTable: 'Select target table',
-    moveSelectedLineItems: 'Confirm to move selected line items to {{tableName}}？',
+    moveSelectedLineItems: 'Confirm to move selected line items to {{tableName}}?',
     payOrder: 'Payment',
     stateTip: {
       open: {
@@ -521,7 +521,9 @@ const en = {
     ConfirmCancelMessage: 'Confirm to cancel split bill?',
     nothing: 'Nothing',
     parentOrder: 'Original Bill',
-    splitOrder: 'Split Bill'
+    splitOrder: 'Split Bill',
+    splitAmount: 'Spllit Amount',
+    splitAmountLimit: 'No greater than or equal to the total amount'
   },
   productOption: 'Product Option',
   printWorkingOrder: 'Print work order',

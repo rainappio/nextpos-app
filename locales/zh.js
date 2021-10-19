@@ -160,7 +160,7 @@ const zh = {
     selectItems: '選取品項',
     moveToTable: '移至別桌',
     selectTargetTable: '選取移至哪桌',
-    moveSelectedLineItems: '確認將選擇的品項移動至 {{tableName}}？',
+    moveSelectedLineItems: '確認將選擇的品項移動至 {{tableName}}?',
     payOrder: '付款',
     stateTip: {
       open: {
@@ -521,7 +521,9 @@ const zh = {
     ConfirmCancelMessage: '確定取消拆帳嗎？',
     nothing: '尚無產品',
     parentOrder: '原單',
-    splitOrder: '子單'
+    splitOrder: '子單',
+    splitAmount: '拆分款項',
+    splitAmountLimit: '不可大於或等於總金額'
   },
   productOption: '產品註記',
   printWorkingOrder: '列印工作單',

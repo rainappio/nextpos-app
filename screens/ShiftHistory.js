@@ -62,19 +62,15 @@ class ShiftHistory extends React.Component {
   keyExtractor = (order, index) => index.toString()
 
   renderItem = ({item}) => {
-    let shiftTotal = 0
+    let allClosingAmount = 0
 
-    if (item.close !== undefined) {
-      const closingShiftReport = item.close.closingShiftReport
+    if (item.close.closingShiftReport != null && item.close.closingShiftReport.totalByPaymentMethod != null) {
 
-      if (closingShiftReport !== null) {
-        if (closingShiftReport.totalByPaymentMethod.hasOwnProperty('CASH')) {
-          shiftTotal += closingShiftReport.totalByPaymentMethod['CASH'].orderTotal
-        }
+      let checkLen = Object.keys(item.close.closingShiftReport.totalByPaymentMethod).length
 
-        if (closingShiftReport.totalByPaymentMethod.hasOwnProperty('CARD')) {
-          shiftTotal += closingShiftReport.totalByPaymentMethod['CARD'].orderTotal
-        }
+      if (!!checkLen) {
+
+        allClosingAmount = Object.values(item.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.orderTotal))?.reduce((a, b) => a + b)
       }
     }
 
@@ -87,7 +83,7 @@ class ShiftHistory extends React.Component {
               <StyledText>{formatDate(item.open.timestamp)}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText>{item.shiftStatus !== 'ACTIVE' ? `$${shiftTotal}` : '-'}</StyledText>
+              <StyledText>{item.shiftStatus !== 'ACTIVE' ? `$${allClosingAmount}` : '-'}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
               <StyledText>{renderShiftStatus(item.shiftStatus)}</StyledText>
