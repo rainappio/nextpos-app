@@ -1,7 +1,7 @@
 import React from "react";
 import {Platform, View} from "react-native";
 import {connect} from "react-redux";
-import {clearOrderOffer, getLables, getOffers} from "../actions";
+import {clearOrderOffer, getLables, getProducts, getOffers} from "../actions";
 import {api, dispatchFetchRequest} from "../constants/Backend";
 import {LocaleContext} from "../locales/LocaleContext";
 import ScreenHeader from "../components/ScreenHeader";
@@ -19,10 +19,6 @@ class NewOffer extends React.Component {
   state = {
     startDate: "",
     endDate: "",
-    products: [],
-    productIds: [],
-    productLabelIds: [],
-    uniqueProductLabelIds: []
   };
 
   handleonChange = (data) => {
@@ -32,15 +28,13 @@ class NewOffer extends React.Component {
     this.setState({
       startDate: startDate,
       endDate: endDate,
-      products: data.products
     });
   }
 
   componentDidMount() {
-    this.props.getLables();
-    this.setState({
-      products: this.props.route.params !== undefined && this.props.route.params.updatedProducts
-    })
+    this.props.getLables()
+    this.props.getProducts()
+
   }
 
   handleEditCancel = () => {
@@ -50,9 +44,9 @@ class NewOffer extends React.Component {
   }
 
   handleSubmit = values => {
-    values.productIds = [];
-    values.productLabelIds = [];
-    const {products} = this.state;
+    values.productIds = []
+    values.productLabelIds = []
+    values.excludedProductIds = []
 
     if (!values.dateBound) {
       values.startDate = null
@@ -63,10 +57,22 @@ class NewOffer extends React.Component {
       values.startDate = this.state.startDate;
       values.endDate = this.state.endDate;
     }
+    if (values.offerType === 'PRODUCT') {
+      values.appliesToAllProducts = !!values.productOfferDetails?.appliesToAllProducts
+    }
 
-    products != null && products.map(selectedProduct => {
-      values.productIds.push(selectedProduct.productId)
-    })
+    if (!values.appliesToAllProducts) {
+      values.includeLabels != null && values.includeLabels.map(label => {
+        values.productLabelIds.push(label.id)
+      })
+      values.includeProducts != null && values.includeProducts.map(product => {
+        values.productIds.push(product.id)
+      })
+    } else {
+      values.excludeProducts != null && values.excludeProducts.map(product => {
+        values.excludedProductIds.push(product.id)
+      })
+    }
 
     dispatchFetchRequest(
       api.order.createOffer,
@@ -88,8 +94,8 @@ class NewOffer extends React.Component {
 
   render() {
     const {t, isTablet} = this.context;
-    const {products} = this.state;
-    const selectedProducts = this.props.route.params !== undefined && this.props.route.params.updatedProducts;
+    const {products, labels} = this.props;
+
 
     return (
       <ThemeKeyboardAwareScrollView>
@@ -106,9 +112,9 @@ class NewOffer extends React.Component {
             onSubmit={this.handleSubmit}
             handleEditCancel={this.handleEditCancel}
             isEditForm={false}
-            labels={this.props.labels}
             navigation={this.props.navigation}
-            selectedProducts={selectedProducts}
+            labels={labels}
+            products={products}
             onChange={this.handleonChange}
           />
         </View>
@@ -118,12 +124,14 @@ class NewOffer extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  labels: state.labels.data.labels
+  labels: state.labels.data.labels,
+  products: state.products.data.results
 });
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
   getLables: () => dispatch(getLables()),
+  getProducts: () => dispatch(getProducts()),
   getOffers: () => dispatch(getOffers()),
   clearOrderOffer: () => dispatch(clearOrderOffer())
 });

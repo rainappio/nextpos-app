@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {View} from "react-native";
 import {LocaleContext} from "../locales/LocaleContext";
 import ScreenHeader from "../components/ScreenHeader";
-import {clearOrderOffer, getOffers, getOrderOffer} from '../actions'
+import {clearOrderOffer, getOffers, getOrderOffer, getLables, getProducts} from '../actions'
 import styles from "../styles";
 import OfferForm from "./OfferForm";
 import {api, dispatchFetchRequest} from '../constants/Backend'
@@ -20,13 +20,11 @@ class EditOffer extends Component {
   state = {
     startDate: "",
     endDate: "",
-    products: [],
-    productIds: [],
-    productLabelIds: [],
-    uniqueProductLabelIds: []
   };
 
   componentDidMount() {
+    this.props.getLables()
+    this.props.getProducts()
     this.props.getOrderOffer(this.props.route.params.offerId);
   }
 
@@ -36,15 +34,14 @@ class EditOffer extends Component {
     this.setState({
       startDate: startDate,
       endDate: endDate,
-      products: data.products
     });
   }
 
   handleSubmit = values => {
-    values.productIds = [];
-    values.productLabelIds = [];
-    const offerId = this.props.route.params.offerId;
-    const {products} = this.state;
+    values.productIds = []
+    values.productLabelIds = []
+    values.excludedProductIds = []
+    const offerId = this.props.route.params.offerId
 
     if (!values.dateBound) {
       values.startDate = null
@@ -60,9 +57,18 @@ class EditOffer extends Component {
       values.appliesToAllProducts = values.productOfferDetails.appliesToAllProducts;
     }
 
-    products != null && products.map(selectedProduct => {
-      values.productIds.push(selectedProduct.productId)
-    })
+    if (!values.productOfferDetails?.appliesToAllProducts) {
+      values.includeLabels != null && values.includeLabels.map(label => {
+        values.productLabelIds.push(label.id)
+      })
+      values.includeProducts != null && values.includeProducts.map(product => {
+        values.productIds.push(product.id)
+      })
+    } else {
+      values.excludeProducts != null && values.excludeProducts.map(product => {
+        values.excludedProductIds.push(product.id)
+      })
+    }
 
     dispatchFetchRequest(
       api.order.updateOrderOfferById(offerId),
@@ -146,11 +152,8 @@ class EditOffer extends Component {
 
   render() {
     const {t, isTablet} = this.context;
-    const {orderOffer, isLoading, haveData, navigation, route} = this.props;
+    const {orderOffer, isLoading, haveData, navigation, route, labels, products} = this.props;
 
-    const selectedProducts =
-      this.props.route.params !== undefined &&
-      this.props.route.params.updatedProducts;
 
     const initialValues = {...orderOffer}
 
@@ -187,7 +190,8 @@ class EditOffer extends Component {
               route={route}
               handleActivate={this.handleActivate}
               handleDeactivate={this.handleDeactivate}
-              selectedProducts={selectedProducts}
+              labels={labels}
+              products={products}
               onChange={this.handleonChange}
             />
           </View>
@@ -203,11 +207,15 @@ const mapStateToProps = state => ({
   orderOffer: state.orderOffer.data,
   haveData: state.orderOffer.haveData,
   haveError: state.orderOffer.haveError,
-  isLoading: state.orderOffer.loading
+  isLoading: state.orderOffer.loading,
+  labels: state.labels.data.labels,
+  products: state.products.data.results
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
+  getLables: () => dispatch(getLables()),
+  getProducts: () => dispatch(getProducts()),
   getOrderOffer: id => dispatch(getOrderOffer(id)),
   getOffers: () => dispatch(getOffers()),
   clearOrderOffer: () => dispatch(clearOrderOffer())

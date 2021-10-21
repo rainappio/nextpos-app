@@ -398,7 +398,7 @@ class ReservationViewForm extends React.Component {
 
                         <View style={[styles.bottom,
                         styles.horizontalMargin]}>
-                          {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
+                          {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'WAITING_CONFIRMED' || reservation.status == 'CONFIRMED') &&
                             <TouchableOpacity onPress={() => {
                               navigation.navigate('ReservationEditScreen', {reservationId: reservation.id})
                             }}>
@@ -408,7 +408,7 @@ class ReservationViewForm extends React.Component {
                             </TouchableOpacity>
                           }
 
-                          {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
+                          {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'WAITING_CONFIRMED' || reservation.status == 'CONFIRMED') &&
                             <TouchableOpacity onPress={() => {
                               this.handleSendNotification(reservation)
                             }}>
@@ -418,7 +418,7 @@ class ReservationViewForm extends React.Component {
                             </TouchableOpacity>
                           }
 
-                          {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
+                          {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'WAITING_CONFIRMED' || reservation.status == 'CONFIRMED') &&
 
                             <NotificationTask
                               buttonText={t('reservation.actionTip.cancel')}
@@ -555,7 +555,7 @@ class ReservationViewForm extends React.Component {
 
 
                     <View style={[styles.bottom, styles.horizontalMargin]}>
-                      {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') && <TouchableOpacity onPress={() => {
+                      {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'WAITING_CONFIRMED' || reservation.status == 'CONFIRMED') && <TouchableOpacity onPress={() => {
                         navigation.navigate('ReservationEditScreen', {reservationId: reservation.id})
                       }}>
                         <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
@@ -563,7 +563,7 @@ class ReservationViewForm extends React.Component {
                         </Text>
                       </TouchableOpacity>}
 
-                      {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') && <TouchableOpacity onPress={() => {
+                      {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'WAITING_CONFIRMED' || reservation.status == 'CONFIRMED') && <TouchableOpacity onPress={() => {
                         this.handleSendNotification(reservation)
                       }}>
                         <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(this.context)]}>
@@ -571,7 +571,7 @@ class ReservationViewForm extends React.Component {
                         </Text>
                       </TouchableOpacity>}
 
-                      {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'CONFIRMED') &&
+                      {(reservation.status == 'BOOKED' || reservation.status == 'WAITING' || reservation.status == 'WAITING_CONFIRMED' || reservation.status == 'CONFIRMED') &&
                         <NotificationTask
                           buttonText={t('reservation.actionTip.cancel')}
                           buttonStyles={[]}

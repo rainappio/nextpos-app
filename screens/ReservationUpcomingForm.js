@@ -140,7 +140,7 @@ class ReservationUpcomingForm extends React.Component {
 
     if (this._isMounted) {
       this.getReservationEventsByTime(startDate, endDate, 'BOOKED, CONFIRMED, SEATED')
-      this.getReservationEventsByTime(startDate, endDate, 'WAITING')
+      this.getReservationEventsByTime(startDate, endDate, 'WAITING, WAITING_CONFIRMED')
     }
   }
 
@@ -930,7 +930,7 @@ class ReservationUpcomingForm extends React.Component {
                       <TouchableOpacity onPress={() => this.handleViewMode(true, 'BOOKED, CONFIRMED, SEATED')} style={[styles.withBorder(this.context), styles.dynamicHorizontalPadding(16), styles.dynamicVerticalPadding(8), {borderTopEndRadius: 8, borderTopStartRadius: 8, borderBottomWidth: 0, backgroundColor: (this.state.isBookedMode ? customMainThemeColor : customBackgroundColor), }]}>
                         <StyledText style={[{color: (this.state.isBookedMode ? customBackgroundColor : customMainThemeColor)}]}>{t('reservation.booked')}: {this.state.bookedCount}</StyledText>
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => this.handleViewMode(false, 'WAITING')} style={[styles.withBorder(this.context), styles.dynamicHorizontalPadding(16), styles.dynamicVerticalPadding(8), {borderTopEndRadius: 8, borderTopStartRadius: 8, borderBottomWidth: 0, backgroundColor: (this.state.isBookedMode ? customBackgroundColor : customMainThemeColor)}]}>
+                      <TouchableOpacity onPress={() => this.handleViewMode(false, 'WAITING, WAITING_CONFIRMED')} style={[styles.withBorder(this.context), styles.dynamicHorizontalPadding(16), styles.dynamicVerticalPadding(8), {borderTopEndRadius: 8, borderTopStartRadius: 8, borderBottomWidth: 0, backgroundColor: (this.state.isBookedMode ? customBackgroundColor : customMainThemeColor)}]}>
                         <StyledText style={[{color: (this.state.isBookedMode ? customMainThemeColor : customBackgroundColor)}]}>{t('reservation.waiting')}: {this.state.waitingCount}</StyledText>
                       </TouchableOpacity>
                     </View>
@@ -1127,6 +1127,13 @@ class ReservationUpcomingForm extends React.Component {
                                 <TouchableOpacity onPress={() => this.handleToggleTableList(true, event)} style={[styles.flexButton(customMainThemeColor), {margin: 4, paddingVertical: 2}]}>
                                   <StyledText style={[styles.flexButtonText]}>{t('reservation.actionTip.tableSelect')}</StyledText>
                                 </TouchableOpacity>
+                                <NotificationTask
+                                  buttonText={t('reservation.actionTip.cancel')}
+                                  isStyledText={true}
+                                  buttonStyles={[styles.flexButton(customMainThemeColor), {margin: 4, paddingVertical: 2}]}
+                                  textStyles={[styles.flexButtonText]}
+                                  onPress={() => this.handleCancel(event, schedulePushNotification, t, 'DELETE')}
+                                />
                               </View>
                             </View>
                           </View>
@@ -1583,7 +1590,7 @@ class ReservationUpcomingForm extends React.Component {
                     <TouchableOpacity onPress={() => this.handleViewMode(true, 'BOOKED, CONFIRMED, SEATED')} style={[styles.withBorder(this.context), styles.dynamicHorizontalPadding(16), styles.dynamicVerticalPadding(8), {borderTopEndRadius: 8, borderTopStartRadius: 8, borderBottomWidth: 0, backgroundColor: (this.state.isBookedMode ? customMainThemeColor : customBackgroundColor), }]}>
                       <StyledText style={[{color: (this.state.isBookedMode ? customBackgroundColor : customMainThemeColor)}]}>{t('reservation.booked')}: {this.state.bookedCount}</StyledText>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.handleViewMode(false, 'WAITING')} style={[styles.withBorder(this.context), styles.dynamicHorizontalPadding(16), styles.dynamicVerticalPadding(8), {borderTopEndRadius: 8, borderTopStartRadius: 8, borderBottomWidth: 0, backgroundColor: (this.state.isBookedMode ? customBackgroundColor : customMainThemeColor)}]}>
+                    <TouchableOpacity onPress={() => this.handleViewMode(false, 'WAITING, WAITING_CONFIRMED')} style={[styles.withBorder(this.context), styles.dynamicHorizontalPadding(16), styles.dynamicVerticalPadding(8), {borderTopEndRadius: 8, borderTopStartRadius: 8, borderBottomWidth: 0, backgroundColor: (this.state.isBookedMode ? customBackgroundColor : customMainThemeColor)}]}>
                       <StyledText style={[{color: (this.state.isBookedMode ? customMainThemeColor : customBackgroundColor)}]}>{t('reservation.waiting')}: {this.state.waitingCount}</StyledText>
                     </TouchableOpacity>
                   </View>
@@ -1753,10 +1760,17 @@ class ReservationUpcomingForm extends React.Component {
                               </StyledText>
                             </View>
                           </View>
-                          <View style={[styles.flex(2), {justifyContent: 'flex-end', paddingVertical: 8, }]}>
+                          <View style={[styles.flex(2), {justifyContent: 'flex-end', paddingVertical: 4, }]}>
                             <TouchableOpacity onPress={() => this.handleToggleTableList(true, event)} style={[styles.flexButton(customMainThemeColor), {margin: 4, paddingVertical: 4}]}>
                               <StyledText style={[styles.flexButtonText]}>{t('reservation.actionTip.tableSelect')}</StyledText>
                             </TouchableOpacity>
+                            <NotificationTask
+                              buttonText={t('reservation.actionTip.cancel')}
+                              isStyledText={true}
+                              buttonStyles={[styles.flexButton(customMainThemeColor), {margin: 2, paddingVertical: 4}]}
+                              textStyles={[styles.flexButtonText]}
+                              onPress={() => this.handleCancel(event, schedulePushNotification, t, 'DELETE')}
+                            />
                           </View>
                         </View>
                       )

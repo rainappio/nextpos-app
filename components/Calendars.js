@@ -766,7 +766,7 @@ class ReservationEventBase extends Component {
 
                 let result = data?.results.filter((event) => {
                     return (
-                        this.state.isBookedMode ? (event.status !== 'WAITING' && event.status !== 'CANCELLED') : event.status === 'WAITING' || event.status === 'CANCELLED')
+                        this.state.isBookedMode ? (event.status !== 'WAITING' && event.status !== 'WAITING_CONFIRMED' && event.status !== 'CANCELLED') : event.status === 'WAITING' || event.status !== 'WAITING_CONFIRMED' || event.status === 'CANCELLED')
                 })
                 this.setState({reservations: result})
             })
@@ -1173,7 +1173,7 @@ class ReservationDayEventBase extends Component {
                                         </View>
                                         <View style={[styles.flex(0.5), {justifyContent: 'flex-end'}]}>
 
-                                            <StyledText style={[{borderRadius: 4, backgroundColor: (event?.status === 'WAITING') ? customBackgroundColor : (event?.status === 'CANCELLED') ? '#f75336' : customMainThemeColor, color: (event?.status === 'WAITING') ? customMainThemeColor : customBackgroundColor, borderWidth: 1, borderColor: (event?.status === 'CANCELLED') ? '#f75336' : customMainThemeColor, textAlign: 'center', marginHorizontal: 4}]}>
+                                            <StyledText style={[{borderRadius: 4, backgroundColor: (event?.status === 'WAITING' || event?.status === 'WAITING_CONFIRMED') ? customBackgroundColor : (event?.status === 'CANCELLED') ? '#f75336' : customMainThemeColor, color: (event?.status === 'WAITING' || event?.status === 'WAITING_CONFIRMED') ? customMainThemeColor : customBackgroundColor, borderWidth: 1, borderColor: (event?.status === 'CANCELLED') ? '#f75336' : customMainThemeColor, textAlign: 'center', marginHorizontal: 4}]}>
                                                 {event?.status?.slice(0, 1)}
                                             </StyledText>
                                         </View>

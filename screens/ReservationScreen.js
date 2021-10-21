@@ -102,6 +102,7 @@ class ReservationScreen extends React.Component {
                     this.props.navigation.navigate('ReservationViewScreen', {
                       reservationId: data.id,
                     })
+                    this.props.getReservation(data.id)
                   }, 800)
                 })
               }
@@ -214,6 +215,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
   getCurrentClient: () => dispatch(getCurrentClient()),
   clearReservation: () => dispatch(clearReservation()),
+  getReservation: (id) => dispatch(getReservation(id)),
 
 })
 

@@ -192,8 +192,8 @@ const CalendarEventBase = (props) => {
                             <StyledText style={{...props?.theme?.text, fontSize: 16, marginTop: 12}}>{t('reservation.adult')} {event?.people}, {t('reservation.kid')} {event?.kid}</StyledText>
                         </View>
 
-                        <View style={[styles.flexButton(customMainThemeColor), {flexDirection: 'row', flex: 0.8, marginVertical: 4}, (event?.status == 'WAITING') && {backgroundColor: customBackgroundColor}, (event?.status == 'CANCELLED') && {backgroundColor: '#f75336', borderColor: '#f75336'}]}>
-                            <StyledText style={[(event?.status !== 'WAITING') && {color: customBackgroundColor}]}>
+                        <View style={[styles.flexButton(customMainThemeColor), {flexDirection: 'row', flex: 0.8, marginVertical: 4}, (event?.status == 'WAITING' || event?.status == 'WAITING_CONFIRMED') && {backgroundColor: customBackgroundColor}, (event?.status == 'CANCELLED') && {backgroundColor: '#f75336', borderColor: '#f75336'}]}>
+                            <StyledText style={[(event?.status !== 'WAITING' || event?.status == 'WAITING_CONFIRMED') && {color: customBackgroundColor}]}>
                                 {event?.status}
                             </StyledText>
                         </View>

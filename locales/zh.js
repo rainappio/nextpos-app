@@ -30,7 +30,8 @@ const zh = {
     reporting: '報表',
     settings: '設定',
     clientUsers: '使用者清單',
-    timecard: '打卡'
+    timecard: '打卡',
+    actuator: '網路狀態'
   },
   settings: {
     account: '帳號',
@@ -121,6 +122,9 @@ const zh = {
     },
     multiple: '可複選',
     required: '必選',
+    excludeProducts: '排除商品',
+    includeProducts: '套用商品',
+    includeLabels: '套用分類',
   },
   newOrder: {
     newOrderTitle: '新訂單',
@@ -744,6 +748,7 @@ const zh = {
     statusTip: {
       BOOKED: '訂位',
       WAITING: '候補',
+      WAITING_CONFIRMED: '確認候補',
       CONFIRMED: '已確認',
       CANCELLED: '已取消',
       SEATED: '已入座'
@@ -815,6 +820,10 @@ const zh = {
     isMergingTitle: '兩桌訂單將合併',
     isMergingMsg: '是否將訂單合併到拖曳的目標桌？',
     printChangeTable: '是否列印換桌明細?'
+  },
+  actuator: {
+    status: 'API狀態',
+    netType: '連線類型'
   }
 }
 

@@ -30,7 +30,8 @@ const en = {
     reporting: 'Reporting',
     settings: 'Settings',
     clientUsers: 'Client Users',
-    timecard: 'Time Card'
+    timecard: 'Time Card',
+    actuator: 'Connection Status'
   },
   settings: {
     account: 'Account',
@@ -121,6 +122,9 @@ const en = {
     },
     multiple: 'Multiple',
     required: 'Required',
+    excludeProducts: 'Exclude Products',
+    includeProducts: 'Include Products',
+    includeLabels: 'Include Labels',
   },
   newOrder: {
     newOrderTitle: 'New Order',
@@ -742,6 +746,7 @@ const en = {
     statusTip: {
       BOOKED: 'Booked',
       WAITING: 'Waiting',
+      WAITING_CONFIRMED: 'Waiting Confirmed',
       CONFIRMED: 'Confirmed',
       CANCELLED: 'Cancelled',
       SEATED: 'Seated'
@@ -815,6 +820,10 @@ const en = {
     isMergingMsg: 'Proceed with merging orders to the destination table?',
     printChangeTable: 'Print change table detail?'
   },
+  actuator: {
+    status: 'API Status',
+    netType: 'Connection Type'
+  }
 }
 
 export default en

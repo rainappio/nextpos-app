@@ -343,7 +343,7 @@ class ReservationCalendarScreen extends React.Component {
                                     }) : []
 
                                     bookedCount = task.length > 0 ? task.map((event) => (event.status === 'BOOKED' || event.status === 'CONFIRMED' || event.status === 'SEATED') ? 1 : 0).reduce((a, b) => a + b) : 0
-                                    waitingCount = task.length > 0 ? task.map((event) => event.status === 'WAITING' ? 1 : 0).reduce((a, b) => a + b) : 0
+                                    waitingCount = task.length > 0 ? task.map((event) => (event.status === 'WAITING' || event.status === 'WAITING_CONFIRMED') ? 1 : 0).reduce((a, b) => a + b) : 0
                                     cancelledCount = task.length > 0 ? task.map((event) => event.status === 'CANCELLED' ? 1 : 0).reduce((a, b) => a + b) : 0
 
                                     return (
@@ -424,7 +424,7 @@ class ReservationCalendarScreen extends React.Component {
 
                         {(!!isTablet) ?
 
-                            <ReservationEvent reservations={this.state?.reservationEvents.filter((event) => (event.status !== 'WAITING' && event.status !== 'CANCELLED'))} tablelayouts={tablelayouts} selectedDate={this.state?.selectedDate} refreshScreen={() => this.refreshScreen()} changeSelectedDate={(date) => this.setState({selectedDate: date})} />
+                            <ReservationEvent reservations={this.state?.reservationEvents.filter((event) => (event.status !== 'WAITING' && event.status !== 'WAITING_CONFIRMED' && event.status !== 'CANCELLED'))} tablelayouts={tablelayouts} selectedDate={this.state?.selectedDate} refreshScreen={() => this.refreshScreen()} changeSelectedDate={(date) => this.setState({selectedDate: date})} />
 
                             :
 
