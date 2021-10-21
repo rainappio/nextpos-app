@@ -168,7 +168,7 @@ class SalesCharts extends React.Component {
     if (getrangedSalesReport?.salesByPaymentMethods !== null && getrangedSalesReport?.salesByPaymentMethods !== undefined) {
       if (!!getrangedSalesReport.salesByPaymentMethods.length) {
 
-        getrangedSalesReport?.salesByPaymentMethods.map((item) => (item?.status === 'CANCELLED' && item?.orderTotal) ? item?.orderTotal : 0).reduce((a, b) => a + b)
+        allCancelledTotal = getrangedSalesReport?.salesByPaymentMethods.map((item) => (item?.status === 'CANCELLED' && item?.settleAmount) ? item?.settleAmount : 0).reduce((a, b) => a + b)
       }
     }
 
@@ -324,7 +324,7 @@ class SalesCharts extends React.Component {
                       <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t(`settings.paymentMethods.${item?.paymentMethod}`)}</StyledText>
                     </View>
                     <View style={[styles.tableCellView, styles.justifyRight]}>
-                      <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CREATED' ? item?.orderTotal : 0)}</StyledText>
+                      <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CREATED' ? item?.settleAmount : 0)}</StyledText>
                     </View>
                   </View>
                 ))}
@@ -518,7 +518,7 @@ class SalesCharts extends React.Component {
                   <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t(`settings.paymentMethods.${item?.paymentMethod}`)}</StyledText>
                 </View>
                 <View style={[styles.tableCellView, styles.justifyRight]}>
-                  <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CREATED' ? item?.orderTotal : 0)}</StyledText>
+                  <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CREATED' ? item?.settleAmount : 0)}</StyledText>
                 </View>
               </View>
             ))}
@@ -581,7 +581,7 @@ class SalesCharts extends React.Component {
                   <StyledText style={[styles.tableCellText, {marginLeft: 16}]}>{t(`settings.paymentMethods.${item?.paymentMethod}`)}</StyledText>
                 </View>
                 <View style={[styles.tableCellView, styles.justifyRight]}>
-                  <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CANCELLED' ? item?.orderTotal : 0)}</StyledText>
+                  <StyledText style={styles.tableCellText}>{formatCurrency(item?.status === 'CANCELLED' ? item?.settleAmount : 0)}</StyledText>
                 </View>
               </View>
             ))}

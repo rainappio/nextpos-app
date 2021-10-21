@@ -14,6 +14,10 @@ import AntDesignIcon from "react-native-vector-icons/AntDesign";
 import RenderPureCheckBox from "../components/rn-elements/PureCheckBox";
 import {api, dispatchFetchRequest} from "../constants/Backend";
 import {StyledText} from "../components/StyledText";
+import ItemList from "../components/ItemList";
+import ItemListDrag from "../components/ItemListDrag";
+import LabelSelector from "./LabelSelector";
+import ProductSelector from "./ProductSelector";
 import {parse} from "expo-linking";
 
 class OfferForm extends React.Component {
@@ -46,8 +50,6 @@ class OfferForm extends React.Component {
         0: {label: context.t('offerTypeName.ORDER'), value: 'ORDER'},
         1: {label: context.t('offerTypeName.PRODUCT'), value: 'PRODUCT'}
       },
-      products: [],
-      uniqueProducts: [],
       dateBound: initialValues.dateBound,
       from: {
         show: false
@@ -63,11 +65,27 @@ class OfferForm extends React.Component {
   componentDidMount() {
 
     if (this.props.isEditForm) {
-      let selectedProducts = this.props.initialValues.productOfferDetails !== null ? this.props.initialValues.productOfferDetails.selectedProducts : [];
+      let selectedProducts = this.props.initialValues.productOfferDetails !== null ? this.props.initialValues.productOfferDetails.selectedProducts : []
+      let selectedLabel = this.props.initialValues.productOfferDetails !== null ? this.props.initialValues.productOfferDetails.productLabelIds : []
+      let selectedExclude = this.props.initialValues.productOfferDetails !== null ? this.props.initialValues.productOfferDetails.selectedExcludedProducts : []
 
-      this.setState({
-        products: this.props.selectedProducts !== undefined ? this.props.selectedProducts : selectedProducts
-      });
+      let includeProducts = [], includeLabels = [], excludeProducts = []
+      selectedProducts.map((item) => {
+        let formatProduct = {name: item.name, id: item.productId}
+        includeProducts.push(formatProduct)
+      })
+      Object.entries(selectedLabel).map(([key, value]) => {
+        let formatLabel = {id: key, name: value}
+        includeLabels.push(formatLabel)
+      })
+      selectedExclude.map((item) => {
+        let formatExclude = {name: item.name, id: item.productId}
+        excludeProducts.push(formatExclude)
+      })
+      this.props.change(`excludeProducts`, excludeProducts)
+      this.props.change(`includeLabels`, includeLabels)
+      this.props.change(`includeProducts`, includeProducts)
+
     }
     if (!!this.props?.initialValues?.startDate) {
       this.props?.change(`startDate`, new Date(this.props.initialValues?.startDate))
@@ -132,15 +150,6 @@ class OfferForm extends React.Component {
     });
   };
 
-  removeArrayItem = productId => {
-    const updatedItems = this.state.products.filter(item => {
-      return item.productId !== productId;
-    });
-    this.setState({
-      products: updatedItems
-    });
-  };
-
   componentDidUpdate() {
     if (this.props.onChange) {
       this.props.onChange(this.state);
@@ -155,14 +164,14 @@ class OfferForm extends React.Component {
       handleEditCancel,
       onCancel,
       handleDeleteOffer,
-      selectedProducts,
       initialValues,
       handleActivate,
-      handleDeactivate
+      handleDeactivate,
+      labels = [],
+      products
     } = this.props;
     const {t, customMainThemeColor} = this.context;
-    const {appliesToAllProducts, products} = this.state;
-
+    const {appliesToAllProducts} = this.state;
 
     const triggerTypes = Object.keys(this.state.triggerTypes).map(key => this.state.triggerTypes[key].label)
     const offerTypes = Object.keys(this.state.offerTypes).map(key => this.state.offerTypes[key].label)
@@ -306,49 +315,60 @@ class OfferForm extends React.Component {
               </View>
             )}
 
-            {this.state.selectedOfferType === 1 && !appliesToAllProducts && (
-              <View style={[styles.sectionContent]}>
-                <View style={[styles.tableRowContainer]}>
-                  <AntDesignIcon
-                    name={"pluscircle"}
-                    size={22}
-                    color={customMainThemeColor}
-                    style={[{transform: [{rotateY: "180deg"}], }, styles.justifyRight]}
-                    onPress={() =>
-                      this.props.navigation.navigate("ProductsOverviewforOffer", {
-                        isEditForm: isEditForm,
-                        updatedselectedProducts: this.state.products
-                      }
-                      )
+            {this.state.selectedOfferType === 1 && appliesToAllProducts && (
+              <View style={styles.sectionContainer}>
+                <View style={styles.sectionTitleContainer}>
+                  <StyledText style={styles.sectionTitleText}>{t('product.excludeProducts')}</StyledText>
+                </View>
+                <View>
+                  <Field
+                    name="excludeProducts"
+                    component={ItemList}
+                    listSelector={(onChange) =>
+                      <ProductSelector
+                        products={products}
+                        labels={labels}
+                        handleOnSelect={onChange}
+                      />
                     }
                   />
                 </View>
-                {products !== undefined &&
-                  products.map(selectedProduct => (
-                    <View style={[styles.tableRowContainerWithBorder]}
-                      key={selectedProduct.productId}
-                    >
-                      <View style={[styles.tableCellView]}>
-                        <StyledText>{selectedProduct.name}</StyledText>
-                      </View>
-                      <View style={[styles.tableCellView, styles.justifyRight]}>
-                        <TouchableOpacity
-                          onPress={() =>
-                            this.removeArrayItem(selectedProduct.productId)
-                          }
-                        >
-                          <AntDesignIcon
-                            name={"closecircle"}
-                            size={22}
-                            color={"#dc3545"}
-                            style={{
-                              transform: [{rotateY: "180deg"}],
-                            }}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  ))}
+              </View>
+            )}
+
+            {this.state.selectedOfferType === 1 && !appliesToAllProducts && (
+              <View style={styles.sectionContainer}>
+                <View style={styles.sectionTitleContainer}>
+                  <StyledText style={styles.sectionTitleText}>{t('product.includeLabels')}</StyledText>
+                </View>
+                <View>
+                  <Field
+                    name="includeLabels"
+                    component={ItemList}
+                    listSelector={(onChange) =>
+                      <LabelSelector
+                        labels={labels}
+                        handleOnSelect={onChange}
+                      />
+                    }
+                  />
+                </View>
+                <View style={styles.sectionTitleContainer}>
+                  <StyledText style={styles.sectionTitleText}>{t('product.includeProducts')}</StyledText>
+                </View>
+                <View>
+                  <Field
+                    name="includeProducts"
+                    component={ItemList}
+                    listSelector={(onChange) =>
+                      <ProductSelector
+                        products={products}
+                        labels={labels}
+                        handleOnSelect={onChange}
+                      />
+                    }
+                  />
+                </View>
               </View>
             )}
           </View>

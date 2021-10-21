@@ -86,7 +86,6 @@ import EinvoiceStatusScreen from '../screens/EinvoiceStatusScreen'
 import EinvoiceEditScreen from '../screens/EinvoiceEditScreen'
 import NewOffer from '../screens/NewOffer'
 import EditOffer from '../screens/EditOffer'
-import ProductsOverviewforOffer from '../screens/ProductsOverviewforOffer'
 import OrderDisplayScreen from "../screens/OrderDisplayScreen";
 import ResetClientPassword from "../screens/ResetClientPassword";
 import SpiltBillScreen from "../screens/SpiltBillScreen";
@@ -194,7 +193,6 @@ const SettingsStack = () => {
       <Stack.Screen name="EinvoiceEditScreen" component={EinvoiceEditScreen} />
       <Stack.Screen name="NewOffer" component={NewOffer} />
       <Stack.Screen name="EditOffer" component={EditOffer} />
-      <Stack.Screen name="ProductsOverviewforOffer" component={ProductsOverviewforOffer} />
       <Stack.Screen name="SubscriptionScreen" component={SubscriptionScreen} />
       <Stack.Screen name="MemberScreen" component={MemberScreen} />
       <Stack.Screen name="MemberFormScreen" component={MemberFormScreen} />

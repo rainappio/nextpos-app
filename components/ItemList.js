@@ -57,7 +57,7 @@ class ItemList extends React.Component {
           renderItem={({item, index}) => (
             <View style={styles.tableRowContainerWithBorder} key={item.id}>
               <View style={styles.tableCellView}>
-                <StyledText>{item.name}</StyledText>
+                <StyledText>{item.name ?? item?.label}</StyledText>
               </View>
               <View style={[styles.tableCellView, styles.justifyRight]}>
                 <TouchableOpacity
