@@ -640,6 +640,9 @@ export const api = {
       return `${apiRoot}/memberships/${id}`
     },
   },
+  actuator: {
+    get: `${apiRoot}/actuator/health`,
+  }
 }
 
 export const getToken = async () => {

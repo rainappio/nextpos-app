@@ -110,6 +110,7 @@ import ReservationViewScreen from '../screens/ReservationViewScreen'
 import ReservationSetting from '../screens/ReservationSetting'
 import {LocaleContext} from '../locales/LocaleContext'
 import ReservationUpcomingScreen from '../screens/ReservationUpcomingScreen'
+import ActuatorScreen from '../screens/ActuatorScreen'
 
 
 const Tab = createBottomTabNavigator();
@@ -137,6 +138,7 @@ const HomeStack = () => {
       <Stack.Screen name="RetailOrdersSummary" component={OrdersSummary} />
       <Stack.Screen name="RetailPaymentOrder" component={PaymentOrder} />
       <Stack.Screen name="Reservations" component={ReservationDrawer} options={{animationEnabled: false}} />
+      <Stack.Screen name="ActuatorScreen" component={ActuatorScreen} />
     </Stack.Navigator>
   );
 }
