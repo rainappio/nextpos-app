@@ -346,6 +346,9 @@ class LoginSuccessScreen extends React.Component {
           <View style={[styles.horizontalMargin, {marginTop: 15}]}>
             <Text style={[styles?.primaryText(customMainThemeColor)]}>
               {t('welcome')} {currentUser?.displayName}{!!currentUser?.defaultUser && t('ownerRemark')}
+              <StyledText style={[styles.subText]}>
+                {` (${client?.clientName})`}
+              </StyledText>
             </Text>
             <StyledText style={[styles.subText]}>
               {t('loggedIn')} {formatDateObj(loggedIn)}
@@ -767,6 +770,20 @@ export class HiddenMenu extends React.Component {
               }}
             >
               <Text style={complexTheme[theme].overlay}>{t('settings.account')}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.jc_alignIem_center,
+                styles.paddingTopBtn20,
+                {flex: 1}
+              ]}
+              onPress={() => {
+                this.toggleMenu()
+                this.props.navigation.navigate('ActuatorScreen')
+              }}
+            >
+              <Text style={complexTheme[theme].overlay}>{t('menu.actuator')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity

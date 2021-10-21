@@ -8,7 +8,7 @@ import ScreenHeader from "../components/ScreenHeader";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
 import {ThemeScrollView} from "../components/ThemeScrollView";
-
+import {Placeholder, PlaceholderMedia, PlaceholderLine, Fade, ShineOverlay} from "rn-placeholder";
 
 class ClientUsers extends React.Component {
   static navigationOptions = {
@@ -55,7 +55,7 @@ class ClientUsers extends React.Component {
   }
 
   render() {
-    const {clientusers, navigation} = this.props
+    const {clientusers, navigation, loading} = this.props
     const {t, customMainThemeColor, customBackgroundColor, customSecondThemeColor} = this.context
 
     return (
@@ -74,8 +74,84 @@ class ClientUsers extends React.Component {
             }
           />
 
+          {(loading) &&
+            <View style={{flex: 1, marginVertical: 28, marginHorizon: 12}}>
+              <View style={{flexDirection: 'row'}}>
+                <View style={[styles.flex(1), styles.placeHolderContainer(customBackgroundColor)]}>
+                  <Placeholder Animation={ShineOverlay}>
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={{backgroundColor: '#eee', width: 60, height: 60, borderRadius: 10, marginBottom: 8}}></View>
+                      <View style={[styles.flex(1), {justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 8}]}>
+                        <PlaceholderLine width={30} />
+                        <PlaceholderLine width={20} />
+                      </View>
+                    </View>
+                  </Placeholder>
+                </View>
+                <View style={[styles.flex(1), styles.placeHolderContainer(customBackgroundColor)]}>
+                  <Placeholder Animation={ShineOverlay}>
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={{backgroundColor: '#eee', width: 60, height: 60, borderRadius: 10, marginBottom: 8}}></View>
+                      <View style={[styles.flex(1), {justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 8}]}>
+                        <PlaceholderLine width={30} />
+                        <PlaceholderLine width={20} />
+                      </View>
+                    </View>
+                  </Placeholder>
+                </View>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <View style={[styles.flex(1), styles.placeHolderContainer(customBackgroundColor)]}>
+                  <Placeholder Animation={ShineOverlay}>
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={{backgroundColor: '#eee', width: 60, height: 60, borderRadius: 10, marginBottom: 8}}></View>
+                      <View style={[styles.flex(1), {justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 8}]}>
+                        <PlaceholderLine width={30} />
+                        <PlaceholderLine width={20} />
+                      </View>
+                    </View>
+                  </Placeholder>
+                </View>
+                <View style={[styles.flex(1), styles.placeHolderContainer(customBackgroundColor)]}>
+                  <Placeholder Animation={ShineOverlay}>
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={{backgroundColor: '#eee', width: 60, height: 60, borderRadius: 10, marginBottom: 8}}></View>
+                      <View style={[styles.flex(1), {justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 8}]}>
+                        <PlaceholderLine width={30} />
+                        <PlaceholderLine width={20} />
+                      </View>
+                    </View>
+                  </Placeholder>
+                </View>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <View style={[styles.flex(1), styles.placeHolderContainer(customBackgroundColor)]}>
+                  <Placeholder Animation={ShineOverlay}>
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={{backgroundColor: '#eee', width: 60, height: 60, borderRadius: 10, marginBottom: 8}}></View>
+                      <View style={[styles.flex(1), {justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 8}]}>
+                        <PlaceholderLine width={30} />
+                        <PlaceholderLine width={20} />
+                      </View>
+                    </View>
+                  </Placeholder>
+                </View>
+                <View style={[styles.flex(1), styles.placeHolderContainer(customBackgroundColor)]}>
+                  <Placeholder Animation={ShineOverlay}>
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={{backgroundColor: '#eee', width: 60, height: 60, borderRadius: 10, marginBottom: 8}}></View>
+                      <View style={[styles.flex(1), {justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 8}]}>
+                        <PlaceholderLine width={30} />
+                        <PlaceholderLine width={20} />
+                      </View>
+                    </View>
+                  </Placeholder>
+                </View>
+              </View>
+            </View>
+          }
           <View style={[styles.horizontalMargin, {marginTop: 28}]}>
-            <FlatList
+            {!loading && <FlatList
               data={clientusers}
               renderItem={({item}) => (
                 <TouchableOpacity
@@ -119,7 +195,7 @@ class ClientUsers extends React.Component {
               )}
               numColumns={2}
               keyExtractor={(item, index) => index.toString()}
-            />
+            />}
           </View>
         </View>
       </ThemeScrollView>
@@ -128,7 +204,8 @@ class ClientUsers extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  clientusers: state.clientusers.data.users
+  clientusers: state.clientusers.data.users,
+  loading: state.clientusers.loading
 })
 
 const mapDispatchToProps = dispatch => ({

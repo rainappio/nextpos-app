@@ -229,6 +229,10 @@ class PaymentOrderForm extends React.Component {
     const totalAmount = this.props?.isSplitByHeadCount ? this.props?.splitAmount : order.orderTotal
 
     const mobilePayList = client?.paymentMethods.filter((item) => item.paymentKey !== 'CARD' && item.paymentKey !== 'CASH')
+    mobilePayList.sort((a, b) => {
+      let sort = ["LINE_PAY", "JKO", "UBER_EATS", "FOOD_PANDA", "GOV_VOUCHER"];
+      return sort.indexOf(a.paymentKey) - sort.indexOf(b.paymentKey);
+    })
 
 
     const TaxInputAndBottomBtns = (props) => {
