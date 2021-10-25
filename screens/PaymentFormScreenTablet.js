@@ -21,6 +21,8 @@ import InputText from '../components/InputText'
 import {isRequired, isCarrierType} from '../validators'
 import Modal from 'react-native-modal';
 import {OfferTooltip} from "../components/OfferTooltip";
+import {RealTimeOrderUpdate} from '../components/RealTimeOrderUpdate'
+
 
 class PaymentFormScreenTablet extends React.Component {
     static navigationOptions = {
@@ -465,6 +467,13 @@ class PaymentFormScreenTablet extends React.Component {
         }).then(() => this.refreshOrder())
     }
 
+    handleOnMessage = (data, id) => {
+        if (data === `${id}.order.orderChanged`) {
+            this.props.getOrder(id)
+            handleOrderAction(id, 'EXIT_PAYMENT', () => this.props.navigation.goBack())
+        }
+    }
+
     render() {
         const {navigation, handleSubmit, globalorderoffers, order, isSplitting, client} = this.props
         const {t, themeStyle, appType, complexTheme, customMainThemeColor, customBackgroundColor} = this.context
@@ -479,6 +488,11 @@ class PaymentFormScreenTablet extends React.Component {
                         backAction={() => {
                             !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()
                         }}
+                    />
+                    <RealTimeOrderUpdate
+                        topics={`/topic/order/${order?.orderId}`}
+                        handleOnMessage={this.handleOnMessage}
+                        id={order?.orderId}
                     />
                     <Modal
                         isVisible={this.state.modalVisible}

@@ -9,6 +9,7 @@ import {Tooltip} from "react-native-elements";
 import {LocaleContext} from "../locales/LocaleContext";
 import {renderOrderState} from "../helpers/orderActions";
 import {StyledText} from "../components/StyledText";
+import {translate} from 'i18n-js'
 
 class OrderItem extends React.PureComponent {
   static contextType = LocaleContext
@@ -20,13 +21,15 @@ class OrderItem extends React.PureComponent {
       handleOrderSubmit,
       handleDelete,
       tableTimeLimit,
-      isTimeLimit
+      isTimeLimit,
+      historyOrder
     } = this.props
     const {t, isTablet, customMainThemeColor, customBackgroundColor} = this.context
 
     const timeDifference = getTimeDifference(order.createdTime)
     const thirtyMinutes = 30 * 60 * 1000
     const costomTimeZone = tableTimeLimit * 60 * 1000
+
 
     TimeAgo.addLocale(en)
     const timeAgo = new TimeAgo()
@@ -88,7 +91,7 @@ class OrderItem extends React.PureComponent {
                   }
                 >
                   <View style={[styles.tableCellView, {flex: 5}]}>
-                    <StyledText>{order.orderType === 'IN_STORE' ? table.tableName : t('order.takeOut')} ({order.serialId})</StyledText>
+                    <StyledText style={historyOrder?.orderId == order?.orderId && {fontWeight: 'bold'}}>{order.orderType === 'IN_STORE' ? table.tableName : t('order.takeOut')} ({order.serialId})</StyledText>
                   </View>
 
                   <View style={[styles.tableCellView, {flex: 2}]}>

@@ -17,6 +17,9 @@ import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/
 import Modal from 'react-native-modal';
 import {isRequired, isCarrierType} from '../validators'
 import {RadioLineItemObjPick} from '../components/RadioItemObjPick'
+import {handleOrderAction} from "../helpers/orderActions";
+import {RealTimeOrderUpdate} from '../components/RealTimeOrderUpdate'
+
 
 class PaymentOrderForm extends React.Component {
   static navigationOptions = {
@@ -193,8 +196,14 @@ class PaymentOrderForm extends React.Component {
         })
       }).then()
     }
-
   }
+
+  handleOnMessage = (data, id) => {
+    if (data === `${id}.order.orderChanged`) {
+      handleOrderAction(id, 'EXIT_PAYMENT', () => this.props.navigation.navigate('TablesScr'))
+    }
+  }
+
 
   render() {
     const moneyAmts = [
@@ -265,6 +274,11 @@ class PaymentOrderForm extends React.Component {
           <ScreenHeader backNavigation={true}
             parentFullScreen={true}
             title={t('paymentMethodTitle')}
+          />
+          <RealTimeOrderUpdate
+            topics={`/topic/order/${order?.orderId}`}
+            handleOnMessage={this.handleOnMessage}
+            id={order?.orderId}
           />
 
           <Modal

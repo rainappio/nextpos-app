@@ -825,7 +825,7 @@ export class HiddenMenu extends React.Component {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={[
                 styles.jc_alignIem_center,
                 styles.paddingTopBtn20,
@@ -846,12 +846,12 @@ export class HiddenMenu extends React.Component {
                   {appType === 'store' ? t('settings.changeToRetail') : t('settings.changeToStore')}
                 </Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <View style={[styles.fieldContainer, styles.paddingTopBtn20, {justifyContent: 'center'}]}>
               <ThemePicker
-                style={{width: 200}}
-                colors={['#f18d1a', '#006B35', '#000']}
+                style={{width: 120}}
+                colors={['#f18d1a', '#006B35']}
                 handleSelectColor={(color) => {
                   changeCustomMainThemeColor(color)
                 }}

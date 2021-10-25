@@ -13,6 +13,7 @@ import {StyledText} from "../components/StyledText";
 import {handleOrderAction, getTableDisplayName, handlePrintOrderDetails} from "../helpers/orderActions";
 import {OfferTooltip} from "../components/OfferTooltip";
 import {ThemeContainer} from "../components/ThemeContainer";
+import {RealTimeOrderUpdate} from '../components/RealTimeOrderUpdate'
 
 
 class PaymentFormScreen extends React.Component {
@@ -47,6 +48,14 @@ class PaymentFormScreen extends React.Component {
     this.props.getOrder(this.props.order.orderId)
   }
 
+  handleOnMessage = (data, id) => {
+    if (data === `${id}.order.orderChanged`) {
+      this.props.getOrder(id)
+      handleOrderAction(id, 'EXIT_PAYMENT', () => this.props.navigation.goBack())
+    }
+  }
+
+
   render() {
     const {order, navigation, handleSubmit, globalorderoffers, isSplitting} = this.props
     const {t, appType, customMainThemeColor} = this.context
@@ -62,6 +71,11 @@ class PaymentFormScreen extends React.Component {
               !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()
             }}
 
+          />
+          <RealTimeOrderUpdate
+            topics={`/topic/order/${order?.orderId}`}
+            handleOnMessage={this.handleOnMessage}
+            id={order?.orderId}
           />
           <ThemeKeyboardAwareScrollView>
             <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>

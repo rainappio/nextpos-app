@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import AddBtn from '../components/AddBtn'
 import OrderStart from './OrderStart'
 import OrderItem from './OrderItem'
-import {getfetchOrderInflights, getMostRecentShiftStatus, getShiftStatus, getTableLayouts, getTablesAvailable, getTableLayout} from '../actions'
+import {getfetchOrderInflights, getMostRecentShiftStatus, getShiftStatus, getTableLayouts, getTablesAvailable, getTableLayout, getPrevOrder} from '../actions'
 import styles from '../styles'
 import {successMessage, warningMessage, api, dispatchFetchRequest, apiRoot} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -91,6 +91,7 @@ class TablesScreen extends React.Component {
     this.props.getfetchOrderInflights()
     this.props.getAvailableTables()
     this.props.getCurrentClient()
+    this.props.getPrevOrder()
   }
 
 
@@ -656,6 +657,7 @@ class TablesScreen extends React.Component {
                       return (
                         <OrderItem
                           order={item}
+                          historyOrder={this.props?.order}
                           navigation={navigation}
                           route={route}
                           handleOrderSubmit={handleOrderSubmit}
@@ -736,7 +738,8 @@ const mapStateToProps = state => ({
     loading: state.mostRecentShift.loading,
     haveData: state.mostRecentShift.haveData,
     data: state.mostRecentShift.data,
-  }
+  },
+  order: state.order.data,
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -747,7 +750,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   getMostRecentShiftStatus: () => dispatch(getMostRecentShiftStatus()),
   getAvailableTables: () => dispatch(getTablesAvailable()),
   getCurrentClient: () => dispatch(getCurrentClient()),
-  getTableLayout: (id) => dispatch(getTableLayout(id))
+  getTableLayout: (id) => dispatch(getTableLayout(id)),
+  getPrevOrder: () => dispatch(getPrevOrder())
 })
 
 const enhance = compose(

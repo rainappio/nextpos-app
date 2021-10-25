@@ -374,7 +374,7 @@ class OrderDetail extends React.Component {
             <ThemeScrollView>
               <OrderTopInfo order={order} route={route} />
 
-              <View style={[styles.tableRowContainerWithBorder]}>
+              {/* <View style={[styles.tableRowContainerWithBorder]}>
                 <View style={[styles.tableCellView, {flex: 1}]}>
                   <StyledText>{t('order.ageGroup')}</StyledText>
                 </View>
@@ -394,7 +394,7 @@ class OrderDetail extends React.Component {
                     {filteredvisitFrequency !== undefined ? filteredvisitFrequency.label : t('order.notFilledIn')}
                   </StyledText>
                 </View>
-              </View>
+              </View> */}
 
               {order.orderPreparationTime != null && (
                 <View style={[styles.tableRowContainerWithBorder]}>
