@@ -9,6 +9,7 @@ import {compose} from "redux";
 import {getClientUsr} from '../actions'
 import {getToken} from '../constants/Backend'
 import {getCurrentUserRole, getCurrentUserScope} from "../helpers/permissionActions"
+import {Placeholder, ShineOverlay} from "rn-placeholder";
 
 
 class PermissionCheckTouchable extends Component {
@@ -53,36 +54,48 @@ class PermissionCheckTouchable extends Component {
 
 
   render() {
-    const {uiComponent} = this.props
-    const {t, customMainThemeColor} = this.context
+    const {uiComponent, loading} = this.props
+    const {t, customMainThemeColor, customBackgroundColor} = this.context
 
     let userInScope = this.state.userInScope
 
-    if (!!userInScope) {
+    if (loading) {
       return (
-        <View style={[styles.flex(1)]}>
-          {uiComponent}
+        <View style={[styles.flex(1), styles.placeHolderContainer(customBackgroundColor)]}>
+          <Placeholder Animation={ShineOverlay}>
+            <View style={{backgroundColor: '#eee', height: '100%', borderRadius: 10, marginBottom: 8}}></View>
+          </Placeholder>
         </View>
       )
     } else {
-      return (
-        <View style={[styles.flex(1), {position: 'relative'}]}>
-          <TouchableOpacity style={[styles.jc_alignIem_center, {position: 'absolute', zIndex: 3, width: '100%', height: '100%', top: 0, left: 0, backgroundColor: 'rgba(0,0,0,0.5)'}]}>
-            <View style={{justifyContent: 'center', alignItem: 'center', paddingHorizontal: 8}}>
-              <StyledText style={[styles.whiteColor, styles.textMedium, styles.textBold,]}>
-                {t('backend.403')}
-              </StyledText>
-            </View>
-          </TouchableOpacity>
-          {uiComponent}
-        </View >
-      )
+      if (!!userInScope) {
+        return (
+          <View style={[styles.flex(1)]}>
+            {uiComponent}
+          </View>
+        )
+      } else {
+        return (
+          <View style={[styles.flex(1), {position: 'relative'}]}>
+            <TouchableOpacity style={[styles.jc_alignIem_center, {position: 'absolute', zIndex: 3, width: '100%', height: '100%', top: 0, left: 0, backgroundColor: 'rgba(0,0,0,0.5)'}]}>
+              <View style={{justifyContent: 'center', alignItem: 'center', paddingHorizontal: 8}}>
+                <StyledText style={[styles.whiteColor, styles.textMedium, styles.textBold,]}>
+                  {t('backend.403')}
+                </StyledText>
+              </View>
+            </TouchableOpacity>
+            {uiComponent}
+          </View >
+        )
+      }
+
     }
 
 
   }
 }
 const mapStateToProps = state => ({
+  loading: state.clientuser.loading,
   currentUser: state.clientuser.data,
 })
 

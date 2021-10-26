@@ -3,6 +3,7 @@ export const FETCH_ORDER = 'FETCH_ORDER'
 export const FETCH_ORDER_SUCCESS = 'FETCH_ORDER_SUCCESS'
 export const FETCH_ORDER_FAILURE = 'FETCH_ORDER_FAILURE'
 export const CLEAR_ORDER = 'CLEAR_ORDER'
+export const GET_PREV_ORDER = 'GET_PREV_ORDER'
 
 export const fetchOrder = id => ({
   type: FETCH_ORDER,
@@ -19,6 +20,9 @@ export const fetchOrderFailure = error => ({
   error
 })
 
+export const getPrevOrder = () => ({
+  type: GET_PREV_ORDER
+})
 export const clearOrder = () => ({
   type: CLEAR_ORDER
 })

@@ -2,6 +2,7 @@ import {
   FETCH_ORDER,
   FETCH_ORDER_SUCCESS,
   FETCH_ORDER_FAILURE,
+  GET_PREV_ORDER,
   CLEAR_ORDER
 } from '../actions'
 
@@ -40,6 +41,9 @@ export const reducer = (state = initialState, action) => {
         error: action.error,
         data: {}
       }
+    case GET_PREV_ORDER:
+      return state
+
     case CLEAR_ORDER:
       return initialState
     default:

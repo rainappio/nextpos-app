@@ -181,7 +181,6 @@ class OrdersSummaryRow extends React.Component {
   }
 
   handleCancel = orderId => {
-    this.props.clearOrder(orderId)
     this.props.navigation.navigate('TablesScr')
   }
 
