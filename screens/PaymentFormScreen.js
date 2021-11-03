@@ -51,7 +51,7 @@ class PaymentFormScreen extends React.Component {
   handleOnMessage = (data, id) => {
     if (data === `${id}.order.orderChanged`) {
       this.props.getOrder(id)
-      handleOrderAction(id, 'EXIT_PAYMENT', () => this.props.navigation.goBack())
+      handleOrderAction(id, 'EXIT_PAYMENT', () => {})
     }
   }
 

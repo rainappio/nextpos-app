@@ -200,7 +200,7 @@ class PaymentOrderForm extends React.Component {
 
   handleOnMessage = (data, id) => {
     if (data === `${id}.order.orderChanged`) {
-      handleOrderAction(id, 'EXIT_PAYMENT', () => this.props.navigation.navigate('TablesScr'))
+      handleOrderAction(id, 'EXIT_PAYMENT', () => {})
     }
   }
 
