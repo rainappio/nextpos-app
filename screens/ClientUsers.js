@@ -48,7 +48,7 @@ class ClientUsers extends React.Component {
       await AsyncStorage.removeItem('token')
       await AsyncStorage.removeItem('clientusrToken')
       navigation.navigate('Login')
-      this.props.dispatch(this.props.dispatch(doLogout()))
+      this.props.dispatch(doLogout())
     } catch (err) {
       console.log(`The error is: ${err}`)
     }
