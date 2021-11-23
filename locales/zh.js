@@ -330,8 +330,16 @@ const zh = {
     mobilePaymentNoSet: '未設定',
   },
   timecard: {
+    title: '打卡記錄',
+    yearLabel: '年',
+    monthLabel: '月',
+    firstColTitle: '員工',
+    secColTitle: '總班數',
+    thirdColTitle: '總時數',
     hours: '小時',
-    minutes: '分鐘'
+    minutes: '分鐘',
+    export: '匯出',
+    exportSuccess: '打卡記錄已寄送到您的信箱'
   },
   shift: {
     closeShift: '關帳',

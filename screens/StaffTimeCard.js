@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {FlatList, Text, TouchableOpacity, View} from 'react-native'
 import {getTimeCards} from '../actions'
-import {warningMessage} from '../constants/Backend'
+import {api, dispatchFetchRequestWithOption, successMessage, warningMessage} from '../constants/Backend'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {StaffTimeCardFilterForm} from './StaffTimeCardFilterForm'
@@ -11,6 +11,8 @@ import LoadingScreen from "./LoadingScreen";
 import moment from "moment";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
+import {LinearProgress} from 'react-native-elements';
+import i18n from 'i18n-js'
 
 class StaffTimeCard extends React.Component {
   static navigationOptions = {
@@ -21,30 +23,10 @@ class StaffTimeCard extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    context.localize({
-      en: {
-        title: 'Staff Time Cards',
-        yearLabel: 'Year',
-        monthLabel: 'Month',
-        firstColTitle: 'Staff',
-        secColTitle: 'Total Shifts',
-        thirdColTitle: 'Total Hours',
-
-      },
-      zh: {
-        title: '打卡記錄',
-        yearLabel: '年',
-        monthLabel: '月',
-        firstColTitle: '員工',
-        secColTitle: '總班數',
-        thirdColTitle: '總時數',
-
-      }
-    })
-
     this.state = {
       selectedYear: String(moment().format('YYYY')),
-      selectedMonth: String(moment().month() + 1)
+      selectedMonth: String(moment().month() + 1),
+      exporting: false
     }
   }
 
@@ -56,11 +38,25 @@ class StaffTimeCard extends React.Component {
       this.props.getTimeCards(this.state.selectedYear, this.state.selectedMonth)
     })
   }
+
   componentWillUnmount() {
     this._getTimeCards()
   }
 
+  onChange = (values) => {
+    this.updateYearAndMonth(values)
+  }
+
   handleFilter = (values) => {
+    this.updateYearAndMonth(values)
+
+    this.props.getTimeCards(values.year, values.month)
+  }
+
+  updateYearAndMonth = (values) => {
+
+    console.log(`Updating year and month: ${JSON.stringify(values)}`)
+
     const month = values.month;
     const year = values.year;
 
@@ -70,15 +66,49 @@ class StaffTimeCard extends React.Component {
     }
 
     this.setState({selectedYear: year, selectedMonth: month})
+  }
 
-    this.props.getTimeCards(year, month)
+  handleExport = () => {
+
+    const month = this.state.selectedMonth;
+    const year = this.state.selectedYear;
+
+    if (!month || !year) {
+      warningMessage('Please Choose Both Year and Month')
+      return
+    }
+
+    console.log(`exporting time cards of selected ${month} and ${year}`)
+
+    const formData = new FormData()
+    formData.append('month', month)
+    formData.append('year', year)
+
+    this.setState({'exporting': true})
+
+    dispatchFetchRequestWithOption(
+      api.timecard.export,
+      {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {},
+        body: formData
+      }, {
+        defaultMessage: false
+      },
+      response => {
+        successMessage(i18n.t('timecard.exportSuccess'))
+        this.setState({exporting: false})
+      }
+    ).then()
   }
 
   render() {
     const {t, customMainThemeColor} = this.context
     const {timecards, haveData, haveError, loading} = this.props
 
-    Item = ({timecard, layoutId, index}) => {
+    const Item = ({timecard, layoutId, index}) => {
       const displayName = timecard?.displayName ?? timecard.id
 
       return (
@@ -115,19 +145,21 @@ class StaffTimeCard extends React.Component {
 
     if (loading) {
       return (
-        <LoadingScreen />
+        <LoadingScreen/>
       )
     } else if (haveData) {
       return (
         <ThemeScrollView>
           <View style={styles.fullWidthScreen}>
             <ScreenHeader backNavigation={true}
-              parentFullScreen={true}
-              title={t('title')}
+                          parentFullScreen={true}
+                          title={t('timecard.title')}
             />
 
             <StaffTimeCardFilterForm
               onSubmit={this.handleFilter}
+              handleExport={this.handleExport}
+              onChange={this.onChange}
               initialValues={{
                 year: this.state.selectedYear,
                 month: this.state.selectedMonth
@@ -136,22 +168,29 @@ class StaffTimeCard extends React.Component {
 
             <View style={[styles.sectionBar]}>
               <View style={[styles.tableCellView, {flex: 5}]}>
-                <Text style={[styles?.sectionBarText(customMainThemeColor)]}>{t('firstColTitle')}</Text>
+                <Text style={[styles?.sectionBarText(customMainThemeColor)]}>{t('timecard.firstColTitle')}</Text>
               </View>
 
               <View style={[styles.tableCellView, {flex: 1.5}]}>
-                <Text style={[styles?.sectionBarText(customMainThemeColor)]}>{t('secColTitle')}</Text>
+                <Text style={[styles?.sectionBarText(customMainThemeColor)]}>{t('timecard.secColTitle')}</Text>
               </View>
 
               <View style={[styles.tableCellView, {flex: 3.5, justifyContent: 'flex-end'}]}>
-                <Text style={[styles?.sectionBarText(customMainThemeColor), {textAlign: 'right'}]}>{t('thirdColTitle')}</Text>
+                <Text
+                  style={[styles?.sectionBarText(customMainThemeColor), {textAlign: 'right'}]}>{t('timecard.thirdColTitle')}</Text>
               </View>
             </View>
+
+            {this.state.exporting && (
+              <View>
+                <LinearProgress color={customMainThemeColor}/>
+              </View>
+            )}
 
             <FlatList
               data={timecards}
               renderItem={({item, index}) => (
-                <Item timecard={item} layoutId={item.id} index={index} />
+                <Item timecard={item} layoutId={item.id} index={index}/>
               )}
               keyExtractor={item => item.id}
             />

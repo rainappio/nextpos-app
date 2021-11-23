@@ -330,8 +330,16 @@ const en = {
     mobilePaymentNoSet: 'No set.',
   },
   timecard: {
+    title: 'Staff Time Cards',
+    yearLabel: 'Year',
+    monthLabel: 'Month',
+    firstColTitle: 'Staff',
+    secColTitle: 'Total Shifts',
+    thirdColTitle: 'Total Hours',
     hours: 'hours',
-    minutes: 'mins'
+    minutes: 'mins',
+    export: 'Export',
+    exportSuccess: 'User Time Card has been sent to your email'
   },
   shift: {
     closeShift: 'Close Shift',

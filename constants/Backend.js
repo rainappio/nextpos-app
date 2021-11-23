@@ -83,7 +83,8 @@ export const api = {
     },
     getById: id => {
       return `${apiRoot}/timecards/${id}`
-    }
+    },
+    export: `${apiRoot}/timecards/export`
   },
   inventory: {
     new: `${apiRoot}/inventories`,
