@@ -11,7 +11,7 @@ class TimeCardFilterForm extends React.Component {
 
   render() {
     const {t, customMainThemeColor} = this.context
-    const {handleSubmit} = this.props
+    const {handleSubmit, handleExport} = this.props
 
     const years = []
     for (let i = -5; i <= 0; i++) {
@@ -37,7 +37,7 @@ class TimeCardFilterForm extends React.Component {
           <Field
             name="year"
             component={DropDown}
-            placeholder={{value: null, label: t('yearLabel')}}
+            placeholder={{value: null, label: t('timecard.yearLabel')}}
             options={years}
           />
         </View>
@@ -46,18 +46,26 @@ class TimeCardFilterForm extends React.Component {
           <Field
             name="month"
             component={DropDown}
-            placeholder={{value: null, label: t('monthLabel')}}
+            placeholder={{value: null, label: t('timecard.monthLabel')}}
             options={months}
           />
         </View>
 
         <View style={{flex: 3}}>
           <TouchableOpacity
-            style={{flex: 1, marginLeft: 5, marginRight: 4}}
+            style={{flex: 1, marginLeft: 5, marginRight: 4, marginBottom: 5}}
             onPress={() => handleSubmit()}
           >
             <Text style={[styles?.searchButton(customMainThemeColor)]}>
               {t('action.search')}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{flex: 1, marginLeft: 5, marginRight: 4}}
+            onPress={() => handleExport()}
+          >
+            <Text style={[styles?.searchButton(customMainThemeColor)]}>
+              {t('timecard.export')}
             </Text>
           </TouchableOpacity>
         </View>

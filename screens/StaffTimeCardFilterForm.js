@@ -11,10 +11,10 @@ class StaffTimeCardFilterFormBase extends React.Component {
   }
 
   render() {
-    const {handleSubmit} = this.props
+    const {onChange, handleSubmit, handleExport} = this.props
 
     return (
-      <TimeCardFilterForm handleSubmit={handleSubmit} />
+      <TimeCardFilterForm onChange={onChange} handleSubmit={handleSubmit} handleExport={handleExport}/>
     )
   }
 }
