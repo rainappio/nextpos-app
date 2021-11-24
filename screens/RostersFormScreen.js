@@ -758,28 +758,6 @@ class RostersFormScreen extends React.Component {
                                                         {label?.resources?.map((user, userIndex) => (
                                                             <ListItem
                                                                 key={userIndex}
-                                                                title={
-                                                                    <View style={[styles.tableRowContainer]}>
-                                                                        <View style={[styles.tableCellView]}>
-                                                                            <CheckBox
-                                                                                containerStyle={{margin: 0, padding: 0}}
-                                                                                checkedIcon={'check-circle'}
-                                                                                uncheckedIcon={'circle'}
-                                                                                checked={user?.isSelected}
-                                                                                onPress={() => {
-                                                                                    let tempLabels = [...this.state?.labels]
-                                                                                    tempLabels[labelIndex].resources[userIndex].isSelected = !tempLabels[labelIndex].resources[userIndex].isSelected
-                                                                                    this.setState({labels: tempLabels})
-                                                                                }}
-                                                                            >
-                                                                            </CheckBox>
-                                                                        </View>
-                                                                        <View style={[styles.tableCellView]}>
-                                                                            <StyledText>{user?.displayName}</StyledText>
-                                                                        </View>
-
-                                                                    </View>
-                                                                }
                                                                 onPress={() => {
                                                                     let tempLabels = [...this.state?.labels]
                                                                     tempLabels[labelIndex].resources[userIndex].isSelected = !tempLabels[labelIndex].resources[userIndex].isSelected
@@ -787,23 +765,42 @@ class RostersFormScreen extends React.Component {
                                                                 }}
                                                                 bottomDivider
                                                                 containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: customBackgroundColor},]}
-                                                            />
+                                                            >
+                                                              <View style={[styles.tableRowContainer]}>
+                                                                <View style={[styles.tableCellView]}>
+                                                                  <CheckBox
+                                                                    containerStyle={{margin: 0, padding: 0}}
+                                                                    checkedIcon={'check-circle'}
+                                                                    uncheckedIcon={'circle'}
+                                                                    checked={user?.isSelected}
+                                                                    onPress={() => {
+                                                                      let tempLabels = [...this.state?.labels]
+                                                                      tempLabels[labelIndex].resources[userIndex].isSelected = !tempLabels[labelIndex].resources[userIndex].isSelected
+                                                                      this.setState({labels: tempLabels})
+                                                                    }}
+                                                                  >
+                                                                  </CheckBox>
+                                                                </View>
+                                                                <View style={[styles.tableCellView]}>
+                                                                  <StyledText>{user?.displayName}</StyledText>
+                                                                </View>
+                                                              </View>
+                                                            </ListItem>
                                                         ))}
                                                         {label?.resources?.length === 0 && (
                                                             <ListItem
-                                                                title={
-                                                                    <View style={[styles.tableRowContainer]}>
-                                                                        <View style={[styles.tableCellView]}>
-                                                                            <StyledText>({t('empty')})</StyledText>
-                                                                        </View>
-                                                                    </View>
-                                                                }
                                                                 onPress={() => {
 
                                                                 }}
                                                                 bottomDivider
                                                                 containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
-                                                            />
+                                                            >
+                                                              <View style={[styles.tableRowContainer]}>
+                                                                <View style={[styles.tableCellView]}>
+                                                                  <StyledText>({t('empty')})</StyledText>
+                                                                </View>
+                                                              </View>
+                                                            </ListItem>
                                                         )}
                                                     </List>
 
@@ -815,28 +812,6 @@ class RostersFormScreen extends React.Component {
                                             {this.state?.labels.map((label, labelIndex) => {
                                                 return (
                                                     <ListItem
-                                                        title={
-                                                            <View style={[styles.tableRowContainer, {paddingHorizontal: 0}]}>
-                                                                <View style={[styles.tableCellView]}>
-                                                                    <CheckBox
-                                                                        containerStyle={{margin: 0, padding: 0}}
-                                                                        checkedIcon={'check-circle'}
-                                                                        uncheckedIcon={'circle'}
-                                                                        checked={label?.labelIsSelected}
-                                                                        onPress={() => {
-                                                                            let tempLabels = [...this.state?.labels]
-                                                                            tempLabels[labelIndex].labelIsSelected = !tempLabels[labelIndex].labelIsSelected
-                                                                            this.setState({labels: tempLabels})
-                                                                        }}
-                                                                    >
-                                                                    </CheckBox>
-                                                                </View>
-                                                                <View style={[styles.tableCellView]}>
-                                                                    <StyledText>{label?.labelName}</StyledText>
-                                                                </View>
-
-                                                            </View>
-                                                        }
                                                         onPress={() => {
                                                             let tempLabels = [...this.state?.labels]
                                                             tempLabels[labelIndex].labelIsSelected = !tempLabels[labelIndex].labelIsSelected
@@ -844,7 +819,27 @@ class RostersFormScreen extends React.Component {
                                                         }}
                                                         bottomDivider
                                                         containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: customBackgroundColor},]}
-                                                    />
+                                                    >
+                                                      <View style={[styles.tableRowContainer, {paddingHorizontal: 0}]}>
+                                                        <View style={[styles.tableCellView]}>
+                                                          <CheckBox
+                                                            containerStyle={{margin: 0, padding: 0}}
+                                                            checkedIcon={'check-circle'}
+                                                            uncheckedIcon={'circle'}
+                                                            checked={label?.labelIsSelected}
+                                                            onPress={() => {
+                                                              let tempLabels = [...this.state?.labels]
+                                                              tempLabels[labelIndex].labelIsSelected = !tempLabels[labelIndex].labelIsSelected
+                                                              this.setState({labels: tempLabels})
+                                                            }}
+                                                          >
+                                                          </CheckBox>
+                                                        </View>
+                                                        <View style={[styles.tableCellView]}>
+                                                          <StyledText>{label?.labelName}</StyledText>
+                                                        </View>
+                                                      </View>
+                                                    </ListItem>
                                                 )
                                             })}
                                         </View>}
@@ -1117,28 +1112,6 @@ class RostersFormScreen extends React.Component {
                                                     {label?.resources?.map((user, userIndex) => (
                                                         <ListItem
                                                             key={userIndex}
-                                                            title={
-                                                                <View style={[styles.tableRowContainer]}>
-                                                                    <View style={[styles.tableCellView]}>
-                                                                        <CheckBox
-                                                                            containerStyle={{margin: 0, padding: 0}}
-                                                                            checkedIcon={'check-circle'}
-                                                                            uncheckedIcon={'circle'}
-                                                                            checked={user?.isSelected}
-                                                                            onPress={() => {
-                                                                                let tempLabels = [...this.state?.labels]
-                                                                                tempLabels[labelIndex].resources[userIndex].isSelected = !tempLabels[labelIndex].resources[userIndex].isSelected
-                                                                                this.setState({labels: tempLabels})
-                                                                            }}
-                                                                        >
-                                                                        </CheckBox>
-                                                                    </View>
-                                                                    <View style={[styles.tableCellView]}>
-                                                                        <StyledText>{user?.displayName}</StyledText>
-                                                                    </View>
-
-                                                                </View>
-                                                            }
                                                             onPress={() => {
                                                                 let tempLabels = [...this.state?.labels]
                                                                 tempLabels[labelIndex].resources[userIndex].isSelected = !tempLabels[labelIndex].resources[userIndex].isSelected
@@ -1146,23 +1119,42 @@ class RostersFormScreen extends React.Component {
                                                             }}
                                                             bottomDivider
                                                             containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: customBackgroundColor},]}
-                                                        />
+                                                        >
+                                                          <View style={[styles.tableRowContainer]}>
+                                                            <View style={[styles.tableCellView]}>
+                                                              <CheckBox
+                                                                containerStyle={{margin: 0, padding: 0}}
+                                                                checkedIcon={'check-circle'}
+                                                                uncheckedIcon={'circle'}
+                                                                checked={user?.isSelected}
+                                                                onPress={() => {
+                                                                  let tempLabels = [...this.state?.labels]
+                                                                  tempLabels[labelIndex].resources[userIndex].isSelected = !tempLabels[labelIndex].resources[userIndex].isSelected
+                                                                  this.setState({labels: tempLabels})
+                                                                }}
+                                                              >
+                                                              </CheckBox>
+                                                            </View>
+                                                            <View style={[styles.tableCellView]}>
+                                                              <StyledText>{user?.displayName}</StyledText>
+                                                            </View>
+                                                          </View>
+                                                        </ListItem>
                                                     ))}
                                                     {label?.resources?.length === 0 && (
                                                         <ListItem
-                                                            title={
-                                                                <View style={[styles.tableRowContainer]}>
-                                                                    <View style={[styles.tableCellView]}>
-                                                                        <StyledText>({t('empty')})</StyledText>
-                                                                    </View>
-                                                                </View>
-                                                            }
                                                             onPress={() => {
 
                                                             }}
                                                             bottomDivider
                                                             containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
-                                                        />
+                                                        >
+                                                          <View style={[styles.tableRowContainer]}>
+                                                            <View style={[styles.tableCellView]}>
+                                                              <StyledText>({t('empty')})</StyledText>
+                                                            </View>
+                                                          </View>
+                                                        </ListItem>
                                                     )}
                                                 </List>
 
@@ -1174,28 +1166,6 @@ class RostersFormScreen extends React.Component {
                                         {this.state?.labels.map((label, labelIndex) => {
                                             return (
                                                 <ListItem
-                                                    title={
-                                                        <View style={[styles.tableRowContainer, {paddingHorizontal: 0}]}>
-                                                            <View style={[styles.tableCellView]}>
-                                                                <CheckBox
-                                                                    containerStyle={{margin: 0, padding: 0}}
-                                                                    checkedIcon={'check-circle'}
-                                                                    uncheckedIcon={'circle'}
-                                                                    checked={label?.labelIsSelected}
-                                                                    onPress={() => {
-                                                                        let tempLabels = [...this.state?.labels]
-                                                                        tempLabels[labelIndex].labelIsSelected = !tempLabels[labelIndex].labelIsSelected
-                                                                        this.setState({labels: tempLabels})
-                                                                    }}
-                                                                >
-                                                                </CheckBox>
-                                                            </View>
-                                                            <View style={[styles.tableCellView]}>
-                                                                <StyledText>{label?.labelName}</StyledText>
-                                                            </View>
-
-                                                        </View>
-                                                    }
                                                     onPress={() => {
                                                         let tempLabels = [...this.state?.labels]
                                                         tempLabels[labelIndex].labelIsSelected = !tempLabels[labelIndex].labelIsSelected
@@ -1203,7 +1173,27 @@ class RostersFormScreen extends React.Component {
                                                     }}
                                                     bottomDivider
                                                     containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: customBackgroundColor},]}
-                                                />
+                                                >
+                                                  <View style={[styles.tableRowContainer, {paddingHorizontal: 0}]}>
+                                                    <View style={[styles.tableCellView]}>
+                                                      <CheckBox
+                                                        containerStyle={{margin: 0, padding: 0}}
+                                                        checkedIcon={'check-circle'}
+                                                        uncheckedIcon={'circle'}
+                                                        checked={label?.labelIsSelected}
+                                                        onPress={() => {
+                                                          let tempLabels = [...this.state?.labels]
+                                                          tempLabels[labelIndex].labelIsSelected = !tempLabels[labelIndex].labelIsSelected
+                                                          this.setState({labels: tempLabels})
+                                                        }}
+                                                      >
+                                                      </CheckBox>
+                                                    </View>
+                                                    <View style={[styles.tableCellView]}>
+                                                      <StyledText>{label?.labelName}</StyledText>
+                                                    </View>
+                                                  </View>
+                                                </ListItem>
                                             )
                                         })}
                                     </View>}

@@ -210,49 +210,47 @@ class ReservationSettingForm extends React.Component {
                             return (
                               <ListItem
                                 key={table?.tableId}
-                                title={
-                                  <View style={[styles.tableRowContainer]}>
-                                    <View style={[styles.tableCellView]}>
-                                      <CheckBox
-                                        containerStyle={{margin: 0, padding: 0}}
-                                        checkedIcon={'check-circle'}
-                                        uncheckedIcon={'circle'}
-                                        checked={isSelected}
-                                        onPress={() => {
-                                          this.handleChooseTable(table.tableId)
-                                        }}
-                                      >
-                                      </CheckBox>
-                                    </View>
-                                    <View style={[styles.tableCellView]}>
-                                      <StyledText>{table?.tableName}</StyledText>
-                                    </View>
-                                  </View>
-                                }
                                 onPress={() => {
                                   this.handleChooseTable(table.tableId)
                                 }}
                                 bottomDivider
                                 containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: customBackgroundColor},]}
-                              />
+                              >
+                                <View style={[styles.tableRowContainer]}>
+                                  <View style={[styles.tableCellView]}>
+                                    <CheckBox
+                                      containerStyle={{margin: 0, padding: 0}}
+                                      checkedIcon={'check-circle'}
+                                      uncheckedIcon={'circle'}
+                                      checked={isSelected}
+                                      onPress={() => {
+                                        this.handleChooseTable(table.tableId)
+                                      }}
+                                    >
+                                    </CheckBox>
+                                  </View>
+                                  <View style={[styles.tableCellView]}>
+                                    <StyledText>{table?.tableName}</StyledText>
+                                  </View>
+                                </View>
+                              </ListItem>
                             )
 
 
                           })}
                           {tablesMap?.[layout].length == 0 && (
                             <ListItem
-                              title={
-                                <View style={[styles.tableRowContainer]}>
-                                  <View style={[styles.tableCellView]}>
-                                    <StyledText>({t('empty')})</StyledText>
-                                  </View>
-                                </View>
-                              }
                               onPress={() => {
                               }}
                               bottomDivider
                               containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
-                            />
+                            >
+                              <View style={[styles.tableRowContainer]}>
+                                <View style={[styles.tableCellView]}>
+                                  <StyledText>({t('empty')})</StyledText>
+                                </View>
+                              </View>
+                            </ListItem>
                           )}
                         </List>
                       </Accordion.Panel>

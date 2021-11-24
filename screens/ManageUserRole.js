@@ -62,13 +62,6 @@ class ManageUserRole extends Component {
     return (
       <ListItem
         key={item}
-        title={
-          <View style={[styles.tableRowContainer]}>
-            <View style={[styles.tableCellView, { flex: 1 }]}>
-              <StyledText>{item.roleName}</StyledText>
-            </View>
-          </View>
-        }
         onPress={() =>
           this.props.navigation.navigate('EditUserRole', {
             userroleId: item.id,
@@ -78,7 +71,13 @@ class ManageUserRole extends Component {
         }
         bottomDivider
         containerStyle={[styles.dynamicVerticalPadding(12), { padding: 0, backgroundColor: this.props.themeStyle.backgroundColor}]}
-      />
+      >
+        <View style={[styles.tableRowContainer]}>
+          <View style={[styles.tableCellView, { flex: 1 }]}>
+            <StyledText>{item.roleName}</StyledText>
+          </View>
+        </View>
+      </ListItem>
     )
   }
 

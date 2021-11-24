@@ -1121,32 +1121,6 @@ class ReservationFormScreen extends React.Component {
                                       return (
                                         <ListItem
                                           key={table?.tableId}
-                                          title={
-                                            <View style={[styles.tableRowContainer]}>
-                                              <View style={[styles.tableCellView]}>
-                                                <CheckBox
-                                                  containerStyle={{margin: 0, padding: 0}}
-                                                  checkedIcon={'check-circle'}
-                                                  uncheckedIcon={'circle'}
-                                                  checked={this.state.selectedTableIds.includes(table.tableId)}
-                                                  onPress={() => {
-                                                    let tableList = this.state.availableTables
-                                                    if (isAvailable) {
-                                                      this.handleChooseTable(table.tableId, table.tableName)
-                                                      if (isSelected) {
-                                                        tableList.push(table.tableId)
-                                                        this.setState({availableTables: tableList})
-                                                      }
-                                                    }
-                                                  }}
-                                                >
-                                                </CheckBox>
-                                              </View>
-                                              <View style={[styles.tableCellView]}>
-                                                <StyledText>{table?.tableName}</StyledText>
-                                              </View>
-                                            </View>
-                                          }
                                           onPress={() => {
                                             let tableList = this.state.availableTables
                                             if (isAvailable || (!isAvailable && isSelected)) {
@@ -1159,24 +1133,48 @@ class ReservationFormScreen extends React.Component {
                                           }}
                                           bottomDivider
                                           containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: customBackgroundColor},]}
-                                        />
+                                        >
+                                          <View style={[styles.tableRowContainer]}>
+                                            <View style={[styles.tableCellView]}>
+                                              <CheckBox
+                                                containerStyle={{margin: 0, padding: 0}}
+                                                checkedIcon={'check-circle'}
+                                                uncheckedIcon={'circle'}
+                                                checked={this.state.selectedTableIds.includes(table.tableId)}
+                                                onPress={() => {
+                                                  let tableList = this.state.availableTables
+                                                  if (isAvailable) {
+                                                    this.handleChooseTable(table.tableId, table.tableName)
+                                                    if (isSelected) {
+                                                      tableList.push(table.tableId)
+                                                      this.setState({availableTables: tableList})
+                                                    }
+                                                  }
+                                                }}
+                                              >
+                                              </CheckBox>
+                                            </View>
+                                            <View style={[styles.tableCellView]}>
+                                              <StyledText>{table?.tableName}</StyledText>
+                                            </View>
+                                          </View>
+                                        </ListItem>
                                       )
                                     }
                                   })}
                                   {tablesMap?.[layout].length == 0 && (
                                     <ListItem
-                                      title={
-                                        <View style={[styles.tableRowContainer]}>
-                                          <View style={[styles.tableCellView]}>
-                                            <StyledText>({t('empty')})</StyledText>
-                                          </View>
-                                        </View>
-                                      }
                                       onPress={() => {
                                       }}
                                       bottomDivider
                                       containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
-                                    />
+                                    >
+                                      <View style={[styles.tableRowContainer]}>
+                                        <View style={[styles.tableCellView]}>
+                                          <StyledText>({t('empty')})</StyledText>
+                                        </View>
+                                      </View>
+                                    </ListItem>
                                   )}
                                 </List>
                               </Accordion.Panel>
@@ -1466,9 +1464,10 @@ class TableMapBase extends Component {
     const isAvailable = this.props.availableTables?.find((item) => item === table.tableId)
     const isSelected = !!this.props?.selectedTableIds && ((this.props?.selectedTableIds.indexOf(table.tableId) > -1) && isAvailable)
 
+    const customStyle = [{color: '#222', textAlign: 'center'}, isSelected ? {color: customBackgroundColor} : {}]
 
     return (
-      <View >
+      <View>
         {
           table.position !== null
             ?
@@ -1482,10 +1481,10 @@ class TableMapBase extends Component {
                 }}
                 style={[panStyle, {zIndex: 1000, position: 'absolute', alignItems: 'center', justifyContent: 'space-around', width: tableSize, height: tableSize, borderRadius: 50}, (!isAvailable) ? {backgroundColor: '#f75336'} : {backgroundColor: '#e7e7e7'}, isSelected && selectedStyle]}>
 
-                <Text style={{color: '#222', textAlign: 'center'}, isSelected && {color: customBackgroundColor}}>{table.tableName}</Text>
+                <Text style={customStyle}>{table.tableName}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Ionicons name={'ios-people'} color={isSelected ? customBackgroundColor : '#222'} size={20} />
-                  <Text style={{color: '#222', textAlign: 'center', }, isSelected && {color: customBackgroundColor}}>{` ${tableOrder?.customerCount ?? 0}(${table.capacity})`}</Text>
+                  <Text style={customStyle}>{` ${tableOrder?.customerCount ?? 0}(${table.capacity})`}</Text>
                 </View>
               </TouchableOpacity>
 
@@ -1499,10 +1498,10 @@ class TableMapBase extends Component {
                 }}
                 style={[panStyle, {zIndex: 1000, position: 'absolute', alignItems: 'center', justifyContent: 'space-around', width: tableSize, height: tableSize, borderRadius: 50}, (!isAvailable) ? {backgroundColor: '#f75336', opacity: 0.5} : {backgroundColor: '#e7e7e7'}, isSelected && selectedStyle]}>
 
-                <Text style={{color: '#222', textAlign: 'center'}, isSelected && {color: customBackgroundColor}}>{table.tableName}</Text>
+                <Text style={customStyle}>{table.tableName}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Ionicons name={'ios-people'} color={isSelected ? customBackgroundColor : '#222'} size={20} />
-                  <Text style={{color: '#222', textAlign: 'center', }, isSelected && {color: customBackgroundColor}}>{` ${tableOrder?.customerCount ?? 0}(${table.capacity})`}</Text>
+                  <Text style={customStyle}>{` ${tableOrder?.customerCount ?? 0}(${table.capacity})`}</Text>
                 </View>
               </TouchableOpacity>
 

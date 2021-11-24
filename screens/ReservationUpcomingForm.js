@@ -638,33 +638,6 @@ class ReservationUpcomingForm extends React.Component {
                                   return (
                                     <ListItem
                                       key={table?.tableId}
-                                      title={
-                                        <View style={[styles.tableRowContainer]}>
-                                          <View style={[styles.tableCellView]}>
-                                            <CheckBox
-                                              containerStyle={{margin: 0, padding: 0}}
-                                              disabled={!isAvailable}
-                                              checkedIcon={'check-circle'}
-                                              uncheckedIcon={'circle'}
-                                              checked={this.state.selectedTableIds.includes(table.tableId)}
-                                              onPress={() => {
-                                                let tableList = this.state.availableTables
-                                                if (isAvailable) {
-                                                  this.handleChooseTable(table.tableId, table.tableName)
-                                                  if (isSelected) {
-                                                    tableList.push(table.tableId)
-                                                    this.setState({availableTables: tableList})
-                                                  }
-                                                }
-                                              }}
-                                            >
-                                            </CheckBox>
-                                          </View>
-                                          <View style={[styles.tableCellView]}>
-                                            <StyledText>{table?.tableName}</StyledText>
-                                          </View>
-                                        </View>
-                                      }
                                       onPress={() => {
                                         let tableList = this.state.availableTables
                                         if (isAvailable || (!isAvailable && isSelected)) {
@@ -677,23 +650,48 @@ class ReservationUpcomingForm extends React.Component {
                                       }}
                                       bottomDivider
                                       containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: !isAvailable ? '#ccc' : customBackgroundColor},]}
-                                    />
-                                  )
-                                })}
-                                {tablesMap?.[layout].length == 0 && (
-                                  <ListItem
-                                    title={
+                                    >
                                       <View style={[styles.tableRowContainer]}>
-                                        <View style={[styles.tableCellView, styles.withBottomBorder]}>
-                                          <StyledText>({t('empty')})</StyledText>
+                                        <View style={[styles.tableCellView]}>
+                                          <CheckBox
+                                            containerStyle={{margin: 0, padding: 0}}
+                                            disabled={!isAvailable}
+                                            checkedIcon={'check-circle'}
+                                            uncheckedIcon={'circle'}
+                                            checked={this.state.selectedTableIds.includes(table.tableId)}
+                                            onPress={() => {
+                                              let tableList = this.state.availableTables
+                                              if (isAvailable) {
+                                                this.handleChooseTable(table.tableId, table.tableName)
+                                                if (isSelected) {
+                                                  tableList.push(table.tableId)
+                                                  this.setState({availableTables: tableList})
+                                                }
+                                              }
+                                            }}
+                                          >
+                                          </CheckBox>
+                                        </View>
+                                        <View style={[styles.tableCellView]}>
+                                          <StyledText>{table?.tableName}</StyledText>
                                         </View>
                                       </View>
-                                    }
+                                    </ListItem>
+                                  )
+                                })}
+                                {tablesMap?.[layout].length === 0 && (
+                                  <ListItem
                                     onPress={() => {
                                     }}
                                     bottomDivider
                                     containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
-                                  />
+                                  >
+                                    <View style={[styles.tableRowContainer]}>
+                                      <View style={[styles.tableCellView, styles.withBottomBorder]}>
+                                        <StyledText>({t('empty')})</StyledText>
+                                      </View>
+                                    </View>
+                                  </ListItem>
                                 )}
                               </List>
                             </Accordion.Panel>
@@ -1278,32 +1276,6 @@ class ReservationUpcomingForm extends React.Component {
                                     return (
                                       <ListItem
                                         key={table?.tableId}
-                                        title={
-                                          <View style={[styles.tableRowContainer]}>
-                                            <View style={[styles.tableCellView]}>
-                                              <CheckBox
-                                                containerStyle={{margin: 0, padding: 0}}
-                                                checkedIcon={'check-circle'}
-                                                uncheckedIcon={'circle'}
-                                                checked={this.state.selectedTableIds.includes(table.tableId)}
-                                                onPress={() => {
-                                                  let tableList = this.state.availableTables
-                                                  if (isAvailable) {
-                                                    this.handleChooseTable(table.tableId, table.tableName)
-                                                    if (isSelected) {
-                                                      tableList.push(table.tableId)
-                                                      this.setState({availableTables: tableList})
-                                                    }
-                                                  }
-                                                }}
-                                              >
-                                              </CheckBox>
-                                            </View>
-                                            <View style={[styles.tableCellView]}>
-                                              <StyledText>{table?.tableName}</StyledText>
-                                            </View>
-                                          </View>
-                                        }
                                         onPress={() => {
                                           let tableList = this.state.availableTables
                                           if (isAvailable || (!isAvailable && isSelected)) {
@@ -1316,24 +1288,48 @@ class ReservationUpcomingForm extends React.Component {
                                         }}
                                         bottomDivider
                                         containerStyle={[styles.dynamicVerticalPadding(5), {backgroundColor: customBackgroundColor},]}
-                                      />
+                                      >
+                                        <View style={[styles.tableRowContainer]}>
+                                          <View style={[styles.tableCellView]}>
+                                            <CheckBox
+                                              containerStyle={{margin: 0, padding: 0}}
+                                              checkedIcon={'check-circle'}
+                                              uncheckedIcon={'circle'}
+                                              checked={this.state.selectedTableIds.includes(table.tableId)}
+                                              onPress={() => {
+                                                let tableList = this.state.availableTables
+                                                if (isAvailable) {
+                                                  this.handleChooseTable(table.tableId, table.tableName)
+                                                  if (isSelected) {
+                                                    tableList.push(table.tableId)
+                                                    this.setState({availableTables: tableList})
+                                                  }
+                                                }
+                                              }}
+                                            >
+                                            </CheckBox>
+                                          </View>
+                                          <View style={[styles.tableCellView]}>
+                                            <StyledText>{table?.tableName}</StyledText>
+                                          </View>
+                                        </View>
+                                      </ListItem>
                                     )
                                   }
                                 })}
-                                {tablesMap?.[layout].length == 0 && (
+                                {tablesMap?.[layout].length === 0 && (
                                   <ListItem
-                                    title={
-                                      <View style={[styles.tableRowContainer]}>
-                                        <View style={[styles.tableCellView]}>
-                                          <StyledText>({t('empty')})</StyledText>
-                                        </View>
-                                      </View>
-                                    }
                                     onPress={() => {
                                     }}
                                     bottomDivider
                                     containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
-                                  />
+                                  >
+                                    <View style={[styles.tableRowContainer]}>
+                                      <View style={[styles.tableCellView]}>
+                                        <StyledText>({t('empty')})</StyledText>
+                                      </View>
+                                    </View>
+                                  </ListItem>
                                 )}
                               </List>
                             </Accordion.Panel>
