@@ -42,24 +42,24 @@ class RNSwitchPayGroup extends Component {
         !!value &&
         <ListItem
           key={payment.id}
-          title={
-            <View style={[styles.tableRowContainer, {paddingVertical: 0}]}>
-              <View style={[styles.tableCellView, {flex: 1}]}>
-                <StyledText>{t(`settings.paymentMethods.${payment.paymentKey}`)}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, styles.justifyRight]}>
-                <Switch
-                  onValueChange={onChange}
-                  value={!!arrFind.find(item => item?.id === payment.id)}
-                  disabled={payment.paymentKey == 'CARD' || payment.paymentKey == 'CASH'}
-                  {...otherInput}
-                  {...rest}
-                />
-              </View>
-            </View>}
           bottomDivider
           containerStyle={[styles.dynamicVerticalPadding(12), {padding: 0, backgroundColor: customBackgroundColor}]}
-        />
+        >
+          <View style={[styles.tableRowContainer, {paddingVertical: 0}]}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText>{t(`settings.paymentMethods.${payment.paymentKey}`)}</StyledText>
+            </View>
+            <View style={[styles.tableCellView, styles.justifyRight]}>
+              <Switch
+                onValueChange={onChange}
+                value={!!arrFind.find(item => item?.id === payment.id)}
+                disabled={payment.paymentKey === 'CARD' || payment.paymentKey === 'CASH'}
+                {...otherInput}
+                {...rest}
+              />
+            </View>
+          </View>
+        </ListItem>
       )
     })
     return (

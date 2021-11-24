@@ -1,7 +1,7 @@
 import React from 'react'
 import {ScrollView, View, Alert} from 'react-native'
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from '../constants/Backend'
-import {getCurrentClient, clearReservation} from '../actions'
+import {getCurrentClient, clearReservation, getReservation} from '../actions'
 import {LocaleContext} from "../locales/LocaleContext";
 import {ThemeContainer} from "../components/ThemeContainer";
 import ReservationFormScreen from './ReservationFormScreen'

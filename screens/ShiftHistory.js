@@ -77,19 +77,6 @@ class ShiftHistory extends React.Component {
     return (
       <ListItem
         key={item.id}
-        title={
-          <View style={[styles.tableRowContainer]}>
-            <View style={[styles.tableCellView, {flex: 3}]}>
-              <StyledText>{formatDate(item.open.timestamp)}</StyledText>
-            </View>
-            <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText>{item.shiftStatus !== 'ACTIVE' ? `$${allClosingAmount}` : '-'}</StyledText>
-            </View>
-            <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
-              <StyledText>{renderShiftStatus(item.shiftStatus)}</StyledText>
-            </View>
-          </View>
-        }
         onPress={() =>
           this.props.navigation.navigate('ShiftDetails', {
             shift: item
@@ -97,7 +84,19 @@ class ShiftHistory extends React.Component {
         }
         bottomDivider
         containerStyle={[styles.dynamicVerticalPadding(12), {padding: 0, backgroundColor: this.context?.customBackgroundColor}]}
-      />
+      >
+        <View style={[styles.tableRowContainer]}>
+          <View style={[styles.tableCellView, {flex: 3}]}>
+            <StyledText>{formatDate(item.open.timestamp)}</StyledText>
+          </View>
+          <View style={[styles.tableCellView, {flex: 1}]}>
+            <StyledText>{item.shiftStatus !== 'ACTIVE' ? `$${allClosingAmount}` : '-'}</StyledText>
+          </View>
+          <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-end'}]}>
+            <StyledText>{renderShiftStatus(item.shiftStatus)}</StyledText>
+          </View>
+        </View>
+      </ListItem>
     )
   }
 

@@ -141,28 +141,6 @@ class OrdersScreen extends React.Component {
   renderItem = ({item}) => (
     <ListItem
       key={item.orderId}
-      title={
-        <View style={[styles.tableRowContainer]}>
-          <View style={[styles.tableCellView, {flex: 2}]}>
-            <StyledText>{item.serialId}</StyledText>
-          </View>
-          <View style={[{flex: 3}]}>
-            <StyledText>{formatDateOnly(item.createdTime)}</StyledText>
-            <View style={[{flexDirection: 'row'}]} >
-              <StyledText>{formatTime(item.createdTime)}, </StyledText>
-              <StyledText>{formatTime(item.modifiedDate)}
-                {(new Date(item.modifiedDate).getDate() > new Date(item.createdTime).getDate()) && `(+)`}
-              </StyledText>
-            </View>
-          </View>
-          <View style={[styles.tableCellView, {flex: 1}]}>
-            <StyledText>${item.orderTotal}</StyledText>
-          </View>
-          <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
-            {renderOrderState(item.state, this.context?.customMainThemeColor)}
-          </View>
-        </View>
-      }
       onPress={() =>
         this.props.navigation.navigate('OrderDetail', {
           orderId: item.orderId
@@ -170,7 +148,28 @@ class OrdersScreen extends React.Component {
       }
       bottomDivider
       containerStyle={[styles.dynamicVerticalPadding(12), {padding: 0, backgroundColor: this.props.themeStyle.backgroundColor}, styles?.customBorderAndBackgroundColor(this.context)]}
-    />
+    >
+      <View style={[styles.tableRowContainer]}>
+        <View style={[styles.tableCellView, {flex: 2}]}>
+          <StyledText>{item.serialId}</StyledText>
+        </View>
+        <View style={[{flex: 3}]}>
+          <StyledText>{formatDateOnly(item.createdTime)}</StyledText>
+          <View style={[{flexDirection: 'row'}]} >
+            <StyledText>{formatTime(item.createdTime)}, </StyledText>
+            <StyledText>{formatTime(item.modifiedDate)}
+              {(new Date(item.modifiedDate).getDate() > new Date(item.createdTime).getDate()) && `(+)`}
+            </StyledText>
+          </View>
+        </View>
+        <View style={[styles.tableCellView, {flex: 1}]}>
+          <StyledText>${item.orderTotal}</StyledText>
+        </View>
+        <View style={[styles.tableCellView, {flex: 1, justifyContent: 'center'}]}>
+          {renderOrderState(item.state, this.context?.customMainThemeColor)}
+        </View>
+      </View>
+    </ListItem>
   )
 
   //https://stackoverflow.com/questions/48061234/how-to-keep-scroll-position-using-flatlist-when-navigating-back-in-react-native

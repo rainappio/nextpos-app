@@ -135,20 +135,6 @@ class InventoryOrderScreen extends React.Component {
     renderItem = ({item}) => (
         <ListItem
             key={item.orderId}
-            title={
-                <View style={[styles.tableRowContainer]}>
-                    <View style={[styles.tableCellView, {flex: 3}]}>
-                        <StyledText>{item.id}</StyledText>
-                    </View>
-                    <View style={[styles.tableCellView, {flex: 2}]}>
-                        <StyledText>{item?.supplierOrderId}</StyledText>
-                    </View>
-                    <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                        <StyledText>{formatDate(item?.orderDate)}</StyledText>
-                    </View>
-
-                </View>
-            }
             onPress={() =>
                 this.props.navigation.navigate('InventoryOrderFormScreen', {
                     data: item
@@ -156,7 +142,20 @@ class InventoryOrderScreen extends React.Component {
             }
             bottomDivider
             containerStyle={[styles.dynamicVerticalPadding(12), {padding: 0, backgroundColor: this.props.themeStyle.backgroundColor}, styles?.customBorderAndBackgroundColor(this.context)]}
-        />
+        >
+          <View style={[styles.tableRowContainer]}>
+            <View style={[styles.tableCellView, {flex: 3}]}>
+              <StyledText>{item.id}</StyledText>
+            </View>
+            <View style={[styles.tableCellView, {flex: 2}]}>
+              <StyledText>{item?.supplierOrderId}</StyledText>
+            </View>
+            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+              <StyledText>{formatDate(item?.orderDate)}</StyledText>
+            </View>
+
+          </View>
+        </ListItem>
     )
 
     //https://stackoverflow.com/questions/48061234/how-to-keep-scroll-position-using-flatlist-when-navigating-back-in-react-native

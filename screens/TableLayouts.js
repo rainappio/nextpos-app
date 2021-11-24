@@ -148,13 +148,6 @@ class TableLayouts extends React.Component {
                   {tblLayout.tables.map(tbl => (
                     <ListItem
                       key={tbl.tableId}
-                      title={
-                        <View style={[styles.tableRowContainer]}>
-                          <View style={[styles.tableCellView]}>
-                            <StyledText>{tbl.tableName}</StyledText>
-                          </View>
-                        </View>
-                      }
                       onPress={() => {
                         this.props.navigation.navigate('TableEdit', {
                           tableId: tbl.tableId,
@@ -163,23 +156,28 @@ class TableLayouts extends React.Component {
                       }}
                       bottomDivider
                       containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
-                    />
+                    >
+                      <View style={[styles.tableRowContainer]}>
+                        <View style={[styles.tableCellView]}>
+                          <StyledText>{tbl.tableName}</StyledText>
+                        </View>
+                      </View>
+                    </ListItem>
                   ))}
                   {tblLayout.tables.length === 0 && (
                     <ListItem
-                      title={
-                        <View style={[styles.tableRowContainer]}>
-                          <View style={[styles.tableCellView]}>
-                            <StyledText>({t('empty')})</StyledText>
-                          </View>
-                        </View>
-                      }
                       onPress={() => {
 
                       }}
                       bottomDivider
                       containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: customBackgroundColor},]}
-                    />
+                    >
+                      <View style={[styles.tableRowContainer]}>
+                        <View style={[styles.tableCellView]}>
+                          <StyledText>({t('empty')})</StyledText>
+                        </View>
+                      </View>
+                    </ListItem>
                   )}
                 </List>
               </Accordion.Panel>

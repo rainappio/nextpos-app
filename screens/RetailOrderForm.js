@@ -698,37 +698,35 @@ class RetailOrderForm extends React.Component {
                                                 map.get('pinned').map(prd => (
                                                     <ListItem
                                                         key={prd.id}
-                                                        title={
-                                                            <View style={[styles.tableRowContainer]}>
-                                                                <View style={[styles.tableCellView, styles.flex(1)]}>
-                                                                    <StyledText>{prd.name}</StyledText>
-                                                                    {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
-                                                                </View>
-                                                                <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
-                                                                    <StyledText>${prd.price}</StyledText>
-                                                                </View>
-                                                            </View>
-                                                        }
                                                         onPress={() => this.addItemToOrder(prd.id)}
                                                         bottomDivider
                                                         containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
-                                                    />
+                                                    >
+                                                      <View style={[styles.tableRowContainer]}>
+                                                        <View style={[styles.tableCellView, styles.flex(1)]}>
+                                                          <StyledText>{prd.name}</StyledText>
+                                                          {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
+                                                        </View>
+                                                        <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
+                                                          <StyledText>${prd.price}</StyledText>
+                                                        </View>
+                                                      </View>
+                                                    </ListItem>
                                                 ))}
                                             {map.get('pinned') !== undefined &&
                                                 map.get('pinned').length === 0 && (
                                                     <ListItem
-                                                        title={
-                                                            <View style={[styles.tableRowContainer]}>
-                                                                <View style={[styles.tableCellView, styles.flex(1)]}>
-                                                                    <StyledText>({t('empty')})</StyledText>
-
-                                                                </View>
-
-                                                            </View>
-                                                        }
                                                         bottomDivider
                                                         containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
-                                                    />
+                                                    >
+                                                      <View style={[styles.tableRowContainer]}>
+                                                        <View style={[styles.tableCellView, styles.flex(1)]}>
+                                                          <StyledText>({t('empty')})</StyledText>
+
+                                                        </View>
+
+                                                      </View>
+                                                    </ListItem>
                                                 )}
                                         </List>
                                     </Accordion.Panel>
@@ -742,37 +740,35 @@ class RetailOrderForm extends React.Component {
                                                 {map.get(lbl.label).map(prd => (
                                                     <ListItem
                                                         key={prd.id}
-                                                        title={
-                                                            <View style={[styles.tableRowContainer]}>
-                                                                <View style={[styles.tableCellView, styles.flex(1)]}>
-                                                                    <StyledText>{prd.name}</StyledText>
-                                                                    {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
-                                                                </View>
-                                                                <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
-                                                                    <StyledText>${prd.price}</StyledText>
-                                                                </View>
-                                                            </View>
-                                                        }
                                                         onPress={() => this.addItemToOrder(prd.id)}
                                                         bottomDivider
                                                         containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
-                                                    />
+                                                    >
+                                                      <View style={[styles.tableRowContainer]}>
+                                                        <View style={[styles.tableCellView, styles.flex(1)]}>
+                                                          <StyledText>{prd.name}</StyledText>
+                                                          {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
+                                                        </View>
+                                                        <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
+                                                          <StyledText>${prd.price}</StyledText>
+                                                        </View>
+                                                      </View>
+                                                    </ListItem>
                                                 ))}
                                                 {map.get(lbl.label) !== undefined &&
                                                     map.get(lbl.label).length === 0 && (
                                                         <ListItem
-                                                            title={
-                                                                <View style={[styles.tableRowContainer]}>
-                                                                    <View style={[styles.tableCellView, styles.flex(1)]}>
-                                                                        <StyledText>({t('empty')})</StyledText>
-
-                                                                    </View>
-
-                                                                </View>
-                                                            }
                                                             bottomDivider
                                                             containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
-                                                        />
+                                                        >
+                                                          <View style={[styles.tableRowContainer]}>
+                                                            <View style={[styles.tableCellView, styles.flex(1)]}>
+                                                              <StyledText>({t('empty')})</StyledText>
+
+                                                            </View>
+
+                                                          </View>
+                                                        </ListItem>
                                                     )}
                                             </List>
                                         </Accordion.Panel>
@@ -786,36 +782,34 @@ class RetailOrderForm extends React.Component {
                                                 map.get('ungrouped').map(prd => (
                                                     <ListItem
                                                         key={prd.id}
-                                                        title={
-                                                            <View style={[styles.tableRowContainer]}>
-                                                                <View style={[styles.tableCellView, styles.flex(1)]}>
-                                                                    <StyledText>{prd.name}</StyledText>
-                                                                    {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
-                                                                </View>
-                                                                <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
-                                                                    <StyledText>${prd.price}</StyledText>
-                                                                </View>
-                                                            </View>
-                                                        }
                                                         onPress={() => this.addItemToOrder(prd.id)}
                                                         bottomDivider
                                                         containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
-                                                    />
+                                                    >
+                                                      <View style={[styles.tableRowContainer]}>
+                                                        <View style={[styles.tableCellView, styles.flex(1)]}>
+                                                          <StyledText>{prd.name}</StyledText>
+                                                          {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
+                                                        </View>
+                                                        <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
+                                                          <StyledText>${prd.price}</StyledText>
+                                                        </View>
+                                                      </View>
+                                                    </ListItem>
                                                 ))}
                                             {(map.get('ungrouped') === undefined || map.get('ungrouped').length === 0) && (
                                                 <ListItem
-                                                    title={
-                                                        <View style={[styles.tableRowContainer]}>
-                                                            <View style={[styles.tableCellView, styles.flex(1)]}>
-                                                                <StyledText>({t('empty')})</StyledText>
-
-                                                            </View>
-
-                                                        </View>
-                                                    }
                                                     bottomDivider
                                                     containerStyle={[styles.dynamicVerticalPadding(10), {backgroundColor: themeStyle.backgroundColor}]}
-                                                />
+                                                >
+                                                  <View style={[styles.tableRowContainer]}>
+                                                    <View style={[styles.tableCellView, styles.flex(1)]}>
+                                                      <StyledText>({t('empty')})</StyledText>
+
+                                                    </View>
+
+                                                  </View>
+                                                </ListItem>
                                             )}
                                         </List>
                                     </Accordion.Panel>

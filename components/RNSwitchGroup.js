@@ -39,23 +39,23 @@ class RNSwitchGroup extends Component {
         ca !== 'BASE' &&
         <ListItem
           key={ix}
-          title={
-            <View style={[styles.tableRowContainer]}>
-              <View style={[styles.tableCellView, { flex: 1 }]}>
-                <StyledText>{t(labels[ca])}</StyledText>
-              </View>
-              <View style={[styles.tableCellView, styles.justifyRight]}>
-                <Switch
-                  onValueChange={onChange}
-                  value={value.includes(ca)}
-                  {...otherInput}
-                  {...rest}
-                />
-              </View>
-            </View>}
           bottomDivider
           containerStyle={[styles.dynamicVerticalPadding(12), { padding: 0, backgroundColor: themeStyle.backgroundColor }]}
-        />
+        >
+          <View style={[styles.tableRowContainer]}>
+            <View style={[styles.tableCellView, { flex: 1 }]}>
+              <StyledText>{t(labels[ca])}</StyledText>
+            </View>
+            <View style={[styles.tableCellView, styles.justifyRight]}>
+              <Switch
+                onValueChange={onChange}
+                value={value.includes(ca)}
+                {...otherInput}
+                {...rest}
+              />
+            </View>
+          </View>
+        </ListItem>
       )
     })
     return (

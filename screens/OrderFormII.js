@@ -1466,27 +1466,6 @@ class OrderFormII extends React.Component {
                         map.get('pinned').map(prd => (
                           <ListItem
                             key={prd.id}
-                            title={
-                              <View style={[styles.tableRowContainer]}>
-                                <View style={[styles.tableCellView, styles.flex(1)]}>
-                                  <StyledText>{prd.name}</StyledText>
-                                  {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
-                                  {!!prd.hasOptions &&
-                                    <StyledText style={{paddingLeft: 8}}>
-                                      <Icon name='more' size={20} color={customMainThemeColor} />
-                                    </StyledText>
-                                  }
-                                  {!!prd.comboProduct &&
-                                    <StyledText style={{paddingLeft: 8}}>
-                                      <Icon name='basket-unfill' size={20} color={customMainThemeColor} />
-                                    </StyledText>
-                                  }
-                                </View>
-                                <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
-                                  <StyledText>${prd.price}</StyledText>
-                                </View>
-                              </View>
-                            }
                             onPress={() => {
                               if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
                                 warningMessage(t('order.unableEditPayingOrder'))
@@ -1496,23 +1475,40 @@ class OrderFormII extends React.Component {
                             }}
                             bottomDivider
                             containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
-                          />
+                          >
+                            <View style={[styles.tableRowContainer]}>
+                              <View style={[styles.tableCellView, styles.flex(1)]}>
+                                <StyledText>{prd.name}</StyledText>
+                                {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
+                                {!!prd.hasOptions &&
+                                <StyledText style={{paddingLeft: 8}}>
+                                  <Icon name='more' size={20} color={customMainThemeColor} />
+                                </StyledText>
+                                }
+                                {!!prd.comboProduct &&
+                                <StyledText style={{paddingLeft: 8}}>
+                                  <Icon name='basket-unfill' size={20} color={customMainThemeColor} />
+                                </StyledText>
+                                }
+                              </View>
+                              <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
+                                <StyledText>${prd.price}</StyledText>
+                              </View>
+                            </View>
+                          </ListItem>
                         ))}
                       {map.get('pinned') !== undefined &&
                         map.get('pinned').length === 0 && (
                           <ListItem
-                            title={
-                              <View style={[styles.tableRowContainer]}>
-                                <View style={[styles.tableCellView, styles.flex(1)]}>
-                                  <StyledText>({t('empty')})</StyledText>
-
-                                </View>
-
-                              </View>
-                            }
                             bottomDivider
                             containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
-                          />
+                          >
+                            <View style={[styles.tableRowContainer]}>
+                              <View style={[styles.tableCellView, styles.flex(1)]}>
+                                <StyledText>({t('empty')})</StyledText>
+                              </View>
+                            </View>
+                          </ListItem>
                         )}
                     </List>
                   </Accordion.Panel>
@@ -1529,27 +1525,6 @@ class OrderFormII extends React.Component {
                               return (
                                 <ListItem
                                   key={prd.id}
-                                  title={
-                                    <View style={[styles.tableRowContainer]}>
-                                      <View style={[styles.tableCellView, styles.flex(1)]}>
-                                        <StyledText>{prd.name}</StyledText>
-                                        {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
-                                        {!!prd.hasOptions &&
-                                          <StyledText style={{paddingLeft: 8}}>
-                                            <Icon name='more' size={20} color={customMainThemeColor} />
-                                          </StyledText>
-                                        }
-                                        {!!prd.comboProduct &&
-                                          <StyledText style={{paddingLeft: 8}}>
-                                            <Icon name='basket-unfill' size={20} color={customMainThemeColor} />
-                                          </StyledText>
-                                        }
-                                      </View>
-                                      <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
-                                        <StyledText>${prd.price}</StyledText>
-                                      </View>
-                                    </View>
-                                  }
                                   onPress={() => {
                                     if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
                                       warningMessage(t('order.unableEditPayingOrder'))
@@ -1559,25 +1534,44 @@ class OrderFormII extends React.Component {
                                   }}
                                   bottomDivider
                                   containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
-                                />
+                                >
+                                  <View style={[styles.tableRowContainer]}>
+                                    <View style={[styles.tableCellView, styles.flex(1)]}>
+                                      <StyledText>{prd.name}</StyledText>
+                                      {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
+                                      {!!prd.hasOptions &&
+                                      <StyledText style={{paddingLeft: 8}}>
+                                        <Icon name='more' size={20} color={customMainThemeColor} />
+                                      </StyledText>
+                                      }
+                                      {!!prd.comboProduct &&
+                                      <StyledText style={{paddingLeft: 8}}>
+                                        <Icon name='basket-unfill' size={20} color={customMainThemeColor} />
+                                      </StyledText>
+                                      }
+                                    </View>
+                                    <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
+                                      <StyledText>${prd.price}</StyledText>
+                                    </View>
+                                  </View>
+                                </ListItem>
                               )
                             }
                             )}
                             {map.get(lbl.label) !== undefined &&
                               map.get(lbl.label).length === 0 && (
                                 <ListItem
-                                  title={
-                                    <View style={[styles.tableRowContainer]}>
-                                      <View style={[styles.tableCellView, styles.flex(1)]}>
-                                        <StyledText>({t('empty')})</StyledText>
-
-                                      </View>
-
-                                    </View>
-                                  }
                                   bottomDivider
                                   containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
-                                />
+                                >
+                                  <View style={[styles.tableRowContainer]}>
+                                    <View style={[styles.tableCellView, styles.flex(1)]}>
+                                      <StyledText>({t('empty')})</StyledText>
+
+                                    </View>
+
+                                  </View>
+                                </ListItem>
                               )}
                           </List>
                         </Accordion.Panel>
@@ -1593,27 +1587,6 @@ class OrderFormII extends React.Component {
                         map.get('ungrouped').map(prd => (
                           <ListItem
                             key={prd.id}
-                            title={
-                              <View style={[styles.tableRowContainer]}>
-                                <View style={[styles.tableCellView, styles.flex(1)]}>
-                                  <StyledText>{prd.name}</StyledText>
-                                  {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
-                                  {!!prd.hasOptions &&
-                                    <StyledText style={{paddingLeft: 8}}>
-                                      <Icon name='more' size={20} color={customMainThemeColor} />
-                                    </StyledText>
-                                  }
-                                  {!!prd.comboProduct &&
-                                    <StyledText style={{paddingLeft: 8}}>
-                                      <Icon name='basket-unfill' size={20} color={customMainThemeColor} />
-                                    </StyledText>
-                                  }
-                                </View>
-                                <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
-                                  <StyledText>${prd.price}</StyledText>
-                                </View>
-                              </View>
-                            }
                             onPress={() => {
                               if (order.state === 'PAYMENT_IN_PROCESS' || order.state === 'COMPLETED') {
                                 warningMessage(t('order.unableEditPayingOrder'))
@@ -1623,22 +1596,39 @@ class OrderFormII extends React.Component {
                             }}
                             bottomDivider
                             containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
-                          />
+                          >
+                            <View style={[styles.tableRowContainer]}>
+                              <View style={[styles.tableCellView, styles.flex(1)]}>
+                                <StyledText>{prd.name}</StyledText>
+                                {!!prd?.description && <StyledText>  ({prd?.description})</StyledText>}
+                                {!!prd.hasOptions &&
+                                <StyledText style={{paddingLeft: 8}}>
+                                  <Icon name='more' size={20} color={customMainThemeColor} />
+                                </StyledText>
+                                }
+                                {!!prd.comboProduct &&
+                                <StyledText style={{paddingLeft: 8}}>
+                                  <Icon name='basket-unfill' size={20} color={customMainThemeColor} />
+                                </StyledText>
+                                }
+                              </View>
+                              <View style={[styles.tableCellView, styles.flex(1), styles.justifyRight]}>
+                                <StyledText>${prd.price}</StyledText>
+                              </View>
+                            </View>
+                          </ListItem>
                         ))}
                       {(map.get('ungrouped') === undefined || map.get('ungrouped').length === 0) && (
                         <ListItem
-                          title={
-                            <View style={[styles.tableRowContainer]}>
-                              <View style={[styles.tableCellView, styles.flex(1)]}>
-                                <StyledText>({t('empty')})</StyledText>
-
-                              </View>
-
-                            </View>
-                          }
                           bottomDivider
                           containerStyle={[styles.dynamicVerticalPadding(10), styles.customBorderAndBackgroundColor(this.context)]}
-                        />
+                        >
+                          <View style={[styles.tableRowContainer]}>
+                            <View style={[styles.tableCellView, styles.flex(1)]}>
+                              <StyledText>({t('empty')})</StyledText>
+                            </View>
+                          </View>
+                        </ListItem>
                       )}
                     </List>
                   </Accordion.Panel>
