@@ -108,7 +108,7 @@ class UserTimeCards extends React.Component {
               {timecard.hours}&nbsp;{t('timecard.hours')}&nbsp;{timecard.minutes}&nbsp;{t('timecard.minutes')}
             </StyledText>
           </View>
-          <View style={[styles.tableCellView, {flex: 1.2, justifyContent: 'flex-end'}]}>
+          {/*<View style={[styles.tableCellView, {flex: 1.2, justifyContent: 'flex-end'}]}>
             <StyledText>
               {timecard?.arriveLateMinutes ?? '0'}{t('minute')}
             </StyledText>
@@ -117,7 +117,7 @@ class UserTimeCards extends React.Component {
             <StyledText>
               {timecard?.leaveEarlyMinutes ?? '0'}{t('minute')}
             </StyledText>
-          </View>
+          </View>*/}
         </View>
       )
     }
@@ -164,7 +164,7 @@ class UserTimeCards extends React.Component {
             <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-start'}]}>
               <Text style={[styles?.sectionBarText(customMainThemeColor)]}>{t('totalHr')}</Text>
             </View>
-            <View style={[styles.tableCellView, {flex: 1.2, justifyContent: 'flex-end'}]}>
+            {/*<View style={[styles.tableCellView, {flex: 1.2, justifyContent: 'flex-end'}]}>
               <Text style={styles?.sectionBarText(customMainThemeColor)}>
                 {t('arriveLateMinutes')}
               </Text>
@@ -173,7 +173,7 @@ class UserTimeCards extends React.Component {
               <Text style={styles?.sectionBarText(customMainThemeColor)}>
                 {t('leaveEarlyMinutes')}
               </Text>
-            </View>
+            </View>*/}
           </View>
 
 

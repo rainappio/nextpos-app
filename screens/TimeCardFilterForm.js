@@ -60,14 +60,16 @@ class TimeCardFilterForm extends React.Component {
               {t('action.search')}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{flex: 1, marginLeft: 5, marginRight: 4}}
-            onPress={() => handleExport()}
-          >
-            <Text style={[styles?.searchButton(customMainThemeColor)]}>
-              {t('timecard.export')}
-            </Text>
-          </TouchableOpacity>
+          {handleExport !== undefined && (
+            <TouchableOpacity
+              style={{flex: 1, marginLeft: 5, marginRight: 4}}
+              onPress={() => handleExport()}
+            >
+              <Text style={[styles?.searchButton(customMainThemeColor)]}>
+                {t('timecard.export')}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     )
