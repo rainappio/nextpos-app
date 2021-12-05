@@ -337,9 +337,21 @@ const zh = {
     secColTitle: '總班數',
     thirdColTitle: '總時數',
     hours: '小時',
-    minutes: '分鐘',
+    minutes: '分',
     export: '匯出',
-    exportSuccess: '打卡記錄已寄送到您的信箱'
+    exportSuccess: '打卡記錄已寄送到您的信箱',
+    actualWorkingHours: '實際小時',
+    actualWorkingMinutes: '實際分鐘',
+    updateWorkingTime: '更新工時',
+
+    userTimeCardTitle: '職員打卡',
+    timeCardDate: '打卡日期',
+    timeCardTime: '上班/下班時間',
+    day: '值班',
+    totalHours: '總時數',
+    actualHours: '實際時數',
+    arriveLateMinutes: '遲到時數',
+    leaveEarlyMinutes: '早退時數'
   },
   shift: {
     closeShift: '關帳',

@@ -135,7 +135,7 @@ class StoreFormScreen extends Component {
   componentDidMount() {
     const client = this.props.initialValues
 
-    console.log("client data : ", client)
+    console.trace("client data", client)
 
     if (client.attributes !== undefined) {
       switch (client.attributes.TABLE_AVAILABILITY_DISPLAY) {

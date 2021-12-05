@@ -84,7 +84,10 @@ export const api = {
     getById: id => {
       return `${apiRoot}/timecards/${id}`
     },
-    export: `${apiRoot}/timecards/export`
+    export: `${apiRoot}/timecards/export`,
+    updateWorkingTime: id => {
+      return `${apiRoot}/timecards/${id}/workingTime`
+    }
   },
   inventory: {
     new: `${apiRoot}/inventories`,

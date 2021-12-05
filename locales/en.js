@@ -339,7 +339,19 @@ const en = {
     hours: 'hours',
     minutes: 'mins',
     export: 'Export',
-    exportSuccess: 'User Time Card has been sent to your email'
+    exportSuccess: 'User Time Card has been sent to your email',
+    actualWorkingHours: 'Actual Hours',
+    actualWorkingMinutes: 'Actual Minutes',
+    updateWorkingTime: 'Update Working Time',
+
+    userTimeCardTitle: 'User Time Cards',
+    timeCardDate: 'Date',
+    timeCardTime: 'Time',
+    day: 'Shift',
+    totalHours: 'Total Hours',
+    actualHours: 'Actual Hours',
+    arriveLateMinutes: 'Arrive Late Minutes',
+    leaveEarlyMinutes: 'Leave Early Minutes'
   },
   shift: {
     closeShift: 'Close Shift',

@@ -181,7 +181,7 @@ export default class App extends React.Component {
       const themeStyle = theme === 'light' ? themes.light : themes.dark
       const reverseThemeStyle = theme === 'light' ? {...themes.light, borderColor: 'black'} : themes.light
       const isTablet = await Device.getDeviceTypeAsync();// 1=PHONE 2=TABLET
-      this.changeScreenOrientation(isTablet);
+      await this.changeScreenOrientation(isTablet);
       const colorScheme = Appearance.getColorScheme();
 
       this.setState({
