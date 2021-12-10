@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {clearProduct, getOrdersByDateRange, getTablesAvailable, getTableLayouts} from '../actions'
+import {clearProduct, getTablesAvailable, getTableLayouts} from '../actions'
 import OrderForm from './OrderForm'
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -118,7 +118,6 @@ const mapDispatchToProps = dispatch => ({
   clearProduct: () => dispatch(clearProduct()),
   getTableLayouts: () => dispatch(getTableLayouts()),
   getTablesAvailable: () => dispatch(getTablesAvailable()),
-  getOrdersByDateRange: () => dispatch(getOrdersByDateRange())
 })
 export default connect(
   mapStateToProps,

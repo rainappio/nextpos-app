@@ -337,9 +337,21 @@ const zh = {
     secColTitle: '總班數',
     thirdColTitle: '總時數',
     hours: '小時',
-    minutes: '分鐘',
+    minutes: '分',
     export: '匯出',
-    exportSuccess: '打卡記錄已寄送到您的信箱'
+    exportSuccess: '打卡記錄已寄送到您的信箱',
+    actualWorkingHours: '實際小時',
+    actualWorkingMinutes: '實際分鐘',
+    updateWorkingTime: '更新工時',
+
+    userTimeCardTitle: '職員打卡',
+    timeCardDate: '打卡日期',
+    timeCardTime: '上班/下班時間',
+    day: '值班',
+    totalHours: '總時數',
+    actualHours: '實際時數',
+    arriveLateMinutes: '遲到時數',
+    leaveEarlyMinutes: '早退時數'
   },
   shift: {
     closeShift: '關帳',
@@ -488,7 +500,8 @@ const zh = {
       outOfStock: '選擇的產品已無庫存',
       inactiveOffer: '目前選用的促銷未啟用',
       operationNotAllowed: '該項目不可選取',
-      moveNotAllowed: '品項不可移至結帳中的桌位'
+      moveNotAllowed: '品項不可移至結帳中的桌位',
+      orderClosed: '此訂單正在結帳中.'
     }
   },
   eInvoice: {

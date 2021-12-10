@@ -14,7 +14,7 @@ export const handleRefreshToken = async () => {
 
   const auth = 'Basic ' + btoa(clientUsername + ':' + clientPassword)
 
-  let response = await fetch(api.getAuthToken, {
+  const response = await fetch(api.getAuthToken, {
     method: 'POST',
     withCredentials: true,
     credentials: 'include',
@@ -33,7 +33,7 @@ export const handleRefreshToken = async () => {
     await AsyncStorage.setItem(storage.clientUsername, clientUsername)
     await AsyncStorage.setItem(storage.clientPassword, clientPassword)
 
-    let res = await response.json()
+    const res = await response.json()
     const loggedIn = new Date()
     res.loggedIn = loggedIn
     res.tokenExp = new Date().setSeconds(

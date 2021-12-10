@@ -169,9 +169,9 @@ export default class App extends React.Component {
   //if isTablet===2:keep screen in landscape mode; else:keep screen in portrait mode
   changeScreenOrientation = async (isTablet) => {
     if (isTablet === 2) {
-      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
     } else {
-      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     }
   }
 
@@ -181,7 +181,13 @@ export default class App extends React.Component {
       const themeStyle = theme === 'light' ? themes.light : themes.dark
       const reverseThemeStyle = theme === 'light' ? {...themes.light, borderColor: 'black'} : themes.light
       const isTablet = await Device.getDeviceTypeAsync();// 1=PHONE 2=TABLET
-      this.changeScreenOrientation(isTablet);
+
+      try {
+        await this.changeScreenOrientation(isTablet);
+      } catch(e) {
+        console.error(e)
+      }
+
       const colorScheme = Appearance.getColorScheme();
 
       this.setState({

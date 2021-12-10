@@ -39,7 +39,6 @@ class TablesScreen extends React.Component {
     header: null
   }
   static contextType = LocaleContext
-  _isMounted = false;
 
   constructor(props, context) {
     super(props, context)
@@ -67,21 +66,13 @@ class TablesScreen extends React.Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
+    this._loadInfo = this.props.navigation.addListener('focus', async () => {
+      await this.loadInfo()
+    })
 
-    if (this._isMounted) {
-      this.loadInfo()
-      this._loadInfo = this.props.navigation.addListener('focus', async () => {
-        await this.loadInfo()
-      })
-    }
   }
   componentWillUnmount() {
-    this._isMounted = false
     this._loadInfo()
-    this.setState = (state, callback) => {
-      return
-    }
   }
 
   loadInfo = () => {
@@ -612,10 +603,10 @@ class TablesScreen extends React.Component {
             }
           >
             <RealTimeOrderUpdate
-              topics={`/topic/inflightOrders/${client?.id}`}
-              handleOnMessage={this.handleOnMessage}
-              id={client?.id}
-            />
+                topics={`/topic/inflightOrders/${client?.id}`}
+                handleOnMessage={this.handleOnMessage}
+                id={client?.id}
+              />
 
             <View style={styles.fullWidthScreen}>
               <ScreenHeader backNavigation={false}

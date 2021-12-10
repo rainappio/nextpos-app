@@ -60,11 +60,7 @@ class PaymentFormScreenTablet extends React.Component {
     }
 
     componentDidMount() {
-        this.props.getCurrentClient()
-        this.props.getfetchglobalOrderOffers()
-        this.props.getOrder(this.props.order.orderId)
-        this.setState({waiveServiceCharge: this.props.order?.serviceCharge === 0})
-        this._initScreen = this.props.navigation.addListener('focus', async () => {
+      this._initScreen = this.props.navigation.addListener('focus', async () => {
             await this.initScreen()
         })
     }
@@ -86,16 +82,15 @@ class PaymentFormScreenTablet extends React.Component {
     }
 
     refreshOrder = async () => {
-        this.props.getfetchglobalOrderOffers()
         this.props.getOrder(this.props.order.orderId)
         this.setState({openDiscountKeyBoard: false})
-
     }
 
     initScreen = async () => {
-        await this.props.getfetchglobalOrderOffers()
-        await this.props.getOrder(this.props.order.orderId)
-        this.setState({openDiscountKeyBoard: false, waiveServiceCharge: this.props.order?.serviceCharge === 0})
+      await this.props.getCurrentClient()
+      await this.props.getfetchglobalOrderOffers()
+      await this.props.getOrder(this.props.order.orderId)
+      this.setState({openDiscountKeyBoard: false, waiveServiceCharge: this.props.order?.serviceCharge === 0})
     }
 
     handleFlashDiscount = (count = 0) => {

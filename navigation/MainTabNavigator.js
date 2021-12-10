@@ -111,6 +111,7 @@ import ReservationSetting from '../screens/ReservationSetting'
 import {LocaleContext} from '../locales/LocaleContext'
 import ReservationUpcomingScreen from '../screens/ReservationUpcomingScreen'
 import ActuatorScreen from '../screens/ActuatorScreen'
+import UserTimeCardDetails from "../screens/UserTimeCardDetails";
 
 
 const Tab = createBottomTabNavigator();
@@ -260,6 +261,7 @@ const ReportsStack = () => {
       <Stack.Screen name="SalesCharts" component={SalesCharts} />
       <Stack.Screen name="StaffTimeCard" component={StaffTimeCard} />
       <Stack.Screen name="UserTimeCards" component={UserTimeCards} />
+      <Stack.Screen name="UserTimeCardDetails" component={UserTimeCardDetails} />
       <Stack.Screen name="CustomerStats" component={CustomerStats} />
       <Stack.Screen name="ShiftHistory" component={ShiftHistory} />
       <Stack.Screen name="ShiftDetails" component={ShiftDetails} />
@@ -446,7 +448,7 @@ const BottomTab = () => {
           NavigationService?.navigateToRoute('Roster', {screen: 'CalendarScreen'}, null)
         } else if (route.name === 'Settings') {
           navigation.navigate('SettingScr')
-          if (route?.state == undefined) {
+          if (route?.state === undefined) {
             // when navigate by account in LoginSuccess, reset stack
             navigation.reset({index: 0, routes: [{'name': 'SettingScr'}]})
           }

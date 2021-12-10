@@ -49,9 +49,7 @@ class StaffEditScreen extends Component {
         this.props.navigation.navigate('StaffsOverview')
         this.props.getClientUsrs()
       }
-    ).then(() => {
-      //handleRefreshToken().then()
-    })
+    ).then()
   }
 
   getClientUsr = async (name) => {

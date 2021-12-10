@@ -3,7 +3,7 @@ import {reduxForm, Field} from 'redux-form'
 import {Alert, ScrollView, Text, TouchableOpacity, View, StyleSheet, Dimensions, PixelRatio, Platform} from 'react-native'
 import {connect} from 'react-redux'
 import {Accordion, List} from '@ant-design/react-native'
-import {getLables, getProducts, getProductsDetail, clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange, getTimeDifference, getPrinters} from '../actions'
+import {getLables, getProducts, getProductsDetail, clearOrder, getOrder, getTimeDifference, getPrinters} from '../actions'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -1709,8 +1709,6 @@ const mapDispatchToProps = (dispatch, props) => ({
   getLables: () => dispatch(getLables()),
   getProductsDetail: () => dispatch(getProductsDetail()),
   getOrder: () => dispatch(getOrder(props.route.params.orderId)),
-  getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
-  getOrdersByDateRange: () => dispatch(getOrdersByDateRange()),
   clearOrder: () => dispatch(clearOrder(props.route.params.orderId)),
   getPrinters: () => dispatch(getPrinters()),
 })

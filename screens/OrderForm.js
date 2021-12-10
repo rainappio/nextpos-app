@@ -99,16 +99,19 @@ class OrderForm extends Component {
   }
 
   formReSize = (to) => {
-    this.setState({isAnimating: true})
-    Animated.timing(this.state.rightFormSize, {
-      toValue: to,
-      duration: 500,
-      useNativeDriver: false
-    }).start((done) => {
-      if (done.finished) {
-        this.setState({isAnimating: false})
-      }
-    })
+    if (this.state.isTablet) {
+      this.setState({isAnimating: true})
+      console.log('resize')
+      Animated.timing(this.state.rightFormSize, {
+        toValue: to,
+        duration: 500,
+        useNativeDriver: false
+      }).start((done) => {
+        if (done.finished) {
+          this.setState({isAnimating: false})
+        }
+      })
+    }
   }
 
   handleAgeGroupSelection = (index) => {

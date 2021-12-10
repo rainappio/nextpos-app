@@ -21,37 +21,12 @@ class UserTimeCards extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    context.localize({
-      en: {
-        timeCardDate: 'Date',
-        timeCardTime: 'Time',
-        userTimeCardTitle: "User Time Cards",
-        day: "Shift",
-        totalHr: "Total Hours",
-        arriveLateMinutes: 'Arrive Late Minutes',
-        leaveEarlyMinutes: 'Leave Early Minutes',
-        minute: 'min'
-      },
-      zh: {
-        timeCardDate: '打卡日期',
-        timeCardTime: '上班/下班時間',
-        userTimeCardTitle: "職員打卡",
-        day: "值班",
-        totalHr: "總時數",
-        arriveLateMinutes: '遲到時數',
-        leaveEarlyMinutes: '早退時數',
-        minute: '分'
-      }
-    })
-
     this.state = {
       timecardId: null,
       selectedYear: props.route.params?.year,
       selectedMonth: props.route.params?.month,
     }
   }
-
-
 
   handleFilter = (values) => {
     const month = values.month;
@@ -73,42 +48,57 @@ class UserTimeCards extends React.Component {
     const year = this.props.route.params?.year
     const month = this.props.route.params?.month
 
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.props.getUserTimeCards(username, year, month)
+    });
+  }
 
-    this.props.getUserTimeCards(username, year, month)
+  componentWillUnmount() {
+    this._unsubscribe()
   }
 
   render() {
     const {t, customMainThemeColor} = this.context
     const {usertimeCards, haveData, haveError, loading, timeCard} = this.props
 
-    Item = ({timecard}) => {
+    const Item = ({timecard}) => {
       const active = timecard.timeCardStatus === 'ACTIVE'
-      console.log('timecard', timecard)
 
       return (
-        <View
-          style={styles.tableRowContainerWithBorder}
-
+        <TouchableOpacity
+          //style={styles.tableRowContainerWithBorder}
+          onPress={() => {
+            this.props.navigation.navigate('UserTimeCardDetails', {
+              timeCardId: timecard.id
+            })
+          }}
         >
-          <View style={[styles.tableCellView, {flex: 3.2, alignItems: 'flex-start'}]}>
-            <StyledText style={{fontWeight: active ? 'bold' : 'normal'}}>
-              {normalizeTimeString(timecard?.clockIn, 'YYYY/MM/DD dd')}
-            </StyledText>
+          <View style={styles.tableRowContainerWithBorder}>
+            <View style={[styles.tableCellView, {flex: 2.5, alignItems: 'flex-start'}]}>
+              <StyledText style={{fontWeight: active ? 'bold' : 'normal'}}>
+                {normalizeTimeString(timecard?.clockIn, 'YYYY/MM/DD dd')}
+              </StyledText>
 
-          </View>
-          <View style={[styles.tableCellView, {flex: 3, alignItems: 'flex-start'}]}>
-            <StyledText style={{fontWeight: active ? 'bold' : 'normal'}}>
-              {normalizeTimeString(timecard?.clockIn, 'hh:mm')}~{!!timecard?.clockOut && normalizeTimeString(timecard?.clockOut, 'hh:mm')}
-            </StyledText>
+            </View>
+            <View style={[styles.tableCellView, {flex: 3, alignItems: 'flex-start'}]}>
+              <StyledText style={{fontWeight: active ? 'bold' : 'normal'}}>
+                {normalizeTimeString(timecard?.clockIn, 'hh:mm')}~{!!timecard?.clockOut && normalizeTimeString(timecard?.clockOut, 'hh:mm')}
+              </StyledText>
 
-          </View>
+            </View>
 
-          <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-start'}]}>
-            <StyledText>
-              {timecard.hours}&nbsp;{t('timecard.hours')}&nbsp;{timecard.minutes}&nbsp;{t('timecard.minutes')}
-            </StyledText>
-          </View>
-          {/*<View style={[styles.tableCellView, {flex: 1.2, justifyContent: 'flex-end'}]}>
+            <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-start'}]}>
+              <StyledText>
+                {timecard.hours}&nbsp;{t('timecard.hours')}&nbsp;{timecard.minutes}&nbsp;{t('timecard.minutes')}
+              </StyledText>
+            </View>
+
+            <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-start'}]}>
+              <StyledText>
+                {timecard.actualWorkingHours}&nbsp;{t('timecard.hours')}&nbsp;{timecard.actualWorkingMinutes}&nbsp;{t('timecard.minutes')}
+              </StyledText>
+            </View>
+            {/*<View style={[styles.tableCellView, {flex: 1.2, justifyContent: 'flex-end'}]}>
             <StyledText>
               {timecard?.arriveLateMinutes ?? '0'}{t('minute')}
             </StyledText>
@@ -118,7 +108,8 @@ class UserTimeCards extends React.Component {
               {timecard?.leaveEarlyMinutes ?? '0'}{t('minute')}
             </StyledText>
           </View>*/}
-        </View>
+          </View>
+        </TouchableOpacity>
       )
     }
 
@@ -132,7 +123,7 @@ class UserTimeCards extends React.Component {
         <View style={styles.fullWidthScreen}>
           <ScreenHeader backNavigation={true}
             parentFullScreen={true}
-            title={t('userTimeCardTitle')}
+            title={t('timecard.userTimeCardTitle')}
           />
 
           <View>
@@ -148,21 +139,24 @@ class UserTimeCards extends React.Component {
           />
 
           <View style={[styles.sectionBar]}>
-            <View style={[styles.tableCellView, {flex: 3.2, alignItems: 'flex-start'}]}>
+            <View style={[styles.tableCellView, {flex: 2.5, alignItems: 'flex-start'}]}>
               <Text style={styles?.sectionBarText(customMainThemeColor)}>
-                {t('timeCardDate')}
+                {t('timecard.timeCardDate')}
               </Text>
 
             </View>
             <View style={[styles.tableCellView, {flex: 3, alignItems: 'flex-start'}]}>
               <Text style={styles?.sectionBarText(customMainThemeColor)}>
-                {t('timeCardTime')}
+                {t('timecard.timeCardTime')}
               </Text>
-
             </View>
 
             <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-start'}]}>
-              <Text style={[styles?.sectionBarText(customMainThemeColor)]}>{t('totalHr')}</Text>
+              <Text style={[styles?.sectionBarText(customMainThemeColor)]}>{t('timecard.totalHours')}</Text>
+            </View>
+
+            <View style={[styles.tableCellView, {flex: 2, justifyContent: 'flex-start'}]}>
+              <Text style={[styles?.sectionBarText(customMainThemeColor)]}>{t('timecard.actualHours')}</Text>
             </View>
             {/*<View style={[styles.tableCellView, {flex: 1.2, justifyContent: 'flex-end'}]}>
               <Text style={styles?.sectionBarText(customMainThemeColor)}>

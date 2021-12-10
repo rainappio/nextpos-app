@@ -2,7 +2,7 @@ import React from 'react'
 import {Alert, Text, TouchableOpacity, View, Switch} from 'react-native'
 import {SwipeListView} from 'react-native-swipe-list-view'
 import {connect} from 'react-redux'
-import {clearOrder, getfetchOrderInflights, getOrder, getOrdersByDateRange} from '../actions'
+import {clearOrder, getOrder} from '../actions'
 import AddBtn from '../components/AddBtn'
 import Icon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -326,9 +326,7 @@ class OrdersSummaryRow extends React.Component {
       defaultMessage: false
     }, response => {
       this.props.navigation.navigate('TablesScr')
-      this.props.getfetchOrderInflights()
       this.props.clearOrder(id)
-      this.props.getOrdersByDateRange()
     }).then()
   }
 
@@ -999,8 +997,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch, props) => ({
   clearOrder: () => dispatch(clearOrder(props.order.orderId)),
   getOrder: id => dispatch(getOrder(id)),
-  getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
-  getOrdersByDateRange: () => dispatch(getOrdersByDateRange()),
   getPrinters: () => dispatch(getPrinters()),
 })
 

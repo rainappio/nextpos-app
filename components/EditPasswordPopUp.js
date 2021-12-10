@@ -158,27 +158,6 @@ class EditPasswordPopUpBase extends Component {
 
   }
 
-  async componentDidMount() {
-    await this.checkGesturePassword()
-  }
-
-
-  checkGesturePassword = async (result = null) => {
-    try {
-      const value = await AsyncStorage.getItem(`gesturePassword_${this.props?.client?.id}`);
-      if (value !== null) {
-        this.setState({hasGesturePassword: true})
-        // We have data!!
-        console.log(value);
-
-      } else {
-        this.setState({hasGesturePassword: false})
-      }
-    } catch (error) {
-      // Error retrieving data
-    }
-  }
-
   getToken = async (password) => {
     const formData = new FormData()
     formData.append('grant_type', 'password')

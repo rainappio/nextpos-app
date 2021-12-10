@@ -84,7 +84,10 @@ export const api = {
     getById: id => {
       return `${apiRoot}/timecards/${id}`
     },
-    export: `${apiRoot}/timecards/export`
+    export: `${apiRoot}/timecards/export`,
+    updateWorkingTime: id => {
+      return `${apiRoot}/timecards/${id}/workingTime`
+    }
   },
   inventory: {
     new: `${apiRoot}/inventories`,
@@ -714,7 +717,7 @@ export const dispatchFetchRequestWithOption = async (
       console.trace(`Use client user token: ${useClientUserToken}`)
       let tokenObj = JSON.parse(token)
       if (tokenObj.tokenExp < Date.now()) {
-        newToken = await handleRefreshToken()
+        const newToken = await handleRefreshToken()
         tokenObj = newToken
       }
       payload.headers.Authorization = payload?.headers?.Authorization ?? `Bearer ${tokenObj.access_token}`

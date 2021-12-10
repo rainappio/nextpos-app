@@ -25,31 +25,35 @@ class RealTimeOrderUpdateBase extends Component {
       meta,
       topics,
       handleOnMessage,
-      id,
+      id
     } = this.props;
 
 
     return (
       <SockJsClient url={url} topics={[topics]}
-        onMessage={(data) => {
-          handleOnMessage(data, id)
-          console.log(`get device: ${Device.deviceName}-${Device.modelName}`)
-        }}
-        ref={(client) => {
-          this.orderFormRef = client
-        }}
-        onConnect={() => {
-          this.handleOnConnection(this.orderFormRef)
-          console.log(`onConnect: ${Device.osName}-${Device.osVersion}`)
-        }}
-        onDisconnect={() => {
-          console.log(`onDisconnect: ${Device.osName}-${Device.osVersion}`)
-        }}
-        debug={debugMode}
+                    onMessage={(data) => {
+                      handleOnMessage(data, id)
+                      console.log(`sockjs on message: ${Device.deviceName}-${Device.modelName}`)
+                    }}
+                    ref={(client) => {
+                      this.orderFormRef = client
+                    }}
+                    onConnect={() => {
+                      this.handleOnConnection(this.orderFormRef)
+                      console.log(`sockjs on connect: ${Device.osName}-${Device.osVersion}`)
+                    }}
+                    onDisconnect={() => {
+                      console.log(`sockjs on disconnect: ${Device.osName}-${Device.osVersion}`)
+                    }}
+                    onConnectFailure={() => {
+                      console.log(`sockjs on connectFailure`)
+                    }}
+                    debug={debugMode}
       />
     );
   }
-};
+}
+
 export const RealTimeOrderUpdate = RealTimeOrderUpdateBase
 
 
