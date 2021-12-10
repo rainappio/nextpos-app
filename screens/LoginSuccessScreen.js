@@ -7,7 +7,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import {Foundation} from '@expo/vector-icons';
-import {doLogout, formatDateObj, getAnnouncements, getClientUsr, getCurrentClient, getShiftStatus, getPrinters} from '../actions'
+import {formatDateObj, getAnnouncements, getClientUsr, getCurrentClient, getShiftStatus, getPrinters} from '../actions'
 import styles from '../styles'
 import BackendErrorScreen from './BackendErrorScreen'
 import {getToken, api, dispatchFetchRequestWithOption, successMessage, dispatchFetchRequest} from '../constants/Backend'
@@ -114,7 +114,7 @@ class LoginSuccessScreen extends React.Component {
     this.props.getAnnouncements()
     this.props.getShiftStatus()
 
-    console.log('token', JSON.stringify(token))
+    console.trace('token', JSON.stringify(token))
 
     this.setState({
       token: token,
@@ -123,7 +123,7 @@ class LoginSuccessScreen extends React.Component {
       tokenExpiry: token.tokenExp,
     })
 
-    checkExpoUpdate(this.context?.disableReload, this.context?.setDisableReload)
+    await checkExpoUpdate(this.context?.disableReload, this.context?.setDisableReload)
   }
 
 
@@ -229,7 +229,6 @@ class LoginSuccessScreen extends React.Component {
 
   render() {
     const {
-      doLogout,
       navigation,
       route,
       currentUser,
@@ -682,9 +681,6 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
   getCurrentClient: () => dispatch(getCurrentClient()),
   getCurrentUser: name => dispatch(getClientUsr(name)),
-  doLogout: () => {
-    dispatch(doLogout())
-  },
   getAnnouncements: () => dispatch(getAnnouncements()),
   getShiftStatus: () => dispatch(getShiftStatus()),
   getPrinters: () => dispatch(getPrinters()),

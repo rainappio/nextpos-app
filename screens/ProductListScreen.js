@@ -44,9 +44,6 @@ export const ProductListScreen = ({
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  doLogout: () => {
-    dispatch(doLogout())
-  }
 })
 
 export default connect(

@@ -2,7 +2,7 @@ import React from 'react'
 import {reduxForm, Field, formValueSelector} from 'redux-form'
 import {Alert, ScrollView, Text, TouchableOpacity, View, TouchableWithoutFeedback} from 'react-native'
 import {connect} from 'react-redux'
-import {getLables, getProducts, clearOrder, getfetchOrderInflights, getOrdersByDateRange, getOrder} from '../actions'
+import {getLables, getProducts, clearOrder, getOrder} from '../actions'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import LoadingScreen from "./LoadingScreen";
@@ -738,8 +738,6 @@ const mapDispatchToProps = (dispatch, props) => ({
     getLables: () => dispatch(getLables()),
     getProducts: () => dispatch(getProducts()),
     getOrder: (orderId) => dispatch(getOrder(orderId ?? props.route.params?.order?.orderId)),
-    getfetchOrderInflights: () => dispatch(getfetchOrderInflights()),
-    getOrdersByDateRange: () => dispatch(getOrdersByDateRange()),
     clearOrder: () => dispatch(clearOrder(props.route.params.orderId)),
 })
 

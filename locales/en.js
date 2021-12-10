@@ -500,7 +500,8 @@ const en = {
       outOfStock: 'The selected product is out of stock.',
       inactiveOffer: 'The resolved offer is not active',
       operationNotAllowed: 'The operation not allowed.',
-      moveNotAllowed: 'Moving line items are not allowed on settling or settled orders.'
+      moveNotAllowed: 'Moving line items are not allowed on settling or settled orders.',
+      orderClosed: 'Order is in payment state.'
     }
   },
   eInvoice: {

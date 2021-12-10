@@ -38,8 +38,6 @@ class ReservationUpcomingForm extends React.Component {
   }
   static contextType = LocaleContext
 
-  _isMounted = false
-
   constructor(props, context) {
     super(props, context)
 
@@ -82,22 +80,15 @@ class ReservationUpcomingForm extends React.Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
 
-    if (this._isMounted) {
-      this._refreshScreen = this.props.navigation.addListener('focus', () => {
-        this.getReservationEventsByTime(this.state.startDate, this.state.endDate, this.state.modeStatus)
-      })
-    }
-
+    this._refreshScreen = this.props.navigation.addListener('focus', () => {
+      this.refreshScreen()
+    })
   }
+
   componentWillUnmount() {
-    this._isMounted = false;
 
     this._refreshScreen()
-    this.setState = (state, callback) => {
-      return
-    }
   }
 
   refreshScreen = () => {
@@ -138,10 +129,8 @@ class ReservationUpcomingForm extends React.Component {
     let endDate = moment(`${currentDate} ${endHour}:00`).format('YYYY-MM-DDTHH:mm:ss')
     this.setState({startDate: startDate, endDate: endDate})
 
-    if (this._isMounted) {
-      this.getReservationEventsByTime(startDate, endDate, 'BOOKED, CONFIRMED, SEATED')
-      this.getReservationEventsByTime(startDate, endDate, 'WAITING, WAITING_CONFIRMED')
-    }
+    this.getReservationEventsByTime(startDate, endDate, 'BOOKED, CONFIRMED, SEATED')
+    this.getReservationEventsByTime(startDate, endDate, 'WAITING, WAITING_CONFIRMED')
   }
 
   getReservationEventsByTime = async (startDate, endDate, status) => {
@@ -497,7 +486,6 @@ class ReservationUpcomingForm extends React.Component {
       haveData,
       isLoading,
       tablelayouts,
-      ordersInflight,
       availableTables,
       handleSubmit,
       statusHeight,

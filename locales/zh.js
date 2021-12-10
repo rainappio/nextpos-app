@@ -500,7 +500,8 @@ const zh = {
       outOfStock: '選擇的產品已無庫存',
       inactiveOffer: '目前選用的促銷未啟用',
       operationNotAllowed: '該項目不可選取',
-      moveNotAllowed: '品項不可移至結帳中的桌位'
+      moveNotAllowed: '品項不可移至結帳中的桌位',
+      orderClosed: '此訂單正在結帳中.'
     }
   },
   eInvoice: {
