@@ -1,10 +1,6 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {Text, TouchableOpacity, View, StyleSheet} from 'react-native'
-import {StyledText} from "./StyledText";
+import React, {useContext} from 'react';
+import {Alert, Text, TouchableOpacity} from 'react-native'
 import styles from '../styles'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Button} from 'react-native-elements';
-import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 
 /*
@@ -14,7 +10,7 @@ import {LocaleContext} from '../locales/LocaleContext'
                 onPress={()=>{}}
                 title={string}
                 style={{}}
-                
+
 
 */
 export const BottomMainActionButton = (props) => {
@@ -44,17 +40,44 @@ export const MainActionButton = (props) => {
 }
 
 export const SecondActionButton = (props) => {
-    const {customMainThemeColor} = useContext(LocaleContext)
-    return (
-        <TouchableOpacity
-            onPress={props?.onPress ?? (() => console.warn('no onPress'))}
-            style={props?.containerStyle}
-        >
-            <Text style={props?.style ?? [styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(useContext(LocaleContext))]}>
-                {props?.title ?? 'Submit'}
-            </Text>
-        </TouchableOpacity>
-    )
+  const {customMainThemeColor, t} = useContext(LocaleContext)
+  const {confirmPrompt} = props
+  const onPress = props?.onPress ?? (() => console.warn('no onPress'))
+
+  const handlePress = () => {
+
+    if (!!confirmPrompt) {
+      Alert.alert(
+        `${t('action.confirmMessageTitle')}`,
+        `${t('action.confirmMessage')}`,
+        [
+          {
+            text: `${t('action.yes')}`,
+            onPress: () => onPress()
+          },
+          {
+            text: `${t('action.no')}`,
+            onPress: () => console.log('Cancelled'),
+            style: 'cancel'
+          }
+        ]
+      )
+    } else {
+      onPress()
+    }
+  }
+
+  return (
+    <TouchableOpacity
+      onPress={handlePress}
+      style={props?.containerStyle}
+    >
+      <Text
+        style={props?.style ?? [styles?.bottomActionButton(customMainThemeColor), styles?.secondActionButton(useContext(LocaleContext))]}>
+        {props?.title ?? 'Submit'}
+      </Text>
+    </TouchableOpacity>
+  )
 }
 
 export const MainActionFlexButton = (props) => {

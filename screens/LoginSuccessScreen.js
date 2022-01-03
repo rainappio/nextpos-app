@@ -671,7 +671,7 @@ const mapStateToProps = state => ({
   isLoading: state.clientuser.loading,
   getannouncements: state.announcements.data,
   shiftStatus: state.shift.data.shiftStatus,
-  shiftStatusLoading: state.shift.data.loading,
+  shiftStatusLoading: state.shift.loading,
   client: state.client.data,
   printers: state.printers.data.printers,
   order: state.order.data,

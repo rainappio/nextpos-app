@@ -19,7 +19,7 @@
       ]
     ],
     "userInterfaceStyle": "automatic",
-    "version": "21.12.01",
+    "version": "22.01.01",
     "icon": "./assets/images/icon.png",
     "splash": {
       "image": "./assets/images/rain-splash-still.png",
@@ -36,7 +36,7 @@
     "ios": {
       "supportsTablet": true,
       "requireFullScreen": true,
-      "buildNumber": "1.21.12.01",
+      "buildNumber": "22.01.01.1",
       "bundleIdentifier": "io.rain.app",
       "infoPlist": {
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Geofencing for staff clock in",
@@ -47,6 +47,7 @@
           "fetch",
           "remote-notification"
         ],
+        "allowsBackgroundLocationUpdates": true,
         "userInterfaceStyle": "automatic"
       }
     },
@@ -67,7 +68,8 @@
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
-        "ACCESS_BACKGROUND_LOCATION"
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE"
       ],
       "userInterfaceStyle": "automatic"
     }

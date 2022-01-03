@@ -138,6 +138,8 @@ export const handlePrintWorkingOrder = (orderId, lineItemIds) => {
     defaultMessage: false
   }, response => {
     response.json().then(data => {
+      console.log('handlePrintWorkingOrder', data)
+
       data.map((printerInstructions) => {
         printerInstructions?.ipAddresses?.map((ipAddresses) => {
           for (let i = 0; i < printerInstructions.noOfPrintCopies; i++) {

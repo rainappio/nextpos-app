@@ -42,7 +42,7 @@ import globalZh from './locales/zh'
 import FlashMessage from 'react-native-flash-message'
 import {LocaleContext} from './locales/LocaleContext'
 import NavigationService from "./navigation/NavigationService";
-import * as Sentry from 'sentry-expo';
+import * as Sentry from '@sentry/react-native';
 import Constants from "expo-constants";
 import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
@@ -70,10 +70,11 @@ LogBox.ignoreLogs([
 Sentry.init({
   dsn: 'https://b5c10cbde6414c0292495c58e7b699d3@sentry.io/5174447',
   enableInExpoDevelopment: true,
-  debug: true
+  debug: true,
+  enableNative: false
 });
 
-Sentry.Native.setRelease(Constants.manifest.revisionId);
+//Sentry.Native.setRelease(Constants.manifest.revisionId);
 
 export const store = createStore(
   rootReducer,
@@ -118,7 +119,7 @@ function restoreAuth(dispatch) {
 restoreAuth(store.dispatch)
 
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props)
 
@@ -169,7 +170,7 @@ export default class App extends React.Component {
   //if isTablet===2:keep screen in landscape mode; else:keep screen in portrait mode
   changeScreenOrientation = async (isTablet) => {
     if (isTablet === 2) {
-      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
     } else {
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     }
@@ -549,3 +550,5 @@ export default class App extends React.Component {
     this.setState({isLoadingComplete: true})
   }
 }
+
+export default Sentry.wrap(App)
