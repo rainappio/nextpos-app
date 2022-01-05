@@ -1,6 +1,6 @@
 import {AsyncStorage} from 'react-native'
 import {showMessage} from 'react-native-flash-message'
-import * as Sentry from 'sentry-expo';
+import * as Sentry from '@sentry/react-native';
 import NavigationService from "../navigation/NavigationService";
 import i18n from 'i18n-js'
 import {order} from '../assets/images';
@@ -755,7 +755,9 @@ export const dispatchFetchRequestWithOption = async (
     }
   } catch (error) {
     console.error(error)
-    Sentry.getCurrentHub().captureException(new Error(error))
+    //Sentry.getCurrentHub().captureException(new Error(error))
+    Sentry.captureException(error);
+
 
   }
 }

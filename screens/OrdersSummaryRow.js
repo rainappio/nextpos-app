@@ -946,6 +946,7 @@ class OrdersSummaryRow extends React.Component {
             <View style={{flexDirection: 'row'}}>
               <View style={{flex: 1, marginRight: 10}}>
                 <SecondActionButton
+                  confirmPrompt={true}
                   onPress={() =>
                     order.lineItems.length === 0
                       ? warningMessage(t('lineItemCountCheck'))
@@ -955,6 +956,7 @@ class OrdersSummaryRow extends React.Component {
                 /></View>
               <View style={{flex: 1}}>
                 <SecondActionButton
+                  confirmPrompt={true}
                   onPress={() =>
                     order.lineItems.length === 0
                       ? warningMessage(t('lineItemCountCheck'))

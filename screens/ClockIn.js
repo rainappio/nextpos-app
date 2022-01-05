@@ -109,9 +109,13 @@ class ClockIn extends React.Component {
    */
   _getLocationAsync = async () => {
 
-    let {status} = await Location.requestForegroundPermissionsAsync()
+    let fgPermission = await Location.requestForegroundPermissionsAsync()
+    let bgPermission = await Location.requestBackgroundPermissionsAsync()
 
-    if (status !== 'granted') {
+    console.log('fg', fgPermission.status)
+    console.log('bg', bgPermission.status)
+
+    if (fgPermission.status !== 'granted') {
       this.setState({
         message: 'Permission to access location was denied',
       });

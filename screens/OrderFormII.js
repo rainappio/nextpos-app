@@ -56,10 +56,6 @@ class OrderFormII extends React.Component {
       modalData: {},
       orderLineItems: {},
       quickCheckoutPrint: true,
-      otherActionOptions: [
-        {label: context.t('printWorkingOrder'), value: 'printWorkingOrder'},
-        {label: context.t('printOrderDetails'), value: 'printOrderDetails'},
-      ],
       otherAction: null,
       splitBillModalVisible: false,
       moveItemMode: false,
@@ -921,19 +917,19 @@ class OrderFormII extends React.Component {
                         />
                         <View style={{flex: 1, marginHorizontal: 5, flexDirection: 'row'}}>
                           <View style={{flex: 1, flexDirection: 'column'}}>
-                            <TouchableOpacity
+                            <SecondActionButton
+                              confirmPrompt={true}
                               onPress={() =>
                                 order.lineItems.length === 0
                                   ? warningMessage(t('orderForm.lineItemCountCheck'))
                                   : handlePrintOrderDetails(order.orderId)
                               }
-                              style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
-                            >
-                              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
-                                {t('printOrderDetails')}
-                              </Text>
-                            </TouchableOpacity>
+                              containerStyle={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
+                              style={[styles?.flexButtonSecondActionText(customMainThemeColor)]}
+                              title={t('printOrderDetails')}
+                            />
                             <SecondActionButton
+                              confirmPrompt={true}
                               onPress={() => {
                                 order.lineItems.length === 0
                                   ? warningMessage(t('orderForm.lineItemCountCheck'))
@@ -942,11 +938,7 @@ class OrderFormII extends React.Component {
                               containerStyle={styles?.flexButtonSecondAction(this.context)}
                               style={styles?.flexButtonSecondActionText(customMainThemeColor)}
                               title={t('printWorkingOrder')}
-                            >
-                              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
-                                {t('printWorkingOrder')}
-                              </Text>
-                            </SecondActionButton>
+                            />
                           </View>
                         </View>
                       </View>
@@ -1067,19 +1059,19 @@ class OrderFormII extends React.Component {
                         />
                         <View style={{flex: 1, marginHorizontal: 5, flexDirection: 'column'}}>
                           <View style={{flex: 1, flexDirection: 'column'}}>
-                            <TouchableOpacity
+                            <SecondActionButton
+                              confirmPrompt={true}
                               onPress={() =>
                                 order.lineItems.length === 0
                                   ? warningMessage(t('orderForm.lineItemCountCheck'))
                                   : handlePrintOrderDetails(order.orderId)
                               }
-                              style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
-                            >
-                              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
-                                {t('printOrderDetails')}
-                              </Text>
-                            </TouchableOpacity>
+                              containerStyle={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
+                              style={[styles?.flexButtonSecondActionText(customMainThemeColor)]}
+                              title={t('printOrderDetails')}
+                            />
                             <SecondActionButton
+                              confirmPrompt={true}
                               onPress={() => {
                                 order.lineItems.length === 0
                                   ? warningMessage(t('orderForm.lineItemCountCheck'))
@@ -1088,11 +1080,7 @@ class OrderFormII extends React.Component {
                               containerStyle={styles?.flexButtonSecondAction(this.context)}
                               style={styles?.flexButtonSecondActionText(customMainThemeColor)}
                               title={t('printWorkingOrder')}
-                            >
-                              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
-                                {t('printWorkingOrder')}
-                              </Text>
-                            </SecondActionButton>
+                            />
                           </View>
                         </View>
                       </View>
@@ -1184,19 +1172,19 @@ class OrderFormII extends React.Component {
                       <View style={{flex: 1, marginHorizontal: 0, flexDirection: 'row'}}>
                         <View style={{flex: 1, marginHorizontal: 5, flexDirection: 'column'}}>
                           <View style={{flex: 1, flexDirection: 'column'}}>
-                            <TouchableOpacity
+                            <SecondActionButton
+                              confirmPrompt={true}
                               onPress={() =>
                                 order.lineItems.length === 0
                                   ? warningMessage(t('orderForm.lineItemCountCheck'))
                                   : handlePrintOrderDetails(order.orderId)
                               }
-                              style={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
-                            >
-                              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
-                                {t('printOrderDetails')}
-                              </Text>
-                            </TouchableOpacity>
+                              containerStyle={[styles?.flexButtonSecondAction(this.context), {marginBottom: 3}]}
+                              style={[styles?.flexButtonSecondActionText(customMainThemeColor)]}
+                              title={t('printOrderDetails')}
+                            />
                             <SecondActionButton
+                              confirmPrompt={true}
                               onPress={() => {
                                 order.lineItems.length === 0
                                   ? warningMessage(t('orderForm.lineItemCountCheck'))
@@ -1205,13 +1193,8 @@ class OrderFormII extends React.Component {
                               containerStyle={styles?.flexButtonSecondAction(this.context)}
                               style={styles?.flexButtonSecondActionText(customMainThemeColor)}
                               title={t('printWorkingOrder')}
-                            >
-                              <Text style={styles?.flexButtonSecondActionText(customMainThemeColor)}>
-                                {t('printWorkingOrder')}
-                              </Text>
-                            </SecondActionButton>
+                            />
                           </View>
-
                         </View>
 
                       </View>
