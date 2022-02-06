@@ -135,7 +135,7 @@ class LoginSuccessScreen extends React.Component {
       })
     }
     if (!this.state.notificationRegister) {
-      registerForPushNotificationsAsync()
+      //registerForPushNotificationsAsync()
       this.setState({notificationRegister: true})
     }
 
