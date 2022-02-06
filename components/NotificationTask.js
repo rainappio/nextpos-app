@@ -7,17 +7,17 @@ import {normalizeTimeString} from '../actions'
 import {StyledText} from "./StyledText";
 
 
-Notifications.setNotificationHandler({
+/*Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
     shouldPlaySound: false,
     shouldSetBadge: false,
   }),
-});
+});*/
 
 export default function NotificationTask(props) {
 
-  const [notification, setNotification] = useState(false);
+  /*const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
 
@@ -36,7 +36,7 @@ export default function NotificationTask(props) {
       Notifications.removeNotificationSubscription(responseListener.current);
 
     };
-  }, []);
+  }, []);*/
 
 
   return (
@@ -58,7 +58,7 @@ export default function NotificationTask(props) {
 
 export async function schedulePushNotification(reservation, t, flag) {
 
-  const tokenArray = []
+  /*const tokenArray = []
   dispatchFetchRequestWithOption(api.notification.get, {
     method: 'GET',
     withCredentials: true,
@@ -95,7 +95,7 @@ export async function schedulePushNotification(reservation, t, flag) {
         body: JSON.stringify(tokenArray),
       });
     })
-  }).then()
+  }).then()*/
 }
 
 export async function registerForPushNotificationsAsync() {
