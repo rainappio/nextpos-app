@@ -19,7 +19,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {ScrollView} from "react-native-gesture-handler";
 import {Pages} from 'react-native-pages'
-import ViewPager from '@react-native-community/viewpager';
+import PagerView from 'react-native-pager-view';
 import {InProcessOrderCard} from "../components/InProcessOrderCard";
 import {RealTimeOrderUpdate} from '../components/RealTimeOrderUpdate'
 
@@ -404,7 +404,7 @@ class OrderDisplayScreen extends React.Component {
 
               </View>
               <View style={{flex: 1}}>
-                <ViewPager
+                <PagerView
                   ref={(ref) => {
                     this.viewPagerRef = ref
                   }}
@@ -496,9 +496,7 @@ class OrderDisplayScreen extends React.Component {
                     )
 
                   })}
-
-
-                </ViewPager>
+                </PagerView>
               </View>
             </>}
         </View>

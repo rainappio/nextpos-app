@@ -39,8 +39,6 @@ class ReservationFormScreen extends React.Component {
   }
   static contextType = LocaleContext
 
-  _isMounted = false
-
   constructor(props, context) {
     super(props, context)
 
@@ -80,9 +78,7 @@ class ReservationFormScreen extends React.Component {
   }
 
   componentDidMount() {
-    this._isMounted = true;
 
-    if (this._isMounted) {
       this.loadInfo()
       this.props.getTableLayouts()
       this.props.getfetchOrderInflights()
@@ -93,16 +89,10 @@ class ReservationFormScreen extends React.Component {
           this.handleResetForm()
         }
       })
-    }
   }
 
   componentWillUnmount() {
-    this._isMounted = false;
-
     this._resetForm()
-    this.setState = (state, callback) => {
-      return
-    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -158,9 +148,7 @@ class ReservationFormScreen extends React.Component {
     if (!!this.state.selectedHour && !!this.state.selectedMinutes) {
       this.props.change(`reservationStartDate`, new Date(selectedDate))
       this.setState({reservationDate: moment(selectedDate).format('YYYY-MM-DD')})
-      if (this._isMounted) {
-        this.handleCheckAvailableTables(moment(selectedDate).format('YYYY-MM-DD'), this.state.selectedHour, this.state.selectedMinutes)
-      }
+      this.handleCheckAvailableTables(moment(selectedDate).format('YYYY-MM-DD'), this.state.selectedHour, this.state.selectedMinutes)
 
     } else {
       this.setState({
@@ -219,7 +207,7 @@ class ReservationFormScreen extends React.Component {
       let dateStr = `${date} ${hour}:${mins}`
       let checkDate = moment(dateStr).tz(timezone).format('YYYY-MM-DDTHH:mm:ss')
 
-      console.log("check date", dateStr)
+      console.log("check datetime for reservation", dateStr)
       this.props.change(`checkDate`, checkDate)
 
       let reservationId = this.props?.initialValues?.id != undefined ? this.props?.initialValues?.id : null
@@ -332,7 +320,6 @@ class ReservationFormScreen extends React.Component {
             this.setState({searchResults: data.results[0], searching: false, isMembership: true, membershipModalVisible: true, isSearched: true})
           } else {
             this.setState({searchResults: data.results, searching: false, isMembership: false, membershipModalVisible: false, isSearched: true})
-            this.nameInput.focus()
           }
         })
       }).then()
@@ -393,12 +380,9 @@ class ReservationFormScreen extends React.Component {
 
     if (!!flag) {
       this.props.change(`name`, this.state.searchResults.name)
-      this.setState({isNameEditable: false, membershipModalVisible: false})
-      this.scroll?.scrollToEnd({animated: true})
-      this.noteInput.focus()
+      this.setState({isNameEditable: true, membershipModalVisible: false})
     } else {
       this.setState({isNameEditable: true, membershipModalVisible: false})
-      this.nameInput.focus()
     }
   }
   handleUnbindMember = () => {
@@ -648,8 +632,9 @@ class ReservationFormScreen extends React.Component {
                   {!nextStep &&
                     <ThemeKeyboardAwareScrollView
                       getRef={ref => {this.scroll = ref}}
-                      extraHeight={-72} enableResetScrollToCoords={false}
-                    >
+                      extraHeight={300}
+                      persistTaps='handled'
+                      enableResetScrollToCoords={false}>
 
                       <View style={styles.tableRowContainer}>
                         <View style={[styles.tableCellView, styles.flex(1)]}>
@@ -754,12 +739,14 @@ class ReservationFormScreen extends React.Component {
                                 <Field
                                   name="phoneNumber"
                                   component={InputTextComponent}
-                                  onEndEditing={(value) =>
+                                  clearTextOnFocus={true}
+                                  onEndEditing={(value) => {
                                     this.handleSearchMember(value.nativeEvent.text)
-                                  }
+                                  }}
                                   setFieldToBeFocused={input => {
                                     this.phoneNumberInput = input
                                   }}
+                                  nextField={this.nameInput}
                                   extraStyle={this.props?.membershipId && {backgroundColor: '#e7e7e7'}}
                                   editable={!this.props?.membershipId}
                                   validate={isRequired}
@@ -817,14 +804,10 @@ class ReservationFormScreen extends React.Component {
                                 <Field
                                   name="name"
                                   component={InputTextComponent}
-                                  onEndEditing={() => {
-                                    this.scroll?.scrollToEnd({animated: true})
-                                    this.noteInput.focus()
-                                  }
-                                  }
                                   setFieldToBeFocused={input => {
                                     this.nameInput = input
                                   }}
+                                  nextField={this.noteInput}
                                   extraStyle={(!this.state.isNameEditable) && {backgroundColor: '#e7e7e7'}}
                                   editable={this.state.isNameEditable}
                                   validate={isRequired}
@@ -859,9 +842,6 @@ class ReservationFormScreen extends React.Component {
                                   setFieldToBeFocused={input => {
                                     this.noteInput = input
                                   }}
-                                  onEndEditing={() =>
-                                    this.scroll?.scrollTo({x: 0, y: 0, animated: true})
-                                  }
                                   placeholder={t('reservation.otherNote')}
                                 />
                               </View>
@@ -869,7 +849,6 @@ class ReservationFormScreen extends React.Component {
 
                             <View>
                               <TouchableOpacity onPress={(value) => {
-                                Keyboard.dismiss()
                                 handleSubmit(value, false)
                               }}>
                                 <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
@@ -1012,7 +991,9 @@ class ReservationFormScreen extends React.Component {
 
               <ThemeKeyboardAwareScrollView
                 getRef={ref => {this.scroll = ref}}
-                extraHeight={-72} enableResetScrollToCoords={false}
+                extraHeight={300}
+                persistTaps='handled'
+                enableResetScrollToCoords={false}
               >
                 <>
                   <View style={styles.tableRowContainer}>
@@ -1213,12 +1194,14 @@ class ReservationFormScreen extends React.Component {
                             <Field
                               name="phoneNumber"
                               component={InputTextComponent}
-                              onEndEditing={(value) =>
-                                this.handleSearchMember(value.nativeEvent.text)
-                              }
+                              clearTextOnFocus={true}
+                              onEndEditing={(value) => {
+                                this.handleSearchMember(value.nativeEvent.text);
+                              }}
                               setFieldToBeFocused={input => {
                                 this.phoneNumberInput = input
                               }}
+                              nextField={this.nameInput}
                               extraStyle={this.props?.membershipId && {backgroundColor: '#e7e7e7'}}
                               editable={!this.props?.membershipId}
                               validate={isRequired}
@@ -1276,12 +1259,10 @@ class ReservationFormScreen extends React.Component {
                             <Field
                               name="name"
                               component={InputTextComponent}
-                              onEndEditing={() =>
-                                this.noteInput.focus()
-                              }
                               setFieldToBeFocused={input => {
                                 this.nameInput = input
                               }}
+                              nextField={this.noteInput}
                               extraStyle={(!this.state.isNameEditable) && {backgroundColor: '#e7e7e7'}}
                               editable={this.state.isNameEditable}
                               validate={isRequired}
@@ -1316,9 +1297,6 @@ class ReservationFormScreen extends React.Component {
                               setFieldToBeFocused={input => {
                                 this.noteInput = input
                               }}
-                              onEndEditing={() =>
-                                this.scroll?.scrollTo({x: 0, y: 480, animated: true})
-                              }
                               placeholder={t('reservation.otherNote')}
                             />
                           </View>

@@ -11,6 +11,7 @@ import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
+import {ThemeContainer} from "../components/ThemeContainer";
 
 class PrinternKDS extends React.Component {
   static navigationOptions = {
@@ -57,7 +58,7 @@ class PrinternKDS extends React.Component {
       )
     }
     return (
-      <ThemeScrollView>
+      <ThemeContainer>
         <View>
           <View style={[styles.container]}>
             <ScreenHeader title={t('settings.workingArea')}
@@ -148,7 +149,7 @@ class PrinternKDS extends React.Component {
             </View>
           </View>
         </View>
-      </ThemeScrollView>
+      </ThemeContainer>
     )
   }
 }

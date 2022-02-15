@@ -1,5 +1,6 @@
 import React from 'react'
-import {AsyncStorage, FlatList, Text, TouchableOpacity, View} from 'react-native'
+import {FlatList, Text, TouchableOpacity, View} from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {connect} from 'react-redux'
 import {doLogout, getClientUsrs, getCurrentClient} from '../actions'
 import styles from '../styles'

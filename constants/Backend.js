@@ -1,4 +1,4 @@
-import {AsyncStorage} from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {showMessage} from 'react-native-flash-message'
 import * as Sentry from '@sentry/react-native';
 import NavigationService from "../navigation/NavigationService";

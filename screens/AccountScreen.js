@@ -1,5 +1,6 @@
 import React from 'react'
-import {Alert, AsyncStorage, Text, TouchableOpacity, View, Share} from 'react-native'
+import {Alert, Text, TouchableOpacity, View, Share} from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import {getClientUsr} from '../actions'

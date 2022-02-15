@@ -1,6 +1,6 @@
 import {encode as btoa} from "base-64";
 import {api, getToken, storage, warningMessage} from "../constants/Backend";
-import {AsyncStorage} from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {doLoggedIn} from "../actions";
 
 export const handleRefreshToken = async () => {

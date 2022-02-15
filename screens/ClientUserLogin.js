@@ -1,6 +1,6 @@
 import React from 'react'
 import ClientUserLoginForm from './ClientUserLoginForm'
-import {AsyncStorage} from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {api, warningMessage} from "../constants/Backend";
 import {encode as btoa} from 'base-64'
 import {LocaleContext} from "../locales/LocaleContext";

@@ -1,6 +1,7 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {AsyncStorage, Image, Keyboard, Text, TouchableOpacity, View, Animated, Dimensions} from 'react-native'
+import {Image, Keyboard, Text, TouchableOpacity, View, Animated, Dimensions} from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Avatar} from 'react-native-elements'
 import Modal from 'react-native-modal';
 import {isEmail, isRequired} from '../validators'

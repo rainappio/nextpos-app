@@ -1,6 +1,7 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
-import {Text, TouchableOpacity, View, AsyncStorage} from 'react-native'
+import {Text, TouchableOpacity, View} from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import PinCodeInput from '../components/PinCodeInput'
 import styles from '../styles'
 import InputText from '../components/InputText'

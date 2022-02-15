@@ -31,6 +31,7 @@ import {checkExpoUpdate} from "../helpers/updateAppHelper";
 import {ThemePicker} from "../components/ThemePicker";
 import Constants from 'expo-constants';
 import {registerForPushNotificationsAsync} from '../components/NotificationTask'
+import * as Application from "expo-application";
 
 
 class LoginSuccessScreen extends React.Component {
@@ -350,7 +351,7 @@ class LoginSuccessScreen extends React.Component {
               </StyledText>
             </Text>
             <StyledText style={[styles.subText]}>
-              {t('loggedIn')} {formatDateObj(loggedIn)}
+              {t('loggedIn')} {formatDateObj(loggedIn)} ({Application.nativeApplicationVersion})
             </StyledText>
           </View>
           {(isLoading || shiftStatusLoading) &&

@@ -586,9 +586,9 @@ class OrderItemOptions extends React.Component {
                     title={`${product.name} ($${product.price})`}
                     backAction={() => {this.props.goBack()}}
                 />
-                <View style={{flex: 9}}>
-                    <ThemeScrollView >
-                        <View >
+                <View style={{flex: 5}}>
+                    <ThemeScrollView>
+                        <View>
 
 
                             {hasProductComboLabels && (
