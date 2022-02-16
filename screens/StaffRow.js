@@ -7,6 +7,7 @@ import {LocaleContext} from '../locales/LocaleContext'
 import ScreenHeader from "../components/ScreenHeader";
 import {ThemeScrollView} from "../components/ThemeScrollView";
 import {StyledText} from "../components/StyledText";
+import {ThemeContainer} from "../components/ThemeContainer";
 
 class StaffRow extends React.Component {
   static navigationOptions = {
@@ -44,7 +45,7 @@ class StaffRow extends React.Component {
     })
 
     return (
-      <ThemeScrollView>
+      <ThemeContainer>
         <View style={styles.fullWidthScreen}>
           <ScreenHeader title={t('staffListTitle')}
             parentFullScreen={true}
@@ -81,7 +82,7 @@ class StaffRow extends React.Component {
             />
           </View>
         </View>
-      </ThemeScrollView>
+      </ThemeContainer>
     )
   }
 }

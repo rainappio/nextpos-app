@@ -1,5 +1,5 @@
 import React from 'react'
-import {AsyncStorage, Platform, Text, useWindowDimensions, View, TouchableOpacity} from 'react-native'
+import {Platform, Text, useWindowDimensions, View, TouchableOpacity} from 'react-native'
 import Animated from 'react-native-reanimated';
 import {handleRefreshToken} from "../helpers/loginActions";
 import NavigationService from "../navigation/NavigationService";

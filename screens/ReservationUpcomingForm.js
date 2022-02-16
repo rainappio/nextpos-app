@@ -386,10 +386,6 @@ class ReservationUpcomingForm extends React.Component {
 
     if (!!flag) {
       this.props.change(`name`, this.state.searchResults.name)
-      this.scroll?.scrollToEnd({animated: true})
-      this.noteInput.focus()
-    } else {
-      this.nameInput.focus()
     }
   }
 
@@ -769,8 +765,11 @@ class ReservationUpcomingForm extends React.Component {
               <View style={[styles.flex(9), styles.withBorder(this.context), {flexDirection: 'row'}]}>
 
                 <View style={[styles.flex(1), {justifyContent: 'flex-start', borderRightWidth: 1, borderColor: customMainThemeColor}]}>
-                  <ThemeKeyboardAwareScrollView getRef={ref => {this.scroll = ref}} extraHeight={-72} enableResetScrollToCoords={false}
-                  >
+                  <ThemeKeyboardAwareScrollView
+                    getRef={ref => {this.scroll = ref}}
+                    extraHeight={350}
+                    persistTaps={'handled'}
+                    enableResetScrollToCoords={false}>
                     <View style={[styles.horizontalMargin]}>
                       <View style={[{marginBottom: 8}]}>
                         <View style={[styles.sectionTitleContainer, {marginVertical: 0}]}>
@@ -806,12 +805,14 @@ class ReservationUpcomingForm extends React.Component {
                           <Field
                             name="phoneNumber"
                             component={InputTextComponent}
+                            clearTextOnFocus={true}
                             onEndEditing={(value) =>
                               this.handleSearchMember(value.nativeEvent.text)
                             }
                             setFieldToBeFocused={input => {
                               this.phoneNumberInput = input
                             }}
+                            nextField={this.nameInput}
                             validate={isRequired}
                             placeholder={t('reservation.phone')}
                             keyboardType={'numeric'}
@@ -845,12 +846,10 @@ class ReservationUpcomingForm extends React.Component {
                           <Field
                             name="name"
                             component={InputTextComponent}
-                            onEndEditing={() =>
-                              this.noteInput.focus()
-                            }
                             setFieldToBeFocused={input => {
                               this.nameInput = input
                             }}
+                            nextField={this.noteInput}
                             validate={isRequired}
                             placeholder={t('reservation.name')}
                           />
@@ -883,9 +882,6 @@ class ReservationUpcomingForm extends React.Component {
                             setFieldToBeFocused={input => {
                               this.noteInput = input
                             }}
-                            onEndEditing={() =>
-                              this.scroll?.scrollTo({x: 0, y: 0, animated: true})
-                            }
                             placeholder={t('reservation.otherNote')}
                           />
                         </View>
@@ -1396,7 +1392,9 @@ class ReservationUpcomingForm extends React.Component {
 
                 <ThemeKeyboardAwareScrollView
                   getRef={ref => {this.scroll = ref}}
-                  extraHeight={-120} enableResetScrollToCoords={false}
+                  extraHeight={350}
+                  persistTaps={'handled'}
+                  enableResetScrollToCoords={false}
                 >
                   <View style={[styles.horizontalMargin]}>
                     <View style={[{marginBottom: 8}]}>
@@ -1430,12 +1428,14 @@ class ReservationUpcomingForm extends React.Component {
                         <Field
                           name="phoneNumber"
                           component={InputTextComponent}
+                          clearTextOnFocus={true}
                           onEndEditing={(value) =>
                             this.handleSearchMember(value.nativeEvent.text)
                           }
                           setFieldToBeFocused={input => {
                             this.phoneNumberInput = input
                           }}
+                          nextField={this.nameInput}
                           validate={isRequired}
                           placeholder={t('reservation.phone')}
                           keyboardType={'numeric'}
@@ -1469,12 +1469,10 @@ class ReservationUpcomingForm extends React.Component {
                         <Field
                           name="name"
                           component={InputTextComponent}
-                          onEndEditing={() =>
-                            this.noteInput.focus()
-                          }
                           setFieldToBeFocused={input => {
                             this.nameInput = input
                           }}
+                          nextField={this.noteInput}
                           validate={isRequired}
                           placeholder={t('reservation.name')}
                         />
@@ -1507,9 +1505,6 @@ class ReservationUpcomingForm extends React.Component {
                           setFieldToBeFocused={input => {
                             this.noteInput = input
                           }}
-                          onEndEditing={() =>
-                            this.scroll?.scrollTo({x: 0, y: 0, animated: true})
-                          }
                           placeholder={t('reservation.otherNote')}
                         />
                       </View>

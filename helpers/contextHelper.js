@@ -1,7 +1,7 @@
 import React from "react";
 import {ThemeContext, themes} from "../themes/ThemeContext";
 import {LocaleContext} from "../locales/LocaleContext";
-import {AsyncStorage} from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const withContext = (Component) => {
 

@@ -1,7 +1,4 @@
-import {getClientUsr} from '../actions'
-import {getToken} from '../constants/Backend'
-import {AsyncStorage} from "react-native";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const getCurrentUserRole = (user, role) => {
 

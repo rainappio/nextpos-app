@@ -1,39 +1,20 @@
 import React from 'react'
 import "intl";
-import {
-  Platform,
-  StatusBar,
-  StyleSheet,
-  View,
-  AsyncStorage,
-  Dimensions,
-  LogBox,
-  Alert,
-  Appearance,
-} from 'react-native';
-if (Platform.OS === "android") {
-  // See https://github.com/expo/expo/issues/6536 for this issue.
-  if (typeof Intl.__disableRegExpRestore === "function") {
-    Intl.__disableRegExpRestore();
-  }
-}
+import {Appearance, LogBox, Platform, StatusBar, View,} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import "intl/locale-data/jsonp/en";
-
-
 import {Provider} from 'react-redux'
-import {createStore, applyMiddleware} from 'redux'
+import {applyMiddleware, createStore} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import rootReducer from './reducers'
-import {getSettingTimezone} from './actions'
+import {canClockIn, doLoggedIn, getSettingTimezone} from './actions'
 import AppLoading from 'expo-app-loading'
 import {Asset} from 'expo-asset'
 import * as Font from 'expo-font'
-import {Icon, Ionicons} from '@expo/vector-icons'
-import {canClockIn, doLoggedIn} from './actions'
+import {Ionicons} from '@expo/vector-icons'
 import {NavigationContainer} from '@react-navigation/native';
 import MainTabNavigator from './navigation/MainTabNavigator'
-// import AppNavigator from './navigation/AppNavigator'
 import styles from './styles'
 import * as Localization from 'expo-localization'
 import i18n from 'i18n-js'
@@ -43,19 +24,24 @@ import FlashMessage from 'react-native-flash-message'
 import {LocaleContext} from './locales/LocaleContext'
 import NavigationService from "./navigation/NavigationService";
 import * as Sentry from '@sentry/react-native';
-import Constants from "expo-constants";
 import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
-import {activateKeepAwake, useKeepAwake} from "expo-keep-awake";
+import {activateKeepAwake} from "expo-keep-awake";
 import TimeZoneService from "./helpers/TimeZoneService";
 import {complexTheme, ThemeContext, themes} from "./themes/ThemeContext";
 import {getTheme, storeTheme} from "./helpers/contextHelper";
 import {enableScreens} from 'react-native-screens'
-
 import * as Device from 'expo-device';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {checkExpoUpdate} from "./helpers/updateAppHelper";
 import {api, dispatchFetchRequest} from './constants/Backend'
+
+if (Platform.OS === "android") {
+  // See https://github.com/expo/expo/issues/6536 for this issue.
+  if (typeof Intl.__disableRegExpRestore === "function") {
+    Intl.__disableRegExpRestore();
+  }
+}
 
 export let currentLocale = ""
 
