@@ -7,7 +7,6 @@ import {LocaleContext} from '../locales/LocaleContext'
 import {api, dispatchFetchRequest, successMessage} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
-import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import {View} from 'react-native'
 
 class OrderFormIII extends React.Component {

@@ -272,6 +272,7 @@ class OrderForm extends Component {
                           name={people.value}
                           component={RenderStepper}
                           optionName={people.label}
+                          totalWidth={180}
                         />
                       </View>
                     ))}

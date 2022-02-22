@@ -307,9 +307,6 @@ export default StyleSheet.create({
   leftpadd20: {
     paddingLeft: 10
   },
-  nomgrBottom: {
-    marginBottom: 0
-  },
   rightAlign: {
     right: 0,
     position: 'absolute',
@@ -747,6 +744,9 @@ export default StyleSheet.create({
   }),
   withoutBorder: {
     borderWidth: 0
+  },
+  marginBottom: margin => {
+      return {marginBottom: margin}
   },
   hitSlop: {top: 20, bottom: 20, left: 50, right: 50},
   bottomButtonContainerWithoutFlex: {

@@ -779,19 +779,21 @@ class ReservationUpcomingForm extends React.Component {
                           <StyledText style={styles.sectionTitleText}>{t('reservation.peopleCount')}</StyledText>
                         </View>
                         <View>
-                          <View style={[styles.tableRowContainerWithBorder]}>
+                          <View style={[styles.tableRowContainer]}>
                             <Field
                               name={`people`}
                               component={RenderStepper}
                               optionName={t('reservation.adult')}
                               validate={[isRequired, isCountZero]}
+                              showNumber={false}
                             />
                           </View>
-                          <View style={[styles.tableRowContainerWithBorder]}>
+                          <View style={[styles.tableRowContainer]}>
                             <Field
                               name={`kid`}
                               component={RenderStepper}
                               optionName={t('reservation.kid')}
+                              showNumber={false}
                             />
                           </View>
                         </View>
@@ -1402,19 +1404,21 @@ class ReservationUpcomingForm extends React.Component {
                         <StyledText style={styles.sectionTitleText}>{t('reservation.peopleCount')}</StyledText>
                       </View>
                       <View>
-                        <View style={[styles.tableRowContainerWithBorder]}>
+                        <View style={[styles.tableRowContainer]}>
                           <Field
                             name={`people`}
                             component={RenderStepper}
                             optionName={t('reservation.adult')}
                             validate={[isRequired, isCountZero]}
+                            showNumber={false}
                           />
                         </View>
-                        <View style={[styles.tableRowContainerWithBorder]}>
+                        <View style={[styles.tableRowContainer]}>
                           <Field
                             name={`kid`}
                             component={RenderStepper}
                             optionName={t('reservation.kid')}
+                            showNumber={false}
                           />
                         </View>
                       </View>
