@@ -110,10 +110,8 @@ class ClockIn extends React.Component {
   _getLocationAsync = async () => {
 
     let fgPermission = await Location.requestForegroundPermissionsAsync()
-    let bgPermission = await Location.requestBackgroundPermissionsAsync()
 
     console.log('fg', fgPermission.status)
-    console.log('bg', bgPermission.status)
 
     if (fgPermission.status !== 'granted') {
       this.setState({
@@ -153,6 +151,8 @@ class ClockIn extends React.Component {
           longitude: storeLocation[0].longitude,
           radius: 500
         }])
+
+        console.log('started geofencing')
 
         const distanceInMeters = getDistance(
           {latitude: location.coords.latitude, longitude: location.coords.longitude},

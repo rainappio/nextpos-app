@@ -32,7 +32,7 @@ export const MainActionButton = (props) => {
         <TouchableOpacity
             onPress={props?.onPress ?? (() => console.warn('no onPress'))}
         >
-            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor), {padding: 10, marginBottom: 0, }, props?.style]}>
+            <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor), {marginBottom: 0}, props?.style]}>
                 {props?.title ?? 'Submit'}
             </Text>
         </TouchableOpacity>

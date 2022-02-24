@@ -26,6 +26,8 @@ export const ThemeKeyboardAwareScrollView = (props) => {
       extraHeight={props?.extraHeight ?? 0}
       enableResetScrollToCoords={props?.enableResetScrollToCoords ?? true}
       keyboardOpeningTime={0}
+      viewIsInsideTabBar={true}
+      enableOnAndroid={true}
     >
       {props?.children}
     </KeyboardAwareScrollView>

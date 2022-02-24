@@ -52,6 +52,7 @@ const NewOrderModal = (props) => {
     return (
 
         <Modal
+            style={{margin: 0}}
             isVisible={modalVisible}
             backdropOpacity={0.7}
             onBackdropPress={() => {props.closeModal()}}
@@ -197,13 +198,12 @@ class OrderForm extends Component {
                 width: '80%',
                 height: '90%',
                 backgroundColor: '#808080',
-                marginTop: 53,
+                marginVertical: 53,
                 justifyContent: 'center',
-                marginBottom: 53,
                 alignSelf: 'center',
                 alignItems: 'center'
             }}>
-                <ThemeScrollView >
+                <ThemeScrollView>
                     <View style={{
                         alignSelf: 'center',
 
@@ -266,20 +266,21 @@ class OrderForm extends Component {
                             </View>
                         </View> */}
 
-                        <View style={styles.sectionContent}>
+                        <View style={[styles.sectionContent]}>
                             <View style={styles.sectionTitleContainer}>
                                 <StyledText style={styles.sectionTitleText}>{t('newOrder.peopleCount')}</StyledText>
                             </View>
                             <View>
                                 {people.map((people, ix) => (
                                     <View
-                                        style={[styles.tableRowContainerWithBorder]}
+                                        style={[styles.tableRowContainer, styles.dynamicHorizontalPadding(20)]}
                                         key={ix}
                                     >
                                         <Field
                                             name={people.value}
                                             component={RenderStepper}
                                             optionName={people.label}
+                                            totalWidth={180}
                                         />
                                     </View>
                                 ))}

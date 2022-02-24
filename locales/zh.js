@@ -235,6 +235,16 @@ const zh = {
     liveOrders: '打開即時訂單',
     copyOrder: '複製訂單',
 
+    // options
+    productOptions: '產品註記',
+    others: '其他',
+    freeTextProductOption: '註記',
+    overridePrice: '自訂價格',
+    lineItemDiscount: '品項折扣',
+    singleChoice: '單選',
+    multipleChoice: '複選',
+    requiredChoice: '必選',
+
     // order messages
     submitted: '訂單送出',
     deleted: '訂單刪除',

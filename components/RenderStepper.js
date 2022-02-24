@@ -5,9 +5,11 @@ import {Stepper} from '@ant-design/react-native'
 import styles from '../styles'
 import {StyledText} from "./StyledText";
 import {withContext} from "../helpers/contextHelper";
+import NumericInput from "react-native-numeric-input";
 
 class RenderStepper extends React.Component {
   static contextType = LocaleContext
+
   constructor(props, context) {
     super(props, context)
     this.state = {
@@ -15,6 +17,7 @@ class RenderStepper extends React.Component {
     }
 
   }
+
   render() {
     const {
       input: {onBlur, onChange, onFocus, value},
@@ -23,100 +26,67 @@ class RenderStepper extends React.Component {
       meta: {error, touched, valid},
       themeStyle,
       locale: {customMainThemeColor},
+      totalWidth,
+      showNumber,
       ...rest
     } = this.props
 
-    if (true) {
-      return (
-        <View>
-          <View style={[styles.flex_dir_row, {alignItems: 'center'}]}>
-            <View style={{width: '60%', flexDirection: 'row', alignItems: 'center'}}>
-              <StyledText style={{flex: 2}}>{optionName}</StyledText>
-              <View style={{flexDirection: 'row', justifyContent: 'space-around', flex: 5}}>
-                <TouchableOpacity
-                  onPress={() => {this.props.input.onChange(1)}}
-                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: customMainThemeColor, borderWidth: (value === 1 ? 1 : 0), borderRadius: 100}}>
-                  <StyledText>1</StyledText>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {this.props.input.onChange(2)}}
-                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: customMainThemeColor, borderWidth: (value === 2 ? 1 : 0), borderRadius: 100}}>
-                  <StyledText>2</StyledText>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {this.props.input.onChange(3)}}
-                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: customMainThemeColor, borderWidth: (value === 3 ? 1 : 0), borderRadius: 100}}>
-                  <StyledText>3</StyledText>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {this.props.input.onChange(4)}}
-                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: customMainThemeColor, borderWidth: (value === 4 ? 1 : 0), borderRadius: 100}}>
-                  <StyledText>4</StyledText>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {this.props.input.onChange(5)}}
-                  style={{width: 30, alignItems: 'center', justifyContent: 'center', aspectRatio: 1, borderColor: customMainThemeColor, borderWidth: (value === 5 ? 1 : 0), borderRadius: 100}}>
-                  <StyledText>5</StyledText>
-                </TouchableOpacity>
-              </View>
+    const numberValue = Number(value)
 
+    return (
+      <View style={{flex: 1}}>
+        <View style={[styles.flex(5), styles.flexRow, {alignItems: 'center'}]}>
+          <View style={{flex: 1.5, flexDirection: 'row', alignItems: 'center'}}>
+            <StyledText style={{flex: 1}}>{optionName}</StyledText>
+            {(showNumber ?? true) && (
+            <View style={{flex: 4, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+              {[1, 2, 3, 4, 5].map(num => {
+                return (
+                  <TouchableOpacity
+                    key={`qty-${num}`}
+                    onPress={() => {
+                      this.props.input.onChange(num)
+                    }}
+                    style={{
+                      width: 40,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      aspectRatio: 1,
+                      borderColor: customMainThemeColor,
+                      borderWidth: (value === num ? 1 : 0),
+                      borderRadius: 100
+                    }}>
+                    <StyledText>{num}</StyledText>
+                  </TouchableOpacity>
+                )
+              })}
             </View>
-
-            <View style={{width: '40%'}}>
-              <Stepper
-                key={1}
-                clear
-                error
-                onChange={onChange}
-                max={100}
-                min={0}
-                readOnly={false}
-                value={value}
-                showNumber
-                inputStyle={[themeStyle, styles?.customBorderAndBackgroundColor(this.context)]}
-              />
-            </View>
+            )}
           </View>
-          <View style={{width: '100%', marginTop: 8}}>
-            {!valid &&
-              touched &&
-              (error && <Text style={styles.rootError}>{error}</Text>)}
+
+          <View style={{flex: 1, flexDirection: 'column', alignItems: 'flex-end'}}>
+            <NumericInput value={numberValue}
+                          initValue={numberValue}
+                          onChange={onChange}
+                          step={1}
+                          rounded={false}
+                          leftButtonBackgroundColor={customMainThemeColor}
+                          rightButtonBackgroundColor={customMainThemeColor}
+                          borderColor={customMainThemeColor}
+                          iconStyle={{color: '#fff'}}
+                          totalWidth={totalWidth ?? 120}
+                          {...rest}
+            />
+
           </View>
         </View>
-      )
-    } else {
-      //old cellphone UI
-      return (
-        <View>
-          <View style={[styles.flex_dir_row, {alignItems: 'center'}]}>
-            <View style={{width: '60%'}}>
-              <StyledText>{optionName}</StyledText>
-            </View>
-
-            <View style={{width: '40%'}}>
-              <Stepper
-                key={1}
-                clear
-                error
-                onChange={onChange}
-                max={20}
-                min={0}
-                readOnly={false}
-                value={value}
-                showNumber
-                inputStyle={themeStyle}
-              />
-            </View>
-          </View>
-          <View style={{width: '100%', marginTop: 8}}>
-            {!valid &&
-              touched &&
-              (error && <Text style={styles.rootError}>{error}</Text>)}
-          </View>
+        <View style={{marginTop: 8}}>
+          {!valid &&
+            touched &&
+            (error && <Text style={styles.rootError}>{error}</Text>)}
         </View>
-      )
-    }
-
+      </View>
+    )
   }
 }
 

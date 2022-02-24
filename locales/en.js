@@ -235,6 +235,16 @@ const en = {
     liveOrders: 'Receive Live Orders',
     copyOrder: 'Copy Order',
 
+    // options
+    productOptions: 'Product Option(s)',
+    others: 'Others',
+    freeTextProductOption: 'Note',
+    overridePrice: 'Custom Price',
+    lineItemDiscount: 'Line Item Discount',
+    singleChoice: 'Single',
+    multipleChoice: 'Multiple',
+    requiredChoice: 'Required',
+
     // order messages
     submitted: 'Order Submitted',
     deleted: 'Order Deleted',
