@@ -8,7 +8,6 @@ import {isRequired} from '../validators'
 import styles from '../styles'
 import {LocaleContext} from "../locales/LocaleContext";
 import {withContext} from "../helpers/contextHelper";
-import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Feather';
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import IconDropDown from '../components/IconDropDown'

@@ -17,21 +17,26 @@ const InputNumber = ({
   locale: {customMainThemeColor, customBackgroundColor, customBorderColor},
   ...rest
 }) => {
+
+  const parsedNumber = parseInt(value, 10)
+
   return (
     <View>
       <NumericInput
         onChange={onChange}
         onSubmitEditing={() => onSubmitEditing}
         onFocus={onFocus}
-        value={parseInt(value, 10)}
-        initValue={value}
+        value={parsedNumber}
+        initValue={parsedNumber}
         minValue={minValue}
         inputStyle={{
           color: customMainThemeColor
         }}
-        upDownButtonsBackgroundColor={customBackgroundColor}
-        iconStyle={{color: customMainThemeColor}}
-        borderColor={customBorderColor}
+        // upDownButtonsBackgroundColor={customBackgroundColor}
+        iconStyle={{color: '#fff'}}
+        borderColor={customMainThemeColor}
+        leftButtonBackgroundColor={customMainThemeColor}
+        rightButtonBackgroundColor={customMainThemeColor}
         {...rest}
       />
       {!valid && touched && <Text style={styles.rootError}>{error}</Text>}
