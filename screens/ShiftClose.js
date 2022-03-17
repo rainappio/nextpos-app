@@ -1,16 +1,17 @@
 import React from 'react'
 import {Text, TouchableOpacity, View} from 'react-native'
 import {connect} from 'react-redux'
-import {formatDate, getMostRecentShiftStatus, getShiftStatus} from '../actions'
+import {formatDate, getMostRecentShiftStatus} from '../actions'
 import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
-import {handleOpenShift, renderShiftStatus} from "../helpers/shiftActions";
+import {handleAbortCloseShift, handleOpenShift, renderShiftStatus} from "../helpers/shiftActions";
 import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import {StyledText} from "../components/StyledText";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {OpenShiftScreen} from "./OpenShiftScreen";
+import {SecondActionButton} from "../components/ActionButtons";
 
 class ShiftClose extends React.Component {
   static navigationOptions = {
@@ -28,20 +29,18 @@ class ShiftClose extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getShiftStatus()
-    this.props.getMostRecentShiftStatus()
+
     this._getShift = this.props.navigation.addListener('focus', () => {
-      this.props.getShiftStatus()
       this.props.getMostRecentShiftStatus()
     })
   }
+
   componentWillUnmount() {
     this._getShift()
   }
 
   handleOpenShift = (balance) => {
     handleOpenShift(balance, (response) => {
-      this.props.dispatch(getShiftStatus())
       this.props.getMostRecentShiftStatus()
     })
   }
@@ -58,37 +57,33 @@ class ShiftClose extends React.Component {
     }, {
       defaultMessage: false
     }, response => {
-      this.props.getShiftStatus()
-      this.props.getMostRecentShiftStatus()
       this.props.navigation.navigate('AccountClose')
     }).then()
   }
 
   render() {
-    const {loading, shift, haveData, mostRecentShift} = this.props
+    const {loading, haveData, mostRecentShift} = this.props
     const {t, customMainThemeColor, isTablet} = this.context
 
     if (loading) {
       return (
-        <LoadingScreen />
+        <LoadingScreen/>
       )
     } else if (this.state?.isOpenShift) {
       return (
-        <OpenShiftScreen handleOpenShift={() => {
-          this.props.getShiftStatus()
-          this.props.getMostRecentShiftStatus()
-          this.setState({isOpenShift: false})
-        }}
-          handleCancel={() => this.setState({isOpenShift: false})} />
+        <OpenShiftScreen
+          handleOpenShift={() => {
+            this.props.getMostRecentShiftStatus()
+            this.setState({isOpenShift: false})
+          }}
+          handleCancel={() => this.setState({isOpenShift: false})}/>
       )
-    }
-
-    else {
+    } else {
       return (
         <ThemeContainer>
           <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
             <ScreenHeader parentFullScreen={true}
-              title={t('shift.shiftTitle')} />
+                          title={t('shift.shiftTitle')}/>
 
             <View style={{flex: 3, justifyContent: 'center'}}>
               <View style={styles.tableRowContainerWithBorder}>
@@ -127,7 +122,7 @@ class ShiftClose extends React.Component {
                 </View>
               )}
 
-              {shift.shiftStatus === 'ACTIVE' && (
+              {mostRecentShift.shiftStatus === 'ACTIVE' && (
                 <View>
                   <View style={styles.tableRowContainerWithBorder}>
                     <View style={[styles.tableCellView, {flex: 1}]}>
@@ -136,7 +131,7 @@ class ShiftClose extends React.Component {
                       </StyledText>
                     </View>
                     <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                      <StyledText>{formatDate(shift.open.timestamp)}</StyledText>
+                      <StyledText>{formatDate(mostRecentShift.open.timestamp)}</StyledText>
                     </View>
                   </View>
                   <View style={styles.tableRowContainerWithBorder}>
@@ -146,7 +141,7 @@ class ShiftClose extends React.Component {
                       </StyledText>
                     </View>
                     <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                      <StyledText>{shift.open.balance}</StyledText>
+                      <StyledText>{mostRecentShift.open.balance}</StyledText>
                     </View>
                   </View>
                   <View style={styles.tableRowContainerWithBorder}>
@@ -156,7 +151,7 @@ class ShiftClose extends React.Component {
                       </StyledText>
                     </View>
                     <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-                      <StyledText>{shift.open.who}</StyledText>
+                      <StyledText>{mostRecentShift.open.who}</StyledText>
                     </View>
                   </View>
                 </View>
@@ -165,27 +160,42 @@ class ShiftClose extends React.Component {
 
             <View style={[styles.bottom, styles.horizontalMargin]}>
               {
-                ['ACTIVE', 'CLOSING', 'CONFIRM_CLOSE'].includes(mostRecentShift.shiftStatus) ? (
+                ['ACTIVE', 'CLOSING', 'CONFIRM_CLOSE'].includes(mostRecentShift.shiftStatus) && (
+                  <>
+                    <TouchableOpacity
+                      onPress={this.handleinitiateCloseShift}
+                    >
+                      <Text
+                        style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                        {t('shift.closeShift')}
+                      </Text>
+                    </TouchableOpacity>
+                    {['CLOSING', 'CONFIRM_CLOSE'].includes(mostRecentShift.shiftStatus) && (
+                      <SecondActionButton
+                        confirmPrompt={true}
+                        onPress={async () => {
+                          await handleAbortCloseShift(() => {
+                            this.props.getMostRecentShiftStatus()
+                          })
+                        }}
+                        title={t('shift.abortAction')}
+                      />
+                    )}
+                  </>
+                )
+              }
+              {['INACTIVE', 'BALANCED', 'UNBALANCED'].includes(mostRecentShift.shiftStatus) && (
+                <>
                   <TouchableOpacity
-                    onPress={this.handleinitiateCloseShift}
+                    onPress={() => this.setState({isOpenShift: true})}
                   >
-                    <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                      {t('shift.closeShift')}
+                    <Text
+                      style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
+                      {t('shift.openShiftAction')}
                     </Text>
                   </TouchableOpacity>
-                ) : (
-                    <View>
-
-                      <TouchableOpacity
-                        onPress={() => this.setState({isOpenShift: true})}
-                      >
-                        <Text style={[styles?.bottomActionButton(customMainThemeColor), styles?.actionButton(customMainThemeColor)]}>
-                          {t('shift.openShiftAction')}
-                        </Text>
-                      </TouchableOpacity>
-
-                    </View>
-                  )
+                </>
+              )
               }
             </View>
           </View>
@@ -196,7 +206,6 @@ class ShiftClose extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  shift: state.shift.data,
   mostRecentShift: state.mostRecentShift.data,
   loading: state.mostRecentShift.loading,
   haveData: state.mostRecentShift.haveData
@@ -204,7 +213,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getShiftStatus: () => dispatch(getShiftStatus()),
   getMostRecentShiftStatus: () => dispatch(getMostRecentShiftStatus())
 })
 export default connect(

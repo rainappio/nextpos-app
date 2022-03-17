@@ -58,7 +58,7 @@ class PrinternKDS extends React.Component {
       )
     }
     return (
-      <ThemeContainer>
+      <ThemeScrollView>
         <View>
           <View style={[styles.container]}>
             <ScreenHeader title={t('settings.workingArea')}
@@ -149,7 +149,7 @@ class PrinternKDS extends React.Component {
             </View>
           </View>
         </View>
-      </ThemeContainer>
+      </ThemeScrollView>
     )
   }
 }

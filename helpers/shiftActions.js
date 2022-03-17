@@ -95,21 +95,22 @@ export const handleConfirmCloseShift = (values) => {
     }).then()
 }
 
-export const handleAbortCloseShift = () => {
+export const handleAbortCloseShift = async (callback) => {
   dispatchFetchRequestWithOption(api.shift.abort, {
-    method: 'POST',
-    withCredentials: true,
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: ''
-  }, {
-    defaultMessage: false
+      method: 'POST',
+      withCredentials: true,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: ''
+    }, {
+      defaultMessage: false
   },
     response => {
       successMessage(i18n.t('shift.shiftAborted'))
       NavigationService.navigate('Settings', {screen: 'ShiftClose'})
+      callback?.()
     }).then()
 }
 

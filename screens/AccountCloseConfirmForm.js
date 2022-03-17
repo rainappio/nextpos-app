@@ -13,6 +13,7 @@ import {StyledText} from "../components/StyledText";
 import Modal from 'react-native-modal';
 import {Ionicons} from '@expo/vector-icons';
 import {DeleteLineItemLogModal} from "../components/DeleteLineItemLogModal";
+import {SecondActionButton} from "../components/ActionButtons";
 
 
 class AccountCloseConfirmForm extends React.Component {
@@ -289,9 +290,10 @@ class AccountCloseConfirmForm extends React.Component {
             </Text>
           </TouchableOpacity>
 
-          <ConfirmActionButton
-            handleConfirmAction={handleAbortCloseShift}
-            buttonTitle='shift.abortAction'
+          <SecondActionButton
+            confirmPrompt={true}
+            onPress={handleAbortCloseShift}
+            title={t('shift.abortAction')}
           />
         </View>
         {/* #Others */}
