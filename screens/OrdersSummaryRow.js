@@ -685,7 +685,8 @@ class OrdersSummaryRow extends React.Component {
                 )
               }}
               leftOpenValue={75}
-              rightOpenValue={-150}
+              rightOpenValue={-160}
+              swipeToOpenPercent={10}
             />
           </View>
 

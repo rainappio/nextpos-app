@@ -502,7 +502,7 @@ class App extends React.Component {
               </LocaleContext.Provider>
             </ThemeContext.Provider>
             {/*https://www.npmjs.com/package/react-native-flash-message?activeTab=readme*/}
-            <FlashMessage position="bottom" />
+            <FlashMessage icon='auto' position="center" duration={1200}/>
           </View>
         </Provider>
       )

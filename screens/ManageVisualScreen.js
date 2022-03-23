@@ -23,9 +23,6 @@ class ManageVisualScreen extends Component {
 
   constructor(props, context) {
     super(props, context);
-    const windowWidth = Dimensions.get('window').width - 30;
-    const windowHeight = Dimensions.get('window').height - 76;
-    console.log("SCREEN SIZE", context?.isTablet);
 
     this.state = {
       windowWidth: Dimensions.get('window').width - 30,
@@ -111,6 +108,7 @@ class ManageVisualScreen extends Component {
           <View style={{flexDirection: 'row', width: '100%', minHeight: 80}}>
             {tablelayouts?.map((tblLayout, index) => {
               return (<TouchableOpacity
+                key={index}
                 disabled={this.state?.screenMode === 'joinTable'}
                 style={{
                   borderColor: customMainThemeColor,
@@ -174,7 +172,9 @@ class ManageVisualScreen extends Component {
                         return {...getInitialTablePosition(index, this.state?.tableHeight ?? this.state?.windowHeight), tableId: table?.tableId, tableData: table}
                       }
                     })
-                    console.log('positionArr', JSON.stringify(positionArr))
+
+                    console.trace('positionArr', JSON.stringify(positionArr))
+
                     return (this.state?.tableWidth && <Draggable
                       table={table}
                       key={table.tableId}

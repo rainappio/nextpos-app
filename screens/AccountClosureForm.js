@@ -5,11 +5,11 @@ import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import InputText from '../components/InputText'
 import {handleAbortCloseShift, renderShiftStatus} from "../helpers/shiftActions";
-import ConfirmActionButton from "../components/ConfirmActionButton";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
 import ScreenHeader from "../components/ScreenHeader";
 import {formatCurrency, formatDate} from "../actions";
 import {StyledText} from "../components/StyledText";
+import {SecondActionButton} from "../components/ActionButtons";
 
 class AccountClosureForm extends React.Component {
   static navigationOptions = {
@@ -136,9 +136,10 @@ class AccountClosureForm extends React.Component {
             </Text>
           </TouchableOpacity>
 
-          <ConfirmActionButton
-            handleConfirmAction={handleAbortCloseShift}
-            buttonTitle='shift.abortAction'
+          <SecondActionButton
+            confirmPrompt={true}
+            onPress={handleAbortCloseShift}
+            title={t('shift.abortAction')}
           />
         </View>
 

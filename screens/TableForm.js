@@ -63,7 +63,6 @@ class TableForm extends React.Component {
             <Field
               name="capacity"
               component={InputNumber}
-              type="up-down"
               placeholder={t('tableCapacity')}
               minValue={1}
             />

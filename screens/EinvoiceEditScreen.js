@@ -1,22 +1,17 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
 import {connect} from 'react-redux'
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native'
+import {Text, TouchableOpacity, View} from 'react-native'
 import {isNDigitsNumber, isRequired, isTwoBigWords} from '../validators'
 import InputText from '../components/InputText'
 import styles from '../styles'
 import Icon from 'react-native-vector-icons/AntDesign'
 import {LocaleContext} from '../locales/LocaleContext'
-import SegmentedControl from "../components/SegmentedControl";
 import ScreenHeader from "../components/ScreenHeader";
-import moment from "moment-timezone";
 import DropDown from "../components/DropDown";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
-import {ThemeContainer} from "../components/ThemeContainer";
 import {StyledText} from "../components/StyledText";
-import ThemeToggleButton from "../themes/ThemeToggleButton";
 import {api, dispatchFetchRequest} from '../constants/Backend'
-import {number} from 'prop-types'
 import DeleteBtn from '../components/DeleteBtn'
 
 class EinvoiceEditScreen extends React.Component {
@@ -195,7 +190,7 @@ class EinvoiceEditScreen extends React.Component {
 
         return (
 
-            <ThemeContainer>
+            <ThemeKeyboardAwareScrollView>
                 <View style={[styles.container, isTablet && styles.horizontalPaddingScreen]}>
                     <View style={{flex: 7}}>
                         <ScreenHeader title={t('eInvoice.eInvoiceTitle')} />
@@ -257,7 +252,7 @@ class EinvoiceEditScreen extends React.Component {
                                 }}
                             />
                         </View>}
-                        <ThemeKeyboardAwareScrollView >
+                        <View>
                             {!this.state.data &&
 
                                 <View style={{flex: 15, flexDirection: 'column'}}>
@@ -372,7 +367,7 @@ class EinvoiceEditScreen extends React.Component {
                             })}
 
 
-                        </ThemeKeyboardAwareScrollView>
+                        </View>
 
                     </View>
 
@@ -401,7 +396,7 @@ class EinvoiceEditScreen extends React.Component {
                         {!!this.state.data && <DeleteBtn handleDeleteAction={() => this.handleDelete()} />}
                     </View>
                 </View>
-            </ThemeContainer>
+            </ThemeKeyboardAwareScrollView>
 
         )
     }
