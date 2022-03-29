@@ -40,7 +40,15 @@ class Payment extends React.Component {
     }
 
     const applyDiscount = async () => {
-      const url = values.discount.offerId === 'NO_DISCOUNT' ? api.order.removeDiscount(orderId) : api.order.applyDiscount(orderId)
+      let url = api.order.applyDiscount(orderId)
+
+      if (values.discount.offerId === 'NO_DISCOUNT') {
+          url = api.order.removeDiscount(orderId)
+      }
+
+      if (values.discount.offerId === 'FULL_DISCOUNT') {
+        url = api.order.applyFullDiscount(orderId)
+      }
 
       await dispatchFetchRequestWithOption(url, {
         method: 'POST',
