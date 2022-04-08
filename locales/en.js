@@ -269,6 +269,7 @@ const en = {
     NO_DISCOUNT: 'No Discount',
     FULL_DISCOUNT: 'Full Discount',
     ENTER_DISCOUNT: 'Discount %',
+    DISCOUNT_PERCENT_OFF: 'Discount %',
     DISCOUNT_AMOUNT_OFF: 'Discount $'
   },
   orderState: {
@@ -836,6 +837,7 @@ const en = {
     serviceType: {
       title: 'Service Type',
       workingArea: 'Working Area',
+      orderDetails: 'Order Details',
       checkout: 'Checkout'
     },
     testPrint: 'Test Printer',

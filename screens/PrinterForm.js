@@ -88,6 +88,15 @@ class PrinterForm extends React.Component {
             <Field
               name="serviceTypes"
               component={RenderRadioBtnMulti}
+              customValue="ORDER_DETAILS"
+              optionName={t('printer.serviceType.orderDetails')}
+            />
+          </View>
+
+          <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+            <Field
+              name="serviceTypes"
+              component={RenderRadioBtnMulti}
               customValue="CHECKOUT"
               optionName={t('printer.serviceType.checkout')}
             />

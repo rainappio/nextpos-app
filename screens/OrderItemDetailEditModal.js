@@ -808,7 +808,7 @@ class OrderItemOptions extends React.Component {
                       productDiscount: offer.offerId,
                       discount: offer.discountValue
                     }}
-                    optionName={offer.offerName}
+                    optionName={t(`offer.${offer.offerId}`)}
                     defaultValueDisplay={(customValue, value) => String(customValue.productDiscount === value.productDiscount ? value.discount : 0)}
                   />
                 </View>

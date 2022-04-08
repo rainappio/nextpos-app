@@ -269,7 +269,8 @@ const zh = {
     NO_DISCOUNT: '取消折扣',
     FULL_DISCOUNT: '整張單打折',
     ENTER_DISCOUNT: '打折(百分比)',
-    DISCOUNT_AMOUNT_OFF: '打折(金額)',
+    DISCOUNT_PERCENT_OFF: '打折(百分比)',
+    DISCOUNT_AMOUNT_OFF: '打折(金額)'
   },
   orderState: {
     OPEN: '已開單',
@@ -838,6 +839,7 @@ const zh = {
     serviceType: {
       title: '綁定區域',
       workingArea: '工作區',
+      orderDetails: '明細',
       checkout: '結帳區'
     },
     testPrint: '測試出單機',
