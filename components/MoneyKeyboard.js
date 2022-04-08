@@ -146,7 +146,7 @@ export const MoneyKeyboard = (props) => {
                 title={""}
                 globalorderoffers
                 order
-            
+
 */
 export const DiscountKeyboard = (props) => {
     const localeContext = useContext(LocaleContext);
@@ -203,7 +203,10 @@ export const DiscountKeyboard = (props) => {
     }
     const handleLabelPress = async (name, label) => {
         console.log('label', JSON.stringify(label))
-        setSelectedLabel(name);
+
+        const labelName = label?.discountValue <= 0 ? localeContext.t(`offer.${label?.offerId}`) : label?.offerName
+        setSelectedLabel(labelName);
+
         if (name === "NO_DISCOUNT") {
             const url = api.order.removeDiscount(props?.order?.orderId)
 
@@ -222,6 +225,22 @@ export const DiscountKeyboard = (props) => {
             }).then(() => {
                 !!props?.okPress ? props?.okPress() : console.warn("need okPress()")
             })
+        } else if (name === 'FULL_DISCOUNT') {
+          const url = api.order.applyFullDiscount(props?.order?.orderId)
+
+          await dispatchFetchRequestWithOption(url, {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }, {
+            defaultMessage: false
+          }, response => {
+          }).then(() => {
+            !!props?.okPress ? props?.okPress() : console.warn("need okPress()")
+          })
         } else if (label?.discountValue === 0) {
 
             setDiscountObj({
@@ -265,29 +284,29 @@ export const DiscountKeyboard = (props) => {
                 {props?.title && <Text style={{fontSize: 28, fontWeight: 'bold'}}>{props?.title}</Text>}
                 <ThemeScrollView style={{flex: 1}}>
                     {props?.globalorderoffers?.map((item, index) => (
-                        <View style={{
+                        <View
+                          key={index}
+                          style={{
                             backgroundColor: customBackgroundColor,
                             flex: 1,
-                            alignItems: 'center'
-                        }}>
+                            justifyContent: 'center',
+                            marginVertical: '2%'
+                          }}>
                             <Button
-                                key={index}
-                                title={item?.offerName}
+                                title={item?.discountValue <= 0 ? localeContext.t(`offer.${item?.offerId}`) : item?.offerName}
                                 raised
                                 containerStyle={{
-                                    marginVertical: '5%',
-                                    padding: 0,
-                                    justifyContent: 'center',
-                                    height: '10%',
-                                    flexDirection: 'row'
+                                  justifyContent: 'center',
+                                  borderRadius: 10,
+                                  width: '100%',
                                 }}
                                 buttonStyle={{
-                                    flex: 1,
-                                    width: '100%',
-                                    margin: 0,
-                                    borderRadius: 10,
-                                    backgroundColor: customMainThemeColor,
-                                    paddingVertical: '10%'
+                                  flex: 1,
+                                  width: '100%',
+                                  margin: 0,
+                                  borderRadius: 10,
+                                  backgroundColor: customMainThemeColor,
+                                  paddingVertical: '10%'
                                 }}
                                 onPress={() => {
                                     handleLabelPress(item?.offerId, item)
@@ -386,7 +405,7 @@ export const DiscountKeyboard = (props) => {
                 getResult={(result)=>{}}
                 okPress={(result)=>{}}
                 value={array[4]}
-            
+
 */
 export const CardFourNumberKeyboard = (props) => {
     const localeContext = useContext(LocaleContext);
@@ -518,7 +537,7 @@ export const CardFourNumberKeyboard = (props) => {
                 getResult={(result)=>{}}
                 okPress={(result)=>{}}
                 value={array[digit]}
-            
+
 */
 export const CustomTitleAndDigitKeyboard = (props) => {
     const localeContext = useContext(LocaleContext);
@@ -725,7 +744,7 @@ const styles = StyleSheet.create({
                 getResult={()=>{}}
                 title={""}
                 client
-            
+
 */
 export const MobilePayKeyboard = (props) => {
     const localeContext = useContext(LocaleContext);

@@ -237,6 +237,9 @@ export const api = {
     applyDiscount: orderId => {
       return `${apiRoot}/orders/${orderId}/applyDiscount`
     },
+    applyFullDiscount: orderId => {
+      return `${apiRoot}/orders/${orderId}/applyFullDiscount`
+    },
     removeDiscount: orderId => {
       return `${apiRoot}/orders/${orderId}/removeDiscount`
     },

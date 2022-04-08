@@ -265,6 +265,13 @@ const en = {
     splitInvoiceDetail: 'Invoice(Status)',
     unableEditPayingOrder: 'Paying order unable to edit items.'
   },
+  offer: {
+    NO_DISCOUNT: 'No Discount',
+    FULL_DISCOUNT: 'Full Discount',
+    ENTER_DISCOUNT: 'Discount %',
+    DISCOUNT_PERCENT_OFF: 'Discount %',
+    DISCOUNT_AMOUNT_OFF: 'Discount $'
+  },
   orderState: {
     OPEN: 'Open',
     IN_PROCESS: 'In Process',
@@ -289,6 +296,7 @@ const en = {
     deliverLineItems: 'Delivered Order Item',
     waiveServiceCharge: 'Waived Service Charge',
     applyOrderDiscount: 'Applied Order Discount',
+    applyFullOrderDiscount: 'Applied Full Order Discount',
     removeOrderDiscount: 'Removed Order Discount',
     copyOrder: 'Copied Order',
     deleteOrder: 'Deleted Order',
@@ -829,6 +837,7 @@ const en = {
     serviceType: {
       title: 'Service Type',
       workingArea: 'Working Area',
+      orderDetails: 'Order Details',
       checkout: 'Checkout'
     },
     testPrint: 'Test Printer',

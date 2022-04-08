@@ -265,6 +265,13 @@ const zh = {
     splitInvoiceDetail: '發票(狀態)',
     unableEditPayingOrder: '結帳中的訂單不可編輯品項.'
   },
+  offer: {
+    NO_DISCOUNT: '取消折扣',
+    FULL_DISCOUNT: '整張單打折',
+    ENTER_DISCOUNT: '打折(百分比)',
+    DISCOUNT_PERCENT_OFF: '打折(百分比)',
+    DISCOUNT_AMOUNT_OFF: '打折(金額)'
+  },
   orderState: {
     OPEN: '已開單',
     IN_PROCESS: '準備中',
@@ -289,6 +296,7 @@ const zh = {
     deliverLineItems: '品項送出',
     waiveServiceCharge: '服務費折免',
     applyOrderDiscount: '訂單折扣',
+    applyFullOrderDiscount: '訂單招待',
     removeOrderDiscount: '訂單折扣移除',
     copyOrder: '訂單複製',
     deleteOrder: '訂單刪除',
@@ -831,6 +839,7 @@ const zh = {
     serviceType: {
       title: '綁定區域',
       workingArea: '工作區',
+      orderDetails: '明細',
       checkout: '結帳區'
     },
     testPrint: '測試出單機',

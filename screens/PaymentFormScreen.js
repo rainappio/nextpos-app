@@ -168,10 +168,8 @@ class PaymentFormScreen extends React.Component {
               <View style={[styles.sectionTitleContainer]}>
                 <StyledText style={styles.sectionTitleText}>{t('order.discount')}</StyledText>
               </View>
-
               {globalorderoffers != null && globalorderoffers.map((offer, ix) => (
                 <View
-                  style={[]}
                   key={ix}
                 >
                   <Field
@@ -182,7 +180,8 @@ class PaymentFormScreen extends React.Component {
                       orderDiscount: offer.offerId,
                       discount: offer.discountValue
                     }}
-                    optionName={offer.offerName}
+                    optionName={offer?.discountValue <= 0 ? t(`offer.${offer?.offerId}`) : offer?.offerName}
+
                     defaultValueDisplay={(customValue, value) => String(customValue.orderDiscount === value.orderDiscount ? value.discount : 0)}
                   />
                 </View>

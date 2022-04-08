@@ -1,5 +1,5 @@
 import React from 'react'
-import {TextInput, View} from 'react-native'
+import {InputAccessoryView, Keyboard, Platform, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import {CheckBox} from 'react-native-elements'
 import styles from '../../styles'
 import {withContext} from "../../helpers/contextHelper";
@@ -43,7 +43,25 @@ class RenderCheckBox extends React.Component {
                       onChange(valueToChange)
                     }}
                     keyboardType={'numeric'}
+                    inputAccessoryViewID={optionName}
                   />
+                  {Platform.OS === 'ios' && (
+                    <InputAccessoryView nativeID={optionName}>
+                      <TouchableOpacity
+                        onPress={() => Keyboard.dismiss()}
+                        style={[{flex: 1, flexDirection: 'row-reverse'}, styles.grayBg]}
+                      >
+                        <Text
+                          style={[
+                            styles.margin_15,
+                            {fontSize: 16, fontWeight: 'bold', color: rest?.locale?.customMainThemeColor}
+                          ]}
+                        >
+                          Done
+                        </Text>
+                      </TouchableOpacity>
+                    </InputAccessoryView>
+                  )}
                 </View>
               )}
             </View>
