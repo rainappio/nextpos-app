@@ -37,9 +37,6 @@ class WorkingAreaEdit extends React.Component {
       body: JSON.stringify(values)
     }, response => {
       this.props.navigation.navigate('PrinternKDS')
-      this.props.getWorkingAreas()
-      this.props.getPrinters()
-      this.props.clearWorkingArea()
     }).then()
   }
 
@@ -54,16 +51,10 @@ class WorkingAreaEdit extends React.Component {
       }
     }, response => {
       this.props.navigation.navigate('PrinternKDS')
-      this.props.getWorkingAreas()
-      this.props.getPrinters()
-      this.props.clearWorkingArea()
     }).then()
   }
 
   handleEditCancel = () => {
-    this.props.clearWorkingArea()
-    this.props.getPrinters()
-    this.props.getWorkingAreas()
     this.props.navigation.navigate('PrinternKDS')
   }
 
@@ -115,11 +106,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getWorkingArea: () =>
-    dispatch(getWorkingArea(props.route.params.id)),
-  getPrinters: () => dispatch(getPrinters()),
-  getWorkingAreas: () => dispatch(getWorkingAreas()),
-  clearWorkingArea: () => dispatch(clearWorkingArea())
+  getWorkingArea: () => dispatch(getWorkingArea(props.route.params.id))
 })
 
 export default connect(

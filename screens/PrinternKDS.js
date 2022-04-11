@@ -32,8 +32,15 @@ class PrinternKDS extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getPrinters()
-    this.props.getWorkingAreas()
+
+    this._getData = this.props.navigation.addListener('focus', () => {
+      this.props.getPrinters()
+      this.props.getWorkingAreas()
+    })
+  }
+
+  componentWillUnmount() {
+    this._getData()
   }
 
   render() {

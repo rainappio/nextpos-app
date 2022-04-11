@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {View} from 'react-native'
 import PrinterForm from '../screens/PrinterForm'
-import {clearPrinter, getPrinter, getPrinters, getWorkingAreas} from '../actions'
+import {clearPrinter, getPrinter, getPrinters, getTableLayouts, getWorkingAreas} from '../actions'
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -10,6 +10,7 @@ import ScreenHeader from "../components/ScreenHeader";
 import LoadingScreen from "./LoadingScreen";
 import BackendErrorScreen from "./BackendErrorScreen";
 import {ThemeContainer} from "../components/ThemeContainer";
+import {ThemeScrollView} from "../components/ThemeScrollView";
 
 class PrinterEdit extends React.Component {
   static navigationOptions = {
@@ -27,6 +28,7 @@ class PrinterEdit extends React.Component {
         ? this.props.route.params.id
         : this.props.route.params.customId
     )
+    this.props.getTableLayouts()
   }
 
   handleUpdate = values => {
@@ -40,8 +42,6 @@ class PrinterEdit extends React.Component {
       body: JSON.stringify({...values, serviceTypes: [...values?.serviceTypes]})
     }, response => {
       this.props.navigation.navigate('PrinternKDS')
-      this.props.getWorkingAreas()
-      this.props.getPrinters()
     }).then()
   }
 
@@ -56,19 +56,15 @@ class PrinterEdit extends React.Component {
       }
     }, response => {
       this.props.navigation.navigate('PrinternKDS')
-      this.props.getWorkingAreas()
-      this.props.getPrinters()
     }).then()
   }
 
   handleEditCancel = () => {
-    this.props.clearPrinter()
-    this.props.getWorkingAreas()
     this.props.navigation.navigate('PrinternKDS')
   }
 
   render() {
-    const {navigation, route, printer, loading, haveData, haveError} = this.props
+    const {navigation, route, printer, loading, haveData, haveError, tableLayouts} = this.props
     const {t, isTablet} = this.context
 
     if (loading) {
@@ -82,7 +78,7 @@ class PrinterEdit extends React.Component {
     }
 
     return (
-      <ThemeContainer>
+      <ThemeScrollView>
         <View style={[styles.fullWidthScreen, isTablet && styles.horizontalPaddingScreen]}>
           <ScreenHeader title={t('printer.editPrinterTitle')}
             parentFullScreen={true} />
@@ -95,26 +91,25 @@ class PrinterEdit extends React.Component {
             isEdit={true}
             initialValues={printer}
             handleEditCancel={this.handleEditCancel}
+            tableLayouts={tableLayouts}
           />
         </View>
-      </ThemeContainer>
+      </ThemeScrollView>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  css: state,
   printer: state.printer.data,
   haveData: state.printer.haveData,
   haveError: state.printer.haveError,
-  loading: state.printer.loading
+  loading: state.printer.loading,
+  tableLayouts: state.tablelayouts.data.tableLayouts
 })
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getPrinters: () => dispatch(getPrinters()),
-  getWorkingAreas: () => dispatch(getWorkingAreas()),
   getPrinter: id => dispatch(getPrinter(id)),
-  clearPrinter: () => dispatch(clearPrinter())
+  getTableLayouts: () => dispatch(getTableLayouts())
 })
 
 export default connect(

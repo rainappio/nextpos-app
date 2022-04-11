@@ -832,10 +832,11 @@ const en = {
     workingAreaTitle: 'Working Area',
     editPrinterTitle: 'Edit Printer',
     addPrinterTitle: 'Add Printer',
+    serviceTypeTitle: 'Service Type',
+    tableLayoutsTitle: 'Table Layouts',
     printerName: 'Printer Name',
     ipAddress: 'IP Address',
     serviceType: {
-      title: 'Service Type',
       workingArea: 'Working Area',
       orderDetails: 'Order Details',
       checkout: 'Checkout'
