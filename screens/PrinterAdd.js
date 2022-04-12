@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {View} from 'react-native'
 import PrinterForm from '../screens/PrinterForm'
-import {getPrinters, getWorkingAreas} from '../actions'
+import {getPrinters, getTableLayouts, getWorkingAreas} from '../actions'
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
@@ -19,6 +19,10 @@ class PrinterAdd extends React.Component {
     super(props, context)
   }
 
+  componentDidMount() {
+    this.props.getTableLayouts()
+  }
+
   handleSubmit = values => {
     dispatchFetchRequest(api.printer.create, {
       method: 'POST',
@@ -30,13 +34,11 @@ class PrinterAdd extends React.Component {
       body: JSON.stringify(values)
     }, response => {
       this.props.navigation.navigate('PrinternKDS')
-      this.props.getWorkingAreas()
-      this.props.getPrinters()
     }).then()
   }
 
   render() {
-    const {navigation, route} = this.props
+    const {navigation, route, tableLayouts} = this.props
     const {t, isTablet} = this.context
 
     return (
@@ -45,7 +47,11 @@ class PrinterAdd extends React.Component {
           <ScreenHeader title={t('printer.addPrinterTitle')}
             parentFullScreen={true} />
 
-          <PrinterForm navigation={navigation} route={route} onSubmit={this.handleSubmit} />
+          <PrinterForm navigation={navigation}
+                       route={route}
+                       onSubmit={this.handleSubmit}
+                       tableLayouts={tableLayouts}
+          />
         </View>
       </ThemeContainer>
     )
@@ -53,13 +59,11 @@ class PrinterAdd extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  printers: state.printers.data.printers,
-  workingareas: state.workingareas.data.workingAreas
+  tableLayouts: state.tablelayouts.data.tableLayouts
 })
 const mapDispatchToProps = dispatch => ({
   dispatch,
-  getPrinters: () => dispatch(getPrinters()),
-  getWorkingAreas: () => dispatch(getWorkingAreas())
+  getTableLayouts: () => dispatch(getTableLayouts())
 })
 
 export default connect(

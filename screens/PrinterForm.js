@@ -34,7 +34,7 @@ class PrinterForm extends React.Component {
   }
 
   render() {
-    const {handleSubmit, isEdit, handleEditCancel, ipAddress} = this.props
+    const {handleSubmit, isEdit, handleEditCancel, ipAddress, tableLayouts} = this.props
     const {t, customMainThemeColor} = this.context
 
     return (
@@ -72,7 +72,7 @@ class PrinterForm extends React.Component {
           </View>
 
           <View style={[styles.sectionTitleContainer]}>
-            <StyledText style={styles.sectionTitleText}>{t('printer.serviceType.title')}</StyledText>
+            <StyledText style={styles.sectionTitleText}>{t('printer.serviceTypeTitle')}</StyledText>
           </View>
 
           <View style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
@@ -101,6 +101,24 @@ class PrinterForm extends React.Component {
               optionName={t('printer.serviceType.checkout')}
             />
           </View>
+
+          <View style={[styles.sectionTitleContainer]}>
+            <StyledText style={styles.sectionTitleText}>{t('printer.tableLayoutsTitle')}</StyledText>
+          </View>
+
+          {tableLayouts !== undefined && tableLayouts.map(tl => {
+            return (
+              <View key={tl.id} style={[styles.tableRowContainerWithBorder, styles.verticalPadding]}>
+                <Field
+                  name="tableLayouts"
+                  component={RenderRadioBtnMulti}
+                  customValue={tl.id}
+                  optionName={tl.layoutName}
+                />
+              </View>
+            )
+          })}
+
         </View>
 
         <View style={[styles.bottom, styles.horizontalMargin]}>

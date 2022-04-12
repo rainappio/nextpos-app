@@ -30,7 +30,6 @@ class WorkingAreaAdd extends React.Component {
       body: JSON.stringify(values)
     }, response => {
       this.props.navigation.navigate('PrinternKDS')
-      this.props.getWorkingAreas()
     }).then()
   }
 
@@ -56,13 +55,10 @@ class WorkingAreaAdd extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  printers: state.printers.data.printers,
-  workingareas: state.workingareas.data.workingAreas
+
 })
 const mapDispatchToProps = dispatch => ({
-  dispatch,
-  getPrinters: () => dispatch(getPrinters()),
-  getWorkingAreas: () => dispatch(getWorkingAreas())
+  dispatch
 })
 
 export default connect(

@@ -834,10 +834,11 @@ const zh = {
     workingAreaTitle: '工作區',
     editPrinterTitle: '編輯出單機',
     addPrinterTitle: '新增出單機',
+    serviceTypeTitle: '綁定區域',
+    tableLayoutsTitle: '綁定樓層',
     printerName: '出單機名稱',
     ipAddress: 'IP地址',
     serviceType: {
-      title: '綁定區域',
       workingArea: '工作區',
       orderDetails: '明細',
       checkout: '結帳區'
