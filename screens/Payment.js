@@ -113,7 +113,7 @@ class Payment extends React.Component {
           waiveServiceCharge: order.serviceCharge === 0,
           discount: initialDiscount
         }}
-        order={order}
+        orderProp={order}
         navigation={navigation}
         route={route}
         onSubmit={this.handlePayment}
@@ -128,7 +128,7 @@ class Payment extends React.Component {
             waiveServiceCharge: order.serviceCharge === 0,
             discount: initialDiscount
           }}
-          order={order}
+          orderProp={order}
           navigation={navigation}
           route={route}
           onSubmit={this.handlePayment}
