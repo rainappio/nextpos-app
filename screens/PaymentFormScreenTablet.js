@@ -82,14 +82,14 @@ class PaymentFormScreenTablet extends React.Component {
     }
 
     refreshOrder = async () => {
-        this.props.getOrder(this.props.order.orderId)
+        this.props.getOrder(this.props.orderProp.orderId)
         this.setState({openDiscountKeyBoard: false})
     }
 
     initScreen = async () => {
       await this.props.getCurrentClient()
       await this.props.getfetchglobalOrderOffers()
-      await this.props.getOrder(this.props.order.orderId)
+      await this.props.getOrder(this.props.orderProp.orderId)
       this.setState({openDiscountKeyBoard: false, waiveServiceCharge: this.props.order?.serviceCharge === 0})
     }
 
@@ -479,7 +479,7 @@ class PaymentFormScreenTablet extends React.Component {
                 <View style={[styles.fullWidthScreen]}>
                     <ScreenHeader backNavigation={true}
                         parentFullScreen={true}
-                        title={`${getTableDisplayName(order)} - ${t('payment.paymentTitle')}`}
+                        title={`${order.serialId} (${getTableDisplayName(order)}) - ${t('payment.paymentTitle')}`}
                         backAction={() => {
                             !isSplitting ? handleOrderAction(order?.orderId, 'EXIT_PAYMENT', () => this.props.navigation.goBack()) : this.props.navigation.goBack()
                         }}
@@ -1059,7 +1059,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
-    getOrder: () => dispatch(getOrder(props.order.orderId)),
+    getOrder: (id) => dispatch(getOrder(id)),
     getfetchglobalOrderOffers: () => dispatch(getfetchglobalOrderOffers()),
     getCurrentClient: () => dispatch(getCurrentClient()),
 })

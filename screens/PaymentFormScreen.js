@@ -45,7 +45,7 @@ class PaymentFormScreen extends React.Component {
 
   componentDidMount() {
     this.props.getfetchglobalOrderOffers()
-    this.props.getOrder(this.props.order.orderId)
+    this.props.getOrder(this.props.orderProp.orderId)
   }
 
   handleOnMessage = (data, id) => {
@@ -240,7 +240,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch, props) => ({
-  getOrder: () => dispatch(getOrder(props.order.orderId)),
+  getOrder: (id) => dispatch(getOrder(id)),
   getfetchglobalOrderOffers: () => dispatch(getfetchglobalOrderOffers())
 })
 

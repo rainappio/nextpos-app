@@ -62,17 +62,7 @@ class ShiftHistory extends React.Component {
   keyExtractor = (order, index) => index.toString()
 
   renderItem = ({item}) => {
-    let allClosingAmount = 0
-
-    if (item.close.closingShiftReport != null && item.close.closingShiftReport.totalByPaymentMethod != null) {
-
-      let checkLen = Object.keys(item.close.closingShiftReport.totalByPaymentMethod).length
-
-      if (!!checkLen) {
-
-        allClosingAmount = Object.values(item.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.orderTotal))?.reduce((a, b) => a + b)
-      }
-    }
+    const allClosingAmount = item.close.closingShiftReport?.oneOrderSummary?.orderTotal
 
     return (
       <ListItem
