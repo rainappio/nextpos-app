@@ -56,17 +56,7 @@ class AccountCloseConfirmForm extends React.Component {
     if (mostrecentShift.close.closingShiftReport != null && mostrecentShift.close.closingShiftReport.oneOrderSummary != null) {
       allDiscount = mostrecentShift.close.closingShiftReport.oneOrderSummary.discount
       allServiceCharge = mostrecentShift.close.closingShiftReport.oneOrderSummary.serviceCharge
-    }
-
-    if (mostrecentShift.close.closingShiftReport != null && mostrecentShift.close.closingShiftReport.totalByPaymentMethod != null) {
-
-      let checkLen = Object.keys(mostrecentShift.close.closingShiftReport.totalByPaymentMethod).length
-
-      if (!!checkLen) {
-
-        allClosingAmount = Object.values(mostrecentShift.close.closingShiftReport?.totalByPaymentMethod)?.map((item => item?.orderTotal))?.reduce((a, b) => a + b)
-      }
-
+      allClosingAmount = mostrecentShift.close.closingShiftReport?.oneOrderSummary?.orderTotal
     }
 
     if (mostrecentShift.close.closingShiftReport != null && mostrecentShift.close.closingShiftReport.orderCountByState != null) {
