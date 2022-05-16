@@ -4,7 +4,7 @@ import {getMostRecentShiftStatus} from '../actions'
 import {api, dispatchFetchRequestWithOption} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import AccountClosureForm from './AccountClosureForm'
-import LoadingScreen from "./LoadingScreen";
+import BlankScreen from "./BlankScreen";
 
 class AccountClose extends React.Component {
   static navigationOptions = {
@@ -31,7 +31,6 @@ class AccountClose extends React.Component {
       defaultMessage: false
     }, response => {
       response.json().then(data => {
-        this.props.getMostRecentShiftStatus()
         this.props.navigation.navigate('AccountCloseConfirm')
       })
     }).then()
@@ -45,7 +44,7 @@ class AccountClose extends React.Component {
 
     if (loading) {
       return (
-        <LoadingScreen />
+        <BlankScreen />
       )
     }
 

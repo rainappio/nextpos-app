@@ -8,6 +8,7 @@
       "android"
     ],
     "plugins": [
+      "sentry-expo",
       [
         "expo-notifications",
         {
@@ -19,7 +20,7 @@
       ]
     ],
     "userInterfaceStyle": "automatic",
-    "version": "22.02.03",
+    "version": "22.05.03",
     "icon": "./assets/images/icon.png",
     "splash": {
       "image": "./assets/images/rain-splash-still.png",
@@ -36,7 +37,7 @@
     "ios": {
       "supportsTablet": true,
       "requireFullScreen": true,
-      "buildNumber": "22.02.03.1",
+      "buildNumber": "22.05.03.1",
       "bundleIdentifier": "io.rain.app",
       "infoPlist": {
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Geofencing for staff clock in",
@@ -64,7 +65,7 @@
     },
     "android": {
       "package": "io.rainapp",
-      "versionCode": 13,
+      "versionCode": 14,
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",

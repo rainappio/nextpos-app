@@ -142,7 +142,6 @@ class AccountClosureForm extends React.Component {
             title={t('shift.abortAction')}
           />
         </View>
-
       </ThemeKeyboardAwareScrollView>
     )
   }

@@ -1,16 +1,8 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {Text, ScrollView, View} from 'react-native'
-import {Field, reduxForm} from 'redux-form'
-import RenderDateTimePicker from '../components/DateTimePicker'
-import DropDown from '../components/DropDown'
+import React, {useContext, useEffect} from 'react';
+import {ScrollView, Text, View} from 'react-native'
 import {LocaleContext} from '../locales/LocaleContext'
 import styles from '../styles'
 import {StyledText} from "../components/StyledText";
-import SegmentedControl from "../components/SegmentedControl";
-import InputText from '../components/InputText'
-import Icon from 'react-native-vector-icons/Ionicons'
-import TimePeriodPicker from "../components/TimePeriodPicker";
-import moment from "moment";
 import Modal from 'react-native-modal';
 import {formatCurrency, normalizeTimeString} from "../actions";
 

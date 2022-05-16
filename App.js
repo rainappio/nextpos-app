@@ -35,6 +35,7 @@ import * as Device from 'expo-device';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {checkExpoUpdate} from "./helpers/updateAppHelper";
 import {api, dispatchFetchRequest} from './constants/Backend'
+import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 if (Platform.OS === "android") {
   // See https://github.com/expo/expo/issues/6536 for this issue.
@@ -442,6 +443,7 @@ class App extends React.Component {
 
       return (
         <Provider store={store}>
+          <GestureHandlerRootView style={{flex: 1}}>
           <View style={styles.mainContainer}>
             <StatusBar
               translucent={true}
@@ -504,6 +506,7 @@ class App extends React.Component {
             {/*https://www.npmjs.com/package/react-native-flash-message?activeTab=readme*/}
             <FlashMessage icon='auto' position="center" duration={1200}/>
           </View>
+          </GestureHandlerRootView>
         </Provider>
       )
     }
