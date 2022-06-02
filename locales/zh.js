@@ -1,4 +1,6 @@
 const zh = {
+  createAccount: '註冊新帳號',
+  signIn: '登入',
   login: '登入',
   clientName: '店名/公司名',
   email: '電子郵件',

@@ -1,4 +1,6 @@
 const en = {
+  createAccount: 'Create Account',
+  signIn: 'Sign In',
   login: 'Login',
   clientName: 'Client Name',
   email: 'Email Address',

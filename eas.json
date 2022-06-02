@@ -7,10 +7,16 @@
       "developmentClient": true,
       "distribution": "internal"
     },
-    "preview": {
+    "staging": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "node": "16.13.0",
+      "env": {
+        "ROOT_HOST": "https://api.rain-app.io",
+        "ADMIN_APIKEY": ""
+      }
+    }
   },
   "submit": {
     "production": {}
