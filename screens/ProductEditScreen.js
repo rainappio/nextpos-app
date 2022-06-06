@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import ProductFormScreen from './ProductFormScreen'
-import {clearProduct, getLables, getProduct, getProductOptions, getProducts, getWorkingAreas} from '../actions'
+import {clearProduct, getProduct, getProductOptions, getProducts, getWorkingAreas} from '../actions'
 import {api, dispatchFetchRequest, successMessage, dispatchFetchRequestWithOption} from '../constants/Backend'
 import LoadingScreen from "./LoadingScreen";
 
@@ -22,7 +22,6 @@ class ProductEdit extends Component {
 
 
   async componentDidMount() {
-    this.props.getLables()
     this.props.getProductOptions()
     await this.props.getWorkingAreas('PRODUCT')
     await this.props.getProduct()
@@ -290,7 +289,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   dispatch,
-  getLables: () => dispatch(getLables()),
   clearProduct: () =>
     dispatch(clearProduct(props.route.params.productId)),
   getProducts: () => dispatch(getProducts()),

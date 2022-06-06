@@ -12,6 +12,7 @@ import {StyledText} from "../components/StyledText";
 import {ThemeContainer} from "../components/ThemeContainer";
 import {OpenShiftScreen} from "./OpenShiftScreen";
 import {SecondActionButton} from "../components/ActionButtons";
+import BlankScreen from "./BlankScreen";
 
 class ShiftClose extends React.Component {
   static navigationOptions = {
@@ -67,7 +68,7 @@ class ShiftClose extends React.Component {
 
     if (loading) {
       return (
-        <LoadingScreen/>
+        <BlankScreen/>
       )
     } else if (this.state?.isOpenShift) {
       return (

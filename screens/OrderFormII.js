@@ -25,7 +25,6 @@ import ScreenHeader from "../components/ScreenHeader";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {MainActionFlexButton, SecondActionButton} from "../components/ActionButtons";
 import {printMessage} from "../helpers/printerActions";
-import DropDown from "../components/DropDown";
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import {SplitBillPopUp} from '../components/PopUp'

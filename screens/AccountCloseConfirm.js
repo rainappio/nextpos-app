@@ -4,7 +4,7 @@ import {getMostRecentShiftStatus} from '../actions'
 import {api, dispatchFetchRequestWithOption, successMessage} from '../constants/Backend'
 import {LocaleContext} from '../locales/LocaleContext'
 import AccountCloseConfirmForm from './AccountCloseConfirmForm'
-import LoadingScreen from "./LoadingScreen";
+import BlankScreen from "./BlankScreen";
 
 class AccountCloseConfirm extends React.Component {
   static navigationOptions = {
@@ -14,6 +14,10 @@ class AccountCloseConfirm extends React.Component {
 
   constructor(props, context) {
     super(props, context)
+  }
+
+  componentDidMount() {
+    this.props.getMostRecentShiftStatus()
   }
 
   handleConfirmCloseShift = (values) => {
@@ -31,7 +35,6 @@ class AccountCloseConfirm extends React.Component {
       defaultMessage: false
     }, response => {
       successMessage(this.context.t('shift.shiftClosed'))
-      this.props.getMostRecentShiftStatus()
       this.props.navigation.navigate('CloseComplete', {mostRecentShift: this.props?.mostRecentShift})
     }).then()
   }
@@ -60,7 +63,7 @@ class AccountCloseConfirm extends React.Component {
 
     if (loading) {
       return (
-        <LoadingScreen />
+        <BlankScreen />
       )
     }
 

@@ -22,7 +22,7 @@ import {withNavigation} from '@react-navigation/compat';
                 text:{}
             }}
 
-            
+
 */
 const CalendarEventBase = (props) => {
     const localeContext = useContext(LocaleContext);
@@ -124,84 +124,131 @@ const CalendarEventBase = (props) => {
             </TouchableOpacity>
         )
     } else {
-        return (
-            <TouchableOpacity key={event?.id} style={{flexDirection: 'row', borderWidth: 1, borderRadius: 10, borderColor: customMainThemeColor, margin: 10, maxWidth: 640, alignSelf: 'center', padding: 10}}
-                onPress={() => {
-                    !!props?.closeModal && props?.closeModal()
-                    props.navigation.navigate('ReservationViewScreen', {
-                        reservationId: event.id,
-                    })
-
-                }}
-            >
-
-                <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1}}>
+      // reservation popup
+      return (
+        <TouchableOpacity key={event?.id}
+                          style={{
+                            flexDirection: 'row',
+                            borderWidth: 1,
+                            borderRadius: 10,
+                            borderColor: customMainThemeColor,
+                            margin: 10,
+                            maxWidth: 640,
+                            alignSelf: 'center',
+                            padding: 10
+                          }}
+                          onPress={() => {
+                            !!props?.closeModal && props?.closeModal()
+                            props.navigation.navigate('ReservationViewScreen', {
+                              reservationId: event.id,
+                            })
+                          }}
+        >
+          <View style={[{flex: 1, flexDirection: 'row', minHeight: 70}]}>
+            <View style={{flexDirection: 'column', flex: 0.5, justifyContent: 'center'}}>
+              <MCIcon
+                name={event?.sourceOfOrigin === 'APP' ? 'tablet-cellphone' : 'web'}
+                size={30}
+                style={[styles?.buttonIconStyle(customMainThemeColor)]}
+              />
+            </View>
+            <View style={{flexDirection: 'column', flex: 2, justifyContent: 'space-around'}}>
+              <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-start', alignItems: 'center'}}>
+                <StyledText style={{...props?.theme?.text, paddingHorizontal: 4}}>
+                  <FontAwesome5Icon
+                    name={'user-check'}
+                    size={18}
+                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                  /></StyledText>
+                <StyledText style={{...props?.theme?.text, fontSize: 16, flex: 1, textAlign: 'center'}}>
+                  {event?.name}
+                </StyledText>
+              </View>
+              <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-start', alignItems: 'center'}}>
+                <StyledText style={{...props?.theme?.text, paddingHorizontal: 4}}>
+                  <FontAwesome5Icon
+                    name={'info-circle'}
+                    size={18}
+                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                  /></StyledText>
+                <StyledText style={{...props?.theme?.text, fontSize: 16, flex: 1, textAlign: 'center'}}>
+                  {event?.tables[0]?.tableName}
+                </StyledText>
+              </View>
+              <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-start', alignItems: 'center'}}>
+                <StyledText style={{...props?.theme?.text, paddingHorizontal: 4}}>
+                  <FontAwesome5Icon
+                    name={'clock'}
+                    size={18}
+                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                  /></StyledText>
+                <StyledText style={{...props?.theme?.text, fontSize: 16, flex: 1, textAlign: 'center'}}>
+                  {moment(event?.reservationStartDate ?? new Date()).tz(timezone).format("HH:mm")} - {moment(event?.reservationEndDate ?? new Date()).tz(timezone).format("HH:mm")}
+                </StyledText>
+              </View>
+            </View>
+            <View style={{flexDirection: 'column', justifyContent: 'space-around', flex: 2}}>
+              <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+                  <View style={{...props?.theme?.text, paddingHorizontal: 4}}>
                     <FontAwesome5Icon
-                        name={'utensils'}
-                        size={36}
-                        style={[styles?.buttonIconStyle(customMainThemeColor), {color: customMainThemeColor}]}
+                      name={'phone'}
+                      size={18}
+                      style={[styles?.buttonIconStyle(customMainThemeColor)]}
                     />
+                  </View>
+                  <StyledText style={{...props?.theme?.text, fontSize: 16}}>
+                    {event?.phoneNumber}
+                  </StyledText>
+              </View>
 
-
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View style={{...props?.theme?.text, paddingHorizontal: 4}}>
+                  <FontAwesome5Icon
+                    name={'user-alt'}
+                    size={18}
+                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                  />
                 </View>
-                <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 4}}>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <StyledText style={{
+                  ...props?.theme?.text, fontSize: 16
+                  }}>
+                  {t('reservation.adult')} {event?.people}
+                </StyledText>
+              </View>
 
-                        <View style={{flexDirection: 'row', flex: 1.5, justifyContent: 'flex-start'}}>
-                            <StyledText style={{...props?.theme?.text, marginTop: 10, paddingHorizontal: 4}}>
-                                <FontAwesome5Icon
-                                    name={'user-check'}
-                                    size={18}
-                                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
-                                /></StyledText>
-                            <StyledText style={{...props?.theme?.text, marginTop: 12, fontSize: 16}}>
-                                {event?.name}</StyledText>
-
-                        </View>
-                        <View style={{flexDirection: 'row', justifyContent: 'flex-start', flex: 1.5}}>
-                            <StyledText style={{...props?.theme?.text, marginTop: 12, paddingHorizontal: 4}}>
-                                <FontAwesome5Icon
-                                    name={'phone'}
-                                    size={18}
-                                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
-                                />
-
-                            </StyledText>
-                            <StyledText style={{...props?.theme?.text, marginTop: 12, fontSize: 16}}>
-                                {event?.phoneNumber}</StyledText>
-                        </View>
-                        <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
-                            <StyledText style={{...props?.theme?.text, marginTop: 8, paddingHorizontal: 4}}>
-                                <MCIcon
-                                    name={event?.sourceOfOrigin == 'APP' ? 'tablet-cellphone' : 'web'}
-                                    size={20}
-                                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
-                                /></StyledText>
-                        </View>
-                    </View>
-
-
-                    <View style={{flexDirection: 'row'}}>
-
-                        <View style={{justifyContent: 'flex-start', flex: 1.5}}>
-                            <StyledText style={{flexWrap: 'wrap', fontSize: 16, marginBottom: 16, marginTop: 12}}>{moment(event?.reservationStartDate ?? new Date()).tz(timezone).format("HH:mm")} - {moment(event?.reservationEndDate ?? new Date()).tz(timezone).format("HH:mm")}
-                            </StyledText>
-
-                        </View>
-                        <View style={{flex: 1.5}}>
-                            <StyledText style={{...props?.theme?.text, fontSize: 16, marginTop: 12}}>{t('reservation.adult')} {event?.people}, {t('reservation.kid')} {event?.kid}</StyledText>
-                        </View>
-
-                        <View style={[styles.flexButton(customMainThemeColor), {flexDirection: 'row', flex: 0.8, marginVertical: 4}, (event?.status == 'WAITING' || event?.status == 'WAITING_CONFIRMED') && {backgroundColor: customBackgroundColor}, (event?.status == 'CANCELLED') && {backgroundColor: '#f75336', borderColor: '#f75336'}]}>
-                            <StyledText style={[(event?.status !== 'WAITING' || event?.status == 'WAITING_CONFIRMED') && {color: customBackgroundColor}]}>
-                                {event?.status}
-                            </StyledText>
-                        </View>
-
-                    </View>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View style={{...props?.theme?.text, paddingHorizontal: 4}}>
+                  <FontAwesome5Icon
+                    name={'user-alt'}
+                    size={18}
+                    style={[styles?.buttonIconStyle(customMainThemeColor)]}
+                  />
                 </View>
-            </TouchableOpacity>
-        )
+                <StyledText style={{
+                  ...props?.theme?.text, fontSize: 16
+                }}>
+                  {t('reservation.kid')} {event?.kid}
+                </StyledText>
+              </View>
+            </View>
+            <View style={{flexDirection: 'column', flex: 1}}>
+              <View style={[styles.flexButton(customMainThemeColor), {
+                flexDirection: 'row',
+                flex: 1,
+                marginVertical: 4
+              }, (event?.status == 'WAITING' || event?.status == 'WAITING_CONFIRMED') && {backgroundColor: customBackgroundColor}, (event?.status == 'CANCELLED') && {
+                backgroundColor: '#f75336',
+                borderColor: '#f75336'
+              }]}>
+                <StyledText
+                  style={[(event?.status !== 'WAITING' || event?.status == 'WAITING_CONFIRMED') && {color: customBackgroundColor}]}>
+                  {event?.status}
+                </StyledText>
+              </View>
+            </View>
+          </View>
+        </TouchableOpacity>
+      )
     }
 }
 

@@ -17,17 +17,6 @@ class IntroAppScreen extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-
-    context.localize({
-      en: {
-        createAccount: 'Create Account',
-        signIn: 'Sign In'
-      },
-      zh: {
-        createAccount: '註冊新帳號',
-        signIn: '登入'
-      }
-    })
   }
 
   isTokenAlive = async () => {

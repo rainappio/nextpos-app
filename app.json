@@ -8,6 +8,7 @@
       "android"
     ],
     "plugins": [
+      "sentry-expo",
       [
         "expo-notifications",
         {
@@ -19,7 +20,7 @@
       ]
     ],
     "userInterfaceStyle": "automatic",
-    "version": "22.02.03",
+    "version": "22.06.01",
     "icon": "./assets/images/icon.png",
     "splash": {
       "image": "./assets/images/rain-splash-still.png",
@@ -36,12 +37,13 @@
     "ios": {
       "supportsTablet": true,
       "requireFullScreen": true,
-      "buildNumber": "22.02.03.1",
+      "buildNumber": "22.06.01.1",
       "bundleIdentifier": "io.rain.app",
       "infoPlist": {
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Geofencing for staff clock in",
         "NSLocationAlwaysUsageDescription": "Geofencing for staff clock in",
         "NSLocationWhenInUseUsageDescription": "Geofencing for staff clock in",
+        "NSPhotoLibraryUsageDescription": "third party API may access photo library",
         "UIBackgroundModes": [
           "location",
           "fetch",
@@ -64,7 +66,7 @@
     },
     "android": {
       "package": "io.rainapp",
-      "versionCode": 13,
+      "versionCode": 14,
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",

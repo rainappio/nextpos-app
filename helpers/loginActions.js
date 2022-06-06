@@ -25,7 +25,7 @@ export const handleRefreshToken = async () => {
   })
 
   if (!response.ok) {
-    warningMessage('Refresh token request failed.')
+    //warningMessage('Refresh token request failed.')
   } else {
     await AsyncStorage.removeItem('token')
     await AsyncStorage.removeItem('clientusrToken')
