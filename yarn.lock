@@ -2061,10 +2061,26 @@
     "@sentry/types" "6.19.7"
     tslib "^1.9.3"
 
-"@sentry/react-native@^3.1.1", "@sentry/react-native@^3.2.13":
+"@sentry/react-native@^3.1.1":
   version "3.4.2"
   resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-3.4.2.tgz#9d8f60411d73f897e2bc1facafdf3e59e686627d"
   integrity sha512-rty+Mj77wBslxZ91dUlMwlvTtDpYpYehXMlrP8+AG/qRf2b1yFfLmtehGIwsZrTETp84WIL5evbKMd5nzYO+VQ==
+  dependencies:
+    "@sentry/browser" "6.19.2"
+    "@sentry/cli" "^1.74.2"
+    "@sentry/core" "6.19.2"
+    "@sentry/hub" "6.19.2"
+    "@sentry/integrations" "6.19.2"
+    "@sentry/react" "6.19.2"
+    "@sentry/tracing" "6.19.2"
+    "@sentry/types" "6.19.2"
+    "@sentry/utils" "6.19.2"
+    "@sentry/wizard" "^1.2.17"
+
+"@sentry/react-native@^3.4.3":
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-3.4.3.tgz#00c90f87b5c8e24bf4698656a0994cf38b99dfba"
+  integrity sha512-q1m/KaPWkv9/nXMXo5S5VzZNngC9gxJrtfPnMQPCXzLwLiGMlc2FBMBDJmZGzeSkQMr163Xb+2UYZEPqCUvdvg==
   dependencies:
     "@sentry/browser" "6.19.2"
     "@sentry/cli" "^1.74.2"
@@ -4922,7 +4938,7 @@ expo-screen-orientation@~4.2.0:
   dependencies:
     "@expo/config-plugins" "^4.0.14"
 
-expo-splash-screen@~0.15.0, expo-splash-screen@~0.15.1:
+expo-splash-screen@^0.15.1, expo-splash-screen@~0.15.0:
   version "0.15.1"
   resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.15.1.tgz#bdfb2434bda7fb1cde97e029fc7a791d7b3e3125"
   integrity sha512-Yvz6p/ig+cQp9c1PLSm1YshpNJXRp/xtxajfwPq2kampf61zA+xnoMk+J6YcNeXeIlqHysj3ND2tMhEEQjM/ow==
@@ -9430,7 +9446,7 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sentry-expo@^4.0.0:
+sentry-expo@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/sentry-expo/-/sentry-expo-4.2.0.tgz#8dc626b39cc1538c1284cc383b9d18c3252859c4"
   integrity sha512-UL+i+kLDmB27kmY/BvkhY7aBqAxnVdy+IVg4jMX20V/iAgA1HBk2szf2gCt9vHDja6Q0HzgkdC91xiQ89jKiOw==

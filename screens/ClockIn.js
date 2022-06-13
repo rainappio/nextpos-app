@@ -173,12 +173,12 @@ class ClockIn extends React.Component {
     if (this.props.client !== undefined) {
       console.log('start location based service')
 
-      if (Platform.OS === 'android' && !Constants.isDevice) {
+      if (Platform.OS === 'android' && !Device.isDevice) {
         this.setState({
           message: 'This will not work on Sketch in an Android emulator. Try it on your device!',
         });
       } else {
-        this._getLocationAsync();
+        //this._getLocationAsync();
       }
     }
     this.timerID = setInterval(
@@ -288,7 +288,7 @@ class ClockIn extends React.Component {
     const {t, isTablet, themeStyle, customMainThemeColor, customBackgroundColor} = this.context
     const {timecard, storeLocation, distance} = this.state
 
-    const locationBasedService = client.clientSettings.LOCATION_BASED_SERVICE != null ? client.clientSettings.LOCATION_BASED_SERVICE.enabled : false
+    const locationBasedService = false //client.clientSettings.LOCATION_BASED_SERVICE != null ? client.clientSettings.LOCATION_BASED_SERVICE.enabled : false
 
     const timeCardDevice = client.attributes?.TIME_CARD_DEVICE ?? null
 

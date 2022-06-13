@@ -166,7 +166,7 @@ class LoginScreen extends React.Component {
               }}
             >
               <View style={[{width: ((Dimensions.get('window').width / 2) - 40), marginTop: 100, flex: 1, alignSelf: 'center'}]}>
-                <ThemeScrollView style={[{borderRadius: 8, padding: 0, flexDirection: 'row', width: ((Dimensions.get('window').width / 2) - 40)}]}>
+                <ThemeContainer style={[{borderRadius: 8, padding: 0, flexDirection: 'row', width: ((Dimensions.get('window').width / 2) - 40)}]}>
                   <View style={[styles.withBottomBorder, styles.jc_alignIem_center, {marginTop: 20, paddingVertical: 12, flexDirection: 'row'}]}>
                     <View style={{marginBottom: 10}}>
                       <FontAwesome5
@@ -212,7 +212,7 @@ class LoginScreen extends React.Component {
                       rightOpenValue={-120}
                     />
                   </View>
-                </ThemeScrollView>
+                </ThemeContainer>
               </View>
             </Modal>
             {this.state.showLoginBlock && <Animated.View style={{flex: 1, flexDirection: 'column', opacity: this.state.fadeAnimation}}>
@@ -350,7 +350,7 @@ class LoginScreen extends React.Component {
               }}
             >
               <View style={[{width: (Dimensions.get('window').width - 40), maxHeight: (Dimensions.get('window').height / 1.5), marginTop: 100, flex: 1, alignSelf: 'center'}]}>
-                <ThemeScrollView style={[{borderRadius: 8, padding: 0, flexDirection: 'row', width: (Dimensions.get('window').width - 40)}]}>
+                <ThemeContainer style={[{borderRadius: 8, padding: 0, flexDirection: 'row', width: (Dimensions.get('window').width - 40)}]}>
                   <View style={[styles.withBottomBorder, styles.jc_alignIem_center, {marginTop: 20, paddingVertical: 12, flexDirection: 'row'}]}>
                     <View style={{marginBottom: 10}}>
                       <FontAwesome5
@@ -396,7 +396,7 @@ class LoginScreen extends React.Component {
                       rightOpenValue={-120}
                     />
                   </View>
-                </ThemeScrollView>
+                </ThemeContainer>
               </View>
             </Modal>
             <View style={{flex: 1}}>
