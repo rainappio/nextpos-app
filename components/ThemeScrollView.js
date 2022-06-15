@@ -10,7 +10,10 @@ export const ThemeScrollView = ({refreshControl, style, children, reverse = fals
   const passedStyles = Array.isArray(style) ? style : [style]
 
   return (
-    <ScrollView scrollIndicatorInsets={{right: 1}} style={[...passedStyles, themeStyle, (customMainThemeColor === '#006B35' && {backgroundColor: customBackgroundColor})]} contentContainerStyle={[themeStyle, {flexGrow: 1}, (customMainThemeColor === '#006B35' && {backgroundColor: customBackgroundColor})]} refreshControl={refreshControl}>
+    <ScrollView scrollIndicatorInsets={{right: 1}}
+                style={[...passedStyles, themeStyle, (customMainThemeColor === '#006B35' && {backgroundColor: customBackgroundColor})]}
+                contentContainerStyle={[themeStyle, {flexGrow: 1}, (customMainThemeColor === '#006B35' && {backgroundColor: customBackgroundColor})]}
+                refreshControl={refreshControl}>
       {children}
     </ScrollView>
   )

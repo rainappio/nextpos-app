@@ -62,7 +62,7 @@ class ClientUsers extends React.Component {
 
     return (
 
-      <ThemeScrollView>
+      <ThemeContainer>
         <View style={[styles.fullWidthScreen]}>
           <ScreenHeader backNavigation={!!navigation?.actions?.pop}
             parentFullScreen={true}
@@ -200,7 +200,7 @@ class ClientUsers extends React.Component {
             />}
           </View>
         </View>
-      </ThemeScrollView>
+      </ThemeContainer>
     )
   }
 }

@@ -226,7 +226,7 @@ class OrderForm extends Component {
 
 
 
-                        {/* <View style={[styles.sectionContent, styles.horizontalMargin]}>
+                         <View style={[styles.sectionContent, styles.horizontalMargin]}>
                             <View style={styles.sectionTitleContainer}>
                                 <StyledText style={styles.sectionTitleText}>{t('newOrder.ageGroup')}</StyledText>
                             </View>
@@ -244,9 +244,9 @@ class OrderForm extends Component {
                                     />
                                 </View>
                             </View>
-                        </View> */}
+                        </View>
 
-                        {/* <View style={[styles.sectionContent, styles.horizontalMargin]}>
+                         <View style={[styles.sectionContent, styles.horizontalMargin]}>
                             <View style={styles.sectionTitleContainer}>
                                 <StyledText style={styles.sectionTitleText}>{t('newOrder.visitFrequency')}</StyledText>
                             </View>
@@ -264,7 +264,7 @@ class OrderForm extends Component {
                                     />
                                 </View>
                             </View>
-                        </View> */}
+                        </View>
 
                         <View style={[styles.sectionContent]}>
                             <View style={styles.sectionTitleContainer}>

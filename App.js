@@ -354,10 +354,6 @@ class App extends React.Component {
     ).then()
   }
 
-  t = (scope, options) => {
-    return i18n.t(scope, {locale: this.state.locale, ...options})
-  }
-
   toggleTheme = () => {
     const theme = this.state.theme === 'light' ? 'dark' : 'light'
     const themeStyleToChange = this.state.themeStyle === themes.dark ? themes.light : themes.dark
