@@ -6,7 +6,7 @@ export const playSound = async () => {
     let count = 0
     console.log('Loading Sound');
     const {sound} = await Audio.Sound.createAsync(
-        require('../assets/sounds/juntos-607.mp3')
+        require('../assets/sounds/juntos607.mp3')
     )
 
     console.log('Playing Sound');
