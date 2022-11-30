@@ -9,7 +9,6 @@ import {composeWithDevTools} from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import rootReducer from './reducers'
 import {canClockIn, doLoggedIn, getSettingTimezone} from './actions'
-import AppLoading from 'expo-app-loading'
 import {Asset} from 'expo-asset'
 import * as Font from 'expo-font'
 import {Ionicons} from '@expo/vector-icons'
@@ -36,6 +35,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import {checkExpoUpdate} from "./helpers/updateAppHelper";
 import {api, dispatchFetchRequest} from './constants/Backend'
 import {GestureHandlerRootView} from "react-native-gesture-handler";
+import * as SplashScreen from "expo-splash-screen";
 
 if (Platform.OS === "android") {
   // See https://github.com/expo/expo/issues/6536 for this issue.
@@ -44,6 +44,7 @@ if (Platform.OS === "android") {
   }
 }
 
+SplashScreen.preventAutoHideAsync()
 export let currentLocale = ""
 
 LogBox.ignoreLogs([
@@ -196,6 +197,8 @@ class App extends React.Component {
 
     checkExpoUpdate(this.state?.disableReload, this.setDisableReload)
     getSettingTimezone()
+
+    await this._loadResourcesAsync();
   }
 
 
@@ -427,13 +430,7 @@ class App extends React.Component {
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
-      return (
-        <AppLoading
-          startAsync={this._loadResourcesAsync}
-          onError={this._handleLoadingError}
-          onFinish={this._handleFinishLoading}
-        />
-      )
+      return null
     } else {
       activateKeepAwake()
 
@@ -509,30 +506,25 @@ class App extends React.Component {
   }
 
   _loadResourcesAsync = async () => {
-    return Promise.all([
-      Asset.loadAsync([
+    try {
+      await Asset.loadAsync([
         require('./assets/images/robot-dev.png'),
         require('./assets/images/robot-prod.png')
-      ]),
-      Font.loadAsync({
-        // This is the font that we are using for our tab bar
-        ...Ionicons.font,
-        // We include SpaceMono because we use it in HomeScreen.js. Feel free
-        // to remove this if you are not using it in your app
-        'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
-        antoutline: require('@ant-design/icons-react-native/fonts/antoutline.ttf')
-      })
-    ])
-  }
-
-  _handleLoadingError = error => {
-    // In this case, you might want to report the error to your error
-    // reporting service, for example Sentry
-    console.warn(error)
-  }
-
-  _handleFinishLoading = () => {
-    this.setState({isLoadingComplete: true})
+      ])
+      await Font.loadAsync({
+          // This is the font that we are using for our tab bar
+          ...Ionicons.font,
+          // We include SpaceMono because we use it in HomeScreen.js. Feel free
+          // to remove this if you are not using it in your app
+          'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+          antoutline: require('@ant-design/icons-react-native/fonts/antoutline.ttf')
+        })
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      this.setState({isLoadingComplete: true})
+      await SplashScreen.hideAsync();
+    }
   }
 }
 
