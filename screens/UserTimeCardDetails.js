@@ -10,6 +10,7 @@ import {connect} from "react-redux";
 import {withContext} from "../helpers/contextHelper";
 import {StyledText} from "../components/StyledText";
 import {api, dispatchFetchRequest, dispatchFetchRequestWithOption} from "../constants/Backend";
+import {SimpleDateTimePicker} from "../components/SimpleDateTimePicker";
 
 class UserTimeCardDetails extends React.Component {
   static navigationOptions = {
@@ -22,6 +23,8 @@ class UserTimeCardDetails extends React.Component {
 
     this.state = {
       timeCardId: props.route.params?.timeCardId,
+      actualClockIn: null,
+      actualClockOut: null,
       actualWorkingHours: String(this.props.timeCardDetails.actualWorkingHours),
       actualWorkingMinutes: String(this.props.timeCardDetails.actualWorkingMinutes)
     }
@@ -53,6 +56,8 @@ class UserTimeCardDetails extends React.Component {
   handleUpdateWorkingTime = () => {
 
     const request = {
+      clockIn: this.state.actualClockIn,
+      clockOut: this.state.actualClockOut,
       workingHours: this.state.actualWorkingHours,
       workingMinutes: this.state.actualWorkingMinutes
     }
@@ -95,16 +100,26 @@ class UserTimeCardDetails extends React.Component {
                 {formatDateOnly(timeCardDetails.clockIn)}
               </StyledText>
             </View>
+
           </View>
 
           <View style={[styles.tableRowContainerWithBorder]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
-              <StyledText>{t('timecard.timeCardTime')}</StyledText>
+              <StyledText>{t('timecard.clockInTime')}</StyledText>
             </View>
-            <View style={[styles.tableCellView, {flex: 1, justifyContent: 'flex-end'}]}>
-              <StyledText>
-                {formatTime(timeCardDetails.clockIn)} ~ {formatTime(timeCardDetails.clockOut)}
-              </StyledText>
+            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+              <SimpleDateTimePicker initDate={timeCardDetails.clockIn}
+                                    onChange2={(dt) => this.setState({actualClockIn: dt})}/>
+            </View>
+          </View>
+
+          <View style={[styles.tableRowContainerWithBorder]}>
+            <View style={[styles.tableCellView, {flex: 1}]}>
+              <StyledText>{t('timecard.clockOutTime')}</StyledText>
+            </View>
+            <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
+              <SimpleDateTimePicker initDate={timeCardDetails.clockOut}
+                                    onChange2={(dt) => this.setState({actualClockOut: dt})}/>
             </View>
           </View>
 

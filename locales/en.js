@@ -367,6 +367,8 @@ const en = {
     userTimeCardTitle: 'User Time Cards',
     timeCardDate: 'Date',
     timeCardTime: 'Time',
+    clockInTime: 'Clock in',
+    clockOutTime: 'Clock out',
     day: 'Shift',
     totalHours: 'Total Hours',
     actualHours: 'Actual Hours',
