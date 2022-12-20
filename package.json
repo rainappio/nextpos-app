@@ -64,7 +64,7 @@
     "intl": "^1.2.5",
     "javascript-time-ago": "^2.0.6",
     "moment": "^2.24.0",
-    "moment-timezone": "^0.5.31",
+    "moment-timezone": "^0.5.35",
     "patch-package": "^6.5.0",
     "postinstall-postinstall": "^2.1.0",
     "prop-types": "^15.7.2",
