@@ -367,6 +367,8 @@ const zh = {
     userTimeCardTitle: '職員打卡',
     timeCardDate: '打卡日期',
     timeCardTime: '上班/下班時間',
+    clockInTime: '上班時間',
+    clockOutTime: '下班時間',
     day: '值班',
     totalHours: '總時數',
     actualHours: '實際時數',

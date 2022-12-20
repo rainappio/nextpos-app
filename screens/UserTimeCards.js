@@ -82,7 +82,7 @@ class UserTimeCards extends React.Component {
             </View>
             <View style={[styles.tableCellView, {flex: 3, alignItems: 'flex-start'}]}>
               <StyledText style={{fontWeight: active ? 'bold' : 'normal'}}>
-                {normalizeTimeString(timecard?.clockIn, 'hh:mm')}~{!!timecard?.clockOut && normalizeTimeString(timecard?.clockOut, 'hh:mm')}
+                {normalizeTimeString(timecard?.clockIn, 'HH:mm')}~{!!timecard?.clockOut && normalizeTimeString(timecard?.clockOut, 'HH:mm')}
               </StyledText>
 
             </View>
