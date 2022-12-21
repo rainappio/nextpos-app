@@ -24,6 +24,7 @@ import Modal from 'react-native-modal';
 import {ThemeContainer} from "../components/ThemeContainer";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {ScanView} from '../components/scanView'
+import DropDownInputText from "../components/DropDownInputText";
 
 class ProductFormScreen extends React.Component {
   static navigationOptions = {
@@ -107,6 +108,12 @@ class ProductFormScreen extends React.Component {
       handlepinToggle,
       inventoryData
     } = this.props
+
+    const dropdownLabels = labels.map(label => {
+      return {label: label.label, value: label.id}
+    })
+
+    dropdownLabels.unshift({label: t('product.productLabel'), value: null})
 
     const productTypes = Object.keys(this.state.productTypes).map(key => this.state.productTypes[key].label)
 
@@ -202,19 +209,18 @@ class ProductFormScreen extends React.Component {
             </View>
           </View>
 
-          <View style={styles.tableRowContainerWithBorder}>
+          <View style={[styles.tableRowContainerWithBorder, {zIndex: 10}]}>
             <View style={[styles.tableCellView, {flex: 1}]}>
               <StyledText style={styles.fieldTitle}>{t('product.productLabel')}</StyledText>
             </View>
             <View style={{flex: 1, justifyContent: 'flex-end'}}>
               <Field
-                component={DropDown}
+                component={DropDownInputText}
                 name="productLabelId"
-                options={labels}
-                search
-                selection
-                fluid
-                placeholder={{value: null, label: t('product.productLabel')}}
+                pickerLabels={dropdownLabels}
+                showTextInput={false}
+                defaultValue={!!this.props?.initialValues ? this.props?.initialValues.productLabelId : null}
+                placeholder={t('product.productLabel')}
               />
             </View>
           </View>
@@ -472,8 +478,6 @@ class InventoryForm extends React.Component {
 
   render() {
     const {t, customMainThemeColor} = this.context
-
-
 
     return (
       <ThemeKeyboardAwareScrollView>

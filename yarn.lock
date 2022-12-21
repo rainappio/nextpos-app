@@ -8896,9 +8896,9 @@ react-native-datepicker@^1.7.2:
     moment "^2.22.0"
 
 react-native-draggable-flatlist@^3.0.5:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-3.1.1.tgz#b27009035153ed8d897217392447fb3c98316aea"
-  integrity sha512-hvzfMgG+HPIYCpoYy+R+FaoylRc4HbcP+gvghG0ISGwsU8HETcM8WmUEAaDTr7EeKmnG1BbV43MMExMjIQXRmA==
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-3.1.2.tgz#b66538007f645ccd851c729d4b8a8f7e07666d3f"
+  integrity sha512-cqBR+lZktTqHY/J7V0aq+TZNkuqeILxwZ5bBXKndokwH4qvZl7ifijM7LlfWhfhU1/pzjketTsX7P2zyojfAaQ==
 
 react-native-dropdown-menu@^2.0.0:
   version "2.0.0"

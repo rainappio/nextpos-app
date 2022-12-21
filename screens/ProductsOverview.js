@@ -12,8 +12,6 @@ class ProductsOverview extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getProducts()
-    this.props.getLables()
     this._geInitialValue = this.props.navigation.addListener('focus', () => {
       this.props.getProducts()
       this.props.getLables()

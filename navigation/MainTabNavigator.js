@@ -1,13 +1,11 @@
 import React from 'react'
-import {Platform, Text, useWindowDimensions, View, TouchableOpacity} from 'react-native'
-import Animated from 'react-native-reanimated';
+import {Platform, Text, useWindowDimensions, View} from 'react-native'
 import {handleRefreshToken} from "../helpers/loginActions";
 import NavigationService from "../navigation/NavigationService";
-import {StackActions, TabActions, CommonActions, getFocusedRouteNameFromRoute} from '@react-navigation/native';
-import {createBottomTabNavigator, BottomTabBar, useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import {BottomTabBar, createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem} from '@react-navigation/drawer';
-import {createCompatNavigatorFactory, createSwitchNavigator} from '@react-navigation/compat';
+import {createDrawerNavigator, DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import TabBarIcon from '../components/TabBarIcon'
 import Icon from 'react-native-vector-icons/Ionicons'
 import HomeScreen from '../screens/HomeScreen'
@@ -36,8 +34,6 @@ import LoginScreen from '../screens/LoginScreen'
 import OptionFormScreen from '../screens/OptionFormScreen'
 import Option from '../screens/Option'
 import AccountScreen from '../screens/AccountScreen'
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
-import Colors from '../constants/Colors'
 import OrderStart from '../screens/OrderStart'
 import OrderForm from '../screens/OrderForm'
 import OrderFormII from '../screens/OrderFormII'

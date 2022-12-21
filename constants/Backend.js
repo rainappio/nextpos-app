@@ -679,7 +679,7 @@ export const makeFetchRequest = async fetchRequest => {
     }
 
     if (token != null) {
-      console.debug(`Use client user token: ${useClientUserToken}`)
+      console.trace(`Use client user token: ${useClientUserToken}`)
       const tokenObj = JSON.parse(token)
       fetchRequest(tokenObj)
     } else {

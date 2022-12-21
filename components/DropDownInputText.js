@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 import {InputAccessoryView, Keyboard, Platform, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import styles from '../styles'
 import {withContext} from "../helpers/contextHelper";
 import DropDownPicker from 'react-native-dropdown-picker';
-import IonIcon from 'react-native-vector-icons/Ionicons'
 
 const DropDownInputText = ({
     input: {
@@ -21,6 +20,8 @@ const DropDownInputText = ({
         autoCapitalize,
     },
     meta: {error, touched, valid},
+  showTextInput = true,
+  placeholder,
     height, alignLeft, extraStyle, defaultValue,
     themeStyle, complexTheme, pickerLabels,
     ...rest
@@ -29,7 +30,7 @@ const DropDownInputText = ({
     const [shift, setShift] = useState(pickerLabels?.[0]?.value ?? null);
     const handlePickerChange = (data) => {
         console.log('handlePickerChange', data)
-        onChange(data?.label)
+        onChange(data?.value)
     }
     useEffect(() => {
         !!defaultValue && onChange(defaultValue)
@@ -39,7 +40,7 @@ const DropDownInputText = ({
             <DropDownPicker
                 items={pickerLabels}
                 showArrow={true}
-                defaultValue={pickerLabels?.[0]?.value ?? null}
+                defaultValue={defaultValue ?? null}
                 containerStyle={{flex: 1, minWidth: 50, marginRight: 10}}
                 style={{...themeStyle, justifyContent: 'flex-start', backgroundColor: rest?.customBackgroundColor, borderColor: rest?.customMainThemeColor}}
                 itemStyle={{
@@ -53,8 +54,9 @@ const DropDownInputText = ({
                     padding: 0, margin: 0
                 }}
                 onChangeItem={item => handlePickerChange(item)}
+                placeholder={placeholder}
             />
-            <View style={[styles.flex(3)]}>
+          {showTextInput && (<View style={[styles.flex(3)]}>
                 <TextInput
                     onBlur={onBlur}
                     onChangeText={onChange}
@@ -100,6 +102,7 @@ const DropDownInputText = ({
                 )}
                 {!valid && touched && <Text style={[styles.rootError]}>{error}</Text>}
             </View>
+            )}
         </View>
     )
 }
