@@ -8,13 +8,13 @@ import {connect} from 'react-redux'
 import {EditPasswordPopUp, EditGesturePasswordPopUp} from '../components/EditPasswordPopUp'
 import {reduxForm} from 'redux-form'
 import {api, getToken, dispatchFetchRequest, storage} from '../constants/Backend'
-import Constants from "expo-constants";
 import ScreenHeader from "../components/ScreenHeader";
 import {withContext} from "../helpers/contextHelper";
 import {compose} from "redux";
 import {StyledText} from "../components/StyledText";
 import {ThemeContainer} from "../components/ThemeContainer";
 import Icon from 'react-native-vector-icons/Ionicons'
+import * as Application from "expo-application";
 
 class AccountScreen extends React.Component {
   static navigationOptions = {
@@ -194,7 +194,7 @@ class AccountScreen extends React.Component {
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
               <StyledText>
-                {Constants.nativeAppVersion} | {Constants.nativeBuildVersion}
+                {Application.nativeApplicationVersion} | {Application.nativeBuildVersion}
               </StyledText>
             </View>
           </View>

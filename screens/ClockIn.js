@@ -7,7 +7,6 @@ import {api, dispatchFetchRequest, dispatchFetchRequestWithOption, successMessag
 import {LocaleContext} from "../locales/LocaleContext"
 import {formatDate, normalizeTimeString} from "../actions"
 import ScreenHeader from "../components/ScreenHeader";
-import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as TaskManager from "expo-task-manager";
 import {connect} from "react-redux";

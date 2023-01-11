@@ -1,10 +1,10 @@
-import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import React, {useState, useEffect, useRef} from 'react';
 import {Text, View, Platform, TouchableOpacity} from 'react-native';
 import {api, dispatchFetchRequestWithOption, dispatchFetchRequest} from '../constants/Backend'
 import {normalizeTimeString} from '../actions'
 import {StyledText} from "./StyledText";
+import * as Device from "expo-device";
 
 
 /*Notifications.setNotificationHandler({
@@ -100,7 +100,7 @@ export async function schedulePushNotification(reservation, t, flag) {
 
 export async function registerForPushNotificationsAsync() {
   let token;
-  if (Constants.isDevice) {
+  if (Device.isDevice) {
     const {status: existingStatus} = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
     if (existingStatus !== 'granted') {

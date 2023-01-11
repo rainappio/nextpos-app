@@ -32,7 +32,6 @@ class DropDown extends Component {
           items={options}
           onValueChange={value => onChange(value)}
           value={value}
-          {...inputProps}
           useNativeAndroidPickerStyle={false}
           style={pickerSelectStyles(color)}
           Icon={() => {

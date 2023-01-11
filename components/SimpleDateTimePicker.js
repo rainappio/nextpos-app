@@ -1,4 +1,4 @@
-import {useContext, useState} from "react"
+import {useContext, useEffect, useState} from "react"
 import {View} from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import moment from "moment-timezone"
@@ -10,27 +10,33 @@ export const SimpleDateTimePicker = ({initDate, onChange2}) => {
 
   const mode = 'datetime'
   const timezone = TimeZoneService.getTimeZone()
-  const i18nMoment = moment(moment(initDate)).tz(timezone)
-  console.log('initial date', i18nMoment)
+  let dateToUse = new Date()
 
-  const [date, setDate] = useState(i18nMoment.toDate())
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate
-    console.log('selected current date', currentDate)
-
-    setDate(currentDate)
-    onChange2(selectedDate)
+  if (initDate !== null) {
+    const i18nMoment = moment(moment(initDate)).tz(timezone)
+    dateToUse = i18nMoment.toDate()
   }
+
+  console.log('initial date', dateToUse)
+
+  // const [date, setDate] = useState(i18nMoment.toDate())
+  //
+  // const onChange = (event, selectedDate) => {
+  //   const currentDate = selectedDate
+  //   console.log('selected current date', currentDate)
+  //
+  //   setDate(currentDate)
+  //   onChange2(selectedDate)
+  // }
 
   return (
     <View style={{flex: 1}}>
       <DateTimePicker
         testID="dateTimePicker"
-        value={date}
+        value={dateToUse}
         mode={mode}
         is24Hour={true}
-        onChange={onChange}
+        onChange={onChange2}
         locale={'zh-TW'}
         style={
           {
