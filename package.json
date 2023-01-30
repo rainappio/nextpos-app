@@ -63,7 +63,7 @@
     "install-peers": "^1.0.3",
     "intl": "^1.2.5",
     "javascript-time-ago": "^2.0.6",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.31",
     "patch-package": "^6.5.0",
     "postinstall-postinstall": "^2.1.0",
