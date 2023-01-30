@@ -163,7 +163,6 @@ class CreateAccFormScreen extends React.Component {
                   name="leadSource"
                   component={DropDown}
                   options={this.state.leadSource}
-                  placeholder={{value: null, label: ``}}
                   onChange={(value) => {
                     this.setState({
                       leadSourceSelected: value

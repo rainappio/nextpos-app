@@ -92,6 +92,12 @@ class RostersFormScreen extends React.Component {
                 {label: context.t('dayPicker.Friday'), value: 'FRIDAY'},
                 {label: context.t('dayPicker.Saturday'), value: 'SATURDAY'},
             ],
+            shifts: [
+              {label: context.t('rostersForm.morningShift'), value: context.t('rostersForm.morningShift')},
+              {label: context.t('rostersForm.afternoonShift'), value: context.t('rostersForm.afternoonShift')},
+              {label: context.t('rostersForm.nightShift'), value: context.t('rostersForm.nightShift')},
+              {label: context.t('rostersForm.midnightShift'), value: context.t('rostersForm.midnightShift')}
+            ],
             repeatType: props.route?.params?.data?.eventRepeat === 'WEEKLY' ? 2
                 : props.route?.params?.data?.eventRepeat === 'DAILY' ? 1 : 0,
             eventColor: props.route?.params?.data?.eventColor ?? '#fff',
@@ -563,13 +569,8 @@ class RostersFormScreen extends React.Component {
                                                             name="title"
                                                             validate={isRequired}
                                                             alignLeft={true}
-                                                            pickerLabels={[
-                                                                {label: t('rostersForm.morningShift'), value: 'morningShift'},
-                                                                {label: t('rostersForm.afternoonShift'), value: 'afternoonShift'},
-                                                                {label: t('rostersForm.nightShift'), value: 'nightShift'},
-                                                                {label: t('rostersForm.midnightShift'), value: 'midnightShift'},
-                                                            ]}
-                                                            defaultValue={this.props.route?.params?.data?.eventName ?? t('rostersForm.morningShift')}
+                                                            pickerLabels={this.state.shifts}
+                                                            //defaultValue={this.props.route?.params?.data?.eventName ?? t('rostersForm.morningShift')}
                                                         /> :
                                                             <StyledText>{this.props.route?.params?.data?.eventName ?? t('rostersForm.morningShift')}</StyledText>}
                                                     </View>
@@ -911,13 +912,8 @@ class RostersFormScreen extends React.Component {
                                                         name="title"
                                                         validate={isRequired}
                                                         alignLeft={true}
-                                                        pickerLabels={[
-                                                            {label: t('rostersForm.morningShift'), value: 'morningShift'},
-                                                            {label: t('rostersForm.afternoonShift'), value: 'afternoonShift'},
-                                                            {label: t('rostersForm.nightShift'), value: 'nightShift'},
-                                                            {label: t('rostersForm.midnightShift'), value: 'midnightShift'},
-                                                        ]}
-                                                        defaultValue={this.props.route?.params?.data?.eventName ?? t('rostersForm.morningShift')}
+                                                        pickerLabels={this.state.shifts}
+                                                        //defaultValue={this.props.route?.params?.data?.eventName ?? t('rostersForm.morningShift')}
                                                     /> :
                                                         <StyledText>{this.props.route?.params?.data?.eventName ?? t('rostersForm.morningShift')}</StyledText>}
                                                 </View>

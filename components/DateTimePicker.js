@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Text, TouchableOpacity, View, Appearance} from 'react-native'
+import {Text, TouchableOpacity, View, Appearance, Platform} from 'react-native'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 import moment from 'moment-timezone'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -77,7 +77,7 @@ class RenderDateTimePicker extends Component {
 							flexDirection: 'row',
 						}}
 					>
-						<View style={{backgroundColor: (colorScheme == 'dark' ? '#222' : '#fff'), borderRadius: 10, paddingHorizontal: 10, }}>
+						<View style={{backgroundColor: (colorScheme === 'dark' ? '#222' : '#fff'), borderRadius: 10, paddingHorizontal: 10, }}>
 
 							<RNDateTimePicker
 								testID="dateTimePicker"
@@ -219,6 +219,8 @@ class RenderTimePickerBase extends Component {
 			i18nMoment.locale('en')
 		}
 
+    const pickerValue = !!value ? moment(this.state?.result).tz(timezone).toDate() : new Date()
+
 		const fontColor = readonly ? '#c5c5c5' : themeStyle.color
 
 		return (
@@ -240,11 +242,11 @@ class RenderTimePickerBase extends Component {
 						>
 
 
-							<View style={{backgroundColor: (colorScheme == 'dark' ? '#222' : '#fff'), borderRadius: 10, paddingHorizontal: 10}}>
+							<View style={{backgroundColor: (colorScheme === 'dark' ? '#222' : '#fff'), borderRadius: 10, paddingHorizontal: 10}}>
 								<RNDateTimePicker
 									style={{minWidth: 320}}
 									testID="dateTimePicker"
-									value={!!value ? this.state?.result : new Date()}
+									value={pickerValue}
 									mode={mode ?? "time"}
 									is24Hour={true}
 									display="inline"
@@ -268,7 +270,7 @@ class RenderTimePickerBase extends Component {
 						</Modal> :
 						isShow && <RNDateTimePicker
 							testID="dateTimePicker"
-							value={!!value ? this.state?.result : new Date()}
+							value={pickerValue}
 							mode={mode ?? "time"}
 							is24Hour={true}
 							display="default"
@@ -365,12 +367,13 @@ class RenderDatePickerBase extends Component {
 		const i18nMoment = moment(!!value ? value : new Date()).tz(timezone);
 
 
-		if (locale === 'zh-Hant-TW') {
+    if (locale === 'zh-Hant-TW') {
 			i18nMoment.locale('zh-tw')
 		} else {
 			i18nMoment.locale('en')
 		}
 
+    const pickerValue = !!value ? moment(this.state?.result).startOf('day').toDate() : new Date()
 		const fontColor = readonly ? '#c5c5c5' : themeStyle.color
 
 		return (
@@ -395,7 +398,7 @@ class RenderDatePickerBase extends Component {
 							<RNDateTimePicker
 								style={{minWidth: 320}}
 								testID="dateTimePicker"
-								value={!!value ? this.state?.result : new Date()}
+								value={pickerValue}
 								mode={mode ?? "date"}
 								is24Hour={true}
 								display="inline"
@@ -418,7 +421,7 @@ class RenderDatePickerBase extends Component {
 					</Modal> :
 						isShow && <RNDateTimePicker
 							testID="dateTimePicker"
-							value={!!value ? this.state?.result : new Date()}
+              value={pickerValue}
 							mode={mode ?? "date"}
 							is24Hour={true}
 							minimumDate={this.props.minimumDate ?? null}

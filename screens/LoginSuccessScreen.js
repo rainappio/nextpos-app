@@ -30,7 +30,6 @@ import {CheckBox} from 'react-native-elements'
 import {checkExpoUpdate} from "../helpers/updateAppHelper";
 import {ThemePicker} from "../components/ThemePicker";
 import Constants from 'expo-constants';
-import {registerForPushNotificationsAsync} from '../components/NotificationTask'
 import * as Application from "expo-application";
 
 

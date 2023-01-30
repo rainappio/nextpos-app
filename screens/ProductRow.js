@@ -84,10 +84,6 @@ class ProductRow extends React.Component {
     }
   }
 
-  handleCollapsed = id => {
-    this.setState({collapsedId: id})
-  }
-
   //https://stackoverflow.com/questions/57738626/collapsible-and-draggable-sectionlist-for-react-native-application
 
   handleDelete = productId => {
@@ -180,17 +176,11 @@ class ProductRow extends React.Component {
     );
   }
   renderItem = ({item, index, drag, isActive}) => {
-    const map = this.props.products;
 
-    let products = map[item.label]
-
-    if (products == null) {
-      products = map[item.id]
-    }
     if (item.aType === 'LABEL') {
       return (
         <View>
-          {this._renderSectionHeader(item, index, drag, isActive, (!products || products?.length === 0))}
+          {this._renderSectionHeader(item, index, drag, isActive, item?.length === 0)}
         </View>
       );
     } else {
@@ -242,7 +232,12 @@ class ProductRow extends React.Component {
     }
   };
 
-  handleReArrange = (data, labelDragged = false, productDragged = false, labelIndexArr = [], productIndexArr = [], oldData = {}) => {
+  handleReArrange = (data,
+                     labelDragged = false,
+                     productDragged = false,
+                     labelIndexArr = [],
+                     productIndexArr = [],
+                     oldData = {}) => {
 
     const from = data?.from;
     const to = data?.to;
@@ -415,6 +410,7 @@ class ProductRow extends React.Component {
           labelIdsToUpdate.push(item.id)
         }
       })
+
       dispatchFetchRequestWithOption(
         api.productLabel.sortPrdLabelList(labelIdsToUpdate),
         {
@@ -431,14 +427,14 @@ class ProductRow extends React.Component {
         },
         response => {
           this.props.getLables()
-          this.props.getProducts()
-          console.log("sort label")
+          //this.props.getProducts()
+          console.log("sorted label")
         }
       ).then()
 
     } else {
       await this.props.getLables()
-      await this.props.getProducts()
+      //await this.props.getProducts()
     }
 
     this.setState({productDragged: false, labelDragged: false, isDragging: false, dragModalVisible: false, dragResult: null})
@@ -452,9 +448,9 @@ class ProductRow extends React.Component {
       route,
       themeStyle
     } = this.props
+
     const {t, customMainThemeColor, customBackgroundColor} = this.context
     var getlabels = labels !== undefined && labels
-    var labelsArr = [{label: t('product.pinned'), id: 'pinned'}, ...getlabels, {label: t('product.ungrouped'), id: 'ungrouped'}]
 
     let resultArr = []
     let labelIndexArr = []
@@ -462,8 +458,9 @@ class ProductRow extends React.Component {
     let arrIndexCount = 0
     let pinnedArr = []
     let emptyLabelArr = []
+
     getlabels.forEach((label) => {
-      resultArr.push({...label, aType: 'LABEL'})
+      resultArr.push({...label, aType: 'LABEL', length: this.props.products[label.label]?.length})
       labelIndexArr.push(arrIndexCount)
       arrIndexCount++
       if (this.props.products[label.label]?.length === 0) {
@@ -634,7 +631,7 @@ class ProductRow extends React.Component {
 
             <DraggableFlatList
               data={this.state.dragResult ?? resultArr}
-              renderItem={(item, index, drag, isActive) => this.renderItem(item, index, drag, isActive)}
+              renderItem={this.renderItem}
               keyExtractor={(item, index) => `draggable-item-${item.id}`}
               onDragEnd={(data) => {
                 if (resultArr?.[`${data?.from}`]?.id === 'ungrouped') {
@@ -644,8 +641,6 @@ class ProductRow extends React.Component {
                 }
                 this.setState({dragResult: data.data})
               }}
-              onDragBegin={(index) => {}}
-              layoutInvalidationKey={this.state.labelDragged || this.state.productDragged}
             />
 
           </View>

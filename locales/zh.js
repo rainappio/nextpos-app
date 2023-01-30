@@ -60,7 +60,8 @@ const zh = {
       JKO: '街口支付',
       UBER_EATS: 'Uber Eats',
       FOOD_PANDA: '熊貓外送',
-      GOV_VOUCHER: '政府消費券'
+      GOV_VOUCHER: '500禮卷',
+      VOUCHER_1000: '1000禮卷'
     }
   },
   newItem: {

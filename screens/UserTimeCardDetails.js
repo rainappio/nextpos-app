@@ -23,8 +23,8 @@ class UserTimeCardDetails extends React.Component {
 
     this.state = {
       timeCardId: props.route.params?.timeCardId,
-      actualClockIn: null,
-      actualClockOut: null,
+      actualClockIn: this.props.timeCardDetails.clockIn,
+      actualClockOut: this.props.timeCardDetails.clockOut,
       actualWorkingHours: String(this.props.timeCardDetails.actualWorkingHours),
       actualWorkingMinutes: String(this.props.timeCardDetails.actualWorkingMinutes)
     }
@@ -108,7 +108,7 @@ class UserTimeCardDetails extends React.Component {
               <StyledText>{t('timecard.clockInTime')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-              <SimpleDateTimePicker initDate={timeCardDetails.clockIn}
+              <SimpleDateTimePicker initDate={this.state.actualClockIn}
                                     onChange2={(dt) => this.setState({actualClockIn: dt})}/>
             </View>
           </View>
@@ -118,7 +118,7 @@ class UserTimeCardDetails extends React.Component {
               <StyledText>{t('timecard.clockOutTime')}</StyledText>
             </View>
             <View style={[styles.tableCellView, {flex: 3, justifyContent: 'flex-end'}]}>
-              <SimpleDateTimePicker initDate={timeCardDetails.clockOut}
+              <SimpleDateTimePicker initDate={this.state.actualClockOut}
                                     onChange2={(dt) => this.setState({actualClockOut: dt})}/>
             </View>
           </View>
