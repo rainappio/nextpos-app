@@ -60,7 +60,8 @@ const en = {
       JKO: 'JKO Pay',
       UBER_EATS: 'Uber Eats',
       FOOD_PANDA: 'Foodpanda',
-      GOV_VOUCHER: 'Gov. Voucher'
+      GOV_VOUCHER: 'Voucher',
+      VOUCHER_1000: 'Voucher $1000'
     }
   },
   newItem: {

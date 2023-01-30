@@ -29,7 +29,7 @@ class AccountClosureForm extends React.Component {
 
     if (mostrecentShift.close.closingBalances !== null) {
       allPaymentMethod = Object.entries(mostrecentShift.close.closingBalances).sort((a, b) => {
-        let sort = ["CASH", "CARD", "LINE_PAY", "JKO", "UBER_EATS", "FOOD_PANDA", "GOV_VOUCHER"];
+        let sort = ["CASH", "CARD", "LINE_PAY", "JKO", "UBER_EATS", "FOOD_PANDA", "GOV_VOUCHER", "VOUCHER_1000"];
         return sort.indexOf(a[0]) - sort.indexOf(b[0]);
       })
     }

@@ -752,7 +752,7 @@ export const MobilePayKeyboard = (props) => {
 
     const mobilePayList = props?.client.paymentMethods.filter((item) => item.paymentKey !== 'CARD' && item.paymentKey !== 'CASH')
     mobilePayList.sort((a, b) => {
-        let sort = ["LINE_PAY", "JKO", "UBER_EATS", "FOOD_PANDA", "GOV_VOUCHER"];
+        let sort = ["LINE_PAY", "JKO", "UBER_EATS", "FOOD_PANDA", "GOV_VOUCHER", "VOUCHER_1000"];
         return sort.indexOf(a.paymentKey) - sort.indexOf(b.paymentKey);
     })
 

@@ -22,7 +22,8 @@ import globalZh from './locales/zh'
 import FlashMessage from 'react-native-flash-message'
 import {LocaleContext} from './locales/LocaleContext'
 import NavigationService from "./navigation/NavigationService";
-import * as Sentry from '@sentry/react-native';
+//import * as Sentry from '@sentry/react-native';
+import * as Sentry from 'sentry-expo';
 import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
 import {activateKeepAwake} from "expo-keep-awake";
@@ -56,10 +57,9 @@ LogBox.ignoreLogs([
 ]);
 
 Sentry.init({
-  dsn: 'https://b5c10cbde6414c0292495c58e7b699d3@sentry.io/5174447',
+  dsn: 'https://b5c10cbde6414c0292495c58e7b699d3@o368564.ingest.sentry.io/5174447',
   enableInExpoDevelopment: true,
   debug: true,
-  enableNative: false
 });
 
 //Sentry.Native.setRelease(Constants.manifest.revisionId);
@@ -528,4 +528,4 @@ class App extends React.Component {
   }
 }
 
-export default Sentry.wrap(App)
+export default App
