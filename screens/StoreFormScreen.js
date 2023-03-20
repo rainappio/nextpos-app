@@ -16,6 +16,7 @@ import {connect} from 'react-redux';
 import RNSwitchPayGroup from "../components/RNSwitchPayGroup"
 import Icon from 'react-native-vector-icons/Ionicons'
 import * as Device from 'expo-device';
+import CustomDropDown from "../components/CustomDropDown";
 
 
 class StoreFormScreen extends Component {
@@ -470,7 +471,7 @@ class StoreFormScreen extends Component {
                 <View style={[styles.justifyRight]}>
                   <Field
                     name="timezone"
-                    component={DropDown}
+                    component={CustomDropDown}
                     options={timezones}
                   />
                 </View>

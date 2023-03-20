@@ -254,7 +254,6 @@ class OrderDetail extends React.Component {
     PayItem = ({orderDetail}) => {
       return (
         <View>
-
           <View style={[styles.tableRowContainer]}>
             {orderDetail.paymentMethod == 'CASH' &&
               <View style={{flex: 1.3}}>
@@ -309,7 +308,6 @@ class OrderDetail extends React.Component {
             }
             <View style={{flex: 1.7}}>
               {orderDetail?.invoiceStatus || orderDetail?.invoiceNumber ?
-
                 <View style={[styles.list, styles.justifyRight, {alignItems: 'center'}]}>
                   <StyledText>
                     {orderDetail.invoiceNumber}
@@ -331,8 +329,15 @@ class OrderDetail extends React.Component {
                 </StyledText>
               }
             </View>
-
           </View>
+
+          {orderDetail?.buyUbn !== null && orderDetail?.buyerUbn?.length > 0 &&
+            (<View style={[styles.tableRowContainer]}>
+                <StyledText>
+                  {t(`payment.taxIDNumber`)}: {orderDetail.buyerUbn}
+                </StyledText>
+              </View>
+            )}
           <View style={styles.tableRowContainer}>
             <View style={[styles.tableCellView, {flex: 1}]}>
               <StyledText>{renderOptionsAndOffer(orderDetail)}</StyledText>

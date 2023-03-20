@@ -13,6 +13,7 @@ import {ThemeScrollView} from "../components/ThemeScrollView";
 import SegmentedControl from "../components/SegmentedControl";
 import DropDown from "../components/DropDown";
 import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScrollView";
+import CustomDropDown from "../components/CustomDropDown";
 
 class CreateAccFormScreen extends React.Component {
   static navigationOptions = {
@@ -161,7 +162,7 @@ class CreateAccFormScreen extends React.Component {
               <View style={{flexDirection: 'column', flex: 1, maxWidth: 640, paddingVertical: 10, }}>
                 <Field
                   name="leadSource"
-                  component={DropDown}
+                  component={CustomDropDown}
                   options={this.state.leadSource}
                   onChange={(value) => {
                     this.setState({

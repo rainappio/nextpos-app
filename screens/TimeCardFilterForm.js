@@ -5,6 +5,7 @@ import styles from '../styles'
 import {LocaleContext} from '../locales/LocaleContext'
 import DropDown from '../components/DropDown'
 import moment from "moment";
+import CustomDropDown from "../components/CustomDropDown";
 
 class TimeCardFilterForm extends React.Component {
   static contextType = LocaleContext
@@ -36,8 +37,8 @@ class TimeCardFilterForm extends React.Component {
         <View style={{flex: 2.5, marginRight: 5, marginLeft: 4}}>
           <Field
             name="year"
-            component={DropDown}
-            placeholder={{value: null, label: t('timecard.yearLabel')}}
+            component={CustomDropDown}
+            placeholder={t('timecard.yearLabel')}
             options={years}
           />
         </View>
@@ -45,8 +46,8 @@ class TimeCardFilterForm extends React.Component {
         <View style={{flex: 3.5}}>
           <Field
             name="month"
-            component={DropDown}
-            placeholder={{value: null, label: t('timecard.monthLabel')}}
+            component={CustomDropDown}
+            placeholder={t('timecard.monthLabel')}
             options={months}
           />
         </View>
