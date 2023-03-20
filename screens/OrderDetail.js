@@ -331,7 +331,7 @@ class OrderDetail extends React.Component {
             </View>
           </View>
 
-          {orderDetail.buyUbn !== null && orderDetail.buyerUbn.length > 0 &&
+          {orderDetail?.buyUbn !== null && orderDetail?.buyerUbn?.length > 0 &&
             (<View style={[styles.tableRowContainer]}>
                 <StyledText>
                   {t(`payment.taxIDNumber`)}: {orderDetail.buyerUbn}

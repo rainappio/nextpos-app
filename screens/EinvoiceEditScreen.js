@@ -13,6 +13,7 @@ import {ThemeKeyboardAwareScrollView} from "../components/ThemeKeyboardAwareScro
 import {StyledText} from "../components/StyledText";
 import {api, dispatchFetchRequest} from '../constants/Backend'
 import DeleteBtn from '../components/DeleteBtn'
+import CustomDropDown from "../components/CustomDropDown";
 
 class EinvoiceEditScreen extends React.Component {
     static navigationOptions = {
@@ -207,9 +208,10 @@ class EinvoiceEditScreen extends React.Component {
                             <View style={[styles.justifyRight]}>
                                 <Field
                                     name="selectedYear"
-                                    component={DropDown}
+                                    component={CustomDropDown}
                                     options={this.state.selectedYear}
-                                    defaultValue={this.state.selectedYear[0]}
+                                    placeholder={t('eInvoice.prefixYear')}
+                                    //defaultValue={this.state.selectedYear[0]}
                                 />
                             </View>
                         </View>
@@ -226,9 +228,10 @@ class EinvoiceEditScreen extends React.Component {
                                 <View style={[styles.justifyRight]}>
                                     <Field
                                         name="selectedMonth"
-                                        component={DropDown}
+                                        component={CustomDropDown}
                                         options={this.state.selectedMonth}
-                                        defaultValue={this.state.selectedMonth[0]}
+                                        placeholder={t('eInvoice.prefixMonth')}
+                                          //defaultValue={this.state.selectedMonth[0]}
                                     />
                                 </View>
                             </View></View>}
